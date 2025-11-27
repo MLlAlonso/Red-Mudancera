@@ -1,3 +1,17 @@
+@use "./utils/variables";
+@use "./utils/mixins";
+@use "./utils/containers";
+
+// Layout
+@use "./layout/header";
+@use "./layout/footer";
+
+// Components
+@use "./components/inputs";
+@use "./components/buttons";
+@use "./components/serviceCard";
+@use "./components/serviceFilters";
+
 *{
     margin: 0;
     padding: 0;

@@ -1,0 +1,53 @@
+@use "../utils/variables";
+
+.input-group {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+
+  &__label {
+    font-size: 30px;
+    font-family: variables.$font-title;
+    font-weight: bold;
+    color: variables.$primary;
+  }
+
+  &__field {
+    width: 100%;
+    max-width: 600px;
+    padding: 10px 16px;
+    background: #ffffff;
+    border: 1px solid variables.$secondary;
+    border-radius: 8px;
+    font-size: 20px;
+    font-family: variables.$font-text;
+    color: variables.$text;
+    outline: none;
+
+    &::placeholder {
+      color: variables.$text-muted;
+    }
+
+    &:focus {
+      border-color: variables.$primary;
+    }
+
+    &:hover {
+      border-color: variables.$primary;
+    }
+  }
+}
+
+/* Móvil */
+@media (max-width: 600px) {
+  .input-group {
+    max-width: 100%;
+  }
+
+  .input-group__field {
+    max-width: 100%;
+  }
+}

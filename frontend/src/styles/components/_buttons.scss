@@ -1,0 +1,61 @@
+@use "../utils/variables";
+
+button {
+    border-radius: 15px;
+    color: white;
+    border-color: transparent;
+    text-align: center;
+    padding: 5px 10px;
+    font-size: 40px;
+    font-family: variables.$font-title;
+    margin-top: 20px;
+    margin-bottom: 10px;
+
+    &:hover {
+        cursor: pointer;
+        transform: scale(1.1);
+    }
+}
+
+/*  Button for Call to Action  */
+.btn_cta {
+    width: 100%;
+    max-width: 600px;
+    background-color: variables.$primary;
+
+    &:hover {
+        background-color: variables.$primary-hover;
+    }
+}
+
+/*  Button for Actiones  */
+.btn_success {
+    width: 100%;
+    max-width: 600px;
+    background-color: variables.$success;
+
+    &:hover {
+        background-color: variables.$success-hover;
+    }
+}
+
+.btn_error {
+    width: 100%;
+    max-width: 600px;
+    background-color: variables.$error;
+
+    &:hover {
+        background-color: variables.$error-hover;
+    }
+}
+
+.btn_crud{
+    width: 140px;
+    max-width: 140px;
+    background-color: #24528E;
+    font-size: 30px;
+
+    &:hover {
+        background-color: #377BD6;
+    }
+}

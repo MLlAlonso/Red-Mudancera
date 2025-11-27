@@ -1,0 +1,47 @@
+@use "../utils/variables";
+
+.service-filters {
+  display: flex;
+  gap: 5px;
+  margin: 20px 0;
+
+  .filter-btn {
+    width: 130px;
+    height: 50px;
+
+    background: #d9d9d9;
+    color: variables.$primary;
+
+    border: none;
+    border-radius: 10px;
+
+    font-size: 20px;
+    font-family: variables.$font-text;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+
+    &:hover {
+      background: variables.$primary;
+      color: #ffffff;
+    }
+
+    &.active {
+      background: variables.$primary;
+      color: #ffffff;
+    }
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .service-filters {
+    justify-content: space-between;
+
+    .filter-btn {
+      flex: 1;
+      width: auto;
+    }
+  }
+}

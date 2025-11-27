@@ -1,0 +1,36 @@
+// Breakpoints
+$bp-sm: 480px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+$bp-xl: 1400px;
+
+// Contenedor adaptable con margen automático
+@mixin container($max) {
+  width: 100%;
+  max-width: $max;
+  margin: 0 auto;
+  padding-inline: 20px; // margen seguro para móviles
+}
+
+// Texto truncado (por si se ocupa)
+@mixin truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Hover suave
+@mixin hover-transition {
+  transition: all 0.2s ease-in-out;
+}
+
+@mixin hover {
+  transition: all 0.2s ease-in-out;
+}
+
+@mixin box {
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding-inline: 20px;
+}

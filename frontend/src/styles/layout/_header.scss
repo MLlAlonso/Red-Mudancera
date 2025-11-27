@@ -1,0 +1,64 @@
+@use "../utils/variables" as *;
+@use "../utils/mixins" as *;
+@use "../utils/containers";
+
+.header {
+  width: 100%;
+  background: $primary;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .header__content {
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    // iconos
+    .header__icon {
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+    }
+
+    // logo centrado
+    .header__logo {
+      height: 70px;
+      object-fit: contain;
+    }
+
+    // hamburguesa
+    .header__menu {
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .header {
+    .header__content {
+      // iconos
+      .header__icon {
+        width: 30px;
+        height: 30px;
+      }
+
+      // logo centrado
+      .header__logo {
+        height: 40px;
+      }
+
+      // hamburguesa
+      .header__menu {
+        width: 30px;
+        height: 30px;
+      }
+    }
+  }
+}
