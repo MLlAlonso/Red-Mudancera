@@ -8,18 +8,19 @@ class RegisterEmpresaRequest extends FormRequest
 {
     public function authorize()
     {
-        return true; // permitir acceso
+        return true;
     }
 
     public function rules()
     {
         return [
             'empresa' => 'required|string|max:150',
+            'representante' => 'required|string|max:150',
             'rfc' => 'required|string|max:13',
             'base' => 'nullable|string|max:100',
             'tel' => 'required|string|max:20',
             'email' => 'required|email|unique:empresas,email',
-            'password' => 'required|min:6|confirmed'
+            'password' => 'required|min:8|confirmed'
         ];
     }
 }

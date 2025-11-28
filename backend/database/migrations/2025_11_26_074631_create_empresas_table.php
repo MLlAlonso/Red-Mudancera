@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('empresas', function (Blueprint $table) {
             $table->id();
             $table->string('empresa', 150);
+            $table->string('representante', 150);
             $table->string('rfc', 13);
             $table->string('base', 100)->nullable();
             $table->string('tel', 20);

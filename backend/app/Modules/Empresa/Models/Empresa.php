@@ -13,6 +13,7 @@ class Empresa extends Authenticatable
 
     protected $fillable = [
         'empresa',
+        'representante',
         'rfc',
         'base',
         'tel',
