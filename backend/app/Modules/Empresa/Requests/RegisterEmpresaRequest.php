@@ -16,11 +16,11 @@ class RegisterEmpresaRequest extends FormRequest
         return [
             'empresa' => 'required|string|max:150',
             'representante' => 'required|string|max:150',
-            'rfc' => 'required|string|max:13',
+            'rfc' => 'nullable|string|max:13',
             'base' => 'nullable|string|max:100',
             'tel' => 'required|string|max:20',
             'email' => 'required|email|unique:empresas,email',
-            'password' => 'required|min:8|confirmed'
+            'password' => 'required|min:8',
         ];
     }
 }

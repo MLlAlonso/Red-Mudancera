@@ -1,25 +1,35 @@
 <?php
 
 return [
+
     'defaults' => [
-        'guard' => 'sanctum',
+        'guard' => 'empresa',
         'passwords' => 'empresas',
     ],
 
     'guards' => [
         'web' => [
             'driver' => 'session',
+            'provider' => 'users',
+        ],
+
+        'empresa' => [
+            'driver' => 'sanctum',
             'provider' => 'empresas',
         ],
 
         'api' => [
-            'driver' => 'token',
+            'driver' => 'sanctum',
             'provider' => 'empresas',
-            'hash' => false,
         ],
     ],
 
     'providers' => [
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
+
         'empresas' => [
             'driver' => 'eloquent',
             'model' => App\Modules\Empresa\Models\Empresa::class,

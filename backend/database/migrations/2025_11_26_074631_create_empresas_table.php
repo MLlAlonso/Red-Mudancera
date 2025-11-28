@@ -15,19 +15,22 @@ return new class extends Migration
             $table->id();
             $table->string('empresa', 150);
             $table->string('representante', 150);
-            $table->string('rfc', 13);
+            $table->string('rfc', 13)->nullable();
             $table->string('base', 100)->nullable();
             $table->string('tel', 20);
-            $table->string('email', 150)->unique();
+            $table->string('email')->unique();
             $table->string('password');
+            $table->string('codigoEmpresa', 10);
+
+            $table->string('logo')->nullable();
             $table->decimal('reputacion', 3, 2)->default(0);
             $table->integer('numServicios')->default(0);
-            $table->enum('estadoRFC', ['pendiente', 'verificado', 'bloqueado'])->default('pendiente');
+            $table->string('estadoRFC')->default('pendiente');
+
             $table->boolean('subActiva')->default(false);
             $table->date('subInicio')->nullable();
             $table->date('subFin')->nullable();
-            $table->string('codigoEmpresa', 20)->unique();
-            $table->string('logo')->nullable();
+
             $table->timestamps();
         });
     }
