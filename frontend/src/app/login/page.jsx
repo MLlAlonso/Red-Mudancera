@@ -5,15 +5,12 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Input from "@/components/common/Input";
+import Button_cta from "@/components/common/Button_cta";
 
-export default function Register() {
+export default function Login() {
     const router = useRouter();
 
     const [form, setForm] = useState({
-        empresa: "",
-        representante: "",
-        rfc: "",
-        tel: "",
         email: "",
         password: "",
     });
@@ -28,38 +25,26 @@ export default function Register() {
         });
     };
 
-    // Validación de contraseña 
-    const isValidPassword = (pwd) => {
-        const regex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
-        return regex.test(pwd);
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrorMsg("");
 
-        // Validaciones frontend
-        if (!isValidPassword(form.password)) {
-            setErrorMsg(
-                "La contraseña debe tener mínimo 8 caracteres, 1 mayúscula y 1 número."
-            );
-            return;
-        }
-
         try {
             setLoading(true);
 
-            // Petición al backend
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/register`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(form),
-            });
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/empresa/login`,
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(form),
+                }
+            );
 
             const data = await res.json();
 
             if (!res.ok) {
-                setErrorMsg(data.message || "Error al registrar la empresa.");
+                setErrorMsg(data.message || "Credenciales incorrectas.");
                 setLoading(false);
                 return;
             }
@@ -67,8 +52,9 @@ export default function Register() {
             // Guardar token
             localStorage.setItem("token", data.token);
 
-            // Redirigir
-            router.push("/login");
+            // Redirigir al dashboard
+            router.push("/dashboard");
+
         } catch (error) {
             setErrorMsg("Error de conexión con el servidor.");
         }
@@ -85,9 +71,9 @@ export default function Register() {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    padding: "40px 20px",
+                    padding: "10px 20px",
                     background: "#F4F7F6",
-                    minHeight: "100vh",
+                    minHeight: "80vh",
                 }}
             >
                 <form
@@ -102,22 +88,14 @@ export default function Register() {
                     }}
                 >
                     <h2 style={{ marginBottom: "20px", color: "#09233E" }}>
-                        Registro de Empresa
+                        Iniciar Sesión
                     </h2>
-
-                    <Input
-                        label="Nombre"
-                        name="empresa"
-                        placeholder="Nombre de empresa"
-                        value={form.empresa}
-                        onChange={handleChange}
-                    />
 
                     <Input
                         label="Correo"
                         name="email"
                         type="email"
-                        placeholder="Correo de empresa"
+                        placeholder="correo@empresa.com"
                         value={form.email}
                         onChange={handleChange}
                     />
@@ -126,24 +104,8 @@ export default function Register() {
                         label="Contraseña"
                         name="password"
                         type="password"
-                        placeholder="Al menos 8 caracteres, 1 mayúscula y 1 número"
+                        placeholder="Ingresa tu contraseña"
                         value={form.password}
-                        onChange={handleChange}
-                    />
-
-                    <Input
-                        label="Representante"
-                        name="representante"
-                        placeholder="Persona de contacto"
-                        value={form.representante}
-                        onChange={handleChange}
-                    />
-
-                    <Input
-                        label="Teléfono"
-                        name="tel"
-                        placeholder="Telefono del representante"
-                        value={form.tel}
                         onChange={handleChange}
                     />
 
@@ -151,12 +113,13 @@ export default function Register() {
                         <p style={{ color: "red", marginBottom: "10px" }}>{errorMsg}</p>
                     )}
 
-                    <button type="submit" className="btn_cta" disabled={loading}>
-                        {loading ? "Registrando..." : "Registrarse"}
-                    </button>
+                    <Button_cta
+                        type="submit"
+                        value={loading ? "Entrando..." : "Entrar"}
+                    />
 
                     <p
-                        onClick={() => router.push("/login")}
+                        onClick={() => router.push("/register")}
                         style={{
                             marginTop: "15px",
                             textAlign: "center",
@@ -164,7 +127,7 @@ export default function Register() {
                             cursor: "pointer",
                         }}
                     >
-                        ¿Ya tienes cuenta? <strong>Inicia sesión</strong>
+                        ¿No tienes cuenta? <strong>Regístrate aquí</strong>
                     </p>
                 </form>
             </main>

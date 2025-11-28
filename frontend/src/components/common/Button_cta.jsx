@@ -1,9 +1,9 @@
 "use client";
 
-export default function button_cta({  value }) {
+export default function Button_cta({ value, onClick, type = "button" }) {
   return (
-      <button className="btn_cta">
-        {value}
-      </button>
+    <button className="btn_cta" type={type} onClick={onClick}>
+      {value}
+    </button>
   );
 }
