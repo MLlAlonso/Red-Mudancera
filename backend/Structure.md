@@ -5,38 +5,44 @@ backend/
 ├── 📄 .gitattributes
 ├── 📄 artisan                          # CLI de Laravel
 ├── 📄 composer.json                    # Dependencias PHP
+├── 📄 composer.lock
 ├── 📄 package.json                     # Dependencias Node.js
+├── 📄 package-lock.json
 ├── 📄 phpunit.xml                      # Configuración de tests
-├── 📄 readme.md
+├── 📄 README.md
+├── 📄 Structure.md                     # Documentación de estructura
 ├── 📄 red_mudancera_dev
 ├── 📄 vite.config.js                   # Configuración de Vite
 │
 ├── 📁 app/                             # Código principal de la aplicación
-│   ├── 📁 Http/                        # Controladores HTTP
-│   ├── 📁 Models/                      # Modelos Eloquent
+│   ├── 📁 Http/
+│   │   ├── Kernel.php                  # Middleware HTTP
+│   │   └── 📁 Middleware/
+│   │       └── Authenticate.php        # Middleware de autenticación
+│   ├── 📁 Models/
 │   ├── 📁 Modules/                     # Módulos personalizados
 │   │   ├── 📁 Empresa/
-│   │   │   ├── Controllers/
+│   │   │   ├── 📁 Controllers/
 │   │   │   │   └── EmpresaAuthController.php
-│   │   │   └── Models/
+│   │   │   └── 📁 Models/
 │   │   │       └── Empresa.php
 │   │   └── 📁 Usuario/
-│   │       └── Models/
+│   │       └── 📁 Models/
 │   │           └── Usuario.php
-│   └── 📁 Providers/                   # Service Providers
+│   └── 📁 Providers/
 │       ├── AppServiceProvider.php
 │       └── RouteServiceProvider.php
 │
-├── 📁 bootstrap/                       # Archivos de inicialización
+├── 📁 bootstrap/
 │   ├── app.php                         # Bootstrapping de la aplicación
 │   ├── providers.php                   # Registro de providers
 │   └── 📁 cache/
 │
-├── 📁 config/                          # Archivos de configuración
+├── 📁 config/
 │   ├── app.php
 │   ├── auth.php                        # Autenticación (Sanctum + Empresa)
 │   ├── cache.php
-│   ├── database.php
+│   ├── database.php                    # Conexión a BD
 │   ├── filesystems.php
 │   ├── logging.php
 │   ├── mail.php
@@ -45,7 +51,7 @@ backend/
 │   ├── services.php
 │   └── session.php
 │
-├── 📁 database/                        # Base de datos
+├── 📁 database/
 │   ├── 📁 migrations/
 │   │   ├── 0001_01_01_000001_create_cache_table.php
 │   │   ├── 2025_11_26_074631_create_empresas_table.php
@@ -53,30 +59,30 @@ backend/
 │   └── 📁 seeders/
 │       └── DatabaseSeeder.php
 │
-├── 📁 public/                          # Archivos públicos
-│   ├── 📄 index.php                    # Punto de entrada
-│   └── 📄 storage/ (enlace simbólico)
+├── 📁 public/
+│   ├── index.php                       # Punto de entrada
+│   └── storage/ (enlace simbólico)
 │
-├── 📁 resources/                       # Recursos (vistas, CSS, JS)
+├── 📁 resources/
 │   ├── 📁 css/
 │   │   └── app.css                     # Tailwind CSS
 │   ├── 📁 js/
 │   │   └── app.js
 │   └── 📁 views/
-│       └── welcome.blade.php           # Vista de bienvenida
+│       └── welcome.blade.php
 │
-├── 📁 routes/                          # Definición de rutas
+├── 📁 routes/
 │   ├── api.php                         # Rutas API (Empresa Auth)
 │   ├── web.php                         # Rutas web
 │   └── console.php                     # Comandos Artisan
 │
-├── 📁 storage/                         # Almacenamiento
-│   ├── 📁 app/                         # Archivos de aplicación
-│   ├── 📁 framework/                   # Caché y sesiones
-│   ├── 📁 logs/                        # Logs
-│   └── 📁 public/                      # Archivos públicos
+├── 📁 storage/
+│   ├── 📁 app/
+│   ├── 📁 framework/
+│   ├── 📁 logs/
+│   └── 📁 public/
 │
-├── 📁 tests/                           # Tests automatizados
+├── 📁 tests/
 │   ├── 📁 Feature/
 │   │   └── ExampleTest.php
 │   └── TestCase.php

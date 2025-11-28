@@ -2,37 +2,32 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import SideMenu from "./SideMenu";
 
 export default function Header() {
   const [openMenu, setOpenMenu] = useState(false);
-
-  const toggleMenu = () => {
-    setOpenMenu(!openMenu);
-  };
 
   return (
     <header className="header">
       <div className="header__content">
 
         <Link href="/">
-          <img  src="/icons/hogar_2.png"  alt="home"  className="header__icon" style={{ cursor: "pointer" }} />
+          <img src="/icons/hogar_2.png" alt="home" className="header__icon" />
         </Link>
 
         <Link href="/">
-          <img  src="/logo/logo.png"  alt="app logo"  className="header__logo" style={{ cursor: "pointer" }} />
+          <img src="/logo/logo.png" alt="app logo" className="header__logo" />
         </Link>
 
-        <img  src="/icons/menu.png"  alt="menu"  className="header__menu" style={{ cursor: "pointer" }} onClick={toggleMenu}/>
+        <img
+          src="/icons/menu.png"
+          alt="menu"
+          className="header__menu"
+          onClick={() => setOpenMenu(!openMenu)}
+        />
       </div>
 
-      {/* MENÚ DESPLEGABLE (provisional) */}
-      {openMenu && (
-        <div className="menu-desplegable-temp">
-          <p>Menú desplegable pendiente…</p>
-        </div>
-      )}
-
-
+      <SideMenu open={openMenu} />
     </header>
   );
 }

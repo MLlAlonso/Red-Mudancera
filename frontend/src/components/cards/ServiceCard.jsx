@@ -1,7 +1,9 @@
 "use client";
 
+import { motion } from "framer-motion";
+
 export default function ServiceCard({
-  type = "busco", // "busco" | "ofrezco"
+  type = "busco",
   origen = "",
   destino = "",
   volumen = " m3",
@@ -11,7 +13,12 @@ export default function ServiceCard({
   const isOffer = type === "ofrezco";
 
   return (
-    <div className={`service-card ${isOffer ? "offer" : "search"}`}>
+    <motion.div
+      className={`service-card ${isOffer ? "offer" : "search"}`}
+      initial={{ opacity: 0, scale: 0.95, y: 10 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 0.25 }}
+    >
       <div className="service-card__title">
         <span className="service-card__tag">{isOffer ? "Ofrezco" : "Busco"}</span>
         <h2 className="service-card__route">{origen} → {destino}</h2>
@@ -27,6 +34,6 @@ export default function ServiceCard({
           Contactar
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 }
