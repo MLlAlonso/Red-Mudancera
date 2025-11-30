@@ -111,7 +111,9 @@
 @media (max-width: 600px) {
     .service-card {
         width: 100%;
-        max-width: 600px;
+        max-width: 650px;
+        margin: 0;
+
         &__title {
             gap: 10px;
             margin-bottom: 20px;

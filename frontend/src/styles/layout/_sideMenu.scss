@@ -17,7 +17,7 @@
     display: flex;
     align-items: center;
     gap: 14px;
-    margin-bottom: 22px;
+    margin-bottom: 22px;  
     cursor: pointer;
 
     &:last-child {
@@ -33,5 +33,16 @@
     font-family: 'Inter', sans-serif;
     font-size: 26px;
     color: #09233E;
+  }
+
+  @media (max-width: 600px) {
+    position: fixed;
+    top: 80px;
+    right: 5px; 
+    padding: 15px; 
+
+    span {
+      font-size: 20px;
+    }
   }
 }

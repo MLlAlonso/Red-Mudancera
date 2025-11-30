@@ -57,16 +57,13 @@ export default function Dashboard() {
     <>
       <Header />
 
-      <main
-        style={{
-          maxWidth: "1300px",
-          margin: "0 auto",
-          padding: "20px",
-        }}
-      >
-        <h1 style={{ marginBottom: "20px", color: "#09233E" }}>
-          Bienvenido a tu Dashboard
+      <main>
+        <h1 style={{ marginBottom: "0px", color: "#09233E" }}>
+          Últimas Publicaciones
         </h1>
+        <h2 style={{ marginTop: "0px", marginBottom: "0px",  color: "#6F7F8D", fontWeight: "400", fontSize: "20px" }}>
+          Servicios recientemente publicados.
+        </h2>
 
         <ServiceFilters onChange={setFilter} />
 

@@ -71,7 +71,6 @@ export default function Login() {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    padding: "10px 20px",
                     background: "#F4F7F6",
                     minHeight: "80vh",
                 }}
@@ -80,10 +79,10 @@ export default function Login() {
                     onSubmit={handleSubmit}
                     style={{
                         background: "#FFFFFF",
-                        padding: "30px",
+                        padding: "20px",
                         borderRadius: "12px",
                         width: "100%",
-                        maxWidth: "600px",
+                        maxWidth: "650px",
                         boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                     }}
                 >

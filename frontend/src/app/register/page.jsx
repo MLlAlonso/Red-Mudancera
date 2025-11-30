@@ -85,7 +85,6 @@ export default function Register() {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    padding: "40px 20px",
                     background: "#F4F7F6",
                     minHeight: "100vh",
                 }}
