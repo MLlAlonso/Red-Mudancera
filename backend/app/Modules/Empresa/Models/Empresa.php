@@ -2,12 +2,13 @@
 
 namespace App\Modules\Empresa\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
 class Empresa extends Authenticatable
 {
-    use HasApiTokens;
+    use HasApiTokens, HasFactory;
 
     protected $table = 'empresas';
 
@@ -20,16 +21,25 @@ class Empresa extends Authenticatable
         'email',
         'password',
         'codigoEmpresa',
+        'email_verified_at',
         'logo',
         'reputacion',
         'numServicios',
         'estadoRFC',
         'subActiva',
         'subInicio',
-        'subFin'
+        'subFin',
     ];
 
     protected $hidden = [
-        'password'
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'subInicio' => 'date',
+        'subFin' => 'date',
+        'subActiva' => 'boolean',
     ];
 }

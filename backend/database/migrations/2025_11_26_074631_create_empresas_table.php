@@ -15,12 +15,15 @@ return new class extends Migration
             $table->id();
             $table->string('empresa', 150);
             $table->string('representante', 150);
-            $table->string('rfc', 13)->nullable();
             $table->string('base', 100)->nullable();
+            $table->string('rfc', 13)->nullable();
             $table->string('tel', 20);
+            
             $table->string('email')->unique();
-            $table->string('password');
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('codigoEmpresa', 10);
+
+            $table->string('password');
 
             $table->string('logo')->nullable();
             $table->decimal('reputacion', 3, 2)->default(0);

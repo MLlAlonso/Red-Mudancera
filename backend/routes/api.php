@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Modules\Empresa\Controllers\EmpresaAuthController;
 
@@ -9,12 +10,36 @@ use App\Modules\Empresa\Controllers\EmpresaAuthController;
 */
 Route::prefix('empresa')->group(function () {
 
-    // Registro y login
+    // ============================================================
+    // RUTAS YA EXISTENTES DE M01
+    // ============================================================
     Route::post('/register', [EmpresaAuthController::class, 'register']);
     Route::post('/login',    [EmpresaAuthController::class, 'login']);
 
-    // Rutas protegidas
+    // ============================================================
+    // VERIFICACIÓN DE CORREO
+    // ============================================================
+    Route::post('/send-verification', [EmpresaAuthController::class, 'sendVerificationCode']);
+    Route::post('/verify-code',       [EmpresaAuthController::class, 'verifyCode']);
+
+    // ============================================================
+    // RUTAS PROTEGIDAS
+    // ============================================================
     Route::middleware('auth:sanctum')->group(function () {
+
+        // EXISTENTE
         Route::get('/me', [EmpresaAuthController::class, 'me']);
+
+        // NUEVA: actualizar perfil de empresa
+        Route::put('/update', [EmpresaAuthController::class, 'update']);
+
     });
 });
+
+
+/*
+|--------------------------------------------------------------------------
+| Usuario
+|--------------------------------------------------------------------------
+*/
+require base_path('app/Modules/Usuario/routes.php');

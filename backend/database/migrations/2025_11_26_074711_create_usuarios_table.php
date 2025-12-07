@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('empresa_id')->constrained('empresas')->cascadeOnDelete();
             $table->string('nombre', 100)->nullable();
-            $table->string('email', 150);
+            $table->string('email', 150) ->unique();
+            $table->string('telefono', 20)->nullable();
+            $table->string('avatar')->nullable();
             $table->string('password');
             $table->enum('rol', ['admin', 'vendedor', 'trabajador'])->default('trabajador');
             $table->boolean('activoEmpresa')->default(true);
