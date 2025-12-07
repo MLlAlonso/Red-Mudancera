@@ -19,15 +19,13 @@ use App\Models\EmailVerification;
 class EmpresaAuthController extends Controller
 {
     /* ============================================================
-       REGISTRO DE EMPRESA (SE MANTIENE TU LÓGICA ORIGINAL)
+       REGISTRO DE EMPRESA
     ============================================================ */
     public function register(RegisterEmpresaRequest $request)
     {
         $data = $request->validated();
-
         $data['password'] = Hash::make($data['password']);
 
-        // Se mantiene tu generación de código única para empresas
         $data['codigoEmpresa'] = strtoupper(
             substr(Str::slug($data['empresa'], ''), 0, 3) // primeras 3 letras del nombre
                 . rand(1000, 9999)                           // 4 números aleatorios
@@ -61,7 +59,7 @@ class EmpresaAuthController extends Controller
 
 
     /* ============================================================
-       LOGIN (SE MANTIENE TU LÓGICA ORIGINAL)
+       LOGIN
     ============================================================ */
     public function login(LoginEmpresaRequest $request)
     {
@@ -85,7 +83,6 @@ class EmpresaAuthController extends Controller
             'token' => $token
         ]);
     }
-
 
     /* ============================================================
        ENVIAR CÓDIGO DE VERIFICACIÓN
@@ -111,7 +108,6 @@ class EmpresaAuthController extends Controller
 
         return response()->json(['message' => 'Código enviado exitosamente']);
     }
-
 
     /* ============================================================
        VERIFICAR CÓDIGO DE CORREO
@@ -145,18 +141,16 @@ class EmpresaAuthController extends Controller
         return response()->json(['message' => 'Correo verificado correctamente']);
     }
 
-
     /* ============================================================
-       PERFIL (SE MANTIENE TU FUNCIÓN)
+       PERFIL
     ============================================================ */
     public function me()
     {
         return response()->json(Auth::user());
     }
 
-
     /* ============================================================
-       ACTUALIZAR PERFIL DE EMPRESA (NUEVO)
+       ACTUALIZAR PERFIL DE EMPRESA
     ============================================================ */
     public function update(EmpresaUpdateRequest $request)
     {
@@ -167,6 +161,24 @@ class EmpresaAuthController extends Controller
         return response()->json([
             'message' => 'Empresa actualizada correctamente',
             'empresa' => $empresa
+        ]);
+    }
+
+    /* ============================================================
+       Eliminar PERFIL DE EMPRESA
+    ============================================================ */
+    public function destroy()
+    {
+        $empresa = Auth::user();
+
+        // Eliminar tokens
+        $empresa->tokens()->delete();
+
+        // Eliminar empresa (DELETE real)
+        $empresa->delete();
+
+        return response()->json([
+            'message' => 'La empresa ha sido eliminada permanentemente.'
         ]);
     }
 }

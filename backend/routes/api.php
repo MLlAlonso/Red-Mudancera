@@ -8,6 +8,7 @@ use App\Modules\Empresa\Controllers\EmpresaAuthController;
 | Empresa Auth
 |--------------------------------------------------------------------------
 */
+
 Route::prefix('empresa')->group(function () {
 
     // ============================================================
@@ -33,6 +34,7 @@ Route::prefix('empresa')->group(function () {
         // NUEVA: actualizar perfil de empresa
         Route::put('/update', [EmpresaAuthController::class, 'update']);
 
+        Route::delete('/delete', [EmpresaAuthController::class, 'destroy']);
     });
 });
 
