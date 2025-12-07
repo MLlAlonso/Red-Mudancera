@@ -10,33 +10,61 @@ use Illuminate\Support\Facades\Hash;
 class UsuarioController extends Controller
 {
     /**
-     * USUARIO AUTENTICADO
+     * Retorna el usuario autenticado (y valida que sea un Usuario)
      */
     public function me()
     {
+        $user = auth()->user();
+
+        if (! $user instanceof Usuario) {
+            return response()->json(['message' => 'Acceso no autorizado'], 403);
+        }
+
         return response()->json([
-            'usuario' => auth()->user()
+            'usuario' => $user
         ]);
     }
 
     /**
-     * ACTUALIZAR PERFIL
+     * Actualizar perfil
      */
     public function update(UsuarioUpdateRequest $request)
     {
-        $usuario = auth()->user();
+        $user = auth()->user();
 
-        if ($request->filled('password')) {
-            $request->merge([
-                'password' => Hash::make($request->password)
-            ]);
+        if (! $user instanceof Usuario) {
+            return response()->json(['message' => 'Acceso no autorizado'], 403);
         }
 
-        $usuario->update($request->validated());
+        if ($request->filled('password')) {
+            $request->merge(['password' => Hash::make($request->password)]);
+        }
+
+        $user->update($request->validated());
 
         return response()->json([
             'message' => 'Perfil actualizado correctamente',
-            'usuario' => $usuario
+            'usuario' => $user
         ]);
+    }
+
+    /**
+     * Eliminar usuario (real)
+     */
+    public function destroy()
+    {
+        $user = auth()->user();
+
+        if (! $user instanceof Usuario) {
+            return response()->json(['message' => 'Acceso no autorizado'], 403);
+        }
+
+        // borrar tokens
+        $user->tokens()->delete();
+
+        // borrar user
+        $user->delete();
+
+        return response()->json(['message' => 'Usuario eliminado correctamente']);
     }
 }

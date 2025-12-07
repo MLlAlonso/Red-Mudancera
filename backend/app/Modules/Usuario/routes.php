@@ -16,9 +16,8 @@ Route::prefix('usuario')->group(function () {
 
     // Rutas protegidas con token Sanctum
     Route::middleware('auth:sanctum')->group(function () {
-
         Route::get('/me',    [UsuarioController::class, 'me']);
         Route::put('/update', [UsuarioController::class, 'update']);
-
+        Route::delete('/delete', [UsuarioController::class, 'destroy']);
     });
 });

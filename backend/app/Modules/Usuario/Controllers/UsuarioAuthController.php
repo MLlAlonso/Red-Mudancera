@@ -14,24 +14,21 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Modules\Empresa\Models\Empresa;
+use App\Models\EmailVerification;
 
 class UsuarioAuthController extends Controller
 {
     /**
-     * REGISTRO DE USUARIO
+     * Registro de usuario ligado a empresa por codigoEmpresa
      */
     public function register(UsuarioRegisterRequest $request)
     {
-        // Buscar empresa por código único
         $empresa = Empresa::where('codigoEmpresa', $request->codigoEmpresa)->first();
 
         if (!$empresa) {
-            return response()->json([
-                'message' => 'El código de empresa no existe.'
-            ], 404);
+            return response()->json(['message' => 'Código de empresa inválido.'], 404);
         }
 
-        // Crear usuario
         $usuario = Usuario::create([
             'empresa_id' => $empresa->id,
             'nombre'     => $request->nombre,
@@ -42,28 +39,26 @@ class UsuarioAuthController extends Controller
             'rol'        => 'trabajador',
         ]);
 
-        // Enviar código de verificación
+        // crear código de verificación
         $code = rand(100000, 999999);
 
-        DB::table('email_verifications')->insert([
+        EmailVerification::create([
             'email'      => $usuario->email,
             'code'       => $code,
             'tipo'       => 'usuario',
             'expires_at' => Carbon::now()->addMinutes(15),
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
 
         Mail::to($usuario->email)->send(new UsuarioVerificationCode($code));
 
         return response()->json([
-            'message' => 'Usuario creado. Verifique su email.',
+            'message' => 'Usuario creado. Verifica tu correo.',
             'usuario' => $usuario,
         ], 201);
     }
 
     /**
-     * LOGIN DE USUARIO
+     * Login de usuario
      */
     public function login(UsuarioLoginRequest $request)
     {
@@ -73,7 +68,7 @@ class UsuarioAuthController extends Controller
             return response()->json(['message' => 'Credenciales incorrectas'], 401);
         }
 
-        // Crear token
+        // crear token para usuario (sanctum)
         $token = $usuario->createToken('usuario_token')->plainTextToken;
 
         return response()->json([
@@ -84,13 +79,11 @@ class UsuarioAuthController extends Controller
     }
 
     /**
-     * ENVIAR CÓDIGO DE VERIFICACIÓN
+     * Reenviar código de verificación
      */
     public function sendVerificationCode(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email'
-        ]);
+        $request->validate(['email' => 'required|email']);
 
         $usuario = Usuario::where('email', $request->email)->first();
 
@@ -98,17 +91,13 @@ class UsuarioAuthController extends Controller
             return response()->json(['message' => 'Este email no está registrado'], 404);
         }
 
-        // Generar código
         $code = rand(100000, 999999);
 
-        // Guardar en tabla
-        DB::table('email_verifications')->updateOrInsert(
-            ['email' => $usuario->email],
+        EmailVerification::updateOrCreate(
+            ['email' => $usuario->email, 'tipo' => 'usuario'],
             [
                 'code'       => $code,
-                'tipo'       => 'usuario',
                 'expires_at' => Carbon::now()->addMinutes(15),
-                'updated_at' => now()
             ]
         );
 
@@ -118,12 +107,12 @@ class UsuarioAuthController extends Controller
     }
 
     /**
-     * VERIFICAR CÓDIGO
+     * Verificar código
      */
     public function verifyCode(UsuarioVerifyEmailRequest $request)
     {
-        $record = DB::table('email_verifications')
-            ->where('email', $request->email)
+        $record = EmailVerification::where('email', $request->email)
+            ->where('tipo', 'usuario')
             ->first();
 
         if (!$record) {
@@ -144,7 +133,7 @@ class UsuarioAuthController extends Controller
         ]);
 
         // Eliminar registro
-        DB::table('email_verifications')->where('email', $request->email)->delete();
+        $record->delete();
 
         return response()->json(['message' => 'Email verificado correctamente']);
     }

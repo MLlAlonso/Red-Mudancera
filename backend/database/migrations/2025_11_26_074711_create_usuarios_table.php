@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('empresa_id')->constrained('empresas')->cascadeOnDelete();
             $table->string('nombre', 100)->nullable();
             $table->string('email', 150) ->unique();
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('telefono', 20)->nullable();
             $table->string('avatar')->nullable();
             $table->string('password');

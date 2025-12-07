@@ -16,12 +16,19 @@ class Usuario extends Authenticatable
         'nombre',
         'email',
         'password',
+        'telefono',
+        'avatar',
         'rol',
-        'activoEmpresa'
+        'activoEmpresa',
+        'email_verified_at',
     ];
 
     protected $hidden = [
         'password'
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
     ];
 
     public function empresa()
