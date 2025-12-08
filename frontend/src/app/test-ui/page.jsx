@@ -5,6 +5,12 @@ import Footer from "@/components/layout/Footer";
 import Input from "@/components/common/Input";
 import ServiceCard from "@/components/cards/ServiceCard";
 import ServiceFilters from "@/components/filters/ServiceFilters";
+import NotificationCard from "@/components/cards/NotificationCard";
+import UserCard from "@/components/cards/UserCard";
+import SearchBar from "@/components/common/SearchBar";
+import ActionCard from "@/components/cards/ActionCard";
+import ReviewCard from "@/components/cards/ReviewCard";
+import AcuerdoCard from "@/components/cards/AcuerdoCard";
 
 export default function TestUI() {
   return (
@@ -54,8 +60,82 @@ export default function TestUI() {
 
 
         {/* Aquí podrás ir añadiendo cards, inputs, botones, etc */}
-        
+
         <ServiceFilters onChange={(filtro) => console.log("Filtro seleccionado:", filtro)} />
+
+        <NotificationCard
+          title="Nueva solicitud"
+          message="Tienes una solicitud nueva de un cliente."
+          onAccept={() => console.log("Aceptar")}
+          onDelete={() => console.log("Eliminar")}
+        />
+
+        <br />
+
+        <UserCard
+          avatar="/logo/mikkel.png"
+          nombre="Carlos Ramírez"
+          telefono="555 432 9876"
+          email="carlos@example.com"
+          fechaUnion="12/03/2023"
+          onDelete={() => console.log("Eliminar usuario")}
+          onPause={() => console.log("Pausar usuario")}
+        />
+
+        <SearchBar />
+
+        <ActionCard type="ofrezco" />
+        <ActionCard type="busco" />
+
+        <ReviewCard
+          empresa="Mudanzas Rápidas MX"
+          fecha="12/12/2025"
+          rating={4.5}
+          comentario="Excelente servicio, muy puntuales y cuidadosos con la mercancía."
+        />
+
+
+
+        <h2 style={{ marginTop: "40px", fontSize: "28px" }}>Testing AcuerdoCard</h2>
+
+        <AcuerdoCard
+          type="busco"
+          origen="CDMX"
+          destino="Guadalajara"
+          volumen={12}
+          socio="Logistics MX"
+          fechaLimite="15/12/2025"
+          estado="Asignado"
+          onVerDetalles={() => console.log("Ver detalles (Busco)")}
+          onContactar={() => console.log("Contactar (Busco)")}
+        />
+
+        <div style={{ height: "30px" }} /> {/* Separador visual */}
+
+        <AcuerdoCard
+          type="ofrezco"
+          origen="Monterrey"
+          destino="Toluca"
+          volumen={20}
+          socio="Transportes del Norte"
+          fechaLimite="22/12/2025"
+          estado="Finalizado"
+          onVerDetalles={() => console.log("Ver detalles (Ofrezco)")}
+          onContactar={() => console.log("Contactar (Ofrezco)")}
+        />
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       </main>
 

@@ -1,0 +1,75 @@
+@use "../utils/variables";
+@use "../utils/mixins";
+
+.actioncard {
+    width: 100%;
+    max-width: 680px;
+    height: auto;
+    aspect-ratio: 680 / 620;
+
+    border-radius: 20px;
+    cursor: pointer;
+    padding: clamp(20px, 5vw, 40px);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    color: #fff;
+
+    @include mixins.hover-transition;
+
+    &__icon {
+        width: clamp(200px, 40vw, 300px);
+        height: auto;
+        aspect-ratio: 300 / 228;
+        object-fit: cover;
+        margin-bottom: clamp(10px, 3vw, 20px);
+    }
+
+    &__title {
+        font-family: variables.$font-title;
+        font-size: clamp(28px, 7vw, 50px);
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    &__info {
+        font-family: variables.$font-text;
+        font-size: clamp(20px, 5vw, 40px);
+        max-width: 90%;
+        line-height: 1.1;
+    }
+
+    @media (max-width: 768px) {
+        aspect-ratio: auto;
+        height: auto;
+        padding: clamp(15px, 4vw, 30px);
+
+        &__icon {
+            margin-bottom: clamp(8px, 2vw, 15px);
+        }
+    }
+
+    @media (max-width: 480px) {
+        padding: clamp(12px, 3vw, 20px);
+    }
+}
+
+.actioncard--ofrezco {
+    background-color: variables.$success;
+
+    &:hover {
+        background-color: variables.$success-hover;
+    }
+}
+
+.actioncard--busco {
+    background-color: variables.$primary;
+
+    &:hover {
+        background-color: variables.$primary-hover;
+    }
+}

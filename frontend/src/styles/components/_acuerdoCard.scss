@@ -1,0 +1,120 @@
+@use "../utils/variables";
+@use "../utils/mixins";
+
+.acuerdo-card {
+  width: 420px;
+  background: #f4f7f6;
+  padding: 18px;
+  border-radius: 10px;
+  font-family: "Inter", sans-serif;
+  color: #0a2a42;
+
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+
+  /* BORDE AHORA A LA DERECHA */
+  border-right: 10px solid #0A2A42;
+  border-top: 1px solid #6F7F8D;
+  border-bottom: 1px solid #6F7F8D;
+  border-left: none;
+
+  display: flex;
+  flex-direction: column;
+
+  &__title {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .tag {
+    display: inline-block;
+    background: #0D355B;
+    color: #ffffff;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    width: 90px;
+    height: 30px;
+    line-height: 30px;
+    margin-bottom: 10px;
+  }
+
+  .ofrezco-tag {
+    background: #1C8F6A;
+  }
+
+  .route {
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 14px;
+  }
+
+  .info {
+    font-size: 14px;
+    margin: 2px 0;
+  }
+
+  .estado {
+    font-weight: 600;
+  }
+
+  .date {
+    font-size: 13px;
+    margin-top: 4px;
+    margin-bottom: 16px;
+    color: #5C6B7A;
+  }
+
+  .actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn-outline,
+  .btn-solid {
+    flex: 1;
+    padding: 10px 0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .btn-outline {
+    background: #f4f7f6;
+    border: 2px solid #0D355B;
+    color: #0A2A42;
+  }
+
+  .btn-solid {
+    background: #09233E;
+    border: none;
+    color: #ffffff;
+
+    &:hover {
+      background: #0D355B;
+    }
+  }
+
+  .ofrezco-btn {
+    background: #1C8F6A;
+
+    &:hover {
+      background: #17785A;
+    }
+  }
+}
+
+/* VARIANTE OFREZCO */
+.acuerdo-card.ofrezco {
+  border-right: 10px solid #1C8F6A;
+}
+
+/* Adaptabilidad */
+@media (max-width: 500px) {
+  .acuerdo-card {
+    width: 100%;
+  }
+}

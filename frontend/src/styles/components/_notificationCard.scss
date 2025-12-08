@@ -1,0 +1,55 @@
+@use "../utils/variables";
+@use "../utils/mixins";
+
+.notification-card {
+  width: 100%;
+  max-width: 650px;
+  background: variables.$cards;
+  padding: 25px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  /* Header */
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  &__title {
+    font-family: variables.$font-title;
+    font-size: 30px;
+    color: variables.$primary;
+    font-weight: bold;
+  }
+
+  /* Mensaje */
+  &__message {
+    font-family: variables.$font-text;
+    font-size: 25px;
+    color: variables.$text;
+    text-align: justify;
+    line-height: 1.3;
+  }
+
+  /* Botones */
+  &__actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    height: 80px;
+    color: variables.$text;
+
+    > * {
+      max-width: 300px;
+      width: 100%;
+    }
+  }
+}

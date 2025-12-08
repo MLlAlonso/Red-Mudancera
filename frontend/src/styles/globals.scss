@@ -10,8 +10,9 @@
 // Components
 @use "./components/inputs";
 @use "./components/buttons";
-@use "./components/serviceCard";
 @use "./components/serviceFilters";
+@use "./components/searchBar";
+@use "./components/cards";
 
 *{
     margin: 0;

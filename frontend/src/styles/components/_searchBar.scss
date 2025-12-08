@@ -1,0 +1,80 @@
+@use "../utils/variables";
+@use "../utils/mixins";
+
+.searchbar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  width: 100%;
+  max-width: 700px;
+
+  /* Contenedor del input */
+  &__input-wrapper {
+    position: relative;
+    width: 480px;
+    height: 50px;
+
+    background: #ffffff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    padding-left: 50px;
+  }
+
+  /* Icono */
+  &__icon {
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    left: 10px;
+  }
+
+  /* Input */
+  &__input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+
+    font-family: variables.$font-text;
+    font-size: 20px;
+    color: variables.$text;
+
+    &::placeholder {
+      color: variables.$text-muted;
+    }
+  }
+
+  /* Botón Filtrar */
+  &__filter {
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    font-family: variables.$font-title;
+    font-size: 30px;
+    font-weight: bold;
+    color: variables.$primary;
+
+    padding: 5px 10px;
+
+    @include mixins.hover-transition;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .searchbar {
+    flex-direction: column;
+    align-items: flex-start;
+
+    &__input-wrapper {
+      width: 100%;
+    }
+  }
+}
