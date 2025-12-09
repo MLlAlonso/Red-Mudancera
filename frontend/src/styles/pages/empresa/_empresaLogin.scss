@@ -1,0 +1,151 @@
+@use "../../utils/variables";
+
+.empresa-login {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  background: variables.$background;
+}
+
+.empresa-login__form {
+  width: 100%;
+  max-width: 550px;
+  background: variables.$cards;
+  padding: 35px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+/* Título */
+.empresa-login__title {
+  font-family: variables.$font-title;
+  font-size: 42px;
+  font-weight: 700;
+  color: variables.$primary;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Inputs */
+.empresa-login__input {
+  width: 100%;
+  padding: 14px 18px;
+  background: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-family: variables.$font-text;
+  font-size: 20px;
+  color: #000;
+  outline: none;
+  padding-left: 55px !important;
+
+  &::placeholder {
+    color: variables.$text-muted;
+  }
+}
+
+/* Contenedor con icono */
+.empresa-login__input-wrapper {
+  position: relative;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+}
+
+.empresa-login__icon {
+  position: absolute;
+  left: 16px;
+  width: 26px;
+  height: 26px;
+  opacity: 0.8;
+}
+
+/* Mostrar contraseña */
+.empresa-login__showpass {
+  position: absolute;
+  right: 14px;
+  font-size: 20px;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+/* CTA */
+.btn_cta{
+    margin-bottom: 0px;
+}
+
+/* Errores */
+.empresa-login__error {
+  margin-top: -10px;
+  color: variables.$error;
+  text-align: center;
+  font-size: 18px;
+  font-family: variables.$font-text;
+}
+
+/* Registro */
+.empresa-login__register {
+  margin-top: 0px;
+  text-align: left;
+  font-family: variables.$font-text;
+  font-size: 22px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease; 
+  
+  a{
+      color: variables.$text-muted;
+      text-decoration: none;
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+/* Olvidé contraseña */
+.empresa-login__forgot {
+  text-align: center;
+  font-family: variables.$font-title;
+  font-size: 30px;
+  font-weight: bold;
+  color: #09233e;
+  cursor: pointer;
+  margin-top: 5px;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+
+
+/* Responsive */
+@media (max-width: 600px) {
+  .empresa-login__title {
+    font-size: 34px;
+  }
+
+  .empresa-login__input {
+    font-size: 18px;
+  }
+
+  .empresa-login__cta {
+    font-size: 22px;
+  }
+
+  .empresa-login__forgot {
+    font-size: 24px;
+  }
+}
