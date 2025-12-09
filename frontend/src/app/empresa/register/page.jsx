@@ -64,6 +64,7 @@ export default function EmpresaRegister() {
       }
 
       // Registro exitoso
+      localStorage.setItem("empresa_email", formData.email);
       window.location.href = "/empresa/confirmacion";
     } catch (err) {
       console.error(err);

@@ -1,0 +1,98 @@
+@use "../../utils/variables";
+
+.empresa-dashboard {
+    width: 100%;
+    padding: 40px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+
+    /* HEADER */
+    &__title {
+        font-family: variables.$font-title;
+        font-size: 32px;
+        font-weight: bold;
+        color: variables.$primary;
+        margin-bottom: 5px;
+    }
+
+    &__subtitle {
+        font-family: variables.$font-text;
+        color: variables.$text-muted;
+        font-size: 18px;
+        margin-bottom: 25px;
+    }
+
+    /* ================================
+      CONTROLS (filters + add + search)
+     ================================ */
+    &__controls {
+        display: flex;
+        flex-direction: column;
+        gap: 0px;
+        width: 100%;
+        margin-bottom: 20px;
+
+        /* Lado izquierdo: filtros y agregar */
+        .empresa-dashboard__left {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0px;
+        }
+
+        @media (max-width: 900px) {
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+
+            .btn_crud {
+                width: 100px;
+                max-width: 100px;
+                height: 50px;
+                font-size: 20px;
+                margin-left: 10px;
+            }
+        }
+    }
+
+
+
+    /* ================================
+      Cards
+     ================================ */
+    &__cards {
+        margin-top: 25px;
+        display: grid;
+        gap: 20px;
+
+        /* Mobile */
+        grid-template-columns: 1fr;
+
+        /* Tablet 600px */
+        @media (min-width: 600px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        /* Desktop 900px */
+        @media (min-width: 900px) {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+}
+
+.header {
+
+    .header__content {
+        justify-content: center;
+        min-width: 100%;
+        align-items: center;
+        justify-content: space-between;
+
+        // iconos
+        .header__icon,
+        .header__menu {
+            display: flex;
+        }
+    }
+}
