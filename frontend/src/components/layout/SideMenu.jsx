@@ -13,11 +13,12 @@ export default function SideMenu({ open }) {
       <ul>
         <li><img src="/icons/cuenta.png" /><span>Mi perfil</span></li>
         <li><img src="/icons/campana.png" /><span>Notificaciones</span></li>
+        <li><img src="/icons/docs.png" /><span>Mis publicaciones</span></li>
         <li><img src="/icons/acuerdo_2.png" /><span>Mis acuerdos</span></li>
-        <li><img src="/icons/docs.png" /><span>Mis servicios de carga</span></li>
-        <li><img src="/icons/team.png" /><span>Mi equipo</span></li>
-        <li><img src="/icons/docs.png" /><span>Crear servicio</span></li>
+        <li><img src="/icons/team.png" /><span>Mis usuarios</span></li>
+        <li><img src="/icons/docs.png" /><span>Busca / Ofrece servicio</span></li>
         <li><img src="/icons/busca_2.png" /><span>Últimas publicaciones</span></li>
+        <li><img src="/icons/logout.png" /><span>Cerrar sesión</span></li>
         <li><img src="/icons/help.png" /><span>Centro de ayuda</span></li>
       </ul>
     </motion.div>
