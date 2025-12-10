@@ -11,10 +11,11 @@ class EmpresaUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nombre'   => 'nullable|string|max:120',
-            'email'    => 'nullable|email|max:150|unique:empresas,email,' . auth()->id(),
-            'telefono' => 'nullable|string|max:20',
-            'avatar'   => 'nullable|string',
+            'empresa'     => 'nullable|string|max:150',
+            'descripcion' => 'nullable|string|max:2000',
+            'email'       => 'nullable|email|max:150|unique:empresas,email,' . auth()->id(),
+            'tel'         => 'nullable|string|max:20',
+            'logo'        => 'nullable|string',
         ];
     }
 }

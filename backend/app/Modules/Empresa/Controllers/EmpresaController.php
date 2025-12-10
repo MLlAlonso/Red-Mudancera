@@ -11,8 +11,11 @@ class EmpresaController extends Controller
 {
     public function me(Request $request)
     {
-        return response()->json($request->user());
+        $empresa = $request->user();
+        $empresa->append('logo_url');
+        return response()->json($empresa);
     }
+
 
     public function update(EmpresaUpdateRequest $request)
     {

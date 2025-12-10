@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function SideMenu({ open }) {
   return (
@@ -11,15 +12,88 @@ export default function SideMenu({ open }) {
       transition={{ duration: 0.25 }}
     >
       <ul>
-        <li><img src="/icons/cuenta.png" /><span>Mi perfil</span></li>
-        <li><img src="/icons/campana.png" /><span>Notificaciones</span></li>
-        <li><img src="/icons/docs.png" /><span>Mis publicaciones</span></li>
-        <li><img src="/icons/acuerdo_2.png" /><span>Mis acuerdos</span></li>
-        <li><img src="/icons/team.png" /><span>Mis usuarios</span></li>
-        <li><img src="/icons/docs.png" /><span>Busca / Ofrece servicio</span></li>
-        <li><img src="/icons/busca_2.png" /><span>Últimas publicaciones</span></li>
-        <li><img src="/icons/logout.png" /><span>Cerrar sesión</span></li>
-        <li><img src="/icons/help.png" /><span>Centro de ayuda</span></li>
+
+        <li>
+          <Link href="/empresa/perfil">
+            <div className="side-item">
+              <img src="/icons/cuenta.png" />
+              <span>Mi perfil</span>
+            </div>
+          </Link>
+        </li>
+
+        <li>
+          <Link href="/empresa/notificaciones">
+            <div className="side-item">
+              <img src="/icons/campana.png" />
+              <span>Notificaciones</span>
+            </div>
+          </Link>
+        </li>
+
+        <li>
+          <Link href="/empresa/publicaciones">
+            <div className="side-item">
+              <img src="/icons/docs.png" />
+              <span>Mis publicaciones</span>
+            </div>
+          </Link>
+        </li>
+
+        <li>
+          <Link href="/empresa/acuerdos">
+            <div className="side-item">
+              <img src="/icons/acuerdo_2.png" />
+              <span>Mis acuerdos</span>
+            </div>
+          </Link>
+        </li>
+
+        <li>
+          <Link href="/empresa/usuarios">
+            <div className="side-item">
+              <img src="/icons/team.png" />
+              <span>Mis usuarios</span>
+            </div>
+          </Link>
+        </li>
+
+        <li>
+          <Link href="/empresa/busca">
+            <div className="side-item">
+              <img src="/icons/docs.png" />
+              <span>Busca / Ofrece servicio</span>
+            </div>
+          </Link>
+        </li>
+
+        <li>
+          <Link href="/empresa/dashboard">
+            <div className="side-item">
+              <img src="/icons/busca_2.png" />
+              <span>Últimas publicaciones</span>
+            </div>
+          </Link>
+        </li>
+
+        <li>
+          <Link href="/empresa/logout">
+            <div className="side-item">
+              <img src="/icons/logout.png" />
+              <span>Cerrar sesión</span>
+            </div>
+          </Link>
+        </li>
+
+        <li>
+          <Link href="/empresa/ayuda">
+            <div className="side-item">
+              <img src="/icons/help.png" />
+              <span>Centro de ayuda</span>
+            </div>
+          </Link>
+        </li>
+
       </ul>
     </motion.div>
   );
