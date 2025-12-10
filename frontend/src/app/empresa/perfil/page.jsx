@@ -1,15 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ReviewCard from "@/components/cards/ReviewCard";
+import Button_crud from "@/components/common/Button_crud";
 
 import "@/styles/pages/empresa/_empresaPerfil.scss";
 
 export default function EmpresaPerfil() {
   const [empresa, setEmpresa] = useState(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   const getCookie = (name) => {
     const match = document.cookie.match(
@@ -63,7 +67,7 @@ export default function EmpresaPerfil() {
           <h2 className="empresa-perfil__name">{empresa.empresa}</h2>
         </div>
 
-        {/* Reputación + acuerdos */}
+        {/* Stats */}
         <div className="empresa-perfil__stats">
           <div className="stat">
             ⭐ {empresa.reputacion}
@@ -79,7 +83,11 @@ export default function EmpresaPerfil() {
         {/* Título + botón editar */}
         <div className="empresa-perfil__row">
           <h3 className="empresa-perfil__section-title">Detalles de empresa</h3>
-          <button className="btn_crud">Editar</button>
+
+          <Button_crud
+            value="Editar"
+            onClick={() => router.push("/empresa/perfil/editar")}
+          />
         </div>
 
         {/* Info */}

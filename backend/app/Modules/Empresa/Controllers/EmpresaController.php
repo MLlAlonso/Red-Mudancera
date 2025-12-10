@@ -13,15 +13,16 @@ class EmpresaController extends Controller
     {
         $empresa = $request->user();
         $empresa->append('logo_url');
+
         return response()->json($empresa);
     }
-
 
     public function update(EmpresaUpdateRequest $request)
     {
         $empresa = $request->user();
 
         $empresa->update($request->validated());
+        $empresa->append('logo_url');
 
         return response()->json([
             'message' => 'Empresa actualizada exitosamente',

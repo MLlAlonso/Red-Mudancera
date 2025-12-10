@@ -1,9 +1,9 @@
 "use client";
 
-export default function button_crud({  value }) {
+export default function Button_crud({ value, onClick }) {
   return (
-      <button className="btn_crud" >
-        {value}
-      </button>
+    <button className="btn_crud" onClick={onClick}>
+      {value}
+    </button>
   );
 }
