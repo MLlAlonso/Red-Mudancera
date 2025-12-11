@@ -15,5 +15,6 @@ Route::prefix('empresa')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/me', [EmpresaController::class, 'me']);
         Route::put('/update', [EmpresaController::class, 'update']);
+        Route::delete('/delete', [EmpresaController::class, 'destroy']);
     });
 });

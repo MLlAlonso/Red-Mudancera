@@ -74,8 +74,11 @@ class EmpresaAuthController extends Controller
         // Eliminar tokens anteriores
         $empresa->tokens()->delete();
 
-        // Crear nuevo token
+        // Crear token nuevo
         $token = $empresa->createToken('api-token')->plainTextToken;
+
+        // 🔥 Agregar logo_url SIEMPRE
+        $empresa->append('logo_url');
 
         return response()->json([
             'message' => 'Inicio de sesión exitoso',
@@ -83,6 +86,7 @@ class EmpresaAuthController extends Controller
             'token' => $token
         ]);
     }
+
 
     /* ============================================================
        ENVIAR CÓDIGO DE VERIFICACIÓN
@@ -139,46 +143,5 @@ class EmpresaAuthController extends Controller
         $record->delete();
 
         return response()->json(['message' => 'Correo verificado correctamente']);
-    }
-
-    /* ============================================================
-       PERFIL
-    ============================================================ */
-    public function me()
-    {
-        return response()->json(Auth::user());
-    }
-
-    /* ============================================================
-       ACTUALIZAR PERFIL DE EMPRESA
-    ============================================================ */
-    public function update(EmpresaUpdateRequest $request)
-    {
-        $empresa = Auth::user();
-
-        $empresa->update($request->validated());
-
-        return response()->json([
-            'message' => 'Empresa actualizada correctamente',
-            'empresa' => $empresa
-        ]);
-    }
-
-    /* ============================================================
-       Eliminar PERFIL DE EMPRESA
-    ============================================================ */
-    public function destroy()
-    {
-        $empresa = Auth::user();
-
-        // Eliminar tokens
-        $empresa->tokens()->delete();
-
-        // Eliminar empresa (DELETE real)
-        $empresa->delete();
-
-        return response()->json([
-            'message' => 'La empresa ha sido eliminada permanentemente.'
-        ]);
     }
 }

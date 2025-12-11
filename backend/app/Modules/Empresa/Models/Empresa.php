@@ -45,18 +45,11 @@ class Empresa extends Authenticatable
     ];
 
     // ===========================================
-    // ACCESSOR PARA LOGO
+    // LOGO
     // ===========================================
     public function getLogoUrlAttribute()
     {
         if (!$this->logo) return null;
-
-        // Si ya viene en base64, regresarlo tal cual
-        if (str_starts_with($this->logo, 'data:image')) {
-            return $this->logo;
-        }
-
-        // Si fuera un archivo físico (futuro)
         return asset('storage/' . $this->logo);
     }
 }

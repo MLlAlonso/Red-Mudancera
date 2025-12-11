@@ -1,9 +1,9 @@
 "use client";
 
-export default function button_success({  value }) {
+export default function Button_success({ value, onClick, type = "button" }) {
   return (
-      <button className="btn_success" >
-        {value}
-      </button>
+    <button className="btn_success" onClick={onClick} type={type}>
+      {value}
+    </button>
   );
 }

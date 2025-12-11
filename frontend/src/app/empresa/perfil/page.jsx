@@ -22,6 +22,8 @@ export default function EmpresaPerfil() {
     return match ? match[2] : null;
   };
 
+  const getLogo = (empresa) => empresa.logo_url || "/icons/user-placeholder.png";
+
   useEffect(() => {
     const token = getCookie("token_empresa");
 
@@ -56,14 +58,8 @@ export default function EmpresaPerfil() {
 
         {/* Foto + nombre */}
         <div className="empresa-perfil__top">
-          <img
-            src={
-              empresa.logo
-                ? `${process.env.NEXT_PUBLIC_STORAGE}/${empresa.logo}`
-                : "/icons/user-placeholder.png"
-            }
-            className="empresa-perfil__avatar"
-          />
+          <img src={getLogo(empresa)} className="empresa-perfil__avatar" />
+
           <h2 className="empresa-perfil__name">{empresa.empresa}</h2>
         </div>
 
