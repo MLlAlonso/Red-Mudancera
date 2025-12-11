@@ -90,10 +90,11 @@ export default function EmpresaPerfil() {
         <div className="empresa-perfil__info">
           <p><strong>Nombre:</strong> {empresa.empresa}</p>
           <p><strong>Descripción:</strong> {empresa.descripcion ?? "—"}</p>
-          <p><strong>Correo:</strong> {empresa.email}</p>
-          <p><strong>Representante legal:</strong> {empresa.representante}</p>
-          <p><strong>Teléfono:</strong> {empresa.tel}</p>
           <p><strong>Sede:</strong> {empresa.base ?? "—"}</p>
+          <p><strong>Representante legal:</strong> {empresa.representante}</p>
+          <p><strong>Correo:</strong> {empresa.email}</p>
+          <p><strong>Teléfono:</strong> {empresa.tel}</p>
+          <p><strong>Codigo Empresa:</strong> {empresa.codigoEmpresa}</p>
         </div>
 
         <div className="empresa-perfil__divider"></div>

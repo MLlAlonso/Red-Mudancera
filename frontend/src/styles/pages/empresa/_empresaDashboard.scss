@@ -9,7 +9,7 @@
     /* HEADER */
     &__title {
         font-family: variables.$font-title;
-        font-size: 32px;
+        font-size: 40px;
         font-weight: bold;
         color: variables.$primary;
         margin-bottom: 5px;
@@ -18,7 +18,7 @@
     &__subtitle {
         font-family: variables.$font-text;
         color: variables.$text-muted;
-        font-size: 18px;
+        font-size: 22px;
         margin-bottom: 25px;
     }
 

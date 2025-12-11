@@ -1,8 +1,6 @@
 "use client";
 
 import React from "react";
-import Button_error from "../common/Button_error";
-import Button_success from "../common/Button_success";
 
 const UserCard = ({
   avatar,
@@ -12,6 +10,7 @@ const UserCard = ({
   fechaUnion,
   onDelete,
   onPause,
+  onShare,
 }) => {
   return (
     <div className="user-card">
@@ -31,9 +30,25 @@ const UserCard = ({
         <p className="user-card__text">Se unió el: {fechaUnion}</p>
       </div>
 
+      {/* Íconos de acciones */}
       <div className="user-card__actions">
-        <Button_error value="Eliminar" onClick={onDelete} />
-        <Button_success value="Pausar" onClick={onPause} />
+        <img
+          src="/icons/delete.png"
+          className="user-card__icon"
+          onClick={onDelete}
+        />
+
+        <img
+          src="/icons/pause.png"
+          className="user-card__icon"
+          onClick={onPause}
+        />
+
+        <img
+          src="/icons/share.png"
+          className="user-card__icon"
+          onClick={onShare}
+        />
       </div>
     </div>
   );
