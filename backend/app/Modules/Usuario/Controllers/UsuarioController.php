@@ -15,23 +15,43 @@ class UsuarioController extends Controller
      */
     public function me()
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         if (! $user instanceof Usuario) {
             return response()->json(['message' => 'Acceso no autorizado'], 403);
         }
 
+        // Cargar empresa
+        $empresa = $user->empresa;
+
         return response()->json([
-            'usuario' => $user
+            'usuario' => [
+                'id'        => $user->id,
+                'nombre'    => $user->nombre,
+                'email'     => $user->email,
+                'telefono'  => $user->telefono,
+                'avatar'    => $user->avatar,
+                'rol'       => $user->rol,
+                'activo'    => $user->activoEmpresa,
+                'created_at' => $user->created_at,
+            ],
+
+            'empresa' => [
+                'nombre'        => $empresa->empresa,
+                'reputacion'    => $empresa->reputacion,
+                'acuerdos'      => $empresa->numServicios,
+                'logo'          => $empresa->logo_url,
+            ]
         ]);
     }
+
 
     /**
      * Actualizar perfil
      */
     public function update(UsuarioUpdateRequest $request)
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         if (! $user instanceof Usuario) {
             return response()->json(['message' => 'Acceso no autorizado'], 403);
@@ -54,7 +74,7 @@ class UsuarioController extends Controller
      */
     public function destroy()
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         if (! $user instanceof Usuario) {
             return response()->json(['message' => 'Acceso no autorizado'], 403);

@@ -1,0 +1,85 @@
+@use "../../utils/variables";
+
+.usuario-login {
+    width: 100%;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    background: variables.$background;
+}
+
+.usuario-login__form {
+    width: 100%;
+    max-width: 550px;
+    background: variables.$cards;
+    padding: 35px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+.usuario-login__title {
+    font-family: variables.$font-title;
+    font-size: 40px;
+    font-weight: 700;
+    color: variables.$primary;
+    text-align: center;
+}
+
+.usuario-login__input-wrapper {
+    position: relative;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    img {
+        position: absolute;
+        left: 16px;
+        width: 26px;
+        height: 26px;
+        opacity: 0.8;
+    }
+}
+
+.usuario-login__input {
+    width: 100%;
+    padding: 14px 18px;
+    background: #fff;
+    border: none;
+    border-radius: 12px;
+    font-family: variables.$font-text;
+    font-size: 20px;
+    padding-left: 55px !important;
+}
+
+.usuario-login__icon {
+    position: absolute;
+    left: 16px;
+    width: 26px;
+    height: 26px;
+}
+
+.usuario-login__showpass {
+    position: absolute;
+    right: 14px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.usuario-login__error {
+    color: variables.$error;
+    text-align: center;
+    font-size: 18px;
+}
+
+.usuario-login__forgot {
+    text-align: center;
+    font-size: 24px;
+    font-family: variables.$font-title;
+    cursor: pointer;
+}
