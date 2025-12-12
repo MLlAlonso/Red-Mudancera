@@ -8,6 +8,7 @@ const UserCard = ({
   telefono,
   email,
   fechaUnion,
+  activo,
   onDelete,
   onPause,
   onShare,
@@ -39,7 +40,7 @@ const UserCard = ({
         />
 
         <img
-          src="/icons/pause.png"
+          src={activo ? "/icons/pause.png" : "/icons/play.png"}
           className="user-card__icon"
           onClick={onPause}
         />

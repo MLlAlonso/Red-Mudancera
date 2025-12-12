@@ -1,23 +1,21 @@
 @use "../utils/variables";
 
 .service-card {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     max-width: 420px;
-    background: variables.$background;
+    margin: 0px auto;
     padding: 18px;
-    border-radius: 10px;
+    background: variables.$background;
     font-family: variables.$font-text;
     color: variables.$primary;
-    margin: 0px auto;
-
+    border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     border-left: 10px solid variables.$primary;
     border-top: 1px solid variables.$text-muted;
     border-bottom: 1px solid variables.$text-muted;
     border-right: none;
-
-    display: flex;
-    flex-direction: column;
 
     &__title {
         display: flex;
@@ -44,9 +42,9 @@
 
     &__route {
         font-size: 24px;
+        font-weight: 600;
         margin-top: 10px;
         margin-bottom: 14px;
-        font-weight: 600;
     }
 
     &__info {
@@ -56,8 +54,8 @@
 
     &__date {
         font-size: 18px;
-        margin-top: 4px;
         color: variables.$text-muted;
+        margin-top: 4px;
     }
 
     &__actions {

@@ -10,15 +10,14 @@
 
   /* Contenedor del input */
   &__input-wrapper {
-    position: relative;
+    display: flex;
     width: 480px;
     height: 50px;
-
-    background: #ffffff;
-    border-radius: 10px;
-    display: flex;
+    position: relative;
     align-items: center;
+    border-radius: 10px;
     padding-left: 50px;
+    background: #ffffff;
   }
 
   /* Icono */
@@ -35,7 +34,6 @@
     height: 100%;
     border: none;
     outline: none;
-
     font-family: variables.$font-text;
     font-size: 20px;
     color: variables.$text;
@@ -50,12 +48,10 @@
     background: none;
     border: none;
     cursor: pointer;
-
     font-family: variables.$font-title;
     font-size: 30px;
     font-weight: bold;
     color: variables.$primary;
-
     padding: 5px 10px;
 
     @include mixins.hover-transition;

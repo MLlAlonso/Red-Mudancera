@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-
 import Button_crud from "@/components/common/Button_crud";
+import Button_error from "@/components/common/Button_error";
+import Button_success from "@/components/common/Button_success";
 import Input from "@/components/common/Input";
 import UserCard from "@/components/cards/UserCard";
 
@@ -18,23 +19,32 @@ export default function EmpresaUsuarios() {
   const [loading, setLoading] = useState(true);
   const [usuarios, setUsuarios] = useState([]);
   const [empresaCodigo, setEmpresaCodigo] = useState("");
-
+  
+  // MODALES
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalConfirmDelete, setModalConfirmDelete] = useState(null);
+  const [modalSuccessDelete, setModalSuccessDelete] = useState(false);
+  const [modalSuccessPause, setModalSuccessPause] = useState(false);
+  const [modalSuccessResume, setModalSuccessResume] = useState(false);
 
+  // FORMULARIO
   const [form, setForm] = useState({
     nombre: "",
     email: "",
-    password: "",
     telefono: "",
     codigoEmpresa: "",
   });
 
+  const DEFAULT_PASSWORD = "Mudanzas123";
+
   const getCookie = (name) => {
-    const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+    const match = document.cookie.match(
+      new RegExp("(^| )" + name + "=([^;]+)")
+    );
     return match ? match[2] : null;
   };
 
-  // Obtener códigoEmpresa automáticamente
+  // Obtener códigoEmpresa
   const fetchEmpresa = () => {
     const token = getCookie("token_empresa");
 
@@ -47,15 +57,12 @@ export default function EmpresaUsuarios() {
       });
   };
 
-  // Obtener usuarios dinámicos
+  // Obtener usuarios
   const fetchUsuarios = () => {
     const token = getCookie("token_empresa");
 
-    // 🔥 RUTA CORRECTA YA ACTUALIZADA
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/usuarios`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
       .then((data) => {
@@ -78,15 +85,19 @@ export default function EmpresaUsuarios() {
   const handleSubmit = async () => {
     const payload = {
       ...form,
+      password: DEFAULT_PASSWORD,
       codigoEmpresa: empresaCodigo,
     };
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/usuario/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/usuario/register`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
 
       if (!res.ok) {
         alert("Error registrando usuario");
@@ -98,15 +109,76 @@ export default function EmpresaUsuarios() {
       setForm({
         nombre: "",
         email: "",
-        password: "",
         telefono: "",
-        codigoEmpresa: "",
       });
 
       fetchUsuarios();
     } catch (err) {
       console.log(err);
     }
+  };
+
+  // Confirmar eliminación
+  const askDelete = (id) => {
+    setModalConfirmDelete(id);
+  };
+
+  const confirmDelete = async () => {
+    const id = modalConfirmDelete;
+    const token = getCookie("token_empresa");
+
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/usuario/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    setModalConfirmDelete(null);
+    setModalSuccessDelete(true);
+    fetchUsuarios();
+    setTimeout(() => setModalSuccessDelete(false), 2500);
+  };
+
+  // Pausar / Reanudar usuario
+  const handlePauseToggle = async (id) => {
+    const token = getCookie("token_empresa");
+    const usuario = usuarios.find((u) => u.id === id);
+
+    const endpoint = usuario.activoEmpresa ? "pausar" : "reanudar";
+
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/empresa/usuario/${id}/${endpoint}`,
+      {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    await fetchUsuarios();
+
+    if (usuario.activoEmpresa) {
+      setModalSuccessPause(true);
+      setTimeout(() => setModalSuccessPause(false), 2000);
+    } else {
+      setModalSuccessResume(true);
+      setTimeout(() => setModalSuccessResume(false), 2000);
+    }
+  };
+
+  // Compartir por WhatsApp sin que desaparezca el mensaje
+  const handleShare = (usuario) => {
+    const mensaje =
+      "Hola bienvenido(a) " + usuario.nombre +
+      " a M3.%0A%0A" +
+      "Te comparto tu usuario y contraseña:%0A" +
+      "Usuario: " + usuario.email +
+      "%0A" +
+      "Contraseña: " + DEFAULT_PASSWORD +
+      "%0A%0A" +
+      "Inicia sesión aquí:%0A" +
+      "http://localhost:3000/usuario/login";
+
+    const url = `https://wa.me/52${usuario.telefono}?text=${mensaje}`;
+    window.open(url, "_blank");
   };
 
   if (loading) return <p>Cargando...</p>;
@@ -133,10 +205,11 @@ export default function EmpresaUsuarios() {
               nombre={u.nombre}
               telefono={u.telefono}
               email={u.email}
+              activo={Boolean(u.activoEmpresa)}
               fechaUnion={new Date(u.created_at).toLocaleDateString()}
-              onDelete={() => {}}
-              onPause={() => {}}
-              onShare={() => {}}
+              onDelete={() => askDelete(u.id)}
+              onPause={() => handlePauseToggle(u.id)}
+              onShare={() => handleShare(u)}
             />
           ))}
         </div>
@@ -144,55 +217,72 @@ export default function EmpresaUsuarios() {
 
       <Footer />
 
-      {/* MODAL */}
+      {/* ===============================
+          MODAL REGISTRO
+      =============================== */}
       {modalOpen && (
         <div className="modal-overlay" onClick={() => setModalOpen(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h2 className="modal__title">Registrar usuario</h2>
 
-            <Input
-              label="Nombre"
-              name="nombre"
-              placeholder="Nombre de usuario"
-              value={form.nombre}
-              onChange={handleInput}
-            />
-
-            <Input
-              label="Correo"
-              name="email"
-              placeholder="Correo personal o de empresa"
-              value={form.email}
-              onChange={handleInput}
-            />
-
-            <div className="modal__password-row">
-              <Input
-                label="Contraseña"
-                name="password"
-                type="password"
-                placeholder="********"
-                value={form.password}
-                onChange={handleInput}
-              />
-
-              <div className="modal__help">
-                <img src="/icons/help.png" className="modal__help-icon" />
-                <div className="modal__tooltip">
-                  La contraseña debe incluir al menos 8 caracteres, 1 mayúscula y 1 número.
-                </div>
-              </div>
-            </div>
-
-            <Input
-              label="Teléfono"
-              name="telefono"
-              placeholder="Teléfono"
-              value={form.telefono}
-              onChange={handleInput}
-            />
+            <Input label="Nombre" name="nombre" placeholder="Nombre" value={form.nombre} onChange={handleInput}/>
+            <Input label="Correo" name="email" placeholder="Correo" value={form.email} onChange={handleInput}/>
+            <Input label="Teléfono" name="telefono" placeholder="Teléfono" value={form.telefono} onChange={handleInput}/>
 
             <Button_crud value="Registrar" onClick={handleSubmit} />
+          </div>
+        </div>
+      )}
+
+      {/* ===============================
+          MODAL CONFIRMAR ELIMINACIÓN
+      =============================== */}
+      {modalConfirmDelete && (
+        <div className="empresa-delete__modal">
+          <div className="empresa-delete__box">
+            <h2>¿Eliminar usuario?</h2>
+            <p>Esta acción es permanente.</p>
+
+            <div className="empresa-delete__buttons">
+              <Button_error value="Cancelar" onClick={() => setModalConfirmDelete(null)} />
+              <Button_success value="Aceptar" onClick={confirmDelete} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===============================
+          MODAL ÉXITO: Eliminado
+      =============================== */}
+      {modalSuccessDelete && (
+        <div className="empresa-editar__modal">
+          <div className="empresa-editar__modal-box">
+            <img src="/icons/check.png" className="empresa-editar__modal-icon" />
+            <p>El usuario ha sido eliminado correctamente</p>
+          </div>
+        </div>
+      )}
+
+      {/* ===============================
+          MODAL ÉXITO: Pausado
+      =============================== */}
+      {modalSuccessPause && (
+        <div className="empresa-editar__modal">
+          <div className="empresa-editar__modal-box">
+            <img src="/icons/check.png" className="empresa-editar__modal-icon" />
+            <p>El usuario ha sido pausado correctamente</p>
+          </div>
+        </div>
+      )}
+
+      {/* ===============================
+          MODAL ÉXITO: Reanudado
+      =============================== */}
+      {modalSuccessResume && (
+        <div className="empresa-editar__modal">
+          <div className="empresa-editar__modal-box">
+            <img src="/icons/check.png" className="empresa-editar__modal-icon" />
+            <p>El usuario ha reanudado sus actividades</p>
           </div>
         </div>
       )}

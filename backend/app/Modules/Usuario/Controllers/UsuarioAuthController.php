@@ -84,7 +84,6 @@ class UsuarioAuthController extends Controller
     public function sendVerificationCode(Request $request)
     {
         $request->validate(['email' => 'required|email']);
-
         $usuario = Usuario::where('email', $request->email)->first();
 
         if (!$usuario) {
@@ -102,7 +101,6 @@ class UsuarioAuthController extends Controller
         );
 
         Mail::to($usuario->email)->send(new UsuarioVerificationCode($code));
-
         return response()->json(['message' => 'Código enviado al email.']);
     }
 
@@ -134,7 +132,6 @@ class UsuarioAuthController extends Controller
 
         // Eliminar registro
         $record->delete();
-
         return response()->json(['message' => 'Email verificado correctamente']);
     }
 }

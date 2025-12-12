@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Modules\Empresa\Requests;
-
 use Illuminate\Foundation\Http\FormRequest;
 
 class LoginEmpresaRequest extends FormRequest

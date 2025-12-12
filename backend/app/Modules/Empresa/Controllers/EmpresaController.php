@@ -64,4 +64,60 @@ class EmpresaController extends Controller
 
         return response()->json(['usuarios' => $usuarios]);
     }
+
+    public function eliminarUsuario($id, Request $request)
+    {
+        $empresa = $request->user();
+
+        $usuario = \App\Modules\Usuario\Models\Usuario::where('id', $id)
+            ->where('empresa_id', $empresa->id)
+            ->first();
+
+        if (!$usuario) {
+            return response()->json(['message' => 'Usuario no encontrado'], 404);
+        }
+
+        $usuario->tokens()->delete();
+        $usuario->delete();
+
+        return response()->json(['message' => 'Usuario eliminado correctamente']);
+    }
+
+    public function pausarUsuario($id, Request $request)
+    {
+        $empresa = $request->user();
+
+        $usuario = \App\Modules\Usuario\Models\Usuario::where('empresa_id', $empresa->id)
+            ->where('id', $id)
+            ->first();
+
+        if (! $usuario) {
+            return response()->json(['message' => 'Usuario no encontrado'], 404);
+        }
+
+        // Pausar usuario
+        $usuario->activoEmpresa = false;
+        $usuario->save();
+
+        return response()->json(['message' => 'Usuario pausado correctamente']);
+    }
+
+    public function reanudarUsuario($id, Request $request)
+    {
+        $empresa = $request->user();
+
+        $usuario = \App\Modules\Usuario\Models\Usuario::where('empresa_id', $empresa->id)
+            ->where('id', $id)
+            ->first();
+
+        if (! $usuario) {
+            return response()->json(['message' => 'Usuario no encontrado'], 404);
+        }
+
+        // Reanudar usuario
+        $usuario->activoEmpresa = true;
+        $usuario->save();
+
+        return response()->json(['message' => 'Usuario reanudado correctamente']);
+    }
 }

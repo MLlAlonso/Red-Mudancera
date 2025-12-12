@@ -16,6 +16,11 @@ Route::prefix('empresa')->group(function () {
         Route::get('/me', [EmpresaController::class, 'me']);
         Route::put('/update', [EmpresaController::class, 'update']);
         Route::delete('/delete', [EmpresaController::class, 'destroy']);
+        
+        // RUTAS PARA CRUD DE USUARIOS
         Route::get('/usuarios', [EmpresaController::class, 'usuariosEmpresa']);
+        Route::delete('/usuario/{id}', [EmpresaController::class, 'eliminarUsuario']);
+        Route::patch('/usuario/{id}/pausar', [EmpresaController::class, 'pausarUsuario']);
+        Route::patch('/usuario/{id}/reanudar', [EmpresaController::class, 'reanudarUsuario']);
     });
 });

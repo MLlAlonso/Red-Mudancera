@@ -9,7 +9,6 @@ use Laravel\Sanctum\HasApiTokens;
 class Empresa extends Authenticatable
 {
     use HasApiTokens, HasFactory;
-
     protected $table = 'empresas';
 
     protected $fillable = [

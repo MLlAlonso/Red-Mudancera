@@ -5,6 +5,7 @@ namespace App\Modules\Usuario\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Usuario\Models\Usuario;
 use App\Modules\Usuario\Requests\UsuarioUpdateRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UsuarioController extends Controller
@@ -73,7 +74,7 @@ class UsuarioController extends Controller
      */
     public function listByEmpresa()
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         if (!$user instanceof Usuario) {
             return response()->json(['message' => 'Acceso no autorizado'], 403);

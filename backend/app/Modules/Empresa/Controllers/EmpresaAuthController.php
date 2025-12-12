@@ -34,7 +34,7 @@ class EmpresaAuthController extends Controller
         $empresa = Empresa::create($data);
 
         // ============================================================
-        //   NUEVO: ENVIAR CÓDIGO DE VERIFICACIÓN POR CORREO
+        // ENVIAR CÓDIGO DE VERIFICACIÓN POR CORREO
         // ============================================================
         $code = rand(100000, 999999);
 
@@ -77,7 +77,7 @@ class EmpresaAuthController extends Controller
         // Crear token nuevo
         $token = $empresa->createToken('api-token')->plainTextToken;
 
-        // 🔥 Agregar logo_url SIEMPRE
+        // Agregar logo_url SIEMPRE
         $empresa->append('logo_url');
 
         return response()->json([

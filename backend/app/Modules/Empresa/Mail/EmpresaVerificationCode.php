@@ -9,7 +9,6 @@ use Illuminate\Queue\SerializesModels;
 class EmpresaVerificationCode extends Mailable
 {
     use Queueable, SerializesModels;
-
     public $code;
 
     public function __construct($code)

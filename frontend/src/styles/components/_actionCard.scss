@@ -2,20 +2,17 @@
 @use "../utils/mixins";
 
 .actioncard {
-    width: 100%;
-    max-width: 680px;
-    height: auto;
-    aspect-ratio: 680 / 620;
-
-    border-radius: 20px;
-    cursor: pointer;
-    padding: clamp(20px, 5vw, 40px);
-
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
+    width: 100%;
+    max-width: 680px;
+    height: auto;
+    aspect-ratio: 680 / 620;
+    border-radius: 20px;
+    cursor: pointer;
+    padding: clamp(20px, 5vw, 40px);
     text-align: center;
     color: #fff;
 
