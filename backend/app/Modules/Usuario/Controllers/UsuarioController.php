@@ -67,4 +67,25 @@ class UsuarioController extends Controller
 
         return response()->json(['message' => 'Usuario eliminado correctamente']);
     }
+
+    /**
+     * Listar usuarios de la misma empresa
+     */
+    public function listByEmpresa()
+    {
+        $user = auth()->user();
+
+        if (!$user instanceof Usuario) {
+            return response()->json(['message' => 'Acceso no autorizado'], 403);
+        }
+
+        // Obtener usuarios de la misma empresa
+        $usuarios = Usuario::where('empresa_id', $user->empresa_id)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        return response()->json([
+            'usuarios' => $usuarios
+        ]);
+    }
 }

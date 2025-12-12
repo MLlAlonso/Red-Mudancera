@@ -5,6 +5,7 @@ namespace App\Modules\Empresa\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Empresa\Models\Empresa;
 use App\Modules\Empresa\Requests\EmpresaUpdateRequest;
+use App\Modules\Usuario\Models\Usuario;
 use Illuminate\Http\Request;
 
 class EmpresaController extends Controller
@@ -51,5 +52,16 @@ class EmpresaController extends Controller
         return response()->json([
             'message' => 'La empresa ha sido eliminada permanentemente.'
         ]);
+    }
+
+    public function usuariosEmpresa(Request $request)
+    {
+        $empresa = $request->user(); // token de empresa
+
+        $usuarios = Usuario::where('empresa_id', $empresa->id)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        return response()->json(['usuarios' => $usuarios]);
     }
 }

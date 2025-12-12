@@ -16,5 +16,6 @@ Route::prefix('empresa')->group(function () {
         Route::get('/me', [EmpresaController::class, 'me']);
         Route::put('/update', [EmpresaController::class, 'update']);
         Route::delete('/delete', [EmpresaController::class, 'destroy']);
+        Route::get('/usuarios', [EmpresaController::class, 'usuariosEmpresa']);
     });
 });
