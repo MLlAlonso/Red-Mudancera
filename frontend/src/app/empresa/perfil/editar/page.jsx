@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-
 import Input from "@/components/common/Input";
 import Button_success from "@/components/common/Button_success";
 import Button_error from "@/components/common/Button_error";
@@ -14,10 +13,8 @@ import "@/styles/pages/empresa/_empresaEditar.scss";
 
 export default function EmpresaEditar() {
   const router = useRouter();
-
   const [empresa, setEmpresa] = useState(null);
   const [loading, setLoading] = useState(true);
-
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   // NUEVOS ESTADOS PARA LOS MODALES
@@ -163,15 +160,10 @@ export default function EmpresaEditar() {
 
         <form className="empresa-editar__form" onSubmit={handleSubmit}>
           <Input label="Nombre" name="empresa" value={form.empresa} onChange={handleChange} />
-
           <Input label="Correo" type="email" name="email" value={form.email} onChange={handleChange} />
-
           <Input label="RFC" name="rfc" value={form.rfc} onChange={handleChange} />
-
           <Input label="Representante" name="representante" value={form.representante} onChange={handleChange} />
-
           <Input label="Teléfono" name="telefono" value={form.telefono} onChange={handleChange} />
-
           <Input label="Sede" name="base" value={form.base} onChange={handleChange} />
 
           <div className="input-group">
