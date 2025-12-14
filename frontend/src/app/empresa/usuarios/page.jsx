@@ -102,22 +102,26 @@ export default function EmpresaUsuarios() {
         }
       );
 
+      const data = await res.json();
+
       if (!res.ok) {
-        alert("Error registrando usuario");
-        return;
-      }
+      alert(
+        data.message ||
+        "Este correo ya está registrado. Intenta con otro."
+      );
+      return;
+    }
 
       setModalOpen(false);
 
       setForm({
-        nombre: "",
-        email: "",
-        telefono: "",
+        nombre: "", email: "", telefono: "",
       });
 
       fetchUsuarios();
     } catch (err) {
       console.log(err);
+      alert("Intenta con otro correo, este probablemente ya está registrado.");
     }
   };
 

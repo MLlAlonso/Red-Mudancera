@@ -41,11 +41,8 @@ export default function EmpresaEditar() {
     return match ? match[2] : null;
   };
 
-  const buildLogoUrl = (logo) => {
-    if (!logo) return "/icons/user-placeholder.png";
-    const base = process.env.NEXT_PUBLIC_API_URL.replace("/api", "");
-    return `${base}/storage/${logo}`;
-  };
+  const getLogo = (empresa) =>
+  empresa.logo_url || "/icons/user-placeholder.png";
 
   useEffect(() => {
     const token = getCookie("token_empresa");
@@ -72,7 +69,7 @@ export default function EmpresaEditar() {
           logo: null,
         });
 
-        setPreviewLogo(buildLogoUrl(data.logo));
+        setPreviewLogo(data.logo_url || "/icons/user-placeholder.png");
         setLoading(false);
       })
       .catch(() => setLoading(false));

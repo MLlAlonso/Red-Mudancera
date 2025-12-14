@@ -64,6 +64,9 @@ export default function EmpresaRegister() {
       }
 
       // Registro exitoso
+
+      // Registro exitoso
+      document.cookie = `token_empresa=${data.token}; path=/`;
       localStorage.setItem("empresa_email", formData.email);
       window.location.href = "/empresa/confirmacion";
     } catch (err) {

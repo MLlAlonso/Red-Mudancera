@@ -3,29 +3,37 @@
 namespace App\Modules\Empresa\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Modules\Empresa\Models\Empresa;
 use App\Modules\Empresa\Requests\EmpresaUpdateRequest;
 use App\Modules\Usuario\Models\Usuario;
 use Illuminate\Http\Request;
 
 class EmpresaController extends Controller
 {
+    /**
+     * Obtener perfil de la empresa autenticada
+     */
     public function me(Request $request)
     {
         $empresa = $request->user();
 
-        // 🔥 SIEMPRE agregar logo_url
-        $empresa->append('logo_url');
+        if (! $empresa) {
+            return response()->json(['message' => 'No autenticado'], 401);
+        }
 
+        // Asegurar logo_url siempre
+        $empresa->append('logo_url');
         return response()->json($empresa);
     }
 
+    /**
+     * Actualizar datos de la empresa
+     */
     public function update(EmpresaUpdateRequest $request)
     {
         $empresa = $request->user();
         $data = $request->validated();
 
-        // Imagen del logo
+        // Subir logo (PUBLICO)
         if ($request->hasFile('logo')) {
             $path = $request->file('logo')->store('logos', 'public');
             $data['logo'] = $path;
@@ -33,7 +41,7 @@ class EmpresaController extends Controller
 
         $empresa->update($data);
 
-        // 🔥 logo_url SIEMPRE incluido en la respuesta
+        // Forzar atributo calculado
         $empresa->append('logo_url');
 
         return response()->json([
@@ -42,10 +50,12 @@ class EmpresaController extends Controller
         ]);
     }
 
+    /**
+     * Eliminar empresa
+     */
     public function destroy(Request $request)
     {
         $empresa = $request->user();
-
         $empresa->tokens()->delete();
         $empresa->delete();
 
@@ -54,9 +64,12 @@ class EmpresaController extends Controller
         ]);
     }
 
+    /**
+     * Listar usuarios de la empresa
+     */
     public function usuariosEmpresa(Request $request)
     {
-        $empresa = $request->user(); // token de empresa
+        $empresa = $request->user();
 
         $usuarios = Usuario::where('empresa_id', $empresa->id)
             ->orderBy('created_at', 'DESC')
@@ -65,15 +78,18 @@ class EmpresaController extends Controller
         return response()->json(['usuarios' => $usuarios]);
     }
 
+    /**
+     * Eliminar usuario de la empresa
+     */
     public function eliminarUsuario($id, Request $request)
     {
         $empresa = $request->user();
 
-        $usuario = \App\Modules\Usuario\Models\Usuario::where('id', $id)
+        $usuario = Usuario::where('id', $id)
             ->where('empresa_id', $empresa->id)
             ->first();
 
-        if (!$usuario) {
+        if (! $usuario) {
             return response()->json(['message' => 'Usuario no encontrado'], 404);
         }
 
@@ -83,11 +99,14 @@ class EmpresaController extends Controller
         return response()->json(['message' => 'Usuario eliminado correctamente']);
     }
 
+    /**
+     * Pausar usuario
+     */
     public function pausarUsuario($id, Request $request)
     {
         $empresa = $request->user();
 
-        $usuario = \App\Modules\Usuario\Models\Usuario::where('empresa_id', $empresa->id)
+        $usuario = Usuario::where('empresa_id', $empresa->id)
             ->where('id', $id)
             ->first();
 
@@ -95,18 +114,20 @@ class EmpresaController extends Controller
             return response()->json(['message' => 'Usuario no encontrado'], 404);
         }
 
-        // Pausar usuario
         $usuario->activoEmpresa = false;
         $usuario->save();
 
         return response()->json(['message' => 'Usuario pausado correctamente']);
     }
 
+    /**
+     * Reanudar usuario
+     */
     public function reanudarUsuario($id, Request $request)
     {
         $empresa = $request->user();
 
-        $usuario = \App\Modules\Usuario\Models\Usuario::where('empresa_id', $empresa->id)
+        $usuario = Usuario::where('empresa_id', $empresa->id)
             ->where('id', $id)
             ->first();
 
@@ -114,7 +135,6 @@ class EmpresaController extends Controller
             return response()->json(['message' => 'Usuario no encontrado'], 404);
         }
 
-        // Reanudar usuario
         $usuario->activoEmpresa = true;
         $usuario->save();
 

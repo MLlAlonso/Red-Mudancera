@@ -57,7 +57,6 @@ class EmpresaAuthController extends Controller
         ], 201);
     }
 
-
     /* ============================================================
        LOGIN
     ============================================================ */
@@ -86,7 +85,6 @@ class EmpresaAuthController extends Controller
             'token' => $token
         ]);
     }
-
 
     /* ============================================================
        ENVIAR CÓDIGO DE VERIFICACIÓN

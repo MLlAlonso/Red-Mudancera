@@ -82,6 +82,10 @@ auth.json
 .phpunit.cache
 /.phpunit.cache
 
+# Storage (archivos subidos por usuarios)
+storage/app/public/*
+!storage/app/public/.gitignore
+
 # Composer
 composer.phar
 
