@@ -13,21 +13,41 @@ export default function Header() {
   const menuRef = useRef(null);
 
   const pathname = usePathname();
+
   const isUsuario = pathname.startsWith("/usuario");
+  const isEmpresa = pathname.startsWith("/empresa");
+
+  // 👉 Dashboard correcto según contexto
+  const homeHref = isUsuario
+    ? "/usuario/dashboard"
+    : isEmpresa
+    ? "/empresa/dashboard"
+    : "/";
 
   useClickOutside(menuRef, () => setOpenMenu(false));
 
   return (
     <header className="header">
       <div className="header__content">
-        <Link href="/">
-          <img src="/icons/hogar_2.png" alt="home" className="header__icon" />
+        {/* HOME */}
+        <Link href={homeHref}>
+          <img
+            src="/icons/hogar_2.png"
+            alt="home"
+            className="header__icon"
+          />
         </Link>
 
-        <Link href="/">
-          <img src="/logo/logo.png" alt="app logo" className="header__logo" />
+        {/* LOGO */}
+        <Link href={homeHref}>
+          <img
+            src="/logo/logo.png"
+            alt="app logo"
+            className="header__logo"
+          />
         </Link>
 
+        {/* MENU */}
         <img
           src="/icons/menu.png"
           alt="menu"
