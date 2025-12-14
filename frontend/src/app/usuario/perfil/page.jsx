@@ -16,8 +16,28 @@ export default function UsuarioPerfil() {
   const [loading, setLoading] = useState(true);
 
   const getCookie = (name) => {
-    const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+    const match = document.cookie.match(
+      new RegExp("(^| )" + name + "=([^;]+)")
+    );
     return match ? match[2] : null;
+  };
+
+  /**
+   * Construye URL válida para imágenes:
+   * - paths tipo: logos/archivo.jpg
+   * - URLs completas (empresa.logo_url)
+   */
+  const buildFileUrl = (file) => {
+    if (!file) return "/icons/default-user.png";
+
+    // Si ya es URL completa (empresa)
+    if (file.startsWith("http")) {
+      return file;
+    }
+
+    // Si es path relativo (usuario avatar)
+    const base = process.env.NEXT_PUBLIC_API_URL.replace("/api", "");
+    return `${base}/storage/${file}`;
   };
 
   useEffect(() => {
@@ -28,7 +48,7 @@ export default function UsuarioPerfil() {
     }
 
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/usuario/me`, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
       .then((d) => {
@@ -60,15 +80,17 @@ export default function UsuarioPerfil() {
         <h1 className="usuario-perfil__title">Perfil de usuario</h1>
         <p className="usuario-perfil__subtitle">Datos sobre el usuario</p>
 
+        {/* Avatar usuario */}
         <div className="usuario-perfil__top">
           <img
-            src={usuario.avatar || "/icons/default-user.png"}
+            src={buildFileUrl(usuario.avatar)}
             className="usuario-perfil__avatar"
             alt="avatar"
           />
           <h2 className="usuario-perfil__name">{usuario.nombre}</h2>
         </div>
 
+        {/* Stats */}
         <div className="usuario-perfil__stats">
           <div className="stat">
             ⭐ {empresa.reputacion}
@@ -80,6 +102,7 @@ export default function UsuarioPerfil() {
           </div>
         </div>
 
+        {/* Header sección */}
         <div className="usuario-perfil__row">
           <h3 className="usuario-perfil__section-title">Detalles usuario</h3>
           <Button_crud
@@ -88,6 +111,7 @@ export default function UsuarioPerfil() {
           />
         </div>
 
+        {/* Info usuario */}
         <div className="usuario-perfil__info">
           <p><strong>Correo:</strong> {usuario.email}</p>
           <p><strong>Tel:</strong> {usuario.telefono}</p>
@@ -96,16 +120,21 @@ export default function UsuarioPerfil() {
 
         <div className="usuario-perfil__divider"></div>
 
+        {/* Empresa */}
         <div className="usuario-perfil__empresa">
           <img
-            src={empresa.logo || "/icons/default-user.png"}
+            src={buildFileUrl(empresa.logo)}
             className="usuario-perfil__empresa-logo"
             alt="logo empresa"
           />
           <div>
             <p className="empresa-nombre">{empresa.nombre}</p>
-            <p className="empresa-reputacion">⭐ {empresa.reputacion} — Reputación</p>
-            <p className="empresa-acuerdos">📦 {empresa.acuerdos} — Acuerdos</p>
+            <p className="empresa-reputacion">
+              ⭐ {empresa.reputacion} — Reputación
+            </p>
+            <p className="empresa-acuerdos">
+              📦 {empresa.acuerdos} — Acuerdos
+            </p>
           </div>
         </div>
       </main>

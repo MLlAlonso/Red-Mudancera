@@ -49,30 +49,35 @@ class UsuarioController extends Controller
      * Actualizar perfil
      */
     public function update(UsuarioUpdateRequest $request)
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    if (! $user instanceof Usuario) {
-        return response()->json(['message' => 'Acceso no autorizado'], 403);
+        if (! $user instanceof Usuario) {
+            return response()->json(['message' => 'Acceso no autorizado'], 403);
+        }
+
+        $data = $request->validated();
+
+        // 🔐 Password
+        if (empty($data['password'])) {
+            unset($data['password']);
+        } else {
+            $data['password'] = Hash::make($data['password']);
+        }
+
+        // 🖼 Avatar (IGUAL QUE EMPRESA)
+        if ($request->hasFile('avatar')) {
+            $path = $request->file('avatar')->store('avatars', 'public');
+            $data['avatar'] = $path;
+        }
+
+        $user->update($data);
+
+        return response()->json([
+            'message' => 'Perfil actualizado correctamente',
+            'usuario' => $user
+        ]);
     }
-
-    $data = $request->validated();
-
-    // Si viene contraseña vacía, NO la tocamos
-    if (empty($data['password'])) {
-        unset($data['password']);
-    } else {
-        // Si trae algo, lo hasheamos SIEMPRE
-        $data['password'] = Hash::make($data['password']);
-    }
-
-    $user->update($data);
-
-    return response()->json([
-        'message' => 'Perfil actualizado correctamente',
-        'usuario' => $user
-    ]);
-}
 
 
     /**

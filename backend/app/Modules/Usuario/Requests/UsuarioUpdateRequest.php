@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Modules\Usuario\Requests;
+
 use Illuminate\Foundation\Http\FormRequest;
 
 class UsuarioUpdateRequest extends FormRequest
@@ -18,7 +19,7 @@ class UsuarioUpdateRequest extends FormRequest
             'nombre'   => 'sometimes|string|min:2|max:100',
             'email'    => 'sometimes|email|max:150|unique:usuarios,email,' . $userId,
             'telefono' => 'sometimes|string|max:20',
-            'avatar'   => 'sometimes|string',
+            'avatar'   => 'sometimes|image|mimes:jpg,jpeg,png,webp|max:2048',
             'password' => 'sometimes|string|min:8',
         ];
     }

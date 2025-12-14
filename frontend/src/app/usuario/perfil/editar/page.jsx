@@ -73,7 +73,7 @@ export default function UsuarioEditar() {
       .catch(() => setLoading(false));
   }, []);
 
-  if (loading) return <p>Cargando…</p>;
+  if (loading) return <p style={{ padding: 40 }}>Cargando…</p>;
   if (!usuario) return <p>Error al cargar datos del usuario.</p>;
 
   const handleChange = (e) => {
@@ -85,8 +85,7 @@ export default function UsuarioEditar() {
     setForm({ ...form, avatar: file });
 
     if (file) {
-      const url = URL.createObjectURL(file);
-      setPreviewAvatar(url);
+      setPreviewAvatar(URL.createObjectURL(file));
     }
   };
 
@@ -99,11 +98,11 @@ export default function UsuarioEditar() {
     const formData = new FormData();
     formData.append("_method", "PUT");
 
-    for (const key in form) {
+    Object.keys(form).forEach((key) => {
       if (form[key] !== null && form[key] !== "") {
         formData.append(key, form[key]);
       }
-    }
+    });
 
     try {
       const res = await fetch(url, {
@@ -152,7 +151,6 @@ export default function UsuarioEditar() {
         </div>
 
         <form className="usuario-editar__form" onSubmit={handleSubmit}>
-          
           <Input
             label="Nombre"
             name="nombre"
@@ -168,7 +166,6 @@ export default function UsuarioEditar() {
             onChange={handleChange}
           />
 
-          {/* Campo contraseña con mostrar/ocultar + tooltip */}
           <div className="input-group password-group">
             <label className="input-group__label">Contraseña</label>
 
@@ -198,7 +195,8 @@ export default function UsuarioEditar() {
 
             {showPasswordHelp && (
               <p className="password-help-text">
-                La contraseña debe incluir al menos 8 caracteres, 1 mayúscula y 1 número.
+                La contraseña debe incluir al menos 8 caracteres, 1 mayúscula y
+                1 número.
               </p>
             )}
           </div>
@@ -221,7 +219,10 @@ export default function UsuarioEditar() {
           </div>
 
           <div className="usuario-editar__buttons">
-            <Button_error value="Cancelar" onClick={() => router.push("/usuario/perfil")} />
+            <Button_error
+              value="Cancelar"
+              onClick={() => router.push("/usuario/perfil")}
+            />
             <Button_success value="Guardar" type="submit" />
           </div>
         </form>
