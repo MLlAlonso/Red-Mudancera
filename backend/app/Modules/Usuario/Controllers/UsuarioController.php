@@ -45,7 +45,6 @@ class UsuarioController extends Controller
         ]);
     }
 
-
     /**
      * Actualizar perfil
      */

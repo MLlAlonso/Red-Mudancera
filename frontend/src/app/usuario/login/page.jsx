@@ -45,13 +45,15 @@ export default function UsuarioLogin() {
             setLoading(false);
 
             if (!res.ok) {
-                setError(data.message || "Credenciales incorrectas");
+                // Mensajes específicos desde backend
+                setError(data.message || "Error al iniciar sesión.");
                 return;
             }
 
+            // ✅ Login exitoso
             document.cookie = `token_usuario=${data.token}; path=/;`;
-
             window.location.href = "/usuario/dashboard";
+
         } catch (err) {
             console.error(err);
             setError("No se pudo conectar al servidor.");
