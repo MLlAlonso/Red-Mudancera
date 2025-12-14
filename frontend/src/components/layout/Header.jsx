@@ -1,35 +1,33 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { usePathname } from "next/navigation";
 
-// Importamos los dos menús separados
 import SideMenuEmpresa from "./SideMenu";
 import SideMenuUsuario from "./SideMenuUsuario";
+import useClickOutside from "@/hooks/useClickOutside";
 
 export default function Header() {
   const [openMenu, setOpenMenu] = useState(false);
+  const menuRef = useRef(null);
 
-  // Detectamos si la ruta pertenece al usuario
   const pathname = usePathname();
   const isUsuario = pathname.startsWith("/usuario");
+
+  useClickOutside(menuRef, () => setOpenMenu(false));
 
   return (
     <header className="header">
       <div className="header__content">
-
-        {/* HOME */}
         <Link href="/">
           <img src="/icons/hogar_2.png" alt="home" className="header__icon" />
         </Link>
 
-        {/* LOGO */}
         <Link href="/">
           <img src="/logo/logo.png" alt="app logo" className="header__logo" />
         </Link>
 
-        {/* BOTÓN MENU */}
         <img
           src="/icons/menu.png"
           alt="menu"
@@ -38,12 +36,13 @@ export default function Header() {
         />
       </div>
 
-      {/* AQUÍ CAMBIAMOS EL MENÚ SEGÚN EL ROL */}
-      {isUsuario ? (
-        <SideMenuUsuario open={openMenu} />
-      ) : (
-        <SideMenuEmpresa open={openMenu} />
-      )}
+      <div ref={menuRef}>
+        {isUsuario ? (
+          <SideMenuUsuario open={openMenu} />
+        ) : (
+          <SideMenuEmpresa open={openMenu} />
+        )}
+      </div>
     </header>
   );
 }

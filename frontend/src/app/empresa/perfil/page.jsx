@@ -8,6 +8,7 @@ import Footer from "@/components/layout/Footer";
 import ReviewCard from "@/components/cards/ReviewCard";
 import Button_crud from "@/components/common/Button_crud";
 
+
 import "@/styles/pages/empresa/_empresaPerfil.scss";
 
 export default function EmpresaPerfil() {

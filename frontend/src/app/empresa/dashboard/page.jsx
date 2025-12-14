@@ -10,6 +10,9 @@ import Button_crud from "@/components/common/Button_crud";
 import SearchBar from "@/components/common/SearchBar";
 import ServiceCard from "@/components/cards/ServiceCard";
 
+import ServiceCardSkeleton from "@/components/skeletons/ServiceCardSkeleton";
+
+
 import "@/styles/pages/empresa/_empresaDashboard.scss";
 
 export default function EmpresaDashboard() {
@@ -90,11 +93,14 @@ export default function EmpresaDashboard() {
       ? services
       : services.filter((s) => s.type === filter);
 
+  const loading = false;
+
   return (
     <>
       <Header />
 
       <main className="empresa-dashboard">
+        
         {/* Encabezado */}
         <div className="empresa-dashboard__header">
           <h1 className="empresa-dashboard__title">Últimas publicaciones</h1>

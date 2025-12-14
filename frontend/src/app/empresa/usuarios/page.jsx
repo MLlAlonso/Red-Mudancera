@@ -11,6 +11,9 @@ import Button_success from "@/components/common/Button_success";
 import Input from "@/components/common/Input";
 import UserCard from "@/components/cards/UserCard";
 
+import UserCardSkeleton from "@/components/skeletons/UserCardSkeleton";
+
+
 import "@/styles/pages/empresa/_empresaUsuarios.scss";
 
 export default function EmpresaUsuarios() {

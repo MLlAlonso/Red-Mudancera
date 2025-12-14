@@ -1,0 +1,32 @@
+.error-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  h1 {
+    font-family: Nunito;
+    font-size: 64px;
+    font-weight: bold;
+    color: #09233E;
+  }
+
+  p {
+    font-family: Inter;
+    font-size: 22px;
+    color: #6F7F8D;
+    margin-top: 12px;
+  }
+
+  button {
+    margin-top: 24px;
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: none;
+    background: #09233E;
+    color: #fff;
+    cursor: pointer;
+  }
+}

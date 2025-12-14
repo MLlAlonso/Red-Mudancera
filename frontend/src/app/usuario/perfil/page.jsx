@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Button_crud from "@/components/common/Button_crud";
+import ProfileSkeleton from "@/components/skeletons/ProfileSkeleton";
 
 import "@/styles/pages/usuario/_usuarioPerfil.scss";
 
@@ -37,7 +38,16 @@ export default function UsuarioPerfil() {
       .catch(() => setLoading(false));
   }, []);
 
-  if (loading) return <p>Cargando...</p>;
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <ProfileSkeleton />
+        <Footer />
+      </>
+    );
+  }
+
   if (!data) return <p>Error: no se pudo cargar el perfil.</p>;
 
   const { usuario, empresa } = data;
@@ -50,7 +60,6 @@ export default function UsuarioPerfil() {
         <h1 className="usuario-perfil__title">Perfil de usuario</h1>
         <p className="usuario-perfil__subtitle">Datos sobre el usuario</p>
 
-        {/* Avatar + nombre */}
         <div className="usuario-perfil__top">
           <img
             src={usuario.avatar || "/icons/default-user.png"}
@@ -60,20 +69,17 @@ export default function UsuarioPerfil() {
           <h2 className="usuario-perfil__name">{usuario.nombre}</h2>
         </div>
 
-        {/* Empresa stats */}
         <div className="usuario-perfil__stats">
           <div className="stat">
             ⭐ {empresa.reputacion}
             <span>Reputación</span>
           </div>
-
           <div className="stat">
             📦 {empresa.acuerdos}
             <span>Acuerdos</span>
           </div>
         </div>
 
-        {/* Subtítulo + Botón Editar */}
         <div className="usuario-perfil__row">
           <h3 className="usuario-perfil__section-title">Detalles usuario</h3>
           <Button_crud
@@ -82,7 +88,6 @@ export default function UsuarioPerfil() {
           />
         </div>
 
-        {/* Info */}
         <div className="usuario-perfil__info">
           <p><strong>Correo:</strong> {usuario.email}</p>
           <p><strong>Tel:</strong> {usuario.telefono}</p>
@@ -91,14 +96,12 @@ export default function UsuarioPerfil() {
 
         <div className="usuario-perfil__divider"></div>
 
-        {/* Info de empresa */}
         <div className="usuario-perfil__empresa">
           <img
             src={empresa.logo || "/icons/default-user.png"}
             className="usuario-perfil__empresa-logo"
             alt="logo empresa"
           />
-
           <div>
             <p className="empresa-nombre">{empresa.nombre}</p>
             <p className="empresa-reputacion">⭐ {empresa.reputacion} — Reputación</p>
