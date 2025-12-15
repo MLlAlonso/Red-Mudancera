@@ -158,3 +158,101 @@
     }
   }
 }
+
+/* ===========================
+     MODAL VERIFICACIÓN EMAIL
+=========================== */
+.usuario_perfil_email {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.usuario-perfil {
+
+  &__modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__modal-box {
+    background: #ffffff;
+    width: 100%;
+    max-width: 420px;
+    padding: 30px;
+    border-radius: 16px;
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+
+    h3 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: variables.$title;
+    }
+
+    input {
+      padding: 12px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+
+    button {
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 18px;
+      cursor: pointer;
+      border: none;
+    }
+
+    button:first-of-type {
+      background: #009e66;
+      color: white;
+      margin-bottom: 0px;
+      &:hover {
+        background: variables.$success-hover;
+      }
+    }
+
+    button:last-of-type {
+      background: #ccc;
+
+
+      &:hover {
+        background: variables.$error-hover;
+      }
+    }
+
+    .error {
+      color: #c0392b;
+      font-size: 14px;
+      margin-top: 0px;
+    }
+  }
+
+  &__verify-btn {
+    margin-top: 10px;
+    background: #009e66;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+
+    &:hover {
+      background: #31be8b;
+    }
+  }
+}

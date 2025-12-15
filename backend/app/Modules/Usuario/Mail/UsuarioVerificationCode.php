@@ -9,7 +9,6 @@ use Illuminate\Queue\SerializesModels;
 class UsuarioVerificationCode extends Mailable
 {
     use Queueable, SerializesModels;
-
     public $code;
 
     public function __construct($code)
@@ -20,7 +19,10 @@ class UsuarioVerificationCode extends Mailable
     public function build()
     {
         return $this->subject('Código de verificación - Red Mudancera')
-                    ->view('emails.usuario_verification_code')
-                    ->with(['code' => $this->code]);
+            ->view('emails.verification_code')
+            ->with([
+                'code' => $this->code,
+                'tipo' => 'usuario',
+            ]);
     }
 }

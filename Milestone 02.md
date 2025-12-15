@@ -1,155 +1,201 @@
-# Milestone 1 – Avances Técnicos, Decisiones y Estado Actual del Proyecto
+# Red Mudancera – Documento de Estado y Guía para la Siguiente Milestone
+
+---
+
+## 1. Resumen General del Proyecto
+
+**Red Mudancera** es una plataforma web orientada a conectar empresas de mudanzas con usuarios, permitiendo la gestión de servicios, usuarios internos, perfiles, reputación y comunicación segura mediante autenticación por tokens.
+El sistema está diseñado con una **arquitectura modular**, escalable y preparada para crecer por milestones, evitando retrabajo y permitiendo incorporar nuevas funcionalidades sin romper lo existente.
+Actualmente el proyecto se encuentra en un **estado funcional sólido**, con autenticación real, perfiles operativos, envío de correos de verificación (Mailtrap) y una base técnica lista para producción futura.
+
+---
+
+## 2. Funcionalidades Implementadas (Checklist General)
+
+### 🔐 Autenticación y Seguridad
+* [x] Registro de empresa
+* [x] Registro de usuario asociado a empresa
+* [x] Login de empresa
+* [x] Login de usuario
+* [x] Autenticación con Laravel Sanctum
+* [x] Protección de rutas con middleware
+* [x] Manejo de tokens (logout, invalidación)
+
+### 👤 Usuarios
+* [x] Perfil de usuario
+* [x] Edición de datos personales
+* [x] Subida y actualización de avatar
+* [x] Eliminación de cuenta
+* [x] Asociación usuario ↔ empresa
+* [x] Listado de usuarios por empresa
+* [x] Cards de usuarios en dashboard empresa
+
+### ✉️ Verificación por Correo
+* [x] Generación de código de verificación
+* [x] Envío de correo vía Mailtrap (local)
+* [x] Modal para ingresar código
+* [x] Validación de código
+* [x] Estado `email_verified_at`
+* [x] Botón dinámico “Verificar correo”
+
+### 🏢 Empresas
+* [x] Registro de empresa
+* [x] Perfil de empresa (datos básicos)
+* [x] Logo de empresa
+* [x] Relación empresa ↔ usuarios
+* [ ] Edición avanzada de perfil de empresa
+
+### 🎨 UI / UX
+* [x] Layout general (Header / Footer)
+* [x] Menú lateral dinámico (empresa / usuario)
+* [x] Skeleton loaders
+* [x] Formularios con validaciones visuales
+* [x] Diseño responsive
+* [x] Animaciones suaves
+
+---
+
+## 3. Funcionalidades Pendientes por Milestone
+
+### 📦 Milestone 2 (cerrada)
+* [x] Arquitectura base
+* [x] Autenticación
+* [x] Dashboard inicial
+* [x] Perfil usuario
+* [x] Perfil empresa básico
+
+### 🚚 Milestone 3 (próxima)
+* [ ] CRUD completo de Servicios
+* [ ] Endpoint de servicios real
+* [ ] Cards de servicios dinámicas
+* [ ] Filtros conectados a backend
+* [ ] Detalle de servicio
+* [ ] Asociación servicio ↔ empresa
+* [ ] Estado del servicio (activo / pausado)
+* [ ] Migración Mailtrap → proveedor real (Resend, etc.)
+
+### 🤝 Milestone 4 (futuro)
+* [ ] Solicitudes / contratos
+* [ ] Historial de servicios
+* [ ] Sistema de reputación real
+* [ ] Notificaciones
+* [ ] Panel administrativo
+
+---
+
+## 4. Avances Técnicos, Decisiones y Estado Actual del Proyecto
 
 ## Proyecto: Red Mudancera
 
-### 1. Resumen General
+### 4.1 Resumen General
+Hasta la milestone actual se construyó un **MVP robusto**, funcional tanto en backend como frontend, que incluye:
+* Autenticación real
+* Gestión de usuarios
+* Perfil de usuario y empresa
+* Envío de correos (entorno local)
+* UI profesional y escalable
 
-Durante la Milestone 1 se construyó la base funcional del sistema Red Mudancera tanto en backend (Laravel) como en frontend (Next.js). El objetivo era entregar un sistema funcional mínimo (MVP base) con:
+El sistema ya **no es un prototipo**, sino una base lista para crecer funcionalmente.
 
-- Registro de empresa
-- Inicio de sesión
-- Autenticación vía tokens Sanctum
-- Dashboard inicial
-- Filtros funcionales
-- Cards base de servicios
-- Diseño responsivo
-- Conexión sólida entre frontend y backend
-- Integración de animaciones y elementos de UI para un look & feel profesional
+---
 
-Este entregable deja el sistema listo para comenzar a almacenar, crear y mostrar servicios reales, lo cual será parte de la siguiente milestone.
+## 5. Backend – Laravel (Estado Actual)
 
-### 2. Backend – Laravel (Estado actual)
+### ✔️ Arquitectura modular
+Módulos implementados:
+* `Empresa`
+* `Usuario`
 
-- ✔️ **Estructura modular implementada**
+Cada módulo contiene:
+* Controllers
+* Models
+* Requests
+* Rutas independientes
 
-    Se creó un módulo completamente aislado para Empresas, ubicado en:  
-    `app/Modules/Empresa/*`
+Esto permite escalar sin acoplamientos.
 
-    Esto permite escalar en el futuro agregando módulos como:
+### ✔️ Autenticación
+* Laravel Sanctum configurado
+* Tokens funcionales
+* Middleware `auth:sanctum`
+* Separación clara empresa / usuario
 
-    - Usuario
-    - Servicios
-    - Contratos
-    - Notificaciones
-    - etc.
+### ✔️ Base de dato
+Tablas activas:
+* empresas
+* usuarios
+* password_resets
+* personal_access_tokens
 
-- ✔️ **Endpoints creados y funcionando**
+Campos relevantes:
+* avatar
+* email_verified_at
+* empresa_id
 
-    | Método | Endpoint                     | Descripción                             |
-    |--------|------------------------------|-----------------------------------------|
-    | POST   | `/api/empresa/register`      | Registrar empresa                       |
-    | POST   | `/api/empresa/login`         | Iniciar sesión y generar token          |
-    | GET    | `/api/empresa/me`            | Obtener la empresa autenticada (token requerido) |
+---
 
-- ✔️ **Autenticación configurada correctamente**
+## 6. Frontend – Next.js (Estado Actual)
 
-    Se configuró `auth.php` para usar el proveedor empresas.  
-    Laravel Sanctum genera tokens sin problemas.  
-    El middleware de autenticación ya protege rutas críticas.
+### ✔️ App Router
+Rutas activas:
+* `/empresa/*`
+* `/usuario/*`
+* `/login`
+* `/register`
 
-- ✔️ **Base de datos**
+### ✔️ Comunicación Front ↔ Back
+* Fetch directo a API
+* Manejo de tokens por cookies
+* Protección de rutas
 
-    Tablas creadas y funcionando:
+### ✔️ Componentización
+* Componentes reutilizables
+* Separación por dominio
+* Estilos SCSS por módulo
 
-    - empresas
-    - usuarios (en espera para futuro uso)
+---
 
-    La tabla de servicios será implementada en la siguiente milestone.
+## 7. UI / UX Implementado
+* Skeleton loaders
+* Modales
+* Estados dinámicos
+* Botones reutilizables
+* Feedback visual
 
-### 3. Frontend – Next.js (Estado actual)
+---
 
-- ✔️ **Routing principal creado**
+## 8. Qué está listo para producción futura
+* Arquitectura
+* Seguridad
+* Autenticación
+* Escalabilidad
+* Base de datos
+* Envío de correos (pendiente proveedor real)
 
-    - `/register`
-    - `/login`
-    - `/dashboard`
-    - `/` (landing temporal)
+---
 
-- ✔️ **Conexión 100% funcional con el backend**
+## 9. Recomendaciones para la Siguiente Milestone
+1. Implementar **Servicios** como nuevo módulo
+2. Mantener contratos API claros
+3. No romper estructura modular
+4. Migrar Mailtrap en Milestone 03
+5. Definir reglas de visibilidad de servicios
 
-    El frontend consume el backend mediante:  
-    `NEXT_PUBLIC_BACKEND_URL=http://localhost:8000/api`
+---
 
-- ✔️ **Formulario de registro con validaciones y envío real**
-- ✔️ **Login funcional**
+## 10. Objetivo de este documento
+Este documento sirve como:
+* 📌 Punto de referencia técnico
+* 🧭 Guía para la siguiente milestone
+* 🤝 Contexto compartido entre chats
 
-    Se almacena el token en localStorage.  
-    El dashboard protege la ruta verificando token.
+Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 
-- ✔️ **Dashboard base creado**
+---
 
-    Incluye:
+**Estado actual:** sólido, estable y listo para crecer 🚀
 
-    - Header real
-    - Side menu animado
-    - Filtros funcionales (todos / busco / ofrezco)
-    - Cards de servicio diseñadas
-    - Cards animadas con Framer Motion
-    - Skeleton loader al filtrar
-
-    Esta es la base del futuro dashboard real donde se mostrarán servicios reales.
-
-### 4. UI / UX implementado
-
-- Inputs con label animado
-- Botón CTA reutilizable
-- Skeleton loader
-- Menú lateral profesional
-- Animaciones suaves
-- Responsividad completa (móvil + escritorio)
-
-### 5. Arquitectura técnica actual
-
-**Backend (Laravel)**
-
-- Modular (por carpetas funcionales)
-- Autenticación propia por módulo
-- Tablas independientes
-- Controladores propios por módulo
-- Requests de validación dedicados
-- Sanctum para tokens API
-
-**Frontend (Next.js App Router)**
-
-- Componentes separados por módulos
-- Diseño escalable para agregar:
-    - módulos de empresa
-    - módulos de servicios
-    - módulos de contratos
-    - módulos de usuarios
-
-### 6. Qué está listo
-
-- ✔️ Registro
-- ✔️ Login
-- ✔️ Autenticación
-- ✔️ Dashboard
-- ✔️ UI base completa
-- ✔️ Animaciones
-- ✔️ Estructura técnica sólida para escalar
-- ✔️ Conexión Front ↔ Back
-
-### 7. Qué sigue para la Milestone 2
-
-1. CRUD de Servicios (creación, listado, detalle)
-2. Conectar servicios reales al dashboard
-3. Perfil de empresa
-4. Notificaciones base
-5. Crear UI interna del perfil
-6. Validaciones adicionales
-
-Todo lo que ya tenemos reduce drásticamente el tiempo de desarrollo de la siguiente milestone.
-
-### 8. Recomendaciones para el próximo sprint
-
-- Mantener la modularidad tal como ya está construida.
-- Definir desde el inicio si los servicios son:
-    - creados solo por empresas
-    - también buscados por usuarios
-- Acordar si los servicios serán visibles para todos o filtrados por región
-
-
-
+## Estrucrura de carpetas
 backend/
 ├── 📄 .editorconfig
 ├── 📄 .env
@@ -162,39 +208,30 @@ backend/
 ├── 📄 package-lock.json
 ├── 📄 phpunit.xml                      # Configuración de tests
 ├── 📄 README.md
-├── 📄 Structure.md                     # Documentación de estructura
+├── 📄 Structure.md                     # Documentación de estructura (este archivo)
 ├── 📄 red_mudancera_dev
 ├── 📄 vite.config.js                   # Configuración de Vite
 │
-├── 📁 app/
+├── 📁 app/                             # Código principal de la aplicación
+│   ├── 📁 Console/
+│   │   ├── Kernel.php                  # Scheduler / comandos (ver [`App\Console\Kernel`](backend/app/Console/Kernel.php))
+│   │   └── 📁 Commands/                 # Comandos artisan custom
 │   ├── 📁 Http/
-│   │   ├── 📄 Kernel.php               # Middleware HTTP
-│   │   ├── 📁 Middleware/
-│   │   │   ├── Authenticate.php        # Middleware de autenticación
-│   │   │   └── RedirectIfAuthenticated.php
-│   │   └── 📁 Controllers/
-│   │       └── (Vacío - controladores en Modules)
-│   │
-│   ├── 📁 Mail/                        # Emails
-│   │   ├── EmpresaVerificationCode.php
-│   │   └── UsuarioVerificationCode.php
-│   │
+│   │   ├── Kernel.php                  # Middleware HTTP
+│   │   └── 📁 Middleware/
+│   │       └── Authenticate.php        # Middleware de autenticación
+│   ├── 📁 Mail/                         # Mails (p.ej. EmpresaVerificationCode)
 │   ├── 📁 Models/
-│   │   └── User.php                    # Modelo genérico
-│   │
-│   ├── 📁 Modules/
+│   ├── 📁 Modules/                      # Módulos funcionales (modular architecture)
 │   │   ├── 📁 Empresa/
 │   │   │   ├── 📁 Controllers/
 │   │   │   │   ├── EmpresaAuthController.php
-│   │   │   │   └── EmpresaController.php
+│   │   │   │   └── EmpresaController.php  # API: me, update, usuarios, etc. (ver [`App\Modules\Empresa\Controllers\EmpresaController`](backend/app/Modules/Empresa/Controllers/EmpresaController.php))
 │   │   │   ├── 📁 Models/
 │   │   │   │   └── Empresa.php
 │   │   │   ├── 📁 Requests/
-│   │   │   │   ├── LoginEmpresaRequest.php
-│   │   │   │   ├── RegisterEmpresaRequest.php
-│   │   │   │   └── EmpresaUpdateRequest.php
-│   │   │   └── routes.php
-│   │   │
+│   │   │   │   └── EmpresaUpdateRequest.php (validaciones)
+│   │   │   └── routes.php               # Rutas del módulo (ver [backend/app/Modules/Empresa/routes.php](backend/app/Modules/Empresa/routes.php))
 │   │   └── 📁 Usuario/
 │   │       ├── 📁 Controllers/
 │   │       │   ├── UsuarioAuthController.php
@@ -202,59 +239,57 @@ backend/
 │   │       ├── 📁 Models/
 │   │       │   └── Usuario.php
 │   │       ├── 📁 Requests/
-│   │       │   ├── LoginUsuarioRequest.php
 │   │       │   ├── RegisterUsuarioRequest.php
+│   │       │   ├── LoginUsuarioRequest.php
 │   │       │   └── UsuarioUpdateRequest.php
 │   │       └── routes.php
-│   │
 │   └── 📁 Providers/
 │       ├── AppServiceProvider.php
-│       └── RouteServiceProvider.php
+│       └── RouteServiceProvider.php     # Registro de rutas (ver [`App\Providers\RouteServiceProvider`](backend/app/Providers/RouteServiceProvider.php))
 │
 ├── 📁 bootstrap/
-│   ├── 📄 app.php                      # Bootstrapping de la aplicación
-│   ├── 📄 providers.php                # Registro de providers
+│   ├── app.php                         # Bootstrapping de la aplicación (ver [backend/bootstrap/app.php](backend/bootstrap/app.php))
+│   ├── providers.php                   # Registro de providers
 │   └── 📁 cache/
 │
 ├── 📁 config/
-│   ├── 📄 app.php
-│   ├── 📄 auth.php                     # Autenticación (Sanctum + Guards)
-│   ├── 📄 cache.php
-│   ├── 📄 database.php                 # Conexión a BD
-│   ├── 📄 filesystems.php
-│   ├── 📄 logging.php
-│   ├── 📄 mail.php
-│   ├── 📄 queue.php
-│   ├── 📄 sanctum.php                  # Configuración de API tokens
-│   ├── 📄 services.php
-│   └── 📄 session.php
+│   ├── app.php
+│   ├── auth.php                        # Autenticación (Sanctum + guards) (ver [backend/config/auth.php](backend/config/auth.php))
+│   ├── cache.php
+│   ├── database.php
+│   ├── filesystems.php                 # Disks + links (ver [backend/config/filesystems.php](backend/config/filesystems.php))
+│   ├── logging.php
+│   ├── mail.php
+│   ├── queue.php
+│   ├── sanctum.php                     # Configuración de API tokens (ver [backend/config/sanctum.php](backend/config/sanctum.php))
+│   ├── services.php
+│   ├── cors.php                        # CORS (ver [backend/config/cors.php](backend/config/cors.php))
+│   └── session.php                     # Session cookie, path, domain (ver [backend/config/session.php](backend/config/session.php))
 │
 ├── 📁 database/
 │   ├── 📁 migrations/
 │   │   ├── 0001_01_01_000001_create_cache_table.php
 │   │   ├── 2025_11_26_074631_create_empresas_table.php
-│   │   ├── 2025_11_26_074711_create_usuarios_table.php
-│   │   ├── 2025_xx_xx_xxxxxx_create_email_verifications_table.php
-│   │   └── 2025_xx_xx_xxxxxx_create_servicios_table.php
+│   │   └── 2025_11_26_074711_create_usuarios_table.php
 │   └── 📁 seeders/
 │       └── DatabaseSeeder.php
 │
 ├── 📁 public/
-│   ├── 📄 index.php                    # Punto de entrada
-│   └── 📁 storage/ (enlace simbólico)
+│   ├── index.php                       # Punto de entrada (ver [backend/public/index.php](backend/public/index.php))
+│   └── storage/ (enlace simbólico)     # link -> storage/app/public
 │
 ├── 📁 resources/
 │   ├── 📁 css/
-│   │   └── 📄 app.css                  # Tailwind CSS
+│   │   └── app.css                     # Tailwind / estilos
 │   ├── 📁 js/
-│   │   └── 📄 app.js
+│   │   └── app.js
 │   └── 📁 views/
-│       └── 📄 welcome.blade.php
+│       └── welcome.blade.php
 │
 ├── 📁 routes/
-│   ├── 📄 api.php                      # Rutas API
-│   ├── 📄 web.php                      # Rutas web
-│   └── 📄 console.php                  # Comandos Artisan
+│   ├── api.php                         # Rutas API (incluye módulos) (ver [backend/routes/api.php](backend/routes/api.php))
+│   ├── web.php                         # Rutas web
+│   └── console.php                     # Comandos Artisan
 │
 ├── 📁 storage/
 │   ├── 📁 app/
@@ -265,156 +300,176 @@ backend/
 ├── 📁 tests/
 │   ├── 📁 Feature/
 │   │   └── ExampleTest.php
-│   └── 📄 TestCase.php
+│   └── TestCase.php
 │
 └── 📁 vendor/                          # Dependencias Composer
 
 frontend/
 ├── 📄 .eslintrc.mjs                    # Configuración ESLint
 ├── 📄 .gitignore
-├── 📄 .env.local                       # Variables de entorno
-├── 📄 .env.example
-├── 📄 carpetas.md                      # Documentación de estructura
-├── 📄 eslint.config.mjs                # Configuración ESLint
+├── 📄 eslint.config.mjs                # Configuración ESLint (mejorado)
 ├── 📄 jsconfig.json                    # Configuración JavaScript
 ├── 📄 next.config.js                   # Configuración Next.js
 ├── 📄 package.json                     # Dependencias Node.js
 ├── 📄 package-lock.json
+├── 📄 carpetas.md                      # Documentación de estructura (este archivo)
 │
 ├── 📁 public/                          # Archivos públicos estáticos
 │   ├── 📁 icons/
-│   │   ├── acuerdo_2.png
-│   │   ├── busca.png
-│   │   ├── busca_2.png
-│   │   ├── campana.png
-│   │   ├── cuenta.png
-│   │   ├── default-user.png
-│   │   ├── docs.png
-│   │   ├── eye.png
-│   │   ├── eye_off.png
-│   │   ├── help.png
 │   │   ├── hogar_2.png
 │   │   ├── menu.png
-│   │   ├── ofrece.png
-│   │   └── team.png
+│   │   └── ...                         # iconos de UI
 │   ├── 📁 logo/
 │   │   ├── logo.png
 │   │   └── mikkel.png
-│   ├── 📄 next.svg
-│   └── 📄 vercel.svg
+│   ├── next.svg
+│   └── vercel.svg
 │
-├── 📁 .next/                           # Build de Next.js (generado)
-│
-└── 📁 src/
-    ├── 📁 app/                         # Rutas y páginas (App Router)
-    │   ├── 📁 dashboard/
-    │   │   └── 📄 page.jsx             # Dashboard principal
-    │   ├── 📁 login/
-    │   │   └── 📄 page.jsx             # Página de login
-    │   ├── 📁 register/
-    │   │   └── 📄 page.jsx             # Página de registro
-    │   ├── 📁 test-ui/
-    │   │   └── 📄 page.jsx             # Página para probar UI
-    │   ├── 📁 busco/
-    │   │   └── 📄 page.jsx             # (Futuro) Crear servicio "busco"
-    │   ├── 📁 ofrezco/
-    │   │   └── 📄 page.jsx             # (Futuro) Crear servicio "ofrezco"
-    │   ├── 📄 globals.css              # Estilos globales CSS
-    │   ├── 📄 layout.js                # Layout principal
-    │   └── 📄 page.js                  # Página principal (Home)
-    │
-    ├── 📁 components/
-    │   ├── 📁 cards/
-    │   │   ├── 📄 ActionCard.jsx       # Tarjeta acción (Busco/Ofrezco)
-    │   │   ├── 📄 AcuerdoCard.jsx      # Tarjeta de acuerdo
-    │   │   ├── 📄 NotificationCard.jsx # Tarjeta notificación
-    │   │   ├── 📄 ReviewCard.jsx       # Tarjeta reseña
-    │   │   ├── 📄 ServiceCard.jsx      # Tarjeta de servicio
-    │   │   └── 📄 UserCard.jsx         # Tarjeta de usuario
-    │   │
-    │   ├── 📁 common/
-    │   │   ├── 📄 Button_cta.jsx       # Botón CTA
-    │   │   ├── 📄 Button_crud.jsx      # Botón CRUD
-    │   │   ├── 📄 Button_error.jsx     # Botón Error
-    │   │   ├── 📄 Button_success.jsx   # Botón Success
-    │   │   ├── 📄 Input.jsx            # Campo de entrada
-    │   │   └── 📄 SearchBar.jsx        # Barra de búsqueda
-    │   │
-    │   ├── 📁 filters/
-    │   │   └── 📄 ServiceFilters.jsx   # Filtros de servicios
-    │   │
-    │   └── 📁 layout/
-    │       ├── 📄 Footer.jsx           # Pie de página
-    │       ├── 📄 Header.jsx           # Encabezado/Navbar
-    │       └── 📄 SideMenu.jsx         # Menú lateral
-    │
-    ├── 📁 hooks/                       # (Vacío) Custom React hooks
-    │
-    ├── 📁 modules/                     # (Vacío) Módulos por funcionalidad
-    │   ├── 📁 auth/
-    │   ├── 📁 dashboard/
+└── 📁 src/                             # Código fuente de la aplicación
+    ├── 📁 app/                         # Rutas y páginas (Next.js App Router)
+    │   ├── 📁 dashboard/               # Dashboards y páginas principales
+    │   │   └── page.jsx
     │   ├── 📁 empresa/
+    │   │   ├── 📁 perfil/
+    │   │   │   ├── page.jsx
+    │   │   │   └── editar/page.jsx
+    │   │   ├── 📁 login/
+    │   │   │   └── page.jsx
+    │   │   ├── 📁 usuarios/
+    │   │   │   └── page.jsx
+    │   │   └── logout/page.jsx
+    │   ├── 📁 usuario/
+    │   │   ├── 📁 perfil/
+    │   │   │   ├── page.jsx
+    │   │   │   └── editar/page.jsx
+    │   │   ├── 📁 dashboard/
+    │   │   │   └── page.jsx
+    │   │   └── logout/page.jsx
+    │   ├── 📁 servicios/               # Rutas públicas / servicios (futuro)
+    │   ├── 📁 test-ui/
+    │   │   └── page.jsx
+    │   ├── 📄 layout.js
+    │   ├── 📄 page.js
+    │   └── 📄 page.module.css
+    │
+    ├── 📁 components/                  # Componentes React reutilizables
+    │   ├── 📁 cards/
+    │   │   ├── ActionCard.jsx
+    │   │   ├── AcuerdoCard.jsx
+    │   │   ├── NotificationCard.jsx
+    │   │   ├── ReviewCard.jsx
+    │   │   ├── ServiceCard.jsx
+    │   │   └── UserCard.jsx
+    │   ├── 📁 common/
+    │   │   ├── Button_cta.jsx
+    │   │   ├── Button_crud.jsx
+    │   │   ├── Button_error.jsx
+    │   │   ├── Button_success.jsx
+    │   │   ├── Input.jsx
+    │   │   └── SearchBar.jsx
+    │   ├── 📁 filters/
+    │   │   └── ServiceFilters.jsx
+    │   ├── 📁 layout/
+    │   │   ├── Footer.jsx
+    │   │   ├── Header.jsx
+    │   │   ├── SideMenu.jsx
+    │   │   └── SideMenuUsuario.jsx
+    │   └── 📁 ui/                       # Componentes UI adicionales (botones, badges, etc.)
+    │
+    ├── 📁 hooks/                        # Custom React hooks
+    │   └── useClickOutside.js
+    │
+    ├── 📁 modules/                      # Módulos por funcionalidad (lógica agrupada)
+    │   ├── 📁 auth/
+    │   │   └── auth.js                  # (futuro) helpers de auth
+    │   ├── 📁 empresa/
+    │   │   └── empresaService.js
+    │   ├── 📁 usuario/
+    │   │   └── usuarioService.js
     │   └── 📁 servicios/
+    │       └── serviciosService.js
     │
-    ├── 📁 services/                    # (Vacío) Servicios API/lógica
-    │   └── 📄 api.js                   # (Futuro) Funciones API centralizadas
+    ├── 📁 services/                     # API wrappers / fetch centralizado
+    │   └── api.js                       # fetch wrapper + token handling
     │
-    ├── 📁 store/                       # (Vacío) Estado global (Redux/Zustand)
+    ├── 📁 store/                        # Estado global (ej.: Zustand / Redux)
+    │   └── index.js
     │
-    ├── 📁 utils/                       # (Vacío) Funciones utilitarias
+    ├── 📁 utils/                        # Funciones utilitarias
+    │   ├── formatters.js
+    │   └── buildFileUrl.js
     │
-    └── 📁 styles/                      # Estilos SCSS globales
+    └── 📁 styles/                       # Estilos SCSS globales
         ├── 📁 components/
-        │   ├── _buttons.scss           # Estilos botones
-        │   ├── _cards.scss             # Estilos tarjetas
-        │   ├── _inputs.scss            # Estilos inputs
-        │   ├── _serviceCard.scss       # Estilos tarjetas servicio
-        │   ├── _serviceFilters.scss    # Estilos filtros
-        │   └── _notifications.scss
+        │   ├── _buttons.scss
+        │   ├── _cards.scss
+        │   ├── _inputs.scss
+        │   ├── _serviceCard.scss
+        │   └── _serviceFilters.scss
         │
         ├── 📁 layout/
-        │   ├── _footer.scss            # Estilos footer
-        │   ├── _header.scss            # Estilos header
-        │   └── _sideMenu.scss          # Estilos menú lateral
+        │   ├── _footer.scss
+        │   ├── _header.scss
+        │   └── _sideMenu.scss
+        │
+        ├── 📁 pages/
+        │   ├── 📁 empresa/
+        │   │   ├── _empresaPerfil.scss
+        │   │   ├── _empresaEditar.scss
+        │   │   ├── _empresaUsuarios.scss
+        │   │   └── _empresaDashboard.scss
+        │   └── 📁 usuario/
+        │       ├── _usuarioPerfil.scss
+        │       ├── _usuarioEditar.scss
+        │       └── _usuarioDashboard.scss
         │
         ├── 📁 utils/
-        │   ├── _containers.scss        # Clases contenedor
-        │   ├── _mixins.scss            # Mixins SCSS
-        │   └── _variables.scss         # Variables de diseño
+        │   ├── _containers.scss
+        │   ├── _mixins.scss
+        │   └── _variables.scss
         │
-        └── 📄 globals.scss             # Estilos globales
+        └── 📄 globals.scss
 
-🔌 Endpoints del Backend
+## Endpoints
+### Empresa — públicos
+POST /api/empresa/register → App\Modules\Empresa\Controllers\EmpresaAuthController
+POST /api/empresa/login → App\Modules\Empresa\Controllers\EmpresaAuthController
+POST /api/empresa/send-verification → App\Modules\Empresa\Controllers\EmpresaAuthController
+POST /api/empresa/verify-code → App\Modules\Empresa\Controllers\EmpresaAuthController
 
-EMPRESA - Autenticación
-Método	Endpoint	Descripción	Body	Auth
-POST	/api/empresa/register	Registrar empresa	{ empresa, representante, rfc, tel, email, password }	❌
-POST	/api/empresa/login	Iniciar sesión empresa	{ email, password }	❌
-POST	/api/empresa/send-verification	Enviar código verificación	{ email }	❌
-POST	/api/empresa/verify-code	Verificar código de correo	{ email, code }	❌
-EMPRESA - Perfil (Protegidas)
-Método	Endpoint	Descripción	Body	Auth
-GET	/api/empresa/me	Obtener empresa autenticada	-	✅ Token
-PUT	/api/empresa/update	Actualizar perfil empresa	{ empresa, representante, tel, ... }	✅ Token
-DELETE	/api/empresa/delete	Eliminar empresa	-	✅ Token
-USUARIO - Autenticación
-Método	Endpoint	Descripción	Body	Auth
-POST	/api/usuario/register	Registrar usuario	{ nombre, email, password, telefono }	❌
-POST	/api/usuario/login	Iniciar sesión usuario	{ email, password }	❌
-POST	/api/usuario/send-verification	Enviar código verificación	{ email }	❌
-POST	/api/usuario/verify-code	Verificar código de correo	{ email, code }	❌
-USUARIO - Perfil (Protegidas)
-Método	Endpoint	Descripción	Body	Auth
-GET	/api/usuario/me	Obtener usuario autenticado	-	✅ Token
-PUT	/api/usuario/update	Actualizar perfil usuario	{ nombre, telefono, ... }	✅ Token
-DELETE	/api/usuario/delete	Eliminar usuario	-	✅ Token
-SERVICIOS (Futuro - Milestone 2)
-Método	Endpoint	Descripción	Body	Auth
-POST	/api/servicios/crear	Crear nuevo servicio	{ tipo, origen, destino, volumen, ... }	✅ Token
-GET	/api/servicios	Listar todos los servicios	-	❌
-GET	/api/servicios/{id}	Obtener detalle servicio	-	❌
-PUT	/api/servicios/{id}	Actualizar servicio	{ ... }	✅ Token
-DELETE	/api/servicios/{id}	Eliminar servicio	-	✅ Token
+### Empresa — protegidas (auth:sanctum)
+GET /api/empresa/me → App\Modules\Empresa\Controllers\EmpresaController
+PUT /api/empresa/update → App\Modules\Empresa\Controllers\EmpresaController
+DELETE /api/empresa/delete → App\Modules\Empresa\Controllers\EmpresaController
+GET /api/empresa/usuarios → App\Modules\Empresa\Controllers\EmpresaController
+DELETE /api/empresa/usuario/{id} → App\Modules\Empresa\Controllers\EmpresaController
+PATCH /api/empresa/usuario/{id}/pausar → App\Modules\Empresa\Controllers\EmpresaController
+PATCH /api/empresa/usuario/{id}/reanudar → App\Modules\Empresa\Controllers\EmpresaController
+
+### Usuario — públicos
+POST /api/usuario/register → App\Modules\Usuario\Controllers\UsuarioAuthController
+POST /api/usuario/login → App\Modules\Usuario\Controllers\UsuarioAuthController
+POST /api/usuario/send-verification-code → App\Modules\Usuario\Controllers\UsuarioAuthController
+POST /api/usuario/verify-code → App\Modules\Usuario\Controllers\UsuarioAuthController
+
+### Usuario — protegidas (auth:sanctum)
+GET /api/usuario/me → App\Modules\Usuario\Controllers\UsuarioController
+PUT /api/usuario/update → App\Modules\Usuario\Controllers\UsuarioController
+DELETE /api/usuario/delete → App\Modules\Usuario\Controllers\UsuarioController
+GET /api/usuario/mis-usuarios → App\Modules\Usuario\Controllers\UsuarioController
+
+### Servicios (planificado / Milestone 2)
+POST /api/servicios/crear (protegida) — CRUD de servicios (implementación pendiente) — referencia: [Milestone 02.md](Milestone 02.md)
+GET /api/servicios — listar (pendiente)
+GET /api/servicios/{id} — detalle (pendiente)
+PUT /api/servicios/{id} — actualizar (pendiente)
+DELETE /api/servicios/{id} — eliminar (pendiente)
+
+### Archivos relevantes:
+Rutas principales: api.php
+Empresa: routes.php, App\Modules\Empresa\Controllers\EmpresaAuthController, App\Modules\Empresa\Controllers\EmpresaController
+Usuario: routes.php, App\Modules\Usuario\Controllers\UsuarioAuthController, App\Modules\Usuario\Controllers\UsuarioController
+Documentación / estado: [Milestone 02.md](Milestone 02.md), carpetas.md)))
 
 /**
  * Guarda el token en localStorage

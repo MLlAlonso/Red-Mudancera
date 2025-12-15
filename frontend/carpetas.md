@@ -6,84 +6,120 @@ frontend/
 ├── 📄 next.config.js                   # Configuración Next.js
 ├── 📄 package.json                     # Dependencias Node.js
 ├── 📄 package-lock.json
-├── 📄 carpetas.md                      # Documentación de estructura
+├── 📄 carpetas.md                      # Documentación de estructura (este archivo)
 │
 ├── 📁 public/                          # Archivos públicos estáticos
 │   ├── 📁 icons/
 │   │   ├── hogar_2.png
-│   │   └── menu.png
+│   │   ├── menu.png
+│   │   └── ...                         # iconos de UI
 │   ├── 📁 logo/
-│   │   └── logo.png
+│   │   ├── logo.png
+│   │   └── mikkel.png
 │   ├── next.svg
 │   └── vercel.svg
 │
 └── 📁 src/                             # Código fuente de la aplicación
     ├── 📁 app/                         # Rutas y páginas (Next.js App Router)
-    │   ├── 📁 dashboard/
-    │   │   └── page.jsx                # Dashboard principal
-    │   ├── 📁 login/
-    │   │   └── page.jsx                # Página de login
-    │   ├── 📁 register/
-    │   │   └── page.jsx                # Página de registro
+    │   ├── 📁 dashboard/               # Dashboards y páginas principales
+    │   │   └── page.jsx
+    │   ├── 📁 empresa/
+    │   │   ├── 📁 perfil/
+    │   │   │   ├── page.jsx
+    │   │   │   └── editar/page.jsx
+    │   │   ├── 📁 login/
+    │   │   │   └── page.jsx
+    │   │   ├── 📁 usuarios/
+    │   │   │   └── page.jsx
+    │   │   └── logout/page.jsx
+    │   ├── 📁 usuario/
+    │   │   ├── 📁 perfil/
+    │   │   │   ├── page.jsx
+    │   │   │   └── editar/page.jsx
+    │   │   ├── 📁 dashboard/
+    │   │   │   └── page.jsx
+    │   │   └── logout/page.jsx
+    │   ├── 📁 servicios/               # Rutas públicas / servicios (futuro)
     │   ├── 📁 test-ui/
-    │   │   └── page.jsx                # Página para probar UI
-    │   ├── 📄 favicon.ico              # Favicon del sitio
-    │   ├── 📄 globals.css              # Estilos globales CSS
-    │   ├── 📄 layout.js                # Layout principal
-    │   ├── 📄 page.js                  # Página principal
-    │   └── 📄 page.module.css          # Estilos del módulo principal
+    │   │   └── page.jsx
+    │   ├── 📄 layout.js
+    │   ├── 📄 page.js
+    │   └── 📄 page.module.css
     │
     ├── 📁 components/                  # Componentes React reutilizables
     │   ├── 📁 cards/
-    │   │   └── ServiceCard.jsx         # Tarjeta de servicio (Busco/Ofrezco)
-    │   │
-    │   ├── 📁 common/                  # Componentes genéricos
-    │   │   ├── Button_cta.jsx          # Botón CTA (Call To Action)
-    │   │   ├── Button_crud.jsx         # Botón CRUD
-    │   │   ├── Button_error.jsx        # Botón Error
-    │   │   ├── Button_success.jsx      # Botón Success
-    │   │   └── Input.jsx               # Campo de entrada
-    │   │
+    │   │   ├── ActionCard.jsx
+    │   │   ├── AcuerdoCard.jsx
+    │   │   ├── NotificationCard.jsx
+    │   │   ├── ReviewCard.jsx
+    │   │   ├── ServiceCard.jsx
+    │   │   └── UserCard.jsx
+    │   ├── 📁 common/
+    │   │   ├── Button_cta.jsx
+    │   │   ├── Button_crud.jsx
+    │   │   ├── Button_error.jsx
+    │   │   ├── Button_success.jsx
+    │   │   ├── Input.jsx
+    │   │   └── SearchBar.jsx
     │   ├── 📁 filters/
-    │   │   └── ServiceFilters.jsx      # Filtros de servicios
-    │   │
+    │   │   └── ServiceFilters.jsx
     │   ├── 📁 layout/
-    │   │   ├── Footer.jsx              # Pie de página
-    │   │   ├── Header.jsx              # Encabezado/Navbar
-    │   │   └── SideMenu.jsx            # Menú lateral
-    │   │
-    │   └── 📁 ui/                      # ⚠️ VACÍO - Componentes UI adicionales
+    │   │   ├── Footer.jsx
+    │   │   ├── Header.jsx
+    │   │   ├── SideMenu.jsx
+    │   │   └── SideMenuUsuario.jsx
+    │   └── 📁 ui/                       # Componentes UI adicionales (botones, badges, etc.)
     │
-    ├── 📁 hooks/                       # ⚠️ VACÍO - Custom React hooks
+    ├── 📁 hooks/                        # Custom React hooks
+    │   └── useClickOutside.js
     │
-    ├── 📁 modules/                     # Módulos por funcionalidad
-    │   ├── 📁 auth/                    # ⚠️ VACÍO - Módulo de autenticación
-    │   ├── 📁 dashboard/               # ⚠️ VACÍO - Módulo de dashboard
-    │   ├── 📁 empresa/                 # ⚠️ VACÍO - Módulo de empresa
-    │   └── 📁 servicios/               # ⚠️ VACÍO - Módulo de servicios
+    ├── 📁 modules/                      # Módulos por funcionalidad (lógica agrupada)
+    │   ├── 📁 auth/
+    │   │   └── auth.js                  # (futuro) helpers de auth
+    │   ├── 📁 empresa/
+    │   │   └── empresaService.js
+    │   ├── 📁 usuario/
+    │   │   └── usuarioService.js
+    │   └── 📁 servicios/
+    │       └── serviciosService.js
     │
-    ├── 📁 services/                    # ⚠️ VACÍO - Servicios API/lógica
+    ├── 📁 services/                     # API wrappers / fetch centralizado
+    │   └── api.js                       # fetch wrapper + token handling
     │
-    ├── 📁 store/                       # ⚠️ VACÍO - Estado global (Redux/Zustand)
+    ├── 📁 store/                        # Estado global (ej.: Zustand / Redux)
+    │   └── index.js
     │
-    ├── 📁 utils/                       # ⚠️ VACÍO - Funciones utilitarias
+    ├── 📁 utils/                        # Funciones utilitarias
+    │   ├── formatters.js
+    │   └── buildFileUrl.js
     │
-    └── 📁 styles/                      # Estilos SCSS globales
-        ├── 📁 components/              # Estilos de componentes
-        │   ├── _buttons.scss           # Estilos botones
-        │   ├── _cards.scss             # Estilos tarjetas
-        │   ├── _inputs.scss            # Estilos inputs
-        │   ├── _serviceCard.scss       # Estilos tarjetas servicio
-        │   └── _serviceFilters.scss    # Estilos filtros
+    └── 📁 styles/                       # Estilos SCSS globales
+        ├── 📁 components/
+        │   ├── _buttons.scss
+        │   ├── _cards.scss
+        │   ├── _inputs.scss
+        │   ├── _serviceCard.scss
+        │   └── _serviceFilters.scss
         │
-        ├── 📁 layout/                  # Estilos de layout
-        │   ├── _footer.scss            # Estilos footer
-        │   ├── _header.scss            # Estilos header
-        │   └── _sideMenu.scss          # Estilos menú lateral
+        ├── 📁 layout/
+        │   ├── _footer.scss
+        │   ├── _header.scss
+        │   └── _sideMenu.scss
         │
-        ├── 📁 utils/                   # Utilidades SCSS
-        │   ├── _containers.scss        # Clases contenedor
-        │   ├── _mixins.scss            # Mixins SCSS
-        │   └── _variables.scss         # Variables de diseño
+        ├── 📁 pages/
+        │   ├── 📁 empresa/
+        │   │   ├── _empresaPerfil.scss
+        │   │   ├── _empresaEditar.scss
+        │   │   ├── _empresaUsuarios.scss
+        │   │   └── _empresaDashboard.scss
+        │   └── 📁 usuario/
+        │       ├── _usuarioPerfil.scss
+        │       ├── _usuarioEditar.scss
+        │       └── _usuarioDashboard.scss
         │
-        └── 📄 globals.scss             # Estilos globales
+        ├── 📁 utils/
+        │   ├── _containers.scss
+        │   ├── _mixins.scss
+        │   └── _variables.scss
+        │
+        └── 📄 globals.scss

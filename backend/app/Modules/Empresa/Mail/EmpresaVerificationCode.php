@@ -19,7 +19,10 @@ class EmpresaVerificationCode extends Mailable
     public function build()
     {
         return $this->subject('Código de verificación (Empresa) - Red Mudancera')
-                    ->view('emails.empresa_verification_code')
-                    ->with(['code' => $this->code]);
+            ->view('emails.verification_code')
+            ->with([
+                'code' => $this->code,
+                'tipo' => 'empresa',
+            ]);
     }
 }

@@ -7,6 +7,7 @@ use App\Modules\Usuario\Models\Usuario;
 use App\Modules\Usuario\Requests\UsuarioUpdateRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UsuarioController extends Controller
 {
@@ -20,7 +21,7 @@ class UsuarioController extends Controller
         if (! $user instanceof Usuario) {
             return response()->json(['message' => 'Acceso no autorizado'], 403);
         }
-
+        
         // Cargar empresa
         $empresa = $user->empresa;
 
@@ -36,12 +37,12 @@ class UsuarioController extends Controller
                 'created_at' => $user->created_at,
             ],
 
-            'empresa' => [
-                'nombre'        => $empresa->empresa,
-                'reputacion'    => $empresa->reputacion,
-                'acuerdos'      => $empresa->numServicios,
-                'logo'          => $empresa->logo_url,
-            ]
+             'empresa' => $empresa ? [
+                'nombre'     => $empresa->empresa,
+                'reputacion' => $empresa->reputacion,
+                'acuerdos'   => $empresa->numServicios,
+                'logo'       => $empresa->logo_url,
+            ] : null
         ]);
     }
 
@@ -52,23 +53,17 @@ class UsuarioController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user instanceof Usuario) {
-            return response()->json(['message' => 'Acceso no autorizado'], 403);
-        }
-
         $data = $request->validated();
 
-        // 🔐 Password
+        if ($request->hasFile('avatar')) {
+            $path = $request->file('avatar')->store('avatars', 'public');
+            $data['avatar'] = $path;
+        }
+
         if (empty($data['password'])) {
             unset($data['password']);
         } else {
             $data['password'] = Hash::make($data['password']);
-        }
-
-        // 🖼 Avatar (IGUAL QUE EMPRESA)
-        if ($request->hasFile('avatar')) {
-            $path = $request->file('avatar')->store('avatars', 'public');
-            $data['avatar'] = $path;
         }
 
         $user->update($data);
@@ -78,7 +73,6 @@ class UsuarioController extends Controller
             'usuario' => $user
         ]);
     }
-
 
     /**
      * Eliminar usuario (real)

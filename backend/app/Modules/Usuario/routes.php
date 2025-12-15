@@ -11,7 +11,7 @@ Route::prefix('usuario')->group(function () {
     Route::post('/login',    [UsuarioAuthController::class, 'login']);
 
     // Verificación por correo
-    Route::post('/send-verification', [UsuarioAuthController::class, 'sendVerificationCode']);
+    Route::post('/send-verification-code', [UsuarioAuthController::class, 'sendVerificationCode']);
     Route::post('/verify-code',       [UsuarioAuthController::class, 'verifyCode']);
 
     // Rutas protegidas con token Sanctum

@@ -4,32 +4,30 @@
 
 Red Mudancera es una plataforma para empresas de transporte y mudanza donde pueden:
 
-- Registrar su empresa
-- Iniciar sesión
-- Crear y gestionar servicios (busco/ofrezco)
-- Contactar a otras empresas
-- Acceder a un dashboard personalizado
+- Registrar y administrar su empresa
+- Gestionar usuarios internos
+- Crear y gestionar servicios (busco / ofrezco) — (CRUD pendiente: Milestone 3)
+- Contactar a otras empresas y compartir credenciales
+- Acceder a dashboards (empresa / usuario) y perfiles
 
 Este repositorio contiene dos aplicaciones:
 - `backend/` → API REST en Laravel + Sanctum
 - `frontend/` → Frontend en Next.js App Router
 
-## 🧱 Características Implementadas (Milestone 1)
+## 🧱 Estado actual (resumen)
 
-### 🔐 Autenticación
-- Registro de empresas
-- Inicio de sesión
-- Generación y validación de tokens vía Sanctum
-- Ruta protegida `/api/empresa/me`
+- Autenticación completa (Laravel Sanctum) con separación Empresa / Usuario.
+- Registro y login para empresas y usuarios.
+- Perfiles (ver/editar) y subida de avatar/logo.
+- Verificación de email por código (Mailtrap en entorno local).
+- UI completa con layout, menús laterales, skeletons y componentes reutilizables.
+- Comunicación Front ↔ Back estable (fetch + manejo de tokens).
+- Arquitectura modular en backend (`app/Modules`) y frontend (`src/app`, `src/components`).
 
-### 🖥️ Frontend
-- Registro y Login funcionales
-- Dashboard
-- Filtros animados (busco/ofrezco)
-- Cards de servicio
-- Skeleton loader
-- Menú lateral animado
-- UI responsiva y profesional
+Estado pendiente relevante:
+- CRUD completo de Servicios (implementación en Milestone 3).
+- Migración Mailtrap → proveedor real.
+- Notificaciones / sistema de reputación / panel admin (futuro).
 
 ## ⚙️ Tecnologías Principales
 
@@ -39,98 +37,96 @@ Este repositorio contiene dos aplicaciones:
 | Frontend | Next.js 14 App Router, React 18, SCSS |
 | Animaciones | Framer Motion |
 | Estilos | SCSS modular |
-| Autenticación | API Tokens (Sanctum), LocalStorage |
+| Autenticación | API Tokens (Sanctum), tokens guardados en cookies por rol (token_empresa / token_usuario) |
 
-## 🛠️ Instalación del Backend (Laravel)
+## 🛠️ Instalación y ejecución
 
-### 1. Instalar dependencias
+### Backend
+1. Instalar dependencias:
 ```bash
 cd backend
 composer install
 npm install
 ```
-
-### 2. Crear archivo .env
-```bash
-cp .env.example .env
-```
-
-Editar las siguientes variables:
-```
-DB_DATABASE=red_mudancera_dev
-DB_USERNAME=root
-DB_PASSWORD=
-```
-
-### 3. Generar clave del proyecto
+2. Configurar archivo `.env`:
+   - Clonar `.env.example` a `.env`
+   - Configurar variables de entorno (base de datos, correo, etc.)
+3. Generar clave de aplicación:
 ```bash
 php artisan key:generate
 ```
-
-### 4. Ejecutar migraciones
+4. Ejecutar migraciones y sembrar datos:
 ```bash
-php artisan migrate
+php artisan migrate --seed
 ```
-
-### 5. Iniciar servidor Laravel
+5. Iniciar el servidor:
 ```bash
 php artisan serve
 ```
 
-Backend disponible en: `http://localhost:8000`
-
-## 🧩 Instalación del Frontend (Next.js)
-
-### 1. Instalar dependencias
+### Frontend
+1. Instalar dependencias:
 ```bash
 cd frontend
 npm install
 ```
-
-### 2. Crear .env.local
-```
-NEXT_PUBLIC_BACKEND_URL=http://localhost:8000/api
-```
-
-### 3. Ejecutar entorno de desarrollo
+2. Configurar archivo `.env.local`:
+   - Clonar `.env.local.example` a `.env.local`
+   - Configurar variables de entorno (API URL, etc.)
+3. Iniciar el servidor de desarrollo:
 ```bash
 npm run dev
 ```
-
-Frontend disponible en: `http://localhost:3000`
-
 ## 🔌 Conexión Front ↔ Back
 
-El login y registro funcionan mediante:
-- `POST {NEXT_PUBLIC_BACKEND_URL}/empresa/login`
-- `POST {NEXT_PUBLIC_BACKEND_URL}/empresa/register`
+Variable usada en código: `process.env.NEXT_PUBLIC_API_URL` (ej.: `frontend/src/app/usuario/perfil/page.jsx`).
 
-Los tokens se almacenan en: `localStorage.token`
+Autenticación: Laravel Sanctum. En frontend se guardan cookies con nombres por rol: `token_empresa` y `token_usuario` (ver llamadas a cookies en `frontend/src/app/empresa/perfil/editar/page.jsx` y `frontend/src/app/usuario/perfil/editar/page.jsx`).
 
-## ▶️ Cómo ejecutar el sistema completo
+Endpoints principales y documentación: `Milestone 02.md`.
 
-Abrir dos terminales:
+### 🔎 Endpoints principales (resumen)
 
-**Terminal 1 → Backend:**
-```bash
-cd backend
-php artisan serve
-```
+**Empresa (públicos):**
+- `POST /api/empresa/register`
+- `POST /api/empresa/login`
+- `POST /api/empresa/send-verification`
+- `POST /api/empresa/verify-code`
 
-**Terminal 2 → Frontend:**
-```bash
-cd frontend
-npm run dev
-```
+**Empresa (protegidas):**
+- `GET /api/empresa/me`
+- `PUT /api/empresa/update`
+- `DELETE /api/empresa/delete`
+- `GET /api/empresa/usuarios`
+- `PATCH/DELETE` sobre usuarios (ver `backend/app/Modules/Empresa/routes.php`)
 
-## 🚀 Siguientes pasos (Milestone 2)
+**Usuario (públicos):**
+- `POST /api/usuario/register`
+- `POST /api/usuario/login`
+- `POST /api/usuario/send-verification-code`
+- `POST /api/usuario/verify-code`
 
-- CRUD completo de servicios
-- Perfil de empresa
-- Notificaciones internas
-- UI de contratos
-- Dashboard con datos dinámicos
-- Roles (empresa / administrador)
+**Usuario (protegidas):**
+- `GET /api/usuario/me`
+- `PUT /api/usuario/update`
+- `DELETE /api/usuario/delete`
+- `GET /api/usuario/mis-usuarios`
+
+**Servicios:** Rutas CRUD planificadas para Milestone 3 (ver `Milestone 02.md`).
+
+### 📁 Estructura y archivos relevantes
+
+- **Documentación de backend:** `backend/Structure.md`
+- **Documentación de frontend:** `frontend/carpetas.md`
+- **Estado y endpoints:** `Milestone 02.md`
+- **Rutas API principales:** `backend/routes/api.php`
+
+**Controladores clave:**
+- `App\Modules\Empresa\Controllers\EmpresaController`
+- `App\Modules\Empresa\Controllers\EmpresaAuthController`
+- `App\Modules\Usuario\Controllers\UsuarioController`
+- `App\Modules\Usuario\Controllers\UsuarioAuthController`
+
 
 ## 👨‍💻 Desarrollado por
 
