@@ -12,7 +12,11 @@ import "@/styles/pages/usuario/_usuarioPerfil.scss";
 
 export default function UsuarioPerfil() {
   const router = useRouter();
-  const [data, setData] = useState(null);
+  const [data, setData] = useState({
+    usuario: null,
+    empresa: null,
+  });
+
   const [loading, setLoading] = useState(true);
 
   const getCookie = (name) => {
@@ -82,9 +86,10 @@ export default function UsuarioPerfil() {
           <p><strong>Correo:</strong> {usuario.email}</p>
           <p><strong>Tel:</strong> {usuario.telefono}</p>
 
-          {empresa && (
+          {empresa?.nombre && (
             <p><strong>Empresa:</strong> {empresa.nombre}</p>
           )}
+
         </div>
 
         {/* 👇 SOLO SE MUESTRA SI EXISTE EMPRESA */}
@@ -94,11 +99,25 @@ export default function UsuarioPerfil() {
 
             <div className="usuario-perfil__empresa">
               <img
-                src={buildFileUrl(empresa.logo)}
+                src={empresa.logo || "/icons/default-company.png"}
                 className="usuario-perfil__empresa-logo"
               />
-              <p>{empresa.nombre}</p>
+
+              <div className="usuario-perfil__empresa-info">
+                <p className="empresa-nombre">{empresa.nombre}</p>
+
+                {empresa.descripcion && (
+                  <p className="empresa-descripcion">{empresa.descripcion}</p>
+                )}
+
+                {empresa.base && (
+                  <p className="empresa-base">
+                    <strong>Base:</strong> {empresa.base}
+                  </p>
+                )}
+              </div>
             </div>
+
           </>
         )}
       </main>

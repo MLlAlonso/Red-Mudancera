@@ -33,6 +33,10 @@ class Usuario extends Authenticatable
 
     public function empresa()
     {
-        return $this->belongsTo(\App\Modules\Empresa\Models\Empresa::class);
+        return $this->belongsTo(
+            \App\Modules\Empresa\Models\Empresa::class,
+            'empresa_id',
+            'id'
+        );
     }
 }

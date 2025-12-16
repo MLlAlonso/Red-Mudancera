@@ -21,8 +21,8 @@ class UsuarioController extends Controller
         if (! $user instanceof Usuario) {
             return response()->json(['message' => 'Acceso no autorizado'], 403);
         }
-        
-        // Cargar empresa
+
+        $user->load('empresa');
         $empresa = $user->empresa;
 
         return response()->json([
@@ -36,15 +36,17 @@ class UsuarioController extends Controller
                 'activo'    => $user->activoEmpresa,
                 'created_at' => $user->created_at,
             ],
-
-             'empresa' => $empresa ? [
-                'nombre'     => $empresa->empresa,
-                'reputacion' => $empresa->reputacion,
-                'acuerdos'   => $empresa->numServicios,
-                'logo'       => $empresa->logo_url,
+            'empresa' => $empresa ? [
+                'nombre'       => $empresa->empresa,
+                'descripcion'  => $empresa->descripcion,
+                'base'         => $empresa->base,
+                'reputacion'   => $empresa->reputacion,
+                'acuerdos'     => $empresa->numServicios,
+                'logo'         => $empresa->logo_url,
             ] : null
         ]);
     }
+
 
     /**
      * Actualizar perfil
