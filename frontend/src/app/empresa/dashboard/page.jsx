@@ -113,7 +113,11 @@ export default function EmpresaDashboard() {
         <div className="empresa-dashboard__controls">
           <div className="empresa-dashboard__left">
             <ServiceFilters onChange={handleFilterChange} />
-            <Button_crud value="Agregar" />
+
+          <Button_crud 
+            value="Agregar" 
+            onClick={() => window.location.href = '../empresa/cargas'}
+          />
           </div>
 
           <SearchBar />

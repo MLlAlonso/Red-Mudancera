@@ -1,0 +1,101 @@
+@use "../../utils/variables" as *;
+
+.carga {
+    min-height: calc(100vh - 120px);
+    display: flex;
+    justify-content: center;
+    padding: 3rem 1rem;
+
+    &__container {
+        width: 100%;
+        max-width: 1400px;
+    }
+
+    .title {
+        font-family: $font-title;
+        font-weight: 700;
+        font-size: 40px;
+        color: $title;
+        margin: 0;
+    }
+
+    .subtitle {
+        font-family: $font-text;
+        font-weight: 400;
+        font-size: 22px;
+        color: $text-muted;
+        margin: 0;
+    }
+
+    &__actions {
+        display: flex;
+        gap: 2rem;
+        margin-top: 40px;
+    }
+}
+
+/* =========================
+   ACTION CARD
+   ========================= */
+.actioncard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 3rem 2rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 768px) {
+    .carga {
+        padding: 2rem 1rem;
+
+        &__actions {
+            flex-direction: column;
+        }
+    }
+
+    .actioncard {
+        width: 100%;
+        padding: 2.5rem 1.5rem;
+
+        &__title {
+            font-size: 24px;
+        }
+
+        &__info {
+            font-size: 15px;
+        }
+    }
+
+    .title {
+        font-size: 32px;
+    }
+
+    .subtitle {
+        font-size: 22px;
+    }
+}
+
+
+.header {
+
+    .header__content {
+        justify-content: center;
+        min-width: 100%;
+        align-items: center;
+        justify-content: space-between;
+
+        // iconos
+        .header__icon,
+        .header__menu {
+            display: flex;
+        }
+    }
+}

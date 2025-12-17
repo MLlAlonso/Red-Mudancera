@@ -16,3 +16,10 @@ require base_path('app/Modules/Empresa/routes.php');
 |--------------------------------------------------------------------------
 */
 require base_path('app/Modules/Usuario/routes.php');
+
+/*
+|--------------------------------------------------------------------------
+| Servicios
+|--------------------------------------------------------------------------
+*/
+require base_path('app/Modules/Servicio/routes.php');

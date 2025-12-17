@@ -16,6 +16,10 @@
     text-align: center;
     color: #fff;
 
+    &:hover {
+        transform: translateY(-4px);
+    }
+
     @include mixins.hover-transition;
 
     &__icon {

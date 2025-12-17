@@ -59,7 +59,7 @@ export default function SideMenu({ open }) {
         </li>
 
         <li>
-          <Link href="/empresa/busca">
+          <Link href="/empresa/cargas">
             <div className="side-item">
               <img src="/icons/docs.png" />
               <span>Busca / Ofrece servicio</span>

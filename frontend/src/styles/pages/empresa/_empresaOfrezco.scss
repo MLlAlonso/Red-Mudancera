@@ -1,0 +1,72 @@
+@use "../../utils/variables" as *;
+
+.ofrezco {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  background-color: $background;
+
+  &__container {
+    width: 100%;
+    max-width: 700px;
+  }
+
+  .title {
+    font-family: $font-title;
+    font-weight: 700;
+    font-size: 40px;
+    color: $title;
+    margin: 0;
+  }
+
+  .subtitle {
+    font-family: $font-text;
+    font-weight: 400;
+    font-size: 22px;
+    color: $text-muted;
+    margin: 0;
+  }
+
+  &__form {
+    background-color: $cards;
+    border-radius: 20px;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 1rem;
+  }
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 768px) {
+  .ofrezco {
+    padding: 2rem 1rem;
+
+    .title {
+      font-size: 32px;
+    }
+
+    .subtitle {
+      font-size: 22px;
+    }
+
+    &__form {
+      padding: 2rem 1.5rem;
+    }
+
+    &__actions {
+      flex-direction: column;
+      gap: 0rem;
+      margin-top: 0rem;
+    }
+  }
+}
