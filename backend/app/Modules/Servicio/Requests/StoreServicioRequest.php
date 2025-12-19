@@ -22,8 +22,25 @@ class StoreServicioRequest extends FormRequest
             'volumen' => ['required', 'numeric', 'gt:0', 'lte:120'],
             'origen' => ['required', 'string', 'min:3', 'max:100'],
             'destino' => ['required', 'string', 'min:3', 'max:100'],
-            // viene del select (ej: 1-7, 8-15)
-            'rangoDias' => ['required', 'string'],
+
+            // SOLO OFREZCO
+            'rangoDias' => [
+                Rule::requiredIf(fn() => request('tipo') === 'ofrezco'),
+                'string'
+            ],
+
+            // SOLO BUSCO
+            'inicio' => [
+                Rule::requiredIf(fn() => request('tipo') === 'busco'),
+                'date',
+                'after_or_equal:today'
+            ],
+            'fin' => [
+                Rule::requiredIf(fn() => request('tipo') === 'busco'),
+                'date',
+                'after_or_equal:inicio'
+            ],
+
             'tipo_carga' => ['nullable', Rule::in(['libre', 'mudanza'])],
             'nota' => ['nullable', 'string', 'max:1000'],
             'responsable' => ['nullable', 'string', 'max:120'],
@@ -31,6 +48,7 @@ class StoreServicioRequest extends FormRequest
             'importe' => ['nullable', 'numeric', 'min:0'],
         ];
     }
+
 
 
     public function withValidator($validator)

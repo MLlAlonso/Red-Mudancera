@@ -15,9 +15,13 @@ class ServicioService
     {
         $this->checkAntiSpam($data, $empresa);
 
-        $inicio = now();
-
-        $fin = $this->calcularFechaFin($inicio, $data['rangoDias']);
+        if ($data['tipo'] === 'busco') {
+            $inicio = Carbon::parse($data['inicio']);
+            $fin = Carbon::parse($data['fin']);
+        } else {
+            $inicio = now();
+            $fin = $this->calcularFechaFin($inicio, $data['rangoDias']);
+        }
 
         return Servicio::create([
             'empresa_id' => $empresa->id,
@@ -35,6 +39,7 @@ class ServicioService
             'estado' => 'activo',
         ]);
     }
+
 
     /**
      * Regla Anti-Spam:

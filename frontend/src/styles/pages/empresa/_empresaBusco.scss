@@ -1,0 +1,138 @@
+@use "../../utils/variables" as *;
+
+.busco {
+    min-height: calc(100vh - 120px);
+    display: flex;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+    background-color: $background;
+
+    &__container {
+        width: 100%;
+        max-width: 700px;
+    }
+
+    .title {
+        font-family: $font-title;
+        font-weight: 700;
+        font-size: 40px;
+        color: $title;
+        margin: 0;
+    }
+
+    .subtitle {
+        font-family: $font-text;
+        font-weight: 400;
+        font-size: 22px;
+        color: $text-muted;
+        margin: 0;
+    }
+
+    &__form {
+        background-color: $cards;
+        border-radius: 20px;
+        padding: 2.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    /* 🔘 Ruta */
+    &__route {
+        background: $secondary;
+        border-radius: 10px;
+        padding: 1rem;
+        width: 100%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    &__route-title {
+        font-family: $font-title;
+        font-size: 30px;
+        font-weight: 600;
+        color: $title;
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+
+    /* 📅 Calendario Airbnb-like */
+    .labels {
+        color: #09233e;
+        font-family: Nunito, sans-serif;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    &__calendar {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .calendar-field {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+
+        label {
+            font-size: 14px;
+            color: $text-muted;
+        }
+
+        input[type="date"] {
+            padding: 0.7rem 0.8rem;
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            font-family: $font-text;
+            font-size: 15px;
+            background: white;
+
+            &:focus {
+                outline: none;
+                border-color: $primary;
+            }
+        }
+    }
+
+    &__actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .busco {
+        padding: 2rem 1rem;
+
+        .title {
+            font-size: 32px;
+        }
+
+        .subtitle {
+            font-size: 22px;
+        }
+
+        &__form {
+            padding: 2rem 1.5rem;
+        }
+
+        &__calendar {
+            flex-direction: column;
+        }
+
+        &__actions {
+            flex-direction: column;
+            gap: 0rem;
+            margin-top: 0rem;
+        }
+
+        &__route {
+            width: 100%;
+        }
+    }
+}
