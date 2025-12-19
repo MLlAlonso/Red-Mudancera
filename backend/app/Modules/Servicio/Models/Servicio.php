@@ -10,10 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Servicio extends Model
 {
     use HasFactory, SoftDeletes;
-
-    /**
-     * Nombre explícito de la tabla
-     */
     protected $table = 'servicios';
 
     /**
@@ -29,6 +25,9 @@ class Servicio extends Model
         'fin',
         'tipo_carga',
         'nota',
+        'responsable_nombre',
+        'responsable_telefono',
+        'importe',
         'estado',
     ];
 
@@ -38,7 +37,7 @@ class Servicio extends Model
     protected $casts = [
         'inicio' => 'date',
         'fin'    => 'date',
-        'volumen'=> 'decimal:2',
+        'volumen' => 'decimal:2',
     ];
 
     /**
@@ -121,7 +120,7 @@ class Servicio extends Model
     {
         if ($fecha) {
             $query->whereDate('inicio', '<=', $fecha)
-                  ->whereDate('fin', '>=', $fecha);
+                ->whereDate('fin', '>=', $fecha);
         }
     }
 

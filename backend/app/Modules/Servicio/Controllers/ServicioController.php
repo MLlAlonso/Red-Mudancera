@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Modules\Servicio\Controllers;
-
 use App\Http\Controllers\Controller;
 use App\Modules\Servicio\Requests\StoreServicioRequest;
 use App\Modules\Servicio\Requests\ChangeEstadoServicioRequest;
@@ -29,7 +28,6 @@ class ServicioController extends Controller
     public function index(Request $request): JsonResponse
     {
         $servicios = $this->servicioRepository->search($request->all());
-
         return response()->json([
             'data' => $servicios->items(),
             'meta' => [
@@ -47,7 +45,6 @@ class ServicioController extends Controller
     public function show(int $id): JsonResponse
     {
         $servicio = $this->servicioRepository->findById($id);
-
         if (!$servicio) {
             return response()->json([
                 'message' => 'Servicio no encontrado.'
@@ -65,7 +62,6 @@ class ServicioController extends Controller
     public function store(StoreServicioRequest $request): JsonResponse
     {
         $empresa = auth()->user();
-
         $servicio = $this->servicioService->create(
             $request->validated(),
             $empresa
@@ -109,7 +105,6 @@ class ServicioController extends Controller
     public function destroy(int $id): JsonResponse
     {
         $servicio = $this->servicioRepository->findById($id);
-
         if (!$servicio) {
             return response()->json([
                 'message' => 'Servicio no encontrado.'
@@ -117,7 +112,6 @@ class ServicioController extends Controller
         }
 
         $servicio->delete();
-
         return response()->json([
             'message' => 'Servicio eliminado correctamente.'
         ]);

@@ -8,7 +8,6 @@ import Footer from "@/components/layout/Footer";
 import ReviewCard from "@/components/cards/ReviewCard";
 import Button_crud from "@/components/common/Button_crud";
 
-
 import "@/styles/pages/empresa/_empresaPerfil.scss";
 
 export default function EmpresaPerfil() {
@@ -95,7 +94,6 @@ export default function EmpresaPerfil() {
           <p><strong>Representante legal:</strong> {empresa.representante}</p>
           <p><strong>Correo:</strong> {empresa.email}</p>
           <p><strong>Teléfono:</strong> {empresa.tel}</p>
-          <p><strong>Codigo Empresa:</strong> {empresa.codigoEmpresa}</p>
         </div>
 
         <div className="empresa-perfil__divider"></div>

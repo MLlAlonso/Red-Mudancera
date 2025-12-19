@@ -80,44 +80,82 @@ export default function OfrezcoServicioPage() {
 
   // 👤 Selección de responsable
   const handleResponsableChange = (e) => {
-  const selectedId = e.target.value;
+    const selectedId = e.target.value;
 
-  if (!selectedId) {
+    if (!selectedId) {
+      setForm((prev) => ({
+        ...prev,
+        responsableId: "",
+        responsableNombre: "",
+        telefono: "",
+      }));
+      return;
+    }
+
+    const usuario = usuarios.find(
+      (u) => String(u.id) === String(selectedId)
+    );
+
+    if (!usuario) return;
+
+    // 🔑 TOMAR EL TELÉFONO REAL (según backend)
+    const telefonoUsuario =
+      usuario.tel ??
+      usuario.telefono ??
+      usuario.telefonoAlterno ??
+      usuario.phone ??
+      "";
+
     setForm((prev) => ({
       ...prev,
-      responsableId: "",
-      responsableNombre: "",
-      telefono: "",
+      responsableId: usuario.id,
+      responsableNombre: usuario.nombre,
+      telefono: telefonoUsuario,
     }));
-    return;
-  }
+  };
 
-  const usuario = usuarios.find(
-    (u) => String(u.id) === String(selectedId)
-  );
-
-  if (!usuario) return;
-
-  // 🔑 TOMAR EL TELÉFONO REAL (según backend)
-  const telefonoUsuario =
-    usuario.tel ??
-    usuario.telefono ??
-    usuario.telefonoAlterno ??
-    usuario.phone ??
-    "";
-
-  setForm((prev) => ({
-    ...prev,
-    responsableId: usuario.id,
-    responsableNombre: usuario.nombre,
-    telefono: telefonoUsuario,
-  }));
-};
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Formulario Ofrezco:", form);
-    // POST /api/servicios (siguiente paso)
+
+    try {
+      const token = document.cookie
+        .split("; ")
+        .find(row => row.startsWith("token_empresa="))
+        ?.split("=")[1];
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/servicios`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+          "Accept": "application/json",
+        },
+        body: JSON.stringify({
+          tipo: "ofrezco",
+          volumen: form.volumen,
+          origen: form.origen,
+          destino: form.destino,
+          rangoDias: form.rangoDias,
+          tipo_carga: form.tipoCarga,
+          nota: form.nota,
+          responsable: form.responsableNombre,
+          telefono: form.telefono,
+          importe: form.importe,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message || "Error al crear servicio");
+        return;
+      }
+
+      router.push("/empresa/dashboard");
+    } catch (error) {
+      console.error(error);
+      alert("Error de conexión");
+    }
   };
 
   return (
@@ -160,7 +198,7 @@ export default function OfrezcoServicioPage() {
             {/* Rango de días */}
             <div className="input-group">
               <label className="input-group__label">
-                Tiempo estimado
+                Plazo máximo de entrega
               </label>
               <select
                 name="rangoDias"
@@ -221,7 +259,7 @@ export default function OfrezcoServicioPage() {
             {/* Estado carga */}
             <div className="input-group">
               <label className="input-group__label">
-                Estado de la carga
+                Estatus de la carga
               </label>
               <select
                 name="estadoCarga"
@@ -230,8 +268,8 @@ export default function OfrezcoServicioPage() {
                 onChange={handleChange}
               >
                 <option value="">Selecciona</option>
-                <option value="almacen">En almacén</option>
-                <option value="ruta">Sobre ruta</option>
+                <option value="almacen">En mis instalaciones</option>
+                <option value="ruta">Por recolectar</option>
               </select>
             </div>
 
@@ -247,9 +285,10 @@ export default function OfrezcoServicioPage() {
                 onChange={handleChange}
               >
                 <option value="">Selecciona</option>
-                <option value="normal">Normal</option>
-                <option value="especial">Especial</option>
+                <option value="libre">Libre</option>
+                <option value="mudanza">Mudanza</option>
               </select>
+
             </div>
 
             <Input

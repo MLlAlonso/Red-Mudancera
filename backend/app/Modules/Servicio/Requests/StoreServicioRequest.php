@@ -12,27 +12,26 @@ class StoreServicioRequest extends FormRequest
         /**
          * Solo empresas autenticadas
          */
-        return auth()->check();
+        return auth('empresa')->check();
     }
 
     public function rules(): array
     {
         return [
             'tipo' => ['required', Rule::in(['busco', 'ofrezco'])],
-
-            'volumen' => ['required', 'numeric', 'gt:0', 'lt:80'],
-
+            'volumen' => ['required', 'numeric', 'gt:0', 'lte:120'],
             'origen' => ['required', 'string', 'min:3', 'max:100'],
             'destino' => ['required', 'string', 'min:3', 'max:100'],
-
-            'inicio' => ['required', 'date', 'after_or_equal:today'],
-            'fin'    => ['required', 'date', 'after_or_equal:inicio'],
-
+            // viene del select (ej: 1-7, 8-15)
+            'rangoDias' => ['required', 'string'],
             'tipo_carga' => ['nullable', Rule::in(['libre', 'mudanza'])],
-
             'nota' => ['nullable', 'string', 'max:1000'],
+            'responsable' => ['nullable', 'string', 'max:120'],
+            'telefono' => ['nullable', 'string', 'max:20'],
+            'importe' => ['nullable', 'numeric', 'min:0'],
         ];
     }
+
 
     public function withValidator($validator)
     {
@@ -43,10 +42,10 @@ class StoreServicioRequest extends FormRequest
             /**
              * RFC verificado obligatorio
              */
-            if ($empresa->estadoRFC !== 'verificado') {
+            if (empty($empresa->rfc)) {
                 $validator->errors()->add(
                     'rfc',
-                    'Debes verificar tu RFC para poder publicar servicios.'
+                    'Debes registrar tu RFC para poder publicar servicios.'
                 );
             }
 
@@ -67,14 +66,11 @@ class StoreServicioRequest extends FormRequest
         return [
             'tipo.required' => 'El tipo de servicio es obligatorio.',
             'tipo.in' => 'Tipo de servicio inválido.',
-
             'volumen.required' => 'El volumen es obligatorio.',
             'volumen.gt' => 'El volumen debe ser mayor a 0.',
-            'volumen.lt' => 'El volumen máximo permitido es 80 m³.',
-
+            'volumen.lt' => 'El volumen máximo permitido es 120 m³.',
             'origen.required' => 'La ciudad de origen es obligatoria.',
             'destino.required' => 'La ciudad de destino es obligatoria.',
-
             'inicio.after_or_equal' => 'La fecha de inicio no puede ser pasada.',
             'fin.after_or_equal' => 'La fecha final debe ser igual o posterior a la inicial.',
         ];

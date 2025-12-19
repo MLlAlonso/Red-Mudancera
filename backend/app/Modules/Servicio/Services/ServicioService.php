@@ -13,20 +13,26 @@ class ServicioService
      */
     public function create(array $data, Empresa $empresa): Servicio
     {
-        // Anti-spam
         $this->checkAntiSpam($data, $empresa);
+
+        $inicio = now();
+
+        $fin = $this->calcularFechaFin($inicio, $data['rangoDias']);
 
         return Servicio::create([
             'empresa_id' => $empresa->id,
-            'tipo'       => $data['tipo'],
-            'volumen'    => $data['volumen'],
-            'origen'     => $data['origen'],
-            'destino'    => $data['destino'],
-            'inicio'     => $data['inicio'],
-            'fin'        => $data['fin'],
+            'tipo' => $data['tipo'],
+            'volumen' => $data['volumen'],
+            'origen' => $data['origen'],
+            'destino' => $data['destino'],
+            'inicio' => $inicio,
+            'fin' => $fin,
             'tipo_carga' => $data['tipo_carga'] ?? 'libre',
-            'nota'       => $data['nota'] ?? null,
-            'estado'     => 'activo',
+            'nota' => $data['nota'] ?? null,
+            'responsable_nombre' => $data['responsable'] ?? null,
+            'responsable_telefono' => $data['telefono'] ?? null,
+            'importe' => $data['importe'] ?? null,
+            'estado' => 'activo',
         ]);
     }
 
@@ -64,8 +70,10 @@ class ServicioService
             'asignado'  => ['finalizado'],
         ];
 
-        if (!isset($transicionesValidas[$servicio->estado]) ||
-            !in_array($nuevoEstado, $transicionesValidas[$servicio->estado])) {
+        if (
+            !isset($transicionesValidas[$servicio->estado]) ||
+            !in_array($nuevoEstado, $transicionesValidas[$servicio->estado])
+        ) {
             abort(422, 'Transición de estado no permitida.');
         }
 
@@ -74,5 +82,16 @@ class ServicioService
         ]);
 
         return $servicio;
+    }
+
+    protected function calcularFechaFin($inicio, string $rango): \Carbon\Carbon
+    {
+        return match ($rango) {
+            '1-7'   => $inicio->copy()->addDays(7),
+            '8-15'  => $inicio->copy()->addDays(15),
+            '15-30' => $inicio->copy()->addDays(30),
+            '+30'   => $inicio->copy()->addDays(45),
+            default => $inicio->copy()->addDays(7),
+        };
     }
 }

@@ -45,6 +45,10 @@ return new class extends Migration
             $table->index(['inicio', 'fin']);
             $table->index(['estado']);
 
+            $table->string('responsable_nombre', 120)->nullable();
+            $table->string('responsable_telefono', 20)->nullable();
+            $table->decimal('importe', 10, 2)->nullable();
+
             $table->softDeletes();
         });
     }
