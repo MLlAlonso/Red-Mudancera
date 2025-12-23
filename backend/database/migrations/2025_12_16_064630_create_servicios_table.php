@@ -12,9 +12,7 @@ return new class extends Migration
             $table->id();
 
             // Relación con empresa
-            $table->foreignId('empresa_id')
-                ->constrained('empresas')
-                ->cascadeOnDelete();
+            $table->foreignId('empresa_id') ->constrained('empresas') ->cascadeOnDelete();
 
             // Tipo de servicio
             $table->enum('tipo', ['busco', 'ofrezco']);
@@ -29,14 +27,13 @@ return new class extends Migration
             $table->date('fin');
 
             // Tipo de carga
-            $table->enum('tipo_carga', ['libre', 'mudanza'])->default('libre');
+            $table->enum('tipo_carga', [ 'menaje', 'vehiculo', 'menaje_vehiculo', 'otro', 'libre', ])->default('menaje');
 
             // Nota opcional
             $table->text('nota')->nullable();
 
             // Estado del servicio
-            $table->enum('estado', ['activo', 'asignado', 'finalizado'])
-                ->default('activo');
+            $table->enum('estado', ['activo', 'asignado', 'finalizado']) ->default('activo');
             $table->timestamps();
 
             // Índices para búsqueda

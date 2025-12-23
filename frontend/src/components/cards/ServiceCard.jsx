@@ -6,9 +6,9 @@ export default function ServiceCard({
   type = "busco",
   origen = "",
   destino = "",
-  volumen = " m3",
+  volumen = "",
   empresa = "",
-  fecha = "01/01/2025",
+  fecha = "",
 }) {
   const isOffer = type === "ofrezco";
 
@@ -20,8 +20,12 @@ export default function ServiceCard({
       transition={{ duration: 0.25 }}
     >
       <div className="service-card__title">
-        <span className="service-card__tag">{isOffer ? "Ofrezco" : "Busco"}</span>
-        <h2 className="service-card__route">{origen} → {destino}</h2>
+        <span className="service-card__tag">
+          {isOffer ? "Ofrezco" : "Busco"}
+        </span>
+        <h2 className="service-card__route">
+          {origen} → {destino}
+        </h2>
       </div>
 
       <p className="service-card__info">Volumen: {volumen}</p>

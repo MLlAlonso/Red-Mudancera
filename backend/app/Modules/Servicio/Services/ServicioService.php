@@ -8,9 +8,6 @@ use Carbon\Carbon;
 
 class ServicioService
 {
-    /**
-     * Crear servicio con reglas de negocio
-     */
     public function create(array $data, Empresa $empresa): Servicio
     {
         $this->checkAntiSpam($data, $empresa);
@@ -26,12 +23,12 @@ class ServicioService
         return Servicio::create([
             'empresa_id' => $empresa->id,
             'tipo' => $data['tipo'],
-            'volumen' => $data['volumen'],
+            'volumen' => $data['volumen'] ?? null,
             'origen' => $data['origen'],
             'destino' => $data['destino'],
             'inicio' => $inicio,
             'fin' => $fin,
-            'tipo_carga' => $data['tipo_carga'] ?? 'libre',
+            'tipo_carga' => $data['tipo_carga'],
             'nota' => $data['nota'] ?? null,
             'responsable_nombre' => $data['responsable'] ?? null,
             'responsable_telefono' => $data['telefono'] ?? null,
@@ -40,17 +37,11 @@ class ServicioService
         ]);
     }
 
-
-    /**
-     * Regla Anti-Spam:
-     * Máx. 2 servicios idénticos en 24 horas
-     */
     protected function checkAntiSpam(array $data, Empresa $empresa): void
     {
-        $desde = Carbon::now()->subHours(24);
+        $desde = now()->subHours(24);
 
         $duplicados = Servicio::where('empresa_id', $empresa->id)
-            ->where('volumen', $data['volumen'])
             ->where('origen', $data['origen'])
             ->where('destino', $data['destino'])
             ->where('created_at', '>=', $desde)
@@ -61,41 +52,13 @@ class ServicioService
         }
     }
 
-    /**
-     * Cambio de estado del servicio
-     */
-    public function changeEstado(Servicio $servicio, string $nuevoEstado): Servicio
-    {
-        if ($servicio->estaFinalizado()) {
-            abort(422, 'Un servicio finalizado no puede modificarse.');
-        }
-
-        $transicionesValidas = [
-            'activo'    => ['asignado'],
-            'asignado'  => ['finalizado'],
-        ];
-
-        if (
-            !isset($transicionesValidas[$servicio->estado]) ||
-            !in_array($nuevoEstado, $transicionesValidas[$servicio->estado])
-        ) {
-            abort(422, 'Transición de estado no permitida.');
-        }
-
-        $servicio->update([
-            'estado' => $nuevoEstado
-        ]);
-
-        return $servicio;
-    }
-
-    protected function calcularFechaFin($inicio, string $rango): \Carbon\Carbon
+    protected function calcularFechaFin($inicio, string $rango): Carbon
     {
         return match ($rango) {
-            '1-7'   => $inicio->copy()->addDays(7),
-            '8-15'  => $inicio->copy()->addDays(15),
+            '1-7' => $inicio->copy()->addDays(7),
+            '8-15' => $inicio->copy()->addDays(15),
             '15-30' => $inicio->copy()->addDays(30),
-            '+30'   => $inicio->copy()->addDays(45),
+            '+30' => $inicio->copy()->addDays(45),
             default => $inicio->copy()->addDays(7),
         };
     }

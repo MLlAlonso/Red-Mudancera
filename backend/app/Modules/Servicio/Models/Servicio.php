@@ -45,8 +45,9 @@ class Servicio extends Model
      */
     protected $attributes = [
         'estado' => 'activo',
-        'tipo_carga' => 'libre',
+        'tipo_carga' => 'menaje',
     ];
+
 
     /* =====================================================
      |  RELACIONES

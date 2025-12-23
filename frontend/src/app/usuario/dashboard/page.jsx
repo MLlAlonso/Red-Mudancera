@@ -1,111 +1,99 @@
 "use client";
 
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
 import ServiceFilters from "@/components/filters/ServiceFilters";
 import SearchBar from "@/components/common/SearchBar";
 import ServiceCard from "@/components/cards/ServiceCard";
+import ServiceCardSkeleton from "@/components/skeletons/ServiceCardSkeleton";
 
-import "@/styles/pages/empresa/_empresaDashboard.scss"; // reutilizamos estilos
+import useServicios from "@/hooks/useServicios";
+
+import "@/styles/pages/empresa/_empresaDashboard.scss";
 
 export default function UsuarioDashboard() {
-  // ================================
-  //  Data temporal (igual al dashboard de empresa)
-  // ================================
-  const services = [
-    {
-      id: 1,
-      type: "busco",
-      origen: "CDMX",
-      destino: "Guadalajara",
-      volumen: "12 m³",
-      empresa: "Mudanzas López",
-      fecha: "05/12/2025",
-    },
-    {
-      id: 2,
-      type: "ofrezco",
-      origen: "Monterrey",
-      destino: "Puebla",
-      volumen: "20 m³",
-      empresa: "Transporte Ramírez",
-      fecha: "06/12/2025",
-    },
-    {
-      id: 3,
-      type: "busco",
-      origen: "Tijuana",
-      destino: "Hermosillo",
-      volumen: "8 m³",
-      empresa: "Mudanzas del Norte",
-      fecha: "06/12/2025",
-    },
-    {
-      id: 4,
-      type: "ofrezco",
-      origen: "Veracruz",
-      destino: "Puebla",
-      volumen: "40 m³",
-      empresa: "Transporte Alonso",
-      fecha: "06/12/2025",
-    }
-  ];
-
-  // ================================
-  //  Estados de filtrado
-  // ================================
   const [filter, setFilter] = useState("todos");
+  const [limit, setLimit] = useState("infinite");
 
-  const handleFilterChange = (newFilter) => {
-    setFilter(newFilter);
-  };
+  const {
+    servicios,
+    loading,
+    hasMore,
+    loadMore,
+  } = useServicios({
+    tipo: filter,
+    limit,
+  });
 
-  // ================================
-  //  Filtrado real
-  // ================================
-  const filteredServices =
-    filter === "todos"
-      ? services
-      : services.filter((s) => s.type === filter);
+  useEffect(() => {
+    if (limit !== "infinite") return;
+
+    const onScroll = () => {
+      if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 200
+      ) {
+        loadMore();
+      }
+    };
+
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [loadMore, limit]);
 
   return (
     <>
       <Header />
 
       <main className="empresa-dashboard">
-        {/* Encabezado */}
         <div className="empresa-dashboard__header">
-          <h1 className="empresa-dashboard__title">Últimas publicaciones</h1>
+          <h1 className="empresa-dashboard__title">
+            Últimas publicaciones
+          </h1>
           <p className="empresa-dashboard__subtitle">
             Servicios disponibles de todas las empresas
           </p>
         </div>
 
-        {/* Filtros + Searchbar */}
         <div className="empresa-dashboard__controls">
-          <div className="empresa-dashboard__left">
-            <ServiceFilters onChange={handleFilterChange} />
-          </div>
+          <ServiceFilters onChange={setFilter} />
 
-          <SearchBar />
+          <div className="empresa-dashboard__right">
+            {/* <select
+              className="limit-select"
+              value={limit}
+              onChange={(e) => setLimit(e.target.value)}
+            >
+              <option value="infinite">Scroll infinito</option>
+              <option value="12">12</option>
+              <option value="30">30</option>
+              <option value="60">60</option>
+              <option value="120">120</option>
+            </select> */}
+
+            <SearchBar />
+          </div>
         </div>
 
-        {/* Cards */}
         <div className="empresa-dashboard__cards">
-          {filteredServices.map((servicio) => (
+          {servicios.map((s) => (
             <ServiceCard
-              key={servicio.id}
-              type={servicio.type}
-              origen={servicio.origen}
-              destino={servicio.destino}
-              volumen={servicio.volumen}
-              empresa={servicio.empresa}
-              fecha={servicio.fecha}
+              key={s.id}
+              type={s.tipo}
+              origen={s.origen}
+              destino={s.destino}
+              volumen={`${s.volumen} m³`}
+              empresa={s.empresa?.nombre ?? "Empresa"}
+              fecha={new Date(s.updated_at).toLocaleDateString()}
             />
           ))}
+
+          {loading &&
+            Array.from({ length: 3 }).map((_, i) => (
+              <ServiceCardSkeleton key={i} />
+            ))}
         </div>
       </main>
 
