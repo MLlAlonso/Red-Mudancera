@@ -19,9 +19,6 @@ export default function EmpresaDashboard() {
   const [filter, setFilter] = useState("todos");
   const [loading, setLoading] = useState(true);
 
-  // ================================
-  // Fetch servicios reales
-  // ================================
   useEffect(() => {
     const fetchServicios = async () => {
       try {
@@ -42,9 +39,6 @@ export default function EmpresaDashboard() {
     fetchServicios();
   }, []);
 
-  // ================================
-  // Filtro
-  // ================================
   const filteredServices =
     filter === "todos"
       ? services
@@ -55,7 +49,6 @@ export default function EmpresaDashboard() {
       <Header />
 
       <main className="empresa-dashboard">
-        {/* Encabezado */}
         <div className="empresa-dashboard__header">
           <h1 className="empresa-dashboard__title">Últimas publicaciones</h1>
           <p className="empresa-dashboard__subtitle">
@@ -63,7 +56,6 @@ export default function EmpresaDashboard() {
           </p>
         </div>
 
-        {/* Filtros */}
         <div className="empresa-dashboard__controls">
           <div className="empresa-dashboard__left">
             <ServiceFilters onChange={setFilter} />
@@ -79,7 +71,6 @@ export default function EmpresaDashboard() {
           <SearchBar />
         </div>
 
-        {/* Cards */}
         <div className="empresa-dashboard__cards">
           {loading &&
             Array.from({ length: 6 }).map((_, i) => (
@@ -90,6 +81,7 @@ export default function EmpresaDashboard() {
             filteredServices.map((servicio) => (
               <ServiceCard
                 key={servicio.id}
+                id={servicio.id}   // 🔥 ESTE ERA EL PUTO FALTANTE
                 type={servicio.tipo}
                 origen={servicio.origen}
                 destino={servicio.destino}

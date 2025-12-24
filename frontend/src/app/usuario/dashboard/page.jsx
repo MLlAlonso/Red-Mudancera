@@ -17,12 +17,7 @@ export default function UsuarioDashboard() {
   const [filter, setFilter] = useState("todos");
   const [limit, setLimit] = useState("infinite");
 
-  const {
-    servicios,
-    loading,
-    hasMore,
-    loadMore,
-  } = useServicios({
+  const { servicios, loading, hasMore, loadMore } = useServicios({
     tipo: filter,
     limit,
   });
@@ -59,20 +54,7 @@ export default function UsuarioDashboard() {
 
         <div className="empresa-dashboard__controls">
           <ServiceFilters onChange={setFilter} />
-
           <div className="empresa-dashboard__right">
-            {/* <select
-              className="limit-select"
-              value={limit}
-              onChange={(e) => setLimit(e.target.value)}
-            >
-              <option value="infinite">Scroll infinito</option>
-              <option value="12">12</option>
-              <option value="30">30</option>
-              <option value="60">60</option>
-              <option value="120">120</option>
-            </select> */}
-
             <SearchBar />
           </div>
         </div>
@@ -81,12 +63,17 @@ export default function UsuarioDashboard() {
           {servicios.map((s) => (
             <ServiceCard
               key={s.id}
+              id={s.id}                // ✅ ESTE ERA EL BUG
               type={s.tipo}
               origen={s.origen}
               destino={s.destino}
               volumen={`${s.volumen} m³`}
               empresa={s.empresa?.nombre ?? "Empresa"}
-              fecha={new Date(s.updated_at).toLocaleDateString()}
+              fecha={
+                s.updated_at
+                  ? new Date(s.updated_at).toLocaleDateString()
+                  : "—"
+              }
             />
           ))}
 

@@ -1,8 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function ServiceCard({
+  id,
   type = "busco",
   origen = "",
   destino = "",
@@ -10,6 +12,7 @@ export default function ServiceCard({
   empresa = "",
   fecha = "",
 }) {
+  const router = useRouter();
   const isOffer = type === "ofrezco";
 
   return (
@@ -33,7 +36,13 @@ export default function ServiceCard({
       <p className="service-card__date">Publicado el {fecha}</p>
 
       <div className="service-card__actions">
-        <button className="btn-outline">Ver detalles</button>
+        <button
+          className="btn-outline"
+          onClick={() => router.push(`/servicios/${id}`)}
+        >
+          Ver detalles
+        </button>
+
         <button className={`btn-solid ${isOffer ? "offer-btn" : ""}`}>
           Contactar
         </button>

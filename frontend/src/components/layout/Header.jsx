@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
 import SideMenuEmpresa from "./SideMenu";
@@ -10,21 +10,46 @@ import useClickOutside from "@/hooks/useClickOutside";
 
 export default function Header() {
   const [openMenu, setOpenMenu] = useState(false);
+  const [homeHref, setHomeHref] = useState("/");
   const menuRef = useRef(null);
 
   const pathname = usePathname();
 
-  const isUsuario = pathname.startsWith("/usuario");
-  const isEmpresa = pathname.startsWith("/empresa");
-
-  // 👉 Dashboard correcto según contexto
-  const homeHref = isUsuario
-    ? "/usuario/dashboard"
-    : isEmpresa
-    ? "/empresa/dashboard"
-    : "/";
+  const isUsuarioPath = pathname.startsWith("/usuario");
+  const isEmpresaPath = pathname.startsWith("/empresa");
 
   useClickOutside(menuRef, () => setOpenMenu(false));
+
+  /* ============================
+     Resolver dashboard correcto
+  ============================ */
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+
+    const cookies = document.cookie;
+
+    if (cookies.includes("token_empresa")) {
+      setHomeHref("/empresa/dashboard");
+      return;
+    }
+
+    if (cookies.includes("token_usuario")) {
+      setHomeHref("/usuario/dashboard");
+      return;
+    }
+
+    if (isEmpresaPath) {
+      setHomeHref("/empresa/dashboard");
+      return;
+    }
+
+    if (isUsuarioPath) {
+      setHomeHref("/usuario/dashboard");
+      return;
+    }
+
+    setHomeHref("/");
+  }, [pathname, isEmpresaPath, isUsuarioPath]);
 
   return (
     <header className="header">
@@ -57,7 +82,7 @@ export default function Header() {
       </div>
 
       <div ref={menuRef}>
-        {isUsuario ? (
+        {homeHref.startsWith("/usuario") ? (
           <SideMenuUsuario open={openMenu} />
         ) : (
           <SideMenuEmpresa open={openMenu} />

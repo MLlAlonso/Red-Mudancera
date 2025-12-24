@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Modules\Servicio\Controllers;
+
 use App\Http\Controllers\Controller;
+use App\Modules\Servicio\Models\Servicio;
 use App\Modules\Servicio\Requests\StoreServicioRequest;
 use App\Modules\Servicio\Requests\ChangeEstadoServicioRequest;
 use App\Modules\Servicio\Services\ServicioService;
@@ -42,19 +44,19 @@ class ServicioController extends Controller
     /**
      * GET /api/servicios/{id}
      */
-    public function show(int $id): JsonResponse
+    public function show($id)
     {
-        $servicio = $this->servicioRepository->findById($id);
-        if (!$servicio) {
+        $servicio = Servicio::with('empresa')->find($id);
+
+        if (! $servicio) {
             return response()->json([
-                'message' => 'Servicio no encontrado.'
+                'message' => 'Servicio no encontrado'
             ], 404);
         }
 
-        return response()->json([
-            'data' => $servicio
-        ]);
+        return response()->json($servicio);
     }
+
 
     /**
      * POST /api/servicios
@@ -114,6 +116,27 @@ class ServicioController extends Controller
         $servicio->delete();
         return response()->json([
             'message' => 'Servicio eliminado correctamente.'
+        ]);
+    }
+
+    public function update(StoreServicioRequest $request, int $id): JsonResponse
+    {
+        $empresa = auth()->user();
+        $servicio = $this->servicioRepository->findById($id);
+
+        if (!$servicio) {
+            return response()->json(['message' => 'Servicio no encontrado'], 404);
+        }
+
+        if ($servicio->empresa_id !== $empresa->id) {
+            return response()->json(['message' => 'No autorizado'], 403);
+        }
+
+        $servicio->update($request->validated());
+
+        return response()->json([
+            'message' => 'Servicio actualizado correctamente',
+            'data' => $servicio->fresh()
         ]);
     }
 }
