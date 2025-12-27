@@ -50,7 +50,7 @@ class StoreServicioRequest extends FormRequest
                 'string',
             ],
 
-            // 🔥 VALORES NORMALIZADOS
+            // VALORES NORMALIZADOS
             'tipo_carga' => [
                 'required',
                 Rule::in([
@@ -63,8 +63,8 @@ class StoreServicioRequest extends FormRequest
             ],
 
             'nota' => ['nullable', 'string', 'max:1000'],
-            'responsable' => ['nullable', 'string', 'max:120'],
-            'telefono' => ['nullable', 'string', 'max:20'],
+            'responsable_nombre' => ['nullable', 'string', 'max:120'],
+            'responsable_telefono' => ['nullable', 'string', 'max:20'],
             'importe' => ['nullable', 'numeric', 'min:0'],
         ];
     }

@@ -5,6 +5,7 @@ import Footer from "@/components/layout/Footer";
 import Input from "@/components/common/Input";
 import Button_success from "@/components/common/Button_success";
 import Button_error from "@/components/common/Button_error";
+import ErrorModal from "@/components/common/ErrorModal";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -22,6 +23,11 @@ export default function OfrezcoServicioPage() {
     nota: "",
     tipoCarga: "",
     importe: "",
+  });
+
+  const [errorModal, setErrorModal] = useState({
+    show: false,
+    message: "",
   });
 
   const [usuarios, setUsuarios] = useState([]);
@@ -80,14 +86,15 @@ export default function OfrezcoServicioPage() {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const token = document.cookie
-      .split("; ")
-      .find(r => r.startsWith("token_empresa="))
-      ?.split("=")[1];
+  const token = document.cookie
+    .split("; ")
+    .find(r => r.startsWith("token_empresa="))
+    ?.split("=")[1];
 
+  try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/servicios`, {
       method: "POST",
       headers: {
@@ -96,24 +103,44 @@ export default function OfrezcoServicioPage() {
         Accept: "application/json",
       },
       body: JSON.stringify({
-        tipo: "ofrezco",
-        volumen: form.volumen,
-        origen: form.origen,
-        destino: form.destino,
-        rangoDias: form.rangoDias,
-        tipo_carga: form.tipoCarga,
-        nota: form.nota,
-        responsable: form.responsableNombre,
-        telefono: form.telefono,
-        importe: form.importe,
-      }),
+  tipo: "ofrezco",
+  volumen: form.volumen,
+  origen: form.origen,
+  destino: form.destino,
+  rangoDias: form.rangoDias,
+  tipo_carga: form.tipoCarga,
+  nota: form.nota,
+  responsable_nombre: form.responsableNombre,
+  responsable_telefono: form.telefono,
+  importe: form.importe,
+}),
+
     });
 
     const data = await res.json();
-    if (!res.ok) return alert(JSON.stringify(data));
+
+    if (!res.ok) {
+      const msg =
+        data?.errors?.servicio?.[0] ??
+        data?.message ??
+        "No se pudo publicar el servicio";
+
+      setErrorModal({
+        show: true,
+        message: msg,
+      });
+      return;
+    }
 
     router.push("/empresa/dashboard");
-  };
+  } catch (err) {
+    setErrorModal({
+      show: true,
+      message: "Error de conexión con el servidor",
+    });
+  }
+};
+
 
   return (
     <>
@@ -177,6 +204,15 @@ export default function OfrezcoServicioPage() {
           </form>
         </div>
       </main>
+
+      <ErrorModal
+        show={errorModal.show}
+        title="Publicación duplicada"
+        message={errorModal.message}
+        onClose={() =>
+          setErrorModal({ show: false, message: "" })
+        }
+      />
 
       <Footer />
     </>

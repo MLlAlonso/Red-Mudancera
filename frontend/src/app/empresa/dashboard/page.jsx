@@ -9,7 +9,6 @@ import ServiceFilters from "@/components/filters/ServiceFilters";
 import Button_crud from "@/components/common/Button_crud";
 import SearchBar from "@/components/common/SearchBar";
 import ServiceCard from "@/components/cards/ServiceCard";
-
 import ServiceCardSkeleton from "@/components/skeletons/ServiceCardSkeleton";
 
 import "@/styles/pages/empresa/_empresaDashboard.scss";
@@ -81,7 +80,7 @@ export default function EmpresaDashboard() {
             filteredServices.map((servicio) => (
               <ServiceCard
                 key={servicio.id}
-                id={servicio.id}   // 🔥 ESTE ERA EL PUTO FALTANTE
+                id={servicio.id}
                 type={servicio.tipo}
                 origen={servicio.origen}
                 destino={servicio.destino}

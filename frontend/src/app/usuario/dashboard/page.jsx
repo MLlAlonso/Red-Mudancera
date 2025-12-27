@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
@@ -15,12 +15,16 @@ import "@/styles/pages/empresa/_empresaDashboard.scss";
 
 export default function UsuarioDashboard() {
   const [filter, setFilter] = useState("todos");
-  const [limit, setLimit] = useState("infinite");
+  const [limit] = useState("infinite");
 
   const { servicios, loading, hasMore, loadMore } = useServicios({
-    tipo: filter,
     limit,
   });
+
+  const filteredServicios = useMemo(() => {
+    if (filter === "todos") return servicios;
+    return servicios.filter(s => s.tipo === filter);
+  }, [servicios, filter]);
 
   useEffect(() => {
     if (limit !== "infinite") return;
@@ -60,10 +64,10 @@ export default function UsuarioDashboard() {
         </div>
 
         <div className="empresa-dashboard__cards">
-          {servicios.map((s) => (
+          {filteredServicios.map((s) => (
             <ServiceCard
               key={s.id}
-              id={s.id}                // ✅ ESTE ERA EL BUG
+              id={s.id}
               type={s.tipo}
               origen={s.origen}
               destino={s.destino}

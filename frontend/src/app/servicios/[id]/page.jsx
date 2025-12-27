@@ -7,6 +7,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Button_crud from "@/components/common/Button_crud";
 import Button_cta from "@/components/common/Button_cta";
+import { openWhatsappMessage } from "@/utils/whatsapp";
 
 import "@/styles/pages/servicios/_detallesServicio.scss";
 
@@ -186,7 +187,19 @@ export default function DetalleServicioPage() {
           </div>
 
           <div className="detalle-servicio__actions">
-            <Button_cta value="Contactar" />
+            <Button_cta
+              value="Contactar"
+              onClick={() =>
+                openWhatsappMessage({
+                  tipo: servicio.tipo === "ofrezco" ? "Ofrezco" : "Busco",
+                  origen: servicio.origen,
+                  destino: servicio.destino,
+                  volumen: `${servicio.volumen} m³`,
+                  servicioId: servicio.id,
+                })
+              }
+            />
+
           </div>
         </div>
       </main>

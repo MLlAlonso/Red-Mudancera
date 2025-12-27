@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { openWhatsappMessage } from "@/utils/whatsapp";
 
 export default function ServiceCard({
   id,
@@ -43,7 +44,18 @@ export default function ServiceCard({
           Ver detalles
         </button>
 
-        <button className={`btn-solid ${isOffer ? "offer-btn" : ""}`}>
+        <button
+          className={`btn-solid ${isOffer ? "offer-btn" : ""}`}
+          onClick={() =>
+            openWhatsappMessage({
+              tipo: isOffer ? "Ofrezco" : "Busco",
+              origen,
+              destino,
+              volumen,
+              servicioId: id,
+            })
+          }
+        >
           Contactar
         </button>
       </div>
