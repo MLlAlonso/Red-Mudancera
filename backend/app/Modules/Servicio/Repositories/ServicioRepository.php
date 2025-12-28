@@ -6,12 +6,60 @@ use App\Modules\Servicio\Models\Servicio;
 
 class ServicioRepository
 {
-    public function search(array $filters)
+    public function search(array $params)
     {
-        return Servicio::with('empresa')
+        $query = Servicio::with('empresa')
             ->activos()
-            ->orderBy('updated_at', 'desc')
-            ->paginate(10);
+            ->orderBy('updated_at', 'desc');
+
+        /* ============================
+         | BUSQUEDA GENERAL
+         ============================ */
+        $query->when($params['search'] ?? null, function ($q, $search) {
+            $q->where(function ($q) use ($search) {
+                $q->where('origen', 'like', "%{$search}%")
+                  ->orWhere('destino', 'like', "%{$search}%")
+                  ->orWhereHas('empresa', function ($e) use ($search) {
+                      $e->where('empresa', 'like', "%{$search}%");
+                  });
+            });
+        });
+
+        /* ============================
+         | FILTROS
+         ============================ */
+        $query->when($params['origen'] ?? null, fn ($q, $v) =>
+            $q->where('origen', 'like', "%{$v}%")
+        );
+
+        $query->when($params['destino'] ?? null, fn ($q, $v) =>
+            $q->where('destino', 'like', "%{$v}%")
+        );
+
+        $query->when($params['volumen'] ?? null, fn ($q, $v) =>
+            $q->where('volumen', '>=', $v)
+        );
+
+        $query->when($params['tipoCarga'] ?? null, fn ($q, $v) =>
+            $q->where('tipo_carga', $v)
+        );
+
+        $query->when(
+            ($params['fechaInicio'] ?? null) && ($params['fechaFin'] ?? null),
+            fn ($q) =>
+                $q->whereBetween('inicio', [
+                    $params['fechaInicio'],
+                    $params['fechaFin']
+                ])
+        );
+
+        $query->when($params['sede'] ?? null, function ($q, $v) {
+            $q->whereHas('empresa', fn ($e) =>
+                $e->where('base', 'like', "%{$v}%")
+            );
+        });
+
+        return $query->paginate(10);
     }
 
     public function findById(int $id): ?Servicio

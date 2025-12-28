@@ -1,68 +1,72 @@
 import { useEffect, useState, useCallback } from "react";
 
-export default function useServicios({ limit = "infinite" } = {}) {
+export default function useServicios({
+  search = "",
+  filters = {},
+  limit = "infinite",
+} = {}) {
   const [servicios, setServicios] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
+  const buildQuery = (pageToLoad) => {
+    const params = new URLSearchParams();
+    params.append("page", pageToLoad);
+
+    if (limit !== "infinite") params.append("limit", limit);
+    if (search) params.append("search", search);
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value) params.append(key, value);
+    });
+
+    return params.toString();
+  };
+
   const fetchServicios = useCallback(
-    async (pageToLoad) => {
-      if (loading || !hasMore) return;
+    async (pageToLoad = 1, reset = false) => {
+      if (loading || (!hasMore && !reset)) return;
 
       setLoading(true);
 
       try {
-        const params = new URLSearchParams();
-        params.append("page", pageToLoad);
-
-        if (limit !== "infinite") {
-          params.append("limit", limit);
-        }
-
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/servicios?${params.toString()}`,
-          {
-            headers: { Accept: "application/json" },
-          }
+          `${process.env.NEXT_PUBLIC_API_URL}/servicios?${buildQuery(
+            pageToLoad
+          )}`,
+          { headers: { Accept: "application/json" } }
         );
-
-        if (!res.ok) {
-          throw new Error("Error al cargar servicios");
-        }
 
         const json = await res.json();
         const nuevos = json.data || [];
 
         setServicios((prev) =>
-          pageToLoad === 1 ? nuevos : [...prev, ...nuevos]
+          reset ? nuevos : [...prev, ...nuevos]
         );
 
         setHasMore(pageToLoad < (json.meta?.last_page ?? 1));
         setPage(pageToLoad);
-      } catch (error) {
-        console.error("useServicios error:", error);
+      } catch (e) {
+        console.error("useServicios error:", e);
       } finally {
         setLoading(false);
       }
     },
-    [loading, hasMore, limit]
+    [search, filters, limit, loading, hasMore]
   );
-  
+
+  // 🔑 SOLO cuando cambia search o filtros aplicados
   useEffect(() => {
-    fetchServicios(1);
-  }, [fetchServicios]);
+    setServicios([]);
+    setPage(1);
+    setHasMore(true);
+    fetchServicios(1, true);
+  }, [search, filters]);
 
   const loadMore = () => {
-    if (!loading && hasMore) {
-      fetchServicios(page + 1);
-    }
+    if (!loading && hasMore) fetchServicios(page + 1);
   };
 
-  return {
-    servicios,
-    loading,
-    hasMore,
-    loadMore,
-  };
+  return { servicios, loading, hasMore, loadMore };
 }

@@ -6,6 +6,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
 import ServiceFilters from "@/components/filters/ServiceFilters";
+import ServiceAdvancedFilters from "@/components/filters/ServiceAdvancedFilters";
 import Button_crud from "@/components/common/Button_crud";
 import SearchBar from "@/components/common/SearchBar";
 import ServiceCard from "@/components/cards/ServiceCard";
@@ -15,30 +16,38 @@ import "@/styles/pages/empresa/_empresaDashboard.scss";
 
 export default function EmpresaDashboard() {
   const [services, setServices] = useState([]);
-  const [filter, setFilter] = useState("todos");
   const [loading, setLoading] = useState(true);
 
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("todos");
+
+  const [filters, setFilters] = useState({
+    origen: "",
+    destino: "",
+    volumen: "",
+    fechaInicio: "",
+    fechaFin: "",
+    sede: "",
+    tipoCarga: "",
+  });
+
+  const [showFilters, setShowFilters] = useState(false);
+
   useEffect(() => {
-    const fetchServicios = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/servicios`,
-          { headers: { Accept: "application/json" } }
-        );
+    const params = new URLSearchParams({
+      search,
+      ...filters,
+    });
 
-        const json = await res.json();
-        setServices(json.data || []);
-      } catch (err) {
-        console.error("Error cargando servicios", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/servicios?${params}`, {
+      headers: { Accept: "application/json" },
+    })
+      .then((r) => r.json())
+      .then((json) => setServices(json.data || []))
+      .finally(() => setLoading(false));
+  }, [search, filters]);
 
-    fetchServicios();
-  }, []);
-
-  const filteredServices =
+  const visible =
     filter === "todos"
       ? services
       : services.filter((s) => s.tipo === filter);
@@ -61,14 +70,28 @@ export default function EmpresaDashboard() {
 
             <Button_crud
               value="Agregar"
-              onClick={() =>
-                (window.location.href = "../empresa/cargas")
-              }
+              onClick={() => (window.location.href = "/empresa/cargas")}
             />
           </div>
 
-          <SearchBar />
+          <SearchBar
+            value={search}
+            onChange={setSearch}
+            onFilterClick={() => setShowFilters(true)}
+          />
         </div>
+
+        {showFilters && (
+          <div className="filters-overlay">
+            <ServiceAdvancedFilters
+              values={filters}
+              onChange={setFilters}
+              onApply={() => { }}
+              onClose={() => setShowFilters(false)}
+            />
+          </div>
+        )}
+
 
         <div className="empresa-dashboard__cards">
           {loading &&
@@ -77,20 +100,18 @@ export default function EmpresaDashboard() {
             ))}
 
           {!loading &&
-            filteredServices.map((servicio) => (
+            visible.map((s) => (
               <ServiceCard
-                key={servicio.id}
-                id={servicio.id}
-                type={servicio.tipo}
-                origen={servicio.origen}
-                destino={servicio.destino}
+                key={s.id}
+                id={s.id}
+                type={s.tipo}
+                origen={s.origen}
+                destino={s.destino}
                 volumen={
-                  servicio.volumen
-                    ? `${servicio.volumen} m³`
-                    : "No especificado"
+                  s.volumen ? `${s.volumen} m³` : "No especificado"
                 }
-                empresa={servicio.empresa?.empresa ?? "Empresa"}
-                fecha={new Date(servicio.created_at).toLocaleDateString()}
+                empresa={s.empresa?.empresa ?? "Empresa"}
+                fecha={new Date(s.created_at).toLocaleDateString()}
               />
             ))}
         </div>

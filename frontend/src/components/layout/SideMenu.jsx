@@ -40,14 +40,14 @@ export default function SideMenu({ open }) {
           </Link>
         </li>
 
-        <li>
+        {/* <li>
           <Link href="/empresa/acuerdos">
             <div className="side-item">
               <img src="/icons/acuerdo_2.png" />
               <span>Mis acuerdos</span>
             </div>
           </Link>
-        </li>
+        </li> */}
 
         <li>
           <Link href="/empresa/usuarios">
