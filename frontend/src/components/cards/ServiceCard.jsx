@@ -12,7 +12,10 @@ export default function ServiceCard({
   volumen = "",
   empresa = "",
   fecha = "",
+  showContact = true,          // NUEVO
+  onChangeEstado = null,       // NUEVO
 }) {
+
   const router = useRouter();
   const isOffer = type === "ofrezco";
 
@@ -44,21 +47,33 @@ export default function ServiceCard({
           Ver detalles
         </button>
 
-        <button
-          className={`btn-solid ${isOffer ? "offer-btn" : ""}`}
-          onClick={() =>
-            openWhatsappMessage({
-              tipo: isOffer ? "Ofrezco" : "Busco",
-              origen,
-              destino,
-              volumen,
-              servicioId: id,
-            })
-          }
-        >
-          Contactar
-        </button>
+        {showContact && (
+          <button
+            className={`btn-solid ${isOffer ? "offer-btn" : ""}`}
+            onClick={() =>
+              openWhatsappMessage({
+                tipo: isOffer ? "Ofrezco" : "Busco",
+                origen,
+                destino,
+                volumen,
+                servicioId: id,
+              })
+            }
+          >
+            Contactar
+          </button>
+        )}
+
+        {!showContact && onChangeEstado && (
+          <button
+            className="btn-solid"
+            onClick={() => onChangeEstado(id)}
+          >
+            Cambiar estado
+          </button>
+        )}
       </div>
+
     </motion.div>
   );
 }

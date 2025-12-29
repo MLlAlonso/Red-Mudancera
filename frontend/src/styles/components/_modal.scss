@@ -23,6 +23,7 @@
 .modal-title {
   font-size: 30px;
   font-weight: 600;
+  font-family: variables.$font-title;
   margin-bottom: 12px;
   text-align: center;
   color: variables.$title;
@@ -32,6 +33,7 @@
   font-size: 18px;
   line-height: 1.5;
   color: variables.$text;
+  font-family: variables.$font-text;
   margin-bottom: 10px;
   text-align: justify;
 }
@@ -40,15 +42,26 @@
   width: 100%;
   padding: 10px;
   background: variables.$success;
-  color: #000;
+  color: variables.$background;
   border: none;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
+  margin-bottom: 0px;
+
+  &:hover {
+    opacity: 0.9;
+    background: variables.$success-hover;
+  }
 }
 
-.modal-btn:hover {
-  opacity: 0.9;
+#modal-btn-cancel{
+  marginTop: 0px;
+  background: variables.$error;
+
+  &:hover{
+    background: variables.$error-hover;
+  }
 }
 
 @keyframes fadeIn {

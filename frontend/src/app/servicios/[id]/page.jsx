@@ -8,15 +8,16 @@ import Footer from "@/components/layout/Footer";
 import Button_crud from "@/components/common/Button_crud";
 import Button_cta from "@/components/common/Button_cta";
 import { openWhatsappMessage } from "@/utils/whatsapp";
+import ChangeServiceStatusModal from "@/components/modals/ChangeServiceStatusModal";
 
 import "@/styles/pages/servicios/_detallesServicio.scss";
 
 export default function DetalleServicioPage() {
   const { id } = useParams();
   const router = useRouter();
-
   const [servicio, setServicio] = useState(null);
   const [empresaAuth, setEmpresaAuth] = useState(null);
+  const [showChangeStatus, setShowChangeStatus] = useState(false);
 
   /* =========================
      Obtener servicio
@@ -68,6 +69,13 @@ export default function DetalleServicioPage() {
               Información detallada del servicio
             </p>
           </div>
+          
+          {isOwner && (
+            <div className={`estado-badge estado-${servicio.estado}`}>
+              Estado actual: <strong>{servicio.estado}</strong>
+            </div>
+          )}
+
         </div>
 
         <div className="detalle-servicio__card">
@@ -200,9 +208,29 @@ export default function DetalleServicioPage() {
               }
             />
 
+            {isOwner && (
+              <Button_crud
+                value="Cambiar estado"
+                onClick={() => setShowChangeStatus(true)}
+              />
+            )}
           </div>
+
         </div>
       </main>
+
+      {showChangeStatus && (
+        <ChangeServiceStatusModal
+          open={showChangeStatus}
+          servicio={servicio}
+          onClose={() => setShowChangeStatus(false)}
+          onUpdated={(updatedService) => {
+            setServicio(updatedService);
+            setShowChangeStatus(false);
+          }}
+        />
+
+      )}
 
       <Footer />
     </>

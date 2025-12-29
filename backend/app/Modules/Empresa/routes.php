@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Modules\Empresa\Controllers\EmpresaAuthController;
 use App\Modules\Empresa\Controllers\EmpresaController;
+use App\Modules\Servicio\Controllers\ServicioController;
 
 Route::prefix('empresa')->group(function () {
 
@@ -16,11 +17,14 @@ Route::prefix('empresa')->group(function () {
         Route::get('/me', [EmpresaController::class, 'me']);
         Route::put('/update', [EmpresaController::class, 'update']);
         Route::delete('/delete', [EmpresaController::class, 'destroy']);
-        
+
         // RUTAS PARA CRUD DE USUARIOS
         Route::get('/usuarios', [EmpresaController::class, 'usuariosEmpresa']);
         Route::delete('/usuario/{id}', [EmpresaController::class, 'eliminarUsuario']);
         Route::patch('/usuario/{id}/pausar', [EmpresaController::class, 'pausarUsuario']);
         Route::patch('/usuario/{id}/reanudar', [EmpresaController::class, 'reanudarUsuario']);
+
+        // RUTAS PARA PUBLICACIONES DE SERVICIOS
+        Route::get('/servicios', [ServicioController::class, 'misServicios']);
     });
 });

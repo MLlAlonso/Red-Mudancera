@@ -10,7 +10,9 @@
     max-width: 1100px;
     width: 100%;
     display: flex;
+    flex-direction: row;
     margin-bottom: 1rem;
+    justify-content: space-between;
   }
 
   &__title {
@@ -107,6 +109,12 @@
 .detalle-servicio__actions {
   display: flex;
   justify-content: center;
+  width: 100%;
+  justify-content: space-evenly;
+
+  .btn_crud {
+    font-size: 20px;
+  }
 }
 
 .reputacion {
@@ -117,6 +125,32 @@
   color: #f5a623; // dorado estrella
 }
 
+.estado-badge {
+  margin-top: 8px;
+  padding: 6px 6px;
+  border-radius: 8px;
+  font-weight: 600;
+  width: fit-content;
+  font-size: 14px;
+  height: 40px;
+  align-items: center;
+  text-align: center;
+}
+
+.estado-activo {
+  background: rgba(28, 143, 106, 0.7);
+  color: #fff;
+}
+
+.estado-asignado {
+  background: rgba(171, 176, 180, 0.3);
+  color: variables.$title;
+}
+
+.estado-finalizado {
+  background: rgba(143, 9, 6, 0.3);
+  color: variables.$text
+}
 
 
 /* Responsive */
@@ -216,6 +250,11 @@
       line-height: 35px;
     }
   }
+
+  .estado-badge {
+    height: 50px;
+  }
+
 }
 
 @media (max-width: 480px) {
@@ -262,6 +301,12 @@
 
     hr {
       margin: 15px auto;
+    }
+
+    .detalle-servicio__actions {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
   }
 }

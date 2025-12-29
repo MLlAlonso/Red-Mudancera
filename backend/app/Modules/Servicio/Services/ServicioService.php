@@ -5,6 +5,7 @@ namespace App\Modules\Servicio\Services;
 use App\Modules\Servicio\Models\Servicio;
 use App\Modules\Empresa\Models\Empresa;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class ServicioService
@@ -62,10 +63,12 @@ class ServicioService
             'responsable_nombre' => $data['responsable_nombre'] ?? null,
             'responsable_telefono' => $data['responsable_telefono'] ?? null,
             'importe' => $data['importe'] ?? null,
-            logger($data)
         ]);
     }
 
+    /*  ==============================
+         | CALCULAR FECHA FIN DEL SERVICIO
+        ============================== */
     protected function calcularFechaFin(Carbon $inicio, string $rango): Carbon
     {
         return match ($rango) {
@@ -76,4 +79,16 @@ class ServicioService
             default => $inicio->copy()->addDays(7),
         };
     }
+
+    /*  ==============================
+         | CAMBIAR ESTADO SERVICIO
+        ============================== */
+    public function changeEstado(Servicio $servicio, string $estado): Servicio
+{
+    $servicio->estado = $estado;
+    $servicio->save();
+
+    return $servicio;
+}
+
 }

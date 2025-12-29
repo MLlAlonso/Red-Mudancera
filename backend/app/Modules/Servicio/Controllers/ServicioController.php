@@ -57,7 +57,6 @@ class ServicioController extends Controller
         return response()->json($servicio);
     }
 
-
     /**
      * POST /api/servicios
      */
@@ -78,26 +77,22 @@ class ServicioController extends Controller
     /**
      * PATCH /api/servicios/{id}/estado
      */
-    public function changeEstado(
-        ChangeEstadoServicioRequest $request,
-        int $id
-    ): JsonResponse {
-        $servicio = $this->servicioRepository->findById($id);
+    public function changeEstado(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'estado' => 'required|in:activo,asignado,finalizado',
+        ]);
 
-        if (!$servicio) {
-            return response()->json([
-                'message' => 'Servicio no encontrado.'
-            ], 404);
-        }
+        $servicio = Servicio::findOrFail($id);
 
         $servicio = $this->servicioService->changeEstado(
             $servicio,
-            $request->estado
+            $validated['estado']
         );
 
         return response()->json([
-            'message' => 'Estado del servicio actualizado.',
-            'data' => $servicio
+            'success' => true,
+            'data' => $servicio,
         ]);
     }
 
@@ -119,6 +114,9 @@ class ServicioController extends Controller
         ]);
     }
 
+    /**
+     * Update /api/servicios/{id}
+     */
     public function update(StoreServicioRequest $request, int $id): JsonResponse
     {
         $empresa = auth()->user();
@@ -139,4 +137,62 @@ class ServicioController extends Controller
             'data' => $servicio->fresh()
         ]);
     }
+
+    /**
+     * Show servicios of authenticated empresa
+     */
+    public function misServicios(Request $request)
+    {
+        $empresa = auth()->user(); // 👈 YA es empresa, no ->empresa
+
+        $query = Servicio::with('empresa')
+            ->where('empresa_id', $empresa->id)
+            ->orderBy('created_at', 'desc');
+
+        // 🔍 búsqueda
+        if ($search = $request->get('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('origen', 'like', "%{$search}%")
+                    ->orWhere('destino', 'like', "%{$search}%");
+            });
+        }
+
+        // filtros avanzados
+        $query->when(
+            $request->origen,
+            fn($q, $v) =>
+            $q->where('origen', 'like', "%{$v}%")
+        );
+
+        $query->when(
+            $request->destino,
+            fn($q, $v) =>
+            $q->where('destino', 'like', "%{$v}%")
+        );
+
+        $query->when(
+            $request->volumen,
+            fn($q, $v) =>
+            $q->where('volumen', '>=', $v)
+        );
+
+        $query->when(
+            $request->tipoCarga,
+            fn($q, $v) =>
+            $q->where('tipo_carga', $v)
+        );
+
+        if ($request->fechaInicio && $request->fechaFin) {
+            $query->whereBetween('inicio', [
+                $request->fechaInicio,
+                $request->fechaFin,
+            ]);
+        }
+
+        return response()->json([
+            'data' => $query->get(), // 👈 TODOS, sin paginar
+        ]);
+    }
+
+    
 }
