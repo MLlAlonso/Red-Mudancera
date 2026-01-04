@@ -65,18 +65,18 @@ Actualmente el proyecto se encuentra en un **estado funcional sólido**, con aut
 * [x] Perfil empresa básico
 
 ### 🚚 Milestone 3 (próxima)
-* [ ] CRUD completo de Servicios
-* [ ] Endpoint de servicios real
-* [ ] Cards de servicios dinámicas
-* [ ] Filtros conectados a backend
-* [ ] Detalle de servicio
-* [ ] Asociación servicio ↔ empresa
-* [ ] Estado del servicio (activo / pausado)
-* [ ] Migración Mailtrap → proveedor real (Resend, etc.)
+* [x] CRUD completo de Servicios
+* [x] Endpoint de servicios real
+* [x] Cards de servicios dinámicas
+* [x] Filtros conectados a backend
+* [x] Detalle de servicio
+* [x] Asociación servicio ↔ empresa
+* [x] Estado del servicio (activo / pausado)
+* [x] Migración Mailtrap → proveedor real (Resend, etc.)
 
 ### 🤝 Milestone 4 (futuro)
 * [ ] Solicitudes / contratos
-* [ ] Historial de servicios
+* [x] Historial de servicios
 * [ ] Sistema de reputación real
 * [ ] Notificaciones
 * [ ] Panel administrativo
@@ -197,112 +197,119 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 
 ## Estrucrura de carpetas
 backend/
-├── 📄 .editorconfig
-├── 📄 .env
-├── 📄 .env.example
-├── 📄 .gitattributes
-├── 📄 artisan                          # CLI de Laravel
-├── 📄 composer.json                    # Dependencias PHP
-├── 📄 composer.lock
-├── 📄 package.json                     # Dependencias Node.js
-├── 📄 package-lock.json
-├── 📄 phpunit.xml                      # Configuración de tests
-├── 📄 README.md
-├── 📄 Structure.md                     # Documentación de estructura (este archivo)
-├── 📄 red_mudancera_dev
-├── 📄 vite.config.js                   # Configuración de Vite
+├── .editorconfig
+├── .env
+├── .env.example
+├── .gitattributes
+├── artisan
+├── composer.json
+├── composer.lock
+├── package.json
+├── package-lock.json
+├── phpunit.xml
+├── README.md
+├── Structure.md                     # (este archivo) [backend/Structure.md](backend/Structure.md)
+├── red_mudancera_dev
+├── vite.config.js                   # [backend/vite.config.js](backend/vite.config.js)
 │
-├── 📁 app/                             # Código principal de la aplicación
-│   ├── 📁 Console/
-│   │   ├── Kernel.php                  # Scheduler / comandos (ver [`App\Console\Kernel`](backend/app/Console/Kernel.php))
-│   │   └── 📁 Commands/                 # Comandos artisan custom
-│   ├── 📁 Http/
-│   │   ├── Kernel.php                  # Middleware HTTP
-│   │   └── 📁 Middleware/
-│   │       └── Authenticate.php        # Middleware de autenticación
-│   ├── 📁 Mail/                         # Mails (p.ej. EmpresaVerificationCode)
-│   ├── 📁 Models/
-│   ├── 📁 Modules/                      # Módulos funcionales (modular architecture)
-│   │   ├── 📁 Empresa/
-│   │   │   ├── 📁 Controllers/
-│   │   │   │   ├── EmpresaAuthController.php
-│   │   │   │   └── EmpresaController.php  # API: me, update, usuarios, etc. (ver [`App\Modules\Empresa\Controllers\EmpresaController`](backend/app/Modules/Empresa/Controllers/EmpresaController.php))
-│   │   │   ├── 📁 Models/
-│   │   │   │   └── Empresa.php
-│   │   │   ├── 📁 Requests/
-│   │   │   │   └── EmpresaUpdateRequest.php (validaciones)
-│   │   │   └── routes.php               # Rutas del módulo (ver [backend/app/Modules/Empresa/routes.php](backend/app/Modules/Empresa/routes.php))
-│   │   └── 📁 Usuario/
-│   │       ├── 📁 Controllers/
-│   │       │   ├── UsuarioAuthController.php
-│   │       │   └── UsuarioController.php
-│   │       ├── 📁 Models/
-│   │       │   └── Usuario.php
-│   │       ├── 📁 Requests/
-│   │       │   ├── RegisterUsuarioRequest.php
-│   │       │   ├── LoginUsuarioRequest.php
-│   │       │   └── UsuarioUpdateRequest.php
-│   │       └── routes.php
-│   └── 📁 Providers/
+├── app/
+│   ├── Console/
+│   │   ├── Kernel.php               # [App\Console\Kernel](backend/app/Console/Kernel.php)
+│   │   └── Commands/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   ├── Kernel.php               # [backend/app/Http/Kernel.php](backend/app/Http/Kernel.php)
+│   │   └── Middleware/
+│   │       └── Authenticate.php
+│   ├── Mail/                        # Mails (ej.: EmpresaVerificationCode) [backend/resources/views/emails/empresa_verification_code.blade.php](backend/resources/views/emails/empresa_verification_code.blade.php)
+│   ├── Models/
+│   │   └── (Modelos Eloquent)
+│   ├── Modules/                     # Arquitectura modular por dominios
+│   │   ├── Empresa/
+│   │   │   ├── Controllers/
+│   │   │   │   ├── EmpresaAuthController.php  # [`App\Modules\Empresa\Controllers\EmpresaAuthController`](backend/app/Modules/Empresa/Controllers/EmpresaAuthController.php)
+│   │   │   │   └── EmpresaController.php      # [`App\Modules\Empresa\Controllers\EmpresaController`](backend/app/Modules/Empresa/Controllers/EmpresaController.php)
+│   │   │   ├── Models/
+│   │   │   │   └── Empresa.php                  # [backend/app/Modules/Empresa/Models/Empresa.php](backend/app/Modules/Empresa/Models/Empresa.php)
+│   │   │   ├── Requests/
+│   │   │   └── routes.php                        # [backend/app/Modules/Empresa/routes.php](backend/app/Modules/Empresa/routes.php)
+│   │   ├── Usuario/
+│   │   │   ├── Controllers/
+│   │   │   │   ├── UsuarioAuthController.php    # [`App\Modules\Usuario\Controllers\UsuarioAuthController`](backend/app/Modules/Usuario/Controllers/UsuarioAuthController.php)
+│   │   │   │   └── UsuarioController.php        # [`App\Modules\Usuario\Controllers\UsuarioController`](backend/app/Modules/Usuario/Controllers/UsuarioController.php)
+│   │   │   ├── Models/
+│   │   │   │   └── Usuario.php                  # [backend/app/Modules/Usuario/Models/Usuario.php](backend/app/Modules/Usuario/Models/Usuario.php)
+│   │   │   ├── Requests/
+│   │   │   └── routes.php                        # [backend/app/Modules/Usuario/routes.php](backend/app/Modules/Usuario/routes.php)
+│   │   └── Servicio/                              # Módulo Servicios (planificado / parcial)
+│   │       ├── Controllers/
+│   │       │   └── ServicioController.php        # [backend/app/Modules/Servicio/Controllers/ServicioController.php](backend/app/Modules/Servicio/Controllers/ServicioController.php)
+│   │       ├── Models/
+│   │       │   └── Servicio.php                  # [backend/app/Modules/Servicio/Models/Servicio.php](backend/app/Modules/Servicio/Models/Servicio.php)
+│   │       ├── Requests/
+│   │       ├── Services/
+│   │       ├── Repositories/
+│   │       └── routes.php                        # [backend/app/Modules/Servicio/routes.php](backend/app/Modules/Servicio/routes.php)
+│   └── Providers/
 │       ├── AppServiceProvider.php
-│       └── RouteServiceProvider.php     # Registro de rutas (ver [`App\Providers\RouteServiceProvider`](backend/app/Providers/RouteServiceProvider.php))
+│       └── RouteServiceProvider.php              # [`App\Providers\RouteServiceProvider`](backend/app/Providers/RouteServiceProvider.php)
 │
-├── 📁 bootstrap/
-│   ├── app.php                         # Bootstrapping de la aplicación (ver [backend/bootstrap/app.php](backend/bootstrap/app.php))
-│   ├── providers.php                   # Registro de providers
-│   └── 📁 cache/
+├── bootstrap/
+│   ├── app.php                                   # [backend/bootstrap/app.php](backend/bootstrap/app.php)
+│   └── cache/
 │
-├── 📁 config/
+├── config/
 │   ├── app.php
-│   ├── auth.php                        # Autenticación (Sanctum + guards) (ver [backend/config/auth.php](backend/config/auth.php))
+│   ├── auth.php                                  # [backend/config/auth.php](backend/config/auth.php)
 │   ├── cache.php
+│   ├── cors.php                                  # [backend/config/cors.php](backend/config/cors.php)
 │   ├── database.php
-│   ├── filesystems.php                 # Disks + links (ver [backend/config/filesystems.php](backend/config/filesystems.php))
+│   ├── filesystems.php                           # [backend/config/filesystems.php](backend/config/filesystems.php)
 │   ├── logging.php
 │   ├── mail.php
 │   ├── queue.php
-│   ├── sanctum.php                     # Configuración de API tokens (ver [backend/config/sanctum.php](backend/config/sanctum.php))
-│   ├── services.php
-│   ├── cors.php                        # CORS (ver [backend/config/cors.php](backend/config/cors.php))
-│   └── session.php                     # Session cookie, path, domain (ver [backend/config/session.php](backend/config/session.php))
+│   ├── sanctum.php                               # [backend/config/sanctum.php](backend/config/sanctum.php)
+│   └── session.php
 │
-├── 📁 database/
-│   ├── 📁 migrations/
+├── database/
+│   ├── migrations/
 │   │   ├── 0001_01_01_000001_create_cache_table.php
-│   │   ├── 2025_11_26_074631_create_empresas_table.php
-│   │   └── 2025_11_26_074711_create_usuarios_table.php
-│   └── 📁 seeders/
+│   │   ├── 2025_11_26_074631_create_empresas_table.php   # [backend/database/migrations/2025_11_26_074631_create_empresas_table.php](backend/database/migrations/2025_11_26_074631_create_empresas_table.php)
+│   │   ├── 2025_11_26_074711_create_usuarios_table.php    # [backend/database/migrations/2025_11_26_074711_create_usuarios_table.php](backend/database/migrations/2025_11_26_074711_create_usuarios_table.php)
+│   │   └── 2025_12_16_064630_create_servicios_table.php  # [backend/database/migrations/2025_12_16_064630_create_servicios_table.php](backend/database/migrations/2025_12_16_064630_create_servicios_table.php)
+│   └── seeders/
 │       └── DatabaseSeeder.php
 │
-├── 📁 public/
-│   ├── index.php                       # Punto de entrada (ver [backend/public/index.php](backend/public/index.php))
-│   └── storage/ (enlace simbólico)     # link -> storage/app/public
+├── public/
+│   ├── index.php                                   # [backend/public/index.php](backend/public/index.php)
+│   └── storage/ (enlace simbólico → storage/app/public)
 │
-├── 📁 resources/
-│   ├── 📁 css/
-│   │   └── app.css                     # Tailwind / estilos
-│   ├── 📁 js/
+├── resources/
+│   ├── css/
+│   │   └── app.css
+│   ├── js/
 │   │   └── app.js
-│   └── 📁 views/
-│       └── welcome.blade.php
+│   └── views/
+│       ├── welcome.blade.php                       # [backend/resources/views/welcome.blade.php](backend/resources/views/welcome.blade.php)
+│       └── emails/
+│           └── empresa_verification_code.blade.php # [backend/resources/views/emails/empresa_verification_code.blade.php](backend/resources/views/emails/empresa_verification_code.blade.php)
 │
-├── 📁 routes/
-│   ├── api.php                         # Rutas API (incluye módulos) (ver [backend/routes/api.php](backend/routes/api.php))
-│   ├── web.php                         # Rutas web
-│   └── console.php                     # Comandos Artisan
+├── routes/
+│   ├── api.php                                     # [backend/routes/api.php](backend/routes/api.php) (incluye módulos: Empresa, Usuario, Servicio)
+│   └── web.php
 │
-├── 📁 storage/
-│   ├── 📁 app/
-│   ├── 📁 framework/
-│   ├── 📁 logs/
-│   └── 📁 public/
+├── storage/
+│   ├── app/
+│   ├── framework/
+│   ├── logs/
+│   └── public/
 │
-├── 📁 tests/
-│   ├── 📁 Feature/
+├── tests/
+│   ├── Feature/
 │   │   └── ExampleTest.php
 │   └── TestCase.php
 │
-└── 📁 vendor/                          # Dependencias Composer
+└── vendor/                                         # dependencias Composer
 
 frontend/
 ├── 📄 .eslintrc.mjs                    # Configuración ESLint
@@ -431,45 +438,53 @@ frontend/
         └── 📄 globals.scss
 
 ## Endpoints
-### Empresa — públicos
-POST /api/empresa/register → App\Modules\Empresa\Controllers\EmpresaAuthController
-POST /api/empresa/login → App\Modules\Empresa\Controllers\EmpresaAuthController
-POST /api/empresa/send-verification → App\Modules\Empresa\Controllers\EmpresaAuthController
-POST /api/empresa/verify-code → App\Modules\Empresa\Controllers\EmpresaAuthController
+A continuación se listan los endpoints actuales (método → ruta → controlador):
 
-### Empresa — protegidas (auth:sanctum)
-GET /api/empresa/me → App\Modules\Empresa\Controllers\EmpresaController
-PUT /api/empresa/update → App\Modules\Empresa\Controllers\EmpresaController
-DELETE /api/empresa/delete → App\Modules\Empresa\Controllers\EmpresaController
-GET /api/empresa/usuarios → App\Modules\Empresa\Controllers\EmpresaController
-DELETE /api/empresa/usuario/{id} → App\Modules\Empresa\Controllers\EmpresaController
-PATCH /api/empresa/usuario/{id}/pausar → App\Modules\Empresa\Controllers\EmpresaController
-PATCH /api/empresa/usuario/{id}/reanudar → App\Modules\Empresa\Controllers\EmpresaController
+## Empresa — públicos
+- POST /api/empresa/register → App\Modules\Empresa\Controllers\EmpresaAuthController::register
+- POST /api/empresa/login → App\Modules\Empresa\Controllers\EmpresaAuthController::login
+- POST /api/empresa/send-verification → App\Modules\Empresa\Controllers\EmpresaAuthController::sendVerificationCode
+- POST /api/empresa/verify-code → App\Modules\Empresa\Controllers\EmpresaAuthController::verifyCode
 
-### Usuario — públicos
-POST /api/usuario/register → App\Modules\Usuario\Controllers\UsuarioAuthController
-POST /api/usuario/login → App\Modules\Usuario\Controllers\UsuarioAuthController
-POST /api/usuario/send-verification-code → App\Modules\Usuario\Controllers\UsuarioAuthController
-POST /api/usuario/verify-code → App\Modules\Usuario\Controllers\UsuarioAuthController
+## Empresa — protegidas (auth:sanctum)
+- GET /api/empresa/me → App\Modules\Empresa\Controllers\EmpresaController::me
+- PUT /api/empresa/update → App\Modules\Empresa\Controllers\EmpresaController::update
+- DELETE /api/empresa/delete → App\Modules\Empresa\Controllers\EmpresaController::destroy
+- GET /api/empresa/usuarios → App\Modules\Empresa\Controllers\EmpresaController::usuariosEmpresa
+- DELETE /api/empresa/usuario/{id} → App\Modules\Empresa\Controllers\EmpresaController::eliminarUsuario
+- PATCH /api/empresa/usuario/{id}/pausar → App\Modules\Empresa\Controllers\EmpresaController::pausarUsuario
+- PATCH /api/empresa/usuario/{id}/reanudar → App\Modules\Empresa\Controllers\EmpresaController::reanudarUsuario
+- GET /api/empresa/servicios → App\Modules\Servicio\Controllers\ServicioController::misServicios
 
-### Usuario — protegidas (auth:sanctum)
-GET /api/usuario/me → App\Modules\Usuario\Controllers\UsuarioController
-PUT /api/usuario/update → App\Modules\Usuario\Controllers\UsuarioController
-DELETE /api/usuario/delete → App\Modules\Usuario\Controllers\UsuarioController
-GET /api/usuario/mis-usuarios → App\Modules\Usuario\Controllers\UsuarioController
+## Usuario — públicos
+- POST /api/usuario/register → App\Modules\Usuario\Controllers\UsuarioAuthController::register
+- POST /api/usuario/login → App\Modules\Usuario\Controllers\UsuarioAuthController::login
+- POST /api/usuario/send-verification-code → App\Modules\Usuario\Controllers\UsuarioAuthController::sendVerificationCode
+- POST /api/usuario/verify-code → App\Modules\Usuario\Controllers\UsuarioAuthController::verifyCode
 
-### Servicios (planificado / Milestone 2)
-POST /api/servicios/crear (protegida) — CRUD de servicios (implementación pendiente) — referencia: [Milestone 02.md](Milestone 02.md)
-GET /api/servicios — listar (pendiente)
-GET /api/servicios/{id} — detalle (pendiente)
-PUT /api/servicios/{id} — actualizar (pendiente)
-DELETE /api/servicios/{id} — eliminar (pendiente)
+## Usuario — protegidas (auth:sanctum)
+- GET /api/usuario/me → App\Modules\Usuario\Controllers\UsuarioController::me
+- PUT /api/usuario/update → App\Modules\Usuario\Controllers\UsuarioController::update
+- DELETE /api/usuario/delete → App\Modules\Usuario\Controllers\UsuarioController::destroy
+- GET /api/usuario/mis-usuarios → App\Modules\Usuario\Controllers\UsuarioController::listByEmpresa
+
+## Servicios — públicos y protegidas
+- GET /api/servicios → App\Modules\Servicio\Controllers\ServicioController::index
+- GET /api/servicios/{id} → App\Modules\Servicio\Controllers\ServicioController::show
+- POST /api/servicios (protegida) → App\Modules\Servicio\Controllers\ServicioController::store
+- PATCH /api/servicios/{id} (protegida) → App\Modules\Servicio\Controllers\ServicioController::update
+- PATCH /api/servicios/{id}/estado (protegida) → App\Modules\Servicio\Controllers\ServicioController::changeEstado
+- DELETE /api/servicios/{id} (protegida) → App\Modules\Servicio\Controllers\ServicioController::destroy
+
+## Rutas agrupadoras
+- Archivo que incluye los módulos de rutas: backend/routes/api.php
+---
 
 ### Archivos relevantes:
 Rutas principales: api.php
 Empresa: routes.php, App\Modules\Empresa\Controllers\EmpresaAuthController, App\Modules\Empresa\Controllers\EmpresaController
 Usuario: routes.php, App\Modules\Usuario\Controllers\UsuarioAuthController, App\Modules\Usuario\Controllers\UsuarioController
-Documentación / estado: [Milestone 02.md](Milestone 02.md), carpetas.md)))
+Servicio: routes.php, App\Modules\Servicio\Controllers\ServicioAuthController, App\Modules\Servicio\Controllers\ServicioController
 
 /**
  * Guarda el token en localStorage
