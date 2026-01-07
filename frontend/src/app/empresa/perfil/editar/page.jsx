@@ -13,11 +13,12 @@ import "@/styles/pages/empresa/_empresaEditar.scss";
 
 export default function EmpresaEditar() {
   const router = useRouter();
+  const API = process.env.NEXT_PUBLIC_API_URL;
+
   const [empresa, setEmpresa] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  // NUEVOS ESTADOS PARA LOS MODALES
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
 
@@ -41,23 +42,20 @@ export default function EmpresaEditar() {
     return match ? match[2] : null;
   };
 
-  const getLogo = (empresa) =>
-  empresa.logo_url || "/icons/user-placeholder.png";
-
   useEffect(() => {
     const token = getCookie("token_empresa");
-    if (!token) {
+
+    if (!API || !token) {
       setLoading(false);
       return;
     }
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/me`, {
+    fetch(`${API}/empresa/me`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
       .then((data) => {
         setEmpresa(data);
-
         setForm({
           empresa: data.empresa || "",
           email: data.email || "",
@@ -68,12 +66,11 @@ export default function EmpresaEditar() {
           rfc: data.rfc || "",
           logo: null,
         });
-
         setPreviewLogo(data.logo_url || "/icons/user-placeholder.png");
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, []);
+  }, [API]);
 
   if (loading) return <p>Cargando...</p>;
   if (!empresa) return <p>Error al cargar perfil.</p>;
@@ -85,53 +82,48 @@ export default function EmpresaEditar() {
   const handleFile = (e) => {
     const file = e.target.files[0];
     setForm({ ...form, logo: file });
-
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setPreviewLogo(url);
-    }
+    if (file) setPreviewLogo(URL.createObjectURL(file));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const token = getCookie("token_empresa");
+    if (!API || !token) return;
 
     const formData = new FormData();
-
     formData.append("_method", "PUT");
 
-    for (const key in form) {
+    Object.keys(form).forEach((key) => {
       if (form[key] !== null) {
         formData.append(key, form[key]);
       }
-    }
+    });
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/empresa/update`,
-      {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
+    try {
+      const res = await fetch(`${API}/empresa/update`, {
+        method: "POST", // 🔥 NO CAMBIAR
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         body: formData,
-      }
-    );
+      });
 
-    const data = await res.json();
+      if (!res.ok) throw new Error("Error backend");
 
-    if (res.ok) {
       setShowSuccessModal(true);
-      setTimeout(() => {
-        router.push("/empresa/perfil");
-      }, 1500);
+      setTimeout(() => router.push("/empresa/perfil"), 1500);
+    } catch (err) {
+      console.error("Error al actualizar empresa", err);
     }
   };
 
-  // Nuevo handler para eliminar perfil
   const handleDelete = async () => {
     const token = getCookie("token_empresa");
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/delete`, {
+    const res = await fetch(`${API}/empresa/delete`, {
       method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     });
 
     if (res.ok) {
@@ -175,16 +167,23 @@ export default function EmpresaEditar() {
 
           <div className="input-group">
             <label className="input-group__label">Foto de perfil</label>
-            <input type="file" accept="image/*" className="input-group__field" onChange={handleFile} />
+            <input
+              type="file"
+              accept="image/*"
+              className="input-group__field"
+              onChange={handleFile}
+            />
           </div>
 
           <div className="empresa-editar__buttons">
-            <Button_error value="Cancelar" onClick={() => router.push("/empresa/perfil")} />
+            <Button_error
+              value="Cancelar"
+              onClick={() => router.push("/empresa/perfil")}
+            />
             <Button_success value="Aceptar" type="submit" />
           </div>
         </form>
 
-        {/* ACTIVADOR DEL MODAL */}
         <p
           className="empresa-editar__delete"
           onClick={() => setShowDeleteModal(true)}
@@ -195,7 +194,6 @@ export default function EmpresaEditar() {
 
       <Footer />
 
-      {/* Modal de éxito */}
       {showSuccessModal && (
         <div className="empresa-editar__modal">
           <div className="empresa-editar__modal-box">
@@ -205,32 +203,20 @@ export default function EmpresaEditar() {
         </div>
       )}
 
-      {/* Modal 1 — Advertencia inicial */}
       {showDeleteModal && (
         <div
           className="empresa-delete__modal"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              setShowDeleteModal(false);
-            }
-          }}
+          onClick={(e) => e.target === e.currentTarget && setShowDeleteModal(false)}
         >
           <div className="empresa-delete__box">
             <h2>¿Desea eliminar su perfil de empresa?</h2>
-            <p>
-              Al hacerlo, se borrarán todos los datos asociados, incluyendo información
-              de la empresa, empleados y servicios. Esta acción es permanente.
-            </p>
+            <p>Esta acción es permanente.</p>
 
             <div className="empresa-delete__buttons">
               <Button_error
                 value="Cancelar"
-                onClick={() => {
-                  setShowDeleteModal(false);
-                  router.push("/empresa/perfil");
-                }}
+                onClick={() => setShowDeleteModal(false)}
               />
-
               <Button_success
                 value="Aceptar"
                 onClick={() => {
@@ -243,32 +229,21 @@ export default function EmpresaEditar() {
         </div>
       )}
 
-      {/* Modal 2 — Confirmación final */}
       {showDeleteConfirmModal && (
         <div
           className="empresa-delete__modal"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              setShowDeleteConfirmModal(false);
-            }
-          }}
+          onClick={(e) =>
+            e.target === e.currentTarget && setShowDeleteConfirmModal(false)
+          }
         >
           <div className="empresa-delete__box">
-            <h2>¿En verdad quieres eliminar tu perfil de empresa?</h2>
-            <p>
-              Eliminar el perfil de empresa borrará permanentemente toda la información
-              asociada. No podrá recuperar los datos después.
-            </p>
+            <h2>¿En verdad quieres eliminar tu perfil?</h2>
 
             <div className="empresa-delete__buttons">
               <Button_error
                 value="Cancelar"
-                onClick={() => {
-                  setShowDeleteConfirmModal(false);
-                  router.push("/empresa/perfil");
-                }}
+                onClick={() => setShowDeleteConfirmModal(false)}
               />
-
               <Button_success
                 value="Eliminar definitivamente"
                 onClick={handleDelete}
@@ -277,7 +252,6 @@ export default function EmpresaEditar() {
           </div>
         </div>
       )}
-
     </>
   );
 }

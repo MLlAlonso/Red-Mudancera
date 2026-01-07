@@ -23,3 +23,10 @@ require base_path('app/Modules/Usuario/routes.php');
 |--------------------------------------------------------------------------
 */
 require base_path('app/Modules/Servicio/routes.php');
+
+/*
+|--------------------------------------------------------------------------
+| Reseñas
+|--------------------------------------------------------------------------
+*/
+require base_path('app/Modules/Resena/routes.php');

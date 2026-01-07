@@ -55,11 +55,22 @@
   }
 }
 
-#modal-btn-cancel{
+.modal-body {
+  gap: 0px;
+  
+  .Button_success,
+  .Button_error,
+  input {
+    margin-bottom: 0px;
+    margin-top: 0px;
+  }
+}
+
+#modal-btn-cancel {
   marginTop: 0px;
   background: variables.$error;
 
-  &:hover{
+  &:hover {
     background: variables.$error-hover;
   }
 }
@@ -69,6 +80,7 @@
     opacity: 0;
     transform: scale(0.96);
   }
+
   to {
     opacity: 1;
     transform: scale(1);

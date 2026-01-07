@@ -7,12 +7,16 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ReviewCard from "@/components/cards/ReviewCard";
 import Button_crud from "@/components/common/Button_crud";
+import ShareReviewLinkModal from "@/components/modals/ShareReviewLinkModal";
 
 import "@/styles/pages/empresa/_empresaPerfil.scss";
 
 export default function EmpresaPerfil() {
   const [empresa, setEmpresa] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [resenas, setResenas] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+
   const router = useRouter();
 
   const getCookie = (name) => {
@@ -22,8 +26,19 @@ export default function EmpresaPerfil() {
     return match ? match[2] : null;
   };
 
-  const getLogo = (empresa) => empresa.logo_url || "/icons/user-placeholder.png";
+  const getLogo = (empresa) => {
+    if (!empresa?.logo_url) return "/icons/user-placeholder.png";
 
+    if (empresa.logo_url.startsWith("http")) {
+      return empresa.logo_url;
+    }
+
+    return `${process.env.NEXT_PUBLIC_API_URL.replace("/api", "")}/${empresa.logo_url}`;
+  };
+
+  // =========================
+  // FETCH PERFIL (IGUAL)
+  // =========================
   useEffect(() => {
     const token = getCookie("token_empresa");
 
@@ -45,6 +60,20 @@ export default function EmpresaPerfil() {
       .catch(() => setLoading(false));
   }, []);
 
+  // =========================
+  // FETCH RESEÑAS
+  // =========================
+  useEffect(() => {
+    if (!empresa?.id) return;
+
+    fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/empresas/${empresa.id}/resenas?limit=4`
+    )
+      .then((res) => res.json())
+      .then((data) => setResenas(data))
+      .catch(() => { });
+  }, [empresa]);
+
   if (loading) return <p>Cargando...</p>;
   if (!empresa) return <p>Error: no se pudo cargar el perfil.</p>;
 
@@ -59,7 +88,6 @@ export default function EmpresaPerfil() {
         {/* Foto + nombre */}
         <div className="empresa-perfil__top">
           <img src={getLogo(empresa)} className="empresa-perfil__avatar" />
-
           <h2 className="empresa-perfil__name">{empresa.empresa}</h2>
         </div>
 
@@ -78,7 +106,9 @@ export default function EmpresaPerfil() {
 
         {/* Título + botón editar */}
         <div className="empresa-perfil__row">
-          <h3 className="empresa-perfil__section-title">Detalles de empresa</h3>
+          <h3 className="empresa-perfil__section-title">
+            Detalles de empresa
+          </h3>
 
           <Button_crud
             value="Editar"
@@ -101,25 +131,39 @@ export default function EmpresaPerfil() {
         {/* Reseñas */}
         <div className="empresa-perfil__row">
           <h3 className="empresa-perfil__section-title">Reseñas</h3>
-          <span className="empresa-perfil__vermas">Ver más</span>
+
+          <div className="empresa-perfil__section-actions">
+            <Button_crud
+              value="Compartir link"
+              onClick={() => setOpenModal(true)}
+            />
+            <span className="empresa-perfil__vermas">Ver más</span>
+          </div>
         </div>
 
         <div className="empresa-perfil__reviews">
-          <ReviewCard
-            empresa="Mudanzas López"
-            fecha="05/12/2025"
-            rating={4.5}
-            comentario="Excelente servicio, muy profesional."
-          />
+          {resenas.length === 0 && (
+            <p>Aún no hay reseñas</p>
+          )}
 
-          <ReviewCard
-            empresa="Transportes Ramírez"
-            fecha="04/12/2025"
-            rating={5}
-            comentario="Todo perfecto, muy recomendados."
-          />
+          {resenas.map((r, index) => (
+            <ReviewCard
+              key={r.id ?? `${r.empresa}-${r.fecha}-${index}`}
+              empresa={r.empresa ?? "Cliente"}
+              fecha={r.fecha}
+              comentario={r.comentario}
+              rating={r.rating}
+            />
+          ))}
+
+
         </div>
       </main>
+
+      <ShareReviewLinkModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+      />
 
       <Footer />
     </>
