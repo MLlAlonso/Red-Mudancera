@@ -207,7 +207,7 @@ export default function EditarOfrezcoServicioPage() {
                             onChange={handleChange}
                         />
 
-                        <Input
+                        {/* <Input
                             label="Origen"
                             name="origen"
                             value={form.origen}
@@ -219,7 +219,7 @@ export default function EditarOfrezcoServicioPage() {
                             name="destino"
                             value={form.destino}
                             onChange={handleChange}
-                        />
+                        /> */}
 
                         <div className="input-group">
                             <label className="input-group__label">

@@ -47,7 +47,7 @@ export default function ServiceAdvancedFilters({
         onChange={handleChange}
       />
 
-      <Input
+     {/*  <Input
         label="Volumen mínimo (m³)"
         name="volumen"
         type="number"
@@ -78,7 +78,7 @@ export default function ServiceAdvancedFilters({
         placeholder="Ej. Guadalajara"
         value={localValues.sede}
         onChange={handleChange}
-      />
+      /> */}
 
       <div className="input-group">
         <label className="input-group__label">Tipo de carga</label>

@@ -224,8 +224,8 @@ export default function EditarBuscoServicioPage() {
             <h1 className="title">Editar servicio (Busco)</h1>
 
             <Input label="Volumen" name="volumen" type="number" value={form.volumen} onChange={handleChange} />
-            <Input label="Origen" name="origen" value={form.origen} onChange={handleChange} />
-            <Input label="Destino" name="destino" value={form.destino} onChange={handleChange} />
+            {/* <Input label="Origen" name="origen" value={form.origen} onChange={handleChange} />
+            <Input label="Destino" name="destino" value={form.destino} onChange={handleChange} /> */}
 
             <label className="labels">Rango de salida</label>
             <DateRange ranges={range} onChange={item => setRange([item.selection])} minDate={new Date()} />
@@ -243,18 +243,18 @@ export default function EditarBuscoServicioPage() {
             <Input label="Teléfono" name="telefono" value={form.telefono} onChange={handleChange} />
 
             <div className="input-group">
-              <label className="input-group__label">Descripción</label>
+              <label className="input-group__label">Nota</label>
               <textarea name="nota" className="input-group__field" value={form.nota} onChange={handleChange} />
             </div>
 
-            <div className="input-group">
+            {/* <div className="input-group">
               <label className="input-group__label">Tipo de carga</label>
               <select name="tipoCarga" className="input-group__field" value={form.tipoCarga} onChange={handleChange}>
                 <option value="">Selecciona</option>
                 <option value="menaje">Menaje de casa</option>
                 <option value="libre">Libre</option>
               </select>
-            </div>
+            </div> */}
 
             <div className="busco__actions">
               <Button_error value="Cancelar" onClick={() => router.back()} />

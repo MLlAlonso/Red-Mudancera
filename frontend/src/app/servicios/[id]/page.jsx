@@ -144,14 +144,14 @@ export default function DetalleServicioPage() {
               </span>
             </div>
 
-            <div>
+            {/* <div>
               <label>Fecha límite de entrega:</label>
               <span>
                 {servicio.fin
                   ? new Date(servicio.fin).toLocaleDateString()
                   : "—"}
               </span>
-            </div>
+            </div> */}
           </div>
 
           <hr />
@@ -187,12 +187,12 @@ export default function DetalleServicioPage() {
             <p>{servicio.nota || "Sin nota adicional"}</p>
           </div>
 
-          <div className="detalle-servicio__importe">
+          {/* <div className="detalle-servicio__importe">
             <label>Importe:</label>
             <span>
               {servicio.importe ? `$${servicio.importe}` : "No especificado"}
             </span>
-          </div>
+          </div> */}
 
           <div className="detalle-servicio__actions">
             <Button_cta
