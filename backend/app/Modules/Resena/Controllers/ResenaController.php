@@ -38,21 +38,22 @@ class ResenaController extends Controller
             ], 404);
         }
 
-        $empresa = Empresa::find($link->empresa_destino_id);
+        $empresaDestino = Empresa::find($link->empresa_destino_id);
 
-        if (!$empresa) {
+        if (!$empresaDestino) {
             return response()->json([
                 'message' => 'La empresa asociada a este enlace no existe'
             ], 404);
         }
 
         return response()->json([
-            'empresa' => [
-                'id' => $empresa->id,
-                'empresa' => $empresa->empresa
+            'empresa_destino' => [
+                'id' => $empresaDestino->id,
+                'empresa' => $empresaDestino->empresa
             ]
         ]);
     }
+
 
     public function store(Request $request, $token)
     {
@@ -61,73 +62,66 @@ class ResenaController extends Controller
             'rating' => 'required|numeric|min:1|max:5',
         ]);
 
-        // Empresa que está autenticada y escribe la reseña
-        $empresaOrigen = $request->user();
-
-        // Buscar el link
+        $autor = $request->user(); // Empresa o Usuario
         $link = ResenaLink::where('token', $token)->first();
 
         if (!$link || $link->usado) {
-            return response()->json([
-                'message' => 'El enlace de reseña no es válido o ya fue usado'
-            ], 404);
+            return response()->json(['message' => 'Link inválido'], 404);
         }
 
-        // Evitar que una empresa se reseñe a sí misma
-        if ($empresaOrigen->id === $link->empresa_destino_id) {
-            return response()->json([
-                'message' => 'No puedes reseñar a tu propia empresa'
-            ], 403);
+        // Detectar empresa origen
+        $empresaOrigenId = $autor instanceof Empresa
+            ? $autor->id
+            : $autor->empresa_id;
+
+        if (!$empresaOrigenId) {
+            return response()->json(['message' => 'Usuario sin empresa asociada'], 403);
         }
 
-        // Validar que no exista ya una reseña hoy entre las mismas empresas
-        $yaHoy = Resena::where('empresa_origen_id', $empresaOrigen->id)
-            ->where('empresa_destino_id', $link->empresa_destino_id)
-            ->whereDate('fecha_resena', now())
-            ->exists();
-
-        if ($yaHoy) {
-            return response()->json([
-                'message' => 'Solo puedes dejar una reseña por día a esta empresa'
-            ], 422);
-        }
-
-        // Crear la reseña
-        Resena::create([
-            'empresa_origen_id' => $empresaOrigen->id,
+        // Crear reseña
+        $resena = Resena::create([
+            'empresa_origen_id' => $empresaOrigenId,
             'empresa_destino_id' => $link->empresa_destino_id,
             'comentario' => $request->comentario,
             'rating' => $request->rating,
             'fecha_resena' => now(),
         ]);
 
-        // Marcar el link como usado y guardar quién reseñó
         $link->update([
-            'empresa_origen_id' => $empresaOrigen->id,
             'usado' => true,
+            'empresa_origen_id' => $empresaOrigenId,
         ]);
 
-        // Recalcular reputación de la empresa destino
         $this->recalcularReputacion($link->empresa_destino_id);
 
-        // Enviar email a la empresa que recibió la reseña
-        $empresaDestino = Empresa::find($link->empresa_destino_id);
+        // Crear link de respuesta SOLO si quien reseñó fue empresa
+        $linkRespuesta = null;
 
-        if ($empresaDestino) {
-            Mail::to($empresaDestino->email)->send(
-                new NuevaResenaMail(
-                    $empresaOrigen->empresa,
-                    $request->comentario,
-                    $request->rating,
-                    null
-                )
-            );
+        if ($autor instanceof Empresa) {
+            $respuesta = ResenaLink::create([
+                'empresa_origen_id' => $link->empresa_destino_id,
+                'empresa_destino_id' => $empresaOrigenId,
+                'resena_id' => $resena->id,
+                'token' => Str::uuid(),
+                'tipo' => 'response',
+            ]);
+
+            $linkRespuesta = 'https://app.mudanzafacil.com.mx/resena/' . $token;
         }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Reseña enviada correctamente'
-        ]);
+        // Enviar correo
+        $empresaDestino = Empresa::find($link->empresa_destino_id);
+
+        Mail::to($empresaDestino->email)->send(
+            new NuevaResenaMail(
+                Empresa::find($empresaOrigenId)->empresa,
+                $request->comentario,
+                $request->rating,
+                $linkRespuesta
+            )
+        );
+
+        return response()->json(['success' => true]);
     }
 
     private function recalcularReputacion($empresaId)

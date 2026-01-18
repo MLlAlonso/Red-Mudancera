@@ -128,9 +128,8 @@ export default function EmpresaDashboard() {
 
             {/* Botón filtros avanzados / borrar */}
             <button
-              className={`btn-advanced-filters ${
-                hasActiveFilters ? "active" : ""
-              }`}
+              className={`btn-advanced-filters ${hasActiveFilters ? "active" : ""
+                }`}
               onClick={() => {
                 if (hasActiveFilters) {
                   clearAllFilters();
@@ -197,12 +196,12 @@ export default function EmpresaDashboard() {
                 type={s.tipo}
                 origen={s.origen}
                 destino={s.destino}
-                volumen={
-                  s.volumen ? `${s.volumen} m³` : "No especificado"
-                }
+                volumen={s.volumen ? `${s.volumen} m³` : "No especificado"}
                 empresa={s.empresa?.empresa ?? "Empresa"}
+                telefono={s.empresa?.tel}
                 fecha={new Date(s.created_at).toLocaleDateString()}
               />
+
             ))}
         </div>
       </main>

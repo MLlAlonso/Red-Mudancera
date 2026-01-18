@@ -47,7 +47,7 @@ export default function ResenaPage() {
         if (!res.ok) throw new Error();
         return res.json();
       })
-      .then((data) => setEmpresa(data.empresa))
+      .then(data => setEmpresa(data.empresa_destino))
       .catch(() =>
         setError("El enlace de reseña no es válido o ya no está disponible.")
       )

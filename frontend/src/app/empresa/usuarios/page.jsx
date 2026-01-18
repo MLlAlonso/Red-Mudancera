@@ -182,7 +182,7 @@ export default function EmpresaUsuarios() {
       "Contraseña: " + DEFAULT_PASSWORD +
       "%0A%0A" +
       "Inicia sesión aquí:%0A" +
-      "http://localhost:3000/usuario/login";
+      "https://app.mudanzafacil.com.mx/usuario/login";
 
     const url = `https://wa.me/52${usuario.telefono}?text=${mensaje}`;
     window.open(url, "_blank");

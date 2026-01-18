@@ -64,6 +64,11 @@ export default function DetalleServicioPage() {
     router.push(`/empresa/${servicio.empresa.id}`);
   };
 
+  const telefonoContacto =
+    servicio.responsable_telefono ||
+    servicio.empresa?.tel ||
+    "";
+
   return (
     <>
       <Header />
@@ -177,8 +182,11 @@ export default function DetalleServicioPage() {
           <div className="detalle-servicio__actions">
             <Button_cta
               value="Contactar"
+              icon="/icons/whatsapp.png"
+              iconAlt="WhatsApp"
               onClick={() =>
                 openWhatsappMessage({
+                  telefono: telefonoContacto,
                   tipo: isOffer ? "Ofrezco" : "Busco",
                   origen: servicio.origen,
                   destino: servicio.destino,
@@ -187,6 +195,9 @@ export default function DetalleServicioPage() {
                 })
               }
             />
+
+
+
           </div>
 
         </div>

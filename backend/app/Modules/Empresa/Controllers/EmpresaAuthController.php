@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use App\Modules\Empresa\Mail\EmpresaVerificationCode;
 use App\Models\EmailVerification;
+use App\Modules\Usuario\Models\Usuario;
 
 class EmpresaAuthController extends Controller
 {
@@ -24,18 +25,34 @@ class EmpresaAuthController extends Controller
     public function register(RegisterEmpresaRequest $request)
     {
         $data = $request->validated();
+        $plainPassword = $data['password'];
         $data['password'] = Hash::make($data['password']);
 
         $data['codigoEmpresa'] = strtoupper(
-            substr(Str::slug($data['empresa'], ''), 0, 3) // primeras 3 letras del nombre
-                . rand(1000, 9999)                           // 4 números aleatorios
+            substr(Str::slug($data['empresa'], ''), 0, 3) . rand(1000, 9999)
         );
 
+        // =============================
+        // CREAR EMPRESA
+        // =============================
         $empresa = Empresa::create($data);
 
-        // ============================================================
-        // ENVIAR CÓDIGO DE VERIFICACIÓN POR CORREO
-        // ============================================================
+        // =============================
+        // CREAR USUARIO ADMIN INICIAL
+        // =============================
+        Usuario::create([
+            'empresa_id' => $empresa->id,
+            'nombre'     => $empresa->representante,
+            'email'      => $empresa->email,
+            'telefono'   => $empresa->tel,
+            'password'   => Hash::make($plainPassword),
+            'rol'        => 'admin',
+            'activoEmpresa' => true,
+        ]);
+
+        // =============================
+        // VERIFICACIÓN DE CORREO
+        // =============================
         $code = rand(100000, 999999);
 
         EmailVerification::create([
@@ -47,13 +64,15 @@ class EmpresaAuthController extends Controller
 
         Mail::to($empresa->email)->send(new EmpresaVerificationCode($code));
 
-        // Token inicial
+        // =============================
+        // TOKEN
+        // =============================
         $token = $empresa->createToken('api-token')->plainTextToken;
 
         return response()->json([
             'message' => 'Empresa registrada correctamente. Verifica tu correo.',
             'empresa' => $empresa,
-            'token' => $token
+            'token'   => $token
         ], 201);
     }
 

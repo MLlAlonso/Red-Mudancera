@@ -11,6 +11,7 @@ export default function ServiceCard({
   destino = "",
   volumen = "",
   empresa = "",
+  telefono = "",
   fecha = "",
   showContact = true,
   onChangeEstado = null,
@@ -51,6 +52,7 @@ export default function ServiceCard({
             className={`btn-solid btn-contact ${isOffer ? "offer-btn" : ""}`}
             onClick={() =>
               openWhatsappMessage({
+                telefono,
                 tipo: isOffer ? "Ofrezco" : "Busco",
                 origen,
                 destino,

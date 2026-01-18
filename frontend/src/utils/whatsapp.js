@@ -1,13 +1,19 @@
 export function openWhatsappMessage({
+  telefono,
   tipo,
   origen,
   destino,
   volumen,
   servicioId,
 }) {
+  if (!telefono) {
+    alert("Este servicio no tiene teléfono de contacto");
+    return;
+  }
+
   const mensaje = `
-Saludos
-Acabo de ver tu servicio publicado en la plataforma:
+Saludos 👋
+Vi tu servicio publicado en MudanzaFácil:
 
 Tipo: ${tipo}
 Origen: ${origen}
@@ -15,10 +21,11 @@ Destino: ${destino}
 Volumen: ${volumen}
 
 Ver servicio:
-${window.location.origin}/servicios/${servicioId}
+https://app.mudanzafacil.com.mx/servicios/${servicioId}
 
-Me interesa llegar a un acuerdo contigo, colega
-  `;
-  const url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
+Quedo atento para coordinar 🤝
+`;
+
+  const url = `https://wa.me/52${telefono}?text=${encodeURIComponent(mensaje)}`;
   window.open(url, "_blank");
 }
