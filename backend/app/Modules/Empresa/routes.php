@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Modules\Empresa\Controllers\EmpresaAuthController;
 use App\Modules\Empresa\Controllers\EmpresaController;
 use App\Modules\Servicio\Controllers\ServicioController;
+use App\Modules\Empresa\Controllers\EmpresaPublicController;
 
 Route::prefix('empresa')->group(function () {
 
@@ -27,4 +28,6 @@ Route::prefix('empresa')->group(function () {
         // RUTAS PARA PUBLICACIONES DE SERVICIOS
         Route::get('/servicios', [ServicioController::class, 'misServicios']);
     });
+
+    Route::get('/empresas/{id}', [EmpresaPublicController::class, 'show']);
 });

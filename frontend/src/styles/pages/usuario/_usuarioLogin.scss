@@ -83,3 +83,15 @@
     font-family: variables.$font-title;
     cursor: pointer;
 }
+
+.header {
+  .header__content {
+    justify-content: center;
+    display: flex;
+
+    // iconos
+    .header__menu, .searchbar {
+      display: none;
+    }
+  }
+}

@@ -7,57 +7,60 @@
   background: $primary;
   height: 120px;
   display: flex;
-  align-items: center;
   justify-content: center;
 
   .header__content {
-    height: 100%;
     width: 100%;
+    max-width: 1280px;
+    height: 100%;
     padding: 20px;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
+    gap: 20px;
 
-    // iconos
-    .header__icon {
-      width: 40px;
-      height: 40px;
-      cursor: pointer;
+    /* ===== Search ===== */
+    .searchbar {
+      max-width: 420px;
     }
 
-    // logo centrado
+    /* ===== Logo ===== */
     .header__logo {
       height: 70px;
       object-fit: contain;
+      justify-self: center;
+      cursor: pointer;
     }
 
-    // hamburguesa
+    /* ===== Menu ===== */
     .header__menu {
       width: 40px;
       height: 40px;
       cursor: pointer;
+      justify-self: end;
     }
   }
 }
 
+/* =========================
+   Mobile
+========================= */
 @media (max-width: 600px) {
   .header {
     .header__content {
-      // iconos
-      .header__icon {
-        width: 30px;
-        height: 30px;
-      }
+      padding: 15px;
 
-      // logo centrado
       .header__logo {
         height: 40px;
       }
 
-      // hamburguesa
       .header__menu {
         width: 30px;
         height: 30px;
+      }
+
+      .searchbar {
+        font-size: 12px;
       }
     }
   }

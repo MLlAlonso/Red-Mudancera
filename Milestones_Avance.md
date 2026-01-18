@@ -43,7 +43,7 @@ Actualmente el proyecto se encuentra en un **estado funcional sólido**, con aut
 * [x] Perfil de empresa (datos básicos)
 * [x] Logo de empresa
 * [x] Relación empresa ↔ usuarios
-* [ ] Edición avanzada de perfil de empresa
+* [x] Edición avanzada de perfil de empresa
 
 ### 🎨 UI / UX
 * [x] Layout general (Header / Footer)
@@ -75,9 +75,9 @@ Actualmente el proyecto se encuentra en un **estado funcional sólido**, con aut
 * [x] Migración Mailtrap → proveedor real (Resend, etc.)
 
 ### 🤝 Milestone 4 (futuro)
-* [ ] Solicitudes / contratos
+* [x] Solicitudes / contratos
 * [x] Historial de servicios
-* [ ] Sistema de reputación real
+* [x] Sistema de reputación real
 * [ ] Notificaciones
 * [ ] Panel administrativo
 
@@ -217,12 +217,12 @@ backend/
 │   │   ├── Kernel.php               # [App\Console\Kernel](backend/app/Console/Kernel.php)
 │   │   └── Commands/
 │   ├── Http/
-│   │   ├── Controllers/
+│   │   ├── Controllers/             # Controladores por módulo (ver enlaces abajo)
 │   │   ├── Kernel.php               # [backend/app/Http/Kernel.php](backend/app/Http/Kernel.php)
 │   │   └── Middleware/
 │   │       └── Authenticate.php
 │   ├── Mail/                        # Mails (ej.: EmpresaVerificationCode) [backend/resources/views/emails/empresa_verification_code.blade.php](backend/resources/views/emails/empresa_verification_code.blade.php)
-│   ├── Models/
+│   ├── Models/                      # Modelos Eloquent globales
 │   │   └── (Modelos Eloquent)
 │   ├── Modules/                     # Arquitectura modular por dominios
 │   │   ├── Empresa/
@@ -232,6 +232,8 @@ backend/
 │   │   │   ├── Models/
 │   │   │   │   └── Empresa.php                  # [backend/app/Modules/Empresa/Models/Empresa.php](backend/app/Modules/Empresa/Models/Empresa.php)
 │   │   │   ├── Requests/
+│   │   │   ├── Services/                        # Lógica de negocio (si aplica)
+│   │   │   ├── Repositories/                    # Acceso a datos (opcional)
 │   │   │   └── routes.php                        # [backend/app/Modules/Empresa/routes.php](backend/app/Modules/Empresa/routes.php)
 │   │   ├── Usuario/
 │   │   │   ├── Controllers/
@@ -240,16 +242,23 @@ backend/
 │   │   │   ├── Models/
 │   │   │   │   └── Usuario.php                  # [backend/app/Modules/Usuario/Models/Usuario.php](backend/app/Modules/Usuario/Models/Usuario.php)
 │   │   │   ├── Requests/
+│   │   │   ├── Services/
 │   │   │   └── routes.php                        # [backend/app/Modules/Usuario/routes.php](backend/app/Modules/Usuario/routes.php)
-│   │   └── Servicio/                              # Módulo Servicios (planificado / parcial)
+│   │   ├── Servicio/                              # Módulo Servicios (implementado)
+│   │   │   ├── Controllers/
+│   │   │   │   └── ServicioController.php        # [`App\Modules\Servicio\Controllers\ServicioController`](backend/app/Modules/Servicio/Controllers/ServicioController.php)
+│   │   │   ├── Models/
+│   │   │   │   └── Servicio.php                  # [backend/app/Modules/Servicio/Models/Servicio.php](backend/app/Modules/Servicio/Models/Servicio.php)
+│   │   │   ├── Requests/
+│   │   │   ├── Services/
+│   │   │   ├── Repositories/
+│   │   │   └── routes.php                        # [backend/app/Modules/Servicio/routes.php](backend/app/Modules/Servicio/routes.php)
+│   │   └── Resena/
 │   │       ├── Controllers/
-│   │       │   └── ServicioController.php        # [backend/app/Modules/Servicio/Controllers/ServicioController.php](backend/app/Modules/Servicio/Controllers/ServicioController.php)
+│   │       │   └── ResenaController.php         # [`App\Modules\Resena\Controllers\ResenaController`](backend/app/Modules/Resena/Controllers/ResenaController.php)
 │   │       ├── Models/
-│   │       │   └── Servicio.php                  # [backend/app/Modules/Servicio/Models/Servicio.php](backend/app/Modules/Servicio/Models/Servicio.php)
 │   │       ├── Requests/
-│   │       ├── Services/
-│   │       ├── Repositories/
-│   │       └── routes.php                        # [backend/app/Modules/Servicio/routes.php](backend/app/Modules/Servicio/routes.php)
+│   │       └── routes.php                        # [backend/app/Modules/Resena/routes.php](backend/app/Modules/Resena/routes.php)
 │   └── Providers/
 │       ├── AppServiceProvider.php
 │       └── RouteServiceProvider.php              # [`App\Providers\RouteServiceProvider`](backend/app/Providers/RouteServiceProvider.php)
@@ -273,7 +282,7 @@ backend/
 │
 ├── database/
 │   ├── migrations/
-│   │   ├── 0001_01_01_000001_create_cache_table.php
+│   │   ├── 0001_01_01_000001_create_cache_table.php   # [backend/database/migrations/0001_01_01_000001_create_cache_table.php](backend/database/migrations/0001_01_01_000001_create_cache_table.php)
 │   │   ├── 2025_11_26_074631_create_empresas_table.php   # [backend/database/migrations/2025_11_26_074631_create_empresas_table.php](backend/database/migrations/2025_11_26_074631_create_empresas_table.php)
 │   │   ├── 2025_11_26_074711_create_usuarios_table.php    # [backend/database/migrations/2025_11_26_074711_create_usuarios_table.php](backend/database/migrations/2025_11_26_074711_create_usuarios_table.php)
 │   │   └── 2025_12_16_064630_create_servicios_table.php  # [backend/database/migrations/2025_12_16_064630_create_servicios_table.php](backend/database/migrations/2025_12_16_064630_create_servicios_table.php)
@@ -295,7 +304,7 @@ backend/
 │           └── empresa_verification_code.blade.php # [backend/resources/views/emails/empresa_verification_code.blade.php](backend/resources/views/emails/empresa_verification_code.blade.php)
 │
 ├── routes/
-│   ├── api.php                                     # [backend/routes/api.php](backend/routes/api.php) (incluye módulos: Empresa, Usuario, Servicio)
+│   ├── api.php                                     # [backend/routes/api.php](backend/routes/api.php) (incluye módulos: Empresa, Usuario, Servicio, Resena)
 │   └── web.php
 │
 ├── storage/
@@ -311,30 +320,38 @@ backend/
 │
 └── vendor/                                         # dependencias Composer
 
+Notas:
+- Las rutas principales se cargan desde [backend/routes/api.php](backend/routes/api.php).
+- Los módulos exponen sus rutas en sus respectivos `routes.php` (ej.: [backend/app/Modules/Empresa/routes.php](backend/app/Modules/Empresa/routes.php)).
+- Controladores y modelos clave:
+  - [`App\Modules\Empresa\Controllers\EmpresaController`](backend/app/Modules/Empresa/Controllers/EmpresaController.php)
+  - [`App\Modules\Empresa\Controllers\EmpresaAuthController`](backend/app/Modules/Empresa/Controllers/EmpresaAuthController.php)
+  - [`App\Modules\Usuario\Controllers\UsuarioController`](backend/app/Modules/Usuario/Controllers/UsuarioController.php)
+  - [`App\Modules\Usuario\Controllers\UsuarioAuthController`](backend/app/Modules/Usuario/Controllers/UsuarioAuthController.php)
+  - [`App\Modules\Servicio\Controllers\ServicioController`](backend/app/Modules/Servicio/Controllers/ServicioController.php)
+  - [`App\Modules\Resena\Controllers\ResenaController`](backend/app/Modules/Resena/Controllers/ResenaController.php)
+
+Recomendación rápida: mantener en cada módulo las carpetas Requests, Services y Repositories para separar validación, lógica de negocio y acceso a datos; así facilitar pruebas y escalabilidad.
+
 frontend/
-├── 📄 .eslintrc.mjs                    # Configuración ESLint
+├── 📄 .eslintrc.mjs
 ├── 📄 .gitignore
-├── 📄 eslint.config.mjs                # Configuración ESLint (mejorado)
-├── 📄 jsconfig.json                    # Configuración JavaScript
-├── 📄 next.config.js                   # Configuración Next.js
-├── 📄 package.json                     # Dependencias Node.js
+├── 📄 eslint.config.mjs
+├── 📄 jsconfig.json
+├── 📄 next.config.js
+├── 📄 package.json
 ├── 📄 package-lock.json
-├── 📄 carpetas.md                      # Documentación de estructura (este archivo)
+├── 📄 carpetas.md                      # (este archivo) [frontend/carpetas.md](frontend/carpetas.md)
 │
 ├── 📁 public/                          # Archivos públicos estáticos
 │   ├── 📁 icons/
-│   │   ├── hogar_2.png
-│   │   ├── menu.png
-│   │   └── ...                         # iconos de UI
 │   ├── 📁 logo/
-│   │   ├── logo.png
-│   │   └── mikkel.png
 │   ├── next.svg
 │   └── vercel.svg
 │
 └── 📁 src/                             # Código fuente de la aplicación
     ├── 📁 app/                         # Rutas y páginas (Next.js App Router)
-    │   ├── 📁 dashboard/               # Dashboards y páginas principales
+    │   ├── 📁 dashboard/
     │   │   └── page.jsx
     │   ├── 📁 empresa/
     │   │   ├── 📁 perfil/
@@ -344,6 +361,8 @@ frontend/
     │   │   │   └── page.jsx
     │   │   ├── 📁 usuarios/
     │   │   │   └── page.jsx
+    │   │   ├── 📁 publicaciones/
+    │   │   │   └── page.jsx
     │   │   └── logout/page.jsx
     │   ├── 📁 usuario/
     │   │   ├── 📁 perfil/
@@ -352,11 +371,15 @@ frontend/
     │   │   ├── 📁 dashboard/
     │   │   │   └── page.jsx
     │   │   └── logout/page.jsx
-    │   ├── 📁 servicios/               # Rutas públicas / servicios (futuro)
+    │   ├── 📁 servicios/               # Rutas públicas / detalles / edición
+    │   │   ├── [id]/page.jsx
+    │   │   └── [id]/editar/
+    │   │       ├── ofrezco/page.jsx
+    │   │       └── busco/page.jsx
     │   ├── 📁 test-ui/
     │   │   └── page.jsx
-    │   ├── 📄 layout.js
-    │   ├── 📄 page.js
+    │   ├── 📄 layout.js                 # [frontend/src/app/layout.js](frontend/src/app/layout.js)
+    │   ├── 📄 page.js                   # [frontend/src/app/page.js](frontend/src/app/page.js)
     │   └── 📄 page.module.css
     │
     ├── 📁 components/                  # Componentes React reutilizables
@@ -365,46 +388,55 @@ frontend/
     │   │   ├── AcuerdoCard.jsx
     │   │   ├── NotificationCard.jsx
     │   │   ├── ReviewCard.jsx
-    │   │   ├── ServiceCard.jsx
-    │   │   └── UserCard.jsx
+    │   │   ├── ServiceCard.jsx          # [`ServiceCard`](frontend/src/components/cards/ServiceCard.jsx)
+    │   │   └── UserCard.jsx             # [`UserCard`](frontend/src/components/cards/UserCard.jsx)
     │   ├── 📁 common/
     │   │   ├── Button_cta.jsx
     │   │   ├── Button_crud.jsx
     │   │   ├── Button_error.jsx
     │   │   ├── Button_success.jsx
     │   │   ├── Input.jsx
-    │   │   └── SearchBar.jsx
+    │   │   ├── SearchBar.jsx
+    │   │   └── ConfirmDeleteModal.jsx   # [`ConfirmDeleteModal`](frontend/src/components/common/ConfirmDeleteModal.jsx)
     │   ├── 📁 filters/
-    │   │   └── ServiceFilters.jsx
+    │   │   ├── ServiceFilters.jsx
+    │   │   └── ServiceAdvancedFilters.jsx
     │   ├── 📁 layout/
-    │   │   ├── Footer.jsx
-    │   │   ├── Header.jsx
+    │   │   ├── Footer.jsx                # [`Footer`](frontend/src/components/layout/Footer.jsx)
+    │   │   ├── Header.jsx                # [`Header`](frontend/src/components/layout/Header.jsx)
     │   │   ├── SideMenu.jsx
     │   │   └── SideMenuUsuario.jsx
-    │   └── 📁 ui/                       # Componentes UI adicionales (botones, badges, etc.)
+    │   ├── 📁 modals/
+    │   │   ├── ChangeServiceStatusModal.jsx  # [`ChangeServiceStatusModal`](frontend/src/components/modals/ChangeServiceStatusModal.jsx)
+    │   │   └── ShareReviewLinkModal.jsx
+    │   ├── 📁 skeletons/
+    │   │   ├── ProfileSkeleton.jsx
+    │   │   └── ServiceCardSkeleton.jsx
+    │   └── 📁 ui/                       # Componentes UI adicionales (badges, loaders, etc.)
     │
     ├── 📁 hooks/                        # Custom React hooks
-    │   └── useClickOutside.js
+    │   └── useClickOutside.js           # [frontend/src/hooks/useClickOutside.js](frontend/src/hooks/useClickOutside.js)
     │
-    ├── 📁 modules/                      # Módulos por funcionalidad (lógica agrupada)
+    ├── 📁 modules/                      # Módulos por funcionalidad (API wrappers organizados)
     │   ├── 📁 auth/
-    │   │   └── auth.js                  # (futuro) helpers de auth
+    │   │   └── auth.js
     │   ├── 📁 empresa/
-    │   │   └── empresaService.js
+    │   │   └── empresaService.js        # [frontend/src/modules/empresa/empresaService.js](frontend/src/modules/empresa/empresaService.js)
     │   ├── 📁 usuario/
     │   │   └── usuarioService.js
     │   └── 📁 servicios/
     │       └── serviciosService.js
     │
     ├── 📁 services/                     # API wrappers / fetch centralizado
-    │   └── api.js                       # fetch wrapper + token handling
+    │   └── api.js                       # [frontend/src/services/api.js](frontend/src/services/api.js)
     │
-    ├── 📁 store/                        # Estado global (ej.: Zustand / Redux)
+    ├── 📁 store/                        # Estado global (opcional: Zustand / Redux)
     │   └── index.js
     │
     ├── 📁 utils/                        # Funciones utilitarias
     │   ├── formatters.js
-    │   └── buildFileUrl.js
+    │   ├── buildFileUrl.js              # [frontend/src/utils/buildFileUrl.js](frontend/src/utils/buildFileUrl.js)
+    │   └── whatsapp.js                  # [frontend/src/utils/whatsapp.js](frontend/src/utils/whatsapp.js)
     │
     └── 📁 styles/                       # Estilos SCSS globales
         ├── 📁 components/
@@ -435,49 +467,62 @@ frontend/
         │   ├── _mixins.scss
         │   └── _variables.scss
         │
-        └── 📄 globals.scss
+        └── 📄 globals.scss               # [frontend/src/styles/globals.scss](frontend/src/styles/globals.scss)
+
+Archivos clave / puntos de entrada:
+- Layout app: [`frontend/src/app/layout.js`](frontend/src/app/layout.js)
+- Página principal: [`frontend/src/app/page.js`](frontend/src/app/page.js)
+- Header: [`frontend/src/components/layout/Header.jsx`](frontend/src/components/layout/Header.jsx)
+- ServiceCard: [`frontend/src/components/cards/ServiceCard.jsx`](frontend/src/components/cards/ServiceCard.jsx)
+- API wrapper: [`frontend/src/services/api.js`](frontend/src/services/api.js)
 
 ## Endpoints
-A continuación se listan los endpoints actuales (método → ruta → controlador):
-
 ## Empresa — públicos
-- POST /api/empresa/register → App\Modules\Empresa\Controllers\EmpresaAuthController::register
-- POST /api/empresa/login → App\Modules\Empresa\Controllers\EmpresaAuthController::login
-- POST /api/empresa/send-verification → App\Modules\Empresa\Controllers\EmpresaAuthController::sendVerificationCode
-- POST /api/empresa/verify-code → App\Modules\Empresa\Controllers\EmpresaAuthController::verifyCode
+- POST /api/empresa/register → [`App\Modules\Empresa\Controllers\EmpresaAuthController`](backend/app/Modules/Empresa/Controllers/EmpresaAuthController.php)::register
+- POST /api/empresa/login → [`App\Modules\Empresa\Controllers\EmpresaAuthController`](backend/app/Modules/Empresa/Controllers/EmpresaAuthController.php)::login
+- POST /api/empresa/send-verification → [`App\Modules\Empresa\Controllers\EmpresaAuthController`](backend/app/Modules/Empresa/Controllers/EmpresaAuthController.php)::sendVerificationCode
+- POST /api/empresa/verify-code → [`App\Modules\Empresa\Controllers\EmpresaAuthController`](backend/app/Modules/Empresa/Controllers/EmpresaAuthController.php)::verifyCode
 
 ## Empresa — protegidas (auth:sanctum)
-- GET /api/empresa/me → App\Modules\Empresa\Controllers\EmpresaController::me
-- PUT /api/empresa/update → App\Modules\Empresa\Controllers\EmpresaController::update
-- DELETE /api/empresa/delete → App\Modules\Empresa\Controllers\EmpresaController::destroy
-- GET /api/empresa/usuarios → App\Modules\Empresa\Controllers\EmpresaController::usuariosEmpresa
-- DELETE /api/empresa/usuario/{id} → App\Modules\Empresa\Controllers\EmpresaController::eliminarUsuario
-- PATCH /api/empresa/usuario/{id}/pausar → App\Modules\Empresa\Controllers\EmpresaController::pausarUsuario
-- PATCH /api/empresa/usuario/{id}/reanudar → App\Modules\Empresa\Controllers\EmpresaController::reanudarUsuario
-- GET /api/empresa/servicios → App\Modules\Servicio\Controllers\ServicioController::misServicios
+- GET /api/empresa/me → [`App\Modules\Empresa\Controllers\EmpresaController`](backend/app/Modules/Empresa/Controllers/EmpresaController.php)::me
+- PUT /api/empresa/update → [`App\Modules\Empresa\Controllers\EmpresaController`](backend/app/Modules/Empresa/Controllers/EmpresaController.php)::update
+- DELETE /api/empresa/delete → [`App\Modules\Empresa\Controllers\EmpresaController`](backend/app/Modules/Empresa/Controllers/EmpresaController.php)::destroy
+- GET /api/empresa/usuarios → [`App\Modules\Empresa\Controllers\EmpresaController`](backend/app/Modules/Empresa/Controllers/EmpresaController.php)::usuariosEmpresa
+- DELETE /api/empresa/usuario/{id} → [`App\Modules\Empresa\Controllers\EmpresaController`](backend/app/Modules/Empresa/Controllers/EmpresaController.php)::eliminarUsuario
+- PATCH /api/empresa/usuario/{id}/pausar → [`App\Modules\Empresa\Controllers\EmpresaController`](backend/app/Modules/Empresa/Controllers/EmpresaController.php)::pausarUsuario
+- PATCH /api/empresa/usuario/{id}/reanudar → [`App\Modules\Empresa\Controllers\EmpresaController`](backend/app/Modules/Empresa/Controllers/EmpresaController.php)::reanudarUsuario
+- GET /api/empresa/servicios → [`App\Modules\Servicio\Controllers\ServicioController`](backend/app/Modules/Servicio/Controllers/ServicioController.php)::misServicios
 
 ## Usuario — públicos
-- POST /api/usuario/register → App\Modules\Usuario\Controllers\UsuarioAuthController::register
-- POST /api/usuario/login → App\Modules\Usuario\Controllers\UsuarioAuthController::login
-- POST /api/usuario/send-verification-code → App\Modules\Usuario\Controllers\UsuarioAuthController::sendVerificationCode
-- POST /api/usuario/verify-code → App\Modules\Usuario\Controllers\UsuarioAuthController::verifyCode
+- POST /api/usuario/register → [`App\Modules\Usuario\Controllers\UsuarioAuthController`](backend/app/Modules/Usuario/Controllers/UsuarioAuthController.php)::register
+- POST /api/usuario/login → [`App\Modules\Usuario\Controllers\UsuarioAuthController`](backend/app/Modules/Usuario/Controllers/UsuarioAuthController.php)::login
+- POST /api/usuario/send-verification-code → [`App\Modules\Usuario\Controllers\UsuarioAuthController`](backend/app/Modules/Usuario/Controllers/UsuarioAuthController.php)::sendVerificationCode
+- POST /api/usuario/verify-code → [`App\Modules\Usuario\Controllers\UsuarioAuthController`](backend/app/Modules/Usuario/Controllers/UsuarioAuthController.php)::verifyCode
 
 ## Usuario — protegidas (auth:sanctum)
-- GET /api/usuario/me → App\Modules\Usuario\Controllers\UsuarioController::me
-- PUT /api/usuario/update → App\Modules\Usuario\Controllers\UsuarioController::update
-- DELETE /api/usuario/delete → App\Modules\Usuario\Controllers\UsuarioController::destroy
-- GET /api/usuario/mis-usuarios → App\Modules\Usuario\Controllers\UsuarioController::listByEmpresa
+- GET /api/usuario/me → [`App\Modules\Usuario\Controllers\UsuarioController`](backend/app/Modules/Usuario/Controllers/UsuarioController.php)::me
+- PUT /api/usuario/update → [`App\Modules\Usuario\Controllers\UsuarioController`](backend/app/Modules/Usuario/Controllers/UsuarioController.php)::update
+- DELETE /api/usuario/delete → [`App\Modules\Usuario\Controllers\UsuarioController`](backend/app/Modules/Usuario/Controllers/UsuarioController.php)::destroy
+- GET /api/usuario/mis-usuarios → [`App\Modules\Usuario\Controllers\UsuarioController`](backend/app/Modules/Usuario/Controllers/UsuarioController.php)::listByEmpresa
 
 ## Servicios — públicos y protegidas
-- GET /api/servicios → App\Modules\Servicio\Controllers\ServicioController::index
-- GET /api/servicios/{id} → App\Modules\Servicio\Controllers\ServicioController::show
-- POST /api/servicios (protegida) → App\Modules\Servicio\Controllers\ServicioController::store
-- PATCH /api/servicios/{id} (protegida) → App\Modules\Servicio\Controllers\ServicioController::update
-- PATCH /api/servicios/{id}/estado (protegida) → App\Modules\Servicio\Controllers\ServicioController::changeEstado
-- DELETE /api/servicios/{id} (protegida) → App\Modules\Servicio\Controllers\ServicioController::destroy
+- GET /api/servicios → [`App\Modules\Servicio\Controllers\ServicioController`](backend/app/Modules/Servicio/Controllers/ServicioController.php)::index
+- GET /api/servicios/{id} → [`App\Modules\Servicio\Controllers\ServicioController`](backend/app/Modules/Servicio/Controllers/ServicioController.php)::show
+- POST /api/servicios (protegida) → [`App\Modules\Servicio\Controllers\ServicioController`](backend/app/Modules/Servicio/Controllers/ServicioController.php)::store
+- PATCH /api/servicios/{id} (protegida) → [`App\Modules\Servicio\Controllers\ServicioController`](backend/app/Modules/Servicio/Controllers/ServicioController.php)::update
+- PATCH /api/servicios/{id}/estado (protegida) → [`App\Modules\Servicio\Controllers\ServicioController`](backend/app/Modules/Servicio/Controllers/ServicioController.php)::changeEstado
+- DELETE /api/servicios/{id} (protegida) → [`App\Modules\Servicio\Controllers\ServicioController`](backend/app/Modules/Servicio/Controllers/ServicioController.php)::destroy
+
+## Reseñas — públicos y protegidas
+- POST /api/empresa/resenas/link (protegida) → [`App\Modules\Resena\Controllers\ResenaController`](backend/app/Modules/Resena/Controllers/ResenaController.php)::generarLink
+- POST /api/resenas/{token} (protegida) → [`App\Modules\Resena\Controllers\ResenaController`](backend/app/Modules/Resena/Controllers/ResenaController.php)::store
+- GET /api/resenas/link/{token} → [`App\Modules\Resena\Controllers\ResenaController`](backend/app/Modules/Resena/Controllers/ResenaController.php)::validarLink
+- GET /api/empresas/{empresaId}/resenas → [`App\Modules\Resena\Controllers\ResenaController`](backend/app/Modules/Resena/Controllers/ResenaController.php)::listar
 
 ## Rutas agrupadoras
-- Archivo que incluye los módulos de rutas: backend/routes/api.php
+- Archivo que incluye los módulos de rutas: [`backend/routes/api.php`](backend/routes/api.php)  
+- Rutas del módulo Reseñas: [`backend/app/Modules/Resena/routes.php`](backend/app/Modules/Resena/routes.php)
+
 ---
 
 ### Archivos relevantes:

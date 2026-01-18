@@ -1,26 +1,30 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
 import ServiceFilters from "@/components/filters/ServiceFilters";
 import ServiceAdvancedFilters from "@/components/filters/ServiceAdvancedFilters";
-import SearchBar from "@/components/common/SearchBar";
 import ServiceCard from "@/components/cards/ServiceCard";
 import ServiceCardSkeleton from "@/components/skeletons/ServiceCardSkeleton";
 
 import useServicios from "@/hooks/useServicios";
+import { useSearch } from "@/store/searchContext";
 
 import "@/styles/pages/empresa/_empresaDashboard.scss";
 
 export default function UsuarioDashboard() {
+  const { search } = useSearch(); // ✅ SEARCH GLOBAL DEL HEADER
+
   const [filter, setFilter] = useState("todos");
-  const [search, setSearch] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
-  // 👉 filtros del modal
-  const [draftFilters, setDraftFilters] = useState({
+  /* =========================
+     Filtros
+  ========================= */
+  const emptyFilters = {
     origen: "",
     destino: "",
     volumen: "",
@@ -28,11 +32,48 @@ export default function UsuarioDashboard() {
     fechaFin: "",
     sede: "",
     tipoCarga: "",
-  });
+  };
 
-  // 👉 filtros aplicados (estos sí disparan fetch)
+  const [draftFilters, setDraftFilters] = useState(emptyFilters);
   const [appliedFilters, setAppliedFilters] = useState({});
 
+  /* =========================
+     Textos dinámicos
+  ========================= */
+  const dashboardTexts = {
+    todos: {
+      title: "Últimas publicaciones",
+      subtitle: "Servicios disponibles de todas las empresas",
+    },
+    busco: {
+      title: "Publicaciones de Búsqueda",
+      subtitle:
+        "En esta pantalla puedes ver lo que están buscando las empresas",
+    },
+    ofrezco: {
+      title: "Publicaciones de Cargas a ofrecer",
+      subtitle:
+        "En esta pantalla puedes ver las cargas que ofrecen las empresas",
+    },
+  };
+
+  /* =========================
+     Helpers
+  ========================= */
+  const hasActiveFilters =
+    search.trim() !== "" ||
+    Object.values(appliedFilters).some((v) => v !== "");
+
+  const clearAllFilters = () => {
+    setDraftFilters(emptyFilters);
+    setAppliedFilters({});
+    setShowFilters(false);
+    // ⛔️ el search se limpia desde el Header
+  };
+
+  /* =========================
+     Data
+  ========================= */
   const { servicios, loading, hasMore, loadMore } = useServicios({
     search,
     filters: appliedFilters,
@@ -43,6 +84,9 @@ export default function UsuarioDashboard() {
     return servicios.filter((s) => s.tipo === filter);
   }, [servicios, filter]);
 
+  /* =========================
+     Infinite scroll
+  ========================= */
   useEffect(() => {
     const onScroll = () => {
       if (
@@ -63,23 +107,60 @@ export default function UsuarioDashboard() {
       <Header />
 
       <main className="empresa-dashboard">
+        {/* =========================
+            Header textos
+        ========================= */}
         <div className="empresa-dashboard__header">
-          <h1 className="empresa-dashboard__title">Últimas publicaciones</h1>
+          <h1 className="empresa-dashboard__title">
+            {dashboardTexts[filter].title}
+          </h1>
           <p className="empresa-dashboard__subtitle">
-            Servicios disponibles de todas las empresas
+            {dashboardTexts[filter].subtitle}
           </p>
         </div>
 
+        {/* =========================
+            Controls
+        ========================= */}
         <div className="empresa-dashboard__controls">
-          <ServiceFilters onChange={setFilter} />
+          <div className="empresa-dashboard__left">
+            <ServiceFilters onChange={setFilter} />
 
-          <SearchBar
-            value={search}
-            onChange={setSearch}
-            onFilterClick={() => setShowFilters(true)}
-          />
+            {/* Botón filtros / borrar */}
+            <button
+              className={`btn-advanced-filters ${
+                hasActiveFilters ? "active" : ""
+              }`}
+              onClick={() => {
+                if (hasActiveFilters) {
+                  clearAllFilters();
+                } else {
+                  setShowFilters(true);
+                }
+              }}
+              aria-label={
+                hasActiveFilters ? "Borrar filtros" : "Filtros avanzados"
+              }
+            >
+              <img
+                src={
+                  hasActiveFilters
+                    ? "/icons/eraser.png"
+                    : "/icons/filter.png"
+                }
+                alt={
+                  hasActiveFilters
+                    ? "Borrar filtros"
+                    : "Filtros avanzados"
+                }
+              />
+            </button>
+          </div>
         </div>
 
+        {/* =========================
+            Advanced filters
+        ========================= */}
         {showFilters && (
           <div className="filters-overlay">
             <ServiceAdvancedFilters
@@ -94,6 +175,9 @@ export default function UsuarioDashboard() {
           </div>
         )}
 
+        {/* =========================
+            Cards
+        ========================= */}
         <div className="empresa-dashboard__cards">
           {visible.map((s) => (
             <ServiceCard

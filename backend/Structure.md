@@ -19,12 +19,12 @@ backend/
 │   │   ├── Kernel.php               # [App\Console\Kernel](backend/app/Console/Kernel.php)
 │   │   └── Commands/
 │   ├── Http/
-│   │   ├── Controllers/
+│   │   ├── Controllers/             # Controladores por módulo (ver enlaces abajo)
 │   │   ├── Kernel.php               # [backend/app/Http/Kernel.php](backend/app/Http/Kernel.php)
 │   │   └── Middleware/
 │   │       └── Authenticate.php
 │   ├── Mail/                        # Mails (ej.: EmpresaVerificationCode) [backend/resources/views/emails/empresa_verification_code.blade.php](backend/resources/views/emails/empresa_verification_code.blade.php)
-│   ├── Models/
+│   ├── Models/                      # Modelos Eloquent globales
 │   │   └── (Modelos Eloquent)
 │   ├── Modules/                     # Arquitectura modular por dominios
 │   │   ├── Empresa/
@@ -34,6 +34,8 @@ backend/
 │   │   │   ├── Models/
 │   │   │   │   └── Empresa.php                  # [backend/app/Modules/Empresa/Models/Empresa.php](backend/app/Modules/Empresa/Models/Empresa.php)
 │   │   │   ├── Requests/
+│   │   │   ├── Services/                        # Lógica de negocio (si aplica)
+│   │   │   ├── Repositories/                    # Acceso a datos (opcional)
 │   │   │   └── routes.php                        # [backend/app/Modules/Empresa/routes.php](backend/app/Modules/Empresa/routes.php)
 │   │   ├── Usuario/
 │   │   │   ├── Controllers/
@@ -42,16 +44,23 @@ backend/
 │   │   │   ├── Models/
 │   │   │   │   └── Usuario.php                  # [backend/app/Modules/Usuario/Models/Usuario.php](backend/app/Modules/Usuario/Models/Usuario.php)
 │   │   │   ├── Requests/
+│   │   │   ├── Services/
 │   │   │   └── routes.php                        # [backend/app/Modules/Usuario/routes.php](backend/app/Modules/Usuario/routes.php)
-│   │   └── Servicio/                              # Módulo Servicios (planificado / parcial)
+│   │   ├── Servicio/                              # Módulo Servicios (implementado)
+│   │   │   ├── Controllers/
+│   │   │   │   └── ServicioController.php        # [`App\Modules\Servicio\Controllers\ServicioController`](backend/app/Modules/Servicio/Controllers/ServicioController.php)
+│   │   │   ├── Models/
+│   │   │   │   └── Servicio.php                  # [backend/app/Modules/Servicio/Models/Servicio.php](backend/app/Modules/Servicio/Models/Servicio.php)
+│   │   │   ├── Requests/
+│   │   │   ├── Services/
+│   │   │   ├── Repositories/
+│   │   │   └── routes.php                        # [backend/app/Modules/Servicio/routes.php](backend/app/Modules/Servicio/routes.php)
+│   │   └── Resena/
 │   │       ├── Controllers/
-│   │       │   └── ServicioController.php        # [backend/app/Modules/Servicio/Controllers/ServicioController.php](backend/app/Modules/Servicio/Controllers/ServicioController.php)
+│   │       │   └── ResenaController.php         # [`App\Modules\Resena\Controllers\ResenaController`](backend/app/Modules/Resena/Controllers/ResenaController.php)
 │   │       ├── Models/
-│   │       │   └── Servicio.php                  # [backend/app/Modules/Servicio/Models/Servicio.php](backend/app/Modules/Servicio/Models/Servicio.php)
 │   │       ├── Requests/
-│   │       ├── Services/
-│   │       ├── Repositories/
-│   │       └── routes.php                        # [backend/app/Modules/Servicio/routes.php](backend/app/Modules/Servicio/routes.php)
+│   │       └── routes.php                        # [backend/app/Modules/Resena/routes.php](backend/app/Modules/Resena/routes.php)
 │   └── Providers/
 │       ├── AppServiceProvider.php
 │       └── RouteServiceProvider.php              # [`App\Providers\RouteServiceProvider`](backend/app/Providers/RouteServiceProvider.php)
@@ -75,7 +84,7 @@ backend/
 │
 ├── database/
 │   ├── migrations/
-│   │   ├── 0001_01_01_000001_create_cache_table.php
+│   │   ├── 0001_01_01_000001_create_cache_table.php   # [backend/database/migrations/0001_01_01_000001_create_cache_table.php](backend/database/migrations/0001_01_01_000001_create_cache_table.php)
 │   │   ├── 2025_11_26_074631_create_empresas_table.php   # [backend/database/migrations/2025_11_26_074631_create_empresas_table.php](backend/database/migrations/2025_11_26_074631_create_empresas_table.php)
 │   │   ├── 2025_11_26_074711_create_usuarios_table.php    # [backend/database/migrations/2025_11_26_074711_create_usuarios_table.php](backend/database/migrations/2025_11_26_074711_create_usuarios_table.php)
 │   │   └── 2025_12_16_064630_create_servicios_table.php  # [backend/database/migrations/2025_12_16_064630_create_servicios_table.php](backend/database/migrations/2025_12_16_064630_create_servicios_table.php)
@@ -97,7 +106,7 @@ backend/
 │           └── empresa_verification_code.blade.php # [backend/resources/views/emails/empresa_verification_code.blade.php](backend/resources/views/emails/empresa_verification_code.blade.php)
 │
 ├── routes/
-│   ├── api.php                                     # [backend/routes/api.php](backend/routes/api.php) (incluye módulos: Empresa, Usuario, Servicio)
+│   ├── api.php                                     # [backend/routes/api.php](backend/routes/api.php) (incluye módulos: Empresa, Usuario, Servicio, Resena)
 │   └── web.php
 │
 ├── storage/
@@ -112,3 +121,16 @@ backend/
 │   └── TestCase.php
 │
 └── vendor/                                         # dependencias Composer
+
+Notas:
+- Las rutas principales se cargan desde [backend/routes/api.php](backend/routes/api.php).
+- Los módulos exponen sus rutas en sus respectivos `routes.php` (ej.: [backend/app/Modules/Empresa/routes.php](backend/app/Modules/Empresa/routes.php)).
+- Controladores y modelos clave:
+  - [`App\Modules\Empresa\Controllers\EmpresaController`](backend/app/Modules/Empresa/Controllers/EmpresaController.php)
+  - [`App\Modules\Empresa\Controllers\EmpresaAuthController`](backend/app/Modules/Empresa/Controllers/EmpresaAuthController.php)
+  - [`App\Modules\Usuario\Controllers\UsuarioController`](backend/app/Modules/Usuario/Controllers/UsuarioController.php)
+  - [`App\Modules\Usuario\Controllers\UsuarioAuthController`](backend/app/Modules/Usuario/Controllers/UsuarioAuthController.php)
+  - [`App\Modules\Servicio\Controllers\ServicioController`](backend/app/Modules/Servicio/Controllers/ServicioController.php)
+  - [`App\Modules\Resena\Controllers\ResenaController`](backend/app/Modules/Resena/Controllers/ResenaController.php)
+
+Recomendación rápida: mantener en cada módulo las carpetas Requests, Services y Repositories para separar validación, lógica de negocio y acceso a datos; así facilitar pruebas y escalabilidad.

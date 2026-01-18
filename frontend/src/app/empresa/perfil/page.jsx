@@ -143,19 +143,18 @@ export default function EmpresaPerfil() {
 
         <div className="empresa-perfil__reviews">
           {resenas.length === 0 && (
-            <p>Aún no hay reseñas</p>
+            <p>⭐ Aún no tienes reseñas</p>
           )}
 
-          {resenas.map((r, index) => (
+          {resenas.map((r) => (
             <ReviewCard
-              key={r.id ?? `${r.empresa}-${r.fecha}-${index}`}
-              empresa={r.empresa ?? "Cliente"}
+              key={r.id}
+              empresa={r.empresa}
               fecha={r.fecha}
               comentario={r.comentario}
               rating={r.rating}
             />
           ))}
-
 
         </div>
       </main>

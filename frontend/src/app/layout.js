@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import { SearchProvider } from "@/store/searchContext";
 import '../styles/globals.scss';
 
 const geistSans = Geist({
@@ -12,18 +13,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Red Mudancera",
-  description: "Comunidad de mudanceros",
+  title: "Mudanza Facil",
+  description: "Plataforma web full-stack diseñada para conectar empresas de mudanzas en México",
   icons: {
-    icon: "/frontend/public/vercel.svg",
+    icon: "/APP/public/icon.svg",
   }
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <SearchProvider>
+          {children}
+        </SearchProvider>
       </body>
     </html>
   );

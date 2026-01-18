@@ -24,7 +24,7 @@ class ResenaController extends Controller
         ]);
 
         return response()->json([
-            'url' => env('FRONTEND_URL') . '/resena/' . $link->token
+            'url' => env('FRONTEND_URL') . 'app.mudanzafacil.com.mx/resena/' . $link->token
         ]);
     }
 
@@ -154,12 +154,16 @@ class ResenaController extends Controller
 
         $resenas = $query->get()->map(function ($resena) {
             return [
-                'empresa' => Empresa::find($resena->empresa_origen_id)->empresa,
+                'id' => $resena->id,
+                'empresa' => optional(
+                    Empresa::find($resena->empresa_origen_id)
+                )->empresa ?? 'Cliente',
                 'fecha' => $resena->created_at->format('d/m/Y'),
                 'rating' => $resena->rating,
                 'comentario' => $resena->comentario,
             ];
         });
+
 
         return response()->json($resenas);
     }

@@ -12,7 +12,7 @@ export default function ServiceFilters({ onChange }) {
 
   return (
     <div className="service-filters">
-      <button
+      {/* <button
         className={`filter-btn ${active === "todos" ? "active" : ""}`}
         onClick={() => handleClick("todos")}
       >
@@ -23,15 +23,37 @@ export default function ServiceFilters({ onChange }) {
         className={`filter-btn ${active === "busco" ? "active" : ""}`}
         onClick={() => handleClick("busco")}
       >
-        Busco
+        Buscan
       </button>
 
       <button
         className={`filter-btn ${active === "ofrezco" ? "active" : ""}`}
         onClick={() => handleClick("ofrezco")}
       >
-        Ofrezco
+        Ofrecen
+      </button> */}
+
+      <button
+        className={`filter-btn ${active === "todos" ? "active" : ""}`}
+        onClick={() => handleClick("todos")}
+      >
+        <img src="/icons/todos.png  " alt="Todos" />
       </button>
+
+      <button
+        className={`filter-btn ${active === "busco" ? "active" : ""}`}
+        onClick={() => handleClick("busco")}
+      >
+        <img src="/icons/acuerdo_2.png" alt="Buscan" />
+      </button>
+
+      <button
+        className={`filter-btn ${active === "ofrezco" ? "active" : ""}`}
+        onClick={() => handleClick("ofrezco")}
+      >
+        <img src="/icons/leave.png" alt="Ofrecen" />
+      </button>
+
     </div>
   );
 }

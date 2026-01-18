@@ -12,6 +12,14 @@ export default function SideMenu({ open }) {
       transition={{ duration: 0.25 }}
     >
       <ul>
+        <li>
+          <Link href="/empresa/dashboard">
+            <div className="side-item">
+              <img src="/icons/hogar.png" />
+              <span>Home</span>
+            </div>
+          </Link>
+        </li>
 
         <li>
           <Link href="/empresa/perfil">
@@ -22,23 +30,7 @@ export default function SideMenu({ open }) {
           </Link>
         </li>
 
-        <li>
-          <Link href="/empresa/notificaciones">
-            <div className="side-item">
-              <img src="/icons/campana.png" />
-              <span>Notificaciones</span>
-            </div>
-          </Link>
-        </li>
-
-        <li>
-          <Link href="/empresa/publicaciones">
-            <div className="side-item">
-              <img src="/icons/docs.png" />
-              <span>Mis publicaciones</span>
-            </div>
-          </Link>
-        </li>
+        
 
         {/* <li>
           <Link href="/empresa/acuerdos">
@@ -62,25 +54,25 @@ export default function SideMenu({ open }) {
           <Link href="/empresa/cargas">
             <div className="side-item">
               <img src="/icons/docs.png" />
-              <span>Busca / Ofrece servicio</span>
+              <span>Publicar</span>
             </div>
           </Link>
         </li>
 
         <li>
-          <Link href="/empresa/dashboard">
+          <Link href="/empresa/publicaciones">
             <div className="side-item">
-              <img src="/icons/busca_2.png" />
-              <span>Últimas publicaciones</span>
+              <img src="/icons/docs.png" />
+              <span>Mis publicaciones</span>
             </div>
           </Link>
         </li>
 
         <li>
-          <Link href="/empresa/logout">
+          <Link href="/empresa/notificaciones">
             <div className="side-item">
-              <img src="/icons/logout.png" />
-              <span>Cerrar sesión</span>
+              <img src="/icons/campana.png" />
+              <span>Notificaciones</span>
             </div>
           </Link>
         </li>
@@ -90,6 +82,15 @@ export default function SideMenu({ open }) {
             <div className="side-item">
               <img src="/icons/help.png" />
               <span>Centro de ayuda</span>
+            </div>
+          </Link>
+        </li>
+
+        <li>
+          <Link href="/empresa/logout">
+            <div className="side-item">
+              <img src="/icons/logout.png" />
+              <span>Cerrar sesión</span>
             </div>
           </Link>
         </li>

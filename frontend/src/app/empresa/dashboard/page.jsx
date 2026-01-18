@@ -8,17 +8,19 @@ import Footer from "@/components/layout/Footer";
 import ServiceFilters from "@/components/filters/ServiceFilters";
 import ServiceAdvancedFilters from "@/components/filters/ServiceAdvancedFilters";
 import Button_crud from "@/components/common/Button_crud";
-import SearchBar from "@/components/common/SearchBar";
 import ServiceCard from "@/components/cards/ServiceCard";
 import ServiceCardSkeleton from "@/components/skeletons/ServiceCardSkeleton";
+
+import { useSearch } from "@/store/searchContext";
 
 import "@/styles/pages/empresa/_empresaDashboard.scss";
 
 export default function EmpresaDashboard() {
+  const { search, setSearch } = useSearch();
+
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("todos");
 
   const [filters, setFilters] = useState({
@@ -33,7 +35,55 @@ export default function EmpresaDashboard() {
 
   const [showFilters, setShowFilters] = useState(false);
 
+  /* =========================
+     Textos dinámicos
+  ========================= */
+  const dashboardTexts = {
+    todos: {
+      title: "Últimas publicaciones",
+      subtitle:
+        "Todas las publicaciones de empresas que buscan y ofrecen servicios",
+    },
+    busco: {
+      title: "Publicaciones de Búsqueda",
+      subtitle:
+        "En esta pantalla puedes ver lo que están buscando las empresas",
+    },
+    ofrezco: {
+      title: "Publicaciones de Cargas a ofrecer",
+      subtitle:
+        "En esta pantalla puedes ver las cargas que ofrecen las empresas",
+    },
+  };
+
+  /* =========================
+     Helpers
+  ========================= */
+  const hasActiveFilters =
+    search.trim() !== "" ||
+    Object.values(filters).some((value) => value !== "");
+
+  const clearAllFilters = () => {
+    setFilters({
+      origen: "",
+      destino: "",
+      volumen: "",
+      fechaInicio: "",
+      fechaFin: "",
+      sede: "",
+      tipoCarga: "",
+    });
+
+    setSearch("");
+    setShowFilters(false);
+  };
+
+  /* =========================
+     Fetch services
+  ========================= */
   useEffect(() => {
+    setLoading(true);
+
     const params = new URLSearchParams({
       search,
       ...filters,
@@ -57,42 +107,82 @@ export default function EmpresaDashboard() {
       <Header />
 
       <main className="empresa-dashboard">
+        {/* =========================
+            Header
+        ========================= */}
         <div className="empresa-dashboard__header">
-          <h1 className="empresa-dashboard__title">Últimas publicaciones</h1>
+          <h1 className="empresa-dashboard__title">
+            {dashboardTexts[filter].title}
+          </h1>
           <p className="empresa-dashboard__subtitle">
-            Servicios recientemente publicados
+            {dashboardTexts[filter].subtitle}
           </p>
         </div>
 
+        {/* =========================
+            Controls
+        ========================= */}
         <div className="empresa-dashboard__controls">
           <div className="empresa-dashboard__left">
             <ServiceFilters onChange={setFilter} />
 
-            <Button_crud
-              value="Agregar"
-              onClick={() => (window.location.href = "/empresa/cargas")}
-            />
+            {/* Botón filtros avanzados / borrar */}
+            <button
+              className={`btn-advanced-filters ${
+                hasActiveFilters ? "active" : ""
+              }`}
+              onClick={() => {
+                if (hasActiveFilters) {
+                  clearAllFilters();
+                } else {
+                  setShowFilters(true);
+                }
+              }}
+              aria-label={
+                hasActiveFilters ? "Borrar filtros" : "Filtros avanzados"
+              }
+            >
+              <img
+                src={
+                  hasActiveFilters
+                    ? "/icons/eraser.png"
+                    : "/icons/filter.png"
+                }
+                alt={
+                  hasActiveFilters
+                    ? "Borrar filtros"
+                    : "Filtros avanzados"
+                }
+              />
+            </button>
           </div>
-
-          <SearchBar
-            value={search}
-            onChange={setSearch}
-            onFilterClick={() => setShowFilters(true)}
-          />
         </div>
 
+        {/* =========================
+            Floating CRUD button
+        ========================= */}
+        <Button_crud
+          value="+"
+          onClick={() => (window.location.href = "/empresa/cargas")}
+        />
+
+        {/* =========================
+            Advanced filters overlay
+        ========================= */}
         {showFilters && (
           <div className="filters-overlay">
             <ServiceAdvancedFilters
               values={filters}
               onChange={setFilters}
-              onApply={() => { }}
+              onApply={() => setShowFilters(false)}
               onClose={() => setShowFilters(false)}
             />
           </div>
         )}
 
-
+        {/* =========================
+            Cards
+        ========================= */}
         <div className="empresa-dashboard__cards">
           {loading &&
             Array.from({ length: 6 }).map((_, i) => (

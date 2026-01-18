@@ -5,12 +5,17 @@ const SearchBar = ({
   value,
   onChange,
   onFilterClick,
-  placeholder = "Buscar por origen, destino o empresa",
+  placeholder = "Origen, destino o empresa",
+  disabled = false,
 }) => {
   return (
-    <div className="searchbar">
+    <div className={`searchbar ${disabled ? "searchbar--disabled" : ""}`}>
       <div className="searchbar__input-wrapper">
-        <img src="/icons/lupa.png" alt="buscar" className="searchbar__icon" />
+        <img
+          src="/icons/lupa.png"
+          alt="buscar"
+          className="searchbar__icon"
+        />
 
         <input
           type="text"
@@ -18,16 +23,9 @@ const SearchBar = ({
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          disabled={disabled}
         />
       </div>
-
-      <button
-        type="button"
-        className="searchbar__filter"
-        onClick={onFilterClick}
-      >
-        Filtrar
-      </button>
     </div>
   );
 };

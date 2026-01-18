@@ -7,6 +7,8 @@ import { usePathname } from "next/navigation";
 import SideMenuEmpresa from "./SideMenu";
 import SideMenuUsuario from "./SideMenuUsuario";
 import useClickOutside from "@/hooks/useClickOutside";
+import SearchBar from "@/components/common/SearchBar";
+import { useSearch } from "@/store/searchContext";
 
 export default function Header() {
   const [openMenu, setOpenMenu] = useState(false);
@@ -14,18 +16,16 @@ export default function Header() {
   const menuRef = useRef(null);
 
   const pathname = usePathname();
+  const { search, setSearch } = useSearch();
 
-  const isUsuarioPath = pathname.startsWith("/usuario");
-  const isEmpresaPath = pathname.startsWith("/empresa");
+  const isEmpresaDashboard = pathname === "/empresa/dashboard";
+  const isUsuarioDashboard = pathname === "/usuario/dashboard";
+
+  const isDashboard = isEmpresaDashboard || isUsuarioDashboard;
 
   useClickOutside(menuRef, () => setOpenMenu(false));
 
-  /* ============================
-     Resolver dashboard correcto
-  ============================ */
   useEffect(() => {
-    if (typeof document === "undefined") return;
-
     const cookies = document.cookie;
 
     if (cookies.includes("token_empresa")) {
@@ -38,31 +38,12 @@ export default function Header() {
       return;
     }
 
-    if (isEmpresaPath) {
-      setHomeHref("/empresa/dashboard");
-      return;
-    }
-
-    if (isUsuarioPath) {
-      setHomeHref("/usuario/dashboard");
-      return;
-    }
-
     setHomeHref("/");
-  }, [pathname, isEmpresaPath, isUsuarioPath]);
+  }, [pathname]);
 
   return (
     <header className="header">
       <div className="header__content">
-        {/* HOME */}
-        <Link href={homeHref}>
-          <img
-            src="/icons/hogar_2.png"
-            alt="home"
-            className="header__icon"
-          />
-        </Link>
-
         {/* LOGO */}
         <Link href={homeHref}>
           <img
@@ -71,6 +52,13 @@ export default function Header() {
             className="header__logo"
           />
         </Link>
+
+        {/* SEARCH BAR */}
+        <SearchBar
+          value={search}
+          onChange={setSearch}
+          disabled={!isDashboard}
+        />
 
         {/* MENU */}
         <img

@@ -4,14 +4,14 @@
 .searchbar {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
   width: 100%;
-  max-width: 700px;
+  max-width: 420px;
 
-  /* Contenedor del input */
+  /* ===== Input wrapper ===== */
   &__input-wrapper {
     display: flex;
-    width: 480px;
+    width: 100%;
     height: 50px;
     position: relative;
     align-items: center;
@@ -20,57 +20,98 @@
     background: #ffffff;
   }
 
-  /* Icono */
+  /* ===== Icon ===== */
   &__icon {
-    width: 35px;
-    height: 35px;
+    width: 24px;
+    height: 24px;
     position: absolute;
     left: 10px;
   }
 
-  /* Input */
+  /* ===== Input ===== */
   &__input {
     width: 100%;
     height: 100%;
     border: none;
+    border-radius: 10px;
     outline: none;
     font-family: variables.$font-text;
-    font-size: 20px;
+    font-size: 16px;
     color: variables.$text;
+    background: transparent;
 
     &::placeholder {
       color: variables.$text-muted;
     }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
   }
 
-  /* Botón Filtrar */
-  &__filter {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-family: variables.$font-title;
-    font-size: 30px;
-    font-weight: bold;
-    color: variables.$primary;
-    padding: 5px 10px;
+  /* ===== Disabled state ===== */
+  &--disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
 
-    @include mixins.hover-transition;
+/* =========================
+   Tablet
+========================= */
+@media (max-width: 900px) {
+  .searchbar {
+    max-width: 100%;
 
-    &:hover {
-      opacity: 0.7;
+    &__input-wrapper {
+      height: 46px;
+    }
+
+    &__input {
+      font-size: 14px;
     }
   }
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
+/* =========================
+   Mobile
+========================= */
+@media (max-width: 600px) {
   .searchbar {
-    flex-direction: row;
-    align-items: center;
+    position: relative;
+    z-index: 1;
 
-    &__input-wrapper {
-      width: 80%;
-      padding-left: 50px;
+    /* ===== Overlay ===== */
+    &::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      z-index: -1;
+    }
+
+    /* ===== Expanded state ===== */
+    &:focus-within {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 30px);
+      max-width: 500px;
+      z-index: 1000;
+
+      &::before {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .searchbar__input-wrapper {
+        height: 48px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      }
     }
   }
 }

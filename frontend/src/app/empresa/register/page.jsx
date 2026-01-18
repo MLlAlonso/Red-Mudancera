@@ -13,7 +13,7 @@ export default function EmpresaRegister() {
     email: "",
     password: "",
     representante: "",
-    tel: "", // CORRECTO: este nombre sí coincide con el backend
+    tel: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -64,8 +64,6 @@ export default function EmpresaRegister() {
       }
 
       // Registro exitoso
-
-      // Registro exitoso
       document.cookie = `token_empresa=${data.token}; path=/`;
       localStorage.setItem("empresa_email", formData.email);
       window.location.href = "/empresa/confirmacion";
@@ -106,7 +104,7 @@ export default function EmpresaRegister() {
             <Input
               label="Contraseña"
               type="password"
-              placeholder="********"
+              placeholder="Mín. 8, 1 mayús. y 1 num"
               value={formData.password}
               onChange={(e) => handleChange("password", e.target.value)}
             />
@@ -130,7 +128,7 @@ export default function EmpresaRegister() {
           </div>
 
           <Input
-            label="Persona de contacto"
+            label="Nombre del responsable"
             placeholder="Administrador empresa"
             value={formData.representante}
             onChange={(e) => handleChange("representante", e.target.value)}
@@ -138,7 +136,7 @@ export default function EmpresaRegister() {
 
           <Input
             label="Teléfono"
-            placeholder="Teléfono de empresa"
+            placeholder="Whatsapp de empresa"
             value={formData.tel}
             onChange={(e) => handleChange("tel", e.target.value)}
           />

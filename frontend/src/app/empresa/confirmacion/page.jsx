@@ -64,10 +64,12 @@ export default function EmpresaConfirmacion() {
       <Header className="header--no-menu" />
 
       <main className="empresa-register">
-        <div className="empresa-register__card" style={{ height: "auto", maxHeight: "280px" }}>
+        <div className="empresa-register__card" id="code_card" style={{ height: "auto", maxHeight: "280px" }}>
           <h1 className="empresa-register__title">Código de verificación</h1>
 
           {error && <p className="empresa-register__error">{error}</p>}
+
+          <p className="empresa-register__code-text">Enviamos un código de verificación a tu correo. Revisa tu bandeja de entrada, Spam u otros.</p>
 
           <Input
             label="Código"

@@ -13,6 +13,15 @@ export default function SideMenuUsuario({ open }) {
     >
       <ul>
         <li>
+          <Link href="/empresa/dashboard">
+            <div className="side-item">
+              <img src="/icons/hogar.png" />
+              <span>Home</span>
+            </div>
+          </Link>
+        </li>
+
+        <li>
           <Link href="/usuario/perfil">
             <div className="side-item">
               <img src="/icons/cuenta.png" alt="perfil" />
@@ -31,10 +40,10 @@ export default function SideMenuUsuario({ open }) {
         </li>
 
         <li>
-          <Link href="/usuario/dashboard">
+          <Link href="/empresa/ayuda">
             <div className="side-item">
-              <img src="/icons/busca_2.png" alt="publicaciones recientes" />
-              <span>Últimas publicaciones</span>
+              <img src="/icons/help.png" />
+              <span>Centro de ayuda</span>
             </div>
           </Link>
         </li>

@@ -189,7 +189,7 @@ const handleSubmit = async (e) => {
               <select name="tipoCarga" className="input-group__field" value={form.tipoCarga} onChange={handleChange}>
                 <option value="">Selecciona</option>
                 <option value="menaje">Menaje de casa</option>
-                <option value="libre">Libre</option>
+                <option value="libre">Otro</option>
               </select>
             </div>
 

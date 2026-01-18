@@ -8,15 +8,16 @@ import Footer from "@/components/layout/Footer";
 import Button_crud from "@/components/common/Button_crud";
 import Button_cta from "@/components/common/Button_cta";
 import { openWhatsappMessage } from "@/utils/whatsapp";
+import ChangeServiceStatusModal from "@/components/modals/ChangeServiceStatusModal";
 
 import "@/styles/pages/servicios/_detallesServicio.scss";
 
 export default function DetalleServicioPage() {
   const { id } = useParams();
   const router = useRouter();
-
   const [servicio, setServicio] = useState(null);
   const [empresaAuth, setEmpresaAuth] = useState(null);
+  const [showChangeStatus, setShowChangeStatus] = useState(false);
 
   /* =========================
      Obtener servicio
@@ -56,14 +57,6 @@ export default function DetalleServicioPage() {
   const isOwner = empresaAuth && empresaAuth.id === servicio.empresa_id;
   const isOffer = servicio.tipo === "ofrezco";
 
-  /* =========================
-     Ir al perfil de empresa
-  ========================= */
-  const goToEmpresaPerfil = () => {
-    if (!servicio?.empresa?.id) return;
-    router.push(`/empresa/${servicio.empresa.id}`);
-  };
-
   return (
     <>
       <Header />
@@ -76,11 +69,21 @@ export default function DetalleServicioPage() {
               Información detallada del servicio
             </p>
           </div>
+
+          {isOwner && (
+            <div className={`estado-badge estado-${servicio.estado}`}>
+              Estado actual: <strong>{servicio.estado}</strong>
+            </div>
+          )}
         </div>
 
         <div className="detalle-servicio__card">
 
+
+
+
           <div className={`detalle-servicio__route ${isOffer ? "offer" : "search"}`}>
+
             <div className="detalle-servicio__route-tags">
               <span className="service-card__tag">
                 {isOffer ? "Ofrezco" : "Busco"}
@@ -98,17 +101,24 @@ export default function DetalleServicioPage() {
               )}
             </div>
 
-            <div className="detalle-servicio__route-tags">
+            <div className="detalle-servicio__route-tags"  >
               <h2 className="detalle-servicio__route-title">
-                <img src="/icons/place-marker.png" alt="" /> {servicio.origen}
-                {" → "}
-                <img src="/icons/truck.png" alt="" /> {servicio.destino}
+                <img src="/icons/place-marker.png" /> {servicio.origen} → <img src="/icons/truck.png" /> {servicio.destino}
               </h2>
+
+              {/* <h3>N KMS</h3> */}
             </div>
           </div>
 
+
+
+
           <div className="detalle-servicio__divider">
-            <img src="/icons/favicon.ico" alt="divider" className="divider__icon" />
+            <img
+              src="/icons/favicon.ico"
+              alt="divider icon"
+              className="divider__icon"
+            />
           </div>
 
           <div className="detalle-servicio__grid">
@@ -117,6 +127,15 @@ export default function DetalleServicioPage() {
               <span>{servicio.volumen} m³</span>
             </div>
 
+            {/* <div>
+              <label>Publicado el:</label>
+              <span>
+                {servicio.created_at
+                  ? new Date(servicio.created_at).toLocaleDateString()
+                  : "—"}
+              </span>
+            </div> */}
+
             <div>
               <label>Tipo de carga:</label>
               <span>{servicio.tipo_carga}</span>
@@ -124,7 +143,7 @@ export default function DetalleServicioPage() {
 
             <div>
               <label>Rango de salida:</label>
-              <span>
+              <span id="salida">
                 {servicio.inicio && servicio.fin
                   ? `${new Date(servicio.inicio).toLocaleDateString()} – ${new Date(servicio.fin).toLocaleDateString()}`
                   : "—"}
@@ -135,18 +154,39 @@ export default function DetalleServicioPage() {
               <label>Estado de la carga:</label>
               <span>{servicio.estado}</span>
             </div>
+
+            {/* <div>
+              <label>Ciudad de origen:</label>
+              <span>{servicio.origen}</span>
+            </div>
+
+            <div>
+              <label>Ciudad de destino:</label>
+              <span>{servicio.destino}</span>
+            </div> */}
+
+
+
+            {/* <div>
+              <label>Fecha límite de entrega:</label>
+              <span>
+                {servicio.fin
+                  ? new Date(servicio.fin).toLocaleDateString()
+                  : "—"}
+              </span>
+            </div> */}
           </div>
 
           <div className="detalle-servicio__divider">
-            <img src="/icons/truck.png" alt="divider" className="divider__icon" />
+            <img
+              src="/icons/truck.png"
+              alt="divider icon"
+              className="divider__icon"
+            />
           </div>
 
-          {/* =========================
-             Empresa
-          ========================= */}
           <div className="detalle-servicio__empresa">
-
-            <div className="empresa-clickable" onClick={goToEmpresaPerfil}>
+            <div>
               <label>Nombre empresa:</label>
               <span>{servicio.empresa?.empresa || "—"}</span>
             </div>
@@ -174,12 +214,19 @@ export default function DetalleServicioPage() {
             <p>{servicio.nota || "Sin nota adicional"}</p>
           </div>
 
+          {/* <div className="detalle-servicio__importe">
+            <label>Importe:</label>
+            <span>
+              {servicio.importe ? `$${servicio.importe}` : "No especificado"}
+            </span>
+          </div> */}
+
           <div className="detalle-servicio__actions">
             <Button_cta
               value="Contactar"
               onClick={() =>
                 openWhatsappMessage({
-                  tipo: isOffer ? "Ofrezco" : "Busco",
+                  tipo: servicio.tipo === "ofrezco" ? "Ofrezco" : "Busco",
                   origen: servicio.origen,
                   destino: servicio.destino,
                   volumen: `${servicio.volumen} m³`,
@@ -187,10 +234,30 @@ export default function DetalleServicioPage() {
                 })
               }
             />
+
+            {isOwner && (
+              <Button_crud
+                value="Cambiar estado"
+                onClick={() => setShowChangeStatus(true)}
+              />
+            )}
           </div>
 
         </div>
       </main>
+
+      {showChangeStatus && (
+        <ChangeServiceStatusModal
+          open={showChangeStatus}
+          servicio={servicio}
+          onClose={() => setShowChangeStatus(false)}
+          onUpdated={(updatedService) => {
+            setServicio(updatedService);
+            setShowChangeStatus(false);
+          }}
+        />
+
+      )}
 
       <Footer />
     </>
