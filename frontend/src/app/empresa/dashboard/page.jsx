@@ -144,8 +144,8 @@ export default function EmpresaDashboard() {
               <img
                 src={
                   hasActiveFilters
-                    ? "/icons/eraser.png"
-                    : "/icons/filter.png"
+                    ? "/icons/borrar.png"
+                    : "/icons/filtrar.png"
                 }
                 alt={
                   hasActiveFilters
@@ -200,6 +200,7 @@ export default function EmpresaDashboard() {
                 empresa={s.empresa?.empresa ?? "Empresa"}
                 telefono={s.empresa?.tel}
                 fecha={new Date(s.created_at).toLocaleDateString()}
+                distanciaKm={s.distancia_km}
               />
 
             ))}

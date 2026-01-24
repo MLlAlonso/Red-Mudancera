@@ -75,16 +75,13 @@ export default function DetalleServicioPage() {
 
       <main className="detalle-servicio">
         <div className="detalle-servicio__header">
-          <div>
             <h1 className="detalle-servicio__title">Detalle de servicio</h1>
             <p className="detalle-servicio__subtitle">
               Información detallada del servicio
             </p>
-          </div>
         </div>
 
         <div className="detalle-servicio__card">
-
           <div className={`detalle-servicio__route ${isOffer ? "offer" : "search"}`}>
             <div className="detalle-servicio__route-tags">
               <span className="service-card__tag">
@@ -123,13 +120,22 @@ export default function DetalleServicioPage() {
             </div>
 
             <div>
+              <label>Distancia:</label>
+              <span>
+                {servicio.distancia_km
+                  ? `${servicio.distancia_km} km`
+                  : "—"}
+              </span>
+            </div>
+
+            <div>
               <label>Tipo de carga:</label>
               <span>{servicio.tipo_carga}</span>
             </div>
 
             <div>
               <label>Rango de salida:</label>
-              <span>
+              <span id="salida">
                 {servicio.inicio && servicio.fin
                   ? `${new Date(servicio.inicio).toLocaleDateString()} – ${new Date(servicio.fin).toLocaleDateString()}`
                   : "—"}
@@ -165,7 +171,7 @@ export default function DetalleServicioPage() {
 
             <div>
               <label>Nombre de vendedor:</label>
-              <span>{servicio.responsable_nombre || "—"}</span>
+              <span id="vendedor">{servicio.responsable_nombre || "—"}</span>
             </div>
 
             <div>
@@ -178,6 +184,8 @@ export default function DetalleServicioPage() {
             <label>Nota:</label>
             <p>{servicio.nota || "Sin nota adicional"}</p>
           </div>
+
+
 
           <div className="detalle-servicio__actions">
             <Button_cta
@@ -199,6 +207,7 @@ export default function DetalleServicioPage() {
 
 
           </div>
+
 
         </div>
       </main>

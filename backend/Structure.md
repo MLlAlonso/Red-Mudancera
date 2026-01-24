@@ -7,13 +7,10 @@ backend/
 ├── composer.json
 ├── composer.lock
 ├── package.json
-├── package-lock.json
 ├── phpunit.xml
-├── README.md
-├── Structure.md                     # (este archivo) [backend/Structure.md](backend/Structure.md)
 ├── red_mudancera_dev
-├── vite.config.js                   # [backend/vite.config.js](backend/vite.config.js)
-│
+├── Structure.md                     # (este archivo) [backend/Structure.md](backend/Structure.md)
+├── vite.config.js
 ├── app/
 │   ├── Console/
 │   │   ├── Kernel.php               # [App\Console\Kernel](backend/app/Console/Kernel.php)

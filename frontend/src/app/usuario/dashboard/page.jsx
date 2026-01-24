@@ -145,8 +145,8 @@ export default function UsuarioDashboard() {
               <img
                 src={
                   hasActiveFilters
-                    ? "/icons/eraser.png"
-                    : "/icons/filter.png"
+                    ? "/icons/borrar.png"
+                    : "/icons/filtrar.png"
                 }
                 alt={
                   hasActiveFilters

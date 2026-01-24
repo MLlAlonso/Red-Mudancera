@@ -205,13 +205,10 @@ backend/
 ├── composer.json
 ├── composer.lock
 ├── package.json
-├── package-lock.json
 ├── phpunit.xml
-├── README.md
-├── Structure.md                     # (este archivo) [backend/Structure.md](backend/Structure.md)
 ├── red_mudancera_dev
-├── vite.config.js                   # [backend/vite.config.js](backend/vite.config.js)
-│
+├── Structure.md                     # (este archivo) [backend/Structure.md](backend/Structure.md)
+├── vite.config.js
 ├── app/
 │   ├── Console/
 │   │   ├── Kernel.php               # [App\Console\Kernel](backend/app/Console/Kernel.php)
@@ -334,14 +331,13 @@ Notas:
 Recomendación rápida: mantener en cada módulo las carpetas Requests, Services y Repositories para separar validación, lógica de negocio y acceso a datos; así facilitar pruebas y escalabilidad.
 
 frontend/
-├── 📄 .eslintrc.mjs
-├── 📄 .gitignore
+├── 📄 .env.local
+├── 📄 carpetas.md                      # (este archivo) [frontend/carpetas.md](frontend/carpetas.md)
 ├── 📄 eslint.config.mjs
 ├── 📄 jsconfig.json
 ├── 📄 next.config.js
 ├── 📄 package.json
-├── 📄 package-lock.json
-├── 📄 carpetas.md                      # (este archivo) [frontend/carpetas.md](frontend/carpetas.md)
+├── 📁 .next/
 │
 ├── 📁 public/                          # Archivos públicos estáticos
 │   ├── 📁 icons/
@@ -477,51 +473,70 @@ Archivos clave / puntos de entrada:
 - API wrapper: [`frontend/src/services/api.js`](frontend/src/services/api.js)
 
 ## Endpoints
-## Empresa — públicos
-- POST /api/empresa/register → [`App\Modules\Empresa\Controllers\EmpresaAuthController`](backend/app/Modules/Empresa/Controllers/EmpresaAuthController.php)::register
-- POST /api/empresa/login → [`App\Modules\Empresa\Controllers\EmpresaAuthController`](backend/app/Modules/Empresa/Controllers/EmpresaAuthController.php)::login
-- POST /api/empresa/send-verification → [`App\Modules\Empresa\Controllers\EmpresaAuthController`](backend/app/Modules/Empresa/Controllers/EmpresaAuthController.php)::sendVerificationCode
-- POST /api/empresa/verify-code → [`App\Modules\Empresa\Controllers\EmpresaAuthController`](backend/app/Modules/Empresa/Controllers/EmpresaAuthController.php)::verifyCode
+## Empresa — Públicos
 
-## Empresa — protegidas (auth:sanctum)
-- GET /api/empresa/me → [`App\Modules\Empresa\Controllers\EmpresaController`](backend/app/Modules/Empresa/Controllers/EmpresaController.php)::me
-- PUT /api/empresa/update → [`App\Modules\Empresa\Controllers\EmpresaController`](backend/app/Modules/Empresa/Controllers/EmpresaController.php)::update
-- DELETE /api/empresa/delete → [`App\Modules\Empresa\Controllers\EmpresaController`](backend/app/Modules/Empresa/Controllers/EmpresaController.php)::destroy
-- GET /api/empresa/usuarios → [`App\Modules\Empresa\Controllers\EmpresaController`](backend/app/Modules/Empresa/Controllers/EmpresaController.php)::usuariosEmpresa
-- DELETE /api/empresa/usuario/{id} → [`App\Modules\Empresa\Controllers\EmpresaController`](backend/app/Modules/Empresa/Controllers/EmpresaController.php)::eliminarUsuario
-- PATCH /api/empresa/usuario/{id}/pausar → [`App\Modules\Empresa\Controllers\EmpresaController`](backend/app/Modules/Empresa/Controllers/EmpresaController.php)::pausarUsuario
-- PATCH /api/empresa/usuario/{id}/reanudar → [`App\Modules\Empresa\Controllers\EmpresaController`](backend/app/Modules/Empresa/Controllers/EmpresaController.php)::reanudarUsuario
-- GET /api/empresa/servicios → [`App\Modules\Servicio\Controllers\ServicioController`](backend/app/Modules/Servicio/Controllers/ServicioController.php)::misServicios
+| Método | Ruta | Controlador |
+|--------|------|-------------|
+| POST | `/api/empresa/register` | `EmpresaAuthController::register` |
+| POST | `/api/empresa/login` | `EmpresaAuthController::login` |
+| POST | `/api/empresa/send-verification` | `EmpresaAuthController::sendVerificationCode` |
+| POST | `/api/empresa/verify-code` | `EmpresaAuthController::verifyCode` |
 
-## Usuario — públicos
-- POST /api/usuario/register → [`App\Modules\Usuario\Controllers\UsuarioAuthController`](backend/app/Modules/Usuario/Controllers/UsuarioAuthController.php)::register
-- POST /api/usuario/login → [`App\Modules\Usuario\Controllers\UsuarioAuthController`](backend/app/Modules/Usuario/Controllers/UsuarioAuthController.php)::login
-- POST /api/usuario/send-verification-code → [`App\Modules\Usuario\Controllers\UsuarioAuthController`](backend/app/Modules/Usuario/Controllers/UsuarioAuthController.php)::sendVerificationCode
-- POST /api/usuario/verify-code → [`App\Modules\Usuario\Controllers\UsuarioAuthController`](backend/app/Modules/Usuario/Controllers/UsuarioAuthController.php)::verifyCode
+## Empresa — Protegidos (auth:sanctum)
 
-## Usuario — protegidas (auth:sanctum)
-- GET /api/usuario/me → [`App\Modules\Usuario\Controllers\UsuarioController`](backend/app/Modules/Usuario/Controllers/UsuarioController.php)::me
-- PUT /api/usuario/update → [`App\Modules\Usuario\Controllers\UsuarioController`](backend/app/Modules/Usuario/Controllers/UsuarioController.php)::update
-- DELETE /api/usuario/delete → [`App\Modules\Usuario\Controllers\UsuarioController`](backend/app/Modules/Usuario/Controllers/UsuarioController.php)::destroy
-- GET /api/usuario/mis-usuarios → [`App\Modules\Usuario\Controllers\UsuarioController`](backend/app/Modules/Usuario/Controllers/UsuarioController.php)::listByEmpresa
+| Método | Ruta | Controlador |
+|--------|------|-------------|
+| GET | `/api/empresa/me` | `EmpresaController::me` |
+| PUT | `/api/empresa/update` | `EmpresaController::update` |
+| DELETE | `/api/empresa/delete` | `EmpresaController::destroy` |
+| GET | `/api/empresa/usuarios` | `EmpresaController::usuariosEmpresa` |
+| DELETE | `/api/empresa/usuario/{id}` | `EmpresaController::eliminarUsuario` |
+| PATCH | `/api/empresa/usuario/{id}/pausar` | `EmpresaController::pausarUsuario` |
+| PATCH | `/api/empresa/usuario/{id}/reanudar` | `EmpresaController::reanudarUsuario` |
+| GET | `/api/empresa/servicios` | `ServicioController::misServicios` |
 
-## Servicios — públicos y protegidas
-- GET /api/servicios → [`App\Modules\Servicio\Controllers\ServicioController`](backend/app/Modules/Servicio/Controllers/ServicioController.php)::index
-- GET /api/servicios/{id} → [`App\Modules\Servicio\Controllers\ServicioController`](backend/app/Modules/Servicio/Controllers/ServicioController.php)::show
-- POST /api/servicios (protegida) → [`App\Modules\Servicio\Controllers\ServicioController`](backend/app/Modules/Servicio/Controllers/ServicioController.php)::store
-- PATCH /api/servicios/{id} (protegida) → [`App\Modules\Servicio\Controllers\ServicioController`](backend/app/Modules/Servicio/Controllers/ServicioController.php)::update
-- PATCH /api/servicios/{id}/estado (protegida) → [`App\Modules\Servicio\Controllers\ServicioController`](backend/app/Modules/Servicio/Controllers/ServicioController.php)::changeEstado
-- DELETE /api/servicios/{id} (protegida) → [`App\Modules\Servicio\Controllers\ServicioController`](backend/app/Modules/Servicio/Controllers/ServicioController.php)::destroy
+## Usuario — Públicos
 
-## Reseñas — públicos y protegidas
-- POST /api/empresa/resenas/link (protegida) → [`App\Modules\Resena\Controllers\ResenaController`](backend/app/Modules/Resena/Controllers/ResenaController.php)::generarLink
-- POST /api/resenas/{token} (protegida) → [`App\Modules\Resena\Controllers\ResenaController`](backend/app/Modules/Resena/Controllers/ResenaController.php)::store
-- GET /api/resenas/link/{token} → [`App\Modules\Resena\Controllers\ResenaController`](backend/app/Modules/Resena/Controllers/ResenaController.php)::validarLink
-- GET /api/empresas/{empresaId}/resenas → [`App\Modules\Resena\Controllers\ResenaController`](backend/app/Modules/Resena/Controllers/ResenaController.php)::listar
+| Método | Ruta | Controlador |
+|--------|------|-------------|
+| POST | `/api/usuario/register` | `UsuarioAuthController::register` |
+| POST | `/api/usuario/login` | `UsuarioAuthController::login` |
+| POST | `/api/usuario/send-verification-code` | `UsuarioAuthController::sendVerificationCode` |
+| POST | `/api/usuario/verify-code` | `UsuarioAuthController::verifyCode` |
 
-## Rutas agrupadoras
-- Archivo que incluye los módulos de rutas: [`backend/routes/api.php`](backend/routes/api.php)  
-- Rutas del módulo Reseñas: [`backend/app/Modules/Resena/routes.php`](backend/app/Modules/Resena/routes.php)
+## Usuario — Protegidos (auth:sanctum)
+
+| Método | Ruta | Controlador |
+|--------|------|-------------|
+| GET | `/api/usuario/me` | `UsuarioController::me` |
+| PUT | `/api/usuario/update` | `UsuarioController::update` |
+| DELETE | `/api/usuario/delete` | `UsuarioController::destroy` |
+| GET | `/api/usuario/mis-usuarios` | `UsuarioController::listByEmpresa` |
+
+## Servicios
+
+| Método | Ruta | Controlador | Protección |
+|--------|------|-------------|-----------|
+| GET | `/api/servicios` | `ServicioController::index` | Público |
+| GET | `/api/servicios/{id}` | `ServicioController::show` | Público |
+| POST | `/api/servicios` | `ServicioController::store` | Protegida |
+| PATCH | `/api/servicios/{id}` | `ServicioController::update` | Protegida |
+| PATCH | `/api/servicios/{id}/estado` | `ServicioController::changeEstado` | Protegida |
+| DELETE | `/api/servicios/{id}` | `ServicioController::destroy` | Protegida |
+
+## Reseñas
+
+| Método | Ruta | Controlador | Protección |
+|--------|------|-------------|-----------|
+| POST | `/api/empresa/resenas/link` | `ResenaController::generarLink` | Protegida |
+| POST | `/api/resenas/{token}` | `ResenaController::store` | Protegida |
+| GET | `/api/resenas/link/{token}` | `ResenaController::validarLink` | Público |
+| GET | `/api/empresas/{empresaId}/resenas` | `ResenaController::listar` | Público |
+
+## Rutas Agrupadoras
+
+- Archivo principal: [`backend/routes/api.php`](backend/routes/api.php)
+- Módulo Reseñas: [`backend/app/Modules/Resena/routes.php`](backend/app/Modules/Resena/routes.php)
 
 ---
 

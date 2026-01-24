@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Modules\Empresa\Controllers\EmpresaAuthController;
+use App\Http\Controllers\Auth\RecoverPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,3 +30,10 @@ require base_path('app/Modules/Servicio/routes.php');
 |--------------------------------------------------------------------------
 */
 require base_path('app/Modules/Resena/routes.php');
+
+/*
+|--------------------------------------------------------------------------
+| PWD Reset
+|--------------------------------------------------------------------------
+*/
+Route::post('/auth/recover-password', [RecoverPasswordController::class, 'recover']);

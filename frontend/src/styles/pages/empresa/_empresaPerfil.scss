@@ -9,14 +9,17 @@
   &__title {
     font-family: variables.$font-title;
     font-size: 40px;
+    font-weight: bold;
     color: variables.$primary;
+    margin-bottom: 5px;
   }
 
   &__subtitle {
     font-family: variables.$font-text;
     color: variables.$text-muted;
-    margin-bottom: 30px;
     font-size: 22px;
+    margin-bottom: 25px;
+    text-align: justify;
   }
 
   &__top {
@@ -72,12 +75,12 @@
     color: variables.$primary;
   }
 
-  .empresa-perfil__section-actions{
+  .empresa-perfil__section-actions {
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    .btn_crud{
+    .btn_crud {
       font-size: 20px;
     }
   }
@@ -135,4 +138,24 @@
   height: 120px;
   border-radius: 100%;
   object-fit: cover;
+}
+
+@media (max-width: 600px) {
+  .empresa-perfil {
+    &__title {
+      font-size: 30px;
+      text-align: center;
+      margin-bottom: 5px;
+    }
+
+    &__subtitle {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    &__info p {
+      display: flex;
+      flex-direction: column;
+    }
+  }
 }

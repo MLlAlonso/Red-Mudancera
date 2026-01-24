@@ -122,7 +122,7 @@ class ServicioController extends Controller
         $empresa = auth()->user();
         $servicio = $this->servicioRepository->findById($id);
 
-        if (!$servicio) {
+        if (! $servicio) {
             return response()->json(['message' => 'Servicio no encontrado'], 404);
         }
 
@@ -130,11 +130,25 @@ class ServicioController extends Controller
             return response()->json(['message' => 'No autorizado'], 403);
         }
 
-        $servicio->update($request->validated());
+        $data = $request->validated();
+
+        // Recalcular distancia SOLO si cambió origen o destino
+        if (
+            $data['origen'] !== $servicio->origen ||
+            $data['destino'] !== $servicio->destino
+        ) {
+            $distanceService = app(\App\Services\Google\GoogleDistanceService::class);
+            $data['distancia_km'] = $distanceService->calcularKm(
+                $data['origen'],
+                $data['destino']
+            );
+        }
+
+        $servicio->update($data);
 
         return response()->json([
             'message' => 'Servicio actualizado correctamente',
-            'data' => $servicio->fresh()
+            'data' => $servicio->fresh(),
         ]);
     }
 
@@ -193,6 +207,4 @@ class ServicioController extends Controller
             'data' => $query->get(), // 👈 TODOS, sin paginar
         ]);
     }
-
-    
 }

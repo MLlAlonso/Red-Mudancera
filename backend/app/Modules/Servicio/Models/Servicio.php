@@ -21,6 +21,7 @@ class Servicio extends Model
         'volumen',
         'origen',
         'destino',
+        'distancia_km',
         'inicio',
         'fin',
         'tipo_carga',

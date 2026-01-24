@@ -4,6 +4,7 @@ namespace App\Modules\Servicio\Services;
 
 use App\Modules\Servicio\Models\Servicio;
 use App\Modules\Empresa\Models\Empresa;
+use App\Services\Google\GoogleDistanceService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -14,9 +15,6 @@ class ServicioService
     {
         $hoy = Carbon::today();
 
-        /* ==============================
-         | NORMALIZAR FECHAS
-         ============================== */
         if ($data['tipo'] === 'ofrezco') {
             $inicio = Carbon::today();
             $fin = $this->calcularFechaFin($inicio, $data['rangoDias'] ?? '1-7');
@@ -25,9 +23,6 @@ class ServicioService
             $fin = Carbon::parse($data['fin']);
         }
 
-        /* ==============================
-         | ANTI-SPAM REAL
-         ============================== */
         $duplicadosHoy = Servicio::where('empresa_id', $empresa->id)
             ->where('tipo', $data['tipo'])
             ->where('volumen', $data['volumen'] ?? 0)
@@ -42,20 +37,23 @@ class ServicioService
         if ($duplicadosHoy >= 2) {
             throw ValidationException::withMessages([
                 'servicio' => [
-                    'Ya has publicado este mismo servicio más de 2 veces hoy. Intenta mañana o modifica los datos.'
+                    'Ya has publicado este mismo servicio más de 2 veces hoy.'
                 ],
             ]);
         }
 
-        /* ==============================
-         | CREAR SERVICIO
-         ============================== */
+        $distanciaKm = $this->distanceService->calcularKm(
+            $data['origen'],
+            $data['destino']
+        );
+
         return Servicio::create([
             'empresa_id' => $empresa->id,
             'tipo' => $data['tipo'],
             'volumen' => $data['volumen'] ?? null,
             'origen' => $data['origen'],
             'destino' => $data['destino'],
+            'distancia_km' => $distanciaKm,
             'inicio' => $inicio,
             'fin' => $fin,
             'tipo_carga' => $data['tipo_carga'],
@@ -84,11 +82,17 @@ class ServicioService
          | CAMBIAR ESTADO SERVICIO
         ============================== */
     public function changeEstado(Servicio $servicio, string $estado): Servicio
-{
-    $servicio->estado = $estado;
-    $servicio->save();
+    {
+        $servicio->estado = $estado;
+        $servicio->save();
 
-    return $servicio;
-}
+        return $servicio;
+    }
 
+    protected GoogleDistanceService $distanceService;
+
+    public function __construct(GoogleDistanceService $distanceService)
+    {
+        $this->distanceService = $distanceService;
+    }
 }

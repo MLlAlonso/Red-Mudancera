@@ -1,4 +1,4 @@
-@use "../../utils/variables" as *;
+@use "../../utils/variables";
 
 .carga {
     min-height: calc(100vh - 120px);
@@ -12,19 +12,19 @@
     }
 
     .title {
-        font-family: $font-title;
-        font-weight: 700;
+        font-family: variables.$font-title;
         font-size: 40px;
-        color: $title;
-        margin: 0;
+        font-weight: bold;
+        color: variables.$primary;
+        margin-bottom: 5px;
     }
 
     .subtitle {
-        font-family: $font-text;
-        font-weight: 400;
+        font-family: variables.$font-text;
+        color: variables.$text-muted;
         font-size: 22px;
-        color: $text-muted;
-        margin: 0;
+        margin-bottom: 25px;
+        text-align: justify;
     }
 
     &__actions {
@@ -56,6 +56,17 @@
     .carga {
         padding: 2rem 1rem;
 
+        .title {
+            font-size: 30px;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        &__subtitle {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
         &__actions {
             flex-direction: column;
         }
@@ -72,14 +83,6 @@
         &__info {
             font-size: 15px;
         }
-    }
-
-    .title {
-        font-size: 32px;
-    }
-
-    .subtitle {
-        font-size: 22px;
     }
 }
 

@@ -10,7 +10,6 @@
 <table width="100%" cellpadding="0" cellspacing="0">
   <tr>
     <td align="center" style="padding:40px 16px;">
-
       <table width="100%" cellpadding="0" cellspacing="0" style="max-width:500px;background:#ffffff;border-radius:14px;overflow:hidden;">
 
         <!-- Header -->
@@ -62,7 +61,6 @@
         </tr>
 
       </table>
-
     </td>
   </tr>
 </table>

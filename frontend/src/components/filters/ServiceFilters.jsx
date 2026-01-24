@@ -37,21 +37,21 @@ export default function ServiceFilters({ onChange }) {
         className={`filter-btn ${active === "todos" ? "active" : ""}`}
         onClick={() => handleClick("todos")}
       >
-        <img src="/icons/todos.png  " alt="Todos" />
+        <img src="/icons/todo.png  " alt="Todos" />
       </button>
 
       <button
         className={`filter-btn ${active === "busco" ? "active" : ""}`}
         onClick={() => handleClick("busco")}
       >
-        <img src="/icons/acuerdo_2.png" alt="Buscan" />
+        <img src="/icons/busco.png" alt="Buscan" />
       </button>
 
       <button
         className={`filter-btn ${active === "ofrezco" ? "active" : ""}`}
         onClick={() => handleClick("ofrezco")}
       >
-        <img src="/icons/leave.png" alt="Ofrecen" />
+        <img src="/icons/ofrezco.png" alt="Ofrecen" />
       </button>
 
     </div>

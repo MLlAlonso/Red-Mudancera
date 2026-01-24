@@ -37,6 +37,7 @@ export default function ServiceAdvancedFilters({
         placeholder="Ciudad de origen"
         value={localValues.origen}
         onChange={handleChange}
+        autocomplete
       />
 
       <Input
@@ -45,6 +46,7 @@ export default function ServiceAdvancedFilters({
         placeholder="Ciudad de destino"
         value={localValues.destino}
         onChange={handleChange}
+        autocomplete
       />
 
      {/*  <Input

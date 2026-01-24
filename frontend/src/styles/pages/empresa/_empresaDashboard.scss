@@ -50,13 +50,13 @@
             display: flex;
             flex-direction: row;
             align-items: center;
-            justify-content: space-between;
-            gap: 20px;
+            justify-content: center;
+            gap: 25px;
         }
 
         .btn-advanced-filters {
-            width: 50px;
-            height: 50px;
+            width: 130px;
+            height: 65px;
             border-radius: 10px;
             border: none;
             background: #d9d9d9;
@@ -65,8 +65,8 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
 
             img {
-                width: 30px;
-                height: 30px;
+                width: 60px;
+                height: 50px;
             }
 
             &:hover {
@@ -75,7 +75,7 @@
                 background: variables.$primary;
 
                 img {
-                    filter: brightness(0) invert(1);
+                    transform: scale(1.2);
                 }
             }
         }
@@ -108,7 +108,7 @@
         position: fixed;
         right: 30px;
         bottom: 400px;
-        z-index: 10;
+        z-index: 11;
         width: 60px;
         height: 60px;
         max-width: none;
@@ -132,12 +132,34 @@
 /* Mobile */
 @media (max-width: 600px) {
     .empresa-dashboard {
+
+        &__title {
+            font-size: 30px;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        &__subtitle {
+            text-align: justify;
+            margin-bottom: 10px;
+        }
+
         .btn_crud {
             right: 10px;
-            bottom: 250px;
-            width: 55px;
-            height: 55px;
-            font-size: 30px;
+            bottom: 350px;
+            width: 65px;
+            height: 65px;
+            font-size: 50px;
+        }
+
+        &__controls {
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-advanced-filters {
+            width: auto;
         }
     }
 }

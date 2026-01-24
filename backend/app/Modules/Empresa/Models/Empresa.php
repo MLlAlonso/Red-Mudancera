@@ -46,7 +46,6 @@ class Empresa extends Authenticatable
     // ===========================================
     // LOGO
     // ===========================================
-
     protected $appends = ['logo_url'];
 
     public function getLogoUrlAttribute()

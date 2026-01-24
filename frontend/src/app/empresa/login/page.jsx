@@ -5,6 +5,9 @@ import Image from "next/image";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Button_cta from "@/components/common/Button_cta";
+import RecoverPasswordModal from "@/components/modals/RecoverPasswordModal";
+import ConfirmRecoverModal from "@/components/modals/ConfirmRecoverModal";
+import MessageModal from "@/components/modals/MessageModal";
 import Link from "next/link";
 
 import "@/styles/pages/empresa/_empresaLogin.scss";
@@ -18,6 +21,11 @@ export default function EmpresaLogin() {
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [showRecover, setShowRecover] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [recoverEmail, setRecoverEmail] = useState("");
+  const [messageModal, setMessageModal] = useState(null);
 
   const handleChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
@@ -72,32 +80,14 @@ export default function EmpresaLogin() {
 
           {/* EMAIL */}
           <div className="empresa-login__input-wrapper">
-            <Image
-              src="/icons/mensaje.png"
-              alt="email icon"
-              width={24}
-              height={24}
-              className="empresa-login__icon"
-            />
+            <Image src="/icons/mensaje.png" alt="email icon" width={24} height={24} className="empresa-login__icon" />
 
-            <input
-              type="email"
-              placeholder="Correo empresa"
-              className="empresa-login__input"
-              value={formData.email}
-              onChange={(e) => handleChange("email", e.target.value)}
-            />
+            <input type="email" placeholder="Correo empresa" className="empresa-login__input" value={formData.email} onChange={(e) => handleChange("email", e.target.value)} />
           </div>
 
           {/* PASSWORD */}
           <div className="empresa-login__input-wrapper">
-            <Image
-              src="/icons/candado.png"
-              alt="lock icon"
-              width={24}
-              height={24}
-              className="empresa-login__icon"
-            />
+            <Image src="/icons/candado.png" alt="lock icon" width={24} height={24} className="empresa-login__icon" />
 
             <input
               type={showPass ? "text" : "password"}
@@ -126,11 +116,70 @@ export default function EmpresaLogin() {
           </p>
 
           {/* Olvidé contraseña */}
-          <p className="empresa-login__forgot">Olvidé mi contraseña</p>
+          <p className="empresa-login__forgot" onClick={() => setShowRecover(true)}>
+            Olvidé mi contraseña
+          </p>
+
         </div>
       </main>
 
       <Footer />
+
+      {showRecover && (
+        <RecoverPasswordModal
+          onClose={() => setShowRecover(false)}
+          onConfirm={(email) => {
+            setRecoverEmail(email);
+            setShowRecover(false);
+            setShowConfirm(true);
+          }}
+        />
+      )}
+
+      {showConfirm && (
+        <ConfirmRecoverModal
+          onCancel={() => setShowConfirm(false)}
+          onAccept={async () => {
+            setShowConfirm(false);
+
+            try {
+              const res = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/auth/recover-password`,
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    email: recoverEmail,
+                    from: "empresa",
+                  }),
+                }
+              );
+
+              const data = await res.json();
+
+              setMessageModal({
+                title: res.ok ? "Correo enviado" : "Atención",
+                message: data.message,
+              });
+
+            } catch (e) {
+              setMessageModal({
+                title: "Error",
+                message: "No se pudo conectar con el servidor.",
+              });
+            }
+          }}
+        />
+      )}
+
+      {messageModal && (
+        <MessageModal
+          title={messageModal.title}
+          message={messageModal.message}
+          onClose={() => setMessageModal(null)}
+        />
+      )}
+
     </>
   );
 }

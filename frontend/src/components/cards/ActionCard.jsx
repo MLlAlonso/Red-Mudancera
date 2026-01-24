@@ -8,7 +8,7 @@ const ActionCard = ({ type }) => {
   const isOfrezco = type === "ofrezco";
 
   const data = {
-    icon: isOfrezco ? "/icons/ofrece.png" : "/icons/busca.png",
+    icon: isOfrezco ? "/icons/ofrezco.png" : "/icons/busco.png",
     title: isOfrezco ? "Ofrezco" : "Busco",
     info: isOfrezco
       ? "Tengo carga para transportar"

@@ -92,60 +92,60 @@ export default function BuscoServicioPage() {
     }));
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const token = document.cookie
-    .split("; ")
-    .find(r => r.startsWith("token_empresa="))
-    ?.split("=")[1];
+    const token = document.cookie
+      .split("; ")
+      .find(r => r.startsWith("token_empresa="))
+      ?.split("=")[1];
 
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/servicios`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-  tipo: "busco",
-  volumen: form.volumen,
-  origen: form.origen,
-  destino: form.destino,
-  inicio: form.inicio,
-  fin: form.fin,
-  tipo_carga: form.tipoCarga,
-  nota: form.nota,
-  responsable_nombre: form.responsableNombre,
-  responsable_telefono: form.telefono,
-}),
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/servicios`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          tipo: "busco",
+          volumen: form.volumen,
+          origen: form.origen,
+          destino: form.destino,
+          inicio: form.inicio,
+          fin: form.fin,
+          tipo_carga: form.tipoCarga,
+          nota: form.nota,
+          responsable_nombre: form.responsableNombre,
+          responsable_telefono: form.telefono,
+        }),
 
-    });
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
-      const msg =
-        data?.errors?.servicio?.[0] ??
-        data?.message ??
-        "No se pudo publicar el servicio";
+      if (!res.ok) {
+        const msg =
+          data?.errors?.servicio?.[0] ??
+          data?.message ??
+          "No se pudo publicar el servicio";
 
+        setErrorModal({
+          show: true,
+          message: msg,
+        });
+        return;
+      }
+
+      router.push("/empresa/dashboard");
+    } catch (err) {
       setErrorModal({
         show: true,
-        message: msg,
+        message: "Error de conexión con el servidor",
       });
-      return;
     }
-
-    router.push("/empresa/dashboard");
-  } catch (err) {
-    setErrorModal({
-      show: true,
-      message: "Error de conexión con el servidor",
-    });
-  }
-};
+  };
 
 
   return (
@@ -158,8 +158,21 @@ const handleSubmit = async (e) => {
             <h1 className="title">Busco carga</h1>
 
             <Input label="Volumen" name="volumen" type="number" value={form.volumen} onChange={handleChange} />
-            <Input label="Origen" name="origen" value={form.origen} onChange={handleChange} />
-            <Input label="Destino" name="destino" value={form.destino} onChange={handleChange} />
+            <Input
+              label="Origen"
+              name="origen"
+              value={form.origen}
+              onChange={handleChange}
+              autocomplete
+            />
+
+            <Input
+              label="Destino"
+              name="destino"
+              value={form.destino}
+              onChange={handleChange}
+              autocomplete
+            />
 
             <label className="labels">Rango de salida</label>
             <DateRange

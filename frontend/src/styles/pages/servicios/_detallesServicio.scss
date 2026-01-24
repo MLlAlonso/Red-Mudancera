@@ -10,7 +10,7 @@
     max-width: 1100px;
     width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     margin-bottom: 1rem;
     justify-content: space-between;
   }
@@ -18,14 +18,17 @@
   &__title {
     font-family: variables.$font-title;
     font-size: 40px;
+    font-weight: bold;
     color: variables.$primary;
+    margin-bottom: 5px;
   }
 
   &__subtitle {
     font-family: variables.$font-text;
     color: variables.$text-muted;
-    margin-bottom: 30px;
     font-size: 22px;
+    margin-bottom: 25px;
+    text-align: justify;
   }
 
   &__card {
@@ -90,7 +93,7 @@
 
   label {
     font-family: variables.$font-text;
-    font-size: 28px;
+    font-size: 30px;
     font-weight: 400;
     color: variables.$primary;
     margin-right: 20px;
@@ -99,7 +102,7 @@
   span,
   p {
     font-family: variables.$font-text;
-    font-size: 20px;
+    font-size: 25px;
     color: #4a5e71;
   }
 
@@ -118,7 +121,7 @@
     }
 
     img {
-      width: 50px;
+      width: 60px;
       height: 50px;
       margin: 0 16px;
       opacity: 0.7;
@@ -141,33 +144,32 @@
       font-weight: 600;
     }
 
-    &:hover  {
+    &:hover {
       transform: scale(1.1);
     }
   }
 
-}
+  &__actions {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    justify-content: space-evenly;
 
-.detalle-servicio__actions {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  justify-content: space-evenly;
+    .btn_crud {
+      font-size: 20px;
+    }
+  }
 
-  .btn_crud {
-    font-size: 20px;
+  .reputacion {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    color: #f5a623; // dorado estrella
   }
 }
 
-.reputacion {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-weight: 600;
-  color: #f5a623; // dorado estrella
-}
-
-.estado-badge {
+/* .estado-badge {
   margin-top: 8px;
   padding: 6px 6px;
   border-radius: 8px;
@@ -191,10 +193,11 @@
 
 .estado-finalizado {
   background: rgba(143, 9, 6, 0.3);
-  color: variables.$text
+  color: variables.$text;
 }
 
 /* Responsive */
+
 @media (max-width: 1024px) {
   .detalle-servicio {
     padding: 2.5rem 1.5rem;
@@ -203,25 +206,8 @@
       padding: 2rem;
     }
 
-    &__title {
-      font-size: 36px;
-    }
-
-    &__subtitle {
-      font-size: 20px;
-    }
-
     &__route-title {
       font-size: 36px;
-    }
-
-    label {
-      font-size: 24px;
-    }
-
-    span,
-    p {
-      font-size: 18px;
     }
 
     .service-card__tag {
@@ -237,14 +223,6 @@
     &__card {
       padding: 1.5rem;
       gap: 1rem;
-    }
-
-    &__title {
-      font-size: 28px;
-    }
-
-    &__subtitle {
-      font-size: 18px;
     }
 
     &__route {
@@ -267,44 +245,19 @@
         align-items: center;
         justify-content: space-between;
 
-        #salida {
+        #salida, #vendedor {
           white-space: nowrap;
         }
       }
     }
 
-
-
-
-
-
-
-
-
     &__divider {
       margin: 10px 0;
 
       img {
-        width: 40px;
+        width: 45px;
         height: 40px;
       }
-    }
-
-
-
-
-
-
-
-
-    label {
-      font-size: 24px;
-      margin-right: 10px;
-    }
-
-    span,
-    p {
-      font-size: 20px;
     }
 
     .service-card__tag {
@@ -327,7 +280,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .detalle-servicio {
     padding: 1.5rem 1rem;
 
@@ -337,12 +290,14 @@
     }
 
     &__title {
-      font-size: 24px;
+      font-size: 30px;
+      text-align: center;
+      margin-bottom: 5px;
     }
 
     &__subtitle {
-      font-size: 16px;
-      margin-bottom: 20px;
+      text-align: center;
+      margin-bottom: 10px;
     }
 
     &__route-title {
@@ -350,7 +305,7 @@
     }
 
     label {
-      font-size: 16px;
+      font-size: 20px;
       margin-right: 5px;
       display: block;
       margin-bottom: 5px;
@@ -358,21 +313,31 @@
 
     span,
     p {
-      font-size: 14px;
+      font-size: 18px;
     }
 
-    .service-card__tag {
-      font-size: 16px;
-      min-width: 80px;
-      max-width: 80px;
-      height: 30px;
-      line-height: 30px;
-    }
-
-    .detalle-servicio__actions {
-      flex-direction: column;
-      justify-content: center;
+    .detalle-servicio__route-tags {
       align-items: center;
+
+      .service-card__tag {
+        font-size: 16px;
+        min-width: 80px;
+        max-width: 80px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+      }
+
+      .btn_crud {
+        font-size: 16px;
+        min-width: 100px;
+        max-width: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
     }
   }
 }

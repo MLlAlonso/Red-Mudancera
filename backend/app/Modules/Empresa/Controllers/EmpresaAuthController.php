@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use App\Modules\Empresa\Mail\EmpresaVerificationCode;
 use App\Models\EmailVerification;
 use App\Modules\Usuario\Models\Usuario;
+use App\Modules\Empresa\Mail\EmpresaWelcomeMail;
 
 class EmpresaAuthController extends Controller
 {
@@ -68,7 +69,6 @@ class EmpresaAuthController extends Controller
         // TOKEN
         // =============================
         $token = $empresa->createToken('api-token')->plainTextToken;
-
         return response()->json([
             'message' => 'Empresa registrada correctamente. Verifica tu correo.',
             'empresa' => $empresa,
@@ -82,7 +82,6 @@ class EmpresaAuthController extends Controller
     public function login(LoginEmpresaRequest $request)
     {
         $empresa = Empresa::where('email', $request->email)->first();
-
         if (!$empresa || !Hash::check($request->password, $empresa->password)) {
             throw ValidationException::withMessages([
                 'email' => ['Las credenciales son incorrectas.'],
@@ -91,13 +90,10 @@ class EmpresaAuthController extends Controller
 
         // Eliminar tokens anteriores
         $empresa->tokens()->delete();
-
         // Crear token nuevo
         $token = $empresa->createToken('api-token')->plainTextToken;
-
         // Agregar logo_url SIEMPRE
         $empresa->append('logo_url');
-
         return response()->json([
             'message' => 'Inicio de sesión exitoso',
             'empresa' => $empresa,
@@ -111,7 +107,6 @@ class EmpresaAuthController extends Controller
     public function sendVerificationCode(Request $request)
     {
         $request->validate(['email' => 'required|email']);
-
         $code = rand(100000, 999999);
 
         EmailVerification::updateOrCreate(
@@ -126,7 +121,6 @@ class EmpresaAuthController extends Controller
         );
 
         Mail::to($request->email)->send(new EmpresaVerificationCode($code));
-
         return response()->json(['message' => 'Código enviado exitosamente']);
     }
 
@@ -153,9 +147,12 @@ class EmpresaAuthController extends Controller
         }
 
         $empresa = Empresa::where('email', $request->email)->first();
-
         $empresa->email_verified_at = now();
         $empresa->save();
+
+        Mail::to($empresa->email)->send(
+            new EmpresaWelcomeMail($empresa)
+        );
 
         $record->delete();
 

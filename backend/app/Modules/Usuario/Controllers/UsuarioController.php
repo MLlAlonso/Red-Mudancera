@@ -47,14 +47,12 @@ class UsuarioController extends Controller
         ]);
     }
 
-
     /**
      * Actualizar perfil
      */
     public function update(UsuarioUpdateRequest $request)
     {
         $user = Auth::user();
-
         $data = $request->validated();
 
         if ($request->hasFile('avatar')) {
@@ -82,17 +80,14 @@ class UsuarioController extends Controller
     public function destroy()
     {
         $user = Auth::user();
-
         if (! $user instanceof Usuario) {
             return response()->json(['message' => 'Acceso no autorizado'], 403);
         }
 
         // borrar tokens
         $user->tokens()->delete();
-
         // borrar user
         $user->delete();
-
         return response()->json(['message' => 'Usuario eliminado correctamente']);
     }
 
@@ -102,7 +97,6 @@ class UsuarioController extends Controller
     public function listByEmpresa()
     {
         $user = Auth::user();
-
         if (!$user instanceof Usuario) {
             return response()->json(['message' => 'Acceso no autorizado'], 403);
         }

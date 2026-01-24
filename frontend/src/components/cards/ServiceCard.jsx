@@ -15,7 +15,9 @@ export default function ServiceCard({
   fecha = "",
   showContact = true,
   onChangeEstado = null,
+  distanciaKm = null,
 }) {
+
   const router = useRouter();
   const isOffer = type === "ofrezco";
 
@@ -35,8 +37,9 @@ export default function ServiceCard({
         </h2>
       </div>
 
-      <p className="service-card__info">Volumen: {volumen}</p>
+      <p className="service-card__info"> Volumen: {volumen} </p>
       <p className="service-card__info">{empresa}</p>
+      {distanciaKm && ( <p className="service-card__info" id="kilometros"> {distanciaKm} km </p>)}
       <p className="service-card__date">Publicado el {fecha}</p>
 
       <div className="service-card__actions">

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Modules\Empresa\Requests\EmpresaUpdateRequest;
 use App\Modules\Usuario\Models\Usuario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Modules\Empresa\Mail\EmpresaGoodbyeMail;
 
 class EmpresaController extends Controller
 {
@@ -15,7 +17,6 @@ class EmpresaController extends Controller
     public function me(Request $request)
     {
         $empresa = $request->user();
-
         if (! $empresa) {
             return response()->json(['message' => 'No autenticado'], 401);
         }
@@ -43,7 +44,6 @@ class EmpresaController extends Controller
 
         // Forzar atributo calculado
         $empresa->append('logo_url');
-
         return response()->json([
             'message' => 'Empresa actualizada correctamente',
             'empresa' => $empresa
@@ -56,9 +56,13 @@ class EmpresaController extends Controller
     public function destroy(Request $request)
     {
         $empresa = $request->user();
+
+        Mail::to($empresa->email)->send(
+            new EmpresaGoodbyeMail($empresa)
+        );
+
         $empresa->tokens()->delete();
         $empresa->delete();
-
         return response()->json([
             'message' => 'La empresa ha sido eliminada permanentemente.'
         ]);
@@ -70,7 +74,6 @@ class EmpresaController extends Controller
     public function usuariosEmpresa(Request $request)
     {
         $empresa = $request->user();
-
         $usuarios = Usuario::where('empresa_id', $empresa->id)
             ->orderBy('created_at', 'DESC')
             ->get();
@@ -84,7 +87,6 @@ class EmpresaController extends Controller
     public function eliminarUsuario($id, Request $request)
     {
         $empresa = $request->user();
-
         $usuario = Usuario::where('id', $id)
             ->where('empresa_id', $empresa->id)
             ->first();
@@ -95,7 +97,6 @@ class EmpresaController extends Controller
 
         $usuario->tokens()->delete();
         $usuario->delete();
-
         return response()->json(['message' => 'Usuario eliminado correctamente']);
     }
 
@@ -105,7 +106,6 @@ class EmpresaController extends Controller
     public function pausarUsuario($id, Request $request)
     {
         $empresa = $request->user();
-
         $usuario = Usuario::where('empresa_id', $empresa->id)
             ->where('id', $id)
             ->first();
@@ -116,7 +116,6 @@ class EmpresaController extends Controller
 
         $usuario->activoEmpresa = false;
         $usuario->save();
-
         return response()->json(['message' => 'Usuario pausado correctamente']);
     }
 
@@ -126,7 +125,6 @@ class EmpresaController extends Controller
     public function reanudarUsuario($id, Request $request)
     {
         $empresa = $request->user();
-
         $usuario = Usuario::where('empresa_id', $empresa->id)
             ->where('id', $id)
             ->first();
@@ -137,7 +135,6 @@ class EmpresaController extends Controller
 
         $usuario->activoEmpresa = true;
         $usuario->save();
-
         return response()->json(['message' => 'Usuario reanudado correctamente']);
     }
 }

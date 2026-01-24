@@ -155,8 +155,10 @@ const handleSubmit = async (e) => {
             </div>
 
             <Input label="Volumen" name="volumen" type="number" value={form.volumen} onChange={handleChange} />
-            <Input label="Origen" name="origen" value={form.origen} onChange={handleChange} />
-            <Input label="Destino" name="destino" value={form.destino} onChange={handleChange} />
+
+
+            <Input label="Origen" name="origen" value={form.origen} onChange={handleChange} autocomplete />
+            <Input label="Destino" name="destino" value={form.destino} onChange={handleChange} autocomplete />
 
             <div className="input-group">
               <label className="input-group__label">Plazo máximo de entrega</label>

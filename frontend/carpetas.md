@@ -1,12 +1,11 @@
 frontend/
-├── 📄 .eslintrc.mjs
-├── 📄 .gitignore
+├── 📄 .env.local
+├── 📄 carpetas.md                      # (este archivo) [frontend/carpetas.md](frontend/carpetas.md)
 ├── 📄 eslint.config.mjs
 ├── 📄 jsconfig.json
 ├── 📄 next.config.js
 ├── 📄 package.json
-├── 📄 package-lock.json
-├── 📄 carpetas.md                      # (este archivo) [frontend/carpetas.md](frontend/carpetas.md)
+├── 📁 .next/
 │
 ├── 📁 public/                          # Archivos públicos estáticos
 │   ├── 📁 icons/

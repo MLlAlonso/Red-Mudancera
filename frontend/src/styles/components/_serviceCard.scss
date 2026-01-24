@@ -26,18 +26,26 @@
     }
 
     &__tag {
-        display: inline-block;
-        background: variables.$primary-hover;
-        color: white;
-        border-radius: 10px;
-        font-size: 26px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+
+        background: transparent;
+        color: variables.$primary;
+        font-size: 30px;
         font-weight: 600;
-        text-align: center;
-        min-width: 120px;
-        max-width: 120px;
-        height: 40px;
-        line-height: 40px;
+
         margin-bottom: 10px;
+        padding: 0;
+
+        &::before {
+            content: "";
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: variables.$primary;
+            display: inline-block;
+        }
     }
 
     &__route {
@@ -50,6 +58,10 @@
     &__info {
         font-size: 20px;
         margin: 2px 0;
+    }
+
+    #kilometros {
+        font-size: 18px;
     }
 
     &__date {
@@ -107,7 +119,7 @@
                 height: 30px;
             }
 
-            span{
+            span {
                 font-size: 16px;
             }
         }
@@ -120,9 +132,14 @@
     border-left: 10px solid variables.$success;
 
     .service-card__tag {
-        background: variables.$success;
+        color: variables.$success;
+
+        &::before {
+            background: variables.$success;
+        }
     }
 }
+
 
 /* RESPONSIVE  */
 @media (max-width: 600px) {
@@ -137,11 +154,12 @@
         }
 
         &__tag {
-            font-size: 26px;
-            min-width: 120px;
-            max-width: 120px;
-            height: 50px;
-            line-height: 50px;
+            font-size: 30px;
+
+            &::before {
+                width: 20px;
+                height: 20px;
+            }
         }
 
         &__route {

@@ -23,8 +23,8 @@ export default function CargaPage() {
       <main className="carga">
         <div className="carga__container">
           <div className="carga__header">
-            <h1 className="title">Creación de Servicios</h1>
-            <h2 className="subtitle">Búsqueda u Oferta de Carga</h2>
+            <h1 className="title">¿Qué necesitas hoy?</h1>
+            <h2 className="subtitle">Publica menaje o encuentra volumen disponible, aprovecha cada m3 de tu unidad.</h2>
           </div>
 
           <div className="carga__actions">

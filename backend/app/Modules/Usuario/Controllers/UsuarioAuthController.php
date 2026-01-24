@@ -64,28 +64,28 @@ class UsuarioAuthController extends Controller
     {
         $usuario = Usuario::where('email', $request->email)->first();
 
-        // ❌ Usuario no existe
+        // Usuario no existe
         if (! $usuario) {
             return response()->json([
                 'message' => 'No se encontraron coincidencias con este correo.'
             ], 404);
         }
 
-        // ❌ Contraseña incorrecta
+        // Contraseña incorrecta
         if (! Hash::check($request->password, $usuario->password)) {
             return response()->json([
                 'message' => 'Credenciales incorrectas.'
             ], 401);
         }
 
-        // ⛔ Usuario pausado por empresa
+        // Usuario pausado por empresa
         if ($usuario->activoEmpresa === 0) {
             return response()->json([
                 'message' => 'Has sido pausado por tu empresa. Contacta a tu administrador.'
             ], 403);
         }
 
-        // ✅ Login válido → crear token
+        // Login válido → crear token
         $token = $usuario->createToken('usuario_token')->plainTextToken;
 
         return response()->json([
@@ -94,7 +94,6 @@ class UsuarioAuthController extends Controller
             'usuario' => $usuario
         ]);
     }
-
 
     /**
      * Reenviar código de verificación

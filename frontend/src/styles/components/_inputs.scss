@@ -62,4 +62,9 @@
       border-color: variables.$primary;
     }
   }
+
+  textarea {
+    resize: vertical;
+    min-height: 120px !important;
+  }
 }

@@ -81,9 +81,9 @@ export default function MisServiciosEmpresa() {
 
             <main className="empresa-dashboard">
                 <div className="empresa-dashboard__header">
-                    <h1 className="empresa-dashboard__title">Mis publicaciones</h1>
+                    <h1 className="empresa-dashboard__title">Publicaciones activas</h1>
                     <p className="empresa-dashboard__subtitle">
-                        Todos los servicios publicados por tu empresa
+                        Aquí puedes ver y editar todos tus servicios publicados
                     </p>
                 </div>
 
@@ -91,28 +91,26 @@ export default function MisServiciosEmpresa() {
                     <div className="empresa-dashboard__left">
                         <ServiceFilters onChange={setFilter} />
 
-                        <Button_crud
-                            value="Agregar"
-                            onClick={() => (window.location.href = "/empresa/cargas")}
-                        />
+
                     </div>
-
-                    <SearchBar
-                        value={search}
-                        onChange={setSearch}
-                        onFilterClick={() => setShowFilters(true)}
-                    />
                 </div>
+                {/* =========================
+            Button CRUD
+        ========================= */}
+                <Button_crud
+                    value="+"
+                    onClick={() => (window.location.href = "/empresa/cargas")}
+                />
 
+                {/* =========================
+            Advanced filters overlay
+        ========================= */}
                 {showFilters && (
                     <div className="filters-overlay">
                         <ServiceAdvancedFilters
-                            values={draftFilters}
-                            onChange={setDraftFilters}
-                            onApply={() => {
-                                setAppliedFilters(draftFilters);
-                                setShowFilters(false);
-                            }}
+                            values={filters}
+                            onChange={setFilters}
+                            onApply={() => setShowFilters(false)}
                             onClose={() => setShowFilters(false)}
                         />
                     </div>
@@ -141,8 +139,6 @@ export default function MisServiciosEmpresa() {
                                     setShowEstadoModal(true);
                                 }}
                             />
-
-
                         ))}
                 </div>
             </main>

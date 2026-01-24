@@ -153,7 +153,7 @@ export default function EmpresaEditar() {
           <Input label="RFC" name="rfc" value={form.rfc} onChange={handleChange} />
           <Input label="Representante" name="representante" value={form.representante} onChange={handleChange} />
           <Input label="Teléfono" name="telefono" value={form.telefono} onChange={handleChange} />
-          <Input label="Sede" name="base" value={form.base} onChange={handleChange} />
+          <Input label="Sede" name="base" value={form.base} onChange={handleChange} autocomplete/>
 
           <div className="input-group">
             <label className="input-group__label">Descripción</label>
