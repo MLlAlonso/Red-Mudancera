@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\DB;
 use App\Modules\Empresa\Models\Empresa;
 use App\Models\EmailVerification;
 
+use App\Modules\Usuario\Mail\UsuarioWelcomeMail;
+
+
 class UsuarioAuthController extends Controller
 {
     /**
@@ -49,7 +52,9 @@ class UsuarioAuthController extends Controller
             'expires_at' => Carbon::now()->addMinutes(15),
         ]);
 
-        Mail::to($usuario->email)->send(new UsuarioVerificationCode($code));
+        Mail::to($usuario->email)->send(
+            new UsuarioWelcomeMail($empresa->empresa)
+        );
 
         return response()->json([
             'message' => 'Usuario creado. Verifica tu correo.',

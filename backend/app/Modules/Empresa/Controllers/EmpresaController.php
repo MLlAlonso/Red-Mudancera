@@ -7,7 +7,9 @@ use App\Modules\Empresa\Requests\EmpresaUpdateRequest;
 use App\Modules\Usuario\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
 use App\Modules\Empresa\Mail\EmpresaGoodbyeMail;
+use App\Modules\Usuario\Mail\UsuarioGoodbyeMail;
 
 class EmpresaController extends Controller
 {
@@ -34,16 +36,28 @@ class EmpresaController extends Controller
         $empresa = $request->user();
         $data = $request->validated();
 
-        // Subir logo (PUBLICO)
+        /**
+         * Logo (opcional)
+         */
         if ($request->hasFile('logo')) {
             $path = $request->file('logo')->store('logos', 'public');
             $data['logo'] = $path;
         }
 
+        /**
+         * Password (opcional)
+         * SOLO si viene en el request
+         */
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        } else {
+            unset($data['password']);
+        }
+
         $empresa->update($data);
 
-        // Forzar atributo calculado
         $empresa->append('logo_url');
+
         return response()->json([
             'message' => 'Empresa actualizada correctamente',
             'empresa' => $empresa
@@ -95,6 +109,7 @@ class EmpresaController extends Controller
             return response()->json(['message' => 'Usuario no encontrado'], 404);
         }
 
+        Mail::to($usuario->email)->send(new UsuarioGoodbyeMail());
         $usuario->tokens()->delete();
         $usuario->delete();
         return response()->json(['message' => 'Usuario eliminado correctamente']);

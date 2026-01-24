@@ -13,7 +13,6 @@ import UserCard from "@/components/cards/UserCard";
 
 import UserCardSkeleton from "@/components/skeletons/UserCardSkeleton";
 
-
 import "@/styles/pages/empresa/_empresaUsuarios.scss";
 
 export default function EmpresaUsuarios() {
@@ -149,7 +148,6 @@ export default function EmpresaUsuarios() {
   const handlePauseToggle = async (id) => {
     const token = getCookie("token_empresa");
     const usuario = usuarios.find((u) => u.id === id);
-
     const endpoint = usuario.activoEmpresa ? "pausar" : "reanudar";
 
     await fetch(

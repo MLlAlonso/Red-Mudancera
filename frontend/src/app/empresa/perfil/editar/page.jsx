@@ -31,6 +31,10 @@ export default function EmpresaEditar() {
     base: "",
     rfc: "",
     logo: null,
+
+    // NUEVOS
+    password: "",
+    password_confirmation: "",
   });
 
   const [previewLogo, setPreviewLogo] = useState(null);
@@ -65,7 +69,12 @@ export default function EmpresaEditar() {
           base: data.base || "",
           rfc: data.rfc || "",
           logo: null,
+
+          // MANTENER
+          password: "",
+          password_confirmation: "",
         });
+
         setPreviewLogo(data.logo_url || "/icons/user-placeholder.png");
         setLoading(false);
       })
@@ -150,10 +159,14 @@ export default function EmpresaEditar() {
         <form className="empresa-editar__form" onSubmit={handleSubmit}>
           <Input label="Nombre" name="empresa" value={form.empresa} onChange={handleChange} />
           <Input label="Correo" type="email" name="email" value={form.email} onChange={handleChange} />
+          <Input label="Nueva contraseña" type="password" name="password" placeholder="Dejar vacío para no cambiar" value={form.password} onChange={handleChange} />
+          <Input label="Confirmar contraseña" type="password" name="password_confirmation" placeholder="Repite la contraseña" value={form.password_confirmation} onChange={handleChange} />
+
+
           <Input label="RFC" name="rfc" value={form.rfc} onChange={handleChange} />
           <Input label="Representante" name="representante" value={form.representante} onChange={handleChange} />
           <Input label="Teléfono" name="telefono" value={form.telefono} onChange={handleChange} />
-          <Input label="Sede" name="base" value={form.base} onChange={handleChange} autocomplete/>
+          <Input label="Sede" name="base" value={form.base} onChange={handleChange} autocomplete />
 
           <div className="input-group">
             <label className="input-group__label">Descripción</label>

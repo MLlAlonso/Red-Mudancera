@@ -57,12 +57,29 @@
 
 .modal-body {
   gap: 0px;
-  
+
   .Button_success,
   .Button_error,
   input {
     margin-bottom: 0px;
     margin-top: 0px;
+  }
+
+  #modal_email {
+    width: 100%;
+    padding: 14px 18px;
+    background: #ffffff;
+    border: none;
+    border-radius: 12px;
+    font-family: variables.$font-text;
+    font-size: 20px;
+    color: #000;
+    outline: none;
+    padding-left: 55px !important;
+    
+    &::placeholder {
+      color: variables.$text-muted;
+    }
   }
 }
 
@@ -75,7 +92,7 @@
   }
 }
 
-#review_link{
+#review_link {
   font-size: 12px;
 }
 

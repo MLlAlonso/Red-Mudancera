@@ -76,17 +76,14 @@ export default function UsuarioLogin() {
             <main className="usuario-login">
                 <div className="usuario-login__form">
                     <h1 className="usuario-login__title">Iniciar sesión</h1>
+                    <p className="usuario-login__hint">
+                        ¿Tu empresa te dio acceso? Usa el correo proporcionado
+                    </p>
 
                     {error && <p className="usuario-login__error">{error}</p>}
 
                     <div className="usuario-login__input-wrapper">
-                        <Image
-                            src="/icons/mensaje.png"
-                            alt="email icon"
-                            width={24}
-                            height={24}
-                        />
-
+                        <Image src="/icons/mensaje.png" alt="email icon" width={24} height={24}/>
                         <input
                             type="email"
                             placeholder="Correo"
@@ -97,13 +94,7 @@ export default function UsuarioLogin() {
                     </div>
 
                     <div className="usuario-login__input-wrapper">
-                        <Image
-                            src="/icons/candado.png"
-                            alt="password icon"
-                            width={24}
-                            height={24}
-                        />
-
+                        <Image src="/icons/candado.png" alt="password icon" width={24} height={24}/>
                         <input
                             type={showPass ? "text" : "password"}
                             placeholder="Contraseña"
@@ -123,6 +114,7 @@ export default function UsuarioLogin() {
                     <Button_cta
                         value={loading ? "Iniciando..." : "Iniciar sesión"}
                         onClick={handleSubmit}
+                        id="btnLog"
                     />
 
                     <p className="usuario-login__forgot" onClick={() => setShowRecover(true)} >

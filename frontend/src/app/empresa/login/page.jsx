@@ -75,6 +75,9 @@ export default function EmpresaLogin() {
       <main className="empresa-login">
         <div className="empresa-login__form">
           <h1 className="empresa-login__title">Iniciar sesión</h1>
+          <p className="empresa-login__hint">
+            Administra tu perfil, servicios y equipo desde aquí
+          </p>
 
           {error && <p className="empresa-login__error">{error}</p>}
 

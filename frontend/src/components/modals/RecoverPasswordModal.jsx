@@ -20,6 +20,7 @@ export default function RecoverPasswordModal({ onClose, onConfirm }) {
           type="email"
           placeholder="Correo electrónico"
           value={email}
+          id="modal_email"
           onChange={(e) => setEmail(e.target.value)}
         />
 

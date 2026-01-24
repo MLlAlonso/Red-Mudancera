@@ -5,9 +5,12 @@ namespace App\Modules\Usuario\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Usuario\Models\Usuario;
 use App\Modules\Usuario\Requests\UsuarioUpdateRequest;
+use App\Modules\Usuario\Mail\UsuarioGoodbyeMail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+
+use Illuminate\Support\Facades\Mail;
 
 class UsuarioController extends Controller
 {
@@ -83,6 +86,8 @@ class UsuarioController extends Controller
         if (! $user instanceof Usuario) {
             return response()->json(['message' => 'Acceso no autorizado'], 403);
         }
+
+        Mail::to($user->email)->send(new UsuarioGoodbyeMail());
 
         // borrar tokens
         $user->tokens()->delete();

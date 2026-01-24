@@ -75,10 +75,10 @@ export default function DetalleServicioPage() {
 
       <main className="detalle-servicio">
         <div className="detalle-servicio__header">
-            <h1 className="detalle-servicio__title">Detalle de servicio</h1>
-            <p className="detalle-servicio__subtitle">
-              Información detallada del servicio
-            </p>
+          <h1 className="detalle-servicio__title">Detalle de servicio</h1>
+          <p className="detalle-servicio__subtitle">
+            Información detallada del servicio
+          </p>
         </div>
 
         <div className="detalle-servicio__card">
@@ -185,29 +185,25 @@ export default function DetalleServicioPage() {
             <p>{servicio.nota || "Sin nota adicional"}</p>
           </div>
 
-
-
-          <div className="detalle-servicio__actions">
-            <Button_cta
-              value="Contactar"
-              icon="/icons/whatsapp.png"
-              iconAlt="WhatsApp"
-              onClick={() =>
-                openWhatsappMessage({
-                  telefono: telefonoContacto,
-                  tipo: isOffer ? "Ofrezco" : "Busco",
-                  origen: servicio.origen,
-                  destino: servicio.destino,
-                  volumen: `${servicio.volumen} m³`,
-                  servicioId: servicio.id,
-                })
-              }
-            />
-
-
-
-          </div>
-
+          {!isOwner && (
+            <div className="detalle-servicio__actions">
+              <Button_cta
+                value="Contactar"
+                icon="/icons/whatsapp.png"
+                iconAlt="WhatsApp"
+                onClick={() =>
+                  openWhatsappMessage({
+                    telefono: telefonoContacto,
+                    tipo: isOffer ? "Ofrezco" : "Busco",
+                    origen: servicio.origen,
+                    destino: servicio.destino,
+                    volumen: `${servicio.volumen} m³`,
+                    servicioId: servicio.id,
+                  })
+                }
+              />
+            </div>
+          )}
 
         </div>
       </main>
