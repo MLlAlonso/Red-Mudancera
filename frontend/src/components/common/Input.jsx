@@ -13,7 +13,6 @@ export default function Input({
 }) {
   const [showPassword, setShowPassword] = useState(false);
   const inputRef = useRef(null);
-
   const isPasswordField = type === "password";
   const inputType = isPasswordField && showPassword ? "text" : type;
 
@@ -84,12 +83,7 @@ export default function Input({
         />
 
         {isPasswordField && (
-          <img
-            src={showPassword ? "/icons/eye_off.png" : "/icons/eye.png"}
-            alt="toggle password"
-            className="input-group__icon"
-            onClick={() => setShowPassword(!showPassword)}
-          />
+          <img src={showPassword ? "/icons/eye_off.png" : "/icons/eye.png"} alt="toggle password" className="input-group__icon" onClick={() => setShowPassword(!showPassword)} />
         )}
       </div>
     </div>

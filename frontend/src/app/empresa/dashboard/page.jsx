@@ -123,7 +123,6 @@ export default function EmpresaDashboard() {
             Controls
         ========================= */}
         <div className="empresa-dashboard__controls">
-          <div className="empresa-dashboard__left">
             <ServiceFilters onChange={setFilter} />
 
             {/* Botón filtros avanzados / borrar */}
@@ -154,7 +153,6 @@ export default function EmpresaDashboard() {
                 }
               />
             </button>
-          </div>
         </div>
 
         {/* =========================

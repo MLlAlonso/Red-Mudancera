@@ -5,7 +5,6 @@ import useClickOutside from "@/hooks/useClickOutside";
 
 export default function BaseModal({ onClose, children }) {
   const modalRef = useRef(null);
-
   useClickOutside(modalRef, onClose);
 
   return (

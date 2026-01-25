@@ -10,11 +10,7 @@ export default function Button_cta({
   return (
     <button className="btn_cta" type={type} onClick={onClick}>
       {icon && (
-        <img
-          src={icon}
-          alt={iconAlt}
-          className="btn_cta__icon"
-        />
+        <img src={icon} alt={iconAlt} className="btn_cta__icon" />
       )}
       <span>{value}</span>
     </button>

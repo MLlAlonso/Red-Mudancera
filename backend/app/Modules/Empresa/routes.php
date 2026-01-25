@@ -10,7 +10,6 @@ Route::prefix('empresa')->group(function () {
 
     Route::post('/register', [EmpresaAuthController::class, 'register']);
     Route::post('/login',    [EmpresaAuthController::class, 'login']);
-
     Route::post('/send-verification', [EmpresaAuthController::class, 'sendVerificationCode']);
     Route::post('/verify-code',       [EmpresaAuthController::class, 'verifyCode']);
 

@@ -145,7 +145,6 @@ class ServicioController extends Controller
         }
 
         $servicio->update($data);
-
         return response()->json([
             'message' => 'Servicio actualizado correctamente',
             'data' => $servicio->fresh(),

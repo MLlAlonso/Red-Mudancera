@@ -42,7 +42,6 @@ export default function ChangeServiceStatusModal({
       }
 
       const json = await res.json();
-
       onUpdated(json.data);
       onClose();
     } catch (err) {
@@ -58,19 +57,12 @@ export default function ChangeServiceStatusModal({
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <h2 className="modal-title">Cambiar estado de servicio</h2>
 
-        <p className="modal-message">
-          Selecciona el nuevo estado del servicio.
-        </p>
+        <p className="modal-message"> Selecciona el nuevo estado del servicio. </p>
 
         <select
           value={estado}
           onChange={(e) => setEstado(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "10px",
-            borderRadius: "8px",
-            marginBottom: "16px",
-          }}
+          style={{ width: "100%", padding: "10px", borderRadius: "8px", marginBottom: "16px", }}
         >
           <option value="activo">Activo</option>
           <option value="asignado">Asignado</option>

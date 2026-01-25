@@ -14,7 +14,6 @@ class ServicioRepository
             ->whereDate('fin', '>=', Carbon::today())
             ->orderBy('updated_at', 'desc');
 
-
         /* ============================
          | BUSQUEDA GENERAL
          ============================ */

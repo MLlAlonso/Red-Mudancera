@@ -69,7 +69,6 @@ export default function MisServiciosEmpresa() {
             .finally(() => setLoading(false));
     }, [search, appliedFilters]);
 
-
     const visible =
         filter === "todos"
             ? services
@@ -90,8 +89,6 @@ export default function MisServiciosEmpresa() {
                 <div className="empresa-dashboard__controls">
                     <div className="empresa-dashboard__left">
                         <ServiceFilters onChange={setFilter} />
-
-
                     </div>
                 </div>
                 {/* =========================

@@ -1,32 +1,51 @@
+@use "./../utils/variables";
+
 .error-page {
-  height: 100vh;
+  min-height: calc(100vh - 120px);
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  background: variables.$background;
+}
+
+.error-card {
+  max-width: 420px;
+  padding: 32px;
+  border-radius: 12px;
+  background: variables.$cards;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
   text-align: center;
 
-  h1 {
-    font-family: Nunito;
-    font-size: 64px;
-    font-weight: bold;
-    color: #09233E;
-  }
+  button{
+    background: variables.$primary;
 
-  p {
-    font-family: Inter;
-    font-size: 22px;
-    color: #6F7F8D;
-    margin-top: 12px;
-  }
-
-  button {
-    margin-top: 24px;
-    padding: 10px 24px;
-    border-radius: 8px;
-    border: none;
-    background: #09233E;
-    color: #fff;
-    cursor: pointer;
+    &:hover{
+      background: variables.$primary-hover;
+    }
   }
 }
+
+.error-title {
+  font-size: 30px;
+  margin-bottom: 12px;
+  color: variables.$primary;
+}
+
+.error-text {
+  font-size: 20px;
+  color: variables.$text;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.error-link {
+  color: variables.$primary;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+
