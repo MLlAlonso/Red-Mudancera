@@ -30,6 +30,8 @@ class Servicio extends Model
         'responsable_telefono',
         'importe',
         'estado',
+        'ganancia',
+        'finalizado_at',
     ];
 
     /**
@@ -39,6 +41,7 @@ class Servicio extends Model
         'inicio' => 'date',
         'fin'    => 'date',
         'volumen' => 'decimal:2',
+        'finalizado_at' => 'datetime',
     ];
 
     /**

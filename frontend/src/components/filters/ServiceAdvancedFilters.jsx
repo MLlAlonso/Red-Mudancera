@@ -24,9 +24,9 @@ export default function ServiceAdvancedFilters({
   };
 
   const handleApply = () => {
-    onChange(localValues); // pasa filtros al dashboard
-    onApply?.();           // por si lo usas o no
-    onClose();             // cierra el panel
+    onChange(localValues);
+    onApply?.();           
+    onClose();          
   };
 
   return (

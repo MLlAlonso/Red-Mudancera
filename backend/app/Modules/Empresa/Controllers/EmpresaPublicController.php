@@ -4,6 +4,7 @@ namespace App\Modules\Empresa\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Empresa\Models\Empresa;
+use Illuminate\Http\Request;
 
 class EmpresaPublicController extends Controller
 {
@@ -25,11 +26,37 @@ class EmpresaPublicController extends Controller
             'empresa'      => $empresa->empresa,
             'descripcion'  => $empresa->descripcion,
             'base'         => $empresa->base,
-            'representante'=> $empresa->representante,
+            'representante' => $empresa->representante,
             'tel'          => $empresa->tel,
             'logo_url'     => $empresa->logo_url,
             'reputacion'   => $empresa->reputacion,
             'numServicios' => $empresa->numServicios,
         ]);
+    }
+
+    /**
+     * Listado público de empresas
+     */
+    public function index(Request $request)
+    {
+        $query = Empresa::query();
+
+        // Filtro por sede (base)
+        if ($request->filled('sede')) {
+            $query->where('base', $request->sede);
+        }
+
+        $empresas = $query
+            ->orderByDesc('reputacion')
+            ->get()
+            ->map(fn($e) => [
+                'id'       => $e->id,
+                'empresa'  => $e->empresa,
+                'base'     => $e->base,
+                'logo_url' => $e->logo_url,
+                'reputacion' => $e->reputacion,
+            ]);
+
+        return response()->json($empresas);
     }
 }

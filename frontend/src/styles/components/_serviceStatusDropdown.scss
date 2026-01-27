@@ -1,0 +1,82 @@
+@use "../utils/variables";
+
+.service-status {
+  position: relative;
+  display: inline-block;
+
+  &__btn {
+    width: 130px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-weight: 600;
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+    font-family: variables.$font-title;
+    color: #fff;
+  }
+
+  /* BACKGROUNDS Status */
+  &__btn.is-activo {
+    background: variables.$success;
+  }
+
+  &__btn.is-asignado {
+    background: variables.$primary; 
+  }
+
+  &__btn.is-finalizado {
+    background: variables.$error-hover;
+  }
+
+  &__menu {
+    position: absolute;
+    top: calc(100%);
+    left: 0;
+    width: 130px;
+    background: variables.$cards;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  &__item {
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    background: #ffffff;
+    color: variables.$text;
+    font-family: variables.$font-text;
+    transition: background 0.2s ease, color 0.2s ease;
+
+    &.asignado:hover {
+      background: variables.$primary;
+      color: #fff;
+    }
+
+    &.finalizado:hover {
+      background: variables.$error-hover;
+      color: #fff;
+    }
+  }
+}
+
+/* Flecha */
+.arrow {
+  transition: transform 0.2s ease;
+  font-size: 20px;
+
+  &.open {
+    transform: rotate(180deg);
+  }
+}

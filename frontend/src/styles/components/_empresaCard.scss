@@ -1,0 +1,56 @@
+@use "../utils/variables";
+
+.empresa-card {
+  width: 100%;
+  max-width: 650px;
+  min-height: 350px;
+  background: variables.$cards;
+  padding: 30px;
+  border-radius: 16px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+
+  &__avatar-wrapper {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  &__avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__name {
+    font-family: variables.$font-title;
+    font-size: 34px;
+    font-weight: bold;
+    color: variables.$primary;
+    cursor: pointer;
+    text-align: center;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__sede {
+    font-size: 22px;
+    color: variables.$text-muted;
+  }
+
+  &__reputation {
+    background: variables.$primary;
+    color: #fff;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 8px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  }
+}

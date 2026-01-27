@@ -2,7 +2,9 @@
 
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { openWhatsappMessage } from "@/utils/whatsapp";
+import ServiceStatusDropdown from "@/components/common/ServiceStatusDropdown";
 
 export default function ServiceCard({
   id,
@@ -13,13 +15,21 @@ export default function ServiceCard({
   empresa = "",
   telefono = "",
   fecha = "",
+  estado = "activo",
   showContact = true,
   onChangeEstado = null,
   distanciaKm = null,
 }) {
-
   const router = useRouter();
   const isOffer = type === "ofrezco";
+
+  // 🔥 ESTADO LOCAL VISUAL
+  const [estadoLocal, setEstadoLocal] = useState(estado);
+
+  // 🔁 Sincroniza cuando el backend responda
+  useEffect(() => {
+    setEstadoLocal(estado);
+  }, [estado]);
 
   return (
     <motion.div
@@ -37,9 +47,13 @@ export default function ServiceCard({
         </h2>
       </div>
 
-      <p className="service-card__info"> Volumen: {volumen} </p>
+      <p className="service-card__info">Volumen: {volumen}</p>
       <p className="service-card__info">{empresa}</p>
-      {distanciaKm && ( <p className="service-card__info" id="kilometros"> {distanciaKm} km </p>)}
+      {distanciaKm && (
+        <p className="service-card__info" id="kilometros">
+          {distanciaKm} km
+        </p>
+      )}
       <p className="service-card__date">Publicado el {fecha}</p>
 
       <div className="service-card__actions">
@@ -74,12 +88,16 @@ export default function ServiceCard({
         )}
 
         {!showContact && onChangeEstado && (
-          <button
-            className="btn-solid"
-            onClick={() => onChangeEstado(id)}
-          >
-            Cambiar estado
-          </button>
+          <ServiceStatusDropdown
+            estado={estadoLocal}
+            onSelect={(nuevoEstado) => {
+              // 🔥 CAMBIO VISUAL INMEDIATO
+              setEstadoLocal(nuevoEstado);
+
+              // 🔥 AVISA AL PADRE
+              onChangeEstado(id, nuevoEstado);
+            }}
+          />
         )}
       </div>
     </motion.div>

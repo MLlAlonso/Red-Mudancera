@@ -7,7 +7,6 @@ use App\Modules\Servicio\Controllers\ServicioController;
 use App\Modules\Empresa\Controllers\EmpresaPublicController;
 
 Route::prefix('empresa')->group(function () {
-
     Route::post('/register', [EmpresaAuthController::class, 'register']);
     Route::post('/login',    [EmpresaAuthController::class, 'login']);
     Route::post('/send-verification', [EmpresaAuthController::class, 'sendVerificationCode']);
@@ -23,10 +22,9 @@ Route::prefix('empresa')->group(function () {
         Route::delete('/usuario/{id}', [EmpresaController::class, 'eliminarUsuario']);
         Route::patch('/usuario/{id}/pausar', [EmpresaController::class, 'pausarUsuario']);
         Route::patch('/usuario/{id}/reanudar', [EmpresaController::class, 'reanudarUsuario']);
-
-        // RUTAS PARA PUBLICACIONES DE SERVICIOS
         Route::get('/servicios', [ServicioController::class, 'misServicios']);
     });
 
     Route::get('/empresas/{id}', [EmpresaPublicController::class, 'show']);
+    Route::get('/empresas', [EmpresaPublicController::class, 'index']);
 });

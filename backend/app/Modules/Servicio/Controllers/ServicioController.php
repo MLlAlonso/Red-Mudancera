@@ -10,6 +10,8 @@ use App\Modules\Servicio\Services\ServicioService;
 use App\Modules\Servicio\Repositories\ServicioRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class ServicioController extends Controller
 {
@@ -205,5 +207,111 @@ class ServicioController extends Controller
         return response()->json([
             'data' => $query->get(), // 👈 TODOS, sin paginar
         ]);
+    }
+
+    /**
+     * Save earnings for service
+     */
+    public function finalizar(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'ganancia' => 'required|numeric|min:0'
+        ]);
+
+        $servicio = Servicio::findOrFail($id);
+
+        if ($servicio->estado === 'finalizado') {
+            return response()->json([
+                'message' => 'El servicio ya está finalizado'
+            ], 400);
+        }
+
+        $servicio->update([
+            'estado' => 'finalizado',
+            'ganancia' => round($validated['ganancia'], 2),
+            'finalizado_at' => now(),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'data' => $servicio
+        ]);
+    }
+
+    /**
+     * Generate monthly report
+     */
+    public function reporteMensual(Request $request)
+    {
+        $empresa = auth()->user();
+
+        $validated = $request->validate([
+            'mes' => 'required|integer|min:1|max:12',
+            'anio' => 'required|integer|min:2026',
+        ]);
+
+        $inicio = Carbon::create($validated['anio'], $validated['mes'], 1)->startOfMonth();
+        $fin = $inicio->copy()->endOfMonth();
+
+        $servicios = Servicio::where('empresa_id', $empresa->id)
+            ->where('estado', 'finalizado')
+            ->whereBetween('finalizado_at', [$inicio, $fin])
+            ->get();
+
+        $total = $servicios->sum('ganancia');
+
+        return response()->json([
+            'total' => round($total, 2),
+            'servicios' => $servicios,
+        ]);
+    }
+
+    /**
+     * Generate PDF
+     */
+
+    public function reporteMensualPdf(Request $request)
+    {
+        $token = $request->query('token');
+
+        if (!$token) {
+            abort(401, 'Token requerido');
+        }
+
+        $accessToken = PersonalAccessToken::findToken($token);
+
+        if (!$accessToken) {
+            abort(401, 'Token inválido');
+        }
+
+        $empresa = $accessToken->tokenable;
+
+        $validated = $request->validate([
+            'mes' => 'required|integer|min:1|max:12',
+            'anio' => 'required|integer|min:2026',
+        ]);
+
+        $inicio = Carbon::create($validated['anio'], $validated['mes'], 1)->startOfMonth();
+        $fin = $inicio->copy()->endOfMonth();
+
+        $servicios = Servicio::where('empresa_id', $empresa->id)
+            ->where('estado', 'finalizado')
+            ->whereBetween('finalizado_at', [$inicio, $fin])
+            ->get();
+
+        $total = $servicios->sum('ganancia');
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('pdf.reporte-mensual', [
+            'empresa' => $empresa,
+            'servicios' => $servicios,
+            'total' => $total,
+            'mes' => $validated['mes'],
+            'anio' => $validated['anio'],
+        ]);
+
+        return $pdf->download(
+            "reporte_{$validated['mes']}_{$validated['anio']}.pdf"
+        );
     }
 }
