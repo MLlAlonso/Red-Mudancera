@@ -42,8 +42,11 @@ class EmpresaPublicController extends Controller
         $query = Empresa::query();
 
         // Filtro por sede (base)
-        if ($request->filled('sede')) {
-            $query->where('base', $request->sede);
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('empresa', 'like', "%{$request->search}%")
+                    ->orWhere('base', 'like', "%{$request->search}%");
+            });
         }
 
         $empresas = $query

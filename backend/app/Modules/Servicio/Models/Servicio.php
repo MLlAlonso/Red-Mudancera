@@ -32,6 +32,7 @@ class Servicio extends Model
         'estado',
         'ganancia',
         'finalizado_at',
+        'estado_carga',
     ];
 
     /**
@@ -50,6 +51,7 @@ class Servicio extends Model
     protected $attributes = [
         'estado' => 'activo',
         'tipo_carga' => 'menaje',
+        'estado_carga' => 'mi_almacen',
     ];
 
     /* =====================================================

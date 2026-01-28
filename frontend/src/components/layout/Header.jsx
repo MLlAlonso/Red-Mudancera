@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
-
 import SideMenuEmpresa from "./SideMenu";
 import SideMenuUsuario from "./SideMenuUsuario";
 import useClickOutside from "@/hooks/useClickOutside";
@@ -14,13 +13,10 @@ export default function Header() {
   const [openMenu, setOpenMenu] = useState(false);
   const [homeHref, setHomeHref] = useState("/");
   const menuRef = useRef(null);
-
   const pathname = usePathname();
   const { search, setSearch } = useSearch();
-
   const isEmpresaDashboard = pathname === "/empresa/dashboard";
   const isUsuarioDashboard = pathname === "/usuario/dashboard";
-
   const isDashboard = isEmpresaDashboard || isUsuarioDashboard;
 
   useClickOutside(menuRef, () => setOpenMenu(false));
@@ -46,27 +42,14 @@ export default function Header() {
       <div className="header__content">
         {/* LOGO */}
         <Link href={homeHref}>
-          <img
-            src="/logo/logo.png"
-            alt="app logo"
-            className="header__logo"
-          />
+          <img src="/logo/logo.png" alt="app logo" className="header__logo" />
         </Link>
 
         {/* SEARCH BAR */}
-        <SearchBar
-          value={search}
-          onChange={setSearch}
-          disabled={!isDashboard}
-        />
+        <SearchBar disabled={false} />
 
         {/* MENU */}
-        <img
-          src="/icons/menu.png"
-          alt="menu"
-          className="header__menu"
-          onClick={() => setOpenMenu(!openMenu)}
-        />
+        <img src="/icons/menu.png" alt="menu" className="header__menu" onClick={() => setOpenMenu(!openMenu)} />
       </div>
 
       <div ref={menuRef}>

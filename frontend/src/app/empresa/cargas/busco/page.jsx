@@ -155,9 +155,11 @@ export default function BuscoServicioPage() {
       <main className="busco">
         <div className="busco__container">
           <form className="busco__form" onSubmit={handleSubmit}>
-            <h1 className="title">Busco carga</h1>
+            <div className="busco__header">
+              <h1 className="title">Busco carga</h1>
+              <h2 className="subtitle">¿Qué buscas?</h2>
+            </div>
 
-            <Input label="Volumen" name="volumen" type="number" value={form.volumen} onChange={handleChange} />
             <Input
               label="Origen"
               name="origen"
@@ -182,20 +184,7 @@ export default function BuscoServicioPage() {
               moveRangeOnFirstSelection={false}
             />
 
-            <div className="input-group">
-              <label className="input-group__label">Responsable</label>
-              <select className="input-group__field" value={form.responsableId} onChange={handleResponsableChange}>
-                <option value="">Selecciona</option>
-                {usuarios.map(u => <option key={u.id} value={u.id}>{u.nombre}</option>)}
-              </select>
-            </div>
-
-            <Input label="Teléfono" name="telefono" value={form.telefono} onChange={handleChange} />
-
-            <div className="input-group">
-              <label className="input-group__label">Descripción</label>
-              <textarea name="nota" className="input-group__field" value={form.nota} onChange={handleChange} />
-            </div>
+            <Input label="Volumen" name="volumen" type="number" value={form.volumen} onChange={handleChange} />
 
             <div className="input-group">
               <label className="input-group__label">Tipo de carga</label>
@@ -205,6 +194,21 @@ export default function BuscoServicioPage() {
                 <option value="libre">Otro</option>
               </select>
             </div>
+
+            <div className="input-group">
+              <label className="input-group__label">Descripción</label>
+              <textarea name="nota" className="input-group__field" value={form.nota} onChange={handleChange} />
+            </div>
+
+            <div className="input-group">
+              <label className="input-group__label">Responsable</label>
+              <select className="input-group__field" value={form.responsableId} onChange={handleResponsableChange}>
+                <option value="">Selecciona</option>
+                {usuarios.map(u => <option key={u.id} value={u.id}>{u.nombre}</option>)}
+              </select>
+            </div>
+
+            <Input label="Teléfono" name="telefono" value={form.telefono} onChange={handleChange} />
 
             <div className="busco__actions">
               <Button_error value="Cancelar" onClick={() => router.back()} />

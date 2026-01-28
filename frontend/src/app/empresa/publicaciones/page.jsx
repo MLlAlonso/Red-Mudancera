@@ -11,6 +11,7 @@ import ServiceCardSkeleton from "@/components/skeletons/ServiceCardSkeleton";
 import ConfirmFinalizarServicioModal from "@/components/modals/ConfirmFinalizarServicioModal";
 import FinalizarServicioGananciaModal from "@/components/modals/FinalizarServicioGananciaModal";
 import ReporteMensualModal from "@/components/modals/ReporteMensualModal";
+import { useSearch } from "@/store/searchContext";
 
 import "@/styles/pages/empresa/_empresaDashboard.scss";
 
@@ -22,6 +23,7 @@ export default function MisServiciosEmpresa() {
   const [showConfirmFinalizar, setShowConfirmFinalizar] = useState(false);
   const [showGananciaModal, setShowGananciaModal] = useState(false);
   const [showReporte, setShowReporte] = useState(false);
+  const { search, city } = useSearch();
 
   const cambiarEstadoDirecto = async (id, estado) => {
     try {
@@ -73,10 +75,17 @@ export default function MisServiciosEmpresa() {
       .finally(() => setLoading(false));
   }, []);
 
-  const visible =
-    filter === "todos"
-      ? services
-      : services.filter((s) => s.tipo === filter);
+  const visible = services.filter((s) => {
+    if (!search) return true;
+
+    const q = search.toLowerCase();
+
+    return (
+      s.empresa?.empresa?.toLowerCase().includes(q) ||
+      s.origen?.toLowerCase().includes(q) ||
+      s.destino?.toLowerCase().includes(q)
+    );
+  });
 
   return (
     <>
@@ -100,7 +109,6 @@ export default function MisServiciosEmpresa() {
             Crear reporte
           </button>
         </div>
-
 
         {/* BOTÓN CREAR */}
         <Button_crud

@@ -4,20 +4,17 @@ import { useState, useEffect, useMemo } from "react";
 
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-
 import ServiceFilters from "@/components/filters/ServiceFilters";
 import ServiceAdvancedFilters from "@/components/filters/ServiceAdvancedFilters";
 import ServiceCard from "@/components/cards/ServiceCard";
 import ServiceCardSkeleton from "@/components/skeletons/ServiceCardSkeleton";
-
 import useServicios from "@/hooks/useServicios";
 import { useSearch } from "@/store/searchContext";
 
 import "@/styles/pages/empresa/_empresaDashboard.scss";
 
 export default function UsuarioDashboard() {
-  const { search } = useSearch(); // ✅ SEARCH GLOBAL DEL HEADER
-
+  const { search } = useSearch();
   const [filter, setFilter] = useState("todos");
   const [showFilters, setShowFilters] = useState(false);
 
@@ -68,7 +65,6 @@ export default function UsuarioDashboard() {
     setDraftFilters(emptyFilters);
     setAppliedFilters({});
     setShowFilters(false);
-    // ⛔️ el search se limpia desde el Header
   };
 
   /* =========================
@@ -92,7 +88,7 @@ export default function UsuarioDashboard() {
       if (
         hasMore &&
         window.innerHeight + window.scrollY >=
-          document.body.offsetHeight - 200
+        document.body.offsetHeight - 200
       ) {
         loadMore();
       }
@@ -123,39 +119,36 @@ export default function UsuarioDashboard() {
             Controls
         ========================= */}
         <div className="empresa-dashboard__controls">
-          <div className="empresa-dashboard__left">
-            <ServiceFilters onChange={setFilter} />
+          <ServiceFilters onChange={setFilter} />
 
-            {/* Botón filtros / borrar */}
-            <button
-              className={`btn-advanced-filters ${
-                hasActiveFilters ? "active" : ""
+          {/* Botón filtros avanzados / borrar */}
+          <button
+            className={`btn-advanced-filters ${hasActiveFilters ? "active" : ""
               }`}
-              onClick={() => {
-                if (hasActiveFilters) {
-                  clearAllFilters();
-                } else {
-                  setShowFilters(true);
-                }
-              }}
-              aria-label={
-                hasActiveFilters ? "Borrar filtros" : "Filtros avanzados"
+            onClick={() => {
+              if (hasActiveFilters) {
+                clearAllFilters();
+              } else {
+                setShowFilters(true);
               }
-            >
-              <img
-                src={
-                  hasActiveFilters
-                    ? "/icons/borrar.png"
-                    : "/icons/filtrar.png"
-                }
-                alt={
-                  hasActiveFilters
-                    ? "Borrar filtros"
-                    : "Filtros avanzados"
-                }
-              />
-            </button>
-          </div>
+            }}
+            aria-label={
+              hasActiveFilters ? "Borrar filtros" : "Filtros avanzados"
+            }
+          >
+            <img
+              src={
+                hasActiveFilters
+                  ? "/icons/borrar.png"
+                  : "/icons/filtrar.png"
+              }
+              alt={
+                hasActiveFilters
+                  ? "Borrar filtros"
+                  : "Filtros avanzados"
+              }
+            />
+          </button>
         </div>
 
         {/* =========================
@@ -186,13 +179,12 @@ export default function UsuarioDashboard() {
               type={s.tipo}
               origen={s.origen}
               destino={s.destino}
-              volumen={`${s.volumen} m³`}
+              volumen={s.volumen ? `${s.volumen} m³` : "No especificado"}
               empresa={s.empresa?.empresa ?? "Empresa"}
-              fecha={
-                s.updated_at
-                  ? new Date(s.updated_at).toLocaleDateString()
-                  : "—"
-              }
+              telefono={s.empresa?.tel}
+              fecha={new Date(s.created_at).toLocaleDateString()}
+              distanciaKm={s.distancia_km}
+              importe={s.importe}
             />
           ))}
 

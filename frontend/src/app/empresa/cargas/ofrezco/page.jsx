@@ -23,6 +23,7 @@ export default function OfrezcoServicioPage() {
     nota: "",
     tipoCarga: "",
     importe: "",
+    estadoCarga: "mi_almacen",
   });
 
   const [errorModal, setErrorModal] = useState({
@@ -86,60 +87,61 @@ export default function OfrezcoServicioPage() {
     }));
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const token = document.cookie
-    .split("; ")
-    .find(r => r.startsWith("token_empresa="))
-    ?.split("=")[1];
+    const token = document.cookie
+      .split("; ")
+      .find(r => r.startsWith("token_empresa="))
+      ?.split("=")[1];
 
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/servicios`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-  tipo: "ofrezco",
-  volumen: form.volumen,
-  origen: form.origen,
-  destino: form.destino,
-  rangoDias: form.rangoDias,
-  tipo_carga: form.tipoCarga,
-  nota: form.nota,
-  responsable_nombre: form.responsableNombre,
-  responsable_telefono: form.telefono,
-  importe: form.importe,
-}),
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/servicios`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          tipo: "ofrezco",
+          volumen: form.volumen,
+          origen: form.origen,
+          destino: form.destino,
+          rangoDias: form.rangoDias,
+          tipo_carga: form.tipoCarga,
+          nota: form.nota,
+          responsable_nombre: form.responsableNombre,
+          responsable_telefono: form.telefono,
+          importe: form.importe,
+          estado_carga: form.estadoCarga,
+        }),
 
-    });
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
-      const msg =
-        data?.errors?.servicio?.[0] ??
-        data?.message ??
-        "No se pudo publicar el servicio";
+      if (!res.ok) {
+        const msg =
+          data?.errors?.servicio?.[0] ??
+          data?.message ??
+          "No se pudo publicar el servicio";
 
+        setErrorModal({
+          show: true,
+          message: msg,
+        });
+        return;
+      }
+
+      router.push("/empresa/dashboard");
+    } catch (err) {
       setErrorModal({
         show: true,
-        message: msg,
+        message: "Error de conexión con el servidor",
       });
-      return;
     }
-
-    router.push("/empresa/dashboard");
-  } catch (err) {
-    setErrorModal({
-      show: true,
-      message: "Error de conexión con el servidor",
-    });
-  }
-};
+  };
 
 
   return (
@@ -154,11 +156,25 @@ const handleSubmit = async (e) => {
               <h2 className="subtitle">Información requerida</h2>
             </div>
 
-            <Input label="Volumen" name="volumen" type="number" value={form.volumen} onChange={handleChange} />
-
-
             <Input label="Origen" name="origen" value={form.origen} onChange={handleChange} autocomplete />
             <Input label="Destino" name="destino" value={form.destino} onChange={handleChange} autocomplete />
+            <Input label="Volumen" name="volumen" type="number" value={form.volumen} onChange={handleChange} />
+
+            <div className="input-group">
+              <label className="input-group__label">Tipo de carga</label>
+              <select name="tipoCarga" className="input-group__field" value={form.tipoCarga} onChange={handleChange}>
+                <option value="">Selecciona</option>
+                <option value="menaje">Menaje de casa</option>
+                <option value="vehiculo">Vehículo</option>
+                <option value="menaje_vehiculo">Menaje + vehículo</option>
+                <option value="otro">Otro</option>
+              </select>
+            </div>
+
+            <div className="input-group">
+              <label className="input-group__label">Descripción de carga</label>
+              <textarea name="nota" className="input-group__field" value={form.nota} onChange={handleChange} />
+            </div>
 
             <div className="input-group">
               <label className="input-group__label">Plazo máximo de entrega</label>
@@ -168,6 +184,20 @@ const handleSubmit = async (e) => {
                 <option value="8-15">8 a 15 días</option>
                 <option value="15-30">15 a 30 días</option>
                 <option value="+30">+30 días</option>
+              </select>
+            </div>
+
+            <div className="input-group">
+              <label className="input-group__label">Estado de la carga</label>
+              <select
+                name="estadoCarga"
+                className="input-group__field"
+                value={form.estadoCarga}
+                onChange={handleChange}
+              >
+                <option value="mi_almacen">Mi almacén</option>
+                <option value="tu_almacen">Tu almacén</option>
+                <option value="en_ruta">En ruta</option>
               </select>
             </div>
 
@@ -182,22 +212,27 @@ const handleSubmit = async (e) => {
             <Input label="Teléfono" name="telefono" value={form.telefono} onChange={handleChange} />
 
             <div className="input-group">
-              <label className="input-group__label">Descripción</label>
-              <textarea name="nota" className="input-group__field" value={form.nota} onChange={handleChange} />
-            </div>
+              <label className="input-group__label input-group__label--tooltip">
+                <span className="tooltip">
+                  ⓘ
+                  <span className="tooltip__content">
+                    Este campo no es obligatorio.<br />
+                    Si lo dejas vacío, se publicará como
+                    <strong> “Por convenir”</strong>.
+                  </span>
+                </span>
+                Oferta
+              </label>
 
-            <div className="input-group">
-              <label className="input-group__label">Tipo de carga</label>
-              <select name="tipoCarga" className="input-group__field" value={form.tipoCarga} onChange={handleChange}>
-                <option value="">Selecciona</option>
-                <option value="menaje">Menaje de casa</option>
-                <option value="vehiculo">Vehículo</option>
-                <option value="menaje_vehiculo">Menaje + vehículo</option>
-                <option value="otro">Otro</option>
-              </select>
+              <input
+                type="number"
+                name="importe"
+                className="input-group__field"
+                value={form.importe}
+                onChange={handleChange}
+                placeholder="Monto opcional"
+              />
             </div>
-
-            <Input label="Importe esperado" name="importe" type="number" value={form.importe} onChange={handleChange} />
 
             <div className="ofrezco__actions">
               <Button_error value="Cancelar" onClick={() => router.back()} />

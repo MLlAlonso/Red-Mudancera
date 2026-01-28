@@ -69,6 +69,19 @@ export default function DetalleServicioPage() {
     servicio.empresa?.tel ||
     "";
 
+  const estadoCargaLabel = (estado) => {
+    switch (estado) {
+      case "mi_almacen":
+        return "Mi almacén";
+      case "tu_almacen":
+        return "Tu almacén";
+      case "en_ruta":
+        return "En ruta";
+      default:
+        return "—";
+    }
+  };
+
   return (
     <>
       <Header />
@@ -142,10 +155,27 @@ export default function DetalleServicioPage() {
               </span>
             </div>
 
+            {servicio.tipo === "ofrezco" && (
+              <div>
+                <label>Estado de la carga:</label>
+                <span>{estadoCargaLabel(servicio.estado_carga)}</span>
+              </div>
+            )}
+
             <div>
-              <label>Estado de la carga:</label>
+              <label>Estado de publicación:</label>
               <span>{servicio.estado}</span>
             </div>
+
+            <div>
+              <label>Oferta:</label>
+              <span>
+                {Number(servicio.importe) === 0
+                  ? "A convenir"
+                  : `$${Number(servicio.importe).toLocaleString()}`}
+              </span>
+            </div>
+
           </div>
 
           <div className="detalle-servicio__divider">

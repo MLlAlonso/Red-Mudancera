@@ -61,6 +61,7 @@ class ServicioService
             'responsable_nombre' => $data['responsable_nombre'] ?? null,
             'responsable_telefono' => $data['responsable_telefono'] ?? null,
             'importe' => $data['importe'] ?? null,
+            'estado_carga' => $data['estado_carga'] ?? 'mi_almacen',
         ]);
     }
 
@@ -85,7 +86,6 @@ class ServicioService
     {
         $servicio->estado = $estado;
         $servicio->save();
-
         return $servicio;
     }
 

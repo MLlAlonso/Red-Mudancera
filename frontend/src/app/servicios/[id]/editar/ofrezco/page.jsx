@@ -25,6 +25,7 @@ export default function EditarOfrezcoServicioPage() {
         nota: "",
         tipoCarga: "",
         importe: "",
+        estadoCarga: "mi_almacen",
     });
 
     const [usuarios, setUsuarios] = useState([]);
@@ -60,6 +61,7 @@ export default function EditarOfrezcoServicioPage() {
                     nota: servicio.nota ?? "",
                     tipoCarga: servicio.tipo_carga ?? "",
                     importe: servicio.importe ?? "",
+                    estadoCarga: servicio.estado_carga ?? "mi_almacen",
                 });
             });
 
@@ -149,6 +151,7 @@ export default function EditarOfrezcoServicioPage() {
                 responsable: form.responsableNombre,
                 telefono: form.telefono,
                 importe: form.importe,
+                estado_carga: form.estadoCarga,
             }),
 
         });
@@ -195,31 +198,27 @@ export default function EditarOfrezcoServicioPage() {
                 <div className="ofrezco__container">
                     <form className="ofrezco__form" onSubmit={handleSubmit}>
                         <div className="ofrezco__header">
-                            <h1 className="title">Editar servicio (Ofrezco)</h1>
+                            <h1 className="title">Editar Ofrezco</h1>
                             <h2 className="subtitle">Actualiza la información</h2>
                         </div>
 
-                        <Input
-                            label="Volumen"
-                            name="volumen"
-                            type="number"
-                            value={form.volumen}
-                            onChange={handleChange}
-                        />
+                        <Input label="Volumen" name="volumen" type="number" value={form.volumen} onChange={handleChange} />
 
-                        {/* <Input
-                            label="Origen"
-                            name="origen"
-                            value={form.origen}
-                            onChange={handleChange}
-                        />
+                        <div className="input-group">
+                            <label className="input-group__label">Tipo de carga</label>
+                            <select name="tipoCarga" className="input-group__field" value={form.tipoCarga} onChange={handleChange}>
+                                <option value="">Selecciona</option>
+                                <option value="menaje">Menaje de casa</option>
+                                <option value="vehiculo">Vehículo</option>
+                                <option value="menaje_vehiculo">Menaje + vehículo</option>
+                                <option value="otro">Otro</option>
+                            </select>
+                        </div>
 
-                        <Input
-                            label="Destino"
-                            name="destino"
-                            value={form.destino}
-                            onChange={handleChange}
-                        /> */}
+                        <div className="input-group">
+                            <label className="input-group__label">Descripción de la carga</label>
+                            <textarea name="nota" className="input-group__field" value={form.nota} onChange={handleChange} />
+                        </div>
 
                         <div className="input-group">
                             <label className="input-group__label">
@@ -240,6 +239,20 @@ export default function EditarOfrezcoServicioPage() {
                         </div>
 
                         <div className="input-group">
+                            <label className="input-group__label">Estado de la carga</label>
+                            <select
+                                name="estadoCarga"
+                                className="input-group__field"
+                                value={form.estadoCarga}
+                                onChange={handleChange}
+                            >
+                                <option value="mi_almacen">Mi almacén</option>
+                                <option value="tu_almacen">Tu almacén</option>
+                                <option value="en_ruta">En ruta</option>
+                            </select>
+                        </div>
+
+                        <div className="input-group">
                             <label className="input-group__label">Persona a cargo</label>
                             <select
                                 className="input-group__field"
@@ -255,59 +268,38 @@ export default function EditarOfrezcoServicioPage() {
                             </select>
                         </div>
 
-                        <Input
-                            label="Teléfono"
-                            name="telefono"
-                            value={form.telefono}
-                            onChange={handleChange}
-                        />
+                        <Input label="Teléfono" name="telefono" value={form.telefono} onChange={handleChange} />
 
                         <div className="input-group">
-                            <label className="input-group__label">Descripción</label>
-                            <textarea
-                                name="nota"
-                                className="input-group__field"
-                                value={form.nota}
+                            <label className="input-group__label input-group__label--tooltip">
+                                <span className="tooltip">
+                                    ⓘ
+                                    <span className="tooltip__content">
+                                        Este campo no es obligatorio.<br />
+                                        Si lo dejas vacío, se publicará como
+                                        <strong> “Por convenir”</strong>.
+                                    </span>
+                                </span>
+                                Oferta
+                            </label>
+
+                            <Input
+                                name="importe"
+                                type="number"
+                                value={form.importe}
                                 onChange={handleChange}
+                                placeholder="Monto opcional"
                             />
                         </div>
-
-                        <div className="input-group">
-                            <label className="input-group__label">Tipo de carga</label>
-                            <select
-                                name="tipoCarga"
-                                className="input-group__field"
-                                value={form.tipoCarga}
-                                onChange={handleChange}
-                            >
-                                <option value="">Selecciona</option>
-                                <option value="menaje">Menaje de casa</option>
-                                <option value="vehiculo">Vehículo</option>
-                                <option value="menaje_vehiculo">Menaje + vehículo</option>
-                                <option value="otro">Otro</option>
-                            </select>
-                        </div>
-
-                        <Input
-                            label="Importe esperado"
-                            name="importe"
-                            type="number"
-                            value={form.importe}
-                            onChange={handleChange}
-                        />
 
                         <div className="ofrezco__actions">
                             <Button_error value="Cancelar" onClick={() => router.back()} />
                             <Button_success value="Actualizar servicio" type="submit" />
                         </div>
 
-                        <p
-                            className="delete-legend"
-                            onClick={() => setShowConfirm1(true)}
-                        >
+                        <p className="delete-legend" onClick={() => setShowConfirm1(true)} >
                             ¿Desea eliminar su servicio?
                         </p>
-
                     </form>
                 </div>
             </main>

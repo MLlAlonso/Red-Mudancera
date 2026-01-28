@@ -158,7 +158,7 @@ class ServicioController extends Controller
      */
     public function misServicios(Request $request)
     {
-        $empresa = auth()->user(); // 👈 YA es empresa, no ->empresa
+        $empresa = auth()->user(); //
 
         $query = Servicio::with('empresa')
             ->where('empresa_id', $empresa->id)
@@ -205,7 +205,7 @@ class ServicioController extends Controller
         }
 
         return response()->json([
-            'data' => $query->get(), // 👈 TODOS, sin paginar
+            'data' => $query->get(),
         ]);
     }
 

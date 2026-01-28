@@ -1,35 +1,35 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import EmpresaCard from "@/components/cards/EmpresaCard";
+import { useSearch } from "@/store/searchContext";
 
 import "@/styles/pages/empresa/_empresaEmpresas.scss";
 
 export default function EmpresaCatalogo() {
   const [empresas, setEmpresas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [sede, setSede] = useState("");
+  const { search } = useSearch();
 
   const fetchEmpresas = () => {
     setLoading(true);
 
-    const query = sede ? `?sede=${encodeURIComponent(sede)}` : "";
+    const params = new URLSearchParams();
+    if (search) params.append("search", search);
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/empresas${query}`)
-      .then(res => res.json())
-      .then(data => {
-        setEmpresas(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+    fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/empresa/empresas?${params}`
+    )
+      .then((res) => res.json())
+      .then(setEmpresas)
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
     fetchEmpresas();
-  }, [sede]);
+  }, [search]);
 
   return (
     <>

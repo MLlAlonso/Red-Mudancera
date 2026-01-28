@@ -9,15 +9,15 @@
 
   &__container {
     width: 100%;
-    max-width: 700px;
+    max-width: 720px;
   }
 
   .title {
     font-family: $font-title;
     font-weight: 700;
-    font-size: 40px;
+    font-size: 38px;
     color: $title;
-    margin: 0;
+    margin-bottom: 0.2rem;
   }
 
   .subtitle {
@@ -28,19 +28,72 @@
     margin: 0;
   }
 
+  label {
+    font-size: 18px;
+    font-weight: 600;
+    color: $title;
+  }
+
   &__form {
     background-color: $cards;
-    border-radius: 20px;
+    border-radius: 22px;
     padding: 2.5rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.2rem;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
   }
 
   &__actions {
     display: flex;
     gap: 1rem;
   }
+
+  /* =========================
+   Tooltip
+========================= */
+
+  .input-group__label--tooltip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tooltip {
+    position: relative;
+    font-size: 14px;
+    cursor: pointer;
+    color: $text-muted;
+    user-select: none;
+
+    &:hover .tooltip__content,
+    &:focus-within .tooltip__content {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    &__content {
+      position: absolute;
+      top: 28px;
+      left: 50%;
+      transform: translate(-50%, 6px);
+      width: 260px;
+      background: #ffffff;
+      color: $text;
+      font-size: 13px;
+      line-height: 1.4;
+      padding: 12px 14px;
+      border-radius: 10px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s ease;
+      z-index: 10;
+      text-align: center;
+    }
+  }
+
 }
 
 /* =========================

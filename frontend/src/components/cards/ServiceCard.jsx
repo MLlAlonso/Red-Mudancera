@@ -19,14 +19,16 @@ export default function ServiceCard({
   showContact = true,
   onChangeEstado = null,
   distanciaKm = null,
+  importe = null,
 }) {
+
   const router = useRouter();
   const isOffer = type === "ofrezco";
 
-  // 🔥 ESTADO LOCAL VISUAL
+  // ESTADO LOCAL VISUAL
   const [estadoLocal, setEstadoLocal] = useState(estado);
 
-  // 🔁 Sincroniza cuando el backend responda
+  // Sincroniza cuando el backend responda
   useEffect(() => {
     setEstadoLocal(estado);
   }, [estado]);
@@ -54,6 +56,16 @@ export default function ServiceCard({
           {distanciaKm} km
         </p>
       )}
+
+      {isOffer && (
+        <p className="service-card__info">
+          <label>Oferta:</label>{" "}
+          {Number(importe) > 0
+            ? `$${Number(importe).toLocaleString()}`
+            : "A convenir"}
+        </p>
+      )}
+
       <p className="service-card__date">Publicado el {fecha}</p>
 
       <div className="service-card__actions">
@@ -91,10 +103,7 @@ export default function ServiceCard({
           <ServiceStatusDropdown
             estado={estadoLocal}
             onSelect={(nuevoEstado) => {
-              // 🔥 CAMBIO VISUAL INMEDIATO
               setEstadoLocal(nuevoEstado);
-
-              // 🔥 AVISA AL PADRE
               onChangeEstado(id, nuevoEstado);
             }}
           />

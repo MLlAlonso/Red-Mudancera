@@ -1,26 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-
 import ServiceFilters from "@/components/filters/ServiceFilters";
 import ServiceAdvancedFilters from "@/components/filters/ServiceAdvancedFilters";
 import Button_crud from "@/components/common/Button_crud";
 import ServiceCard from "@/components/cards/ServiceCard";
 import ServiceCardSkeleton from "@/components/skeletons/ServiceCardSkeleton";
-
 import { useSearch } from "@/store/searchContext";
 
 import "@/styles/pages/empresa/_empresaDashboard.scss";
 
 export default function EmpresaDashboard() {
   const { search, setSearch } = useSearch();
-
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [filter, setFilter] = useState("todos");
 
   const [filters, setFilters] = useState({
@@ -123,36 +118,36 @@ export default function EmpresaDashboard() {
             Controls
         ========================= */}
         <div className="empresa-dashboard__controls">
-            <ServiceFilters onChange={setFilter} />
+          <ServiceFilters onChange={setFilter} />
 
-            {/* Botón filtros avanzados / borrar */}
-            <button
-              className={`btn-advanced-filters ${hasActiveFilters ? "active" : ""
-                }`}
-              onClick={() => {
-                if (hasActiveFilters) {
-                  clearAllFilters();
-                } else {
-                  setShowFilters(true);
-                }
-              }}
-              aria-label={
-                hasActiveFilters ? "Borrar filtros" : "Filtros avanzados"
+          {/* Botón filtros avanzados / borrar */}
+          <button
+            className={`btn-advanced-filters ${hasActiveFilters ? "active" : ""
+              }`}
+            onClick={() => {
+              if (hasActiveFilters) {
+                clearAllFilters();
+              } else {
+                setShowFilters(true);
               }
-            >
-              <img
-                src={
-                  hasActiveFilters
-                    ? "/icons/borrar.png"
-                    : "/icons/filtrar.png"
-                }
-                alt={
-                  hasActiveFilters
-                    ? "Borrar filtros"
-                    : "Filtros avanzados"
-                }
-              />
-            </button>
+            }}
+            aria-label={
+              hasActiveFilters ? "Borrar filtros" : "Filtros avanzados"
+            }
+          >
+            <img
+              src={
+                hasActiveFilters
+                  ? "/icons/borrar.png"
+                  : "/icons/filtrar.png"
+              }
+              alt={
+                hasActiveFilters
+                  ? "Borrar filtros"
+                  : "Filtros avanzados"
+              }
+            />
+          </button>
         </div>
 
         {/* =========================
@@ -199,8 +194,8 @@ export default function EmpresaDashboard() {
                 telefono={s.empresa?.tel}
                 fecha={new Date(s.created_at).toLocaleDateString()}
                 distanciaKm={s.distancia_km}
+                importe={s.importe}
               />
-
             ))}
         </div>
       </main>

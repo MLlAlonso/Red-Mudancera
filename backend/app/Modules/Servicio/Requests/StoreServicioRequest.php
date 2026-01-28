@@ -22,7 +22,7 @@ class StoreServicioRequest extends FormRequest
 
             // Volumen obligatorio excepto vehículo
             'volumen' => [
-                Rule::requiredIf(fn () => $tipoCarga !== 'vehiculo'),
+                Rule::requiredIf(fn() => $tipoCarga !== 'vehiculo'),
                 'nullable',
                 'numeric',
                 'gt:0',
@@ -34,19 +34,19 @@ class StoreServicioRequest extends FormRequest
 
             // BUSCO
             'inicio' => [
-                Rule::requiredIf(fn () => $tipo === 'busco'),
+                Rule::requiredIf(fn() => $tipo === 'busco'),
                 'date',
                 'after_or_equal:today',
             ],
             'fin' => [
-                Rule::requiredIf(fn () => $tipo === 'busco'),
+                Rule::requiredIf(fn() => $tipo === 'busco'),
                 'date',
                 'after_or_equal:inicio',
             ],
 
             // OFREZCO
             'rangoDias' => [
-                Rule::requiredIf(fn () => $tipo === 'ofrezco'),
+                Rule::requiredIf(fn() => $tipo === 'ofrezco'),
                 'string',
             ],
 
@@ -66,6 +66,12 @@ class StoreServicioRequest extends FormRequest
             'responsable_nombre' => ['nullable', 'string', 'max:120'],
             'responsable_telefono' => ['nullable', 'string', 'max:20'],
             'importe' => ['nullable', 'numeric', 'min:0'],
+
+            'estado_carga' => [
+                'nullable',
+                Rule::in(['mi_almacen', 'tu_almacen', 'en_ruta']),
+            ],
+
         ];
     }
 

@@ -56,7 +56,6 @@ export default function useServicios({
     [search, filters, limit, loading, hasMore]
   );
 
-  // 🔑 SOLO cuando cambia search o filtros aplicados
   useEffect(() => {
     setServicios([]);
     setPage(1);

@@ -6,12 +6,10 @@ import Input from "@/components/common/Input";
 import Button_success from "@/components/common/Button_success";
 import Button_error from "@/components/common/Button_error";
 import ConfirmDeleteModal from "@/components/common/ConfirmDeleteModal";
-
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { DateRange } from "react-date-range";
 import { addDays } from "date-fns";
-
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import "@/styles/pages/servicios/_eliminarServicio.scss";
@@ -221,11 +219,9 @@ export default function EditarBuscoServicioPage() {
       <main className="busco">
         <div className="busco__container">
           <form className="busco__form" onSubmit={handleSubmit}>
-            <h1 className="title">Editar servicio (Busco)</h1>
+            <h1 className="title">Editar Busco</h1>
 
             <Input label="Volumen" name="volumen" type="number" value={form.volumen} onChange={handleChange} />
-            {/* <Input label="Origen" name="origen" value={form.origen} onChange={handleChange} />
-            <Input label="Destino" name="destino" value={form.destino} onChange={handleChange} /> */}
 
             <label className="labels">Rango de salida</label>
             <DateRange ranges={range} onChange={item => setRange([item.selection])} minDate={new Date()} />
@@ -243,7 +239,7 @@ export default function EditarBuscoServicioPage() {
             <Input label="Teléfono" name="telefono" value={form.telefono} onChange={handleChange} />
 
             <div className="input-group">
-              <label className="input-group__label">Nota</label>
+              <label className="input-group__label">Descripción</label>
               <textarea name="nota" className="input-group__field" value={form.nota} onChange={handleChange} />
             </div>
 
