@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useSearch } from "@/store/searchContext";
 import Input from "@/components/common/Input";
@@ -8,12 +9,35 @@ const ENABLED_ROUTES = [
   "/empresa/dashboard",
   "/empresa/publicaciones",
   "/empresa/empresas",
-  "/usuario/empresas",
+  "/usuario/dashboard",
 ];
 
 const SearchBar = () => {
   const pathname = usePathname();
   const { search, setSearch } = useSearch();
+
+  const [mounted, setMounted] = useState(false);
+
+  // 🔑 Evita mismatch SSR / Client
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // ⛔️ NO renderizar nada hasta estar montado
+  if (!mounted) {
+    return (
+      <div className="searchbar searchbar--disabled">
+        <div className="searchbar__input-wrapper">
+          <img src="/icons/lupa.png" alt="Buscar" className="searchbar__icon" />
+          <Input
+            disabled
+            placeholder="Buscar..."
+            className="searchbar__input"
+          />
+        </div>
+      </div>
+    );
+  }
 
   const isEnabled = ENABLED_ROUTES.some((route) =>
     pathname.startsWith(route)

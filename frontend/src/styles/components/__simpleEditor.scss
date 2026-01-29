@@ -1,0 +1,65 @@
+@use "../utils/variables";
+
+.simple-editor {
+  border: 1px solid #e5e7eb;
+  border-radius: 15px;
+  overflow: hidden;
+  background: #fff;
+  transform: none !important;
+}
+
+.simple-editor__toolbar {
+  display: flex;
+  gap: 15px;
+  padding: 8px;
+  background: variables.$background;
+  border-bottom: 1px solid #e5e7eb;
+  align-items: center;
+
+  button {
+    border: none;
+    background: variables.$primary;
+    padding: 6px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+
+    &:hover {
+      background: #e5e7eb;
+    }
+  }
+}
+
+.simple-editor__content {
+  all: unset;
+  display: block;
+
+  min-height: 140px;
+  padding: 12px;
+
+  font-family: sans-serif;
+  font-size: 18px;
+  color: variables.$text;
+  direction: ltr;
+  writing-mode: horizontal-tb;
+  text-align: left;
+  outline: none;
+  white-space: pre-wrap;
+  word-break: break-word;
+  cursor: text;
+
+  &:empty::before {
+    content: attr(data-placeholder);
+    color: #9ca3af;
+    pointer-events: none;
+  }
+
+  ul,
+  ol {
+    padding-left: 1.2rem;
+  }
+
+  li {
+    margin-bottom: 4px;
+  }
+}

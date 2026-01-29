@@ -16,6 +16,7 @@
 @use "./components/modal";
 @use "./components/serviceAdvancedFilters";
 @use "./components/serviceStatusDropdown";
+@use "./components/_simpleEditor";
 
 //Pages Empresas
 @use "./pages/empresa/empresaRegister";
@@ -23,7 +24,6 @@
 @use "./pages/empresa/empresaOfrezco";
 @use "./pages/empresa/empresaBusco";
 @use "./pages/empresa/empresaEmpresas";
-
 
 * {
   margin: 0;

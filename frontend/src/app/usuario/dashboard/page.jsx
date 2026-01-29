@@ -14,9 +14,10 @@ import { useSearch } from "@/store/searchContext";
 import "@/styles/pages/empresa/_empresaDashboard.scss";
 
 export default function UsuarioDashboard() {
-  const { search } = useSearch();
+  const { search, setSearch } = useSearch();
   const [filter, setFilter] = useState("todos");
   const [showFilters, setShowFilters] = useState(false);
+
 
   /* =========================
      Filtros
@@ -97,6 +98,11 @@ export default function UsuarioDashboard() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, [loadMore, hasMore]);
+
+  useEffect(() => {
+    setSearch("");
+  }, []);
+
 
   return (
     <>

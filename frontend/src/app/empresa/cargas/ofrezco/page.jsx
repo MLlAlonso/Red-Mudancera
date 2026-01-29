@@ -6,6 +6,7 @@ import Input from "@/components/common/Input";
 import Button_success from "@/components/common/Button_success";
 import Button_error from "@/components/common/Button_error";
 import ErrorModal from "@/components/common/ErrorModal";
+import SimpleEditor from "@/components/common/SimpleEditor";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -116,7 +117,6 @@ export default function OfrezcoServicioPage() {
           importe: form.importe,
           estado_carga: form.estadoCarga,
         }),
-
       });
 
       const data = await res.json();
@@ -142,7 +142,6 @@ export default function OfrezcoServicioPage() {
       });
     }
   };
-
 
   return (
     <>
@@ -172,10 +171,14 @@ export default function OfrezcoServicioPage() {
             </div>
 
             <div className="input-group">
-              <label className="input-group__label">Descripción de carga</label>
-              <textarea name="nota" className="input-group__field" value={form.nota} onChange={handleChange} />
+              <label>Descripción de carga</label>
+              <SimpleEditor
+                value={form.nota}
+                onChange={(html) => setForm(prev => ({ ...prev, nota: html }))}
+                placeholder="Describe la carga..."
+              />
             </div>
-
+            
             <div className="input-group">
               <label className="input-group__label">Plazo máximo de entrega</label>
               <select name="rangoDias" className="input-group__field" value={form.rangoDias} onChange={handleChange}>
@@ -195,9 +198,9 @@ export default function OfrezcoServicioPage() {
                 value={form.estadoCarga}
                 onChange={handleChange}
               >
-                <option value="mi_almacen">Mi almacén</option>
-                <option value="tu_almacen">Tu almacén</option>
-                <option value="en_ruta">En ruta</option>
+                <option value="mi_almacen">En bodega</option>
+                <option value="tu_almacen">Entrega directa en tu bodega</option>
+                <option value="en_ruta">Pendiente de recolección</option>
               </select>
             </div>
 

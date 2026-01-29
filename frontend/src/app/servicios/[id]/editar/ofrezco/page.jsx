@@ -8,6 +8,7 @@ import Button_error from "@/components/common/Button_error";
 import ConfirmDeleteModal from "@/components/common/ConfirmDeleteModal";
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import SimpleEditor from "@/components/common/SimpleEditor";
 import "@/styles/pages/servicios/_eliminarServicio.scss";
 
 export default function EditarOfrezcoServicioPage() {
@@ -64,8 +65,7 @@ export default function EditarOfrezcoServicioPage() {
                     estadoCarga: servicio.estado_carga ?? "mi_almacen",
                 });
             });
-
-
+            
     }, [id, router]);
 
     /* ======================
@@ -158,11 +158,8 @@ export default function EditarOfrezcoServicioPage() {
 
         const data = await res.json();
         if (!res.ok) return alert(JSON.stringify(data));
-
         router.push("/empresa/dashboard");
     };
-
-
 
     const [showConfirm1, setShowConfirm1] = useState(false);
     const [showConfirm2, setShowConfirm2] = useState(false);
@@ -185,10 +182,8 @@ export default function EditarOfrezcoServicioPage() {
         );
 
         if (!res.ok) return alert("Error al eliminar servicio");
-
         router.push("/empresa/dashboard");
     };
-
 
     return (
         <>
@@ -217,7 +212,13 @@ export default function EditarOfrezcoServicioPage() {
 
                         <div className="input-group">
                             <label className="input-group__label">Descripción de la carga</label>
-                            <textarea name="nota" className="input-group__field" value={form.nota} onChange={handleChange} />
+                            <SimpleEditor
+                                value={form.nota}
+                                onChange={(value) =>
+                                    setForm((prev) => ({ ...prev, nota: value }))
+                                }
+                                placeholder={`Descripción de la carga`}
+                            />
                         </div>
 
                         <div className="input-group">
@@ -246,9 +247,9 @@ export default function EditarOfrezcoServicioPage() {
                                 value={form.estadoCarga}
                                 onChange={handleChange}
                             >
-                                <option value="mi_almacen">Mi almacén</option>
-                                <option value="tu_almacen">Tu almacén</option>
-                                <option value="en_ruta">En ruta</option>
+                                <option value="mi_almacen">En bodega</option>
+                                <option value="tu_almacen">Entrega directa en tu bodega</option>
+                                <option value="en_ruta">Pendiente de recolección</option>
                             </select>
                         </div>
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
-
 const SearchContext = createContext();
 
 export function SearchProvider({ children }) {

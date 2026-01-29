@@ -77,11 +77,12 @@ export default function Input({
           className="input-group__field"
           type={inputType}
           placeholder={placeholder}
-          value={value}
+          value={value ?? ""}
           onChange={onChange}
+          readOnly={!onChange}
           autoComplete="off"
         />
-
+        
         {isPasswordField && (
           <img src={showPassword ? "/icons/eye_off.png" : "/icons/eye.png"} alt="toggle password" className="input-group__icon" onClick={() => setShowPassword(!showPassword)} />
         )}

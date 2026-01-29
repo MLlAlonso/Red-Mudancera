@@ -128,10 +128,6 @@
     }
   }
 
-  &__nota p {
-    margin-top: 0rem;
-  }
-
   .offer {
     border-left: 10px solid transparent;
   }
@@ -167,33 +163,27 @@
     font-weight: 600;
     color: #f5a623;
   }
-}
 
-/* .estado-badge {
-  margin-top: 8px;
-  padding: 6px 6px;
-  border-radius: 8px;
-  font-weight: 600;
-  width: fit-content;
-  font-size: 14px;
-  height: 40px;
-  align-items: center;
-  text-align: center;
-}
+  .nota-html {
+    font-size: 20px;
 
-.estado-activo {
-  background: rgba(28, 143, 106, 0.7);
-  color: #fff;
-}
+    ul,
+    ol {
+      padding-left: 1.2rem;
+    }
 
-.estado-asignado {
-  background: rgba(171, 176, 180, 0.3);
-  color: variables.$title;
-}
+    li {
+      margin-bottom: 4px;
+    }
 
-.estado-finalizado {
-  background: rgba(143, 9, 6, 0.3);
-  color: variables.$text;
+    b {
+      font-weight: 700;
+    }
+
+    i {
+      font-style: italic;
+    }
+  }
 }
 
 /* Responsive */
@@ -245,7 +235,8 @@
         align-items: center;
         justify-content: space-between;
 
-        #salida, #vendedor {
+        #salida,
+        #vendedor {
           white-space: nowrap;
         }
       }

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Button_crud from "@/components/common/Button_crud";
@@ -14,7 +13,6 @@ import "@/styles/pages/servicios/_detallesServicio.scss";
 export default function DetalleServicioPage() {
   const { id } = useParams();
   const router = useRouter();
-
   const [servicio, setServicio] = useState(null);
   const [empresaAuth, setEmpresaAuth] = useState(null);
 
@@ -52,7 +50,6 @@ export default function DetalleServicioPage() {
   }, []);
 
   if (!servicio) return null;
-
   const isOwner = empresaAuth && empresaAuth.id === servicio.empresa_id;
   const isOffer = servicio.tipo === "ofrezco";
 
@@ -72,11 +69,11 @@ export default function DetalleServicioPage() {
   const estadoCargaLabel = (estado) => {
     switch (estado) {
       case "mi_almacen":
-        return "Mi almacén";
+        return "En bodega";
       case "tu_almacen":
-        return "Tu almacén";
+        return "Directo en tu bodega";
       case "en_ruta":
-        return "En ruta";
+        return "Pendiente de recolección";
       default:
         return "—";
     }
@@ -157,15 +154,10 @@ export default function DetalleServicioPage() {
 
             {servicio.tipo === "ofrezco" && (
               <div>
-                <label>Estado de la carga:</label>
+                <label>Estado de carga:</label>
                 <span>{estadoCargaLabel(servicio.estado_carga)}</span>
               </div>
             )}
-
-            <div>
-              <label>Estado de publicación:</label>
-              <span>{servicio.estado}</span>
-            </div>
 
             <div>
               <label>Oferta:</label>
@@ -174,6 +166,11 @@ export default function DetalleServicioPage() {
                   ? "A convenir"
                   : `$${Number(servicio.importe).toLocaleString()}`}
               </span>
+            </div>
+
+            <div>
+              <label>Estado publicación:</label>
+              <span>{servicio.estado}</span>
             </div>
 
           </div>
@@ -210,10 +207,13 @@ export default function DetalleServicioPage() {
             </div>
           </div>
 
-          <div className="detalle-servicio__nota">
-            <label>Nota:</label>
-            <p>{servicio.nota || "Sin nota adicional"}</p>
-          </div>
+          <label>Descripción de la carga:</label>
+          <div
+            className="nota-html"
+            dangerouslySetInnerHTML={{
+              __html: servicio.nota || "<p>Sin nota adicional</p>",
+            }}
+          />
 
           {!isOwner && (
             <div className="detalle-servicio__actions">
