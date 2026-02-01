@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Button_crud from "@/components/common/Button_crud";
@@ -10,18 +9,15 @@ import Button_error from "@/components/common/Button_error";
 import Button_success from "@/components/common/Button_success";
 import Input from "@/components/common/Input";
 import UserCard from "@/components/cards/UserCard";
-
 import UserCardSkeleton from "@/components/skeletons/UserCardSkeleton";
 
 import "@/styles/pages/empresa/_empresaUsuarios.scss";
 
 export default function EmpresaUsuarios() {
   const router = useRouter();
-
   const [loading, setLoading] = useState(true);
   const [usuarios, setUsuarios] = useState([]);
   const [empresaCodigo, setEmpresaCodigo] = useState("");
-  
   // MODALES
   const [modalOpen, setModalOpen] = useState(false);
   const [modalConfirmDelete, setModalConfirmDelete] = useState(null);
@@ -49,7 +45,6 @@ export default function EmpresaUsuarios() {
   // Obtener códigoEmpresa
   const fetchEmpresa = () => {
     const token = getCookie("token_empresa");
-
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/me`, {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -62,7 +57,6 @@ export default function EmpresaUsuarios() {
   // Obtener usuarios
   const fetchUsuarios = () => {
     const token = getCookie("token_empresa");
-
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/usuarios`, {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -102,7 +96,6 @@ export default function EmpresaUsuarios() {
       );
 
       const data = await res.json();
-
       if (!res.ok) {
       alert(
         data.message ||
@@ -112,11 +105,9 @@ export default function EmpresaUsuarios() {
     }
 
       setModalOpen(false);
-
       setForm({
         nombre: "", email: "", telefono: "",
       });
-
       fetchUsuarios();
     } catch (err) {
       console.log(err);
@@ -132,7 +123,6 @@ export default function EmpresaUsuarios() {
   const confirmDelete = async () => {
     const id = modalConfirmDelete;
     const token = getCookie("token_empresa");
-
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/usuario/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
@@ -159,7 +149,7 @@ export default function EmpresaUsuarios() {
     );
 
     await fetchUsuarios();
-
+    
     if (usuario.activoEmpresa) {
       setModalSuccessPause(true);
       setTimeout(() => setModalSuccessPause(false), 2000);
@@ -206,7 +196,7 @@ export default function EmpresaUsuarios() {
           {usuarios.map((u) => (
             <UserCard
               key={u.id}
-              avatar={u.avatar}
+              avatar={u.avatar_url}
               nombre={u.nombre}
               telefono={u.telefono}
               email={u.email}

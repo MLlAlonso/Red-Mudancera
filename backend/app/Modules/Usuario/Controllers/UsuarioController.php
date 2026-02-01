@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Modules\Usuario\Controllers;
-
 use App\Http\Controllers\Controller;
 use App\Modules\Usuario\Models\Usuario;
 use App\Modules\Usuario\Requests\UsuarioUpdateRequest;
@@ -9,8 +8,8 @@ use App\Modules\Usuario\Mail\UsuarioGoodbyeMail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-
 use Illuminate\Support\Facades\Mail;
+use App\Services\CloudinaryService;
 
 class UsuarioController extends Controller
 {
@@ -20,7 +19,6 @@ class UsuarioController extends Controller
     public function me()
     {
         $user = Auth::user();
-
         if (! $user instanceof Usuario) {
             return response()->json(['message' => 'Acceso no autorizado'], 403);
         }
@@ -34,7 +32,7 @@ class UsuarioController extends Controller
                 'nombre'    => $user->nombre,
                 'email'     => $user->email,
                 'telefono'  => $user->telefono,
-                'avatar'    => $user->avatar,
+                'avatar' => $user->avatar_url,
                 'rol'       => $user->rol,
                 'activo'    => $user->activoEmpresa,
                 'created_at' => $user->created_at,
@@ -57,10 +55,15 @@ class UsuarioController extends Controller
     {
         $user = Auth::user();
         $data = $request->validated();
-
         if ($request->hasFile('avatar')) {
-            $path = $request->file('avatar')->store('avatars', 'public');
-            $data['avatar'] = $path;
+            $cloudinary = new CloudinaryService();
+
+            $cloudinary->deleteByUrl($user->avatar);
+
+            $data['avatar'] = $cloudinary->upload(
+                $request->file('avatar'),
+                'usuarios/avatar'
+            );
         }
 
         if (empty($data['password'])) {
@@ -70,7 +73,6 @@ class UsuarioController extends Controller
         }
 
         $user->update($data);
-
         return response()->json([
             'message' => 'Perfil actualizado correctamente',
             'usuario' => $user
@@ -88,7 +90,6 @@ class UsuarioController extends Controller
         }
 
         Mail::to($user->email)->send(new UsuarioGoodbyeMail());
-
         // borrar tokens
         $user->tokens()->delete();
         // borrar user

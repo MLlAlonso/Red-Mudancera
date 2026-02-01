@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Button_crud from "@/components/common/Button_crud";
@@ -22,13 +21,6 @@ export default function UsuarioPerfil() {
   const getCookie = (name) => {
     const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
     return match ? match[2] : null;
-  };
-
-  const buildFileUrl = (file) => {
-    if (!file) return "/icons/default-user.png";
-    if (file.startsWith("http")) return file;
-    const base = process.env.NEXT_PUBLIC_API_URL.replace("/api", "");
-    return `${base}/storage/${file}`;
   };
 
   useEffect(() => {
@@ -56,7 +48,6 @@ export default function UsuarioPerfil() {
   }
 
   if (!data) return <p>Error al cargar perfil.</p>;
-
   const { usuario, empresa } = data;
 
   return (
@@ -67,10 +58,7 @@ export default function UsuarioPerfil() {
         <h1>Perfil de usuario</h1>
 
         <div className="usuario-perfil__top">
-          <img
-            src={buildFileUrl(usuario.avatar)}
-            className="usuario-perfil__avatar"
-          />
+          <img src={usuario.avatar || "/icons/default-user.png"} className="usuario-perfil__avatar" />
           <h2>{usuario.nombre}</h2>
         </div>
 
@@ -89,19 +77,15 @@ export default function UsuarioPerfil() {
           {empresa?.nombre && (
             <p><strong>Empresa:</strong> {empresa.nombre}</p>
           )}
-
         </div>
 
-        {/* 👇 SOLO SE MUESTRA SI EXISTE EMPRESA */}
+        {/* SOLO SE MUESTRA SI EXISTE EMPRESA */}
         {empresa && (
           <>
             <div className="usuario-perfil__divider"></div>
 
             <div className="usuario-perfil__empresa">
-              <img
-                src={empresa.logo || "/icons/default-company.png"}
-                className="usuario-perfil__empresa-logo"
-              />
+              <img src={empresa.logo || "/icons/default-company.png"} className="usuario-perfil__empresa-logo" />
 
               <div className="usuario-perfil__empresa-info">
                 <p className="empresa-nombre">{empresa.nombre}</p>

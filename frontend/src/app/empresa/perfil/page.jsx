@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ReviewCard from "@/components/cards/ReviewCard";
@@ -16,7 +15,6 @@ export default function EmpresaPerfil() {
   const [loading, setLoading] = useState(true);
   const [resenas, setResenas] = useState([]);
   const [openModal, setOpenModal] = useState(false);
-
   const router = useRouter();
 
   const getCookie = (name) => {
@@ -24,16 +22,6 @@ export default function EmpresaPerfil() {
       new RegExp("(^| )" + name + "=([^;]+)")
     );
     return match ? match[2] : null;
-  };
-
-  const getLogo = (empresa) => {
-    if (!empresa?.logo_url) return "/icons/user-placeholder.png";
-
-    if (empresa.logo_url.startsWith("http")) {
-      return empresa.logo_url;
-    }
-
-    return `${process.env.NEXT_PUBLIC_API_URL.replace("/api", "")}/${empresa.logo_url}`;
   };
 
   // =========================
@@ -87,7 +75,7 @@ export default function EmpresaPerfil() {
 
         {/* Foto + nombre */}
         <div className="empresa-perfil__top">
-          <img src={getLogo(empresa)} className="empresa-perfil__avatar" />
+          <img src={empresa.logo_url || "/icons/user-placeholder.png"} className="empresa-perfil__avatar"/>
           <h2 className="empresa-perfil__name">{empresa.empresa}</h2>
         </div>
 
@@ -110,10 +98,7 @@ export default function EmpresaPerfil() {
             Detalles de empresa
           </h3>
 
-          <Button_crud
-            value="Editar"
-            onClick={() => router.push("/empresa/perfil/editar")}
-          />
+          <Button_crud value="Editar" onClick={() => router.push("/empresa/perfil/editar")} />
         </div>
 
         {/* Info */}
@@ -133,10 +118,7 @@ export default function EmpresaPerfil() {
           <h3 className="empresa-perfil__section-title">Reseñas</h3>
 
           <div className="empresa-perfil__section-actions">
-            <Button_crud
-              value="Compartir link"
-              onClick={() => setOpenModal(true)}
-            />
+            <Button_crud value="Compartir link" onClick={() => setOpenModal(true)} />
             <span className="empresa-perfil__vermas">Ver más</span>
           </div>
         </div>

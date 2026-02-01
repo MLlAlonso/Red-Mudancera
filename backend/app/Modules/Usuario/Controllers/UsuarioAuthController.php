@@ -3,21 +3,19 @@
 namespace App\Modules\Usuario\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\EmailVerification;
+use App\Modules\Empresa\Models\Empresa;
 use App\Modules\Usuario\Models\Usuario;
 use App\Modules\Usuario\Requests\UsuarioRegisterRequest;
 use App\Modules\Usuario\Requests\UsuarioLoginRequest;
 use App\Modules\Usuario\Requests\UsuarioVerifyEmailRequest;
 use App\Modules\Usuario\Mail\UsuarioVerificationCode;
+use App\Modules\Usuario\Mail\UsuarioWelcomeMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use App\Modules\Empresa\Models\Empresa;
-use App\Models\EmailVerification;
-
-use App\Modules\Usuario\Mail\UsuarioWelcomeMail;
-
 
 class UsuarioAuthController extends Controller
 {
@@ -27,7 +25,6 @@ class UsuarioAuthController extends Controller
     public function register(UsuarioRegisterRequest $request)
     {
         $empresa = Empresa::where('codigoEmpresa', $request->codigoEmpresa)->first();
-
         if (!$empresa) {
             return response()->json(['message' => 'Código de empresa inválido.'], 404);
         }
@@ -113,7 +110,6 @@ class UsuarioAuthController extends Controller
         }
 
         $code = rand(100000, 999999);
-
         EmailVerification::updateOrCreate(
             ['email' => $usuario->email, 'tipo' => 'usuario'],
             [
@@ -121,7 +117,6 @@ class UsuarioAuthController extends Controller
                 'expires_at' => Carbon::now()->addMinutes(15),
             ]
         );
-
         Mail::to($usuario->email)->send(new UsuarioVerificationCode($code));
         return response()->json(['message' => 'Código enviado al email.']);
     }

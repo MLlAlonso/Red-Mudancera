@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Input from "@/components/common/Input";
@@ -14,11 +13,9 @@ import "@/styles/pages/empresa/_empresaEditar.scss";
 export default function EmpresaEditar() {
   const router = useRouter();
   const API = process.env.NEXT_PUBLIC_API_URL;
-
   const [empresa, setEmpresa] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
 
@@ -31,8 +28,6 @@ export default function EmpresaEditar() {
     base: "",
     rfc: "",
     logo: null,
-
-    // NUEVOS
     password: "",
     password_confirmation: "",
   });
@@ -69,12 +64,10 @@ export default function EmpresaEditar() {
           base: data.base || "",
           rfc: data.rfc || "",
           logo: null,
-
           // MANTENER
           password: "",
           password_confirmation: "",
         });
-
         setPreviewLogo(data.logo_url || "/icons/user-placeholder.png");
         setLoading(false);
       })
@@ -99,7 +92,6 @@ export default function EmpresaEditar() {
 
     const token = getCookie("token_empresa");
     if (!API || !token) return;
-
     const formData = new FormData();
     formData.append("_method", "PUT");
 
@@ -111,7 +103,7 @@ export default function EmpresaEditar() {
 
     try {
       const res = await fetch(`${API}/empresa/update`, {
-        method: "POST", // 🔥 NO CAMBIAR
+        method: "POST", // NO CAMBIAR
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -150,10 +142,7 @@ export default function EmpresaEditar() {
         <p className="empresa-editar__subtitle">Editar datos de una empresa</p>
 
         <div className="empresa-editar__avatar-wrapper">
-          <img
-            src={previewLogo || "/icons/user-placeholder.png"}
-            className="empresa-editar__avatar"
-          />
+          <img src={previewLogo || "/icons/user-placeholder.png"} className="empresa-editar__avatar" />
         </div>
 
         <form className="empresa-editar__form" onSubmit={handleSubmit}>
@@ -161,8 +150,6 @@ export default function EmpresaEditar() {
           <Input label="Correo" type="email" name="email" value={form.email} onChange={handleChange} />
           <Input label="Nueva contraseña" type="password" name="password" placeholder="Dejar vacío para no cambiar" value={form.password} onChange={handleChange} />
           <Input label="Confirmar contraseña" type="password" name="password_confirmation" placeholder="Repite la contraseña" value={form.password_confirmation} onChange={handleChange} />
-
-
           <Input label="RFC" name="rfc" value={form.rfc} onChange={handleChange} />
           <Input label="Representante" name="representante" value={form.representante} onChange={handleChange} />
           <Input label="Teléfono" name="telefono" value={form.telefono} onChange={handleChange} />
@@ -189,18 +176,12 @@ export default function EmpresaEditar() {
           </div>
 
           <div className="empresa-editar__buttons">
-            <Button_error
-              value="Cancelar"
-              onClick={() => router.push("/empresa/perfil")}
-            />
+            <Button_error value="Cancelar" onClick={() => router.push("/empresa/perfil")} />
             <Button_success value="Aceptar" type="submit" />
           </div>
         </form>
 
-        <p
-          className="empresa-editar__delete"
-          onClick={() => setShowDeleteModal(true)}
-        >
+        <p className="empresa-editar__delete" onClick={() => setShowDeleteModal(true)} >
           ¿Desea eliminar su perfil de empresa?
         </p>
       </main>
@@ -226,10 +207,7 @@ export default function EmpresaEditar() {
             <p>Esta acción es permanente.</p>
 
             <div className="empresa-delete__buttons">
-              <Button_error
-                value="Cancelar"
-                onClick={() => setShowDeleteModal(false)}
-              />
+              <Button_error value="Cancelar" onClick={() => setShowDeleteModal(false)} />
               <Button_success
                 value="Aceptar"
                 onClick={() => {
@@ -253,14 +231,8 @@ export default function EmpresaEditar() {
             <h2>¿En verdad quieres eliminar tu perfil?</h2>
 
             <div className="empresa-delete__buttons">
-              <Button_error
-                value="Cancelar"
-                onClick={() => setShowDeleteConfirmModal(false)}
-              />
-              <Button_success
-                value="Eliminar definitivamente"
-                onClick={handleDelete}
-              />
+              <Button_error value="Cancelar" onClick={() => setShowDeleteConfirmModal(false)} />
+              <Button_success value="Eliminar definitivamente" onClick={handleDelete} />
             </div>
           </div>
         </div>

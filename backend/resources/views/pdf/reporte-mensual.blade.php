@@ -29,16 +29,15 @@
                     </tr>
 
                     <!-- Logo empresa -->
-                    @if (!empty($empresa->logo))
+                    @if (!empty($logoPath))
                         <tr>
                             <td align="center" style="padding:20px 24px;">
-                                <img src="{{ public_path('storage/' . $empresa->logo) }}"
-                                    alt="Logo {{ $empresa->empresa }}"
-                                    style=" max-height:70px; max-width:150px; object-fit:contain; border-radius:80%; ">
+                                <img src="{{ $logoPath }}" alt="Logo {{ $empresa->empresa }}"
+                                    style="max-height:70px; max-width:150px; object-fit:contain; border-radius:80%;">
                             </td>
                         </tr>
                     @endif
-                    
+
                     <!-- Empresa -->
                     <tr>
                         <td style="padding:20px 24px;color:#4A5E71; text-align:center">
@@ -130,7 +129,6 @@
 
                 </table>
                 <!-- /Card -->
-
             </td>
         </tr>
     </table>

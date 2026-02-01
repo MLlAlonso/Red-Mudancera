@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ReviewCard from "@/components/cards/ReviewCard";
@@ -12,22 +11,15 @@ import "@/styles/pages/empresa/_empresaPerfil.scss";
 export default function EmpresaPublicPerfil() {
   const { id } = useParams();
   const router = useRouter();
-
   const [empresa, setEmpresa] = useState(null);
   const [loading, setLoading] = useState(true);
   const [resenas, setResenas] = useState([]);
-
-  const getLogo = (empresa) => {
-    if (!empresa?.logo_url) return "/icons/user-placeholder.png";
-    return empresa.logo_url;
-  };
 
   // =========================
   // FETCH EMPRESA PÚBLICA
   // =========================
   useEffect(() => {
     if (!id) return;
-
     setLoading(true);
 
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/empresas/${id}`)
@@ -50,7 +42,6 @@ export default function EmpresaPublicPerfil() {
   // =========================
   useEffect(() => {
     if (!empresa?.id) return;
-
     fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/empresas/${empresa.id}/resenas?limit=4`
     )
@@ -95,11 +86,7 @@ export default function EmpresaPublicPerfil() {
         </p>
 
         <div className="empresa-perfil__top">
-          <img
-            src={getLogo(empresa)}
-            className="empresa-perfil__avatar"
-            alt="Logo empresa"
-          />
+          <img src={empresa.logo_url || "/icons/user-placeholder.png"} className="empresa-perfil__avatar" alt="Logo empresa" />
           <h2 className="empresa-perfil__name">{empresa.empresa}</h2>
         </div>
 
@@ -126,12 +113,10 @@ export default function EmpresaPublicPerfil() {
         </div>
 
         <div className="empresa-perfil__divider"></div>
-
         <h3 className="empresa-perfil__section-title">Reseñas</h3>
 
         <div className="empresa-perfil__reviews">
           {resenas.length === 0 && <p>⭐ Aún no hay reseñas</p>}
-
           {resenas.map((r) => (
             <ReviewCard
               key={r.id}

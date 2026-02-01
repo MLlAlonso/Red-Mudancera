@@ -1,15 +1,15 @@
 <?php
 
 namespace App\Modules\Empresa\Controllers;
-
 use App\Http\Controllers\Controller;
 use App\Modules\Empresa\Requests\EmpresaUpdateRequest;
 use App\Modules\Usuario\Models\Usuario;
+use App\Modules\Empresa\Mail\EmpresaGoodbyeMail;
+use App\Modules\Usuario\Mail\UsuarioGoodbyeMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
-use App\Modules\Empresa\Mail\EmpresaGoodbyeMail;
-use App\Modules\Usuario\Mail\UsuarioGoodbyeMail;
+use App\Services\CloudinaryService;
 
 class EmpresaController extends Controller
 {
@@ -22,7 +22,6 @@ class EmpresaController extends Controller
         if (! $empresa) {
             return response()->json(['message' => 'No autenticado'], 401);
         }
-
         // Asegurar logo_url siempre
         $empresa->append('logo_url');
         return response()->json($empresa);
@@ -40,13 +39,17 @@ class EmpresaController extends Controller
          * Logo (opcional)
          */
         if ($request->hasFile('logo')) {
-            $path = $request->file('logo')->store('logos', 'public');
-            $data['logo'] = $path;
+            $cloudinary = new CloudinaryService();
+            // borrar logo anterior si existe
+            $cloudinary->deleteByUrl($empresa->logo);
+            $data['logo'] = $cloudinary->upload(
+                $request->file('logo'),
+                'empresas/logos'
+            );
         }
 
         /**
-         * Password (opcional)
-         * SOLO si viene en el request
+         * Password (opcional) SOLO si viene en el request
          */
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
@@ -55,9 +58,7 @@ class EmpresaController extends Controller
         }
 
         $empresa->update($data);
-
         $empresa->append('logo_url');
-
         return response()->json([
             'message' => 'Empresa actualizada correctamente',
             'empresa' => $empresa
@@ -70,11 +71,9 @@ class EmpresaController extends Controller
     public function destroy(Request $request)
     {
         $empresa = $request->user();
-
         Mail::to($empresa->email)->send(
             new EmpresaGoodbyeMail($empresa)
         );
-
         $empresa->tokens()->delete();
         $empresa->delete();
         return response()->json([
@@ -91,7 +90,6 @@ class EmpresaController extends Controller
         $usuarios = Usuario::where('empresa_id', $empresa->id)
             ->orderBy('created_at', 'DESC')
             ->get();
-
         return response()->json(['usuarios' => $usuarios]);
     }
 

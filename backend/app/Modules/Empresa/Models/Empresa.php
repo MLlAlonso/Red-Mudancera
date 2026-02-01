@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Modules\Empresa\Models;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
@@ -46,11 +45,14 @@ class Empresa extends Authenticatable
     // ===========================================
     // LOGO
     // ===========================================
-    protected $appends = ['logo_url'];
-
     public function getLogoUrlAttribute()
     {
         if (!$this->logo) return null;
+        // Si ya es URL (Cloudinary)
+        if (str_starts_with($this->logo, 'http')) {
+            return $this->logo;
+        }
+        // Legacy (storage antiguo)
         return asset('storage/' . $this->logo);
     }
 }

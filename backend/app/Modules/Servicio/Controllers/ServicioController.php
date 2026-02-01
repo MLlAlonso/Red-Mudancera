@@ -2,6 +2,8 @@
 
 namespace App\Modules\Servicio\Controllers;
 
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Modules\Servicio\Models\Servicio;
 use App\Modules\Servicio\Requests\StoreServicioRequest;
@@ -286,6 +288,14 @@ class ServicioController extends Controller
 
         $empresa = $accessToken->tokenable;
 
+        $logoPath = null;
+
+        if ($empresa->logo) {
+            $image = Http::get($empresa->logo)->body();
+            $logoPath = storage_path('app/temp_logo.png');
+            file_put_contents($logoPath, $image);
+        }
+
         $validated = $request->validate([
             'mes' => 'required|integer|min:1|max:12',
             'anio' => 'required|integer|min:2026',
@@ -308,7 +318,12 @@ class ServicioController extends Controller
             'total' => $total,
             'mes' => $validated['mes'],
             'anio' => $validated['anio'],
+            'logoPath' => $logoPath,
         ]);
+
+        if ($logoPath && file_exists($logoPath)) {
+            unlink($logoPath);
+        }
 
         return $pdf->download(
             "reporte_{$validated['mes']}_{$validated['anio']}.pdf"

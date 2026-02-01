@@ -2,17 +2,6 @@
 
 import React from "react";
 
-const buildAvatarUrl = (avatar) => {
-  if (!avatar) return "/icons/default-user.png";
-
-  // (por si algún día usas Cloudinary)
-  if (avatar.startsWith("http")) return avatar;
-
-  // Backend base
-  const base = process.env.NEXT_PUBLIC_API_URL.replace("/api", "");
-  return `${base}/storage/${avatar}`;
-};
-
 const UserCard = ({
   avatar,
   nombre,
@@ -28,7 +17,7 @@ const UserCard = ({
     <div className="user-card">
       <div className="user-card__avatar-wrapper">
         <img
-          src={buildAvatarUrl(avatar)}
+          src={avatar || "/icons/default-user.png"}
           alt="avatar"
           className="user-card__avatar"
         />
@@ -44,29 +33,14 @@ const UserCard = ({
 
       {/* Acciones */}
       <div className="user-card__actions">
-        <img
-          src="/icons/delete.png"
-          alt="Eliminar"
-          className="user-card__icon"
-          onClick={onDelete}
-        />
+        <img src="/icons/delete.png" alt="Eliminar" className="user-card__icon" onClick={onDelete} />
 
-        <img
-          src={activo ? "/icons/pause.png" : "/icons/play.png"}
-          alt={activo ? "Pausar" : "Reanudar"}
-          className="user-card__icon"
-          onClick={onPause}
-        />
+        <img src={activo ? "/icons/pause.png" : "/icons/play.png"} alt={activo ? "Pausar" : "Reanudar"} className="user-card__icon" onClick={onPause} />
 
-        <img
-          src="/icons/share.png"
-          alt="Compartir"
-          className="user-card__icon"
-          onClick={onShare}
-        />
+        <img src="/icons/share.png" alt="Compartir" className="user-card__icon" onClick={onShare} />
       </div>
+
     </div>
   );
 };
-
 export default UserCard;

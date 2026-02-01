@@ -2,10 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-
 import Input from "@/components/common/Input";
 import Button_success from "@/components/common/Button_success";
 import Button_error from "@/components/common/Button_error";
@@ -14,11 +12,9 @@ import "@/styles/pages/usuario/_usuarioEditar.scss";
 
 export default function UsuarioEditar() {
   const router = useRouter();
-
   const [usuario, setUsuario] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordHelp, setShowPasswordHelp] = useState(false);
 
@@ -39,12 +35,6 @@ export default function UsuarioEditar() {
     return match ? match[2] : null;
   };
 
-  const buildFileUrl = (file) => {
-    if (!file) return "/icons/user-placeholder.png";
-    const base = process.env.NEXT_PUBLIC_API_URL.replace("/api", "");
-    return `${base}/storage/${file}`;
-  };
-
   useEffect(() => {
     const token = getCookie("token_usuario");
     if (!token) {
@@ -58,7 +48,6 @@ export default function UsuarioEditar() {
       .then((res) => res.json())
       .then((data) => {
         setUsuario(data.usuario);
-
         setForm({
           nombre: data.usuario.nombre,
           email: data.usuario.email,
@@ -66,8 +55,7 @@ export default function UsuarioEditar() {
           telefono: data.usuario.telefono,
           avatar: null,
         });
-
-        setPreviewAvatar(buildFileUrl(data.usuario.avatar));
+        setPreviewAvatar(data.usuario.avatar || "/icons/user-placeholder.png");
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -83,7 +71,6 @@ export default function UsuarioEditar() {
   const handleFile = (e) => {
     const file = e.target.files[0];
     setForm({ ...form, avatar: file });
-
     if (file) {
       setPreviewAvatar(URL.createObjectURL(file));
     }
@@ -91,13 +78,10 @@ export default function UsuarioEditar() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const token = getCookie("token_usuario");
     const url = `${process.env.NEXT_PUBLIC_API_URL}/usuario/update`;
-
     const formData = new FormData();
     formData.append("_method", "PUT");
-
     Object.keys(form).forEach((key) => {
       if (form[key] !== null && form[key] !== "") {
         formData.append(key, form[key]);
@@ -124,12 +108,10 @@ export default function UsuarioEditar() {
 
   const handleDelete = async () => {
     const token = getCookie("token_usuario");
-
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/usuario/delete`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });
-
     document.cookie = "token_usuario=; path=/; max-age=0";
     router.push("/usuario/login");
   };
@@ -151,20 +133,8 @@ export default function UsuarioEditar() {
         </div>
 
         <form className="usuario-editar__form" onSubmit={handleSubmit}>
-          <Input
-            label="Nombre"
-            name="nombre"
-            value={form.nombre}
-            onChange={handleChange}
-          />
-
-          <Input
-            label="Correo"
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-          />
+          <Input label="Nombre" name="nombre" value={form.nombre} onChange={handleChange} />
+          <Input label="Correo" type="email" name="email" value={form.email} onChange={handleChange} />
 
           <div className="input-group password-group">
             <label className="input-group__label">Contraseña</label>
@@ -178,11 +148,7 @@ export default function UsuarioEditar() {
                 className="input-group__field"
               />
 
-              <img
-                src={showPassword ? "/icons/eye_off.png" : "/icons/eye.png"}
-                className="password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
-              />
+              <img src={showPassword ? "/icons/eye_off.png" : "/icons/eye.png"} className="password-toggle" onClick={() => setShowPassword(!showPassword)} />
 
               <button
                 type="button"
@@ -201,12 +167,7 @@ export default function UsuarioEditar() {
             )}
           </div>
 
-          <Input
-            label="Teléfono"
-            name="telefono"
-            value={form.telefono}
-            onChange={handleChange}
-          />
+          <Input label="Teléfono" name="telefono" value={form.telefono} onChange={handleChange} />
 
           <div className="input-group">
             <label className="input-group__label">Foto de perfil</label>
