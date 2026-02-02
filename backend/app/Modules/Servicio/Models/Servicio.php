@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Modules\Servicio\Models;
-
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Modules\Empresa\Models\Empresa;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Modules\Servicio\Models\ServicioImagen;
 
 class Servicio extends Model
 {
@@ -53,6 +53,8 @@ class Servicio extends Model
         'tipo_carga' => 'menaje',
         'estado_carga' => 'mi_almacen',
     ];
+
+    protected $with = ['imagenes'];
 
     /* =====================================================
      |  RELACIONES
@@ -157,5 +159,24 @@ class Servicio extends Model
     public function estaFinalizado(): bool
     {
         return $this->estado === 'finalizado';
+    }
+
+    /**
+     * Imágenes del servicio (máx 3)
+     */
+    public function imagenes()
+    {
+        return $this->hasMany(
+            \App\Modules\Servicio\Models\ServicioImagen::class,
+            'servicio_id'
+        )->orderBy('orden');
+    }
+
+    protected static function booted()
+    {
+        static::forceDeleted(function ($servicio) {
+            app(\App\Modules\Servicio\Services\ServicioImagenService::class)
+                ->eliminarTodas($servicio);
+        });
     }
 }

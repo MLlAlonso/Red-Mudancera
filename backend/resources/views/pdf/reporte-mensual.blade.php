@@ -74,7 +74,7 @@
                                     @forelse ($servicios as $s)
                                         <tr>
                                             <td style="padding:10px;border:1px solid #E2E8EE;">
-                                                {{ $s->origen }} → {{ $s->destino }}
+                                                {{ $s->origen }}  ->  {{ $s->destino }}
                                             </td>
                                             <td align="center" style="padding:10px;border:1px solid #E2E8EE;">
                                                 {{ $s->finalizado_at?->format('d/m/Y') }}

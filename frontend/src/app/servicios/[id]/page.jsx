@@ -15,6 +15,7 @@ export default function DetalleServicioPage() {
   const router = useRouter();
   const [servicio, setServicio] = useState(null);
   const [empresaAuth, setEmpresaAuth] = useState(null);
+  const [imagenActiva, setImagenActiva] = useState(null);
 
   /* =========================
      Obtener servicio
@@ -215,6 +216,19 @@ export default function DetalleServicioPage() {
             }}
           />
 
+          {/* =========================
+                Galería de imágenes
+              ========================= */}
+          {servicio.imagenes?.length > 0 && (
+            <div className="servicio-galeria">
+              {servicio.imagenes.map((img, index) => (
+                <div key={img.id} className="servicio-galeria__item" onClick={() => setImagenActiva(img.url)} >
+                  <img src={img.url} alt={`imagen-${index}`} />
+                </div>
+              ))}
+            </div>
+          )}
+
           {!isOwner && (
             <div className="detalle-servicio__actions">
               <Button_cta
@@ -236,6 +250,24 @@ export default function DetalleServicioPage() {
           )}
 
         </div>
+
+        {/* =========================
+              Modal imagen ampliada
+            ========================= */}
+        {imagenActiva && (
+          <div
+            className="imagen-modal"
+            onClick={() => setImagenActiva(null)}
+          >
+            <div className="imagen-modal__content" onClick={(e) => e.stopPropagation()} >
+              <button className="imagen-modal__close" onClick={() => setImagenActiva(null)} >
+                ✕
+              </button>
+              <img src={imagenActiva} alt="Imagen ampliada" />
+            </div>
+          </div>
+        )}
+
       </main>
 
       <Footer />

@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Modules\Servicio\Requests;
-
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -19,8 +18,6 @@ class StoreServicioRequest extends FormRequest
 
         return [
             'tipo' => ['required', Rule::in(['busco', 'ofrezco'])],
-
-            // Volumen obligatorio excepto vehículo
             'volumen' => [
                 Rule::requiredIf(fn() => $tipoCarga !== 'vehiculo'),
                 'nullable',
@@ -32,7 +29,6 @@ class StoreServicioRequest extends FormRequest
             'origen' => ['required', 'string', 'min:3', 'max:100'],
             'destino' => ['required', 'string', 'min:3', 'max:100'],
 
-            // BUSCO
             'inicio' => [
                 Rule::requiredIf(fn() => $tipo === 'busco'),
                 'date',
@@ -72,6 +68,17 @@ class StoreServicioRequest extends FormRequest
                 Rule::in(['mi_almacen', 'tu_almacen', 'en_ruta']),
             ],
 
+            'imagenes' => [
+                'nullable',
+                'array',
+                'max:3',
+            ],
+
+            'imagenes.*' => [
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:7096', // 7MB
+            ],
         ];
     }
 

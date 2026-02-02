@@ -94,6 +94,39 @@
     }
   }
 
+  .imagenes-preview {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    align-items: center;
+    justify-content: space-between;
+
+    &__item {
+      position: relative;
+
+      img {
+        width: 140px;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+      }
+
+      button {
+        position: absolute;
+        top: -25px;
+        right: -6px;
+        background: $error-hover;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+    }
+  }
 }
 
 /* =========================

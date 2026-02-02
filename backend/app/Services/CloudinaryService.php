@@ -17,7 +17,7 @@ class CloudinaryService
         ]);
     }
 
-    public function upload($file, string $folder): string
+    public function upload($file, string $folder): array
     {
         $result = $this->cloudinary->uploadApi()->upload(
             $file->getRealPath(),
@@ -27,7 +27,11 @@ class CloudinaryService
                 'overwrite' => true,
             ]
         );
-        return $result['secure_url'];
+
+        return [
+            'url' => $result['secure_url'],
+            'public_id' => $result['public_id'],
+        ];
     }
 
     public function deleteByUrl(?string $url): void
@@ -44,5 +48,11 @@ class CloudinaryService
     {
         preg_match('/upload\/(?:v\d+\/)?(.+)\.\w+$/', $url, $matches);
         return $matches[1] ?? null;
+    }
+
+    public function deleteByPublicId(string $publicId): void
+    {
+        if (!$publicId) return;
+        $this->cloudinary->uploadApi()->destroy($publicId);
     }
 }

@@ -2,12 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RecoverPasswordController;
+use App\Modules\Servicio\Controllers\ServicioController;
 
 /*
 |--------------------------------------------------------------------------
 | Empresa
 |--------------------------------------------------------------------------
 */
+
 require base_path('app/Modules/Empresa/routes.php');
 
 /*
@@ -37,3 +39,14 @@ require base_path('app/Modules/Resena/routes.php');
 |--------------------------------------------------------------------------
 */
 Route::post('/auth/recover-password', [RecoverPasswordController::class, 'recover']);
+
+
+/*
+|--------------------------------------------------------------------------
+| Images
+|--------------------------------------------------------------------------
+*/
+Route::post(
+    '/servicios/{id}/imagenes',
+    [ServicioController::class, 'updateImagenes']
+)->middleware('auth:empresa');

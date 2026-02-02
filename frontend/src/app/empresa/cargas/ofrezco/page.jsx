@@ -27,6 +27,11 @@ export default function OfrezcoServicioPage() {
     estadoCarga: "mi_almacen",
   });
 
+  /**
+   * imagenes = [{ file: File, preview: string }]
+   */
+  const [imagenes, setImagenes] = useState([]);
+
   const [errorModal, setErrorModal] = useState({
     show: false,
     message: "",
@@ -34,12 +39,18 @@ export default function OfrezcoServicioPage() {
 
   const [usuarios, setUsuarios] = useState([]);
 
+  /* =========================
+     AUTH
+  ========================= */
   useEffect(() => {
     if (!document.cookie.includes("token_empresa")) {
       router.push("/empresa/login");
     }
   }, [router]);
 
+  /* =========================
+     USUARIOS
+  ========================= */
   useEffect(() => {
     const token = document.cookie
       .split("; ")
@@ -58,15 +69,27 @@ export default function OfrezcoServicioPage() {
       .then(data => setUsuarios(data.usuarios || []));
   }, []);
 
+  /* =========================
+     CLEANUP PREVIEWS
+  ========================= */
+  useEffect(() => {
+    return () => {
+      imagenes.forEach(img => URL.revokeObjectURL(img.preview));
+    };
+  }, [imagenes]);
+
+  /* =========================
+     HANDLERS
+  ========================= */
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "volumen" && Number(value) > 120) return;
-
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
   const handleResponsableChange = (e) => {
     const id = e.target.value;
+
     if (!id) {
       setForm(prev => ({
         ...prev,
@@ -84,10 +107,38 @@ export default function OfrezcoServicioPage() {
       ...prev,
       responsableId: u.id,
       responsableNombre: u.nombre,
-      telefono: u.tel ?? u.telefono ?? u.phone ?? "",
+      telefono: u.tel ?? u.telefono ?? "",
     }));
   };
 
+  const handleImagenesChange = (e) => {
+    const files = Array.from(e.target.files);
+
+    if (files.length + imagenes.length > 3) {
+      setErrorModal({
+        show: true,
+        message: "Máximo 3 imágenes por servicio",
+      });
+      return;
+    }
+
+    const nuevas = files.map(file => ({
+      file,
+      preview: URL.createObjectURL(file),
+    }));
+
+    setImagenes(prev => [...prev, ...nuevas]);
+    if (imagenes.length >= 3) return;
+  };
+
+  const eliminarImagen = (index) => {
+    URL.revokeObjectURL(imagenes[index].preview);
+    setImagenes(prev => prev.filter((_, i) => i !== index));
+  };
+
+  /* =========================
+     SUBMIT
+  ========================= */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -96,46 +147,52 @@ export default function OfrezcoServicioPage() {
       .find(r => r.startsWith("token_empresa="))
       ?.split("=")[1];
 
+    const formData = new FormData();
+
+    formData.append("tipo", "ofrezco");
+    formData.append("volumen", form.volumen);
+    formData.append("origen", form.origen);
+    formData.append("destino", form.destino);
+    formData.append("rangoDias", form.rangoDias);
+    formData.append("tipo_carga", form.tipoCarga);
+    formData.append("nota", form.nota);
+    formData.append("responsable_nombre", form.responsableNombre);
+    formData.append("responsable_telefono", form.telefono);
+    formData.append("importe", form.importe);
+    formData.append("estado_carga", form.estadoCarga);
+
+    imagenes.forEach(({ file }) => {
+      formData.append("imagenes[]", file);
+    });
+
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/servicios`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          tipo: "ofrezco",
-          volumen: form.volumen,
-          origen: form.origen,
-          destino: form.destino,
-          rangoDias: form.rangoDias,
-          tipo_carga: form.tipoCarga,
-          nota: form.nota,
-          responsable_nombre: form.responsableNombre,
-          responsable_telefono: form.telefono,
-          importe: form.importe,
-          estado_carga: form.estadoCarga,
-        }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/servicios`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+          body: formData,
+        }
+      );
 
       const data = await res.json();
 
       if (!res.ok) {
-        const msg =
-          data?.errors?.servicio?.[0] ??
-          data?.message ??
-          "No se pudo publicar el servicio";
-
         setErrorModal({
           show: true,
-          message: msg,
+          message:
+            data?.errors?.imagenes?.[0] ||
+            data?.message ||
+            "No se pudo publicar el servicio",
         });
         return;
       }
 
       router.push("/empresa/dashboard");
-    } catch (err) {
+    } catch {
       setErrorModal({
         show: true,
         message: "Error de conexión con el servidor",
@@ -178,7 +235,44 @@ export default function OfrezcoServicioPage() {
                 placeholder="Describe la carga..."
               />
             </div>
-            
+
+            <div className="input-group">
+            <label className="input-group__label input-group__label--tooltip">
+                <span className="tooltip">
+                  ⓘ
+                  <span className="tooltip__content">
+                    Campo opcional.<br />
+                    Una vez cargadas, las imágenes
+                    <strong> No se podrán editar.”</strong>.
+                  </span>
+                </span>
+                Imágenes de inventario (opcional) ({imagenes.length}/3)
+              </label>
+
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleImagenesChange}
+                onClick={(e) => (e.target.value = null)}
+              />
+
+              {imagenes.length > 0 && (
+                <div className="imagenes-preview">
+                  {imagenes.map((img, index) => (
+                    <div key={index} className="imagenes-preview__item">
+                      <img src={img.preview} alt={`imagen-${index}`} />
+                      <button type="button" onClick={() => eliminarImagen(index)}>
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+
+                </div>
+              )}
+            </div>
+
+
             <div className="input-group">
               <label className="input-group__label">Plazo máximo de entrega</label>
               <select name="rangoDias" className="input-group__field" value={form.rangoDias} onChange={handleChange}>
@@ -192,12 +286,7 @@ export default function OfrezcoServicioPage() {
 
             <div className="input-group">
               <label className="input-group__label">Estado de la carga</label>
-              <select
-                name="estadoCarga"
-                className="input-group__field"
-                value={form.estadoCarga}
-                onChange={handleChange}
-              >
+              <select name="estadoCarga" className="input-group__field" value={form.estadoCarga} onChange={handleChange} >
                 <option value="mi_almacen">En bodega</option>
                 <option value="tu_almacen">Entrega directa en tu bodega</option>
                 <option value="en_ruta">Pendiente de recolección</option>

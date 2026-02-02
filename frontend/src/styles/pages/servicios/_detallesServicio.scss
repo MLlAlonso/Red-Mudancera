@@ -184,10 +184,80 @@
       font-style: italic;
     }
   }
+
+  /* =========================
+      Galería de imágenes
+    ========================= */
+
+  .servicio-galeria {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+
+    &__item {
+      cursor: pointer;
+
+      img {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        transition: transform 0.2s ease;
+      }
+
+      &:hover img {
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  /* =========================
+      Modal imagen
+    ========================= */
+
+  .imagen-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+
+    &__content {
+      position: relative;
+      max-width: 90%;
+      max-height: 90%;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      max-height: 90vh;
+      border-radius: 12px;
+    }
+
+    &__close {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+  }
 }
 
 /* Responsive */
-
 @media (max-width: 1024px) {
   .detalle-servicio {
     padding: 2.5rem 1.5rem;

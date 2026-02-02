@@ -14,6 +14,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Laravel\Sanctum\PersonalAccessToken;
+use App\Modules\Servicio\Requests\UpdateServicioRequest;
+use App\Modules\Servicio\Services\ServicioImagenService;
 
 class ServicioController extends Controller
 {
@@ -50,31 +52,42 @@ class ServicioController extends Controller
      */
     public function show($id)
     {
-        $servicio = Servicio::with('empresa')->find($id);
-
+        $servicio = Servicio::with(['empresa'])->find($id);
         if (! $servicio) {
             return response()->json([
                 'message' => 'Servicio no encontrado'
             ], 404);
         }
-
         return response()->json($servicio);
     }
 
     /**
      * POST /api/servicios
      */
-    public function store(StoreServicioRequest $request): JsonResponse
-    {
+    public function store(
+        StoreServicioRequest $request,
+        ServicioImagenService $imagenService
+    ): JsonResponse {
         $empresa = auth()->user();
+
         $servicio = $this->servicioService->create(
             $request->validated(),
             $empresa
         );
 
+        if (
+            $request->tipo === 'ofrezco' &&
+            $request->hasFile('imagenes')
+        ) {
+            $imagenService->guardarImagenes(
+                $servicio,
+                $request->file('imagenes')
+            );
+        }
+
         return response()->json([
             'message' => 'Servicio creado correctamente.',
-            'data' => $servicio
+            'data' => $servicio->load('imagenes'),
         ], 201);
     }
 
@@ -88,7 +101,6 @@ class ServicioController extends Controller
         ]);
 
         $servicio = Servicio::findOrFail($id);
-
         $servicio = $this->servicioService->changeEstado(
             $servicio,
             $validated['estado']
@@ -121,8 +133,11 @@ class ServicioController extends Controller
     /**
      * Update /api/servicios/{id}
      */
-    public function update(StoreServicioRequest $request, int $id): JsonResponse
-    {
+    public function update(
+        UpdateServicioRequest $request,
+        int $id,
+        ServicioImagenService $imagenService
+    ): JsonResponse {
         $empresa = auth()->user();
         $servicio = $this->servicioRepository->findById($id);
 
@@ -134,24 +149,51 @@ class ServicioController extends Controller
             return response()->json(['message' => 'No autorizado'], 403);
         }
 
-        $data = $request->validated();
+        $servicio->update($request->validated());
 
-        // Recalcular distancia SOLO si cambió origen o destino
-        if (
-            $data['origen'] !== $servicio->origen ||
-            $data['destino'] !== $servicio->destino
-        ) {
-            $distanceService = app(\App\Services\Google\GoogleDistanceService::class);
-            $data['distancia_km'] = $distanceService->calcularKm(
-                $data['origen'],
-                $data['destino']
+        if ($request->hasFile('imagenes')) {
+            $imagenService->eliminarTodas($servicio);
+
+            $imagenService->guardarImagenes(
+                $servicio,
+                $request->file('imagenes')
             );
         }
 
-        $servicio->update($data);
         return response()->json([
             'message' => 'Servicio actualizado correctamente',
-            'data' => $servicio->fresh(),
+            'data' => $servicio->fresh()->load('imagenes'),
+        ]);
+    }
+
+    public function updateImagenes(
+        Request $request,
+        int $id,
+        ServicioImagenService $imagenService
+    ): JsonResponse {
+        $empresa = auth('empresa')->user();
+        $servicio = Servicio::findOrFail($id);
+        if ($servicio->empresa_id !== $empresa->id) {
+            return response()->json(['message' => 'No autorizado'], 403);
+        }
+
+        $request->validate([
+            'imagenes' => ['required', 'array', 'min:1', 'max:3'],
+            'imagenes.*' => [
+                'file',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:4096',
+            ],
+        ]);
+
+        $imagenes = $request->file('imagenes');
+        $imagenService->eliminarTodas($servicio);
+        $imagenService->guardarImagenes($servicio, $imagenes);
+
+        return response()->json([
+            'message' => 'Imágenes actualizadas correctamente',
+            'data' => $servicio->fresh()->load('imagenes'),
         ]);
     }
 
@@ -166,7 +208,7 @@ class ServicioController extends Controller
             ->where('empresa_id', $empresa->id)
             ->orderBy('created_at', 'desc');
 
-        // 🔍 búsqueda
+        // búsqueda
         if ($search = $request->get('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('origen', 'like', "%{$search}%")
@@ -246,7 +288,6 @@ class ServicioController extends Controller
     public function reporteMensual(Request $request)
     {
         $empresa = auth()->user();
-
         $validated = $request->validate([
             'mes' => 'required|integer|min:1|max:12',
             'anio' => 'required|integer|min:2026',
@@ -275,13 +316,11 @@ class ServicioController extends Controller
     public function reporteMensualPdf(Request $request)
     {
         $token = $request->query('token');
-
         if (!$token) {
             abort(401, 'Token requerido');
         }
 
         $accessToken = PersonalAccessToken::findToken($token);
-
         if (!$accessToken) {
             abort(401, 'Token inválido');
         }
@@ -289,7 +328,6 @@ class ServicioController extends Controller
         $empresa = $accessToken->tokenable;
 
         $logoPath = null;
-
         if ($empresa->logo) {
             $image = Http::get($empresa->logo)->body();
             $logoPath = storage_path('app/temp_logo.png');

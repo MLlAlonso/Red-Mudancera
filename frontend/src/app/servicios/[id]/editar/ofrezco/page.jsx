@@ -65,7 +65,7 @@ export default function EditarOfrezcoServicioPage() {
                     estadoCarga: servicio.estado_carga ?? "mi_almacen",
                 });
             });
-            
+
     }, [id, router]);
 
     /* ======================
