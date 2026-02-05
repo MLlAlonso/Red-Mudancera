@@ -90,6 +90,7 @@
     &.active {
       background: variables.$primary;
       color: #fff;
+      font-size: 26px;
 
       img {
         filter: brightness(1.2);

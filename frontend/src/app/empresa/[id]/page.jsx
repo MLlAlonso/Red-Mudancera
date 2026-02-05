@@ -92,12 +92,18 @@ export default function EmpresaPublicPerfil() {
 
         <div className="empresa-perfil__stats">
           <div className="stat">
-            ⭐ {empresa.reputacion ?? "—"}
+            ⭐{" "}
+            {empresa.reputacion > 0
+              ? empresa.reputacion
+              : "Sin reseñas aún"}
             <span>Reputación</span>
           </div>
 
           <div className="stat">
-            📦 {empresa.numServicios ?? 0}
+            📦{" "}
+            {empresa.numServicios > 0
+              ? empresa.numServicios
+              : "Usuario nuevo"}
             <span>Acuerdos</span>
           </div>
         </div>
@@ -127,6 +133,8 @@ export default function EmpresaPublicPerfil() {
             />
           ))}
         </div>
+
+        <span className="empresa-perfil__vermas">Ver más</span>
       </main>
 
       <Footer />

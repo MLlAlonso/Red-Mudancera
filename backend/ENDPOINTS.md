@@ -1,62 +1,63 @@
 ## Empresa — Públicos
-
-| Método | Ruta | Controlador |
-|--------|------|-------------|
-| POST | `/api/empresa/register` | `EmpresaAuthController::register` |
-| POST | `/api/empresa/login` | `EmpresaAuthController::login` |
-| POST | `/api/empresa/send-verification` | `EmpresaAuthController::sendVerificationCode` |
-| POST | `/api/empresa/verify-code` | `EmpresaAuthController::verifyCode` |
+Método	Ruta	Controlador	Archivo
+POST	/api/empresa/register	EmpresaAuthController::register	routes.php
+POST	/api/empresa/login	EmpresaAuthController::login	routes.php
+POST	/api/empresa/send-verification	EmpresaAuthController::sendVerificationCode	routes.php
+POST	/api/empresa/verify-code	EmpresaAuthController::verifyCode	routes.php
 
 ## Empresa — Protegidos (auth:sanctum)
+Método	Ruta	Controlador	Archivo
+GET	/api/empresa/me	EmpresaController::me	routes.php
+PUT	/api/empresa/update	EmpresaController::update	routes.php
+DELETE	/api/empresa/delete	EmpresaController::destroy	routes.php
+GET	/api/empresa/usuarios	EmpresaController::usuariosEmpresa	routes.php
+DELETE	/api/empresa/usuario/{id}	EmpresaController::eliminarUsuario	routes.php
+PATCH	/api/empresa/usuario/{id}/pausar	EmpresaController::pausarUsuario	routes.php
+PATCH	/api/empresa/usuario/{id}/reanudar	EmpresaController::reanudarUsuario	routes.php
+GET	/api/empresa/servicios	ServicioController::misServicios	routes.php
 
-| Método | Ruta | Controlador |
-|--------|------|-------------|
-| GET | `/api/empresa/me` | `EmpresaController::me` |
-| PUT | `/api/empresa/update` | `EmpresaController::update` |
-| DELETE | `/api/empresa/delete` | `EmpresaController::destroy` |
-| GET | `/api/empresa/usuarios` | `EmpresaController::usuariosEmpresa` |
-| DELETE | `/api/empresa/usuario/{id}` | `EmpresaController::eliminarUsuario` |
-| PATCH | `/api/empresa/usuario/{id}/pausar` | `EmpresaController::pausarUsuario` |
-| PATCH | `/api/empresa/usuario/{id}/reanudar` | `EmpresaController::reanudarUsuario` |
-| GET | `/api/empresa/servicios` | `ServicioController::misServicios` |
+## Empresa — Públicos (adicionales)
+Método	Ruta	Controlador	Archivo
+GET	/api/empresa/empresas/{id}	EmpresaPublicController::show	routes.php
+GET	/api/empresa/empresas	EmpresaPublicController::index	routes.php
 
 ## Usuario — Públicos
-
-| Método | Ruta | Controlador |
-|--------|------|-------------|
-| POST | `/api/usuario/register` | `UsuarioAuthController::register` |
-| POST | `/api/usuario/login` | `UsuarioAuthController::login` |
-| POST | `/api/usuario/send-verification-code` | `UsuarioAuthController::sendVerificationCode` |
-| POST | `/api/usuario/verify-code` | `UsuarioAuthController::verifyCode` |
+Método	Ruta	Controlador	Archivo
+POST	/api/usuario/register	UsuarioAuthController::register	routes.php
+POST	/api/usuario/login	UsuarioAuthController::login	routes.php
+POST	/api/usuario/send-verification-code	UsuarioAuthController::sendVerificationCode	routes.php
+POST	/api/usuario/verify-code	UsuarioAuthController::verifyCode	routes.php
 
 ## Usuario — Protegidos (auth:sanctum)
-
-| Método | Ruta | Controlador |
-|--------|------|-------------|
-| GET | `/api/usuario/me` | `UsuarioController::me` |
-| PUT | `/api/usuario/update` | `UsuarioController::update` |
-| DELETE | `/api/usuario/delete` | `UsuarioController::destroy` |
-| GET | `/api/usuario/mis-usuarios` | `UsuarioController::listByEmpresa` |
+Método	Ruta	Controlador	Archivo
+GET	/api/usuario/me	UsuarioController::me	routes.php
+PUT	/api/usuario/update	UsuarioController::update	routes.php
+DELETE	/api/usuario/delete	UsuarioController::destroy	routes.php
+GET	/api/usuario/mis-usuarios	UsuarioController::listByEmpresa	routes.php
 
 ## Servicios
-
-| Método | Ruta | Controlador | Protección |
-|--------|------|-------------|-----------|
-| GET | `/api/servicios` | `ServicioController::index` | Público |
-| GET | `/api/servicios/{id}` | `ServicioController::show` | Público |
-| POST | `/api/servicios` | `ServicioController::store` | Protegida |
-| PATCH | `/api/servicios/{id}` | `ServicioController::update` | Protegida |
-| PATCH | `/api/servicios/{id}/estado` | `ServicioController::changeEstado` | Protegida |
-| DELETE | `/api/servicios/{id}` | `ServicioController::destroy` | Protegida |
+Método	Ruta	Controlador	Protección	Archivo
+GET	/api/servicios	ServicioController::index	Público	routes.php
+GET	/api/servicios/{id}	ServicioController::show	Público	routes.php
+POST	/api/servicios	ServicioController::store	Protegida	routes.php
+PATCH	/api/servicios/{id}	ServicioController::update	Protegida	routes.php
+PATCH	/api/servicios/{id}/estado	ServicioController::changeEstado	Protegida	routes.php
+DELETE	/api/servicios/{id}	ServicioController::destroy	Protegida	routes.php
+POST	/api/servicios/{id}/finalizar	ServicioController::finalizar	Protegida	routes.php
+GET	/api/servicios/reporte/mensual	ServicioController::reporteMensual	Protegida	routes.php
+GET	/api/servicios/reporte/mensual/pdf	ServicioController::reporteMensualPdf	Público	routes.php
+POST	/api/servicios/{id}/imagenes	ServicioController::updateImagenes	Protegida	api.php
 
 ## Reseñas
+Método	Ruta	Controlador	Protección	Archivo
+POST	/api/empresa/resenas/link	ResenaController::generarLink	Protegida	routes.php
+POST	/api/resenas/{token}	ResenaController::store	Protegida	routes.php
+GET	/api/resenas/link/{token}	ResenaController::validarLink	Público	routes.php
+GET	/api/empresas/{empresaId}/resenas	ResenaController::listar	Público	routes.php
 
-| Método | Ruta | Controlador | Protección |
-|--------|------|-------------|-----------|
-| POST | `/api/empresa/resenas/link` | `ResenaController::generarLink` | Protegida |
-| POST | `/api/resenas/{token}` | `ResenaController::store` | Protegida |
-| GET | `/api/resenas/link/{token}` | `ResenaController::validarLink` | Público |
-| GET | `/api/empresas/{empresaId}/resenas` | `ResenaController::listar` | Público |
+## Otros (Recuperación de Contraseña)
+Método	Ruta	Controlador	Archivo
+POST	/api/auth/recover-password	RecoverPasswordController::recover	api.php
 
 ## Rutas Agrupadoras
 

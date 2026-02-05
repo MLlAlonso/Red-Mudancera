@@ -21,8 +21,12 @@ const EmpresaCard = ({ id, logo, nombre, sede, reputacion }) => {
 
       {reputacion !== null && reputacion !== undefined && (
         <div className="empresa-card__reputation">
-          ⭐ {Number(reputacion).toFixed(1)}
+          ⭐{" "}
+          {Number(reputacion) > 0
+            ? Number(reputacion).toFixed(1)
+            : "Sin reseñas"}
         </div>
+
       )}
     </div>
   );

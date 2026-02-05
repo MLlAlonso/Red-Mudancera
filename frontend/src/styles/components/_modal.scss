@@ -171,6 +171,13 @@
   }
 }
 
+.modal-actions{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  gap: 15px;
+}
+
 #modal-btn-cancel {
   marginTop: 0px;
   background: variables.$error;

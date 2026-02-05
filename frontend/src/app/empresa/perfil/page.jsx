@@ -75,19 +75,25 @@ export default function EmpresaPerfil() {
 
         {/* Foto + nombre */}
         <div className="empresa-perfil__top">
-          <img src={empresa.logo_url || "/icons/user-placeholder.png"} className="empresa-perfil__avatar"/>
+          <img src={empresa.logo_url || "/icons/user-placeholder.png"} className="empresa-perfil__avatar" />
           <h2 className="empresa-perfil__name">{empresa.empresa}</h2>
         </div>
 
         {/* Stats */}
         <div className="empresa-perfil__stats">
           <div className="stat">
-            ⭐ {empresa.reputacion}
+            ⭐{" "}
+            {empresa.reputacion > 0
+              ? empresa.reputacion
+              : "Sin reseñas aún"}
             <span>Reputación</span>
           </div>
 
           <div className="stat">
-            📦 {empresa.numServicios}
+            📦{" "}
+            {empresa.numServicios > 0
+              ? empresa.numServicios
+              : "Usuario nuevo"}
             <span>Acuerdos</span>
           </div>
         </div>
@@ -119,7 +125,6 @@ export default function EmpresaPerfil() {
 
           <div className="empresa-perfil__section-actions">
             <Button_crud value="Compartir link" onClick={() => setOpenModal(true)} />
-            <span className="empresa-perfil__vermas">Ver más</span>
           </div>
         </div>
 
@@ -139,6 +144,8 @@ export default function EmpresaPerfil() {
           ))}
 
         </div>
+
+        <span className="empresa-perfil__vermas">Ver más</span>
       </main>
 
       <ShareReviewLinkModal

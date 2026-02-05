@@ -49,8 +49,6 @@ export default function ShareReviewLinkModal({ open, onClose }) {
       <div className="modal">
         <h3 className="modal-title">Compartir link de reseña</h3>
 
-
-
         <div className="modal-message">
           {loading && <p>Generando link...</p>}
         </div>
@@ -65,13 +63,16 @@ export default function ShareReviewLinkModal({ open, onClose }) {
                 placeholder="Generando enlace..."
                 onChange={() => { }}
               />
-
-              <Button_success
-                value="Copiar"
-                onClick={() => navigator.clipboard.writeText(link)}
-              />
             </>
           )}
+
+        </div>
+
+        <div className="modal-actions">
+          <Button_success
+            value="Copiar"
+            onClick={() => navigator.clipboard.writeText(link)}
+          />
           <Button_error value="Cerrar" onClick={onClose} />
         </div>
 

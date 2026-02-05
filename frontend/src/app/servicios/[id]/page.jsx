@@ -115,13 +115,9 @@ export default function DetalleServicioPage() {
               <h2 className="detalle-servicio__route-title">
                 <img src="/icons/place-marker.png" alt="" /> {servicio.origen}
                 {" → "}
-                <img src="/icons/truck.png" alt="" /> {servicio.destino}
+                <img src="/icons/destino.png" alt="" /> {servicio.destino}
               </h2>
             </div>
-          </div>
-
-          <div className="detalle-servicio__divider">
-            <img src="/icons/favicon.ico" alt="divider" className="divider__icon" />
           </div>
 
           <div className="detalle-servicio__grid">
@@ -193,8 +189,12 @@ export default function DetalleServicioPage() {
             <div>
               <label>Reputación:</label>
               <span className="reputacion">
-                ⭐ {servicio.empresa?.reputacion ?? "—"}
+                ⭐{" "}
+                {servicio.empresa?.reputacion > 0
+                  ? servicio.empresa.reputacion
+                  : "Sin reseñas aún"}
               </span>
+
             </div>
 
             <div>

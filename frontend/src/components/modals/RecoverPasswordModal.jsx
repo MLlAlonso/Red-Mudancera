@@ -23,7 +23,8 @@ export default function RecoverPasswordModal({ onClose, onConfirm }) {
           id="modal_email"
           onChange={(e) => setEmail(e.target.value)}
         />
-
+      </div>
+      
         <Button_cta
           value="Continuar"
           onClick={() => {
@@ -31,7 +32,6 @@ export default function RecoverPasswordModal({ onClose, onConfirm }) {
             onConfirm(email);
           }}
         />
-      </div>
     </BaseModal>
   );
 }
