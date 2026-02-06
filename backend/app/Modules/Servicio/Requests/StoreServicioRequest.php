@@ -4,6 +4,7 @@ namespace App\Modules\Servicio\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
 
 class StoreServicioRequest extends FormRequest
 {
@@ -14,11 +15,42 @@ class StoreServicioRequest extends FormRequest
 
     public function rules(): array
     {
-        $tipo = request('tipo');
-        $tipoCarga = request('tipo_carga');
+        $tipo = $this->input('tipo');
+        $tipoCarga = $this->input('tipo_carga');
 
+        if ($tipo === 'busco') {
+            return [
+                'tipo' => ['required', Rule::in(['busco'])],
+
+                'volumen' => [
+                    Rule::requiredIf(fn() => $tipoCarga !== 'vehiculo'),
+                    'nullable',
+                    'numeric',
+                    'gt:0',
+                    'lte:120',
+                ],
+
+                'origen' => ['required', 'string', 'min:3', 'max:100'],
+                'destino' => ['required', 'string', 'min:3', 'max:100'],
+
+                'inicio' => ['required', 'date', 'after_or_equal:today'],
+                'fin' => ['required', 'date', 'after_or_equal:inicio'],
+
+                'tipo_carga' => [
+                    'required',
+                    Rule::in(['menaje', 'libre']),
+                ],
+
+                'nota' => ['nullable', 'string', 'max:1000'],
+                'responsable_nombre' => ['nullable', 'string', 'max:120'],
+                'responsable_telefono' => ['nullable', 'string', 'max:20'],
+            ];
+        }
+
+        // ===== OFREZCO =====
         return [
-            'tipo' => ['required', Rule::in(['busco', 'ofrezco'])],
+            'tipo' => ['required', Rule::in(['ofrezco'])],
+
             'volumen' => [
                 Rule::requiredIf(fn() => $tipoCarga !== 'vehiculo'),
                 'nullable',
@@ -30,26 +62,8 @@ class StoreServicioRequest extends FormRequest
             'origen' => ['required', 'string', 'min:3', 'max:100'],
             'destino' => ['required', 'string', 'min:3', 'max:100'],
 
-            'inicio' => [
-                Rule::requiredIf(fn() => $tipo === 'busco'),
-                'date',
-                'after_or_equal:today',
-            ],
-            'fin' => [
-                Rule::requiredIf(fn() => $tipo === 'busco'),
-                'date',
-                'after_or_equal:inicio',
-            ],
+            'rangoDias' => ['required', 'string'],
 
-            // OFREZCO
-            'rangoDias' => [
-                Rule::requiredIf(fn() => $tipo === 'ofrezco'),
-                'filled',
-                'string',
-            ],
-
-
-            // VALORES NORMALIZADOS
             'tipo_carga' => [
                 'required',
                 Rule::in([
@@ -57,7 +71,6 @@ class StoreServicioRequest extends FormRequest
                     'vehiculo',
                     'menaje_vehiculo',
                     'otro',
-                    'libre', // solo busco
                 ]),
             ],
 
@@ -65,25 +78,13 @@ class StoreServicioRequest extends FormRequest
             'responsable_nombre' => ['nullable', 'string', 'max:120'],
             'responsable_telefono' => ['nullable', 'string', 'max:20'],
             'importe' => ['nullable', 'numeric', 'min:0'],
+            'estado_carga' => ['nullable', Rule::in(['mi_almacen', 'tu_almacen', 'en_ruta'])],
 
-            'estado_carga' => [
-                'nullable',
-                Rule::in(['mi_almacen', 'tu_almacen', 'en_ruta']),
-            ],
-
-            'imagenes' => [
-                'nullable',
-                'array',
-                'max:3',
-            ],
-
-            'imagenes.*' => [
-                'image',
-                'mimes:jpg,jpeg,png,webp',
-                'max:7096', // 7MB
-            ],
+            'imagenes' => ['nullable', 'array', 'max:3'],
+            'imagenes.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:7096'],
         ];
     }
+
 
     public function messages(): array
     {
@@ -96,15 +97,13 @@ class StoreServicioRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            // Normalizar tipo_carga
             'tipo_carga' => $this->tipo_carga
                 ?: $this->tipoCarga
                 ?: 'menaje',
 
-            // Normalizar rangoDias SOLO para ofrezco
-            'rangoDias' => request('tipo') === 'ofrezco'
+            'rangoDias' => $this->input('tipo') === 'ofrezco'
                 ? ($this->rangoDias ?: '1-7')
-                : $this->rangoDias,
+                : null,
         ]);
     }
 }

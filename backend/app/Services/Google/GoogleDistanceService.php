@@ -1,9 +1,7 @@
 <?php
 
 namespace App\Services\Google;
-
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class GoogleDistanceService
 {
@@ -39,8 +37,6 @@ class GoogleDistanceService
         }
 
         $data = $response->json();
-
-        Log::warning('Google Distance raw response', $response->json());
         $element = $data['rows'][0]['elements'][0] ?? null;
 
         if (! $element || $element['status'] !== 'OK') {
@@ -49,7 +45,6 @@ class GoogleDistanceService
 
         // Google devuelve metros
         $metros = $element['distance']['value'];
-
         return (int) round($metros / 1000);
     }
 }

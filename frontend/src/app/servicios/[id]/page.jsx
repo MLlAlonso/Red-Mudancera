@@ -113,9 +113,9 @@ export default function DetalleServicioPage() {
 
             <div className="detalle-servicio__route-tags">
               <h2 className="detalle-servicio__route-title">
-                {/* <img src="/icons/place-marker.png" alt="" /> */} 
+                {/* <img src="/icons/place-marker.png" alt="" /> */}
                 {servicio.origen}
-                {" → "} 
+                {" → "}
                 {servicio.destino}
               </h2>
             </div>
@@ -127,14 +127,16 @@ export default function DetalleServicioPage() {
               <span>{servicio.volumen} m³</span>
             </div>
 
-            <div>
-              <label>Distancia:</label>
-              <span>
-                {servicio.distancia_km
-                  ? `${servicio.distancia_km} km`
-                  : "—"}
-              </span>
-            </div>
+            {isOffer && (
+              <div>
+                <label>Distancia:</label>
+                <span>
+                  {servicio.distancia_km
+                    ? `${servicio.distancia_km} km`
+                    : "—"}
+                </span>
+              </div>
+            )}
 
             <div>
               <label>Oferta:</label>
