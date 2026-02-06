@@ -126,53 +126,7 @@ export default function UsuarioDashboard() {
         ========================= */}
         <div className="empresa-dashboard__controls">
           <ServiceFilters onChange={setFilter} />
-
-          {/* Botón filtros avanzados / borrar */}
-          <button
-            className={`btn-advanced-filters ${hasActiveFilters ? "active" : ""
-              }`}
-            onClick={() => {
-              if (hasActiveFilters) {
-                clearAllFilters();
-              } else {
-                setShowFilters(true);
-              }
-            }}
-            aria-label={
-              hasActiveFilters ? "Borrar filtros" : "Filtros avanzados"
-            }
-          >
-            <img
-              src={
-                hasActiveFilters
-                  ? "/icons/borrar.png"
-                  : "/icons/filtrar.png"
-              }
-              alt={
-                hasActiveFilters
-                  ? "Borrar filtros"
-                  : "Filtros avanzados"
-              }
-            />
-          </button>
         </div>
-
-        {/* =========================
-            Advanced filters
-        ========================= */}
-        {showFilters && (
-          <div className="filters-overlay">
-            <ServiceAdvancedFilters
-              values={draftFilters}
-              onChange={setDraftFilters}
-              onApply={() => {
-                setAppliedFilters(draftFilters);
-                setShowFilters(false);
-              }}
-              onClose={() => setShowFilters(false)}
-            />
-          </div>
-        )}
 
         {/* =========================
             Cards

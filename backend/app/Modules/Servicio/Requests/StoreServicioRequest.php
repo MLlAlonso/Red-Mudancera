@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Modules\Servicio\Requests;
+
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -43,8 +44,10 @@ class StoreServicioRequest extends FormRequest
             // OFREZCO
             'rangoDias' => [
                 Rule::requiredIf(fn() => $tipo === 'ofrezco'),
+                'filled',
                 'string',
             ],
+
 
             // VALORES NORMALIZADOS
             'tipo_carga' => [
@@ -88,5 +91,20 @@ class StoreServicioRequest extends FormRequest
             'volumen.required' => 'El volumen es obligatorio para este tipo de carga.',
             'tipo_carga.in' => 'El tipo de carga seleccionado no es válido.',
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            // Normalizar tipo_carga
+            'tipo_carga' => $this->tipo_carga
+                ?: $this->tipoCarga
+                ?: 'menaje',
+
+            // Normalizar rangoDias SOLO para ofrezco
+            'rangoDias' => request('tipo') === 'ofrezco'
+                ? ($this->rangoDias ?: '1-7')
+                : $this->rangoDias,
+        ]);
     }
 }

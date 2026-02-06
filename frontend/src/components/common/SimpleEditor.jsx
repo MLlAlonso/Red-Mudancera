@@ -3,7 +3,7 @@ import { useRef, useEffect } from "react";
 export default function SimpleEditor({
     value = "",
     onChange,
-    placeholder = "Escribe aquí…",
+    placeholder = "¿Qué lleva la mudanza? Escríbelo o pega la lista del cliente.",
 }) {
     const editorRef = useRef(null);
     const lastHtml = useRef(value);
@@ -28,12 +28,12 @@ export default function SimpleEditor({
 
     return (
         <div className="simple-editor">
-            <div className="simple-editor__toolbar">
+            {/* <div className="simple-editor__toolbar">
                 <button type="button" onClick={() => document.execCommand("bold")}> B </button>
                 <button type="button" onClick={() => document.execCommand("italic")}> I </button>
                 <button type="button" onClick={() => document.execCommand("insertUnorderedList")}> • Lista </button>
                 <button type="button" onClick={() => document.execCommand("insertOrderedList")}> 1. </button>
-            </div>
+            </div> */}
 
             <div
                 ref={editorRef}

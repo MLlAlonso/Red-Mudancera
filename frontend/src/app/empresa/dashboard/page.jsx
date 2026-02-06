@@ -121,7 +121,7 @@ export default function EmpresaDashboard() {
           <ServiceFilters onChange={setFilter} />
 
           {/* Botón filtros avanzados / borrar */}
-          <button
+{/*           <button
             className={`btn-advanced-filters ${hasActiveFilters ? "active" : ""
               }`}
             onClick={() => {
@@ -147,7 +147,7 @@ export default function EmpresaDashboard() {
                   : "Filtros avanzados"
               }
             />
-          </button>
+          </button> */}
         </div>
 
         {/* =========================
@@ -161,7 +161,7 @@ export default function EmpresaDashboard() {
         {/* =========================
             Advanced filters overlay
         ========================= */}
-        {showFilters && (
+        {/* {showFilters && (
           <div className="filters-overlay">
             <ServiceAdvancedFilters
               values={filters}
@@ -170,7 +170,7 @@ export default function EmpresaDashboard() {
               onClose={() => setShowFilters(false)}
             />
           </div>
-        )}
+        )} */}
 
         {/* =========================
             Cards

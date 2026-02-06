@@ -162,7 +162,15 @@
         }
 
         &__controls {
-            justify-content: space-between;
+            justify-content: center;
+
+            .service-filters__trigger{
+                width: 340px;
+
+                span{
+                    font-size: 26px;
+                }
+            }
         }
     }
 }

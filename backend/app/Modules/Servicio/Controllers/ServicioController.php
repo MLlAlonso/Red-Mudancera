@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Modules\Servicio\Controllers;
 
 use Illuminate\Support\Facades\Http;
@@ -16,6 +15,9 @@ use Carbon\Carbon;
 use Laravel\Sanctum\PersonalAccessToken;
 use App\Modules\Servicio\Requests\UpdateServicioRequest;
 use App\Modules\Servicio\Services\ServicioImagenService;
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ServicioController extends Controller
 {
@@ -68,28 +70,41 @@ class ServicioController extends Controller
         StoreServicioRequest $request,
         ServicioImagenService $imagenService
     ): JsonResponse {
-        $empresa = auth()->user();
+        $empresa = auth('empresa')->user();
 
-        $servicio = $this->servicioService->create(
-            $request->validated(),
-            $empresa
-        );
+        return DB::transaction(function () use ($request, $empresa, $imagenService) {
 
-        if (
-            $request->tipo === 'ofrezco' &&
-            $request->hasFile('imagenes')
-        ) {
-            $imagenService->guardarImagenes(
-                $servicio,
-                $request->file('imagenes')
+            // Crear servicio + calcular distancia
+            $servicio = $this->servicioService->create(
+                $request->validated(),
+                $empresa
             );
-        }
 
-        return response()->json([
-            'message' => 'Servicio creado correctamente.',
-            'data' => $servicio->load('imagenes'),
-        ], 201);
+            // Subir imágenes SOLO si vienen
+            if ($request->hasFile('imagenes')) {
+                try {
+                    $imagenService->guardarImagenes(
+                        $servicio,
+                        $request->file('imagenes')
+                    );
+                } catch (\Throwable $e) {
+                    Log::error('Error subiendo imágenes', [
+                        'servicio_id' => $servicio->id,
+                        'error' => $e->getMessage(),
+                    ]);
+
+                    // rollback automático
+                    throw $e;
+                }
+            }
+
+            return response()->json([
+                'message' => 'Servicio creado correctamente',
+                'data' => $servicio->fresh()->load('imagenes'),
+            ], 201);
+        });
     }
+
 
     /**
      * PATCH /api/servicios/{id}/estado

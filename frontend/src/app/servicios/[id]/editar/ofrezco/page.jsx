@@ -217,7 +217,7 @@ export default function EditarOfrezcoServicioPage() {
                                 onChange={(value) =>
                                     setForm((prev) => ({ ...prev, nota: value }))
                                 }
-                                placeholder={`Descripción de la carga`}
+                                placeholder={`¿Qué lleva la mudanza? Escríbelo o pega la lista del cliente.`}
                             />
                         </div>
 
@@ -231,7 +231,6 @@ export default function EditarOfrezcoServicioPage() {
                                 value={form.rangoDias}
                                 onChange={handleChange}
                             >
-                                <option value="">Selecciona</option>
                                 <option value="1-7">1 a 7 días</option>
                                 <option value="8-15">8 a 15 días</option>
                                 <option value="15-30">15 a 30 días</option>

@@ -212,9 +212,9 @@ export default function OfrezcoServicioPage() {
               <h2 className="subtitle">Información requerida</h2>
             </div>
 
-            <Input label="Origen" name="origen" value={form.origen} onChange={handleChange} autocomplete />
-            <Input label="Destino" name="destino" value={form.destino} onChange={handleChange} autocomplete />
-            <Input label="Volumen" name="volumen" type="number" value={form.volumen} onChange={handleChange} />
+            <Input label="Origen" name="origen" value={form.origen} placeholder={"Ubicación donde está la mudanza"} onChange={handleChange} autocomplete />
+            <Input label="Destino" name="destino" value={form.destino} placeholder={"Ciudad donde se debe entregar la carga"} onChange={handleChange} autocomplete />
+            <Input label="Volumen m³" name="volumen" type="number" value={form.volumen} placeholder={"Espacio que ocupa la carga (m³)"} onChange={handleChange} />
 
             <div className="input-group">
               <label className="input-group__label">Tipo de carga</label>
@@ -232,12 +232,12 @@ export default function OfrezcoServicioPage() {
               <SimpleEditor
                 value={form.nota}
                 onChange={(html) => setForm(prev => ({ ...prev, nota: html }))}
-                placeholder="Describe la carga..."
+                placeholder="¿Qué lleva la mudanza? Escríbelo o pega la lista del cliente."
               />
             </div>
 
             <div className="input-group">
-            <label className="input-group__label input-group__label--tooltip">
+              <label className="input-group__label input-group__label--tooltip">
                 <span className="tooltip">
                   ⓘ
                   <span className="tooltip__content">
@@ -246,7 +246,7 @@ export default function OfrezcoServicioPage() {
                     <strong> No se podrán editar.”</strong>.
                   </span>
                 </span>
-                Imágenes de inventario (opcional) ({imagenes.length}/3)
+                Imágenes de inventario ({imagenes.length}/3)
               </label>
 
               <input
@@ -272,11 +272,18 @@ export default function OfrezcoServicioPage() {
               )}
             </div>
 
-
             <div className="input-group">
-              <label className="input-group__label">Plazo máximo de entrega</label>
+              <label className="input-group__label input-group__label--tooltip">
+                <span className="tooltip">
+                  ⓘ
+                  <span className="tooltip__content">
+                    La carga debe entregarse antes de
+                  </span>
+                </span>
+                Plazo máximo de entrega
+              </label>
+
               <select name="rangoDias" className="input-group__field" value={form.rangoDias} onChange={handleChange}>
-                <option value="">Selecciona</option>
                 <option value="1-7">1 a 7 días</option>
                 <option value="8-15">8 a 15 días</option>
                 <option value="15-30">15 a 30 días</option>
@@ -285,7 +292,16 @@ export default function OfrezcoServicioPage() {
             </div>
 
             <div className="input-group">
-              <label className="input-group__label">Estado de la carga</label>
+              <label className="input-group__label input-group__label--tooltip">
+                <span className="tooltip">
+                  ⓘ
+                  <span className="tooltip__content">
+                    ¿Dónde está la carga actualmente?
+                  </span>
+                </span>
+                Estado de la carga
+              </label>
+              
               <select name="estadoCarga" className="input-group__field" value={form.estadoCarga} onChange={handleChange} >
                 <option value="mi_almacen">En bodega</option>
                 <option value="tu_almacen">Entrega directa en tu bodega</option>

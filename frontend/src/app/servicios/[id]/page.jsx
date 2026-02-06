@@ -113,9 +113,10 @@ export default function DetalleServicioPage() {
 
             <div className="detalle-servicio__route-tags">
               <h2 className="detalle-servicio__route-title">
-                <img src="/icons/place-marker.png" alt="" /> {servicio.origen}
-                {" → "}
-                <img src="/icons/destino.png" alt="" /> {servicio.destino}
+                {/* <img src="/icons/place-marker.png" alt="" /> */} 
+                {servicio.origen}
+                {" → "} 
+                {servicio.destino}
               </h2>
             </div>
           </div>
@@ -132,6 +133,15 @@ export default function DetalleServicioPage() {
                 {servicio.distancia_km
                   ? `${servicio.distancia_km} km`
                   : "—"}
+              </span>
+            </div>
+
+            <div>
+              <label>Oferta:</label>
+              <span>
+                {Number(servicio.importe) === 0
+                  ? "A convenir"
+                  : `$${Number(servicio.importe).toLocaleString()}`}
               </span>
             </div>
 
@@ -155,20 +165,6 @@ export default function DetalleServicioPage() {
                 <span>{estadoCargaLabel(servicio.estado_carga)}</span>
               </div>
             )}
-
-            <div>
-              <label>Oferta:</label>
-              <span>
-                {Number(servicio.importe) === 0
-                  ? "A convenir"
-                  : `$${Number(servicio.importe).toLocaleString()}`}
-              </span>
-            </div>
-
-            <div>
-              <label>Estado publicación:</label>
-              <span>{servicio.estado}</span>
-            </div>
 
           </div>
 

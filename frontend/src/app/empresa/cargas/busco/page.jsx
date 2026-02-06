@@ -160,31 +160,21 @@ export default function BuscoServicioPage() {
               <h2 className="subtitle">¿Qué buscas?</h2>
             </div>
 
-            <Input
-              label="Origen"
-              name="origen"
-              value={form.origen}
-              onChange={handleChange}
-              autocomplete
-            />
+            <Input label="Origen" name="origen" value={form.origen} placeholder={"Ubicación donde está la mudanza"} onChange={handleChange} autocomplete />
+            <Input label="Destino" name="destino" value={form.destino} placeholder={"Ciudad donde se debe entregar la carga"} onChange={handleChange} autocomplete />
 
-            <Input
-              label="Destino"
-              name="destino"
-              value={form.destino}
-              onChange={handleChange}
-              autocomplete
-            />
+            <label className="input-group__label input-group__label--tooltip">
+                <span className="tooltip">
+                  ⓘ
+                  <span className="tooltip__content">
+                    Busco carga entre las siguientes fechas
+                  </span>
+                </span>
+                Rango de salida
+              </label>
 
-            <label className="labels">Rango de salida</label>
-            <DateRange
-              ranges={range}
-              onChange={item => setRange([item.selection])}
-              minDate={new Date()}
-              moveRangeOnFirstSelection={false}
-            />
-
-            <Input label="Volumen" name="volumen" type="number" value={form.volumen} onChange={handleChange} />
+            <DateRange ranges={range} onChange={item => setRange([item.selection])} minDate={new Date()} moveRangeOnFirstSelection={false} />
+            <Input label="Volumen m³" name="volumen" type="number" value={form.volumen} placeholder={"Espacio disponible de carga (m³)"} onChange={handleChange} />
 
             <div className="input-group">
               <label className="input-group__label">Tipo de carga</label>

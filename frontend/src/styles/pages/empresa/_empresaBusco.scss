@@ -138,6 +138,51 @@
     gap: 1rem;
     margin-top: 1.5rem;
   }
+
+   /* =========================
+   Tooltip
+========================= */
+
+  .input-group__label--tooltip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tooltip {
+    position: relative;
+    font-size: 14px;
+    cursor: pointer;
+    color: $text-muted;
+    user-select: none;
+
+    &:hover .tooltip__content,
+    &:focus-within .tooltip__content {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    &__content {
+      position: absolute;
+      top: 28px;
+      left: 50%;
+      transform: translate(-50%, 6px);
+      width: 260px;
+      background: #ffffff;
+      color: $text;
+      font-size: 13px;
+      line-height: 1.4;
+      padding: 12px 14px;
+      border-radius: 10px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s ease;
+      z-index: 10;
+      text-align: center;
+    }
+  }
 }
 
 /* ==============================

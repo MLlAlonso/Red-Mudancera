@@ -8,6 +8,8 @@ use App\Services\Google\GoogleDistanceService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Log;
+
 
 class ServicioService
 {
@@ -46,6 +48,13 @@ class ServicioService
             $data['origen'],
             $data['destino']
         );
+
+        if ($distanciaKm === null) {
+            Log::warning('Distancia no calculada', [
+                'origen' => $data['origen'],
+                'destino' => $data['destino'],
+            ]);
+        }
 
         return Servicio::create([
             'empresa_id' => $empresa->id,
