@@ -1,54 +1,62 @@
 <?php
 
 namespace App\Modules\Servicio\Services;
+
 use App\Modules\Servicio\Models\Servicio;
 use App\Modules\Servicio\Models\ServicioImagen;
 use App\Services\CloudinaryService;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class ServicioImagenService
 {
-    protected CloudinaryService $cloudinary;
-    public function __construct(CloudinaryService $cloudinary)
-    {
-        $this->cloudinary = $cloudinary;
-    }
-
     /**
-     * Guardar imágenes del servicio (máx 3)
+     * Guardar imágenes YA SUBIDAS (frontend → Cloudinary)
      */
-    public function guardarImagenes(Servicio $servicio, array $imagenes): void
-    {
+    public function guardarDesdeFrontend(
+        Servicio $servicio,
+        array $imagenes
+    ): void {
         if (count($imagenes) > 3) {
             throw ValidationException::withMessages([
                 'imagenes' => ['Máximo 3 imágenes por servicio'],
             ]);
         }
 
-        $orden = 1;
+        $orden = $servicio->imagenes()->count() + 1;
 
-        foreach ($imagenes as $imagen) {
-            $upload = $this->cloudinary->upload(
-                $imagen,
-                'servicios/imagenes'
-            );
-
+        foreach ($imagenes as $img) {
             ServicioImagen::create([
                 'servicio_id' => $servicio->id,
-                'url'         => $upload['url'],
-                'public_id'   => $upload['public_id'],
+                'url'         => $img['url'],
+                'public_id'   => $img['public_id'],
                 'orden'       => $orden++,
             ]);
         }
     }
 
     /**
-     * Eliminar todas las imágenes de un servicio
+     * Eliminar todas las imágenes del servicio (Cloudinary)
      */
     public function eliminarTodas(Servicio $servicio): void
     {
         foreach ($servicio->imagenes as $img) {
-            $this->cloudinary->deleteByPublicId($img->public_id);
+            app(CloudinaryService::class)
+                ->deleteByPublicId($img->public_id);
+            $img->delete();
+        }
+    }
+
+    public function eliminarPorIds(Servicio $servicio, array $ids): void
+    {
+        $imagenes = ServicioImagen::whereIn('id', $ids)
+            ->where('servicio_id', $servicio->id)
+            ->get();
+
+        foreach ($imagenes as $img) {
+            app(CloudinaryService::class)
+                ->deleteByPublicId($img->public_id);
+
             $img->delete();
         }
     }

@@ -53,3 +53,11 @@
     }
   }
 }
+
+.notification-card {
+  transition: all 0.25s ease;
+
+  &--leida {
+    opacity: 0.45;
+  }
+}

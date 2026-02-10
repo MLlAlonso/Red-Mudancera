@@ -157,22 +157,12 @@ export default function EmpresaEditar() {
 
           <div className="input-group">
             <label className="input-group__label">Descripción</label>
-            <textarea
-              name="descripcion"
-              className="input-group__field textarea"
-              value={form.descripcion}
-              onChange={handleChange}
-            />
+            <textarea name="descripcion" className="input-group__field textarea" value={form.descripcion} onChange={handleChange} />
           </div>
 
           <div className="input-group">
             <label className="input-group__label">Foto de perfil</label>
-            <input
-              type="file"
-              accept="image/*"
-              className="input-group__field"
-              onChange={handleFile}
-            />
+            <input type="file" accept="image/*" className="input-group__field" onChange={handleFile} />
           </div>
 
           <div className="empresa-editar__buttons">

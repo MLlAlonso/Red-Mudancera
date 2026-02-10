@@ -4,7 +4,6 @@ namespace App\Modules\Servicio\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Log;
 
 class StoreServicioRequest extends FormRequest
 {
@@ -81,10 +80,10 @@ class StoreServicioRequest extends FormRequest
             'estado_carga' => ['nullable', Rule::in(['mi_almacen', 'tu_almacen', 'en_ruta'])],
 
             'imagenes' => ['nullable', 'array', 'max:3'],
-            'imagenes.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:7096'],
+            'imagenes.*.url' => ['required', 'url'],
+            'imagenes.*.public_id' => ['required', 'string'],
         ];
     }
-
 
     public function messages(): array
     {

@@ -138,14 +138,16 @@ export default function DetalleServicioPage() {
               </div>
             )}
 
-            <div>
-              <label>Oferta:</label>
-              <span>
-                {Number(servicio.importe) === 0
-                  ? "A convenir"
-                  : `$${Number(servicio.importe).toLocaleString()}`}
-              </span>
-            </div>
+            {isOffer && (
+              <div>
+                <label>Oferta:</label>
+                <span>
+                  {Number(servicio.importe) === 0
+                    ? "A convenir"
+                    : `$${Number(servicio.importe).toLocaleString()}`}
+                </span>
+              </div>
+            )}
 
             <div>
               <label>Tipo de carga:</label>

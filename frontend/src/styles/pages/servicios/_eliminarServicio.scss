@@ -11,3 +11,69 @@
     opacity: 0.8;
   }
 }
+
+.imagenes-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 2fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.imagenes-preview__item,
+.imagen-item {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  background: #fafafa;
+  
+    width: 140px;
+    height: 140px;
+
+  img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+/* botón eliminar (✕) */
+.imagenes-preview__item button {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  border: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+
+  &:hover {
+    background: #dc2626;
+  }
+}
+
+/* checkbox eliminar imagen existente */
+.imagen-item label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 6px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* input file */
+.input-group input[type="file"] {
+  margin-top: 6px;
+}

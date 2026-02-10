@@ -40,7 +40,6 @@ require base_path('app/Modules/Resena/routes.php');
 */
 Route::post('/auth/recover-password', [RecoverPasswordController::class, 'recover']);
 
-
 /*
 |--------------------------------------------------------------------------
 | Images
@@ -50,3 +49,10 @@ Route::post(
     '/servicios/{id}/imagenes',
     [ServicioController::class, 'updateImagenes']
 )->middleware('auth:empresa');
+
+/*
+|--------------------------------------------------------------------------
+| Notificaciones
+|--------------------------------------------------------------------------
+*/
+require base_path('app/Modules/Notificacion/routes.php');

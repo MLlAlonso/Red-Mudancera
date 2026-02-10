@@ -12,7 +12,7 @@ export function openWhatsappMessage({
   }
 
   const mensaje = `
-Saludos 👋
+Saludos
 Vi tu servicio publicado en MudanzaFácil:
 
 Tipo: ${tipo}
@@ -23,7 +23,7 @@ Volumen: ${volumen}
 Ver servicio:
 https://app.mudanzafacil.com.mx/servicios/${servicioId}
 
-Quedo atento para coordinar 🤝
+Quedo atento para coordinar
 `;
 
   const url = `https://wa.me/52${telefono}?text=${encodeURIComponent(mensaje)}`;

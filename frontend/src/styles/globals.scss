@@ -24,6 +24,10 @@
 @use "./pages/empresa/empresaOfrezco";
 @use "./pages/empresa/empresaBusco";
 @use "./pages/empresa/empresaEmpresas";
+@use "./pages/empresa/_empresaNotificaciones";
+
+//Pages Usuarios
+@use "./pages/usuario/_usuarioNotificaciones";
 
 * {
   margin: 0;

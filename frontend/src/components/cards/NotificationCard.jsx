@@ -10,25 +10,28 @@ const DEFAULT_ICON = campanaIcon;
 const NotificationCard = ({
   title,
   message,
+  leida,
   onAccept,
   onDelete,
   icon = DEFAULT_ICON,
 }) => {
   return (
-    <div className="notification-card">
-      {/* Header */}
+    <div className={`notification-card ${leida ? "notification-card--leida" : ""}`}>
       <div className="notification-card__header">
         <img src={icon.src || icon} alt="icon" className="notification-card__icon" />
         <h3 className="notification-card__title">{title}</h3>
       </div>
 
-      {/* Message */}
       <p className="notification-card__message">{message}</p>
 
-      {/* Footer botones */}
       <div className="notification-card__actions">
         <Button_error value="Eliminar" onClick={onDelete} />
-        <Button_success value="Visto" onClick={onAccept} />
+
+        <Button_success
+          value={leida ? "Leído" : "Visto"}
+          onClick={onAccept}
+          disabled={leida}
+        />
       </div>
     </div>
   );

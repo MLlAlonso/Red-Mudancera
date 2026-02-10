@@ -49,7 +49,13 @@ class UpdateServicioRequest extends FormRequest
                 Rule::in(['mi_almacen', 'tu_almacen', 'en_ruta']),
             ],
 
-            'eliminar_imagenes' => ['nullable', 'boolean'],
+            'eliminar_imagenes' => ['nullable', 'array'],
+            'eliminar_imagenes.*' => ['integer', 'exists:servicio_imagenes,id'],
+
+            'imagenes' => ['nullable', 'array', 'max:3'],
+            'imagenes.*.url' => ['required', 'url'],
+            'imagenes.*.public_id' => ['required', 'string'],
+
         ];
     }
 }

@@ -6,14 +6,21 @@ import Input from "@/components/common/Input";
 import Button_success from "@/components/common/Button_success";
 import Button_error from "@/components/common/Button_error";
 import ConfirmDeleteModal from "@/components/common/ConfirmDeleteModal";
+import SimpleEditor from "@/components/common/SimpleEditor";
+import { uploadToCloudinary } from "@/utils/cloudinaryUpload";
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import SimpleEditor from "@/components/common/SimpleEditor";
 import "@/styles/pages/servicios/_eliminarServicio.scss";
 
 export default function EditarOfrezcoServicioPage() {
     const router = useRouter();
     const { id } = useParams();
+    const [imagenesActuales, setImagenesActuales] = useState([]);
+    const [imagenesEliminar, setImagenesEliminar] = useState([]);
+    const [imagenesNuevas, setImagenesNuevas] = useState([]);
+
+    const maxPermitidas =
+        3 - (imagenesActuales.length - imagenesEliminar.length);
 
     const [form, setForm] = useState({
         volumen: "",
@@ -64,6 +71,7 @@ export default function EditarOfrezcoServicioPage() {
                     importe: servicio.importe ?? "",
                     estadoCarga: servicio.estado_carga ?? "mi_almacen",
                 });
+                setImagenesActuales(servicio.imagenes || []);
             });
 
     }, [id, router]);
@@ -88,6 +96,12 @@ export default function EditarOfrezcoServicioPage() {
             .then(res => res.json())
             .then(data => setUsuarios(data.usuarios || []));
     }, []);
+
+    useEffect(() => {
+        return () => {
+            imagenesNuevas.forEach(img => URL.revokeObjectURL(img.preview));
+        };
+    }, [imagenesNuevas]);
 
     /* ======================
        HANDLERS
@@ -128,6 +142,12 @@ export default function EditarOfrezcoServicioPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const nuevasCloud = [];
+        for (const img of imagenesNuevas) {
+            const uploaded = await uploadToCloudinary(img.file);
+            nuevasCloud.push(uploaded);
+        }
+
         const token = document.cookie
             .split("; ")
             .find(r => r.startsWith("token_empresa="))
@@ -141,19 +161,20 @@ export default function EditarOfrezcoServicioPage() {
                 Accept: "application/json",
             },
             body: JSON.stringify({
-                tipo: "ofrezco",
                 volumen: form.volumen,
                 origen: form.origen,
                 destino: form.destino,
                 rangoDias: form.rangoDias,
                 tipo_carga: form.tipoCarga,
                 nota: form.nota,
-                responsable: form.responsableNombre,
-                telefono: form.telefono,
+                responsable_nombre: form.responsableNombre,
+                responsable_telefono: form.telefono,
                 importe: form.importe,
                 estado_carga: form.estadoCarga,
-            }),
 
+                eliminar_imagenes: imagenesEliminar,
+                imagenes: nuevasCloud,
+            })
         });
 
         const data = await res.json();
@@ -214,9 +235,7 @@ export default function EditarOfrezcoServicioPage() {
                             <label className="input-group__label">Descripción de la carga</label>
                             <SimpleEditor
                                 value={form.nota}
-                                onChange={(value) =>
-                                    setForm((prev) => ({ ...prev, nota: value }))
-                                }
+                                onChange={(value) => setForm((prev) => ({ ...prev, nota: value })) }
                                 placeholder={`¿Qué lleva la mudanza? Escríbelo o pega la lista del cliente.`}
                             />
                         </div>
@@ -225,12 +244,7 @@ export default function EditarOfrezcoServicioPage() {
                             <label className="input-group__label">
                                 Plazo máximo de entrega
                             </label>
-                            <select
-                                name="rangoDias"
-                                className="input-group__field"
-                                value={form.rangoDias}
-                                onChange={handleChange}
-                            >
+                            <select name="rangoDias" className="input-group__field" value={form.rangoDias} onChange={handleChange} >
                                 <option value="1-7">1 a 7 días</option>
                                 <option value="8-15">8 a 15 días</option>
                                 <option value="15-30">15 a 30 días</option>
@@ -240,12 +254,7 @@ export default function EditarOfrezcoServicioPage() {
 
                         <div className="input-group">
                             <label className="input-group__label">Estado de la carga</label>
-                            <select
-                                name="estadoCarga"
-                                className="input-group__field"
-                                value={form.estadoCarga}
-                                onChange={handleChange}
-                            >
+                            <select name="estadoCarga" className="input-group__field" value={form.estadoCarga} onChange={handleChange} >
                                 <option value="mi_almacen">En bodega</option>
                                 <option value="tu_almacen">Entrega directa en tu bodega</option>
                                 <option value="en_ruta">Pendiente de recolección</option>
@@ -254,11 +263,7 @@ export default function EditarOfrezcoServicioPage() {
 
                         <div className="input-group">
                             <label className="input-group__label">Persona a cargo</label>
-                            <select
-                                className="input-group__field"
-                                value={form.responsableId}
-                                onChange={handleResponsableChange}
-                            >
+                            <select className="input-group__field" value={form.responsableId} onChange={handleResponsableChange} >
                                 <option value="">Selecciona</option>
                                 {usuarios.map(u => (
                                     <option key={u.id} value={u.id}>
@@ -283,13 +288,73 @@ export default function EditarOfrezcoServicioPage() {
                                 Oferta
                             </label>
 
-                            <Input
-                                name="importe"
-                                type="number"
-                                value={form.importe}
-                                onChange={handleChange}
-                                placeholder="Monto opcional"
-                            />
+                            <Input name="importe" type="number" value={form.importe} onChange={handleChange} placeholder="Monto opcional" />
+                        </div>
+
+                        <div className="imagenes-preview">
+                            {imagenesActuales.map(img => (
+                                <div key={img.id} className="imagen-item">
+                                    <img src={img.url} alt="" />
+
+                                    <label>
+                                        <input
+                                            type="checkbox"
+                                            checked={imagenesEliminar.includes(img.id)}
+                                            onChange={() =>
+                                                setImagenesEliminar(prev =>
+                                                    prev.includes(img.id)
+                                                        ? prev.filter(i => i !== img.id)
+                                                        : [...prev, img.id]
+                                                )
+                                            }
+                                        />
+                                        Eliminar
+                                    </label>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="input-group">
+                            {maxPermitidas > 0 && (
+                                <div className="input-group">
+                                    <label className="input-group__label">
+                                        Agregar imágenes ({imagenesNuevas.length}/{maxPermitidas})
+                                    </label>
+
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        multiple
+                                        onChange={(e) => {
+                                            const files = Array.from(e.target.files).slice(0, maxPermitidas);
+
+                                            setImagenesNuevas(prev => [
+                                                ...prev,
+                                                ...files.map(file => ({
+                                                    file,
+                                                    preview: URL.createObjectURL(file),
+                                                })),
+                                            ]);
+                                        }}
+                                    />
+
+                                    <div className="imagenes-preview">
+                                        {imagenesNuevas.map((img, i) => (
+                                            <div key={i} className="imagenes-preview__item">
+                                                <img src={img.preview} alt="" />
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        setImagenesNuevas(prev => prev.filter((_, x) => x !== i))
+                                                    }
+                                                >
+                                                    ✕
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         <div className="ofrezco__actions">

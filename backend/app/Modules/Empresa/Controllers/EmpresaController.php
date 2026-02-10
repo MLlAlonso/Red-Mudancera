@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Modules\Empresa\Controllers;
+
 use App\Http\Controllers\Controller;
 use App\Modules\Empresa\Requests\EmpresaUpdateRequest;
 use App\Modules\Usuario\Models\Usuario;
@@ -42,10 +43,12 @@ class EmpresaController extends Controller
             $cloudinary = new CloudinaryService();
             // borrar logo anterior si existe
             $cloudinary->deleteByUrl($empresa->logo);
-            $data['logo'] = $cloudinary->upload(
+            $upload = $cloudinary->upload(
                 $request->file('logo'),
                 'empresas/logos'
             );
+
+            $data['logo'] = $upload['url'];
         }
 
         /**

@@ -147,7 +147,6 @@ export default function BuscoServicioPage() {
     }
   };
 
-
   return (
     <>
       <Header />
@@ -170,20 +169,20 @@ export default function BuscoServicioPage() {
                     Busco carga entre las siguientes fechas
                   </span>
                 </span>
-                Rango de salida
+                Selecciona una fecha de inicio y fin
               </label>
 
             <DateRange ranges={range} onChange={item => setRange([item.selection])} minDate={new Date()} moveRangeOnFirstSelection={false} />
-            <Input label="Volumen m³" name="volumen" type="number" value={form.volumen} placeholder={"Espacio disponible de carga (m³)"} onChange={handleChange} />
+            <Input label="Volumen m³" name="volumen" type="number" value={form.volumen} placeholder={" Tengo espacio para (m³) de carga"} onChange={handleChange} />
 
-            <div className="input-group">
+            {/* <div className="input-group">
               <label className="input-group__label">Tipo de carga</label>
               <select name="tipoCarga" className="input-group__field" value={form.tipoCarga} onChange={handleChange}>
                 <option value="">Selecciona</option>
                 <option value="menaje">Menaje de casa</option>
                 <option value="libre">Otro</option>
               </select>
-            </div>
+            </div> */}
 
             <div className="input-group">
               <label className="input-group__label">Descripción</label>
@@ -191,9 +190,9 @@ export default function BuscoServicioPage() {
             </div>
 
             <div className="input-group">
-              <label className="input-group__label">Responsable</label>
+              <label className="input-group__label"> Contacto Responsable</label>
               <select className="input-group__field" value={form.responsableId} onChange={handleResponsableChange}>
-                <option value="">Selecciona</option>
+                <option value="">Elige un contacto</option>
                 {usuarios.map(u => <option key={u.id} value={u.id}>{u.nombre}</option>)}
               </select>
             </div>
@@ -202,7 +201,7 @@ export default function BuscoServicioPage() {
 
             <div className="busco__actions">
               <Button_error value="Cancelar" onClick={() => router.back()} />
-              <Button_success value="Publicar servicio" type="submit" />
+              <Button_success value="Buscar carga" type="submit" />
             </div>
           </form>
         </div>

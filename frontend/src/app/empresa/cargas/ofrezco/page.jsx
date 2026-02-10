@@ -9,6 +9,7 @@ import ErrorModal from "@/components/common/ErrorModal";
 import SimpleEditor from "@/components/common/SimpleEditor";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { uploadToCloudinary } from "@/utils/cloudinaryUpload";
 
 export default function OfrezcoServicioPage() {
   const router = useRouter();
@@ -129,6 +130,16 @@ export default function OfrezcoServicioPage() {
 
     setImagenes(prev => [...prev, ...nuevas]);
     if (imagenes.length >= 3) return;
+
+    for (const file of files) {
+      if (file.size > 5 * 1024 * 1024) {
+        setErrorModal({
+          show: true,
+          message: "Cada imagen debe pesar menos de 5MB",
+        });
+        return;
+      }
+    }
   };
 
   const eliminarImagen = (index) => {
@@ -147,34 +158,39 @@ export default function OfrezcoServicioPage() {
       .find(r => r.startsWith("token_empresa="))
       ?.split("=")[1];
 
-    const formData = new FormData();
-
-    formData.append("tipo", "ofrezco");
-    formData.append("volumen", form.volumen);
-    formData.append("origen", form.origen);
-    formData.append("destino", form.destino);
-    formData.append("rangoDias", form.rangoDias);
-    formData.append("tipo_carga", form.tipoCarga);
-    formData.append("nota", form.nota);
-    formData.append("responsable_nombre", form.responsableNombre);
-    formData.append("responsable_telefono", form.telefono);
-    formData.append("importe", form.importe);
-    formData.append("estado_carga", form.estadoCarga);
-
-    imagenes.forEach(({ file }) => {
-      formData.append("imagenes[]", file);
-    });
-
     try {
+      // Subir imágenes a Cloudinary
+      const imagenesCloud = [];
+
+      for (const img of imagenes) {
+        const uploaded = await uploadToCloudinary(img.file);
+        imagenesCloud.push(uploaded);
+      }
+
+      // Crear servicio (solo JSON)
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/servicios`,
         {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
             Accept: "application/json",
           },
-          body: formData,
+          body: JSON.stringify({
+            tipo: "ofrezco",
+            volumen: form.volumen,
+            origen: form.origen,
+            destino: form.destino,
+            rangoDias: form.rangoDias,
+            tipo_carga: form.tipoCarga,
+            nota: form.nota,
+            responsable_nombre: form.responsableNombre,
+            responsable_telefono: form.telefono,
+            importe: form.importe,
+            estado_carga: form.estadoCarga,
+            imagenes: imagenesCloud,
+          }),
         }
       );
 
@@ -183,19 +199,16 @@ export default function OfrezcoServicioPage() {
       if (!res.ok) {
         setErrorModal({
           show: true,
-          message:
-            data?.errors?.imagenes?.[0] ||
-            data?.message ||
-            "No se pudo publicar el servicio",
+          message: data?.message || "No se pudo publicar el servicio",
         });
         return;
       }
 
       router.push("/empresa/dashboard");
-    } catch {
+    } catch (err) {
       setErrorModal({
         show: true,
-        message: "Error de conexión con el servidor",
+        message: err.message || "Error de conexión",
       });
     }
   };
@@ -222,7 +235,6 @@ export default function OfrezcoServicioPage() {
                 <option value="">Selecciona</option>
                 <option value="menaje">Menaje de casa</option>
                 <option value="vehiculo">Vehículo</option>
-                <option value="menaje_vehiculo">Menaje + vehículo</option>
                 <option value="otro">Otro</option>
               </select>
             </div>
@@ -241,9 +253,7 @@ export default function OfrezcoServicioPage() {
                 <span className="tooltip">
                   ⓘ
                   <span className="tooltip__content">
-                    Campo opcional.<br />
-                    Una vez cargadas, las imágenes
-                    <strong> No se podrán editar.”</strong>.
+                    Campo opcional
                   </span>
                 </span>
                 Imágenes de inventario ({imagenes.length}/3)
@@ -262,8 +272,13 @@ export default function OfrezcoServicioPage() {
                   {imagenes.map((img, index) => (
                     <div key={index} className="imagenes-preview__item">
                       <img src={img.preview} alt={`imagen-${index}`} />
-                      <button type="button" onClick={() => eliminarImagen(index)}>
-                        ✕
+                      <button
+                        type="button"
+                        className="imagen-remove-btn"
+                        onClick={() => eliminarImagen(index)}
+                        aria-label="Eliminar imagen"
+                      >
+                        <img src="/icons/delete.png" alt="Eliminar" />
                       </button>
                     </div>
                   ))}
@@ -301,7 +316,7 @@ export default function OfrezcoServicioPage() {
                 </span>
                 Estado de la carga
               </label>
-              
+
               <select name="estadoCarga" className="input-group__field" value={form.estadoCarga} onChange={handleChange} >
                 <option value="mi_almacen">En bodega</option>
                 <option value="tu_almacen">Entrega directa en tu bodega</option>
@@ -344,7 +359,7 @@ export default function OfrezcoServicioPage() {
 
             <div className="ofrezco__actions">
               <Button_error value="Cancelar" onClick={() => router.back()} />
-              <Button_success value="Publicar servicio" type="submit" />
+              <Button_success value="Ofrecer carga" type="submit" />
             </div>
           </form>
         </div>

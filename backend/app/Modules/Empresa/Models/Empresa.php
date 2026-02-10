@@ -47,12 +47,20 @@ class Empresa extends Authenticatable
     // ===========================================
     public function getLogoUrlAttribute()
     {
-        if (!$this->logo) return null;
-        // Si ya es URL (Cloudinary)
+        if (!$this->logo) {
+            return null;
+        }
+
+        // seguridad extra por si llega basura
+        if (!is_string($this->logo)) {
+            return null;
+        }
+
         if (str_starts_with($this->logo, 'http')) {
             return $this->logo;
         }
-        // Legacy (storage antiguo)
+
+        // legacy storage
         return asset('storage/' . $this->logo);
     }
 }

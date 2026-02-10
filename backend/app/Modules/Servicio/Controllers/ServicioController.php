@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Modules\Servicio\Controllers;
 
 use Illuminate\Support\Facades\Http;
@@ -9,15 +10,15 @@ use App\Modules\Servicio\Requests\StoreServicioRequest;
 use App\Modules\Servicio\Requests\ChangeEstadoServicioRequest;
 use App\Modules\Servicio\Services\ServicioService;
 use App\Modules\Servicio\Repositories\ServicioRepository;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Laravel\Sanctum\PersonalAccessToken;
 use App\Modules\Servicio\Requests\UpdateServicioRequest;
 use App\Modules\Servicio\Services\ServicioImagenService;
-
+use Laravel\Sanctum\PersonalAccessToken;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+use App\Modules\Notificacion\Services\NotificacionService;
 
 class ServicioController extends Controller
 {
@@ -80,23 +81,20 @@ class ServicioController extends Controller
                 $empresa
             );
 
-            // Subir imágenes SOLO si vienen
-            if ($request->hasFile('imagenes')) {
-                try {
-                    $imagenService->guardarImagenes(
-                        $servicio,
-                        $request->file('imagenes')
-                    );
-                } catch (\Throwable $e) {
-                    Log::error('Error subiendo imágenes', [
-                        'servicio_id' => $servicio->id,
-                        'error' => $e->getMessage(),
-                    ]);
-
-                    // rollback automático
-                    throw $e;
-                }
+            if ($request->filled('imagenes')) {
+                $imagenService->guardarDesdeFrontend(
+                    $servicio,
+                    $request->input('imagenes')
+                );
             }
+
+            app(NotificacionService::class)->crearParaEmpresa(
+                $empresa->id,
+                'Nuevo servicio publicado',
+                "Publicaste un servicio de {$servicio->origen} a {$servicio->destino}",
+                'info',
+                "/servicios/{$servicio->id}"
+            );
 
             return response()->json([
                 'message' => 'Servicio creado correctamente',
@@ -104,7 +102,6 @@ class ServicioController extends Controller
             ], 201);
         });
     }
-
 
     /**
      * PATCH /api/servicios/{id}/estado
@@ -166,12 +163,27 @@ class ServicioController extends Controller
 
         $servicio->update($request->validated());
 
-        if ($request->hasFile('imagenes')) {
-            $imagenService->eliminarTodas($servicio);
-
-            $imagenService->guardarImagenes(
+        if ($request->filled('eliminar_imagenes')) {
+            $imagenService->eliminarPorIds(
                 $servicio,
-                $request->file('imagenes')
+                $request->input('eliminar_imagenes')
+            );
+        }
+
+        $totalActuales = $servicio->imagenes()->count();
+        $eliminadas = count($request->input('eliminar_imagenes', []));
+        $nuevas = count($request->input('imagenes', []));
+
+        if (($totalActuales - $eliminadas + $nuevas) > 3) {
+            return response()->json([
+                'message' => 'Máximo 3 imágenes por servicio',
+            ], 422);
+        }
+
+        if ($request->filled('imagenes')) {
+            $imagenService->guardarDesdeFrontend(
+                $servicio,
+                $request->input('imagenes')
             );
         }
 
@@ -181,43 +193,12 @@ class ServicioController extends Controller
         ]);
     }
 
-    public function updateImagenes(
-        Request $request,
-        int $id,
-        ServicioImagenService $imagenService
-    ): JsonResponse {
-        $empresa = auth('empresa')->user();
-        $servicio = Servicio::findOrFail($id);
-        if ($servicio->empresa_id !== $empresa->id) {
-            return response()->json(['message' => 'No autorizado'], 403);
-        }
-
-        $request->validate([
-            'imagenes' => ['required', 'array', 'min:1', 'max:3'],
-            'imagenes.*' => [
-                'file',
-                'image',
-                'mimes:jpg,jpeg,png,webp',
-                'max:4096',
-            ],
-        ]);
-
-        $imagenes = $request->file('imagenes');
-        $imagenService->eliminarTodas($servicio);
-        $imagenService->guardarImagenes($servicio, $imagenes);
-
-        return response()->json([
-            'message' => 'Imágenes actualizadas correctamente',
-            'data' => $servicio->fresh()->load('imagenes'),
-        ]);
-    }
-
     /**
      * Show servicios of authenticated empresa
      */
     public function misServicios(Request $request)
     {
-        $empresa = auth()->user(); //
+        $empresa = auth()->user();
 
         $query = Servicio::with('empresa')
             ->where('empresa_id', $empresa->id)
@@ -327,7 +308,6 @@ class ServicioController extends Controller
     /**
      * Generate PDF
      */
-
     public function reporteMensualPdf(Request $request)
     {
         $token = $request->query('token');
@@ -343,10 +323,25 @@ class ServicioController extends Controller
         $empresa = $accessToken->tokenable;
 
         $logoPath = null;
-        if ($empresa->logo) {
-            $image = Http::get($empresa->logo)->body();
-            $logoPath = storage_path('app/temp_logo.png');
-            file_put_contents($logoPath, $image);
+        $logoUrl = $empresa->logo_url;
+
+        if ($logoUrl) {
+            try {
+                $response = Http::timeout(5)->get($logoUrl);
+
+                if ($response->successful()) {
+                    $logoPath = storage_path(
+                        'app/temp_logo_' . $empresa->id . '.png'
+                    );
+                    file_put_contents($logoPath, $response->body());
+                }
+            } catch (\Throwable $e) {
+                Log::warning('No se pudo cargar logo para PDF', [
+                    'empresa_id' => $empresa->id,
+                    'logo' => $logoUrl,
+                    'error' => $e->getMessage(),
+                ]);
+            }
         }
 
         $validated = $request->validate([
