@@ -145,4 +145,31 @@ class NotificacionController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+
+    public function countEmpresa()
+    {
+        $empresa = auth('empresa')->user();
+
+        $count = Notificacion::where('empresa_id', $empresa->id)
+            ->where('leida_empresa', false)
+            ->count();
+
+        return response()->json([
+            'count' => $count
+        ]);
+    }
+
+    public function countUsuario()
+    {
+        $usuario = auth('usuario')->user();
+
+        $count = NotificacionUsuario::where('usuario_id', $usuario->id)
+            ->where('leida', false)
+            ->count();
+
+        return response()->json([
+            'count' => $count
+        ]);
+    }
 }

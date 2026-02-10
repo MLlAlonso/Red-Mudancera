@@ -1,0 +1,18 @@
+@use "../utils/variables";
+
+.notification-badge {
+  background: variables.$success;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+}
