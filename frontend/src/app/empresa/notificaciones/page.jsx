@@ -17,7 +17,6 @@ export default function EmpresaNotificacionesPage() {
         return match ? match[2] : null;
     };
 
-
     /* =========================
        FETCH NOTIFICACIONES
     ========================= */
@@ -48,7 +47,6 @@ export default function EmpresaNotificacionesPage() {
         }
     };
 
-
     useEffect(() => {
         fetchNotificaciones();
     }, []);
@@ -70,7 +68,6 @@ export default function EmpresaNotificacionesPage() {
                 },
             }
         );
-
         fetchNotificaciones();
     };
 
@@ -91,15 +88,12 @@ export default function EmpresaNotificacionesPage() {
                 },
             }
         );
-
         fetchNotificaciones();
     };
 
     const [confirmId, setConfirmId] = useState(null);
-
     const abrirModal = (id) => setConfirmId(id);
     const cerrarModal = () => setConfirmId(null);
-
     const confirmarEliminar = async () => {
         await eliminar(confirmId);
         cerrarModal();
@@ -119,7 +113,6 @@ export default function EmpresaNotificacionesPage() {
                 </div>
 
                 {loading && <p>Cargando notificaciones…</p>}
-
                 {!loading && notificaciones.length === 0 && (
                     <p>No tienes notificaciones por ahora.</p>
                 )}
@@ -140,6 +133,7 @@ export default function EmpresaNotificacionesPage() {
                                         title={item.titulo}
                                         message={item.mensaje}
                                         leida={item.leida_empresa}
+                                        url={item.url_destino}
                                         onAccept={() => marcarLeida(item.id)}
                                         onDelete={() => abrirModal(item.id)}
                                     />
@@ -162,6 +156,7 @@ export default function EmpresaNotificacionesPage() {
                                         title={item.titulo}
                                         message={item.mensaje}
                                         leida={item.leida_empresa}
+                                        url={item.url_destino}
                                         onAccept={() => marcarLeida(item.id)}
                                         onDelete={() => abrirModal(item.id)}
                                     />
@@ -169,9 +164,7 @@ export default function EmpresaNotificacionesPage() {
                             </div>
                         </>
                     )}
-
                 </div>
-
             </main>
 
             <Footer />
@@ -182,7 +175,6 @@ export default function EmpresaNotificacionesPage() {
                     onConfirm={confirmarEliminar}
                 />
             )}
-
         </>
     );
 }

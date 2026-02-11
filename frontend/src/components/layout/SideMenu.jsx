@@ -2,13 +2,10 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-
 import { useEffect, useState } from "react";
 import NotificationBadge from "@/components/common/NotificationBadge";
 
-
 export default function SideMenu({ open }) {
-
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -25,7 +22,6 @@ export default function SideMenu({ open }) {
       .then(data => setCount(data.count || 0))
       .catch(() => { });
   }, []);
-
 
   return (
     <motion.div
@@ -52,8 +48,6 @@ export default function SideMenu({ open }) {
             </div>
           </Link>
         </li>
-
-
 
         {/* <li>
           <Link href="/empresa/acuerdos">

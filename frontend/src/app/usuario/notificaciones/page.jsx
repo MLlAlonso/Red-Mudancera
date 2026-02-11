@@ -130,6 +130,7 @@ export default function UsuarioNotificacionesPage() {
                     title={item.notificacion.titulo}
                     message={item.notificacion.mensaje}
                     leida={item.leida}
+                    url={item.notificacion.url_destino}
                     onAccept={() => marcarLeida(item.id)}
                     onDelete={() => setConfirmId(item.id)}
                   />
@@ -152,6 +153,7 @@ export default function UsuarioNotificacionesPage() {
                     title={item.notificacion.titulo}
                     message={item.notificacion.mensaje}
                     leida={item.leida}
+                    url={item.notificacion.url_destino}
                     onAccept={() => marcarLeida(item.id)}
                     onDelete={() => setConfirmId(item.id)}
                   />

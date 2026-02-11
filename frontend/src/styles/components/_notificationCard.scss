@@ -10,6 +10,11 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  transition: all 0.25s ease;
+
+  &--leida {
+    opacity: 0.45;
+  }
 
   /* Header */
   &__header {
@@ -54,10 +59,11 @@
   }
 }
 
-.notification-card {
-  transition: all 0.25s ease;
+.notification-card--clickable {
+  cursor: pointer;
+}
 
-  &--leida {
-    opacity: 0.45;
-  }
+.notification-card--clickable:hover {
+  transform: translateY(-2px);
+  transition: 0.2s ease;
 }

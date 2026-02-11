@@ -1,6 +1,5 @@
 <?php
 namespace App\Modules\Notificacion\Services;
-
 use App\Modules\Notificacion\Models\Notificacion;
 use App\Modules\Usuario\Models\Usuario;
 
