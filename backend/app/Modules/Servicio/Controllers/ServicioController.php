@@ -1,9 +1,14 @@
 <?php
 
 namespace App\Modules\Servicio\Controllers;
-
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Sanctum\PersonalAccessToken;
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use App\Modules\Servicio\Models\Servicio;
 use App\Modules\Servicio\Requests\StoreServicioRequest;
@@ -12,13 +17,11 @@ use App\Modules\Servicio\Services\ServicioService;
 use App\Modules\Servicio\Repositories\ServicioRepository;
 use App\Modules\Servicio\Requests\UpdateServicioRequest;
 use App\Modules\Servicio\Services\ServicioImagenService;
-use Laravel\Sanctum\PersonalAccessToken;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
-use App\Modules\Notificacion\Services\NotificacionService;
+use App\Modules\Notificacion\Events\ServicioPublicadoEvent;
+use App\Modules\Notificacion\Services\NotificationDispatcher;
+use App\Modules\Notificacion\Events\ServicioFinalizadoEvent;
+use App\Modules\Notificacion\Events\ServicioAsignadoEvent;
+
 
 class ServicioController extends Controller
 {
@@ -88,12 +91,11 @@ class ServicioController extends Controller
                 );
             }
 
-            app(NotificacionService::class)->crearParaEmpresa(
-                $empresa->id,
-                'Nuevo servicio publicado',
-                "Publicaste un servicio de {$servicio->origen} a {$servicio->destino}",
-                'info',
-                "/servicios/{$servicio->id}"
+            app(NotificationDispatcher::class)->dispatch(
+                new ServicioPublicadoEvent([
+                    'empresa_id' => $empresa->id,
+                    'servicio' => $servicio,
+                ])
             );
 
             return response()->json([
@@ -117,6 +119,15 @@ class ServicioController extends Controller
             $servicio,
             $validated['estado']
         );
+
+        if ($validated['estado'] === 'asignado') {
+            app(NotificationDispatcher::class)->dispatch(
+                new ServicioAsignadoEvent([
+                    'empresa_id' => $servicio->empresa_id,
+                    'servicio' => $servicio,
+                ])
+            );
+        }
 
         return response()->json([
             'success' => true,
@@ -271,6 +282,13 @@ class ServicioController extends Controller
             'ganancia' => round($validated['ganancia'], 2),
             'finalizado_at' => now(),
         ]);
+
+        app(NotificationDispatcher::class)->dispatch(
+            new ServicioFinalizadoEvent([
+                'empresa_id' => $servicio->empresa_id,
+                'servicio' => $servicio,
+            ])
+        );
 
         return response()->json([
             'success' => true,

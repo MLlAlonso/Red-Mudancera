@@ -155,7 +155,7 @@
 
         .btn_crud {
             right: 10px;
-            bottom: 350px;
+            bottom: 300px;
             width: 65px;
             height: 65px;
             font-size: 50px;
@@ -165,10 +165,11 @@
             justify-content: center;
 
             .service-filters__trigger{
-                width: 340px;
+                min-width: 450px;
+                max-width: 650px;
 
                 span{
-                    font-size: 26px;
+                    font-size: 30px;
                 }
             }
         }

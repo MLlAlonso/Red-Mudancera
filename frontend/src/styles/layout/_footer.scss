@@ -4,17 +4,83 @@
 
 .footer {
   width: 100%;
-  background: $secondary;
-  height: 110px;
+  background: $cards;
+  padding: 40px 20px;
   display: flex;
-  align-items: center;
   justify-content: center;
 
   .footer__content {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
     text-align: center;
-    color: white;
+  }
+
+  .footer__top {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: start;
+
+    span{
+      color: $success;
+    }
+  }
+
+  .footer__title {
     font-family: $font-title;
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 24px;
+    font-weight: 700;
+    color: $title;
+  }
+
+  .footer__description {
+    font-family: $font-text;
+    font-size: 14px;
+    color: $text;
+    max-width: 600px;
+  }
+
+  .footer__links {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-family: $font-text;
+    font-size: 14px;
+    font-weight: 700;
+
+    a {
+      color: $success;
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover {
+        color: $success-hover;
+        font-weight: bold;
+      }
+    }
+
+    span {
+      color: $text-muted;
+    }
+  }
+
+  .footer__divider {
+    width: 100%;
+    max-width: 800px;
+    height: 1px;
+    background: $text-muted;
+    opacity: 0.4;
+  }
+
+  .footer__bottom {
+    font-family: $font-text;
+    font-size: 16px;
+    color: $text-muted;
   }
 }
