@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Modules\Notificacion\Events;
+
 use App\Modules\Servicio\Models\Servicio;
 
 class ServicioFinalizadoEvent extends BaseNotificationEvent
@@ -32,5 +33,10 @@ class ServicioFinalizadoEvent extends BaseNotificationEvent
     {
         $servicio = $this->payload['servicio'];
         return "/servicios/{$servicio->id}";
+    }
+
+    public function getType(): string
+    {
+        return 'alerta';
     }
 }

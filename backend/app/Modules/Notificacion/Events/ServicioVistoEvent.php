@@ -4,18 +4,19 @@ namespace App\Modules\Notificacion\Events;
 
 use App\Modules\Servicio\Models\Servicio;
 
-class ServicioAsignadoEvent extends BaseNotificationEvent
+class ServicioVistoEvent extends BaseNotificationEvent
 {
     public function getTitle(): string
     {
-        return 'Servicio asignado';
+        return 'Servicio visto';
     }
 
     public function getMessage(): string
     {
         /** @var Servicio $servicio */
         $servicio = $this->payload['servicio'];
-        return "Tu servicio {$servicio->origen} → {$servicio->destino} fue asignado.";
+        $cantidad = $this->payload['cantidad'];
+        return "{$cantidad} empresas han visto tu servicio ({$servicio->origen} - {$servicio->destino})";
     }
 
     public function getEmpresaId(): ?int
@@ -25,7 +26,7 @@ class ServicioAsignadoEvent extends BaseNotificationEvent
 
     public function shouldNotifyUsuarios(): bool
     {
-        return true;
+        return false; // solo empresa
     }
 
     public function getUrl(): ?string
@@ -36,6 +37,6 @@ class ServicioAsignadoEvent extends BaseNotificationEvent
 
     public function getType(): string
     {
-        return 'info';
+        return 'sistema';
     }
 }

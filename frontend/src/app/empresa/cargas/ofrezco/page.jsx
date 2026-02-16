@@ -289,13 +289,7 @@ export default function OfrezcoServicioPage() {
 
             <div className="input-group">
               <label className="input-group__label input-group__label--tooltip">
-                <span className="tooltip">
-                  ⓘ
-                  <span className="tooltip__content">
-                    La carga debe entregarse antes de
-                  </span>
-                </span>
-                Plazo máximo de entrega
+                La carga debe entregarse:
               </label>
 
               <select name="rangoDias" className="input-group__field" value={form.rangoDias} onChange={handleChange}>

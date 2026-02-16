@@ -18,7 +18,7 @@ class DatabaseChannel implements NotificationChannelInterface
             'empresa_id' => $empresaId,
             'titulo' => $event->getTitle(),
             'mensaje' => $event->getMessage(),
-            'tipo' => 'info',
+            'tipo' => $event->getType(),
             'url_destino' => $event->getUrl(),
             'creado_por' => 'system',
         ]);

@@ -169,7 +169,7 @@ export default function BuscoServicioPage() {
                     Busco carga entre las siguientes fechas
                   </span>
                 </span>
-                Selecciona una fecha de inicio y fin
+                El camion debe pasar entre las siguientes fechas
               </label>
 
             <DateRange ranges={range} onChange={item => setRange([item.selection])} minDate={new Date()} moveRangeOnFirstSelection={false} />

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Modules\Servicio\Controllers;
+
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -21,7 +22,9 @@ use App\Modules\Notificacion\Events\ServicioPublicadoEvent;
 use App\Modules\Notificacion\Services\NotificationDispatcher;
 use App\Modules\Notificacion\Events\ServicioFinalizadoEvent;
 use App\Modules\Notificacion\Events\ServicioAsignadoEvent;
-
+use App\Modules\Notificacion\Events\ServiciosCreadosMesEvent;
+use App\Modules\Servicio\Models\ServiceView;
+use App\Modules\Notificacion\Events\ServicioVistoEvent;
 
 class ServicioController extends Controller
 {
@@ -59,11 +62,48 @@ class ServicioController extends Controller
     public function show($id)
     {
         $servicio = Servicio::with(['empresa'])->find($id);
+
         if (! $servicio) {
             return response()->json([
                 'message' => 'Servicio no encontrado'
             ], 404);
         }
+
+        /* =========================
+   REGISTRAR VISTA
+========================= */
+
+        if (auth('empresa')->check()) {
+
+            $empresaViewer = auth('empresa')->user();
+
+            // No contar vista propia
+            if ($empresaViewer->id !== $servicio->empresa_id) {
+
+                ServiceView::create([
+                    'servicio_id' => $servicio->id,
+                    'empresa_id' => $empresaViewer->id,
+                ]);
+
+                // Contar vistas únicas
+                $count = ServiceView::where('servicio_id', $servicio->id)
+                    ->distinct('empresa_id')
+                    ->count('empresa_id');
+
+                // Solo cada 5
+                if ($count % 5 === 0) {
+
+                    app(NotificationDispatcher::class)->dispatch(
+                        new ServicioVistoEvent([
+                            'empresa_id' => $servicio->empresa_id,
+                            'servicio' => $servicio,
+                            'cantidad' => $count,
+                        ])
+                    );
+                }
+            }
+        }
+
         return response()->json($servicio);
     }
 
@@ -97,6 +137,25 @@ class ServicioController extends Controller
                     'servicio' => $servicio,
                 ])
             );
+
+            $totalMes = \App\Modules\Servicio\Models\Servicio::whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->count();
+
+            if ($totalMes % 100 === 0) {
+
+                $empresas = \App\Modules\Empresa\Models\Empresa::where('subActiva', true)->get();
+
+                foreach ($empresas as $empresaActiva) {
+
+                    app(NotificationDispatcher::class)->dispatch(
+                        new ServiciosCreadosMesEvent([
+                            'empresa_id' => $empresaActiva->id,
+                            'cantidad' => $totalMes,
+                        ])
+                    );
+                }
+            }
 
             return response()->json([
                 'message' => 'Servicio creado correctamente',

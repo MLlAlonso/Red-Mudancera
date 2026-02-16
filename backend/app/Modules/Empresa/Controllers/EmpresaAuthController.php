@@ -17,6 +17,8 @@ use App\Modules\Empresa\Mail\EmpresaVerificationCode;
 use App\Models\EmailVerification;
 use App\Modules\Usuario\Models\Usuario;
 use App\Modules\Empresa\Mail\EmpresaWelcomeMail;
+use App\Modules\Notificacion\Services\NotificationDispatcher;
+use App\Modules\Notificacion\Events\LoginEmpresaEvent;
 
 class EmpresaAuthController extends Controller
 {
@@ -92,6 +94,12 @@ class EmpresaAuthController extends Controller
         $empresa->tokens()->delete();
         // Crear token nuevo
         $token = $empresa->createToken('api-token')->plainTextToken;
+        // Disparar evento de notificación
+        app(NotificationDispatcher::class)->dispatch(
+            new LoginEmpresaEvent([
+                'empresa_id' => $empresa->id,
+            ])
+        );
         // Agregar logo_url SIEMPRE
         $empresa->append('logo_url');
         return response()->json([

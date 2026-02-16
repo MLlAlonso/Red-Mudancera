@@ -4,18 +4,19 @@ namespace App\Modules\Notificacion\Events;
 
 use App\Modules\Servicio\Models\Servicio;
 
-class ServicioAsignadoEvent extends BaseNotificationEvent
+class ServicioPorVencerEvent extends BaseNotificationEvent
 {
     public function getTitle(): string
     {
-        return 'Servicio asignado';
+        return 'Servicio por vencer';
     }
 
     public function getMessage(): string
     {
         /** @var Servicio $servicio */
         $servicio = $this->payload['servicio'];
-        return "Tu servicio {$servicio->origen} → {$servicio->destino} fue asignado.";
+
+        return "Tu servicio {$servicio->origen} → {$servicio->destino} vence en menos de 24 horas.";
     }
 
     public function getEmpresaId(): ?int
@@ -28,6 +29,11 @@ class ServicioAsignadoEvent extends BaseNotificationEvent
         return true;
     }
 
+    public function shouldSendEmail(): bool
+    {
+        return true;
+    }
+
     public function getUrl(): ?string
     {
         $servicio = $this->payload['servicio'];
@@ -36,6 +42,6 @@ class ServicioAsignadoEvent extends BaseNotificationEvent
 
     public function getType(): string
     {
-        return 'info';
+        return 'alerta';
     }
 }

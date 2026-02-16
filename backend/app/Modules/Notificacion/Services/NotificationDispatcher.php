@@ -3,18 +3,18 @@
 namespace App\Modules\Notificacion\Services;
 use App\Modules\Notificacion\Events\BaseNotificationEvent;
 use App\Modules\Notificacion\Channels\DatabaseChannel;
+use App\Modules\Notificacion\Channels\EmailChannel;
 
 class NotificationDispatcher
 {
     protected array $channels = [];
-
     public function __construct(
-        DatabaseChannel $databaseChannel
-        // Aquí luego se inyectaran EmailChannel, PushChannel, etc.
+        DatabaseChannel $databaseChannel,
+        EmailChannel $emailChannel
     ) {
         $this->channels = [
             $databaseChannel,
-            // nuevos canales se agregan aquí
+            $emailChannel,
         ];
     }
 
