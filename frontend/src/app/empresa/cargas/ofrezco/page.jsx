@@ -289,14 +289,13 @@ export default function OfrezcoServicioPage() {
 
             <div className="input-group">
               <label className="input-group__label input-group__label--tooltip">
-                La carga debe entregarse:
+                La carga se debe de entregar en destino aproxidamente
               </label>
 
               <select name="rangoDias" className="input-group__field" value={form.rangoDias} onChange={handleChange}>
                 <option value="1-7">1 a 7 días</option>
                 <option value="8-15">8 a 15 días</option>
                 <option value="15-30">15 a 30 días</option>
-                <option value="+30">+30 días</option>
               </select>
             </div>
 

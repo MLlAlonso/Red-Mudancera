@@ -169,11 +169,11 @@ export default function BuscoServicioPage() {
                     Busco carga entre las siguientes fechas
                   </span>
                 </span>
-                El camion debe pasar entre las siguientes fechas
+                La unidad sale a destino entre las siguientes fechas
               </label>
 
             <DateRange ranges={range} onChange={item => setRange([item.selection])} minDate={new Date()} moveRangeOnFirstSelection={false} />
-            <Input label="Volumen m³" name="volumen" type="number" value={form.volumen} placeholder={" Tengo espacio para (m³) de carga"} onChange={handleChange} />
+            <Input label="Volumen m³" name="volumen" type="number" value={form.volumen} placeholder={"Tengo espacio para un máximo de (m3) de carga"} onChange={handleChange} />
 
             {/* <div className="input-group">
               <label className="input-group__label">Tipo de carga</label>
@@ -186,7 +186,7 @@ export default function BuscoServicioPage() {
 
             <div className="input-group">
               <label className="input-group__label">Descripción</label>
-              <textarea name="nota" className="input-group__field" value={form.nota} onChange={handleChange} />
+              <textarea name="nota" className="input-group__field" value={form.nota} onChange={handleChange} placeholder="Algun detalle relevante o algun tipo de carga que no manejes" />
             </div>
 
             <div className="input-group">

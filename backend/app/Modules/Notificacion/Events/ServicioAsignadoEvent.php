@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Modules\Notificacion\Events;
-
 use App\Modules\Servicio\Models\Servicio;
 
 class ServicioAsignadoEvent extends BaseNotificationEvent

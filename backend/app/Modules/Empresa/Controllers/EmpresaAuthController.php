@@ -19,6 +19,7 @@ use App\Modules\Usuario\Models\Usuario;
 use App\Modules\Empresa\Mail\EmpresaWelcomeMail;
 use App\Modules\Notificacion\Services\NotificationDispatcher;
 use App\Modules\Notificacion\Events\LoginEmpresaEvent;
+use App\Modules\Notificacion\Models\NotificationPreference;
 
 class EmpresaAuthController extends Controller
 {
@@ -43,7 +44,7 @@ class EmpresaAuthController extends Controller
         // =============================
         // CREAR USUARIO ADMIN INICIAL
         // =============================
-        Usuario::create([
+        $usuario = Usuario::create([
             'empresa_id' => $empresa->id,
             'nombre'     => $empresa->representante,
             'email'      => $empresa->email,
@@ -52,6 +53,20 @@ class EmpresaAuthController extends Controller
             'rol'        => 'admin',
             'activoEmpresa' => true,
         ]);
+
+        $tipos = ['info', 'alerta', 'sistema'];
+        $canales = ['database', 'email', 'push'];
+
+        foreach ($tipos as $tipo) {
+            foreach ($canales as $canal) {
+                NotificationPreference::create([
+                    'usuario_id' => $usuario->id,
+                    'tipo' => $tipo,
+                    'canal' => $canal,
+                    'activo' => true,
+                ]);
+            }
+        }
 
         // =============================
         // VERIFICACIÓN DE CORREO
@@ -163,7 +178,6 @@ class EmpresaAuthController extends Controller
         );
 
         $record->delete();
-
         return response()->json(['message' => 'Correo verificado correctamente']);
     }
 }

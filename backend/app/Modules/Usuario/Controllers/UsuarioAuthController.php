@@ -11,6 +11,7 @@ use App\Modules\Usuario\Requests\UsuarioLoginRequest;
 use App\Modules\Usuario\Requests\UsuarioVerifyEmailRequest;
 use App\Modules\Usuario\Mail\UsuarioVerificationCode;
 use App\Modules\Usuario\Mail\UsuarioWelcomeMail;
+use App\Modules\Notificacion\Models\NotificationPreference;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -39,9 +40,22 @@ class UsuarioAuthController extends Controller
             'rol'        => 'trabajador',
         ]);
 
+        $tipos = ['info', 'alerta', 'sistema'];
+        $canales = ['database', 'email', 'push'];
+
+        foreach ($tipos as $tipo) {
+            foreach ($canales as $canal) {
+                NotificationPreference::create([
+                    'usuario_id' => $usuario->id,
+                    'tipo' => $tipo,
+                    'canal' => $canal,
+                    'activo' => true,
+                ]);
+            }
+        }
+
         // crear código de verificación
         $code = rand(100000, 999999);
-
         EmailVerification::create([
             'email'      => $usuario->email,
             'code'       => $code,
@@ -65,7 +79,6 @@ class UsuarioAuthController extends Controller
     public function login(UsuarioLoginRequest $request)
     {
         $usuario = Usuario::where('email', $request->email)->first();
-
         // Usuario no existe
         if (! $usuario) {
             return response()->json([
@@ -89,7 +102,6 @@ class UsuarioAuthController extends Controller
 
         // Login válido → crear token
         $token = $usuario->createToken('usuario_token')->plainTextToken;
-
         return response()->json([
             'message' => 'Login exitoso',
             'token'   => $token,
@@ -104,7 +116,6 @@ class UsuarioAuthController extends Controller
     {
         $request->validate(['email' => 'required|email']);
         $usuario = Usuario::where('email', $request->email)->first();
-
         if (!$usuario) {
             return response()->json(['message' => 'Este email no está registrado'], 404);
         }

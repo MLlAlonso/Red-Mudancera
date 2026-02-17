@@ -24,21 +24,33 @@ class SendNotificationEmailJob implements ShouldQueue
 
     public function handle(): void
     {
-        $empresa = Empresa::find($this->eventData['empresa_id']);
-        if (!$empresa) {
-            return;
+        try {
+            $empresa = Empresa::find($this->eventData['empresa_id']);
+            if (!$empresa) {
+                return;
+            }
+
+            $usuarios = Usuario::where('empresa_id', $empresa->id)
+                ->where('activoEmpresa', true)
+                ->get();
+
+            Log::info('Email enviado (simulado)', [
+                'empresa' => $empresa->email ?? null,
+                'usuarios' => $usuarios->pluck('email'),
+                'titulo' => $this->eventData['title'],
+                'mensaje' => $this->eventData['message'],
+            ]);
+        } catch (\Throwable $e) {
+
+            \App\Modules\Notificacion\Models\NotificationMetric::create([
+                'notificacion_id' => null,
+                'tipo' => 'sistema',
+                'canal' => 'email',
+                'evento' => 'failed',
+            ]);
+
+            throw $e;
         }
-
-        $usuarios = Usuario::where('empresa_id', $empresa->id)
-            ->where('activoEmpresa', true)
-            ->get();
-
-        Log::info('Email enviado (simulado)', [
-            'empresa' => $empresa->email ?? null,
-            'usuarios' => $usuarios->pluck('email'),
-            'titulo' => $this->eventData['title'],
-            'mensaje' => $this->eventData['message'],
-        ]);
 
         /*
         Aquí irá integración con Resend

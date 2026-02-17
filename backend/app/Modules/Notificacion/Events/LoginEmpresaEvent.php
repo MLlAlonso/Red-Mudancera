@@ -33,4 +33,9 @@ class LoginEmpresaEvent extends BaseNotificationEvent
     {
         return true;
     }
+
+    public function getType(): string
+    {
+        return 'sistema';
+    }
 }

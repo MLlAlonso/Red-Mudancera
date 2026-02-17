@@ -5,7 +5,6 @@ namespace App\Modules\Notificacion\Events;
 abstract class BaseNotificationEvent
 {
     protected array $payload;
-
     public function __construct(array $payload = [])
     {
         $this->payload = $payload;
@@ -26,5 +25,10 @@ abstract class BaseNotificationEvent
     public function shouldSendEmail(): bool
     {
         return false;
+    }
+
+    public function getUsuarioId(): ?int
+    {
+        return null;
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Modules\Notificacion\Models\Notificacion;
 use App\Modules\Notificacion\Models\NotificacionUsuario;
+use App\Modules\Notificacion\Models\NotificationMetric;
 
 class NotificacionController extends Controller
 {
@@ -28,6 +29,14 @@ class NotificacionController extends Controller
             'leida' => true,
             'leida_at' => now(),
         ]);
+
+        NotificationMetric::create([
+            'notificacion_id' => $registro->notificacion_id,
+            'tipo' => $registro->notificacion->tipo,
+            'canal' => 'database',
+            'evento' => 'read',
+        ]);
+
         return response()->json(['success' => true]);
     }
 
@@ -52,7 +61,6 @@ class NotificacionController extends Controller
         return response()->json($notificaciones);
     }
 
-
     public function marcarLeidaEmpresa(int $id)
     {
         $empresa = auth('empresa')->user();
@@ -62,15 +70,19 @@ class NotificacionController extends Controller
             ->firstOrFail();
 
         if (! $notificacion->leida_empresa) {
+
             $ok = $notificacion->update([
                 'leida_empresa' => true,
                 'leida_empresa_at' => now(),
             ]);
 
-            if (! $ok) {
-                return response()->json([
-                    'error' => 'UPDATE NO SE EJECUTÓ',
-                ], 500);
+            if ($ok) {
+                \App\Modules\Notificacion\Models\NotificationMetric::create([
+                    'notificacion_id' => $notificacion->id,
+                    'tipo' => $notificacion->tipo,
+                    'canal' => 'database',
+                    'evento' => 'read',
+                ]);
             }
         }
 
@@ -117,6 +129,13 @@ class NotificacionController extends Controller
             $registro->update([
                 'leida' => true,
                 'leida_at' => now(),
+            ]);
+
+            NotificationMetric::create([
+                'notificacion_id' => $registro->notificacion_id,
+                'tipo' => $registro->notificacion->tipo,
+                'canal' => 'database',
+                'evento' => 'read',
             ]);
         }
 

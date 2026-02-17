@@ -46,4 +46,12 @@ class Usuario extends Authenticatable
             'id'
         );
     }
+
+    public function notificationPreferences()
+    {
+        return $this->hasMany(
+            \App\Modules\Notificacion\Models\NotificationPreference::class,
+            'usuario_id'
+        );
+    }
 }
