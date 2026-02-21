@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Modules\Usuario\Controllers;
+
 use App\Http\Controllers\Controller;
 use App\Modules\Usuario\Models\Usuario;
 use App\Modules\Usuario\Requests\UsuarioUpdateRequest;
@@ -60,10 +61,11 @@ class UsuarioController extends Controller
 
             $cloudinary->deleteByUrl($user->avatar);
 
-            $data['avatar'] = $cloudinary->upload(
+            $upload = $cloudinary->upload(
                 $request->file('avatar'),
                 'usuarios/avatar'
             );
+            $data['avatar'] = $upload['url'];
         }
 
         if (empty($data['password'])) {

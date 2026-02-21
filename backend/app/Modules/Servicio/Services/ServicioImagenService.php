@@ -23,7 +23,8 @@ class ServicioImagenService
             ]);
         }
 
-        $orden = $servicio->imagenes()->count() + 1;
+        $ultimoOrden = $servicio->imagenes()->max('orden');
+        $orden = $ultimoOrden ? $ultimoOrden + 1 : 1;
 
         foreach ($imagenes as $img) {
             ServicioImagen::create([

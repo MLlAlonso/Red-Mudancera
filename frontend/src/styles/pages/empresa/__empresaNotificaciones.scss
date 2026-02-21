@@ -1,5 +1,6 @@
 .empresa-notificaciones {
   padding: 1.5rem;
+  min-height: 100dvh;
 
   &__header {
     margin-bottom: 1.5rem;
@@ -8,33 +9,95 @@
   &__list {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 2.5rem;
   }
 
   &__divider {
     font-size: 1.4rem;
-    font-weight: bold;
-    color: #666;
-    border-bottom: 2px solid #ddd;
+    font-weight: 600;
+    color: #444;
+    border-bottom: 2px solid #e5e7eb;
     padding-bottom: 0.5rem;
+    margin: 0;
 
     &--vistas {
-      color: #999;
+      color: #888;
     }
   }
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
+  }
+
+  /* ===============================
+     Acciones (Título + botón)
+  ================================= */
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  &__actions_title {
+    flex: 1;
+    min-width: 200px;
   }
 }
 
-/* RESPONSIVE */
+/* ===============================
+   Responsive
+================================= */
+
 @media (max-width: 768px) {
   .empresa-notificaciones {
     &__grid {
       grid-template-columns: 1fr;
     }
+
+    &__actions {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.2rem;
+    }
   }
+}
+
+/* ===============================
+   Botones notificaciones
+================================= */
+
+.notif-btn {
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Marcar todas */
+.notif-btn--secondary {
+  background: #1C8F6A;
+  color: #fff;
+}
+
+.notif-btn--secondary:hover {
+  background: #17785A;
+}
+
+/* Eliminar vistas */
+.notif-btn--danger {
+  background: #abb0b4;
+  color: #fff;
+}
+
+.notif-btn--danger:hover {
+  background: #8f0906;
 }

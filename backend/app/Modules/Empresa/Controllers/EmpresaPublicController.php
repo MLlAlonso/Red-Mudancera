@@ -41,25 +41,39 @@ class EmpresaPublicController extends Controller
     {
         $query = Empresa::query();
 
-        // Filtro por sede (base)
-        if ($request->filled('search')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('empresa', 'like', "%{$request->search}%")
-                    ->orWhere('base', 'like', "%{$request->search}%");
-            });
+        // Filtro por estado (abreviatura)
+        if ($request->filled('estado')) {
+
+            $query->where('base', 'like', '%' . $request->estado . '%');
+
+            $empresas = $query
+                ->orderByDesc('reputacion')
+                ->get();
+        } else {
+
+            // Búsqueda general
+            if ($request->filled('search')) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('empresa', 'like', "%{$request->search}%")
+                        ->orWhere('base', 'like', "%{$request->search}%");
+                });
+            }
+
+            // Últimas 10 registradas
+            $empresas = $query
+                ->latest()
+                ->take(10)
+                ->get();
         }
 
-        $empresas = $query
-            ->orderByDesc('reputacion')
-            ->get()
-            ->map(fn($e) => [
-                'id'       => $e->id,
-                'empresa'  => $e->empresa,
-                'base'     => $e->base,
-                'logo_url' => $e->logo_url,
+        return response()->json(
+            $empresas->map(fn($e) => [
+                'id'         => $e->id,
+                'empresa'    => $e->empresa,
+                'base'       => $e->base,
+                'logo_url'   => $e->logo_url,
                 'reputacion' => $e->reputacion,
-            ]);
-
-        return response()->json($empresas);
+            ])
+        );
     }
 }

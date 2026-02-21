@@ -7,12 +7,14 @@ import Button_success from "@/components/common/Button_success";
 import Button_error from "@/components/common/Button_error";
 import ErrorModal from "@/components/common/ErrorModal";
 import SimpleEditor from "@/components/common/SimpleEditor";
+import LoadingOverlay from "@/components/ui/LoadingOverlay";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { uploadToCloudinary } from "@/utils/cloudinaryUpload";
 
 export default function OfrezcoServicioPage() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
     volumen: "",
@@ -32,7 +34,6 @@ export default function OfrezcoServicioPage() {
    * imagenes = [{ file: File, preview: string }]
    */
   const [imagenes, setImagenes] = useState([]);
-
   const [errorModal, setErrorModal] = useState({
     show: false,
     message: "",
@@ -69,6 +70,20 @@ export default function OfrezcoServicioPage() {
       .then(res => res.json())
       .then(data => setUsuarios(data.usuarios || []));
   }, []);
+
+  useEffect(() => {
+    if (usuarios.length > 0 && !form.responsableId) {
+      const usuariosOrdenados = [...usuarios].sort((a, b) => a.id - b.id);
+      const primerUsuario = usuariosOrdenados[0];
+
+      setForm(prev => ({
+        ...prev,
+        responsableId: primerUsuario.id,
+        responsableNombre: primerUsuario.nombre,
+        telefono: primerUsuario.tel ?? primerUsuario.telefono ?? "",
+      }));
+    }
+  }, [usuarios, form.responsableId]);
 
   /* =========================
      CLEANUP PREVIEWS
@@ -112,34 +127,55 @@ export default function OfrezcoServicioPage() {
     }));
   };
 
+  const MAX_SIZE = 5 * 1024 * 1024;
+  const MAX_IMAGES = 3;
+
   const handleImagenesChange = (e) => {
     const files = Array.from(e.target.files);
 
-    if (files.length + imagenes.length > 3) {
+    if (!files.length) return;
+    const imagenesValidas = [];
+    const errores = [];
+
+    for (const file of files) {
+
+      // Validar peso
+      if (file.size > MAX_SIZE) {
+        errores.push(`${file.name} supera los 5MB`);
+        continue;
+      }
+
+      // Validar tipo real de imagen
+      if (!file.type.startsWith("image/")) {
+        errores.push(`${file.name} no es una imagen válida`);
+        continue;
+      }
+
+      imagenesValidas.push({
+        file,
+        preview: URL.createObjectURL(file),
+      });
+    }
+
+    // Validar límite total
+    if (imagenes.length + imagenesValidas.length > MAX_IMAGES) {
       setErrorModal({
         show: true,
-        message: "Máximo 3 imágenes por servicio",
+        message: `Máximo ${MAX_IMAGES} imágenes por servicio`,
       });
       return;
     }
 
-    const nuevas = files.map(file => ({
-      file,
-      preview: URL.createObjectURL(file),
-    }));
-
-    setImagenes(prev => [...prev, ...nuevas]);
-    if (imagenes.length >= 3) return;
-
-    for (const file of files) {
-      if (file.size > 5 * 1024 * 1024) {
-        setErrorModal({
-          show: true,
-          message: "Cada imagen debe pesar menos de 5MB",
-        });
-        return;
-      }
+    // Mostrar errores si existen
+    if (errores.length > 0) {
+      setErrorModal({
+        show: true,
+        message: errores.join("\n"),
+      });
     }
+
+    // Agregar solo las válidas
+    setImagenes(prev => [...prev, ...imagenesValidas]);
   };
 
   const eliminarImagen = (index) => {
@@ -153,13 +189,15 @@ export default function OfrezcoServicioPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (loading) return; // evita doble click
+    setLoading(true);
+
     const token = document.cookie
       .split("; ")
       .find(r => r.startsWith("token_empresa="))
       ?.split("=")[1];
 
     try {
-      // Subir imágenes a Cloudinary
       const imagenesCloud = [];
 
       for (const img of imagenes) {
@@ -167,7 +205,6 @@ export default function OfrezcoServicioPage() {
         imagenesCloud.push(uploaded);
       }
 
-      // Crear servicio (solo JSON)
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/servicios`,
         {
@@ -185,6 +222,7 @@ export default function OfrezcoServicioPage() {
             rangoDias: form.rangoDias,
             tipo_carga: form.tipoCarga,
             nota: form.nota,
+            responsable_id: form.responsableId,
             responsable_nombre: form.responsableNombre,
             responsable_telefono: form.telefono,
             importe: form.importe,
@@ -197,6 +235,7 @@ export default function OfrezcoServicioPage() {
       const data = await res.json();
 
       if (!res.ok) {
+        setLoading(false);
         setErrorModal({
           show: true,
           message: data?.message || "No se pudo publicar el servicio",
@@ -205,7 +244,9 @@ export default function OfrezcoServicioPage() {
       }
 
       router.push("/empresa/dashboard");
+
     } catch (err) {
+      setLoading(false);
       setErrorModal({
         show: true,
         message: err.message || "Error de conexión",
@@ -261,8 +302,9 @@ export default function OfrezcoServicioPage() {
 
               <input
                 type="file"
-                accept="image/*"
+                accept="image/png,image/jpeg,image/webp"
                 multiple
+                disabled={imagenes.length >= 3}
                 onChange={handleImagenesChange}
                 onClick={(e) => (e.target.value = null)}
               />
@@ -282,7 +324,6 @@ export default function OfrezcoServicioPage() {
                       </button>
                     </div>
                   ))}
-
                 </div>
               )}
             </div>
@@ -337,7 +378,7 @@ export default function OfrezcoServicioPage() {
                     <strong> “Por convenir”</strong>.
                   </span>
                 </span>
-                Oferta
+                Monto de referencia
               </label>
 
               <input
@@ -346,7 +387,7 @@ export default function OfrezcoServicioPage() {
                 className="input-group__field"
                 value={form.importe}
                 onChange={handleChange}
-                placeholder="Monto opcional"
+                placeholder="Oferta sujeta a negociación."
               />
             </div>
 
@@ -360,7 +401,7 @@ export default function OfrezcoServicioPage() {
 
       <ErrorModal
         show={errorModal.show}
-        title="Publicación duplicada"
+        title="Revisa datos ingresados"
         message={errorModal.message}
         onClose={() =>
           setErrorModal({ show: false, message: "" })
@@ -368,6 +409,8 @@ export default function OfrezcoServicioPage() {
       />
 
       <Footer />
+      <LoadingOverlay show={loading} message="Subiendo imágenes..." />
+
     </>
   );
 }

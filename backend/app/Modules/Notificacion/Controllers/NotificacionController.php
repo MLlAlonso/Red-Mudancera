@@ -103,6 +103,43 @@ class NotificacionController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function marcarTodasLeidasEmpresa()
+    {
+        $empresa = auth('empresa')->user();
+
+        $notificaciones = Notificacion::where('empresa_id', $empresa->id)
+            ->where('leida_empresa', false)
+            ->get();
+
+        foreach ($notificaciones as $notificacion) {
+            $notificacion->update([
+                'leida_empresa' => true,
+                'leida_empresa_at' => now(),
+            ]);
+
+            NotificationMetric::create([
+                'notificacion_id' => $notificacion->id,
+                'tipo' => $notificacion->tipo,
+                'canal' => 'database',
+                'evento' => 'read',
+            ]);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    public function eliminarTodasLeidasEmpresa()
+    {
+        $empresa = auth('empresa')->user();
+
+        Notificacion::where('empresa_id', $empresa->id)
+            ->where('leida_empresa', true)
+            ->delete();
+
+        return response()->json(['success' => true]);
+    }
+
+
     /* 
         Funciones para el usuario
     */
@@ -155,6 +192,41 @@ class NotificacionController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function marcarTodasLeidasUsuario()
+    {
+        $usuario = auth('usuario')->user();
+        $registros = NotificacionUsuario::where('usuario_id', $usuario->id)
+            ->where('leida', false)
+            ->get();
+
+        foreach ($registros as $registro) {
+            $registro->update([
+                'leida' => true,
+                'leida_at' => now(),
+            ]);
+
+            NotificationMetric::create([
+                'notificacion_id' => $registro->notificacion_id,
+                'tipo' => $registro->notificacion->tipo,
+                'canal' => 'database',
+                'evento' => 'read',
+            ]);
+        }
+        return response()->json(['success' => true]);
+    }
+
+    public function eliminarTodasLeidasUsuario()
+    {
+        $usuario = auth('usuario')->user();
+        NotificacionUsuario::where('usuario_id', $usuario->id)
+            ->where('leida', true)
+            ->delete();
+        return response()->json(['success' => true]);
+    }
+
+    /* 
+        Metricas
+    */
     public function countEmpresa()
     {
         $empresa = auth('empresa')->user();

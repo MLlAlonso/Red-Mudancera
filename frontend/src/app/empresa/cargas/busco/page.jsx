@@ -6,6 +6,7 @@ import Input from "@/components/common/Input";
 import Button_success from "@/components/common/Button_success";
 import Button_error from "@/components/common/Button_error";
 import ErrorModal from "@/components/common/ErrorModal";
+import LoadingOverlay from "@/components/ui/LoadingOverlay";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { DateRange } from "react-date-range";
@@ -15,6 +16,7 @@ import "react-date-range/dist/theme/default.css";
 
 export default function BuscoServicioPage() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const [errorModal, setErrorModal] = useState({
     show: false,
@@ -74,6 +76,20 @@ export default function BuscoServicioPage() {
       .then(data => setUsuarios(data.usuarios || []));
   }, []);
 
+  useEffect(() => {
+    if (usuarios.length > 0 && !form.responsableId) {
+      const usuariosOrdenados = [...usuarios].sort((a, b) => a.id - b.id);
+      const primerUsuario = usuariosOrdenados[0];
+
+      setForm(prev => ({
+        ...prev,
+        responsableId: primerUsuario.id,
+        responsableNombre: primerUsuario.nombre,
+        telefono: primerUsuario.tel ?? primerUsuario.telefono ?? "",
+      }));
+    }
+  }, [usuarios, form.responsableId]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "volumen" && Number(value) > 120) return;
@@ -81,7 +97,19 @@ export default function BuscoServicioPage() {
   };
 
   const handleResponsableChange = (e) => {
-    const u = usuarios.find(x => String(x.id) === e.target.value);
+    const id = e.target.value;
+
+    if (!id) {
+      setForm(prev => ({
+        ...prev,
+        responsableId: "",
+        responsableNombre: "",
+        telefono: "",
+      }));
+      return;
+    }
+
+    const u = usuarios.find(x => String(x.id) === String(id));
     if (!u) return;
 
     setForm(prev => ({
@@ -94,6 +122,8 @@ export default function BuscoServicioPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
+    setLoading(true);
 
     const token = document.cookie
       .split("; ")
@@ -120,26 +150,22 @@ export default function BuscoServicioPage() {
           responsable_nombre: form.responsableNombre,
           responsable_telefono: form.telefono,
         }),
-
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        const msg =
-          data?.errors?.servicio?.[0] ??
-          data?.message ??
-          "No se pudo publicar el servicio";
-
+        setLoading(false);
         setErrorModal({
           show: true,
-          message: msg,
+          message: data?.message ?? "No se pudo publicar el servicio",
         });
         return;
       }
 
       router.push("/empresa/dashboard");
     } catch (err) {
+      setLoading(false);
       setErrorModal({
         show: true,
         message: "Error de conexión con el servidor",
@@ -163,14 +189,14 @@ export default function BuscoServicioPage() {
             <Input label="Destino" name="destino" value={form.destino} placeholder={"Ciudad donde se debe entregar la carga"} onChange={handleChange} autocomplete />
 
             <label className="input-group__label input-group__label--tooltip">
-                <span className="tooltip">
-                  ⓘ
-                  <span className="tooltip__content">
-                    Busco carga entre las siguientes fechas
-                  </span>
+              <span className="tooltip">
+                ⓘ
+                <span className="tooltip__content">
+                  Busco carga entre las siguientes fechas
                 </span>
-                La unidad sale a destino entre las siguientes fechas
-              </label>
+              </span>
+              La unidad sale a destino entre las siguientes fechas
+            </label>
 
             <DateRange ranges={range} onChange={item => setRange([item.selection])} minDate={new Date()} moveRangeOnFirstSelection={false} />
             <Input label="Volumen m³" name="volumen" type="number" value={form.volumen} placeholder={"Tengo espacio para un máximo de (m3) de carga"} onChange={handleChange} />
@@ -217,6 +243,7 @@ export default function BuscoServicioPage() {
       />
 
       <Footer />
+      <LoadingOverlay show={loading} />
     </>
   );
 }

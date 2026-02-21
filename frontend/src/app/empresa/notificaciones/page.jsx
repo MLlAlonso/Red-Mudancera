@@ -71,6 +71,24 @@ export default function EmpresaNotificacionesPage() {
         fetchNotificaciones();
     };
 
+    const marcarTodas = async () => {
+        const token = getTokenEmpresa();
+        if (!token) return;
+
+        await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/empresa/notificaciones/marcar-todas`,
+            {
+                method: "PATCH",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/json",
+                },
+            }
+        );
+
+        fetchNotificaciones();
+    };
+
     /* =========================
        ELIMINAR
     ========================= */
@@ -88,6 +106,24 @@ export default function EmpresaNotificacionesPage() {
                 },
             }
         );
+        fetchNotificaciones();
+    };
+
+    const eliminarLeidas = async () => {
+        const token = getTokenEmpresa();
+        if (!token) return;
+
+        await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/empresa/notificaciones/eliminar-leidas`,
+            {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/json",
+                },
+            }
+        );
+
         fetchNotificaciones();
     };
 
@@ -122,9 +158,19 @@ export default function EmpresaNotificacionesPage() {
                     {/* NO VISTAS */}
                     {noVistas.length > 0 && (
                         <>
-                            <h2 className="empresa-notificaciones__divider">
-                                No leídas
-                            </h2>
+                            <div className="empresa-notificaciones__actions">
+                                <div className="empresa-notificaciones__actions_title">
+                                    <h2 className="empresa-notificaciones__divider">
+                                        No leídas
+                                    </h2>
+                                </div>
+
+                                {noVistas.length > 0 && (
+                                    <button className="notif-btn notif-btn--secondary" onClick={marcarTodas} >
+                                        Leer todo
+                                    </button>
+                                )}
+                            </div>
 
                             <div className="empresa-notificaciones__grid">
                                 {noVistas.map((item) => (
@@ -145,9 +191,20 @@ export default function EmpresaNotificacionesPage() {
                     {/* VISTAS */}
                     {vistas.length > 0 && (
                         <>
-                            <h2 className="empresa-notificaciones__divider empresa-notificaciones__divider--vistas">
-                                Leídas
-                            </h2>
+                            <div className="empresa-notificaciones__actions">
+                                <div className="empresa-notificaciones__actions_title">
+
+                                    <h2 className="empresa-notificaciones__divider empresa-notificaciones__divider--vistas">
+                                        Leídas
+                                    </h2>
+                                </div>
+
+                                {vistas.length > 0 && (
+                                    <button className="notif-btn notif-btn--danger" onClick={eliminarLeidas} >
+                                        Eliminar todas
+                                    </button>
+                                )}
+                            </div>
 
                             <div className="empresa-notificaciones__grid">
                                 {vistas.map((item) => (

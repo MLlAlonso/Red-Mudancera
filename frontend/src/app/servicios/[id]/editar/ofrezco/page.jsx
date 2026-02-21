@@ -7,10 +7,12 @@ import Button_success from "@/components/common/Button_success";
 import Button_error from "@/components/common/Button_error";
 import ConfirmDeleteModal from "@/components/common/ConfirmDeleteModal";
 import SimpleEditor from "@/components/common/SimpleEditor";
+import ErrorModal from "@/components/common/ErrorModal";
 import { uploadToCloudinary } from "@/utils/cloudinaryUpload";
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import "@/styles/pages/servicios/_eliminarServicio.scss";
+import LoadingOverlay from "@/components/ui/LoadingOverlay";
 
 export default function EditarOfrezcoServicioPage() {
     const router = useRouter();
@@ -18,6 +20,11 @@ export default function EditarOfrezcoServicioPage() {
     const [imagenesActuales, setImagenesActuales] = useState([]);
     const [imagenesEliminar, setImagenesEliminar] = useState([]);
     const [imagenesNuevas, setImagenesNuevas] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [errorModal, setErrorModal] = useState({
+        show: false,
+        message: "",
+    });
 
     const maxPermitidas =
         3 - (imagenesActuales.length - imagenesEliminar.length);
@@ -71,6 +78,7 @@ export default function EditarOfrezcoServicioPage() {
                     importe: servicio.importe ?? "",
                     estadoCarga: servicio.estado_carga ?? "mi_almacen",
                 });
+
                 setImagenesActuales(servicio.imagenes || []);
             });
 
@@ -137,49 +145,121 @@ export default function EditarOfrezcoServicioPage() {
     };
 
     /* ======================
+       VALIDACIÓN DE IMÁGENES
+    ====================== */
+    const handleImagenesChange = (e) => {
+        const MAX_SIZE = 5 * 1024 * 1024;
+        const files = Array.from(e.target.files);
+
+        if (!files.length) return;
+
+        const imagenesValidas = [];
+        const errores = [];
+
+        const disponibles =
+            3 - (imagenesActuales.length - imagenesEliminar.length + imagenesNuevas.length);
+
+        if (disponibles <= 0) {
+            setErrorModal({
+                show: true,
+                message: "Ya alcanzaste el máximo de 3 imágenes",
+            });
+            return;
+        }
+
+        for (const file of files) {
+            if (file.size > MAX_SIZE) {
+                errores.push(`${file.name} supera los 4MB`);
+                continue;
+            }
+
+            if (!file.type.startsWith("image/")) {
+                errores.push(`${file.name} no es una imagen válida`);
+                continue;
+            }
+
+            imagenesValidas.push({
+                file,
+                preview: URL.createObjectURL(file),
+            });
+        }
+
+        if (imagenesValidas.length > disponibles) {
+            errores.push(`Solo puedes agregar ${disponibles} imagen(es) más`);
+        }
+
+        const imagenesFinales = imagenesValidas.slice(0, disponibles);
+        if (errores.length > 0) {
+            setErrorModal({
+                show: true,
+                message: errores.join("\n"),
+            });
+        }
+        setImagenesNuevas(prev => [...prev, ...imagenesFinales]);
+    };
+
+    /* ======================
        SUBMIT
     ====================== */
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const nuevasCloud = [];
-        for (const img of imagenesNuevas) {
-            const uploaded = await uploadToCloudinary(img.file);
-            nuevasCloud.push(uploaded);
-        }
+        if (loading) return; // evita doble click
+        setLoading(true);
 
         const token = document.cookie
             .split("; ")
             .find(r => r.startsWith("token_empresa="))
             ?.split("=")[1];
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/servicios/${id}`, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-                Accept: "application/json",
-            },
-            body: JSON.stringify({
-                volumen: form.volumen,
-                origen: form.origen,
-                destino: form.destino,
-                rangoDias: form.rangoDias,
-                tipo_carga: form.tipoCarga,
-                nota: form.nota,
-                responsable_nombre: form.responsableNombre,
-                responsable_telefono: form.telefono,
-                importe: form.importe,
-                estado_carga: form.estadoCarga,
+        try {
+            const nuevasCloud = [];
+            for (const img of imagenesNuevas) {
+                const uploaded = await uploadToCloudinary(img.file);
+                nuevasCloud.push(uploaded);
+            }
 
-                eliminar_imagenes: imagenesEliminar,
-                imagenes: nuevasCloud,
-            })
-        });
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/servicios/${id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/json",
+                },
+                body: JSON.stringify({
+                    volumen: form.volumen,
+                    origen: form.origen,
+                    destino: form.destino,
+                    rangoDias: form.rangoDias,
+                    tipo_carga: form.tipoCarga,
+                    nota: form.nota,
+                    responsable_nombre: form.responsableNombre,
+                    responsable_telefono: form.telefono,
+                    importe: form.importe,
+                    estado_carga: form.estadoCarga,
+                    eliminar_imagenes: imagenesEliminar,
+                    imagenes: nuevasCloud,
+                })
+            });
 
-        const data = await res.json();
-        if (!res.ok) return alert(JSON.stringify(data));
-        router.push("/empresa/dashboard");
+            const data = await res.json();
+            if (!res.ok) {
+                setLoading(false);
+                setErrorModal({
+                    show: true,
+                    message: data?.message || "No se pudo actualizar el servicio",
+                });
+                return;
+            }
+            router.push("/empresa/dashboard");
+
+        } catch (err) {
+            setLoading(false);
+            setErrorModal({
+                show: true,
+                message: err.message || "Error de conexión",
+            });
+        }
     };
 
     const [showConfirm1, setShowConfirm1] = useState(false);
@@ -235,7 +315,7 @@ export default function EditarOfrezcoServicioPage() {
                             <label className="input-group__label">Descripción de la carga</label>
                             <SimpleEditor
                                 value={form.nota}
-                                onChange={(value) => setForm((prev) => ({ ...prev, nota: value })) }
+                                onChange={(value) => setForm((prev) => ({ ...prev, nota: value }))}
                                 placeholder={`¿Qué lleva la mudanza? Escríbelo o pega la lista del cliente.`}
                             />
                         </div>
@@ -323,19 +403,10 @@ export default function EditarOfrezcoServicioPage() {
 
                                     <input
                                         type="file"
-                                        accept="image/*"
+                                        accept="image/png,image/jpeg,image/webp"
                                         multiple
-                                        onChange={(e) => {
-                                            const files = Array.from(e.target.files).slice(0, maxPermitidas);
-
-                                            setImagenesNuevas(prev => [
-                                                ...prev,
-                                                ...files.map(file => ({
-                                                    file,
-                                                    preview: URL.createObjectURL(file),
-                                                })),
-                                            ]);
-                                        }}
+                                        onClick={(e) => (e.target.value = null)}
+                                        onChange={handleImagenesChange}
                                     />
 
                                     <div className="imagenes-preview">
@@ -345,7 +416,9 @@ export default function EditarOfrezcoServicioPage() {
                                                 <button
                                                     type="button"
                                                     onClick={() =>
-                                                        setImagenesNuevas(prev => prev.filter((_, x) => x !== i))
+                                                        setImagenesNuevas(prev =>
+                                                            prev.filter((_, x) => x !== i)
+                                                        )
                                                     }
                                                 >
                                                     ✕
@@ -393,6 +466,14 @@ Al confirmar, este servicio será eliminado de forma permanente`}
                 onConfirm={handleDelete}
             />
 
+            <ErrorModal
+                show={errorModal.show}
+                title="Error en imágenes"
+                message={errorModal.message}
+                onClose={() => setErrorModal({ show: false, message: "" }) }
+            />
+
+            <LoadingOverlay show={loading} message="Actualizando servicio..." />
         </>
     );
 }

@@ -5,6 +5,7 @@
     padding: 40px 20px;
     max-width: 1400px;
     margin: 0 auto;
+    min-height: 100dvh;
 
     /* HEADER */
     &__title {
@@ -75,7 +76,7 @@
             }
         }
 
-        .btn-outline{
+        .btn-outline {
             background: variables.$primary;
             height: 65px;
             font-size: 20px;
@@ -86,7 +87,7 @@
 
     }
 
-    #publicaciones{
+    #publicaciones {
         align-items: center;
         justify-content: space-between;
     }
@@ -162,15 +163,21 @@
         }
 
         &__controls {
+            display: flex;
+            flex-direction: column;
             justify-content: center;
 
-            .service-filters__trigger{
+            .service-filters__trigger {
                 min-width: 400px;
                 max-width: 650px;
 
-                span{
+                span {
                     font-size: 30px;
                 }
+            }
+
+            .btn-outline{
+                width: 100%;
             }
         }
     }

@@ -73,6 +73,24 @@ export default function UsuarioNotificacionesPage() {
     fetchNotificaciones();
   };
 
+  const marcarTodas = async () => {
+    const token = getTokenUsuario();
+    if (!token) return;
+
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/usuario/notificaciones/marcar-todas`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      }
+    );
+
+    fetchNotificaciones();
+  };
+
   /* =========================
      ELIMINAR
   ========================= */
@@ -92,6 +110,24 @@ export default function UsuarioNotificacionesPage() {
     );
 
     setConfirmId(null);
+    fetchNotificaciones();
+  };
+
+  const eliminarLeidas = async () => {
+    const token = getTokenUsuario();
+    if (!token) return;
+
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/usuario/notificaciones/eliminar-leidas`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      }
+    );
+
     fetchNotificaciones();
   };
 
@@ -115,13 +151,20 @@ export default function UsuarioNotificacionesPage() {
         )}
 
         <div className="usuario-notificaciones__list">
-
           {/* NO LEÍDAS */}
           {noLeidas.length > 0 && (
             <>
-              <h2 className="usuario-notificaciones__divider">
-                No leídas
-              </h2>
+              <div className="usuario-notificaciones__actions">
+                <h2 className="usuario-notificaciones__divider">
+                  No leídas
+                </h2>
+
+                {noLeidas.length > 0 && (
+                  <button className="notif-btn notif-btn--secondary" onClick={marcarTodas} >
+                    Leer todo
+                  </button>
+                )}
+              </div>
 
               <div className="usuario-notificaciones__grid">
                 {noLeidas.map((item) => (
@@ -142,9 +185,17 @@ export default function UsuarioNotificacionesPage() {
           {/* LEÍDAS */}
           {leidas.length > 0 && (
             <>
-              <h2 className="usuario-notificaciones__divider usuario-notificaciones__divider--vistas">
-                Leídas
-              </h2>
+              <div className="usuario-notificaciones__actions">
+                <h2 className="usuario-notificaciones__divider usuario-notificaciones__divider--vistas">
+                  Leídas
+                </h2>
+
+                {leidas.length > 0 && (
+                  <button className="notif-btn notif-btn--danger" onClick={eliminarLeidas} >
+                    Eliminar todas
+                  </button>
+                )}
+              </div>
 
               <div className="usuario-notificaciones__grid">
                 {leidas.map((item) => (

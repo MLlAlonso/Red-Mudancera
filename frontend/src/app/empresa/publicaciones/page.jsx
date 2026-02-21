@@ -102,10 +102,7 @@ export default function MisServiciosEmpresa() {
         <div className="empresa-dashboard__controls" id="publicaciones">
           <ServiceFilters onChange={setFilter} />
 
-          <button
-            className="btn-outline"
-            onClick={() => setShowReporte(true)}
-          >
+          <button className="btn-outline" onClick={() => setShowReporte(true)} >
             Crear reporte
           </button>
         </div>

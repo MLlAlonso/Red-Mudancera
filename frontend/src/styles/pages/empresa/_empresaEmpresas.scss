@@ -1,7 +1,7 @@
 @use "../../utils/variables";
 
 .empresa-empresas {
-  padding: 40px 20px;
+  padding: 48px 24px;
   max-width: 1400px;
   margin: 0 auto;
   min-height: 100dvh;
@@ -9,8 +9,8 @@
   &__header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    gap: 20px;
+    align-items: flex-end;
+    gap: 24px;
     flex-wrap: wrap;
   }
 
@@ -18,28 +18,128 @@
     font-family: variables.$font-title;
     font-size: 40px;
     color: variables.$primary;
-    margin-bottom: 0px;
+    margin: 0;
   }
 
   &__subtitle {
-    margin: 0;
-    font-size: 22px;
-    margin-top: 0px;
+    margin: 4px 0 0 0;
+    font-size: 20px;
     font-family: variables.$font-text;
     color: variables.$text-muted;
   }
 
+  /* =========================
+     FILTROS
+  ========================= */
+
+  &__filtros {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    select {
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+      font-family: variables.$font-text;
+      background: #fff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        border-color: variables.$primary;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: variables.$primary;
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+      }
+    }
+  }
+
+  /* =========================
+     GRID
+  ========================= */
+
   &__grid {
-    margin-top: 40px;
+    margin-top: 48px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
+    gap: 32px;
+  }
+
+  /* =========================
+     EMPTY STATE
+  ========================= */
+
+  &__empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    border-radius: 16px;
+
+    h3 {
+      font-family: variables.$font-text;
+      font-size: 30px;
+      color: variables.$text-muted;
+      margin: 0;
+      line-height: 1.6;
+    }
+  }
+
+  /* =========================
+     RESPONSIVE
+  ========================= */
+
+  @media (max-width: 1024px) {
+    &__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    &__title {
+      font-size: 34px;
+    }
   }
 
   @media (max-width: 768px) {
+    padding: 32px 16px;
+
+    &__header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    &__title {
+      font-size: 28px;
+    }
+
+    &__subtitle {
+      font-size: 16px;
+    }
+
     &__grid {
-      grid-template-columns: repeat(1, 1fr);
-      gap: 15px;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    &__filtros {
+      width: 100%;
+
+      select {
+        width: 100%;
+      }
+    }
+
+    &__empty {
+      padding: 40px 16px;
+
+      h3 {
+        font-size: 16px;
+      }
     }
   }
 }
