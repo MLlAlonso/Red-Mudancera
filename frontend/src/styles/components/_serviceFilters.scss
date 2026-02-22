@@ -74,8 +74,9 @@
     color: variables.$primary;
 
     img {
-      width: 30px;
+      width: 35px;
       height: 30px;
+      transition: filter 0.2s ease;
     }
 
     &:hover {
@@ -84,7 +85,8 @@
       font-size: 26px;
 
       img {
-        filter: brightness(1.2);
+        filter: brightness(0) invert(1);
+        margin-left: 10px;
       }
     }
   }

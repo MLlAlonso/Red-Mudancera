@@ -7,17 +7,27 @@ import Footer from "@/components/layout/Footer";
 import Input from "@/components/common/Input";
 import Button_success from "@/components/common/Button_success";
 import Button_error from "@/components/common/Button_error";
+import ErrorModal from "@/components/common/ErrorModal";
+import LoadingOverlay from "@/components/ui/LoadingOverlay";
 
 import "@/styles/pages/empresa/_empresaEditar.scss";
 
 export default function EmpresaEditar() {
   const router = useRouter();
   const API = process.env.NEXT_PUBLIC_API_URL;
+
   const [empresa, setEmpresa] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loadingPage, setLoadingPage] = useState(true);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
+
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
+
+  const [errorModal, setErrorModal] = useState({
+    show: false,
+    message: "",
+  });
 
   const [form, setForm] = useState({
     empresa: "",
@@ -34,6 +44,8 @@ export default function EmpresaEditar() {
 
   const [previewLogo, setPreviewLogo] = useState(null);
 
+  const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+
   const getCookie = (name) => {
     const match = document.cookie.match(
       new RegExp("(^| )" + name + "=([^;]+)")
@@ -41,11 +53,14 @@ export default function EmpresaEditar() {
     return match ? match[2] : null;
   };
 
+  /* ===============================
+     CARGAR EMPRESA
+  =============================== */
   useEffect(() => {
     const token = getCookie("token_empresa");
 
     if (!API || !token) {
-      setLoading(false);
+      setLoadingPage(false);
       return;
     }
 
@@ -55,6 +70,7 @@ export default function EmpresaEditar() {
       .then((res) => res.json())
       .then((data) => {
         setEmpresa(data);
+
         setForm({
           empresa: data.empresa || "",
           email: data.email || "",
@@ -64,58 +80,101 @@ export default function EmpresaEditar() {
           base: data.base || "",
           rfc: data.rfc || "",
           logo: null,
-          // MANTENER
           password: "",
           password_confirmation: "",
         });
+
         setPreviewLogo(data.logo_url || "/icons/user-placeholder.png");
-        setLoading(false);
+        setLoadingPage(false);
       })
-      .catch(() => setLoading(false));
+      .catch(() => setLoadingPage(false));
   }, [API]);
 
-  if (loading) return <p>Cargando...</p>;
+  if (loadingPage) return <p style={{ padding: 40 }}>Cargando...</p>;
   if (!empresa) return <p>Error al cargar perfil.</p>;
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  /* ===============================
+     VALIDACIÓN DE IMAGEN
+  =============================== */
   const handleFile = (e) => {
     const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > MAX_SIZE) {
+      setErrorModal({
+        show: true,
+        message: "El logo no puede superar los 5MB.",
+      });
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      setErrorModal({
+        show: true,
+        message: "El archivo seleccionado no es una imagen válida.",
+      });
+      return;
+    }
+
     setForm({ ...form, logo: file });
-    if (file) setPreviewLogo(URL.createObjectURL(file));
+    setPreviewLogo(URL.createObjectURL(file));
   };
 
+  /* ===============================
+     SUBMIT
+  =============================== */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (loadingSubmit) return;
+    setLoadingSubmit(true);
+
     const token = getCookie("token_empresa");
     if (!API || !token) return;
+
     const formData = new FormData();
     formData.append("_method", "PUT");
 
     Object.keys(form).forEach((key) => {
-      if (form[key] !== null) {
+      if (form[key] !== null && form[key] !== "") {
         formData.append(key, form[key]);
       }
     });
 
     try {
       const res = await fetch(`${API}/empresa/update`, {
-        method: "POST", // NO CAMBIAR
+        method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
         },
         body: formData,
       });
 
-      if (!res.ok) throw new Error("Error backend");
+      if (!res.ok) {
+        setLoadingSubmit(false);
+        setErrorModal({
+          show: true,
+          message: "No se pudo actualizar la empresa.",
+        });
+        return;
+      }
 
       setShowSuccessModal(true);
-      setTimeout(() => router.push("/empresa/perfil"), 1500);
+
+      setTimeout(() => {
+        router.push("/empresa/perfil");
+      }, 1500);
+
     } catch (err) {
-      console.error("Error al actualizar empresa", err);
+      setLoadingSubmit(false);
+      setErrorModal({
+        show: true,
+        message: "Error de conexión.",
+      });
     }
   };
 
@@ -138,18 +197,26 @@ export default function EmpresaEditar() {
       <Header />
 
       <main className="empresa-editar">
-        <h1 className="empresa-editar__title">Actualizar datos empresa</h1>
-        <p className="empresa-editar__subtitle">Editar datos de una empresa</p>
+        <h1 className="empresa-editar__title">
+          Actualizar datos empresa
+        </h1>
+        <p className="empresa-editar__subtitle">
+          Editar datos de una empresa
+        </p>
 
         <div className="empresa-editar__avatar-wrapper">
-          <img src={previewLogo || "/icons/user-placeholder.png"} className="empresa-editar__avatar" />
+          <img
+            src={previewLogo || "/icons/user-placeholder.png"}
+            className="empresa-editar__avatar"
+            alt="logo"
+          />
         </div>
 
         <form className="empresa-editar__form" onSubmit={handleSubmit}>
           <Input label="Nombre" name="empresa" value={form.empresa} onChange={handleChange} />
           <Input label="Correo" type="email" name="email" value={form.email} onChange={handleChange} />
           <Input label="Nueva contraseña" type="password" name="password" placeholder="Dejar vacío para no cambiar" value={form.password} onChange={handleChange} />
-          <Input label="Confirmar contraseña" type="password" name="password_confirmation" placeholder="Repite la contraseña" value={form.password_confirmation} onChange={handleChange} />
+          <Input label="Confirmar contraseña" type="password" name="password_confirmation" value={form.password_confirmation} onChange={handleChange} />
           <Input label="RFC" name="rfc" value={form.rfc} onChange={handleChange} />
           <Input label="Representante" name="representante" value={form.representante} onChange={handleChange} />
           <Input label="Teléfono" name="telefono" value={form.telefono} onChange={handleChange} />
@@ -157,12 +224,25 @@ export default function EmpresaEditar() {
 
           <div className="input-group">
             <label className="input-group__label">Descripción</label>
-            <textarea name="descripcion" className="input-group__field textarea" value={form.descripcion} onChange={handleChange} />
+            <textarea
+              name="descripcion"
+              className="input-group__field textarea"
+              value={form.descripcion}
+              onChange={handleChange}
+            />
           </div>
 
           <div className="input-group">
-            <label className="input-group__label">Foto de perfil</label>
-            <input type="file" accept="image/*" className="input-group__field" onChange={handleFile} />
+            <label className="input-group__label">
+              Logo empresa (máx 5MB)
+            </label>
+            <input
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              className="input-group__field"
+              onChange={handleFile}
+              onClick={(e) => (e.target.value = null)}
+            />
           </div>
 
           <div className="empresa-editar__buttons">
@@ -171,12 +251,27 @@ export default function EmpresaEditar() {
           </div>
         </form>
 
-        <p className="empresa-editar__delete" onClick={() => setShowDeleteModal(true)} >
+        <p
+          className="empresa-editar__delete"
+          onClick={() => setShowDeleteModal(true)}
+        >
           ¿Desea eliminar su perfil de empresa?
         </p>
       </main>
 
       <Footer />
+
+      <ErrorModal
+        show={errorModal.show}
+        title="Error"
+        message={errorModal.message}
+        onClose={() => setErrorModal({ show: false, message: "" })}
+      />
+
+      <LoadingOverlay
+        show={loadingSubmit}
+        message="Actualizando empresa..."
+      />
 
       {showSuccessModal && (
         <div className="empresa-editar__modal">
@@ -187,6 +282,7 @@ export default function EmpresaEditar() {
         </div>
       )}
 
+      {/* Mantengo tus modales de eliminación intactos */}
       {showDeleteModal && (
         <div
           className="empresa-delete__modal"
@@ -213,9 +309,7 @@ export default function EmpresaEditar() {
       {showDeleteConfirmModal && (
         <div
           className="empresa-delete__modal"
-          onClick={(e) =>
-            e.target === e.currentTarget && setShowDeleteConfirmModal(false)
-          }
+          onClick={(e) => e.target === e.currentTarget && setShowDeleteConfirmModal(false)}
         >
           <div className="empresa-delete__box">
             <h2>¿En verdad quieres eliminar tu perfil?</h2>

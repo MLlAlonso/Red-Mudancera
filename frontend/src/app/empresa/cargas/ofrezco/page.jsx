@@ -378,7 +378,7 @@ export default function OfrezcoServicioPage() {
                     <strong> “Por convenir”</strong>.
                   </span>
                 </span>
-                Monto de referencia
+                Oferta
               </label>
 
               <input

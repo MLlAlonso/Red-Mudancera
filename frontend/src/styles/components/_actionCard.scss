@@ -24,7 +24,7 @@
 
     &__icon {
         width: clamp(200px, 40vw, 300px);
-        height: auto;
+        height: 280px;
         aspect-ratio: 300 / 228;
         object-fit: cover;
         margin-bottom: clamp(10px, 3vw, 20px);
@@ -51,6 +51,7 @@
 
         &__icon {
             margin-bottom: clamp(8px, 2vw, 15px);
+            width: 300px;
         }
     }
 

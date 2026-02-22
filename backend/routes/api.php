@@ -56,3 +56,10 @@ Route::post(
 |--------------------------------------------------------------------------
 */
 require base_path('app/Modules/Notificacion/routes.php');
+
+/*
+|--------------------------------------------------------------------------
+| Solicitud de Mudanza publicas
+|--------------------------------------------------------------------------
+*/
+require base_path('app/Modules/SolicitudMudanza/routes.php');

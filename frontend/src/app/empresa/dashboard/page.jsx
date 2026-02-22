@@ -37,18 +37,23 @@ export default function EmpresaDashboard() {
     todos: {
       title: "Últimas publicaciones",
       subtitle:
-        "Todas las publicaciones de empresas que buscan y ofrecen servicios",
+        "Nuevas oportunidades todos los días: Empresas que ofrecen, empresas que buscan y clientes listos para cerrar.",
     },
     busco: {
       title: "Publicaciones de Búsqueda",
       subtitle:
-        "En esta pantalla puedes ver lo que están buscando las empresas",
+        "Empresas que buscan carga disponible para completar sus viajes.",
     },
     ofrezco: {
       title: "Publicaciones de Cargas a ofrecer",
       subtitle:
-        "En esta pantalla puedes ver las cargas que ofrecen las empresas",
+        "Empresas que publican carga disponible.",
     },
+    /* clientes: {
+      title: "Publicaciones de clientes",
+      subtitle:
+        "Clientes publicando su mudanza para recibir cotizaciones..",
+    }, */
   };
 
   /* =========================

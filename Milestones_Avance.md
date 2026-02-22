@@ -196,126 +196,230 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 **Estado actual:** sólido, estable y listo para crecer 🚀
 
 ## Estrucrura de carpetas
-backend/
-├── 📄 .editorconfig
-├── 📄 .env
-├── 📄 .env.example
-├── 📄 .gitattributes
-├── 📄 artisan
-├── 📄 composer.json
-├── 📄 composer.lock
-├── 📄 ENDPOINTS.md                      # [backend/ENDPOINTS.md](backend/ENDPOINTS.md)
-├── 📄 package.json
-├── 📄 phpunit.xml
-├── 📄 red_mudancera_dev
-├── 📄 Structure.md                      # [backend/Structure.md](backend/Structure.md)
-├── 📄 vite.config.js
-├── 📁 __borrar__/
-│   ├── 📄 .env
-│   └── 📄 .env.save
-├── 📁 app/
-│   ├── 📁 Console/
-│   │   ├── 📄 Kernel.php               # [backend/app/Console/Kernel.php](backend/app/Console/Kernel.php)
-│   │   └── 📁 Commands/
-│   ├── 📁 Http/
-│   │   ├── 📁 Controllers/             # Controladores por módulo
-│   │   ├── 📄 Kernel.php               # [backend/app/Http/Kernel.php](backend/app/Http/Kernel.php)
-│   │   └── 📁 Middleware/
-│   │       └── 📄 Authenticate.php
-│   ├── 📁 Modules/                     # Arquitectura modular por dominios
-│   │   ├── 📁 Empresa/
-│   │   │   ├── 📁 Controllers/
-│   │   │   │   ├── 📄 EmpresaAuthController.php  # [`App\Modules\Empresa\Controllers\EmpresaAuthController`](backend/app/Modules/Empresa/Controllers/EmpresaAuthController.php)
-│   │   │   │   └── 📄 EmpresaController.php      # [`App\Modules\Empresa\Controllers\EmpresaController`](backend/app/Modules/Empresa/Controllers/EmpresaController.php)
-│   │   │   ├── 📁 Models/
-│   │   │   │   └── 📄 Empresa.php                  # [backend/app/Modules/Empresa/Models/Empresa.php](backend/app/Modules/Empresa/Models/Empresa.php)
-│   │   │   ├── 📁 Requests/
-│   │   │   ├── 📁 Services/                        # Lógica de negocio (si aplica)
-│   │   │   ├── 📁 Repositories/                    # Acceso a datos (opcional)
-│   │   │   └── 📄 routes.php                        # [backend/app/Modules/Empresa/routes.php](backend/app/Modules/Empresa/routes.php)
-│   │   ├── 📁 Usuario/
-│   │   │   ├── 📁 Controllers/
-│   │   │   │   ├── 📄 UsuarioAuthController.php    # [`App\Modules\Usuario\Controllers\UsuarioAuthController`](backend/app/Modules/Usuario/Controllers/UsuarioAuthController.php)
-│   │   │   │   └── 📄 UsuarioController.php        # [`App\Modules\Usuario\Controllers\UsuarioController`](backend/app/Modules/Usuario/Controllers/UsuarioController.php)
-│   │   │   ├── 📁 Models/
-│   │   │   │   └── 📄 Usuario.php                  # [backend/app/Modules/Usuario/Models/Usuario.php](backend/app/Modules/Usuario/Models/Usuario.php)
-│   │   │   ├── 📁 Requests/
-│   │   │   ├── 📁 Services/
-│   │   │   └── 📄 routes.php                        # [backend/app/Modules/Usuario/routes.php](backend/app/Modules/Usuario/routes.php)
-│   │   ├── 📁 Servicio/                              # Módulo Servicios (implementado)
-│   │   │   ├── 📁 Controllers/
-│   │   │   │   └── 📄 ServicioController.php        # [`App\Modules\Servicio\Controllers\ServicioController`](backend/app/Modules/Servicio/Controllers/ServicioController.php)
-│   │   │   ├── 📁 Models/
-│   │   │   │   └── 📄 Servicio.php                  # [backend/app/Modules/Servicio/Models/Servicio.php](backend/app/Modules/Servicio/Models/Servicio.php)
-│   │   │   ├── 📁 Requests/
-│   │   │   │   ├── 📄 StoreServicioRequest.php      # [backend/app/Modules/Servicio/Requests/StoreServicioRequest.php](backend/app/Modules/Servicio/Requests/StoreServicioRequest.php)
-│   │   │   │   ├── 📄 UpdateServicioRequest.php     # [backend/app/Modules/Servicio/Requests/UpdateServicioRequest.php](backend/app/Modules/Servicio/Requests/UpdateServicioRequest.php)
-│   │   │   │   └── 📄 ChangeEstadoServicioRequest.php
-│   │   │   ├── 📁 Services/
-│   │   │   │   └── 📄 ServicioService.php
-│   │   │   ├── 📁 Repositories/
-│   │   │   │   └── 📄 ServicioRepository.php
-│   │   │   └── 📄 routes.php                        # [backend/app/Modules/Servicio/routes.php](backend/app/Modules/Servicio/routes.php)
-│   │   └── 📁 Resena/
-│   │       ├── 📁 Controllers/
-│   │       │   └── 📄 ResenaController.php         # [`App\Modules\Resena\Controllers\ResenaController`](backend/app/Modules/Resena/Controllers/ResenaController.php)
-│   │       ├── 📁 Models/
-│   │       ├── 📁 Requests/
-│   │       └── 📄 routes.php                        # [backend/app/Modules/Resena/routes.php](backend/app/Modules/Resena/routes.php)
-│   └── 📁 Providers/
-│       ├── 📄 AppServiceProvider.php
-│       └── 📄 RouteServiceProvider.php              # [`App\Providers\RouteServiceProvider`](backend/app/Providers/RouteServiceProvider.php)
-├── 📁 bootstrap/
-│   ├── 📄 app.php                                   # [backend/bootstrap/app.php](backend/bootstrap/app.php)
-│   └── 📁 cache/
-├── 📁 config/
-│   ├── 📄 app.php
-│   ├── 📄 auth.php                                  # [backend/config/auth.php](backend/config/auth.php)
-│   ├── 📄 cache.php
-│   ├── 📄 cors.php                                  # [backend/config/cors.php](backend/config/cors.php)
-│   ├── 📄 database.php
-│   ├── 📄 filesystems.php                           # [backend/config/filesystems.php](backend/config/filesystems.php)
-│   ├── 📄 logging.php
-│   ├── 📄 mail.php
-│   ├── 📄 queue.php
-│   ├── 📄 sanctum.php                               # [backend/config/sanctum.php](backend/config/sanctum.php)
-│   └── 📄 session.php
-├── 📁 database/
-│   ├── 📁 migrations/
-│   │   ├── 📄 0001_01_01_000001_create_cache_table.php   # [backend/database/migrations/0001_01_01_000001_create_cache_table.php](backend/database/migrations/0001_01_01_000001_create_cache_table.php)
-│   │   ├── 📄 2025_11_26_074631_create_empresas_table.php   # [backend/database/migrations/2025_11_26_074631_create_empresas_table.php](backend/database/migrations/2025_11_26_074631_create_empresas_table.php)
-│   │   ├── 📄 2025_11_26_074711_create_usuarios_table.php    # [backend/database/migrations/2025_11_26_074711_create_usuarios_table.php](backend/database/migrations/2025_11_26_074711_create_usuarios_table.php)
-│   │   ├── 📄 2025_12_16_064630_create_servicios_table.php  # [backend/database/migrations/2025_12_16_064630_create_servicios_table.php](backend/database/migrations/2025_12_16_064630_create_servicios_table.php)
-│   │   └── 📄 2026_01_28_062726_add_estado_carga_to_servicios.php  # [backend/database/migrations/2026_01_28_062726_add_estado_carga_to_servicios.php](backend/database/migrations/2026_01_28_062726_add_estado_carga_to_servicios.php)
-│   └── 📁 seeders/
-│       └── 📄 DatabaseSeeder.php
-├── 📁 public/
-│   ├── 📄 index.php                                   # [backend/public/index.php](backend/public/index.php)
-│   └── 📁 storage/ (enlace simbólico → storage/app/public)
-├── 📁 resources/
-│   ├── 📁 css/
-│   │   └── 📄 app.css
-│   ├── 📁 js/
-│   │   └── 📄 app.js                                   # [backend/resources/js/app.js](backend/resources/js/app.js)
-│   └── 📁 views/
-│       ├── 📄 welcome.blade.php                       # [backend/resources/views/welcome.blade.php](backend/resources/views/welcome.blade.php)
-│       ├── 📁 emails/
-│       │   └── 📄 empresa_verification_code.blade.php # [backend/resources/views/emails/empresa_verification_code.blade.php](backend/resources/views/emails/empresa_verification_code.blade.php)
-│       └── 📁 pdf/
-│           └── 📄 reporte-mensual.blade.php            # [backend/resources/views/pdf/reporte-mensual.blade.php](backend/resources/views/pdf/reporte-mensual.blade.php)
-├── 📁 routes/
-│   ├── 📄 api.php                                     # [backend/routes/api.php](backend/routes/api.php) (incluye módulos: Empresa, Usuario, Servicio, Resena)
-│   └── 📄 web.php
-├── 📁 storage/
-│   ├── 📁 app/
-│   ├── 📁 framework/
-│   ├── 📁 logs/
-│   └── 📁 public/
-├── 📁 tests/
-│   ├── 📁 Feature/
-│   │   └── 📄 ExampleTest.php
-│   └── 📄 TestCase.php
-└── 📁 vendor/                                         # dependencias Composer
+├── 📁 backend
+│   ├── 📁 __borrar__
+│   │   └── 🐘 app.php
+│   ├── 📁 app
+│   │   ├── 📁 Console
+│   │   │   ├── 📁 Commands
+│   │   │   │   ├── 🐘 CheckServiciosPorVencer.php
+│   │   │   │   ├── 🐘 CleanEmailVerifications.php
+│   │   │   │   └── 🐘 SendDailyServiceViewsSummary.php
+│   │   │   └── 🐘 Kernel.php
+│   │   ├── 📁 Http
+│   │   │   ├── 📁 Controllers
+│   │   │   │   ├── 📁 Auth
+│   │   │   │   │   └── 🐘 RecoverPasswordController.php
+│   │   │   │   └── 🐘 Controller.php
+│   │   │   ├── 📁 Middleware
+│   │   │   │   ├── 🐘 Authenticate.php
+│   │   │   │   └── 🐘 RedirectIfAuthenticated.php
+│   │   │   └── 🐘 Kernel.php
+│   │   ├── 📁 Jobs
+│   │   │   └── 🐘 SendNotificationEmailJob.php
+│   │   ├── 📁 Mail
+│   │   │   └── 🐘 RecoverPasswordMail.php
+│   │   ├── 📁 Models
+│   │   │   ├── 🐘 EmailVerification.php
+│   │   │   └── 🐘 User.php
+│   │   ├── 📁 Modules
+│   │   │   ├── 📁 Auth
+│   │   │   ├── 📁 Empresa
+│   │   │   │   ├── 📁 Controllers
+│   │   │   │   │   ├── 🐘 EmpresaAuthController.php
+│   │   │   │   │   ├── 🐘 EmpresaController.php
+│   │   │   │   │   └── 🐘 EmpresaPublicController.php
+│   │   │   │   ├── 📁 Mail
+│   │   │   │   │   ├── 🐘 EmpresaGoodbyeMail.php
+│   │   │   │   │   ├── 🐘 EmpresaVerificationCode.php
+│   │   │   │   │   └── 🐘 EmpresaWelcomeMail.php
+│   │   │   │   ├── 📁 Models
+│   │   │   │   │   └── 🐘 Empresa.php
+│   │   │   │   ├── 📁 Repositories
+│   │   │   │   ├── 📁 Requests
+│   │   │   │   │   ├── 🐘 EmpresaUpdateRequest.php
+│   │   │   │   │   ├── 🐘 LoginEmpresaRequest.php
+│   │   │   │   │   └── 🐘 RegisterEmpresaRequest.php
+│   │   │   │   ├── 📁 Services
+│   │   │   │   │   └── 🐘 EmpresaService.php
+│   │   │   │   └── 🐘 routes.php
+│   │   │   ├── 📁 Notificacion
+│   │   │   │   ├── 📁 Channels
+│   │   │   │   │   ├── 🐘 DatabaseChannel.php
+│   │   │   │   │   ├── 🐘 EmailChannel.php
+│   │   │   │   │   ├── 🐘 NotificationChannelInterface.php
+│   │   │   │   │   └── 🐘 PushChannel.php
+│   │   │   │   ├── 📁 Controllers
+│   │   │   │   │   └── 🐘 NotificacionController.php
+│   │   │   │   ├── 📁 Events
+│   │   │   │   │   ├── 🐘 BaseNotificationEvent.php
+│   │   │   │   │   ├── 🐘 LoginEmpresaEvent.php
+│   │   │   │   │   ├── 🐘 ServicioAsignadoEvent.php
+│   │   │   │   │   ├── 🐘 ServicioFinalizadoEvent.php
+│   │   │   │   │   ├── 🐘 ServicioPorVencerEvent.php
+│   │   │   │   │   ├── 🐘 ServicioPublicadoEvent.php
+│   │   │   │   │   ├── 🐘 ServicioVistoEvent.php
+│   │   │   │   │   └── 🐘 ServiciosCreadosMesEvent.php
+│   │   │   │   ├── 📁 Models
+│   │   │   │   │   ├── 🐘 Notificacion.php
+│   │   │   │   │   ├── 🐘 NotificacionUsuario.php
+│   │   │   │   │   ├── 🐘 NotificationMetric.php
+│   │   │   │   │   └── 🐘 NotificationPreference.php
+│   │   │   │   ├── 📁 Services
+│   │   │   │   │   ├── 🐘 NotificacionService.php
+│   │   │   │   │   └── 🐘 NotificationDispatcher.php
+│   │   │   │   └── 🐘 routes.php
+│   │   │   ├── 📁 Resena
+│   │   │   │   ├── 📁 Controllers
+│   │   │   │   │   └── 🐘 ResenaController.php
+│   │   │   │   ├── 📁 Mail
+│   │   │   │   │   └── 🐘 NuevaResenaMail.php
+│   │   │   │   ├── 📁 Models
+│   │   │   │   │   ├── 🐘 ResenaLink.php
+│   │   │   │   │   └── 🐘 resena.php
+│   │   │   │   ├── 📁 Repositories
+│   │   │   │   ├── 📁 Request
+│   │   │   │   ├── 📁 Services
+│   │   │   │   └── 🐘 routes.php
+│   │   │   ├── 📁 Servicio
+│   │   │   │   ├── 📁 Controllers
+│   │   │   │   │   └── 🐘 ServicioController.php
+│   │   │   │   ├── 📁 Models
+│   │   │   │   │   ├── 🐘 ServiceView.php
+│   │   │   │   │   ├── 🐘 Servicio.php
+│   │   │   │   │   └── 🐘 ServicioImagen.php
+│   │   │   │   ├── 📁 Repositories
+│   │   │   │   │   └── 🐘 ServicioRepository.php
+│   │   │   │   ├── 📁 Requests
+│   │   │   │   │   ├── 🐘 ChangeEstadoServicioRequest.php
+│   │   │   │   │   ├── 🐘 StoreServicioRequest.php
+│   │   │   │   │   └── 🐘 UpdateServicioRequest.php
+│   │   │   │   ├── 📁 Services
+│   │   │   │   │   ├── 🐘 ServicioImagenService.php
+│   │   │   │   │   └── 🐘 ServicioService.php
+│   │   │   │   └── 🐘 routes.php
+│   │   │   └── 📁 Usuario
+│   │   │       ├── 📁 Controllers
+│   │   │       │   ├── 🐘 UsuarioAuthController.php
+│   │   │       │   └── 🐘 UsuarioController.php
+│   │   │       ├── 📁 Mail
+│   │   │       │   ├── 🐘 UsuarioGoodbyeMail.php
+│   │   │       │   ├── 🐘 UsuarioVerificationCode.php
+│   │   │       │   └── 🐘 UsuarioWelcomeMail.php
+│   │   │       ├── 📁 Models
+│   │   │       │   └── 🐘 Usuario.php
+│   │   │       ├── 📁 Repositories
+│   │   │       ├── 📁 Requests
+│   │   │       │   ├── 🐘 UsuarioLoginRequest.php
+│   │   │       │   ├── 🐘 UsuarioRegisterRequest.php
+│   │   │       │   ├── 🐘 UsuarioUpdateRequest.php
+│   │   │       │   └── 🐘 UsuarioVerifyEmailRequest.php
+│   │   │       └── 🐘 routes.php
+│   │   ├── 📁 Providers
+│   │   │   ├── 🐘 AppServiceProvider.php
+│   │   │   └── 🐘 RouteServiceProvider.php
+│   │   └── 📁 Services
+│   │       ├── 📁 Google
+│   │       │   └── 🐘 GoogleDistanceService.php
+│   │       └── 🐘 CloudinaryService.php
+│   ├── 📁 bootstrap
+│   │   ├── 🐘 app.php
+│   │   └── 🐘 providers.php
+│   ├── 📁 config
+│   │   ├── 🐘 app.php
+│   │   ├── 🐘 auth.php
+│   │   ├── 🐘 cache.php
+│   │   ├── 🐘 cors.php
+│   │   ├── 🐘 database.php
+│   │   ├── 🐘 filesystems.php
+│   │   ├── 🐘 logging.php
+│   │   ├── 🐘 mail.php
+│   │   ├── 🐘 queue.php
+│   │   ├── 🐘 sanctum.php
+│   │   ├── 🐘 services.php
+│   │   └── 🐘 session.php
+│   ├── 📁 database
+│   │   ├── 📁 factories
+│   │   │   └── 🐘 UserFactory.php
+│   │   ├── 📁 migrations
+│   │   │   ├── 🐘 0001_01_01_000001_create_cache_table.php
+│   │   │   ├── 🐘 2025_11_26_072955_create_personal_access_tokens_table.php
+│   │   │   ├── 🐘 2025_11_26_074631_create_empresas_table.php
+│   │   │   ├── 🐘 2025_11_26_074711_create_usuarios_table.php
+│   │   │   ├── 🐘 2025_12_07_052204_create_email_verifications_table.php
+│   │   │   ├── 🐘 2025_12_16_064630_create_servicios_table.php
+│   │   │   ├── 🐘 2026_01_06_051311_create_resenas_table.php
+│   │   │   ├── 🐘 2026_01_06_051525_create_resena_links_table.php
+│   │   │   ├── 🐘 2026_01_18_082815_add_response_fields_to_resena_links.php
+│   │   │   ├── 🐘 2026_01_20_042024_add_distancia_km_to_servicios_table.php
+│   │   │   ├── 🐘 2026_01_25_075637_add_ganancia_to_servicios_table.php
+│   │   │   ├── 🐘 2026_01_28_062726_add_estado_carga_to_servicios.php
+│   │   │   ├── 🐘 2026_02_01_064840_create_servicio_imagenes_table.php
+│   │   │   ├── 🐘 2026_02_08_075259_create_notificaciones_table.php
+│   │   │   ├── 🐘 2026_02_08_075522_create_notificacion_usuario_table.php
+│   │   │   ├── 🐘 2026_02_08_100224_add_leida_empresa_to_notificaciones_table.php
+│   │   │   ├── 🐘 2026_02_13_052004_create_jobs_table.php
+│   │   │   ├── 🐘 2026_02_13_054109_create_service_views_table.php
+│   │   │   ├── 🐘 2026_02_14_054657_add_expiration_notified_to_servicios_table.php
+│   │   │   ├── 🐘 2026_02_15_194227_create_notification_preferences_table.php
+│   │   │   └── 🐘 2026_02_16_230425_create_notification_metrics_table.php
+│   │   ├── 📁 seeders
+│   │   │   └── 🐘 DatabaseSeeder.php
+│   │   └── ⚙️ .gitignore
+│   ├── 📁 public
+│   │   ├── ⚙️ .htaccess
+│   │   ├── 📄 favicon.ico
+│   │   ├── 🐘 index.php
+│   │   └── 📄 robots.txt
+│   ├── 📁 resources
+│   │   ├── 📁 css
+│   │   │   └── 🎨 app.css
+│   │   ├── 📁 js
+│   │   │   ├── 📄 app.js
+│   │   │   └── 📄 bootstrap.js
+│   │   └── 📁 views
+│   │       ├── 📁 emails
+│   │       │   ├── 🐘 empresa_goodbye.blade.php
+│   │       │   ├── 🐘 empresa_verification_code.blade.php
+│   │       │   ├── 🐘 empresa_welcome.blade.php
+│   │       │   ├── 🐘 nueva-resena.blade.php
+│   │       │   ├── 🐘 recover_password.blade.php
+│   │       │   ├── 🐘 usuario_goodbye.blade.php
+│   │       │   ├── 🐘 usuario_verification_code.blade.php
+│   │       │   ├── 🐘 usuario_welcome.blade.php
+│   │       │   └── 🐘 verification_code.blade.php
+│   │       ├── 📁 pdf
+│   │       │   └── 🐘 reporte-mensual.blade.php
+│   │       └── 🐘 welcome.blade.php
+│   ├── 📁 routes
+│   │   ├── 🐘 api.php
+│   │   ├── 🐘 console.php
+│   │   └── 🐘 web.php
+│   ├── 📁 storage
+│   │   ├── 📁 app
+│   │   │   ├── 📁 private
+│   │   │   │   └── ⚙️ .gitignore
+│   │   │   └── ⚙️ .gitignore
+│   │   └── 📁 framework
+│   │       ├── 📁 testing
+│   │       │   └── ⚙️ .gitignore
+│   │       └── ⚙️ .gitignore
+│   ├── 📁 tests
+│   │   ├── 📁 Feature
+│   │   │   └── 🐘 ExampleTest.php
+│   │   ├── 📁 Unit
+│   │   │   └── 🐘 ExampleTest.php
+│   │   └── 🐘 TestCase.php
+│   ├── ⚙️ .editorconfig
+│   ├── ⚙️ .gitattributes
+│   ├── 📝 ENDPOINTS.md
+│   ├── 📝 Structure.md
+│   ├── 📄 artisan
+│   ├── ⚙️ composer.json
+│   ├── ⚙️ package.json
+│   ├── ⚙️ phpunit.xml
+│   ├── 📄 red_mudancera_dev
+│   └── 📄 vite.config.js
 
 Notas:
 - Las rutas principales se cargan desde [backend/routes/api.php](backend/routes/api.php).
@@ -330,172 +434,241 @@ Notas:
 
 Recomendación rápida: mantener en cada módulo las carpetas Requests, Services y Repositories para separar validación, lógica de negocio y acceso a datos; así facilitar pruebas y escalabilidad.
 
-frontend/
-├── 📄 .env.local
-├── 📄 carpetas.md                      # [frontend/carpetas.md](frontend/carpetas.md)
-├── 📄 eslint.config.mjs
-├── 📄 jsconfig.json
-├── 📄 next.config.js
-├── 📄 package.json
-├── 📁 .next/
-│
-├── 📁 public/                          # Archivos públicos estáticos
-│   ├── 📁 icons/
-│   ├── 📁 logo/
-│   ├── next.svg
-│   └── vercel.svg
-│
-└── 📁 src/                             # Código fuente de la aplicación
-    ├── 📁 app/                         # Rutas y páginas (Next.js App Router)
-    │   ├── 📁 empresa/
-    │   │   ├── 📁 cargas/
-    │   │   │   ├── page.jsx            # [frontend/src/app/empresa/cargas/page.jsx](frontend/src/app/empresa/cargas/page.jsx)
-    │   │   │   ├── 📁 busco/
-    │   │   │   │   └── page.jsx        # [frontend/src/app/empresa/cargas/busco/page.jsx](frontend/src/app/empresa/cargas/busco/page.jsx)
-    │   │   │   └── 📁 ofrezco/
-    │   │   │       └── page.jsx        # [frontend/src/app/empresa/cargas/ofrezco/page.jsx](frontend/src/app/empresa/cargas/ofrezco/page.jsx)
-    │   │   ├── 📁 confirmacion/
-    │   │   │   └── page.jsx            # [frontend/src/app/empresa/confirmacion/page.jsx](frontend/src/app/empresa/confirmacion/page.jsx)
-    │   │   ├── 📁 dashboard/
-    │   │   │   └── page.jsx
-    │   │   ├── 📁 empresas/
-    │   │   │   └── page.jsx            # [frontend/src/app/empresa/empresas/page.jsx](frontend/src/app/empresa/empresas/page.jsx)
-    │   │   ├── 📁 login/
-    │   │   │   └── page.jsx
-    │   │   ├── 📁 logout/
-    │   │   │   └── page.jsx            # [frontend/src/app/empresa/logout/page.jsx](frontend/src/app/empresa/logout/page.jsx)
-    │   │   ├── 📁 perfil/
-    │   │   │   ├── page.jsx            # [frontend/src/app/empresa/perfil/page.jsx](frontend/src/app/empresa/perfil/page.jsx)
-    │   │   │   └── 📁 editar/
-    │   │   │       └── page.jsx        # [frontend/src/app/empresa/perfil/editar/page.jsx](frontend/src/app/empresa/perfil/editar/page.jsx)
-    │   │   ├── 📁 publicaciones/
-    │   │   │   └── page.jsx            # [frontend/src/app/empresa/publicaciones/page.jsx](frontend/src/app/empresa/publicaciones/page.jsx)
-    │   │   ├── 📁 usuarios/
-    │   │   │   └── page.jsx
-    │   │   └── 📁 [id]/
-    │   │       └── page.jsx            # [frontend/src/app/empresa/[id]/page.jsx](frontend/src/app/empresa/[id]/page.jsx)
-    │   ├── 📁 resena/
-    │   │   └── 📁 [token]/
-    │   │       └── page.jsx            # [frontend/src/app/resena/[token]/page.jsx](frontend/src/app/resena/[token]/page.jsx)
-    │   ├── 📁 servicios/
-    │   │   ├── 📁 [id]/
-    │   │   │   ├── page.jsx            # [frontend/src/app/servicios/[id]/page.jsx](frontend/src/app/servicios/[id]/page.jsx)
-    │   │   │   └── 📁 editar/
-    │   │   │       ├── 📁 busco/
-    │   │   │       │   └── page.jsx    # [frontend/src/app/servicios/[id]/editar/busco/page.jsx](frontend/src/app/servicios/[id]/editar/busco/page.jsx)
-    │   │   │       └── 📁 ofrezco/
-    │   │   │           └── page.jsx    # [frontend/src/app/servicios/[id]/editar/ofrezco/page.jsx](frontend/src/app/servicios/[id]/editar/ofrezco/page.jsx)
-    │   ├── 📁 usuario/
-    │   │   ├── 📁 perfil/
-    │   │   │   ├── page.jsx            # [frontend/src/app/usuario/perfil/page.jsx](frontend/src/app/usuario/perfil/page.jsx)
-    │   │   │   └── 📁 editar/
-    │   │   │       └── page.jsx        # [frontend/src/app/usuario/perfil/editar/page.jsx](frontend/src/app/usuario/perfil/editar/page.jsx)
-    │   │   ├── 📁 dashboard/
-    │   │   │   └── page.jsx
-    │   │   ├── 📁 login/
-    │   │   │   └── page.jsx
-    │   │   ├── 📁 logout/
-    │   │   │   └── page.jsx
-    │   │   └── 📁 notificaciones/
-    │   │       └── page.jsx
-    │   ├── 📄 layout.js                 # [frontend/src/app/layout.js](frontend/src/app/layout.js)
-    │   ├── 📄 page.js                   # [frontend/src/app/page.js](frontend/src/app/page.js)
-    │   └── 📄 page.module.css           # [frontend/src/app/page.module.css](frontend/src/app/page.module.css)
-    │
-    ├── 📁 components/                  # Componentes React reutilizables
-    │   ├── 📁 cards/
-    │   │   ├── ActionCard.jsx
-    │   │   ├── AcuerdoCard.jsx
-    │   │   ├── EmpresaCard.jsx
-    │   │   ├── NotificationCard.jsx
-    │   │   ├── ReviewCard.jsx
-    │   │   ├── ServiceCard.jsx         # [frontend/src/components/cards/ServiceCard.jsx](frontend/src/components/cards/ServiceCard.jsx)
-    │   │   └── UserCard.jsx
-    │   ├── 📁 common/
-    │   │   ├── Button_cta.jsx
-    │   │   ├── Button_crud.jsx
-    │   │   ├── Button_error.jsx
-    │   │   ├── Button_success.jsx
-    │   │   ├── ConfirmDeleteModal.jsx   # [frontend/src/components/common/ConfirmDeleteModal.jsx](frontend/src/components/common/ConfirmDeleteModal.jsx)
-    │   │   ├── ErrorModal.jsx
-    │   │   ├── Input.jsx
-    │   │   ├── SearchBar.jsx
-    │   │   └── SimpleEditor.jsx
-    │   ├── 📁 filters/
-    │   │   ├── ServiceFilters.jsx
-    │   │   └── ServiceAdvancedFilters.jsx
-    │   ├── 📁 layout/
-    │   │   ├── Footer.jsx                # [frontend/src/components/layout/Footer.jsx](frontend/src/components/layout/Footer.jsx)
-    │   │   ├── Header.jsx                # [frontend/src/components/layout/Header.jsx](frontend/src/components/layout/Header.jsx)
-    │   │   ├── SideMenu.jsx
-    │   │   └── SideMenuUsuario.jsx
-    │   ├── 📁 modals/
-    │   │   ├── ChangeServiceStatusModal.jsx  # [frontend/src/components/modals/ChangeServiceStatusModal.jsx](frontend/src/components/modals/ChangeServiceStatusModal.jsx)
-    │   │   ├── ConfirmFinalizarServicioModal.jsx
-    │   │   ├── FinalizarServicioGananciaModal.jsx
-    │   │   ├── ReporteMensualModal.jsx
-    │   │   └── ShareReviewLinkModal.jsx
-    │   ├── 📁 skeletons/
-    │   │   ├── ProfileSkeleton.jsx
-    │   │   └── ServiceCardSkeleton.jsx
-    │   └── 📁 ui/                       # Componentes UI adicionales (badges, loaders, etc.)
-    │
-    ├── 📁 hooks/                        # Custom React hooks
-    │   └── useClickOutside.js           # [frontend/src/hooks/useClickOutside.js](frontend/src/hooks/useClickOutside.js)
-    │
-    ├── 📁 modules/                      # Módulos por funcionalidad (API wrappers organizados)
-    │   ├── 📁 auth/
-    │   │   └── auth.js
-    │   ├── 📁 empresa/
-    │   │   └── empresaService.js        # [frontend/src/modules/empresa/empresaService.js](frontend/src/modules/empresa/empresaService.js)
-    │   ├── 📁 usuario/
-    │   │   └── usuarioService.js
-    │   └── 📁 servicios/
-    │       └── serviciosService.js
-    │
-    ├── 📁 services/                     # API wrappers / fetch centralizado
-    │   └── api.js                       # [frontend/src/services/api.js](frontend/src/services/api.js)
-    │
-    ├── 📁 store/                        # Estado global (opcional: Zustand / Redux)
-    │   ├── index.js
-    │   └── searchContext.js
-    │
-    ├── 📁 utils/                        # Funciones utilitarias
-    │   ├── buildFileUrl.js              # [frontend/src/utils/buildFileUrl.js](frontend/src/utils/buildFileUrl.js)
-    │   ├── formatters.js
-    │   ├── getEmpresaToken.js
-    │   └── whatsapp.js                  # [frontend/src/utils/whatsapp.js](frontend/src/utils/whatsapp.js)
-    │
-    └── 📁 styles/                       # Estilos SCSS globales
-        ├── 📁 components/
-        │   ├── _buttons.scss            # [frontend/src/styles/components/_buttons.scss](frontend/src/styles/components/_buttons.scss)
-        │   ├── _cards.scss
-        │   ├── _inputs.scss
-        │   ├── _serviceCard.scss
-        │   └── _serviceFilters.scss
-        │
-        ├── 📁 layout/
-        │   ├── _footer.scss
-        │   ├── _header.scss
-        │   └── _sideMenu.scss
-        │
-        ├── 📁 pages/
-        │   ├── 📁 empresa/
-        │   │   ├── _empresaBusco.scss
-        │   │   ├── _empresaDashboard.scss
-        │   │   ├── _empresaEditar.scss    # [frontend/src/styles/pages/empresa/_empresaEditar.scss](frontend/src/styles/pages/empresa/_empresaEditar.scss)
-        │   │   ├── _empresaEmpresas.scss
-        │   │   ├── _empresaOfrezco.scss
-        │   │   └── _empresaPerfil.scss    # [frontend/src/styles/pages/empresa/_empresaPerfil.scss](frontend/src/styles/pages/empresa/_empresaPerfil.scss)
-        │   └── 📁 usuario/
-        │       └── _usuarioPerfil.scss    # [frontend/src/styles/pages/usuario/_usuarioPerfil.scss](frontend/src/styles/pages/usuario/_usuarioPerfil.scss)
-        │
-        ├── 📁 utils/
-        │   ├── _containers.scss
-        │   ├── _mixins.scss
-        │   └── _variables.scss
-        │
-        └── 📄 globals.scss               # [frontend/src/styles/globals.scss](frontend/src/styles/globals.scss)
+├── 📁 frontend
+│   ├── 📁 public
+│   │   ├── 📁 icons
+│   │   │   ├── 🖼️ borrar.png
+│   │   │   ├── 🖼️ box.png
+│   │   │   ├── 🖼️ busco.png
+│   │   │   ├── 🖼️ busco_btn.png
+│   │   │   ├── 🖼️ campana.png
+│   │   │   ├── 🖼️ candado.png
+│   │   │   ├── 🖼️ check.png
+│   │   │   ├── 🖼️ cuenta.png
+│   │   │   ├── 🖼️ default-user.png
+│   │   │   ├── 🖼️ delete.png
+│   │   │   ├── 🖼️ destino.png
+│   │   │   ├── 🖼️ docs.png
+│   │   │   ├── 🖼️ eraser.png
+│   │   │   ├── 🖼️ eye.png
+│   │   │   ├── 🖼️ eye_off.png
+│   │   │   ├── 📄 favicon.ico
+│   │   │   ├── 🖼️ filtrar.png
+│   │   │   ├── 🖼️ help.png
+│   │   │   ├── 🖼️ hogar.png
+│   │   │   ├── 🖼️ hogar_2.png
+│   │   │   ├── 🖼️ logout.png
+│   │   │   ├── 🖼️ lupa.png
+│   │   │   ├── 🖼️ mensaje.png
+│   │   │   ├── 🖼️ menu.png
+│   │   │   ├── 🖼️ ofrezco.png
+│   │   │   ├── 🖼️ ofrezco_btn.png
+│   │   │   ├── 🖼️ ojo.png
+│   │   │   ├── 🖼️ pause.png
+│   │   │   ├── 🖼️ place-marker.png
+│   │   │   ├── 🖼️ play.png
+│   │   │   ├── 🖼️ share.png
+│   │   │   ├── 🖼️ team.png
+│   │   │   ├── 🖼️ telefono.png
+│   │   │   ├── 🖼️ todo.png
+│   │   │   ├── 🖼️ todos.png
+│   │   │   ├── 🖼️ truck.png
+│   │   │   ├── 🖼️ user-placeholder.png
+│   │   │   └── 🖼️ whatsapp.png
+│   │   ├── 📁 logo
+│   │   │   ├── 🖼️ Logo2.png
+│   │   │   ├── 🖼️ Mikkel.png
+│   │   │   ├── 🖼️ logo.png
+│   │   │   └── 🖼️ logo3.png
+│   │   ├── 🖼️ file.svg
+│   │   ├── 🖼️ globe.svg
+│   │   ├── 🖼️ icon.svg
+│   │   ├── 🖼️ next.svg
+│   │   ├── 🖼️ vercel.svg
+│   │   └── 🖼️ window.svg
+│   ├── 📁 src
+│   │   ├── 📁 app
+│   │   │   ├── 📁 empresa
+│   │   │   │   ├── 📁 [id]
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 cargas
+│   │   │   │   │   ├── 📁 busco
+│   │   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   │   ├── 📁 ofrezco
+│   │   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 confirmacion
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 dashboard
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 empresas
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 login
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 logout
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 notificaciones
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 perfil
+│   │   │   │   │   ├── 📁 editar
+│   │   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 publicaciones
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 register
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   └── 📁 usuarios
+│   │   │   │       └── 📄 page.jsx
+│   │   │   ├── 📁 resena
+│   │   │   │   └── 📁 [token]
+│   │   │   │       └── 📄 page.jsx
+│   │   │   ├── 📁 servicios
+│   │   │   │   └── 📁 [id]
+│   │   │   │       ├── 📁 editar
+│   │   │   │       │   ├── 📁 busco
+│   │   │   │       │   │   └── 📄 page.jsx
+│   │   │   │       │   └── 📁 ofrezco
+│   │   │   │       │       └── 📄 page.jsx
+│   │   │   │       └── 📄 page.jsx
+│   │   │   ├── 📁 usuario
+│   │   │   │   ├── 📁 dashboard
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 login
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 logout
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 notificaciones
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   └── 📁 perfil
+│   │   │   │       ├── 📁 editar
+│   │   │   │       │   └── 📄 page.jsx
+│   │   │   │       └── 📄 page.jsx
+│   │   │   ├── 📄 error.jsx
+│   │   │   ├── 📄 favicon.ico
+│   │   │   ├── 🎨 globals.css
+│   │   │   ├── 📄 layout.js
+│   │   │   ├── 📄 page.js
+│   │   │   └── 🎨 page.module.css
+│   │   ├── 📁 components
+│   │   │   ├── 📁 cards
+│   │   │   │   ├── 📄 ActionCard.jsx
+│   │   │   │   ├── 📄 AcuerdoCard.jsx
+│   │   │   │   ├── 📄 EmpresaCard.jsx
+│   │   │   │   ├── 📄 NotificationCard.jsx
+│   │   │   │   ├── 📄 ReviewCard.jsx
+│   │   │   │   ├── 📄 ServiceCard.jsx
+│   │   │   │   └── 📄 UserCard.jsx
+│   │   │   ├── 📁 common
+│   │   │   │   ├── 📄 Button_crud.jsx
+│   │   │   │   ├── 📄 Button_cta.jsx
+│   │   │   │   ├── 📄 Button_error.jsx
+│   │   │   │   ├── 📄 Button_success.jsx
+│   │   │   │   ├── 📄 ConfirmDeleteModal.jsx
+│   │   │   │   ├── 📄 ErrorModal.jsx
+│   │   │   │   ├── 📄 Input.jsx
+│   │   │   │   ├── 📄 NotificationBadge.jsx
+│   │   │   │   ├── 📄 SearchBar.jsx
+│   │   │   │   ├── 📄 ServiceStatusDropdown.jsx
+│   │   │   │   └── 📄 SimpleEditor.jsx
+│   │   │   ├── 📁 filters
+│   │   │   │   ├── 📄 ServiceAdvancedFilters.jsx
+│   │   │   │   └── 📄 ServiceFilters.jsx
+│   │   │   ├── 📁 layout
+│   │   │   │   ├── 📄 Footer.jsx
+│   │   │   │   ├── 📄 Header.jsx
+│   │   │   │   ├── 📄 SideMenu.jsx
+│   │   │   │   └── 📄 SideMenuUsuario.jsx
+│   │   │   ├── 📁 modals
+│   │   │   │   ├── 📄 BaseModal.jsx
+│   │   │   │   ├── 📄 ConfirmDeleteNotificationModal.jsx
+│   │   │   │   ├── 📄 ConfirmFinalizarServicioModal.jsx
+│   │   │   │   ├── 📄 ConfirmRecoverModal.jsx
+│   │   │   │   ├── 📄 FinalizarServicioGananciaModal.jsx
+│   │   │   │   ├── 📄 MessageModal.jsx
+│   │   │   │   ├── 📄 RecoverPasswordModal.jsx
+│   │   │   │   ├── 📄 ReporteMensualModal.jsx
+│   │   │   │   └── 📄 ShareReviewLinkModal.jsx
+│   │   │   ├── 📁 skeletons
+│   │   │   │   ├── 📄 ProfileSkeleton.jsx
+│   │   │   │   ├── 📄 ServiceCardSkeleton.jsx
+│   │   │   │   └── 📄 UserCardSkeleton.jsx
+│   │   │   └── 📁 ui
+│   │   │       └── 📄 LoadingOverlay.jsx
+│   │   ├── 📁 hooks
+│   │   │   ├── 📄 useClickOutside.js
+│   │   │   ├── 📄 useGooglePlaces.js
+│   │   │   └── 📄 useServicios.js
+│   │   ├── 📁 modules
+│   │   ├── 📁 services
+│   │   ├── 📁 store
+│   │   │   └── 📄 searchContext.js
+│   │   ├── 📁 styles
+│   │   │   ├── 📁 components
+│   │   │   │   ├── 🎨 __notificationBadge.scss
+│   │   │   │   ├── 🎨 __simpleEditor.scss
+│   │   │   │   ├── 🎨 _actionCard.scss
+│   │   │   │   ├── 🎨 _acuerdoCard.scss
+│   │   │   │   ├── 🎨 _buttons.scss
+│   │   │   │   ├── 🎨 _cards.scss
+│   │   │   │   ├── 🎨 _confirmDeleteModal.scss
+│   │   │   │   ├── 🎨 _empresaCard.scss
+│   │   │   │   ├── 🎨 _inputs.scss
+│   │   │   │   ├── 🎨 _loadingOverlay.scss
+│   │   │   │   ├── 🎨 _modal.scss
+│   │   │   │   ├── 🎨 _notificationCard.scss
+│   │   │   │   ├── 🎨 _reviewCard.scss
+│   │   │   │   ├── 🎨 _searchBar.scss
+│   │   │   │   ├── 🎨 _serviceAdvancedFilters.scss
+│   │   │   │   ├── 🎨 _serviceCard.scss
+│   │   │   │   ├── 🎨 _serviceFilters.scss
+│   │   │   │   ├── 🎨 _serviceStatusDropdown.scss
+│   │   │   │   └── 🎨 _userCard.scss
+│   │   │   ├── 📁 layout
+│   │   │   │   ├── 🎨 _footer.scss
+│   │   │   │   ├── 🎨 _header.scss
+│   │   │   │   └── 🎨 _sideMenu.scss
+│   │   │   ├── 📁 pages
+│   │   │   │   ├── 📁 empresa
+│   │   │   │   │   ├── 🎨 __empresaNotificaciones.scss
+│   │   │   │   │   ├── 🎨 _empresaBusco.scss
+│   │   │   │   │   ├── 🎨 _empresaCargas.scss
+│   │   │   │   │   ├── 🎨 _empresaDashboard.scss
+│   │   │   │   │   ├── 🎨 _empresaEditar.scss
+│   │   │   │   │   ├── 🎨 _empresaEmpresas.scss
+│   │   │   │   │   ├── 🎨 _empresaLogin.scss
+│   │   │   │   │   ├── 🎨 _empresaOfrezco.scss
+│   │   │   │   │   ├── 🎨 _empresaPerfil.scss
+│   │   │   │   │   ├── 🎨 _empresaRegister.scss
+│   │   │   │   │   └── 🎨 _empresaUsuarios.scss
+│   │   │   │   ├── 📁 resena
+│   │   │   │   │   └── 🎨 _resena.scss
+│   │   │   │   ├── 📁 servicios
+│   │   │   │   │   ├── 🎨 _detallesServicio.scss
+│   │   │   │   │   └── 🎨 _eliminarServicio.scss
+│   │   │   │   ├── 📁 usuario
+│   │   │   │   │   ├── 🎨 _usuarioEditar.scss
+│   │   │   │   │   ├── 🎨 _usuarioLogin.scss
+│   │   │   │   │   ├── 🎨 _usuarioNotificaciones.scss
+│   │   │   │   │   └── 🎨 _usuarioPerfil.scss
+│   │   │   │   └── 🎨 _error.scss
+│   │   │   ├── 📁 utils
+│   │   │   │   ├── 🎨 _containers.scss
+│   │   │   │   ├── 🎨 _mixins.scss
+│   │   │   │   └── 🎨 _variables.scss
+│   │   │   └── 🎨 globals.scss
+│   │   └── 📁 utils
+│   │       ├── 📄 auth.js
+│   │       ├── 📄 cloudinaryUpload.js
+│   │       └── 📄 whatsapp.js
+│   ├── 📝 carpetas.md
+│   ├── 📄 eslint.config.mjs
+│   ├── ⚙️ jsconfig.json
+│   ├── 📄 next.config.js
+│   ├── ⚙️ package-lock.json
+│   └── ⚙️ package.json
+├── ⚙️ .gitignore
+├── 📝 Milestones_Avance.md
+└── 📝 README.md
 
 Archivos clave / puntos de entrada:
 - Layout app: [`frontend/src/app/layout.js`](frontend/src/app/layout.js)
@@ -505,15 +678,23 @@ Archivos clave / puntos de entrada:
 - API wrapper: [`frontend/src/services/api.js`](frontend/src/services/api.js)
 
 ## Endpoints
-## Empresa — Públicos
-Método	Ruta	Controlador	Archivo
+# 📋 Red Mudancera - Endpoints API
+
+## 🏢 Empresa — Públicos
+
+| Método | Ruta | Controlador | Archivo |
+|--------|------|-------------|---------|
 POST	/api/empresa/register	EmpresaAuthController::register	routes.php
 POST	/api/empresa/login	EmpresaAuthController::login	routes.php
 POST	/api/empresa/send-verification	EmpresaAuthController::sendVerificationCode	routes.php
 POST	/api/empresa/verify-code	EmpresaAuthController::verifyCode	routes.php
+GET	/api/empresa/empresas/{id}	EmpresaPublicController::show	routes.php
+GET	/api/empresa/empresas	EmpresaPublicController::index	routes.php
 
-## Empresa — Protegidos (auth:sanctum)
-Método	Ruta	Controlador	Archivo
+
+## 🏢 Empresa — Protegidos (auth:sanctum)
+| Método | Ruta | Controlador | Archivo |
+|--------|------|-------------|---------|
 GET	/api/empresa/me	EmpresaController::me	routes.php
 PUT	/api/empresa/update	EmpresaController::update	routes.php
 DELETE	/api/empresa/delete	EmpresaController::destroy	routes.php
@@ -523,44 +704,71 @@ PATCH	/api/empresa/usuario/{id}/pausar	EmpresaController::pausarUsuario	routes.p
 PATCH	/api/empresa/usuario/{id}/reanudar	EmpresaController::reanudarUsuario	routes.php
 GET	/api/empresa/servicios	ServicioController::misServicios	routes.php
 
-## Empresa — Públicos (adicionales)
-Método	Ruta	Controlador	Archivo
-GET	/api/empresa/empresas/{id}	EmpresaPublicController::show	routes.php
-GET	/api/empresa/empresas	EmpresaPublicController::index	routes.php
-
 ## Usuario — Públicos
-Método	Ruta	Controlador	Archivo
+| Método | Ruta | Controlador | Archivo |
+|--------|------|-------------|---------|
 POST	/api/usuario/register	UsuarioAuthController::register	routes.php
 POST	/api/usuario/login	UsuarioAuthController::login	routes.php
 POST	/api/usuario/send-verification-code	UsuarioAuthController::sendVerificationCode	routes.php
 POST	/api/usuario/verify-code	UsuarioAuthController::verifyCode	routes.php
 
 ## Usuario — Protegidos (auth:sanctum)
-Método	Ruta	Controlador	Archivo
+| Método | Ruta | Controlador | Archivo |
+|--------|------|-------------|---------|
 GET	/api/usuario/me	UsuarioController::me	routes.php
 PUT	/api/usuario/update	UsuarioController::update	routes.php
 DELETE	/api/usuario/delete	UsuarioController::destroy	routes.php
 GET	/api/usuario/mis-usuarios	UsuarioController::listByEmpresa	routes.php
 
-## Servicios
-Método	Ruta	Controlador	Protección	Archivo
-GET	/api/servicios	ServicioController::index	Público	routes.php
-GET	/api/servicios/{id}	ServicioController::show	Público	routes.php
-POST	/api/servicios	ServicioController::store	Protegida	routes.php
-PATCH	/api/servicios/{id}	ServicioController::update	Protegida	routes.php
-PATCH	/api/servicios/{id}/estado	ServicioController::changeEstado	Protegida	routes.php
-DELETE	/api/servicios/{id}	ServicioController::destroy	Protegida	routes.php
-POST	/api/servicios/{id}/finalizar	ServicioController::finalizar	Protegida	routes.php
-GET	/api/servicios/reporte/mensual	ServicioController::reporteMensual	Protegida	routes.php
-GET	/api/servicios/reporte/mensual/pdf	ServicioController::reporteMensualPdf	Público	routes.php
-POST	/api/servicios/{id}/imagenes	ServicioController::updateImagenes	Protegida	api.php
+## Servicios — Públicos
+| Método | Ruta | Controlador | Archivo |
+|--------|------|-------------|---------|
+GET	/api/servicios	ServicioController::index	routes.php
+GET	/api/servicios/{id}	ServicioController::show	routes.php
+GET	/api/servicios/reporte/mensual/pdf	ServicioController::reporteMensualPdf	routes.php
 
-## Reseñas
-Método	Ruta	Controlador	Protección	Archivo
-POST	/api/empresa/resenas/link	ResenaController::generarLink	Protegida	routes.php
-POST	/api/resenas/{token}	ResenaController::store	Protegida	routes.php
-GET	/api/resenas/link/{token}	ResenaController::validarLink	Público	routes.php
-GET	/api/empresas/{empresaId}/resenas	ResenaController::listar	Público	routes.php
+## Servicios — Protegidos (auth:sanctum)
+| Método | Ruta | Controlador | Archivo |
+|--------|------|-------------|---------|
+POST	/api/servicios	ServicioController::store	routes.php
+PATCH	/api/servicios/{id}	ServicioController::update	routes.php
+PATCH	/api/servicios/{id}/estado	ServicioController::changeEstado	routes.php
+DELETE	/api/servicios/{id}	ServicioController::destroy	routes.php
+POST	/api/servicios/{id}/finalizar	ServicioController::finalizar	routes.php
+GET	/api/servicios/reporte/mensual	ServicioController::reporteMensual	routes.php
+POST	/api/servicios/{id}/imagenes	ServicioController::updateImagenes	api.php
+
+## Reseñas — Públicos
+| Método | Ruta | Controlador | Archivo |
+|--------|------|-------------|---------|
+GET	/api/resenas/link/{token}	ResenaController::validarLink	routes.php
+GET	/api/empresas/{empresaId}/resenas	ResenaController::listar	routes.php
+
+## Reseñas — Protegidos (auth:sanctum)
+| Método | Ruta | Controlador | Archivo |
+|--------|------|-------------|---------|
+POST	/api/empresa/resenas/link	ResenaController::generarLink	routes.php
+POST	/api/resenas/{token}	ResenaController::store	routes.php
+
+## Notificaciones — Empresa — Protegidos (auth:sanctum)
+| Método | Ruta | Controlador | Archivo |
+|--------|------|-------------|---------|
+GET	/api/empresa/notificaciones	NotificacionController::indexEmpresa	routes.php
+GET	/api/empresa/notificaciones/count	NotificacionController::countEmpresa	routes.php
+PATCH	/api/empresa/notificaciones/marcar-todas	NotificacionController::marcarTodasLeidasEmpresa	routes.php
+DELETE	/api/empresa/notificaciones/eliminar-leidas	NotificacionController::eliminarTodasLeidasEmpresa	routes.php
+PATCH	/api/empresa/notificaciones/{id}/leer	NotificacionController::marcarLeidaEmpresa	routes.php
+DELETE	/api/empresa/notificaciones/{id}	NotificacionController::eliminarEmpresa	routes.php
+
+## Notificaciones — Usuario — Protegidos (auth:sanctum)
+| Método | Ruta | Controlador | Archivo |
+|--------|------|-------------|---------|
+GET	/api/usuario/notificaciones	NotificacionController::indexUsuario	routes.php
+GET	/api/usuario/notificaciones/count	NotificacionController::countUsuario	routes.php
+PATCH	/api/usuario/notificaciones/marcar-todas	NotificacionController::marcarTodasLeidasUsuario	routes.php
+DELETE	/api/usuario/notificaciones/eliminar-leidas	NotificacionController::eliminarTodasLeidasUsuario	routes.php
+PATCH	/api/usuario/notificaciones/{id}/leer	NotificacionController::marcarLeidaUsuario	routes.php
+DELETE	/api/usuario/notificaciones/{id}	NotificacionController::eliminarUsuario	routes.php
 
 ## Otros (Recuperación de Contraseña)
 Método	Ruta	Controlador	Archivo
@@ -574,10 +782,54 @@ POST	/api/auth/recover-password	RecoverPasswordController::recover	api.php
 ---
 
 ### Archivos relevantes:
-Rutas principales: api.php
-Empresa: routes.php, App\Modules\Empresa\Controllers\EmpresaAuthController, App\Modules\Empresa\Controllers\EmpresaController
-Usuario: routes.php, App\Modules\Usuario\Controllers\UsuarioAuthController, App\Modules\Usuario\Controllers\UsuarioController
-Servicio: routes.php, App\Modules\Servicio\Controllers\ServicioAuthController, App\Modules\Servicio\Controllers\ServicioController
+Rutas Principales
+Archivo principal: api.php
+🏢 Empresa
+Componente	Ubicación
+Rutas	routes.php
+Auth Controller	App\Modules\Empresa\Controllers\EmpresaAuthController
+Controller	App\Modules\Empresa\Controllers\EmpresaController
+Public Controller	App\Modules\Empresa\Controllers\EmpresaPublicController
+Model	App\Modules\Empresa\Models\Empresa
+Requests	Requests
+Services	Services
+👤 Usuario
+Componente	Ubicación
+Rutas	routes.php
+Auth Controller	App\Modules\Usuario\Controllers\UsuarioAuthController
+Controller	App\Modules\Usuario\Controllers\UsuarioController
+Model	App\Modules\Usuario\Models\Usuario
+Requests	Requests
+📦 Servicio
+Componente	Ubicación
+Rutas	routes.php
+Controller	App\Modules\Servicio\Controllers\ServicioController
+Model	App\Modules\Servicio\Models\Servicio
+Requests	Requests
+Services	Services
+Repository	App\Modules\Servicio\Repositories\ServicioRepository
+⭐ Reseña
+Componente	Ubicación
+Rutas	routes.php
+Controller	App\Modules\Resena\Controllers\ResenaController
+Models	Models
+🔔 Notificación
+Componente	Ubicación
+Rutas	routes.php
+Controller	App\Modules\Notificacion\Controllers\NotificacionController
+Events	Events
+Services	Services
+Models	Models
+🔐 Autenticación
+Componente	Ubicación
+Config Auth	auth.php
+Recover Password Controller	App\Http\Controllers\Auth\RecoverPasswordController
+Sanctum Config	sanctum.php
+🛠️ Servicios Globales
+Servicio	Ubicación
+Cloudinary Service	App\Services\CloudinaryService
+Google Distance Service	App\Services\Google\GoogleDistanceService
+Route Service Provider	App\Providers\RouteServiceProvider
 
 /**
  * Guarda el token en localStorage

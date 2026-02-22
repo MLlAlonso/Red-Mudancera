@@ -84,7 +84,6 @@
             font-family: variables.$font-title;
             text-align: center;
         }
-
     }
 
     #publicaciones {
@@ -174,9 +173,13 @@
                 span {
                     font-size: 30px;
                 }
+
+                &:hover{
+                    transform: scale(1);
+                }
             }
 
-            .btn-outline{
+            .btn-outline {
                 width: 100%;
             }
         }

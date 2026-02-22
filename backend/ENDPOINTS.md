@@ -1,12 +1,20 @@
-## Empresa — Públicos
-Método	Ruta	Controlador	Archivo
+# 📋 Red Mudancera - Endpoints API
+
+## 🏢 Empresa — Públicos
+
+| Método | Ruta | Controlador | Archivo |
+|--------|------|-------------|---------|
 POST	/api/empresa/register	EmpresaAuthController::register	routes.php
 POST	/api/empresa/login	EmpresaAuthController::login	routes.php
 POST	/api/empresa/send-verification	EmpresaAuthController::sendVerificationCode	routes.php
 POST	/api/empresa/verify-code	EmpresaAuthController::verifyCode	routes.php
+GET	/api/empresa/empresas/{id}	EmpresaPublicController::show	routes.php
+GET	/api/empresa/empresas	EmpresaPublicController::index	routes.php
 
-## Empresa — Protegidos (auth:sanctum)
-Método	Ruta	Controlador	Archivo
+
+## 🏢 Empresa — Protegidos (auth:sanctum)
+| Método | Ruta | Controlador | Archivo |
+|--------|------|-------------|---------|
 GET	/api/empresa/me	EmpresaController::me	routes.php
 PUT	/api/empresa/update	EmpresaController::update	routes.php
 DELETE	/api/empresa/delete	EmpresaController::destroy	routes.php
@@ -16,44 +24,71 @@ PATCH	/api/empresa/usuario/{id}/pausar	EmpresaController::pausarUsuario	routes.p
 PATCH	/api/empresa/usuario/{id}/reanudar	EmpresaController::reanudarUsuario	routes.php
 GET	/api/empresa/servicios	ServicioController::misServicios	routes.php
 
-## Empresa — Públicos (adicionales)
-Método	Ruta	Controlador	Archivo
-GET	/api/empresa/empresas/{id}	EmpresaPublicController::show	routes.php
-GET	/api/empresa/empresas	EmpresaPublicController::index	routes.php
-
 ## Usuario — Públicos
-Método	Ruta	Controlador	Archivo
+| Método | Ruta | Controlador | Archivo |
+|--------|------|-------------|---------|
 POST	/api/usuario/register	UsuarioAuthController::register	routes.php
 POST	/api/usuario/login	UsuarioAuthController::login	routes.php
 POST	/api/usuario/send-verification-code	UsuarioAuthController::sendVerificationCode	routes.php
 POST	/api/usuario/verify-code	UsuarioAuthController::verifyCode	routes.php
 
 ## Usuario — Protegidos (auth:sanctum)
-Método	Ruta	Controlador	Archivo
+| Método | Ruta | Controlador | Archivo |
+|--------|------|-------------|---------|
 GET	/api/usuario/me	UsuarioController::me	routes.php
 PUT	/api/usuario/update	UsuarioController::update	routes.php
 DELETE	/api/usuario/delete	UsuarioController::destroy	routes.php
 GET	/api/usuario/mis-usuarios	UsuarioController::listByEmpresa	routes.php
 
-## Servicios
-Método	Ruta	Controlador	Protección	Archivo
-GET	/api/servicios	ServicioController::index	Público	routes.php
-GET	/api/servicios/{id}	ServicioController::show	Público	routes.php
-POST	/api/servicios	ServicioController::store	Protegida	routes.php
-PATCH	/api/servicios/{id}	ServicioController::update	Protegida	routes.php
-PATCH	/api/servicios/{id}/estado	ServicioController::changeEstado	Protegida	routes.php
-DELETE	/api/servicios/{id}	ServicioController::destroy	Protegida	routes.php
-POST	/api/servicios/{id}/finalizar	ServicioController::finalizar	Protegida	routes.php
-GET	/api/servicios/reporte/mensual	ServicioController::reporteMensual	Protegida	routes.php
-GET	/api/servicios/reporte/mensual/pdf	ServicioController::reporteMensualPdf	Público	routes.php
-POST	/api/servicios/{id}/imagenes	ServicioController::updateImagenes	Protegida	api.php
+## Servicios — Públicos
+| Método | Ruta | Controlador | Archivo |
+|--------|------|-------------|---------|
+GET	/api/servicios	ServicioController::index	routes.php
+GET	/api/servicios/{id}	ServicioController::show	routes.php
+GET	/api/servicios/reporte/mensual/pdf	ServicioController::reporteMensualPdf	routes.php
 
-## Reseñas
-Método	Ruta	Controlador	Protección	Archivo
-POST	/api/empresa/resenas/link	ResenaController::generarLink	Protegida	routes.php
-POST	/api/resenas/{token}	ResenaController::store	Protegida	routes.php
-GET	/api/resenas/link/{token}	ResenaController::validarLink	Público	routes.php
-GET	/api/empresas/{empresaId}/resenas	ResenaController::listar	Público	routes.php
+## Servicios — Protegidos (auth:sanctum)
+| Método | Ruta | Controlador | Archivo |
+|--------|------|-------------|---------|
+POST	/api/servicios	ServicioController::store	routes.php
+PATCH	/api/servicios/{id}	ServicioController::update	routes.php
+PATCH	/api/servicios/{id}/estado	ServicioController::changeEstado	routes.php
+DELETE	/api/servicios/{id}	ServicioController::destroy	routes.php
+POST	/api/servicios/{id}/finalizar	ServicioController::finalizar	routes.php
+GET	/api/servicios/reporte/mensual	ServicioController::reporteMensual	routes.php
+POST	/api/servicios/{id}/imagenes	ServicioController::updateImagenes	api.php
+
+## Reseñas — Públicos
+| Método | Ruta | Controlador | Archivo |
+|--------|------|-------------|---------|
+GET	/api/resenas/link/{token}	ResenaController::validarLink	routes.php
+GET	/api/empresas/{empresaId}/resenas	ResenaController::listar	routes.php
+
+## Reseñas — Protegidos (auth:sanctum)
+| Método | Ruta | Controlador | Archivo |
+|--------|------|-------------|---------|
+POST	/api/empresa/resenas/link	ResenaController::generarLink	routes.php
+POST	/api/resenas/{token}	ResenaController::store	routes.php
+
+## Notificaciones — Empresa — Protegidos (auth:sanctum)
+| Método | Ruta | Controlador | Archivo |
+|--------|------|-------------|---------|
+GET	/api/empresa/notificaciones	NotificacionController::indexEmpresa	routes.php
+GET	/api/empresa/notificaciones/count	NotificacionController::countEmpresa	routes.php
+PATCH	/api/empresa/notificaciones/marcar-todas	NotificacionController::marcarTodasLeidasEmpresa	routes.php
+DELETE	/api/empresa/notificaciones/eliminar-leidas	NotificacionController::eliminarTodasLeidasEmpresa	routes.php
+PATCH	/api/empresa/notificaciones/{id}/leer	NotificacionController::marcarLeidaEmpresa	routes.php
+DELETE	/api/empresa/notificaciones/{id}	NotificacionController::eliminarEmpresa	routes.php
+
+## Notificaciones — Usuario — Protegidos (auth:sanctum)
+| Método | Ruta | Controlador | Archivo |
+|--------|------|-------------|---------|
+GET	/api/usuario/notificaciones	NotificacionController::indexUsuario	routes.php
+GET	/api/usuario/notificaciones/count	NotificacionController::countUsuario	routes.php
+PATCH	/api/usuario/notificaciones/marcar-todas	NotificacionController::marcarTodasLeidasUsuario	routes.php
+DELETE	/api/usuario/notificaciones/eliminar-leidas	NotificacionController::eliminarTodasLeidasUsuario	routes.php
+PATCH	/api/usuario/notificaciones/{id}/leer	NotificacionController::marcarLeidaUsuario	routes.php
+DELETE	/api/usuario/notificaciones/{id}	NotificacionController::eliminarUsuario	routes.php
 
 ## Otros (Recuperación de Contraseña)
 Método	Ruta	Controlador	Archivo
