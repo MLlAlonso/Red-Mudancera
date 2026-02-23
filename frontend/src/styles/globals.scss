@@ -31,6 +31,9 @@
 //Pages Usuarios
 @use "./pages/usuario/_usuarioNotificaciones";
 
+//Solicitudes de Mudanza
+@use "./pages/_solicitarMudanza";
+
 * {
   margin: 0;
   padding: 0;

@@ -59,7 +59,7 @@ export default function UsuarioLogin() {
             }
 
             // Login exitoso
-            document.cookie = `token_usuario=${data.token}; path=/;`;
+            document.cookie = `token_usuario=${data.token}; path=/; max-age=86400`;
             window.location.href = "/usuario/dashboard";
 
         } catch (err) {

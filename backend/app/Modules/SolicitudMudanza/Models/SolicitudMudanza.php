@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 class SolicitudMudanza extends Model
 {
     protected $table = 'solicitudes_mudanza';
-
     protected $fillable = [
         'origen',
         'destino',
+        'codigo_expira_en',
         'distancia_km',
         'tipo_vivienda',
         'inventario',
@@ -22,5 +22,9 @@ class SolicitudMudanza extends Model
         'telefono_verificado',
         'estado',
         'ip_address'
+    ];
+
+    protected $casts = [
+        'codigo_expira_en' => 'datetime',
     ];
 }

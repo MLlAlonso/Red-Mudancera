@@ -1,0 +1,284 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Input from "@/components/common/Input";
+import SimpleEditor from "@/components/common/SimpleEditor";
+import Button_success from "@/components/common/Button_success";
+import BaseModal from "@/components/modals/BaseModal";
+import LoadingOverlay from "@/components/ui/LoadingOverlay";
+
+export default function SolicitarMudanza() {
+    const API = process.env.NEXT_PUBLIC_API_URL;
+
+    const [form, setForm] = useState({
+        origen: "",
+        destino: "",
+        tipo_vivienda: "casa",
+        inventario: "",
+        fecha_recoleccion: "7-15",
+        tipo_mudanza: "compartida",
+        nombre: "",
+        email: "",
+        telefono: ""
+    });
+
+    const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [solicitudId, setSolicitudId] = useState(null);
+    const [codigo, setCodigo] = useState("");
+    const [timeLeft, setTimeLeft] = useState(900);
+    const [successModal, setSuccessModal] = useState(false);
+
+    const handleChange = (e) => {
+        setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    };
+
+    /* =========================
+       VALIDACIÓN
+    ========================= */
+    const validate = () => {
+        const newErrors = {};
+        if (!form.origen) newErrors.origen = "El origen es obligatorio.";
+        if (!form.destino) newErrors.destino = "El destino es obligatorio.";
+        if (!form.inventario || form.inventario.replace(/<[^>]*>/g, "").length < 10) {
+            newErrors.inventario = "Describe al menos 10 caracteres.";
+        }
+
+        if (!form.nombre) newErrors.nombre = "El nombre es obligatorio.";
+        if (!form.email) {
+            newErrors.email = "El correo es obligatorio.";
+        } else if (!/^\S+@\S+\.\S+$/.test(form.email)) {
+            newErrors.email = "Correo inválido.";
+        }
+
+        if (!form.telefono) {
+            newErrors.telefono = "El teléfono es obligatorio.";
+        } else if (!/^[0-9]{8,15}$/.test(form.telefono)) {
+            newErrors.telefono = "Solo números (8-15 dígitos).";
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    /* =========================
+       SUBMIT
+    ========================= */
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (loading) return;
+        if (!validate()) return;
+        setLoading(true);
+        try {
+            const res = await fetch(`${API}/solicitudes-mudanza`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json"
+                },
+                body: JSON.stringify(form)
+            });
+
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message);
+            setSolicitudId(data.data.id);
+            setModalOpen(true);
+            setTimeLeft(900);
+        } catch (err) {
+            alert(err.message);
+        }
+        setLoading(false);
+    };
+
+    /* =========================
+       VERIFICAR
+    ========================= */
+    const handleVerify = async () => {
+        if (!codigo) return;
+        setLoading(true);
+        try {
+            const res = await fetch(`${API}/solicitudes-mudanza/verificar`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json"
+                },
+                body: JSON.stringify({
+                    id: solicitudId,
+                    codigo
+                })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message);
+            setModalOpen(false);
+            setSuccessModal(true);
+        } catch (err) {
+            alert(err.message);
+        }
+        setLoading(false);
+    };
+
+    /* =========================
+       REENVIAR
+    ========================= */
+    const handleReenviar = async () => {
+        await fetch(`${API}/solicitudes-mudanza/reenviar-codigo`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json"
+            },
+            body: JSON.stringify({ id: solicitudId })
+        });
+        setTimeLeft(900);
+    };
+
+    /* =========================
+       CONTADOR
+    ========================= */
+    useEffect(() => {
+        if (!modalOpen) return;
+        const interval = setInterval(() => {
+            setTimeLeft(prev => {
+                if (prev <= 1) {
+                    clearInterval(interval);
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [modalOpen]);
+
+    const formatTime = () => {
+        const min = Math.floor(timeLeft / 60);
+        const sec = timeLeft % 60;
+        return `${min}:${sec < 10 ? "0" : ""}${sec}`;
+    };
+
+    return (
+        <div className="solicitar-mudanza">
+            {loading && <LoadingOverlay />}
+
+            <div className="solicitar-mudanza__hero">
+                <div className="hero-logo">
+                    <img src="/logo/logo.png" alt="Mudanza Fácil" />
+                </div>
+
+                <h1 className="title">Busco Mudanza</h1>
+
+                <p className="subtitle">
+                    Publica tu solicitud en menos de 2 minutos y recibe contacto de empresas verificadas.
+                </p>
+            </div>
+
+            <div className="solicitar-mudanza__container">
+                <form className="solicitar-mudanza__form" onSubmit={handleSubmit}>
+                    <Input label="Origen" name="origen" autocomplete value={form.origen} onChange={handleChange} />
+                    {errors.origen && <p className="form-error">{errors.origen}</p>}
+
+                    <Input label="Destino" name="destino" autocomplete value={form.destino} onChange={handleChange} />
+                    {errors.destino && <p className="form-error">{errors.destino}</p>}
+
+                    <label htmlFor="tipo_vivienda">Tipo de vivienda</label>
+                    <select name="tipo_vivienda" value={form.tipo_vivienda} onChange={handleChange}>
+                        <option value="casa">Casa</option>
+                        <option value="departamento">Departamento</option>
+                        <option value="otro">Otro</option>
+                    </select>
+
+                    <label htmlFor="inventario">Inventario</label>
+                    <SimpleEditor
+                        value={form.inventario}
+                        onChange={(val) => setForm(prev => ({ ...prev, inventario: val }))}
+                    />
+                    {errors.inventario && <p className="form-error">{errors.inventario}</p>}
+
+                    <label htmlFor="fecha_recoleccion">Cuando necesitas que se recolecte tu mudanza</label>
+                    <select name="fecha_recoleccion" value={form.fecha_recoleccion} onChange={handleChange}>
+                        <option value="urgente">Lo antes posible</option>
+                        <option value="7-15">7-15 días</option>
+                        <option value="15-30">15-30 días</option>
+                    </select>
+
+                    <label htmlFor="tipo_mudanza">
+                        Que tipo de mudanza necesitas
+                    </label>
+                    <select name="tipo_mudanza" value={form.tipo_mudanza} onChange={handleChange}>
+                        <option value="compartida">Compartida</option>
+                        <option value="exclusiva">Exclusiva</option>
+                        <option value="asesoria">Requiero asesoría</option>
+                    </select>
+
+                    <Input label="Nombre" name="nombre" value={form.nombre} onChange={handleChange} />
+                    {errors.nombre && <p className="form-error">{errors.nombre}</p>}
+
+                    <Input label="Correo electrónico" name="email" type="email" value={form.email} onChange={handleChange} />
+                    {errors.email && <p className="form-error">{errors.email}</p>}
+
+                    <Input label="Teléfono" name="telefono" value={form.telefono} onChange={handleChange} />
+                    {errors.telefono && <p className="form-error">{errors.telefono}</p>}
+
+                    <Button_success value="Solicitar Mudanza" type="submit" />
+                </form>
+            </div>
+
+            {/* MODAL VERIFICACIÓN */}
+            {modalOpen && (
+                <BaseModal onClose={() => { }}>
+                    <div className="verificacion-modal">
+                        <h3>Verifica tu correo</h3>
+                        <p>Hemos enviado un código a tu correo.</p>
+                        <p>Revisa bandeja de entrada o spam.</p>
+
+                        <Input
+                            label="Código"
+                            name="codigo"
+                            value={codigo}
+                            onChange={(e) => setCodigo(e.target.value)}
+                        />
+
+                        <div className="verificacion-modal__contador">
+                            El código expira en: {formatTime()}
+                        </div>
+
+                        <Button_success value="Verificar" onClick={handleVerify} />
+
+                        {timeLeft === 0 && (
+                            <button
+                                className="verificacion-modal__reenviar"
+                                onClick={handleReenviar}
+                            >
+                                Reenviar código
+                            </button>
+                        )}
+
+                        <button
+                            className="verificacion-modal__cancelar"
+                            onClick={() => setModalOpen(false)}
+                        >
+                            Cancelar
+                        </button>
+                    </div>
+                </BaseModal>
+            )}
+
+            {/* MODAL ÉXITO */}
+            {successModal && (
+                <BaseModal onClose={() => setSuccessModal(false)}>
+                    <div className="exito-modal">
+                        <h3>Solicitud publicada correctamente</h3>
+                        <p>Algún agente se pondrá en contacto contigo pronto.</p>
+                        <Button_success
+                            value="Aceptar"
+                            onClick={() => {
+                                setSuccessModal(false);
+                                window.location.href = "https://mudanzafacil.com.mx/";
+                            }}
+                        />
+                    </div>
+                </BaseModal>
+            )}
+        </div>
+    );
+}

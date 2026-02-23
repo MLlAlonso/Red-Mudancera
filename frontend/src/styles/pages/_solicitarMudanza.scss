@@ -1,0 +1,225 @@
+@use "../utils/variables" as *;
+
+.solicitar-mudanza {
+    min-height: 100dvh;
+    background: $background;
+    position: relative;
+
+    /* =========================
+     HERO SECTION
+     ========================= */
+
+    &__hero {
+        background: $primary;
+        padding: 2rem 1.5rem 8rem 1.5rem;
+        text-align: center;
+        color: white;
+
+        .title {
+            font-family: $font-title;
+            font-size: 52px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-family: $font-text;
+            font-size: 18px;
+            opacity: 0.7;
+            max-width: 520px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+    }
+
+    .hero-logo {
+        margin-bottom: 2rem;
+
+        img {
+            height: 90px;
+            object-fit: contain;
+            opacity: 0.95;
+        }
+    }
+
+    /* =========================
+     CARD FLOATING
+     ========================= */
+    &__container {
+        max-width: 760px;
+        margin: -5rem auto 4rem auto;
+        padding: 0 1.5rem;
+    }
+
+    &__form {
+        background: #ffffff;
+        border-radius: 26px;
+        padding: 3rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        box-shadow:
+            0 30px 60px rgba(0, 0, 0, 0.08),
+            0 10px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    /* =========================
+     INPUT STYLE RADICAL
+     ========================= */
+    .input-group__field {
+        border-radius: 16px !important;
+        border: 1px solid rgba(25, 2, 81, 0.08);
+        padding: 16px !important;
+        transition: all 0.2s ease;
+
+        &:focus {
+            border-color: $primary;
+            box-shadow: 0 0 0 3px rgba(9, 35, 62, 0.1);
+        }
+    }
+
+    select {
+        border-radius: 16px;
+        padding: 16px;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        transition: all 0.2s ease;
+
+        &:focus {
+            border-color: $primary;
+            box-shadow: 0 0 0 3px rgba(9, 35, 62, 0.1);
+            outline: none;
+        }
+    }
+
+    label {
+        font-weight: 600;
+        font-size: 15px;
+        color: $text;
+    }
+
+    .form-error {
+        font-size: 13px;
+        color: $error;
+        margin-top: -6px;
+        margin-bottom: 6px;
+    }
+
+    /* =========================
+     BOTÓN MÁS MODERNO
+     ========================= */
+    .btn_success {
+        margin-top: 1rem;
+        border-radius: 20px;
+        padding: 16px 0;
+        font-size: 16px;
+        font-weight: 600;
+        background: linear-gradient(135deg,
+                $success 0%,
+                $primary 100%);
+        border: none;
+        transition: all 0.25s ease;
+
+        &:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(9, 35, 62, 0.2);
+        }
+    }
+
+    /* =========================
+     MODAL VERIFICACIÓN
+     ========================= */
+    .verificacion-modal {
+        text-align: center;
+
+        h3 {
+            font-family: $font-title;
+            font-size: 28px;
+            color: $primary;
+            margin-bottom:1rem;
+        }
+
+        p {
+            font-size: 14px;
+            color: $text-muted;
+            margin-bottom:0.8rem;
+        }
+
+        &__contador {
+            margin: 1.5rem 0;
+            font-weight: 600;
+            font-size: 20px;
+            background: rgba(9, 35, 62, 0.05);
+            padding: 14px;
+            border-radius: 14px;
+            color: $primary;
+        }
+
+        &__reenviar {
+            margin-top: 1rem;
+            background: none;
+            border: none;
+            color: $primary;
+            font-weight: 600;
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        &__cancelar {
+            margin-top: 1rem;
+            background: none;
+            border: none;
+            color: $text-muted;
+            cursor: pointer;
+        }
+    }
+
+    /* =========================
+     MODAL ÉXITO
+     ========================= */
+
+    .exito-modal {
+        text-align: center;
+
+        h3 {
+            font-family: $font-title;
+            font-size: 30px;
+            color: $success;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 16px;
+            color: $text;
+            margin-bottom: 2rem;
+        }
+    }
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 768px) {
+    .solicitar-mudanza {
+
+        &__hero {
+            padding: 4rem 1rem 7rem 1rem;
+
+            .title {
+                font-size: 36px;
+            }
+        }
+
+        &__container {
+            margin-top: -4rem;
+        }
+
+        &__form {
+            padding: 2rem 1.6rem;
+        }
+    }
+}

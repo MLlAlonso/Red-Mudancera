@@ -58,7 +58,7 @@ export default function EmpresaLogin() {
       }
 
       // Guardamos token en cookies
-      document.cookie = `token_empresa=${data.token}; path=/;`;
+      document.cookie = `token_empresa=${data.token}; path=/; max-age=86400`;
 
       window.location.href = "/empresa/dashboard";
     } catch (err) {
