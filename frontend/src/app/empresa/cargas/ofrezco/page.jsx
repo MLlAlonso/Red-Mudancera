@@ -220,7 +220,7 @@ export default function OfrezcoServicioPage() {
             origen: form.origen,
             destino: form.destino,
             rangoDias: form.rangoDias,
-            tipo_carga: form.tipoCarga,
+            tipo_carga: "menaje",
             nota: form.nota,
             responsable_id: form.responsableId,
             responsable_nombre: form.responsableNombre,
@@ -262,18 +262,18 @@ export default function OfrezcoServicioPage() {
         <div className="ofrezco__container">
           <form className="ofrezco__form" onSubmit={handleSubmit}>
             <div className="ofrezco__header">
-              <h1 className="title">Ofrezco carga</h1>
-              <h2 className="subtitle">Información requerida</h2>
+              <h1 className="title">Publicar carga disponible</h1>
+              <h2 className="subtitle">Detalles de la carga</h2>
             </div>
 
-            <Input label="Origen" name="origen" value={form.origen} placeholder={"Ubicación donde está la mudanza"} onChange={handleChange} autocomplete />
-            <Input label="Destino" name="destino" value={form.destino} placeholder={"Ciudad donde se debe entregar la carga"} onChange={handleChange} autocomplete />
-            <Input label="Volumen m³" name="volumen" type="number" value={form.volumen} placeholder={"Espacio que ocupa la carga (m³)"} onChange={handleChange} />
+            <Input label="Origen" name="origen" value={form.origen} placeholder={"Ciudad o zona donde se recoge la carga"} onChange={handleChange} autocomplete />
+            <Input label="Destino" name="destino" value={form.destino} placeholder={"Ciudad donde se entrega la carga"} onChange={handleChange} autocomplete />
+            <Input label="Volumen estimado (m³)" name="volumen" type="number" value={form.volumen} placeholder={"Espacio que ocupa la carga (m³)"} onChange={handleChange} />
 
             <div className="input-group">
               <label className="input-group__label">Tipo de carga</label>
+              
               <select name="tipoCarga" className="input-group__field" value={form.tipoCarga} onChange={handleChange}>
-                <option value="">Selecciona</option>
                 <option value="menaje">Menaje de casa</option>
                 <option value="vehiculo">Vehículo</option>
                 <option value="otro">Otro</option>
@@ -285,7 +285,7 @@ export default function OfrezcoServicioPage() {
               <SimpleEditor
                 value={form.nota}
                 onChange={(html) => setForm(prev => ({ ...prev, nota: html }))}
-                placeholder="¿Qué lleva la mudanza? Escríbelo o pega la lista del cliente."
+                placeholder=" Lista de muebles, cajas o mercancía. Puedes pegar el inventario del cliente."
               />
             </div>
 
@@ -294,10 +294,10 @@ export default function OfrezcoServicioPage() {
                 <span className="tooltip">
                   ⓘ
                   <span className="tooltip__content">
-                    Campo opcional
+                    Sube hasta 3 imágenes máximo para facilitar validación y negociación.
                   </span>
                 </span>
-                Imágenes de inventario ({imagenes.length}/3)
+                Fotos de la carga ({imagenes.length}/3)
               </label>
 
               <input
@@ -330,7 +330,7 @@ export default function OfrezcoServicioPage() {
 
             <div className="input-group">
               <label className="input-group__label input-group__label--tooltip">
-                La carga se debe de entregar en destino aproxidamente
+                Plazo máximo de entrega
               </label>
 
               <select name="rangoDias" className="input-group__field" value={form.rangoDias} onChange={handleChange}>
@@ -348,7 +348,7 @@ export default function OfrezcoServicioPage() {
                     ¿Dónde está la carga actualmente?
                   </span>
                 </span>
-                Estado de la carga
+                Disponibilidad de la carga
               </label>
 
               <select name="estadoCarga" className="input-group__field" value={form.estadoCarga} onChange={handleChange} >
@@ -359,23 +359,23 @@ export default function OfrezcoServicioPage() {
             </div>
 
             <div className="input-group">
-              <label className="input-group__label">Persona a cargo</label>
+              <label className="input-group__label">Persona de contacto</label>
               <select className="input-group__field" value={form.responsableId} onChange={handleResponsableChange}>
                 <option value="">Selecciona</option>
                 {usuarios.map(u => <option key={u.id} value={u.id}>{u.nombre}</option>)}
               </select>
             </div>
 
-            <Input label="Teléfono" name="telefono" value={form.telefono} onChange={handleChange} />
+            <Input label="Teléfono de contacto" name="telefono" value={form.telefono} onChange={handleChange} />
 
             <div className="input-group">
               <label className="input-group__label input-group__label--tooltip">
                 <span className="tooltip">
                   ⓘ
                   <span className="tooltip__content">
-                    Este campo no es obligatorio.<br />
-                    Si lo dejas vacío, se publicará como
-                    <strong> “Por convenir”</strong>.
+                    Si no indicas monto, se mostrará como
+                    <strong> “Por convenir”</strong>. <br />
+                    Las publicaciones con precio visible generan más interés.
                   </span>
                 </span>
                 Oferta
@@ -387,7 +387,7 @@ export default function OfrezcoServicioPage() {
                 className="input-group__field"
                 value={form.importe}
                 onChange={handleChange}
-                placeholder="Oferta sujeta a negociación."
+                placeholder="Ingresa el monto que ofreces por este servicio( negociable)"
               />
             </div>
 

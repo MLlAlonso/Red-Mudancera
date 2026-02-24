@@ -15,7 +15,7 @@ export default function SolicitarMudanza() {
         destino: "",
         tipo_vivienda: "casa",
         inventario: "",
-        fecha_recoleccion: "7-15",
+        fecha_recoleccion: "1-7",
         tipo_mudanza: "compartida",
         nombre: "",
         email: "",
@@ -45,7 +45,7 @@ export default function SolicitarMudanza() {
             newErrors.inventario = "Describe al menos 10 caracteres.";
         }
 
-        if (!form.nombre) newErrors.nombre = "El nombre es obligatorio.";
+        if (!form.nombre) newErrors.nombre = "La persona de contacto es obligatorio.";
         if (!form.email) {
             newErrors.email = "El correo es obligatorio.";
         } else if (!/^\S+@\S+\.\S+$/.test(form.email)) {
@@ -53,7 +53,7 @@ export default function SolicitarMudanza() {
         }
 
         if (!form.telefono) {
-            newErrors.telefono = "El teléfono es obligatorio.";
+            newErrors.telefono = "El teléfono de contacto es obligatorio.";
         } else if (!/^[0-9]{8,15}$/.test(form.telefono)) {
             newErrors.telefono = "Solo números (8-15 dígitos).";
         }
@@ -174,31 +174,42 @@ export default function SolicitarMudanza() {
 
             <div className="solicitar-mudanza__container">
                 <form className="solicitar-mudanza__form" onSubmit={handleSubmit}>
-                    <Input label="Origen" name="origen" autocomplete value={form.origen} onChange={handleChange} />
+                    <Input label="Origen" placeholder="Ciudad o zona donde se recoge la mudanza" name="origen" autocomplete value={form.origen} onChange={handleChange} />
                     {errors.origen && <p className="form-error">{errors.origen}</p>}
 
-                    <Input label="Destino" name="destino" autocomplete value={form.destino} onChange={handleChange} />
+                    <Input label="Destino" placeholder="Ciudad donde se entrega la mudanza" name="destino" autocomplete value={form.destino} onChange={handleChange} />
                     {errors.destino && <p className="form-error">{errors.destino}</p>}
 
-                    <label htmlFor="tipo_vivienda">Tipo de vivienda</label>
+                    <label className="input-group__label input-group__label--tooltip">
+                        <span className="tooltip">
+                            ⓘ
+                            <span className="tooltip__content">
+                                Tipo de vivienda en la cual se va a recoger la mudanza
+                            </span>
+                        </span>
+                        Tipo de vivienda
+                    </label>
                     <select name="tipo_vivienda" value={form.tipo_vivienda} onChange={handleChange}>
                         <option value="casa">Casa</option>
                         <option value="departamento">Departamento</option>
                         <option value="otro">Otro</option>
                     </select>
 
+
                     <label htmlFor="inventario">Inventario</label>
                     <SimpleEditor
                         value={form.inventario}
+                        placeholder="Lista de muebles, cajas o mercancía, puedes pegar el inventario aqui."
                         onChange={(val) => setForm(prev => ({ ...prev, inventario: val }))}
                     />
                     {errors.inventario && <p className="form-error">{errors.inventario}</p>}
 
                     <label htmlFor="fecha_recoleccion">Cuando necesitas que se recolecte tu mudanza</label>
                     <select name="fecha_recoleccion" value={form.fecha_recoleccion} onChange={handleChange}>
-                        <option value="urgente">Lo antes posible</option>
-                        <option value="7-15">7-15 días</option>
-                        <option value="15-30">15-30 días</option>
+                        <option value="1-7">1-7 días</option>
+                        <option value="8-15">8-15 días</option>
+                        <option value="+15">Más de 15 días</option>
+                        <option value="lo_antes_posible">Lo antes posible</option>
                     </select>
 
                     <label htmlFor="tipo_mudanza">
@@ -210,13 +221,13 @@ export default function SolicitarMudanza() {
                         <option value="asesoria">Requiero asesoría</option>
                     </select>
 
-                    <Input label="Nombre" name="nombre" value={form.nombre} onChange={handleChange} />
+                    <Input label="Persona de contacto" name="nombre" value={form.nombre} onChange={handleChange} />
                     {errors.nombre && <p className="form-error">{errors.nombre}</p>}
 
-                    <Input label="Correo electrónico" name="email" type="email" value={form.email} onChange={handleChange} />
+                    <Input label="Correo electrónico de contacto" name="email" type="email" value={form.email} onChange={handleChange} />
                     {errors.email && <p className="form-error">{errors.email}</p>}
 
-                    <Input label="Teléfono" name="telefono" value={form.telefono} onChange={handleChange} />
+                    <Input label="Teléfono de contacto" name="telefono" value={form.telefono} onChange={handleChange} />
                     {errors.telefono && <p className="form-error">{errors.telefono}</p>}
 
                     <Button_success value="Solicitar Mudanza" type="submit" />

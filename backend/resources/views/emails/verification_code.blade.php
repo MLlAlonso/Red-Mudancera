@@ -25,7 +25,7 @@
         <tr>
           <td align="center" style="padding:20px;">
             <a href="https://app.mudanzafacil.com.mx" target="_blank">
-              <img src="https://app.mudanzafacil.com.mx/logo/logo.png"
+              <img src="https://app.mudanzafacil.com.mx/logo/logo_A.png"
                    alt="Mudanza Fácil"
                    style="height:60px;">
             </a>

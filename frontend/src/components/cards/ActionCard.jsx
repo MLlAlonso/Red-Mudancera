@@ -9,10 +9,10 @@ const ActionCard = ({ type }) => {
 
   const data = {
     icon: isOfrezco ? "/icons/ofrezco_btn.png" : "/icons/busco_btn.png",
-    title: isOfrezco ? "Ofrezco" : "Busco",
+    title: isOfrezco ? "Ofrecer Carga" : "Buscar Carga",
     info: isOfrezco
-      ? "Tengo carga para transportar"
-      : "Tengo espacio, quiero carga",
+      ? "Tengo mercancia para compartir"
+      : "Tengo ruta y quiero llenar mi camión",
     bg: isOfrezco ? "actioncard--ofrezco" : "actioncard--busco",
   };
 

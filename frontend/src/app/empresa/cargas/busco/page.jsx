@@ -181,25 +181,25 @@ export default function BuscoServicioPage() {
         <div className="busco__container">
           <form className="busco__form" onSubmit={handleSubmit}>
             <div className="busco__header">
-              <h1 className="title">Busco carga</h1>
-              <h2 className="subtitle">¿Qué buscas?</h2>
+              <h1 className="title">Publicar necesidades de Carga</h1>
+              <h2 className="subtitle">Indica tu ruta y encuentra carga compatible en el trayecto.</h2>
             </div>
 
-            <Input label="Origen" name="origen" value={form.origen} placeholder={"Ubicación donde está la mudanza"} onChange={handleChange} autocomplete />
-            <Input label="Destino" name="destino" value={form.destino} placeholder={"Ciudad donde se debe entregar la carga"} onChange={handleChange} autocomplete />
+            <Input label="Origen" name="origen" value={form.origen} placeholder={"Ciudad o zona desde donde sale mi unidad"} onChange={handleChange} autocomplete />
+            <Input label="Destino" name="destino" value={form.destino} placeholder={"Ciudad donde termina mi viaje"} onChange={handleChange} autocomplete />
 
             <label className="input-group__label input-group__label--tooltip">
               <span className="tooltip">
                 ⓘ
                 <span className="tooltip__content">
-                  Busco carga entre las siguientes fechas
+                  Indica entre qué fechas viajará tu unidad
                 </span>
               </span>
-              La unidad sale a destino entre las siguientes fechas
+              Fechas estimadas de salida
             </label>
 
             <DateRange ranges={range} onChange={item => setRange([item.selection])} minDate={new Date()} moveRangeOnFirstSelection={false} />
-            <Input label="Volumen m³" name="volumen" type="number" value={form.volumen} placeholder={"Tengo espacio para un máximo de (m3) de carga"} onChange={handleChange} />
+            <Input label="Espacio disponible (m³)" name="volumen" type="number" value={form.volumen} placeholder={"Metros cúbicos disponibles en la unidad."} onChange={handleChange} />
 
             {/* <div className="input-group">
               <label className="input-group__label">Tipo de carga</label>
@@ -211,19 +211,19 @@ export default function BuscoServicioPage() {
             </div> */}
 
             <div className="input-group">
-              <label className="input-group__label">Descripción</label>
-              <textarea name="nota" className="input-group__field" value={form.nota} onChange={handleChange} placeholder="Algun detalle relevante o algun tipo de carga que no manejes" />
+              <label className="input-group__label">Condiciones o restricciones</label>
+              <textarea name="nota" className="input-group__field" value={form.nota} onChange={handleChange} placeholder="Indica qué tipo de carga no manejas o condiciones especiales."/>
             </div>
 
             <div className="input-group">
-              <label className="input-group__label"> Contacto Responsable</label>
+              <label className="input-group__label">Persona de contacto</label>
               <select className="input-group__field" value={form.responsableId} onChange={handleResponsableChange}>
                 <option value="">Elige un contacto</option>
                 {usuarios.map(u => <option key={u.id} value={u.id}>{u.nombre}</option>)}
               </select>
             </div>
 
-            <Input label="Teléfono" name="telefono" value={form.telefono} onChange={handleChange} />
+            <Input label="Teléfono" name="telefono" value={form.telefono} onChange={handleChange} placeholder="Número de teléfono del contacto" />
 
             <div className="busco__actions">
               <Button_error value="Cancelar" onClick={() => router.back()} />

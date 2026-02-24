@@ -25,9 +25,10 @@ return new class extends Migration
             $table->text('inventario');
 
             $table->enum('fecha_recoleccion', [
-                'urgente',
-                '7-15',
-                '15-30'
+                '1-7',
+                '8-15', 
+                '+15',
+                'lo_antes_posible'
             ]);
 
             $table->enum('tipo_mudanza', [
@@ -42,6 +43,7 @@ return new class extends Migration
 
             // Sistema de verificación obligatorio
             $table->string('codigo_verificacion', 6)->nullable();
+            $table->timestamp('codigo_expira_en')->nullable();
             $table->boolean('telefono_verificado')->default(false);
 
             $table->enum('estado', [

@@ -15,6 +15,10 @@ const OPTIONS = {
     label: "Ofrezco",
     icon: "/icons/ofrezco.png",
   },
+  cliente: {
+    label: "Clientes",
+    icon: "/icons/cliente.png",
+  },
 };
 
 export default function ServiceFilters({ onChange }) {

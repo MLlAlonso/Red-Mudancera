@@ -10,6 +10,10 @@ use App\Modules\SolicitudMudanza\Requests\VerifySolicitudMudanzaRequest;
 use App\Modules\SolicitudMudanza\Requests\ReenviarCodigoSolicitudRequest;
 use Illuminate\Http\JsonResponse;
 
+use Illuminate\Http\Request;
+use Laravel\Sanctum\PersonalAccessToken;
+use App\Modules\Empresa\Models\Empresa;
+
 class SolicitudMudanzaController extends Controller
 {
     protected SolicitudMudanzaService $service;
@@ -61,7 +65,8 @@ class SolicitudMudanzaController extends Controller
     {
         $solicitudes = SolicitudMudanza::where('estado', 'activo')
             ->latest()
-            ->paginate(10);
+            ->get();
+
         return response()->json($solicitudes);
     }
 }

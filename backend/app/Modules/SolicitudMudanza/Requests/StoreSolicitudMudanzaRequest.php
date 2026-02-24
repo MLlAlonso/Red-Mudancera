@@ -17,7 +17,7 @@ class StoreSolicitudMudanzaRequest extends FormRequest
             'destino' => 'required|string|min:3|max:100',
             'tipo_vivienda' => 'required|in:casa,departamento,otro',
             'inventario' => 'required|string|min:10',
-            'fecha_recoleccion' => 'required|in:urgente,7-15,15-30',
+            'fecha_recoleccion' => 'required|in:1-7,8-15,+15,lo_antes_posible',
             'tipo_mudanza' => 'required|in:compartida,exclusiva,asesoria',
             'nombre' => 'required|string|min:3|max:150',
             'email' => 'required|email|max:150',

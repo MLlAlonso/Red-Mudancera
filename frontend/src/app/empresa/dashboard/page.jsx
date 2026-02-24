@@ -8,6 +8,7 @@ import ServiceAdvancedFilters from "@/components/filters/ServiceAdvancedFilters"
 import Button_crud from "@/components/common/Button_crud";
 import ServiceCard from "@/components/cards/ServiceCard";
 import ServiceCardSkeleton from "@/components/skeletons/ServiceCardSkeleton";
+import SolicitudMudanzaCard from "@/components/cards/SolicitudMudanzaCard";
 import { useSearch } from "@/store/searchContext";
 
 import "@/styles/pages/empresa/_empresaDashboard.scss";
@@ -17,6 +18,7 @@ export default function EmpresaDashboard() {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("todos");
+  const [solicitudes, setSolicitudes] = useState([]);
 
   const [filters, setFilters] = useState({
     origen: "",
@@ -49,11 +51,11 @@ export default function EmpresaDashboard() {
       subtitle:
         "Empresas que publican carga disponible.",
     },
-    /* clientes: {
-      title: "Publicaciones de clientes",
+    cliente: {
+      title: "Solicitudes de Clientes",
       subtitle:
-        "Clientes publicando su mudanza para recibir cotizaciones..",
-    }, */
+        "Clientes que buscan servicio de mudanza y están listos para cotizar.",
+    },
   };
 
   /* =========================
@@ -79,8 +81,8 @@ export default function EmpresaDashboard() {
   };
 
   /* =========================
-     Fetch services
-  ========================= */
+    Fetch solicitudes
+ ========================= */
   useEffect(() => {
     setLoading(true);
 
@@ -89,18 +91,38 @@ export default function EmpresaDashboard() {
       ...filters,
     });
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/servicios?${params}`, {
-      headers: { Accept: "application/json" },
-    })
-      .then((r) => r.json())
-      .then((json) => setServices(json.data || []))
+    const fetchServicios = fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/servicios?${params}`,
+      { headers: { Accept: "application/json" } }
+    ).then((r) => r.json());
+
+    const fetchSolicitudes = fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/solicitudes-mudanza`,
+      {
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    ).then((r) => r.json());
+
+    Promise.all([fetchServicios, fetchSolicitudes])
+      .then(([servJson, solJson]) => {
+        setServices(servJson.data || []);
+        setSolicitudes(Array.isArray(solJson) ? solJson : []);
+      })
       .finally(() => setLoading(false));
+
   }, [search, filters]);
 
-  const visible =
+  const visibleServicios =
     filter === "todos"
       ? services
       : services.filter((s) => s.tipo === filter);
+
+  const visibleSolicitudes =
+    filter === "todos" || filter === "cliente"
+      ? solicitudes
+      : [];
 
   return (
     <>
@@ -126,7 +148,7 @@ export default function EmpresaDashboard() {
           <ServiceFilters onChange={setFilter} />
 
           {/* Botón filtros avanzados / borrar */}
-{/*           <button
+          {/*           <button
             className={`btn-advanced-filters ${hasActiveFilters ? "active" : ""
               }`}
             onClick={() => {
@@ -181,28 +203,51 @@ export default function EmpresaDashboard() {
             Cards
         ========================= */}
         <div className="empresa-dashboard__cards">
+
           {loading &&
             Array.from({ length: 6 }).map((_, i) => (
               <ServiceCardSkeleton key={i} />
             ))}
 
-          {!loading &&
-            visible.map((s) => (
-              <ServiceCard
-                key={s.id}
-                id={s.id}
-                type={s.tipo}
-                origen={s.origen}
-                destino={s.destino}
-                volumen={s.volumen ? `${s.volumen} m³` : "No especificado"}
-                empresa={s.empresa?.empresa ?? "Empresa"}
-                telefono={s.empresa?.tel}
-                fecha={new Date(s.created_at).toLocaleDateString()}
-                distanciaKm={s.distancia_km}
-                importe={s.importe}
-              />
-            ))}
+          {!loading && (
+            <>
+              {/* SERVICIOS EMPRESAS */}
+              {visibleServicios.map((s) => (
+                <ServiceCard
+                  key={`serv-${s.id}`}
+                  id={s.id}
+                  type={s.tipo}
+                  origen={s.origen}
+                  destino={s.destino}
+                  volumen={s.volumen ? `${s.volumen} m³` : "No especificado"}
+                  empresa={s.empresa?.empresa ?? "Empresa"}
+                  telefono={s.empresa?.tel}
+                  fecha={new Date(s.created_at).toLocaleDateString()}
+                  distanciaKm={s.distancia_km}
+                  importe={s.importe}
+                />
+              ))}
+
+              {/* SOLICITUDES CLIENTES */}
+              {visibleSolicitudes.map((s) => (
+                <SolicitudMudanzaCard
+                  key={`sol-${s.id}`}
+                  id={s.id}
+                  origen={s.origen}
+                  destino={s.destino}
+                  fechaRecoleccion={s.fecha_recoleccion}
+                  distanciaKm={s.distancia_km}
+                  tipoMudanza={s.tipo_mudanza}
+                  inventario={s.inventario}
+                  fecha={new Date(s.created_at).toLocaleDateString()}
+                />
+              ))}
+            </>
+          )}
+
         </div>
+
+
       </main>
 
       <Footer />
