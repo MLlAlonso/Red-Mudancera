@@ -113,6 +113,23 @@ export default function EmpresaLogin() {
             onClick={handleSubmit}
           />
 
+
+          <button
+            style={{
+              marginTop: "10px",
+              background: "#F1A43F",
+              border: "1px dashed #ccc",
+              padding: "8px",
+              fontSize: "14px",
+              cursor: "pointer"
+            }}
+            onClick={() => (window.location.href = "/solicitar-mudanza")}
+          >
+            🔧 Ir a Solicitar Mudanza (TEST)
+          </button>
+
+
+
           {/* Registrarse */}
           <p className="empresa-login__register">
             <Link href="/empresa/register">Regístrate y empieza</Link>

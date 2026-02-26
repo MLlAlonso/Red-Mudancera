@@ -144,38 +144,62 @@
    VARIANTE SOLICITUD
 ========================= */
 .solicitud-card {
-  border-left: 10px solid variables.$tertiary;
+    border-left: 10px solid variables.$tertiary;
 
-  .service-card__tag {
-    font-size: 22px;
-    color: variables.$primary;
+    .service-card__tag {
+        color: variables.$tertiary;
 
-    &::before {
-      background: variables.$tertiary;
+        &::before {
+            background: variables.$tertiary;
+        }
     }
-  }
 
-  &__inventario {
-    font-size: 16px;
-    color: variables.$text;
-    line-height: 1.4;
-    margin-top: 6px;
-  }
+   
 
-  .btn_cta{
-    background: variables.$tertiary;
-    color: white;
-    border: none;
-    padding: 10px 0;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
+    .btn-contact {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: variables.$tertiary;
+        // color: variables.$primary;
 
-    &:hover {
-      background: darken(variables.$tertiary, 10%);
+        &:hover {
+            background: variables.$tertiary-hover;
+        }
+
+        &__icon {
+            margin-left: 15px;
+            width: 30px;
+            height: 30px;
+        }
+
+        span {
+            font-size: 16px;
+        }
     }
-  }
+
+    #recoleccion {
+        strong {
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        font-size: 18px;
+    }
+
+     &__inventario {
+        strong {
+            font-size: 20px;
+            font-weight: 700;
+            color: variables.$primary;
+        }
+        
+        font-size: 18px;
+        color: variables.$text;
+        line-height: 1.4;
+        margin-top: 6px;
+    }
+
 }
 
 /* RESPONSIVE  */
@@ -212,5 +236,21 @@
         &__date {
             font-size: 20px;
         }
+    }
+
+    .solicitud-card {
+        #solicitud {
+            strong {
+                font-size: 21px;
+                font-weight: 500;
+            }
+
+            font-size: 18px;
+        }
+
+        &__inventario {
+            font-size: 14px;
+        }
+
     }
 }

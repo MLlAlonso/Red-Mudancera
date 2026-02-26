@@ -211,6 +211,21 @@ export default function EmpresaDashboard() {
 
           {!loading && (
             <>
+              {/* SOLICITUDES CLIENTES */}
+              {visibleSolicitudes.map((s) => (
+                <SolicitudMudanzaCard
+                  key={`sol-${s.id}`}
+                  id={s.id}
+                  origen={s.origen}
+                  destino={s.destino}
+                  fechaRecoleccion={s.fecha_recoleccion}
+                  distanciaKm={s.distancia_km}
+                  tipoMudanza={s.tipo_mudanza}
+                  inventario={s.inventario}
+                  fecha={new Date(s.created_at).toLocaleDateString()}
+                />
+              ))}
+
               {/* SERVICIOS EMPRESAS */}
               {visibleServicios.map((s) => (
                 <ServiceCard
@@ -225,21 +240,6 @@ export default function EmpresaDashboard() {
                   fecha={new Date(s.created_at).toLocaleDateString()}
                   distanciaKm={s.distancia_km}
                   importe={s.importe}
-                />
-              ))}
-
-              {/* SOLICITUDES CLIENTES */}
-              {visibleSolicitudes.map((s) => (
-                <SolicitudMudanzaCard
-                  key={`sol-${s.id}`}
-                  id={s.id}
-                  origen={s.origen}
-                  destino={s.destino}
-                  fechaRecoleccion={s.fecha_recoleccion}
-                  distanciaKm={s.distancia_km}
-                  tipoMudanza={s.tipo_mudanza}
-                  inventario={s.inventario}
-                  fecha={new Date(s.created_at).toLocaleDateString()}
                 />
               ))}
             </>

@@ -127,6 +127,72 @@
     }
 
     /* =========================
+     MODAL Validación
+     ========================= */
+    .resumen-modal {
+        width: 100%;
+        max-width: 480px;
+        padding: 10px 5px;
+
+        h3 {
+            text-align: center;
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #09233E;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            background: #F8FAFC;
+            border-radius: 12px;
+            padding: 15px;
+
+            li {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px 0;
+                font-size: 14px;
+                border-bottom: 1px solid #E5EAF0;
+
+                strong {
+                    color: #6F7F8D;
+                    font-weight: 500;
+                }
+
+                span {
+                    font-weight: 600;
+                    color: #09233E;
+                    text-align: right;
+                }
+            }
+        }
+
+        &__actions {
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-edit {
+            background: transparent;
+            border: none;
+            color: #6F7F8D;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.2s;
+
+            &:hover {
+                color: #09233E;
+            }
+        }
+    }
+
+    /* =========================
      MODAL VERIFICACIÓN
      ========================= */
     .verificacion-modal {
@@ -145,7 +211,7 @@
             margin-bottom: 0.8rem;
         }
 
-        .input-group__field{
+        .input-group__field {
             text-align: center;
             font-weight: 600;
         }

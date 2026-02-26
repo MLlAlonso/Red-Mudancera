@@ -16,6 +16,7 @@ class StoreSolicitudMudanzaRequest extends FormRequest
             'origen' => 'required|string|min:3|max:100',
             'destino' => 'required|string|min:3|max:100',
             'tipo_vivienda' => 'required|in:casa,departamento,otro',
+            'vivienda_destino' => 'required|in:casa,departamento,otro',
             'inventario' => 'required|string|min:10',
             'fecha_recoleccion' => 'required|in:1-7,8-15,+15,lo_antes_posible',
             'tipo_mudanza' => 'required|in:compartida,exclusiva,asesoria',

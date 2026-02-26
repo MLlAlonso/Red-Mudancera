@@ -12,6 +12,7 @@ class SolicitudMudanza extends Model
         'codigo_expira_en',
         'distancia_km',
         'tipo_vivienda',
+        'vivienda_destino',
         'inventario',
         'fecha_recoleccion',
         'tipo_mudanza',

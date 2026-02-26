@@ -14,6 +14,7 @@ export default function SolicitarMudanza() {
         origen: "",
         destino: "",
         tipo_vivienda: "casa",
+        vivienda_destino: "casa",
         inventario: "",
         fecha_recoleccion: "1-7",
         tipo_mudanza: "compartida",
@@ -26,8 +27,9 @@ export default function SolicitarMudanza() {
     const [loading, setLoading] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const [solicitudId, setSolicitudId] = useState(null);
+    const [resumeModal, setResumeModal] = useState(false);
     const [codigo, setCodigo] = useState("");
-    const [timeLeft, setTimeLeft] = useState(900);
+    const [timeLeft, setTimeLeft] = useState(300);
     const [successModal, setSuccessModal] = useState(false);
 
     const handleChange = (e) => {
@@ -64,11 +66,17 @@ export default function SolicitarMudanza() {
     /* =========================
        SUBMIT
     ========================= */
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         if (loading) return;
         if (!validate()) return;
+
+        setResumeModal(true);
+    };
+
+    const createSolicitud = async () => {
         setLoading(true);
+
         try {
             const res = await fetch(`${API}/solicitudes-mudanza`, {
                 method: "POST",
@@ -81,12 +89,15 @@ export default function SolicitarMudanza() {
 
             const data = await res.json();
             if (!res.ok) throw new Error(data.message);
+
             setSolicitudId(data.data.id);
+            setResumeModal(false);
             setModalOpen(true);
-            setTimeLeft(900);
+            setTimeLeft(300);
         } catch (err) {
             alert(err.message);
         }
+
         setLoading(false);
     };
 
@@ -130,7 +141,7 @@ export default function SolicitarMudanza() {
             },
             body: JSON.stringify({ id: solicitudId })
         });
-        setTimeLeft(900);
+        setTimeLeft(300);
     };
 
     /* =========================
@@ -177,9 +188,6 @@ export default function SolicitarMudanza() {
                     <Input label="Origen" placeholder="Ciudad o zona donde se recoge la mudanza" name="origen" autocomplete value={form.origen} onChange={handleChange} />
                     {errors.origen && <p className="form-error">{errors.origen}</p>}
 
-                    <Input label="Destino" placeholder="Ciudad donde se entrega la mudanza" name="destino" autocomplete value={form.destino} onChange={handleChange} />
-                    {errors.destino && <p className="form-error">{errors.destino}</p>}
-
                     <label className="input-group__label input-group__label--tooltip">
                         <span className="tooltip">
                             ⓘ
@@ -187,7 +195,7 @@ export default function SolicitarMudanza() {
                                 Tipo de vivienda en la cual se va a recoger la mudanza
                             </span>
                         </span>
-                        Tipo de vivienda
+                        Tipo de vivienda de origen
                     </label>
                     <select name="tipo_vivienda" value={form.tipo_vivienda} onChange={handleChange}>
                         <option value="casa">Casa</option>
@@ -195,6 +203,28 @@ export default function SolicitarMudanza() {
                         <option value="otro">Otro</option>
                     </select>
 
+                    <Input label="Destino" placeholder="Ciudad donde se entrega la mudanza" name="destino" autocomplete value={form.destino} onChange={handleChange} />
+                    {errors.destino && <p className="form-error">{errors.destino}</p>}
+
+                    <label className="input-group__label input-group__label--tooltip">
+                        <span className="tooltip">
+                            ⓘ
+                            <span className="tooltip__content">
+                                Tipo de vivienda donde se entregará la mudanza
+                            </span>
+                        </span>
+                        Tipo de vivienda de destino
+                    </label>
+
+                    <select
+                        name="vivienda_destino"
+                        value={form.vivienda_destino}
+                        onChange={handleChange}
+                    >
+                        <option value="casa">Casa</option>
+                        <option value="departamento">Departamento</option>
+                        <option value="otro">Otro</option>
+                    </select>
 
                     <label htmlFor="inventario">Inventario</label>
                     <SimpleEditor
@@ -233,6 +263,35 @@ export default function SolicitarMudanza() {
                     <Button_success value="Solicitar Mudanza" type="submit" />
                 </form>
             </div>
+
+            {/* MODAL Resumen */}
+            {resumeModal && (
+                <BaseModal onClose={() => setResumeModal(false)}>
+                    <div className="resumen-modal">
+                        <h3>Confirma tu solicitud</h3>
+
+                        <ul>
+                            <li><strong>Origen:</strong> {form.origen}</li>
+                            <li><strong>Vivienda origen:</strong> {form.tipo_vivienda}</li>
+                            <li><strong>Destino:</strong> {form.destino}</li>
+                            <li><strong>Vivienda destino:</strong> {form.vivienda_destino}</li>
+                            <li><strong>Fecha:</strong> {form.fecha_recoleccion}</li>
+                            <li><strong>Tipo mudanza:</strong> {form.tipo_mudanza}</li>
+                            <li><strong>Contacto:</strong> {form.nombre}</li>
+                            <li><strong>Email:</strong> {form.email}</li>
+                            <li><strong>Teléfono:</strong> {form.telefono}</li>
+                        </ul>
+
+                        <div className="resumen-modal__actions">
+                            <Button_success value="Confirmar y enviar código" onClick={createSolicitud} />
+
+                            <button className="btn-edit" onClick={() => setResumeModal(false)} >
+                                Editar información
+                            </button>
+                        </div>
+                    </div>
+                </BaseModal>
+            )}
 
             {/* MODAL VERIFICACIÓN */}
             {modalOpen && (
