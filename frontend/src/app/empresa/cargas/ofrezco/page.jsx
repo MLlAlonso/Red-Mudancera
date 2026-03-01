@@ -27,7 +27,7 @@ export default function OfrezcoServicioPage() {
     nota: "",
     tipoCarga: "",
     importe: "",
-    estadoCarga: "mi_almacen",
+    estadoCarga: "",
   });
 
   /**
@@ -274,6 +274,7 @@ export default function OfrezcoServicioPage() {
               <label className="input-group__label">Tipo de carga</label>
               
               <select name="tipoCarga" className="input-group__field" value={form.tipoCarga} onChange={handleChange}>
+                <option value="">Selecciona una opción</option>
                 <option value="menaje">Menaje de casa</option>
                 <option value="vehiculo">Vehículo</option>
                 <option value="otro">Otro</option>
@@ -334,6 +335,7 @@ export default function OfrezcoServicioPage() {
               </label>
 
               <select name="rangoDias" className="input-group__field" value={form.rangoDias} onChange={handleChange}>
+                <option value="">Selecciona una opción</option>
                 <option value="1-7">1 a 7 días</option>
                 <option value="8-15">8 a 15 días</option>
                 <option value="15-30">15 a 30 días</option>
@@ -352,6 +354,7 @@ export default function OfrezcoServicioPage() {
               </label>
 
               <select name="estadoCarga" className="input-group__field" value={form.estadoCarga} onChange={handleChange} >
+                <option value="">Selecciona una opción</option>
                 <option value="mi_almacen">En bodega</option>
                 <option value="tu_almacen">Entrega directa en tu bodega</option>
                 <option value="en_ruta">Pendiente de recolección</option>
@@ -361,7 +364,7 @@ export default function OfrezcoServicioPage() {
             <div className="input-group">
               <label className="input-group__label">Persona de contacto</label>
               <select className="input-group__field" value={form.responsableId} onChange={handleResponsableChange}>
-                <option value="">Selecciona</option>
+                <option value="">Selecciona una opción</option>
                 {usuarios.map(u => <option key={u.id} value={u.id}>{u.nombre}</option>)}
               </select>
             </div>

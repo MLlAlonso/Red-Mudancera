@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { openWhatsappMessage } from "@/utils/whatsapp";
 import ServiceStatusDropdown from "@/components/common/ServiceStatusDropdown";
+import ComprarLeadModal from "@/components/modals/ComprarLeadModal";
 
 export default function SolicitudMudanzaCard({
   id,
@@ -24,6 +25,7 @@ export default function SolicitudMudanzaCard({
   const router = useRouter();
 
   const [estadoLocal, setEstadoLocal] = useState(estado);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     setEstadoLocal(estado);
@@ -41,90 +43,89 @@ export default function SolicitudMudanzaCard({
   };
 
   return (
-    <motion.div
-      className="service-card solicitud-card"
-      initial={{ opacity: 0, scale: 0.95, y: 10 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ duration: 0.25 }}
-    >
-      <div className="service-card__title">
-        <span className="service-card__tag">
-          Solicitud
-        </span>
+    <>
+      <motion.div
+        className="service-card solicitud-card"
+        initial={{ opacity: 0, scale: 0.95, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.25 }}
+      >
+        <div className="service-card__title">
+          <span className="service-card__tag">
+            Solicitud
+          </span>
 
-        <h2 className="service-card__route">
-          {origen} → {destino}
-        </h2>
-      </div>
+          <h2 className="service-card__route">
+            {origen} → {destino}
+          </h2>
+        </div>
 
-      <p className="service-card__info" id="solicitud">
-        <strong>Recolección:</strong> {formatFechaRecoleccion(fechaRecoleccion)}
-      </p>
-
-      <p className="service-card__info" id="solicitud">
-       <strong>Modalidad:</strong>  {tipoMudanza}
-      </p>
-
-      <p className="service-card__info solicitud-card__inventario" id="solicitud">
-        <strong>Inventario:</strong>{" "}
-        {inventario?.replace(/<[^>]*>/g, "").slice(0, 80)}
-        {inventario?.length > 80 && "..."}
-      </p>
-
-      {distanciaKm && (
-        <p className="service-card__info" id="kilometros">
-          {distanciaKm} km
+        <p className="service-card__info" id="solicitud">
+          <strong>Recolección:</strong> {formatFechaRecoleccion(fechaRecoleccion)}
         </p>
-      )}
 
-      <p className="service-card__date">
-        Publicado el {fecha}
-      </p>
+        <p className="service-card__info" id="solicitud">
+          <strong>Modalidad:</strong>  {tipoMudanza}
+        </p>
 
-      <div className="service-card__actions">
-        {/* VER DETALLES */}
-        <button
-          className="btn-outline"
-          onClick={() => router.push(`/empresa/solicitudes/${id}`)}
-        >
-          Ver detalles
-        </button>
+        <p className="service-card__info solicitud-card__inventario" id="solicitud">
+          <strong>Inventario:</strong>{" "}
+          {inventario?.replace(/<[^>]*>/g, "").slice(0, 80)}
+          {inventario?.length > 80 && "..."}
+        </p>
 
-        {/* CONTACTAR */}
-        {showContact && (
+        {distanciaKm && (
+          <p className="service-card__info" id="kilometros">
+            {distanciaKm} km
+          </p>
+        )}
+
+        <p className="service-card__date">
+          Publicado el {fecha}
+        </p>
+
+        <div className="service-card__actions">
+          {/* VER DETALLES */}
+          <button
+            className="btn-outline"
+            onClick={() => router.push(`/empresa/solicitudes/${id}`)}
+          >
+            Ver detalles
+          </button>
+
+          {/* CONTACTAR */}
           <button
             className="btn-solid btn-contact"
-            onClick={() =>
-              openWhatsappMessage({
-                telefono,
-                tipo: "Solicitud",
-                origen,
-                destino,
-                volumen: tipoMudanza,
-                servicioId: id,
-              })
-            }
+            onClick={() => setShowModal(true)}
           >
             <img
               src="/icons/token.png"
-              alt="WhatsApp"
+              alt="Comprar"
               className="btn-contact__icon"
             />
             <span>Comprar</span>
           </button>
-        )}
 
-        {/* DROPDOWN ESTADO */}
-        {!showContact && onChangeEstado && (
-          <ServiceStatusDropdown
-            estado={estadoLocal}
-            onSelect={(nuevoEstado) => {
-              setEstadoLocal(nuevoEstado);
-              onChangeEstado(id, nuevoEstado);
-            }}
+          {/* DROPDOWN ESTADO */}
+          {!showContact && onChangeEstado && (
+            <ServiceStatusDropdown
+              estado={estadoLocal}
+              onSelect={(nuevoEstado) => {
+                setEstadoLocal(nuevoEstado);
+                onChangeEstado(id, nuevoEstado);
+              }}
+            />
+          )}
+        </div>
+      </motion.div>
+
+        {showModal && (
+          <ComprarLeadModal
+            solicitudId={id}
+            onClose={() => setShowModal(false)}
+            onSuccess={() => window.location.reload()}
           />
         )}
-      </div>
-    </motion.div>
-  );
-}
+      </>
+    );
+  }

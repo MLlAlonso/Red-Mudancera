@@ -12,12 +12,21 @@ export default function SolicitarMudanza() {
 
     const [form, setForm] = useState({
         origen: "",
+        tipo_vivienda: "",
+        origen_pisos: "",
+        origen_elevador: "",
+        origen_acarreo: "",
+
         destino: "",
-        tipo_vivienda: "casa",
-        vivienda_destino: "casa",
+        vivienda_destino: "",
+        destino_pisos: "",
+        destino_elevador: "",
+        destino_acarreo: "",
+
         inventario: "",
-        fecha_recoleccion: "1-7",
-        tipo_mudanza: "compartida",
+        fecha_recoleccion: "",
+        tipo_mudanza: "",
+
         nombre: "",
         email: "",
         telefono: ""
@@ -58,6 +67,13 @@ export default function SolicitarMudanza() {
             newErrors.telefono = "El teléfono de contacto es obligatorio.";
         } else if (!/^[0-9]{8,15}$/.test(form.telefono)) {
             newErrors.telefono = "Solo números (8-15 dígitos).";
+        }
+        if (form.tipo_vivienda === "departamento" && !form.origen_elevador) {
+            newErrors.origen_elevador = "Indica si tiene elevador.";
+        }
+
+        if (form.vivienda_destino === "departamento" && !form.destino_elevador) {
+            newErrors.destino_elevador = "Indica si tiene elevador.";
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -185,80 +201,181 @@ export default function SolicitarMudanza() {
 
             <div className="solicitar-mudanza__container">
                 <form className="solicitar-mudanza__form" onSubmit={handleSubmit}>
-                    <Input label="Origen" placeholder="Ciudad o zona donde se recoge la mudanza" name="origen" autocomplete value={form.origen} onChange={handleChange} />
-                    {errors.origen && <p className="form-error">{errors.origen}</p>}
 
-                    <label className="input-group__label input-group__label--tooltip">
-                        <span className="tooltip">
-                            ⓘ
-                            <span className="tooltip__content">
-                                Tipo de vivienda en la cual se va a recoger la mudanza
+                    <div className="form-section">
+                        <h2 className="form-section__title">Origen de la mudanza</h2>
+
+                        <Input label="Origen" placeholder="Ciudad o zona donde se recoge la mudanza" name="origen" autocomplete value={form.origen} onChange={handleChange} />
+                        {errors.origen && <p className="form-error">{errors.origen}</p>}
+
+                        <label className="input-group__label input-group__label--tooltip">
+                            <span className="tooltip">
+                                ⓘ
+                                <span className="tooltip__content">
+                                    Tipo de vivienda en la cual se va a recoger la mudanza
+                                </span>
                             </span>
-                        </span>
-                        Tipo de vivienda de origen
-                    </label>
-                    <select name="tipo_vivienda" value={form.tipo_vivienda} onChange={handleChange}>
-                        <option value="casa">Casa</option>
-                        <option value="departamento">Departamento</option>
-                        <option value="otro">Otro</option>
-                    </select>
+                            Tipo de vivienda de origen
+                        </label>
+                        <select name="tipo_vivienda" value={form.tipo_vivienda} onChange={handleChange}>
+                            <option value="">Selecciona una opción</option>
+                            <option value="casa">Casa</option>
+                            <option value="departamento">Departamento</option>
+                            <option value="bodega">Bodega</option>
+                            <option value="otro">Otro</option>
+                        </select>
 
-                    <Input label="Destino" placeholder="Ciudad donde se entrega la mudanza" name="destino" autocomplete value={form.destino} onChange={handleChange} />
-                    {errors.destino && <p className="form-error">{errors.destino}</p>}
+                        {form.tipo_vivienda === "departamento" && (
+                            <>
+                                <Input
+                                    label="Número de pisos"
+                                    name="origen_pisos"
+                                    type="number"
+                                    value={form.origen_pisos}
+                                    onChange={handleChange}
+                                />
 
-                    <label className="input-group__label input-group__label--tooltip">
-                        <span className="tooltip">
-                            ⓘ
-                            <span className="tooltip__content">
-                                Tipo de vivienda donde se entregará la mudanza
+                                <label>¿Cuenta con elevador accesible?</label>
+                                <select name="origen_elevador" value={form.origen_elevador} onChange={handleChange}>
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="no_hay">No hay elevador</option>
+                                    <option value="si_y_se_puede_usar">Sí hay y se puede usar para la mudanza</option>
+                                    <option value="si_solo_algunos">Sí hay pero solo para algunos muebles</option>
+                                    <option value="si_no_se_permite">Sí hay pero no se permite utilizar</option>
+                                    <option value="no_lo_se">No lo sé</option>
+                                </select>
+                            </>
+                        )}
+
+                        <label className="input-group__label input-group__label--tooltip">
+                            <span className="tooltip">
+                                ⓘ
+                                <span className="tooltip__content">
+                                    Acarreo es cuando el camión no puede estacionarse cerca del acceso y se debe caminar más de 20 metros con los muebles.
+                                </span>
                             </span>
-                        </span>
-                        Tipo de vivienda de destino
-                    </label>
+                            ¿Considera que hay acarreo mayor a 20 metros?
+                        </label>
+                        <select name="origen_acarreo" value={form.origen_acarreo} onChange={handleChange}>
+                            <option value="">Selecciona una opción</option>
+                            <option value="si">Sí</option>
+                            <option value="no">No</option>
+                            <option value="no_se">No estoy seguro</option>
+                        </select>
+                    </div>
 
-                    <select
-                        name="vivienda_destino"
-                        value={form.vivienda_destino}
-                        onChange={handleChange}
-                    >
-                        <option value="casa">Casa</option>
-                        <option value="departamento">Departamento</option>
-                        <option value="otro">Otro</option>
-                    </select>
+                    <div className="form-section">
+                        <h2 className="form-section__title">Destino de la mudanza</h2>
 
-                    <label htmlFor="inventario">Inventario</label>
-                    <SimpleEditor
-                        value={form.inventario}
-                        placeholder="Lista de muebles, cajas o mercancía, puedes pegar el inventario aqui."
-                        onChange={(val) => setForm(prev => ({ ...prev, inventario: val }))}
-                    />
-                    {errors.inventario && <p className="form-error">{errors.inventario}</p>}
+                        <Input label="Destino" placeholder="Ciudad donde se entrega la mudanza" name="destino" autocomplete value={form.destino} onChange={handleChange} />
+                        {errors.destino && <p className="form-error">{errors.destino}</p>}
 
-                    <label htmlFor="fecha_recoleccion">Cuando necesitas que se recolecte tu mudanza</label>
-                    <select name="fecha_recoleccion" value={form.fecha_recoleccion} onChange={handleChange}>
-                        <option value="1-7">1-7 días</option>
-                        <option value="8-15">8-15 días</option>
-                        <option value="+15">Más de 15 días</option>
-                        <option value="lo_antes_posible">Lo antes posible</option>
-                    </select>
+                        <label className="input-group__label input-group__label--tooltip">
+                            <span className="tooltip">
+                                ⓘ
+                                <span className="tooltip__content">
+                                    Tipo de vivienda donde se entregará la mudanza
+                                </span>
+                            </span>
+                            Tipo de vivienda de destino
+                        </label>
 
-                    <label htmlFor="tipo_mudanza">
-                        Que tipo de mudanza necesitas
-                    </label>
-                    <select name="tipo_mudanza" value={form.tipo_mudanza} onChange={handleChange}>
-                        <option value="compartida">Compartida</option>
-                        <option value="exclusiva">Exclusiva</option>
-                        <option value="asesoria">Requiero asesoría</option>
-                    </select>
+                        <select
+                            name="vivienda_destino"
+                            value={form.vivienda_destino}
+                            onChange={handleChange}
+                        >
+                            <option value="">Selecciona una opción</option>
+                            <option value="casa">Casa</option>
+                            <option value="departamento">Departamento</option>
+                            <option value="bodega">Bodega</option>
+                            <option value="otro">Otro</option>
+                        </select>
 
-                    <Input label="Persona de contacto" name="nombre" value={form.nombre} onChange={handleChange} />
-                    {errors.nombre && <p className="form-error">{errors.nombre}</p>}
+                        {form.vivienda_destino === "departamento" && (
+                            <>
+                                <Input
+                                    label="Número de pisos"
+                                    name="destino_pisos"
+                                    type="number"
+                                    value={form.destino_pisos}
+                                    onChange={handleChange}
+                                />
 
-                    <Input label="Correo electrónico de contacto" name="email" type="email" value={form.email} onChange={handleChange} />
-                    {errors.email && <p className="form-error">{errors.email}</p>}
+                                <label>¿Cuenta con elevador accesible?</label>
+                                <select name="destino_elevador" value={form.destino_elevador} onChange={handleChange}>
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="no_hay">No hay elevador</option>
+                                    <option value="si_y_se_puede_usar">Sí hay y se puede usar para la mudanza</option>
+                                    <option value="si_solo_algunos">Sí hay pero solo para algunos muebles</option>
+                                    <option value="si_no_se_permite">Sí hay pero no se permite utilizar</option>
+                                    <option value="no_lo_se">No lo sé</option>
+                                </select>
+                            </>
+                        )}
 
-                    <Input label="Teléfono de contacto" name="telefono" value={form.telefono} onChange={handleChange} />
-                    {errors.telefono && <p className="form-error">{errors.telefono}</p>}
+                        <label className="input-group__label input-group__label--tooltip">
+                            <span className="tooltip">
+                                ⓘ
+                                <span className="tooltip__content">
+                                    Acarreo es cuando el camión no puede estacionarse cerca del acceso y se debe caminar más de 20 metros con los muebles.
+                                </span>
+                            </span>
+                            ¿Considera que hay acarreo mayor a 20 metros en el destino?
+                        </label>
+
+                        <select
+                            name="destino_acarreo"
+                            value={form.destino_acarreo}
+                            onChange={handleChange}
+                        >
+                            <option value="">Selecciona una opción</option>
+                            <option value="si">Sí</option>
+                            <option value="no">No</option>
+                            <option value="no_se">No estoy seguro</option>
+                        </select>
+                    </div>
+
+                    <div className="form-section">
+                        <h2 className="form-section__title">Detalles y contacto</h2>
+
+                        <label htmlFor="inventario">Inventario</label>
+                        <SimpleEditor
+                            value={form.inventario}
+                            placeholder="Lista de muebles, cajas o mercancía, puedes pegar el inventario aqui."
+                            onChange={(val) => setForm(prev => ({ ...prev, inventario: val }))}
+                        />
+                        {errors.inventario && <p className="form-error">{errors.inventario}</p>}
+
+                        <label htmlFor="fecha_recoleccion">¿Cuándo necesitas la mudanza?</label>
+                        <select name="fecha_recoleccion" value={form.fecha_recoleccion} onChange={handleChange}>
+                            <option value="">Selecciona una opción</option>
+                            <option value="1-7">1-7 días</option>
+                            <option value="8-15">8-15 días</option>
+                            <option value="15-30">15-30 días</option>
+                            <option value="30+">Más de 30 días</option>
+                            <option value="lo_antes_posible">Lo antes posible</option>
+                        </select>
+
+                        <label htmlFor="tipo_mudanza">
+                            Que tipo de mudanza necesitas
+                        </label>
+                        <select name="tipo_mudanza" value={form.tipo_mudanza} onChange={handleChange}>
+                            <option value="">Selecciona una opción</option>
+                            <option value="compartida">Compartida</option>
+                            <option value="exclusiva">Exclusiva</option>
+                            <option value="asesoria">Requiero asesoría</option>
+                        </select>
+
+                        <Input label="Persona de contacto" name="nombre" value={form.nombre} onChange={handleChange} />
+                        {errors.nombre && <p className="form-error">{errors.nombre}</p>}
+
+                        <Input label="Correo electrónico de contacto" name="email" type="email" value={form.email} onChange={handleChange} />
+                        {errors.email && <p className="form-error">{errors.email}</p>}
+
+                        <Input label="Teléfono de contacto" name="telefono" value={form.telefono} onChange={handleChange} />
+                        {errors.telefono && <p className="form-error">{errors.telefono}</p>}
+                    </div>
 
                     <Button_success value="Solicitar Mudanza" type="submit" />
                 </form>
@@ -268,27 +385,47 @@ export default function SolicitarMudanza() {
             {resumeModal && (
                 <BaseModal onClose={() => setResumeModal(false)}>
                     <div className="resumen-modal">
-                        <h3>Confirma tu solicitud</h3>
 
-                        <ul>
-                            <li><strong>Origen:</strong> {form.origen}</li>
-                            <li><strong>Vivienda origen:</strong> {form.tipo_vivienda}</li>
-                            <li><strong>Destino:</strong> {form.destino}</li>
-                            <li><strong>Vivienda destino:</strong> {form.vivienda_destino}</li>
-                            <li><strong>Fecha:</strong> {form.fecha_recoleccion}</li>
-                            <li><strong>Tipo mudanza:</strong> {form.tipo_mudanza}</li>
-                            <li><strong>Contacto:</strong> {form.nombre}</li>
-                            <li><strong>Email:</strong> {form.email}</li>
-                            <li><strong>Teléfono:</strong> {form.telefono}</li>
-                        </ul>
+                        <div className="resumen-modal__header">
+                            <h3>Confirma tu solicitud</h3>
+                        </div>
 
-                        <div className="resumen-modal__actions">
-                            <Button_success value="Confirmar y enviar código" onClick={createSolicitud} />
+                        <div className="resumen-modal__body">
+                            <ul>
+                                <li><strong>Origen:</strong> {form.origen}</li>
+                                <li><strong>Vivienda origen:</strong> {form.tipo_vivienda}</li>
+                                <li><strong>Pisos origen:</strong> {form.origen_pisos || "—"}</li>
+                                <li><strong>Elevador origen:</strong> {form.origen_elevador || "—"}</li>
+                                <li><strong>Acarreo origen:</strong> {form.origen_acarreo || "—"}</li>
 
-                            <button className="btn-edit" onClick={() => setResumeModal(false)} >
+                                <li><strong>Destino:</strong> {form.destino}</li>
+                                <li><strong>Vivienda destino:</strong> {form.vivienda_destino}</li>
+                                <li><strong>Pisos destino:</strong> {form.destino_pisos || "—"}</li>
+                                <li><strong>Elevador destino:</strong> {form.destino_elevador || "—"}</li>
+                                <li><strong>Acarreo destino:</strong> {form.destino_acarreo || "—"}</li>
+
+                                <li><strong>Fecha:</strong> {form.fecha_recoleccion}</li>
+                                <li><strong>Tipo mudanza:</strong> {form.tipo_mudanza}</li>
+                                <li><strong>Contacto:</strong> {form.nombre}</li>
+                                <li><strong>Email:</strong> {form.email}</li>
+                                <li><strong>Teléfono:</strong> {form.telefono}</li>
+                            </ul>
+                        </div>
+
+                        <div className="resumen-modal__footer">
+                            <Button_success
+                                value="Confirmar y enviar código"
+                                onClick={createSolicitud}
+                            />
+
+                            <button
+                                className="btn-edit"
+                                onClick={() => setResumeModal(false)}
+                            >
                                 Editar información
                             </button>
                         </div>
+
                     </div>
                 </BaseModal>
             )}

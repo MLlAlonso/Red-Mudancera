@@ -96,6 +96,15 @@ export default function EmpresaPerfil() {
               : "Usuario nuevo"}
             <span>Acuerdos</span>
           </div>
+
+          <div className="stat stat--tokens">
+            <div className="stat__top">
+              <img src="/icons/token_color.png" alt="Tokens" />
+              <strong>{empresa.tokens ?? 0}</strong>
+            </div>
+            <span>Tokens disponibles</span>
+          </div>
+
         </div>
 
         {/* Título + botón editar */}

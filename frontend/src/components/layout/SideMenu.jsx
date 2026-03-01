@@ -7,11 +7,13 @@ import NotificationBadge from "@/components/common/NotificationBadge";
 
 export default function SideMenu({ open }) {
   const [count, setCount] = useState(0);
+  const [tokens, setTokens] = useState(null);
 
   useEffect(() => {
     const token = document.cookie.match(/token_empresa=([^;]+)/)?.[1];
     if (!token) return;
 
+    // Notificaciones
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/notificaciones/count`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -21,6 +23,18 @@ export default function SideMenu({ open }) {
       .then(res => res.json())
       .then(data => setCount(data.count || 0))
       .catch(() => { });
+
+    // Tokens
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    })
+      .then(res => res.json())
+      .then(data => setTokens(data.tokens ?? 0))
+      .catch(() => { });
+
   }, []);
 
   return (
@@ -30,6 +44,14 @@ export default function SideMenu({ open }) {
       animate={{ x: open ? 0 : 300, opacity: open ? 1 : 0 }}
       transition={{ duration: 0.25 }}
     >
+
+      {tokens !== null && (
+        <div className="side-menu__tokens">
+          <img src="/icons/token_color.png" alt="Tokens" />
+          <span>{tokens} tokens</span>
+        </div>
+      )}
+
       <ul>
         <li>
           <Link href="/empresa/dashboard">

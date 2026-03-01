@@ -31,7 +31,6 @@
                         </td>
                     </tr>
 
-                    <!-- Ticket Body -->
                     <tr>
                         <td style="padding:24px;color:#4A5E71;">
 
@@ -46,59 +45,141 @@
                                 </div>
                             </div>
 
-                            <!-- Línea punteada -->
-                            <div style="border-top:2px dashed #ABB0B4;margin:24px 0;"></div>
+                            <!-- ================= ORIGEN ================= -->
+                            <div style="margin-top:24px;">
+                                <div style="font-weight:bold;color:#09233E;font-size:15px;margin-bottom:8px;">
+                                    📍 Origen
+                                </div>
 
-                            <!-- Datos tipo formulario -->
-                            <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;">
+                                <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;">
+                                    <tr>
+                                        <td style="color:#6F7F8D;">Ubicación:</td>
+                                        <td align="right"><strong>{{ $solicitud->origen }}</strong></td>
+                                    </tr>
 
-                                <tr>
-                                    <td style="color:#6F7F8D;">Origen:</td>
-                                    <td align="right"><strong>{{ $solicitud->origen }}</strong></td>
-                                </tr>
+                                    <tr>
+                                        <td style="color:#6F7F8D;">Tipo vivienda:</td>
+                                        <td align="right"><strong>{{ ucfirst($solicitud->tipo_vivienda) }}</strong>
+                                        </td>
+                                    </tr>
 
-                                <tr>
-                                    <td style="color:#6F7F8D;">Vivienda origen:</td>
-                                    <td align="right"><strong>{{ ucfirst($solicitud->tipo_vivienda) }}</strong></td>
-                                </tr>
+                                    <tr>
+                                        <td style="color:#6F7F8D;">Pisos:</td>
+                                        <td align="right"><strong>{{ $solicitud->origen_pisos ?? '—' }}</strong></td>
+                                    </tr>
 
-                                <tr>
-                                    <td style="color:#6F7F8D;">Destino:</td>
-                                    <td align="right"><strong>{{ $solicitud->destino }}</strong></td>
-                                </tr>
+                                    <tr>
+                                        <td style="color:#6F7F8D;">Elevador:</td>
+                                        <td align="right"><strong>{{ $solicitud->origen_elevador ?? '—' }}</strong>
+                                        </td>
+                                    </tr>
 
-                                <tr>
-                                    <td style="color:#6F7F8D;">Vivienda destino:</td>
-                                    <td align="right">
-                                        <strong>{{ ucfirst($solicitud->vivienda_destino) }}</strong>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td style="color:#6F7F8D;">Acarreo:</td>
+                                        <td align="right"><strong>{{ $solicitud->origen_acarreo ?? '—' }}</strong></td>
+                                    </tr>
+                                </table>
+                            </div>
 
-                                <tr>
-                                    <td style="color:#6F7F8D;">Fecha de recolección:</td>
-                                    <td align="right"><strong>{{ $solicitud->fecha_recoleccion }}</strong></td>
-                                </tr>
+                            <!-- ================= DESTINO ================= -->
+                            <div style="margin-top:28px;">
+                                <div style="font-weight:bold;color:#09233E;font-size:15px;margin-bottom:8px;">
+                                    🚚 Destino
+                                </div>
 
-                                <tr>
-                                    <td style="color:#6F7F8D;">Tipo mudanza:</td>
-                                    <td align="right"><strong>{{ ucfirst($solicitud->tipo_mudanza) }}</strong></td>
-                                </tr>
+                                <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;">
+                                    <tr>
+                                        <td style="color:#6F7F8D;">Ubicación:</td>
+                                        <td align="right"><strong>{{ $solicitud->destino }}</strong></td>
+                                    </tr>
 
-                                <tr>
-                                    <td style="color:#6F7F8D;">Distancia estimada:</td>
-                                    <td align="right">
-                                        <strong>
-                                            {{ $solicitud->distancia_km ? $solicitud->distancia_km . ' km' : 'No disponible' }}
-                                        </strong>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td style="color:#6F7F8D;">Tipo vivienda:</td>
+                                        <td align="right"><strong>{{ ucfirst($solicitud->vivienda_destino) }}</strong>
+                                        </td>
+                                    </tr>
 
-                            </table>
+                                    <tr>
+                                        <td style="color:#6F7F8D;">Pisos:</td>
+                                        <td align="right"><strong>{{ $solicitud->destino_pisos ?? '—' }}</strong></td>
+                                    </tr>
 
-                            <!-- Línea punteada -->
-                            <div style="border-top:2px dashed #ABB0B4;margin:24px 0;"></div>
+                                    <tr>
+                                        <td style="color:#6F7F8D;">Elevador:</td>
+                                        <td align="right"><strong>{{ $solicitud->destino_elevador ?? '—' }}</strong>
+                                        </td>
+                                    </tr>
 
-                            <!-- Mensaje final -->
+                                    <tr>
+                                        <td style="color:#6F7F8D;">Acarreo:</td>
+                                        <td align="right"><strong>{{ $solicitud->destino_acarreo ?? '—' }}</strong>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <!-- ================= DETALLES ================= -->
+                            <div style="margin-top:28px;">
+                                <div style="font-weight:bold;color:#09233E;font-size:15px;margin-bottom:8px;">
+                                    📦 Detalles del servicio
+                                </div>
+
+                                <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;">
+                                    <tr>
+                                        <td style="color:#6F7F8D;">Fecha estimada:</td>
+                                        <td align="right">
+                                            <strong>{{ $solicitud->fecha_recoleccion }} días</strong>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="color:#6F7F8D;">Tipo mudanza:</td>
+                                        <td align="right">
+                                            <strong>{{ ucfirst($solicitud->tipo_mudanza) }}</strong>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="color:#6F7F8D;">Distancia estimada:</td>
+                                        <td align="right">
+                                            <strong>
+                                                {{ $solicitud->distancia_km ? $solicitud->distancia_km . ' km' : 'No disponible' }}
+                                            </strong>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+
+                            <!-- ================= CONTACTO ================= -->
+                            <div style="margin-top:28px;">
+                                <div style="font-weight:bold;color:#09233E;font-size:15px;margin-bottom:8px;">
+                                    👤 Datos de contacto
+                                </div>
+
+                                <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;">
+
+                                    <tr>
+                                        <td style="color:#6F7F8D;">Nombre:</td>
+                                        <td align="right"><strong>{{ $solicitud->nombre }}</strong></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="color:#6F7F8D;">Email:</td>
+                                        <td align="right"><strong>{{ $solicitud->email }}</strong></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="color:#6F7F8D;">Teléfono:</td>
+                                        <td align="right"><strong>{{ $solicitud->telefono }}</strong></td>
+                                    </tr>
+
+                                </table>
+                            </div>
+
+                            <!-- Línea final -->
+                            <div style="border-top:2px dashed #ABB0B4;margin:28px 0;"></div>
+
                             <div style="text-align:center;font-size:14px;">
                                 <p>
                                     Algún agente se pondrá en contacto con usted pronto.
@@ -112,7 +193,6 @@
                         </td>
                     </tr>
 
-                    <!-- Footer -->
                     <tr>
                         <td style="background:#F4F7F6;padding:16px;text-align:center;">
                             <p style="font-size:12px;color:#6F7F8D;">
@@ -122,7 +202,6 @@
                     </tr>
 
                 </table>
-
             </td>
         </tr>
     </table>

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Modules\Empresa\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
@@ -62,5 +63,15 @@ class Empresa extends Authenticatable
 
         // legacy storage
         return asset('storage/' . $this->logo);
+    }
+
+    public function leadsComprados()
+    {
+        return $this->belongsToMany(
+            \App\Modules\SolicitudMudanza\Models\SolicitudMudanza::class,
+            'lead_compras',
+            'empresa_id',
+            'solicitud_id'
+        );
     }
 }

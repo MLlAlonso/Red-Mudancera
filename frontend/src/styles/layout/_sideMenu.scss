@@ -1,3 +1,5 @@
+@use "../utils/variables";
+
 .side-menu {
   position: fixed;
   top: 120px;
@@ -68,5 +70,28 @@
     span {
       font-size: 20px;
     }
+  }
+}
+
+.side-menu__tokens {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px;
+  padding: 10px 0;
+
+  font-weight: 600;
+  color: variables.$primary;
+
+  border-bottom: 2px dashed rgba(9, 35, 62, 0.2);
+
+  img {
+    width: 30px;
+  }
+
+  span {
+    font-size: 18px;
+    text-align: center;
   }
 }

@@ -54,6 +54,23 @@
       font-size: 22px;
       font-family: variables.$font-text;
 
+      &__top {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      img {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+      }
+
+      strong {
+        font-size: 24px;
+      }
+
       span {
         display: block;
         font-size: 16px;
@@ -61,7 +78,7 @@
       }
     }
   }
-
+  
   /* Secciones */
   &__row {
     display: flex;
