@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Modules\SolicitudMudanza\Models;
+
 use Illuminate\Database\Eloquent\Model;
 
 class LeadCompra extends Model
@@ -13,4 +14,9 @@ class LeadCompra extends Model
         'exclusivo',
         'tokens_pagados',
     ];
+
+    public function solicitud()
+    {
+        return $this->belongsTo(SolicitudMudanza::class, 'solicitud_id');
+    }
 }

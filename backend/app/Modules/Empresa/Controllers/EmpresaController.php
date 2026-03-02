@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App\Services\CloudinaryService;
+use Illuminate\Support\Facades\Auth;
+use App\Modules\SolicitudMudanza\Models\LeadCompra;
 
 class EmpresaController extends Controller
 {
@@ -152,5 +154,36 @@ class EmpresaController extends Controller
         $usuario->activoEmpresa = true;
         $usuario->save();
         return response()->json(['message' => 'Usuario reanudado correctamente']);
+    }
+
+
+
+    public function misLeads()
+    {
+        $empresa = Auth::user();
+
+        $leads = LeadCompra::with('solicitud')
+            ->where('empresa_id', $empresa->id)
+            ->latest()
+            ->get()
+            ->map(function ($compra) {
+                $sol = $compra->solicitud;
+
+                return [
+                    'id' => $sol->id,
+                    'tipo' => 'lead',
+                    'origen' => $sol->origen,
+                    'destino' => $sol->destino,
+                    'telefono' => $sol->telefono,
+                    'nombre_cliente' => $sol->nombre,
+                    'tipo_vivienda' => $sol->tipo_vivienda,
+                    'vivienda_destino' => $sol->vivienda_destino,
+                    'created_at' => $compra->created_at,
+                ];
+            });
+
+        return response()->json([
+            'data' => $leads
+        ]);
     }
 }

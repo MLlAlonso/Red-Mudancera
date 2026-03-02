@@ -7,6 +7,7 @@ import Footer from "@/components/layout/Footer";
 import ServiceFilters from "@/components/filters/ServiceFilters";
 import Button_crud from "@/components/common/Button_crud";
 import ServiceCard from "@/components/cards/ServiceCard";
+import SolicitudMudanzaCard from "@/components/cards/SolicitudMudanzaCard";
 import ServiceCardSkeleton from "@/components/skeletons/ServiceCardSkeleton";
 import ConfirmFinalizarServicioModal from "@/components/modals/ConfirmFinalizarServicioModal";
 import FinalizarServicioGananciaModal from "@/components/modals/FinalizarServicioGananciaModal";
@@ -23,7 +24,7 @@ export default function MisServiciosEmpresa() {
   const [showConfirmFinalizar, setShowConfirmFinalizar] = useState(false);
   const [showGananciaModal, setShowGananciaModal] = useState(false);
   const [showReporte, setShowReporte] = useState(false);
-  const { search, city } = useSearch();
+  const { search, city } = useSearch(); const [empresa, setEmpresa] = useState(null);
 
   const cambiarEstadoDirecto = async (id, estado) => {
     try {
@@ -58,21 +59,50 @@ export default function MisServiciosEmpresa() {
 
     setLoading(true);
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/servicios`, {
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((r) => {
-        if (r.status === 401) {
-          window.location.href = "/empresa/login";
-          return;
-        }
-        return r.json();
+    Promise.all([
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/servicios`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }).then(r => r.json()),
+
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/mis-leads`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }).then(r => r.json()),
+
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/me`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .then((json) => setServices(json?.data || []))
+        .then(r => r.json())
+        .then(setEmpresa),
+    ])
+
+      .then(([serviciosRes, leadsRes]) => {
+
+        const servicios = (serviciosRes?.data || []).map(s => ({
+          ...s,
+          tipo_item: 'servicio'
+        }));
+
+        const leads = (leadsRes?.data || []).map(l => ({
+          ...l,
+          tipo_item: 'lead'
+        }));
+
+        const combinado = [...servicios, ...leads]
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+        setServices(combinado);
+      })
       .finally(() => setLoading(false));
+
   }, []);
 
   const visible = services.filter((s) => {
@@ -120,32 +150,53 @@ export default function MisServiciosEmpresa() {
             ))}
 
           {!loading &&
-            visible.map((s) => (
-              <ServiceCard
-                key={s.id}
-                id={s.id}
-                estado={s.estado}
-                type={s.tipo}
-                origen={s.origen}
-                destino={s.destino}
-                volumen={s.volumen ? `${s.volumen} m³` : "No especificado"}
-                empresa={s.empresa?.empresa ?? "Empresa"}
-                fecha={new Date(s.created_at).toLocaleDateString()}
-                showContact={false}
-                onChangeEstado={(id, nuevoEstado) => {
-                  setSelectedService(s);
+            visible.map((s) => {
 
-                  if (nuevoEstado === "finalizado") {
-                    setShowConfirmFinalizar(true);
-                    return;
-                  }
+              if (s.tipo_item === 'lead') {
+                return (
+                  <SolicitudMudanzaCard
+                    key={`lead-${s.id}`}
+                    id={s.id}
+                    origen={s.origen}
+                    destino={s.destino}
+                    fecha={new Date(s.created_at).toLocaleDateString()}
+                    telefono={s.telefono}
+                    showContact={true}
+                    isLead
+                    nombreCliente={s.nombre_cliente}
+                    tipoVivienda={s.tipo_vivienda}
+                    empresaNombre={empresa?.empresa}
+                  />
+                );
+              }
 
-                  // asignado → cambio directo
-                  cambiarEstadoDirecto(id, nuevoEstado);
-                  setSelectedService(null);
-                }}
-              />
-            ))}
+              return (
+                <ServiceCard
+                  key={s.id}
+                  id={s.id}
+                  estado={s.estado}
+                  type={s.tipo}
+                  origen={s.origen}
+                  destino={s.destino}
+                  volumen={s.volumen ? `${s.volumen} m³` : "No especificado"}
+                  empresa={s.empresa?.empresa ?? "Empresa"}
+                  fecha={new Date(s.created_at).toLocaleDateString()}
+                  showContact={false}
+                  onChangeEstado={(id, nuevoEstado) => {
+                    setSelectedService(s);
+
+                    if (nuevoEstado === "finalizado") {
+                      setShowConfirmFinalizar(true);
+                      return;
+                    }
+
+                    // asignado → cambio directo
+                    cambiarEstadoDirecto(id, nuevoEstado);
+                    setSelectedService(null);
+                  }}
+                />
+              );
+            })}
         </div>
       </main>
 

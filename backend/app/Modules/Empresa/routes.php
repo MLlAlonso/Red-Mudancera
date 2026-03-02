@@ -23,6 +23,8 @@ Route::prefix('empresa')->group(function () {
         Route::patch('/usuario/{id}/pausar', [EmpresaController::class, 'pausarUsuario']);
         Route::patch('/usuario/{id}/reanudar', [EmpresaController::class, 'reanudarUsuario']);
         Route::get('/servicios', [ServicioController::class, 'misServicios']);
+
+        Route::get('/mis-leads', [EmpresaController::class, 'misLeads']);
     });
 
     Route::get('/empresas/{id}', [EmpresaPublicController::class, 'show']);

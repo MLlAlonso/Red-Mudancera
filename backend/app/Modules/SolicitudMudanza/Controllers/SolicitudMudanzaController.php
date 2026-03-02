@@ -84,7 +84,35 @@ class SolicitudMudanzaController extends Controller
         $solicitud = SolicitudMudanza::where('estado', 'activo')
             ->findOrFail($id);
 
-        return response()->json($solicitud);
+        $empresa = Auth::guard('empresa')->user();
+
+        $haComprado = false;
+        $fueExclusivo = false;
+
+        if ($empresa) {
+            $compra = LeadCompra::where('empresa_id', $empresa->id)
+                ->where('solicitud_id', $id)
+                ->first();
+
+            if ($compra) {
+                $haComprado = true;
+                $fueExclusivo = $compra->exclusivo;
+            }
+        }
+
+        if (!$haComprado) {
+            $solicitud->makeHidden([
+                'telefono',
+                'email',
+                'nombre',
+            ]);
+        }
+
+        return response()->json([
+            'data' => $solicitud,
+            'ha_comprado' => $haComprado,
+            'fue_exclusivo' => $fueExclusivo
+        ]);
     }
 
     public function comprar(Request $request, $id): JsonResponse

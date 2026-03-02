@@ -3,9 +3,10 @@
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { openWhatsappMessage } from "@/utils/whatsapp";
 import ServiceStatusDropdown from "@/components/common/ServiceStatusDropdown";
 import ComprarLeadModal from "@/components/modals/ComprarLeadModal";
+import Button_cta from "@/components/common/Button_cta";
+import { openLeadWhatsappMessage } from "@/utils/whatsapp";
 
 export default function SolicitudMudanzaCard({
   id,
@@ -20,6 +21,10 @@ export default function SolicitudMudanzaCard({
   estado = "activo",
   showContact = true,
   onChangeEstado = null,
+  isLead = false,
+  nombreCliente = "",
+  tipoVivienda = "",
+  empresaNombre = "",
 }) {
 
   const router = useRouter();
@@ -94,17 +99,35 @@ export default function SolicitudMudanzaCard({
           </button>
 
           {/* CONTACTAR */}
-          <button
-            className="btn-solid btn-contact"
-            onClick={() => setShowModal(true)}
-          >
-            <img
-              src="/icons/token.png"
-              alt="Comprar"
-              className="btn-contact__icon"
+          {isLead ? (
+            <Button_cta
+              value="Contactar"
+              icon="/icons/whatsapp.png"
+              iconAlt="WhatsApp"
+              onClick={() =>
+                openLeadWhatsappMessage({
+                  telefono,
+                  nombreCliente,
+                  origen,
+                  destino,
+                  tipoVivienda,
+                  empresaNombre,
+                })
+              }
             />
-            <span>Comprar</span>
-          </button>
+          ) : (
+            <button
+              className="btn-solid btn-contact"
+              onClick={() => setShowModal(true)}
+            >
+              <img
+                src="/icons/token.png"
+                alt="Comprar"
+                className="btn-contact__icon"
+              />
+              <span>Comprar</span>
+            </button>
+          )}
 
           {/* DROPDOWN ESTADO */}
           {!showContact && onChangeEstado && (
@@ -119,13 +142,13 @@ export default function SolicitudMudanzaCard({
         </div>
       </motion.div>
 
-        {showModal && (
-          <ComprarLeadModal
-            solicitudId={id}
-            onClose={() => setShowModal(false)}
-            onSuccess={() => window.location.reload()}
-          />
-        )}
-      </>
-    );
-  }
+      {showModal && (
+        <ComprarLeadModal
+          solicitudId={id}
+          onClose={() => setShowModal(false)}
+          onSuccess={() => window.location.reload()}
+        />
+      )}
+    </>
+  );
+}

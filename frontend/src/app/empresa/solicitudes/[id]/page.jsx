@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { getEmpresaToken } from "@/utils/auth";
 import Button_cta from "@/components/common/Button_cta";
 import ComprarLeadModal from "@/components/modals/ComprarLeadModal";
+import { openLeadWhatsappMessage } from "@/utils/whatsapp";
 
 import "@/styles/pages/solicitudes/_detalleSolicitud.scss";
 
@@ -13,11 +15,37 @@ export default function DetalleSolicitudPage() {
     const { id } = useParams();
     const [solicitud, setSolicitud] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [haComprado, setHaComprado] = useState(false);
+    const [fueExclusivo, setFueExclusivo] = useState(false);
+    const [empresa, setEmpresa] = useState(null);
 
     useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/solicitudes-mudanza/${id}`)
+        const token = getEmpresaToken();
+
+        if (token) {
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/me`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/json",
+                },
+            })
+                .then(res => res.json())
+                .then(setEmpresa);
+        }
+
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/solicitudes-mudanza/${id}`, {
+            headers: {
+                Accept: "application/json",
+                ...(token && { Authorization: `Bearer ${token}` }),
+            }
+        })
             .then(res => res.json())
-            .then(data => setSolicitud(data));
+            .then(data => {
+                setSolicitud(data.data);
+                setHaComprado(data.ha_comprado);
+                setFueExclusivo(data.fue_exclusivo);
+            });
+
     }, [id]);
 
     if (!solicitud) return null;
@@ -50,9 +78,19 @@ export default function DetalleSolicitudPage() {
 
                     {/* RUTA */}
                     <div className="detalle-solicitud__route">
-                        <span className="detalle-solicitud__tag">
-                            Solicitud
-                        </span>
+
+
+                        <div className="detalle-solicitud__head">
+                            <span className="detalle-solicitud__tag">
+                                Solicitud
+                            </span>
+
+                            {fueExclusivo && (
+                                <span className="badge-exclusivo">
+                                    Exclusivo
+                                </span>
+                            )}
+                        </div>
 
                         <h2 className="detalle-solicitud__route-title">
                             {solicitud.origen} → {solicitud.destino}
@@ -146,10 +184,12 @@ export default function DetalleSolicitudPage() {
                             </span>
                         </div>
 
-                        <div>
-                            <label>Compras realizadas:</label>
-                            <span>{solicitud.compras_count} / 3</span>
-                        </div>
+                        {!fueExclusivo && (
+                            <div>
+                                <label>Compras realizadas:</label>
+                                <span>{solicitud.compras_count} / 3</span>
+                            </div>
+                        )}
                     </div>
 
                     {/* INVENTARIO */}
@@ -161,12 +201,62 @@ export default function DetalleSolicitudPage() {
                         }}
                     />
 
+                    {haComprado && (
+                        <div className="detalle-solicitud__contacto">
+
+                            <div className="detalle-solicitud__divider">
+                                <img src="/icons/default-user.png" alt="divider" />
+                            </div>
+
+                            <h3 className="detalle-solicitud__section-title">Datos de contacto</h3>
+
+                            <div className="detalle-solicitud__grid">
+                                <div>
+                                    <label>Nombre:</label>
+                                    <span>{solicitud.nombre} </span>
+                                </div>
+
+                                <div>
+                                    <label>Telefono:</label>
+                                    <span>{solicitud.telefono} </span>
+                                </div>
+
+                                <div>
+                                    <label>Correo electronico:</label>
+                                    <span>{solicitud.email} </span>
+                                </div>
+                            </div>
+
+                        </div>
+                    )}
+
                     <div className="detalle-solicitud__actions">
-                        <Button_cta
-                            value="Comprar lead"
-                            iconAlt="Comprar"
-                            onClick={() => setShowModal(true)}
-                        />
+
+                        {!haComprado && (
+                            <Button_cta
+                                value="Comprar lead"
+                                onClick={() => setShowModal(true)}
+                            />
+                        )}
+
+                        {haComprado && (
+                            <Button_cta
+                                value="Contactar"
+                                icon="/icons/whatsapp.png"
+                                iconAlt="WhatsApp"
+                                onClick={() =>
+                                    openLeadWhatsappMessage({
+                                        telefono: solicitud.telefono,
+                                        empresaNombre: empresa?.empresa || "Mi empresa",
+                                        nombreCliente: solicitud.nombre,
+                                        origen: solicitud.origen,
+                                        destino: solicitud.destino,
+                                        tipoVivienda: solicitud.tipo_vivienda,
+                                    })
+                                }
+                            />
+                        )}
+
                     </div>
 
                 </div>
@@ -174,13 +264,14 @@ export default function DetalleSolicitudPage() {
 
             <Footer />
 
-            {showModal && (
+            {!haComprado && showModal && (
                 <ComprarLeadModal
                     solicitudId={id}
                     onClose={() => setShowModal(false)}
                     onSuccess={() => window.location.reload()}
                 />
             )}
+
         </>
     );
 }
