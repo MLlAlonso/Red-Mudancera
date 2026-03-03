@@ -5,6 +5,7 @@ use App\Modules\Empresa\Controllers\EmpresaAuthController;
 use App\Modules\Empresa\Controllers\EmpresaController;
 use App\Modules\Servicio\Controllers\ServicioController;
 use App\Modules\Empresa\Controllers\EmpresaPublicController;
+use App\Modules\Empresa\Controllers\EmpresaFeedController;
 
 Route::prefix('empresa')->group(function () {
     Route::post('/register', [EmpresaAuthController::class, 'register']);
@@ -25,6 +26,7 @@ Route::prefix('empresa')->group(function () {
         Route::get('/servicios', [ServicioController::class, 'misServicios']);
 
         Route::get('/mis-leads', [EmpresaController::class, 'misLeads']);
+        Route::get('/feed', [EmpresaFeedController::class, 'index']);
     });
 
     Route::get('/empresas/{id}', [EmpresaPublicController::class, 'show']);

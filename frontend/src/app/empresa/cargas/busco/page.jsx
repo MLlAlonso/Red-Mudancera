@@ -185,8 +185,8 @@ export default function BuscoServicioPage() {
               <h2 className="subtitle">Indica tu ruta y encuentra carga compatible en el trayecto.</h2>
             </div>
 
-            <Input label="Origen" name="origen" value={form.origen} placeholder={"Ciudad o zona desde donde sale mi unidad"} onChange={handleChange} autocomplete />
-            <Input label="Destino" name="destino" value={form.destino} placeholder={"Ciudad donde termina mi viaje"} onChange={handleChange} autocomplete />
+            <Input label="Origen *" name="origen" value={form.origen} placeholder={"Ciudad o zona desde donde sale mi unidad"} onChange={handleChange} autocomplete />
+            <Input label="Destino *" name="destino" value={form.destino} placeholder={"Ciudad donde termina mi viaje"} onChange={handleChange} autocomplete />
 
             <label className="input-group__label input-group__label--tooltip">
               <span className="tooltip">
@@ -195,11 +195,11 @@ export default function BuscoServicioPage() {
                   Indica entre qué fechas viajará tu unidad
                 </span>
               </span>
-              Fechas estimadas de salida
+              Fechas aproximadas de salida a Ruta *
             </label>
 
             <DateRange ranges={range} onChange={item => setRange([item.selection])} minDate={new Date()} moveRangeOnFirstSelection={false} />
-            <Input label="Espacio disponible (m³)" name="volumen" type="number" value={form.volumen} placeholder={"Metros cúbicos disponibles en la unidad."} onChange={handleChange} />
+            <Input label="Espacio disponible (m³)*" name="volumen" type="number" value={form.volumen} placeholder={"Metros cúbicos disponibles en la unidad."} onChange={handleChange} />
 
             {/* <div className="input-group">
               <label className="input-group__label">Tipo de carga</label>

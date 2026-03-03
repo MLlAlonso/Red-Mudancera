@@ -266,12 +266,12 @@ export default function OfrezcoServicioPage() {
               <h2 className="subtitle">Detalles de la carga</h2>
             </div>
 
-            <Input label="Origen" name="origen" value={form.origen} placeholder={"Ciudad o zona donde se recoge la carga"} onChange={handleChange} autocomplete />
-            <Input label="Destino" name="destino" value={form.destino} placeholder={"Ciudad donde se entrega la carga"} onChange={handleChange} autocomplete />
-            <Input label="Volumen estimado (m³)" name="volumen" type="number" value={form.volumen} placeholder={"Espacio que ocupa la carga (m³)"} onChange={handleChange} />
+            <Input label="Origen *" name="origen" value={form.origen} placeholder={"Ciudad o zona donde se recoge la carga"} onChange={handleChange} autocomplete />
+            <Input label="Destino *" name="destino" value={form.destino} placeholder={"Ciudad donde se entrega la carga"} onChange={handleChange} autocomplete />
+            <Input label="Volumen estimado (m³)*" name="volumen" type="number" value={form.volumen} placeholder={"Espacio que ocupa la carga (m³)"} onChange={handleChange} />
 
             <div className="input-group">
-              <label className="input-group__label">Tipo de carga</label>
+              <label className="input-group__label">Tipo de carga *</label>
               
               <select name="tipoCarga" className="input-group__field" value={form.tipoCarga} onChange={handleChange}>
                 <option value="">Selecciona una opción</option>
@@ -331,7 +331,7 @@ export default function OfrezcoServicioPage() {
 
             <div className="input-group">
               <label className="input-group__label input-group__label--tooltip">
-                Plazo máximo de entrega
+                Plazo máximo de entrega *
               </label>
 
               <select name="rangoDias" className="input-group__field" value={form.rangoDias} onChange={handleChange}>
@@ -350,7 +350,7 @@ export default function OfrezcoServicioPage() {
                     ¿Dónde está la carga actualmente?
                   </span>
                 </span>
-                Disponibilidad de la carga
+                Disponibilidad de la carga *
               </label>
 
               <select name="estadoCarga" className="input-group__field" value={form.estadoCarga} onChange={handleChange} >

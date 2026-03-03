@@ -126,6 +126,13 @@
 
                                 <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;">
                                     <tr>
+                                        <td style="color:#6F7F8D;">Inventario:</td>
+                                        <td align="right">
+                                            <strong>{{ $solicitud->inventario }}</strong>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
                                         <td style="color:#6F7F8D;">Fecha estimada:</td>
                                         <td align="right">
                                             <strong>{{ $solicitud->fecha_recoleccion }} días</strong>

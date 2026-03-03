@@ -203,9 +203,9 @@ export default function SolicitarMudanza() {
                 <form className="solicitar-mudanza__form" onSubmit={handleSubmit}>
 
                     <div className="form-section">
-                        <h2 className="form-section__title">Origen de la mudanza</h2>
+                        <h2 className="form-section__title">Datos de Origen</h2>
 
-                        <Input label="Origen" placeholder="Ciudad o zona donde se recoge la mudanza" name="origen" autocomplete value={form.origen} onChange={handleChange} />
+                        <Input label="Origen *" placeholder="Ciudad o zona donde se recoge la mudanza" name="origen" autocomplete value={form.origen} onChange={handleChange} />
                         {errors.origen && <p className="form-error">{errors.origen}</p>}
 
                         <label className="input-group__label input-group__label--tooltip">
@@ -215,7 +215,7 @@ export default function SolicitarMudanza() {
                                     Tipo de vivienda en la cual se va a recoger la mudanza
                                 </span>
                             </span>
-                            Tipo de vivienda de origen
+                            Tipo de vivienda de origen *
                         </label>
                         <select name="tipo_vivienda" value={form.tipo_vivienda} onChange={handleChange}>
                             <option value="">Selecciona una opción</option>
@@ -228,14 +228,14 @@ export default function SolicitarMudanza() {
                         {form.tipo_vivienda === "departamento" && (
                             <>
                                 <Input
-                                    label="Número de pisos"
+                                    label="Número de pisos *"
                                     name="origen_pisos"
                                     type="number"
                                     value={form.origen_pisos}
                                     onChange={handleChange}
                                 />
 
-                                <label>¿Cuenta con elevador accesible?</label>
+                                <label>¿El edificio cuenta con elevador? *</label>
                                 <select name="origen_elevador" value={form.origen_elevador} onChange={handleChange}>
                                     <option value="">Selecciona una opción</option>
                                     <option value="no_hay">No hay elevador</option>
@@ -254,7 +254,7 @@ export default function SolicitarMudanza() {
                                     Acarreo es cuando el camión no puede estacionarse cerca del acceso y se debe caminar más de 20 metros con los muebles.
                                 </span>
                             </span>
-                            ¿Considera que hay acarreo mayor a 20 metros?
+                            ¿Considera que hay acarreo mayor a 20 metros? *
                         </label>
                         <select name="origen_acarreo" value={form.origen_acarreo} onChange={handleChange}>
                             <option value="">Selecciona una opción</option>
@@ -265,9 +265,9 @@ export default function SolicitarMudanza() {
                     </div>
 
                     <div className="form-section">
-                        <h2 className="form-section__title">Destino de la mudanza</h2>
+                        <h2 className="form-section__title">Datos de Destino</h2>
 
-                        <Input label="Destino" placeholder="Ciudad donde se entrega la mudanza" name="destino" autocomplete value={form.destino} onChange={handleChange} />
+                        <Input label="Destino *" placeholder="Ciudad donde se entrega la mudanza" name="destino" autocomplete value={form.destino} onChange={handleChange} />
                         {errors.destino && <p className="form-error">{errors.destino}</p>}
 
                         <label className="input-group__label input-group__label--tooltip">
@@ -277,7 +277,7 @@ export default function SolicitarMudanza() {
                                     Tipo de vivienda donde se entregará la mudanza
                                 </span>
                             </span>
-                            Tipo de vivienda de destino
+                            Tipo de vivienda de destino *
                         </label>
 
                         <select
@@ -302,7 +302,7 @@ export default function SolicitarMudanza() {
                                     onChange={handleChange}
                                 />
 
-                                <label>¿Cuenta con elevador accesible?</label>
+                                <label>¿El edificio cuenta con elevador? *</label>
                                 <select name="destino_elevador" value={form.destino_elevador} onChange={handleChange}>
                                     <option value="">Selecciona una opción</option>
                                     <option value="no_hay">No hay elevador</option>
@@ -321,7 +321,7 @@ export default function SolicitarMudanza() {
                                     Acarreo es cuando el camión no puede estacionarse cerca del acceso y se debe caminar más de 20 metros con los muebles.
                                 </span>
                             </span>
-                            ¿Considera que hay acarreo mayor a 20 metros en el destino?
+                            ¿Considera que hay acarreo mayor a 20 metros en el destino? *
                         </label>
 
                         <select
@@ -339,7 +339,7 @@ export default function SolicitarMudanza() {
                     <div className="form-section">
                         <h2 className="form-section__title">Detalles y contacto</h2>
 
-                        <label htmlFor="inventario">Inventario</label>
+                        <label htmlFor="inventario">Artículos a transportar</label>
                         <SimpleEditor
                             value={form.inventario}
                             placeholder="Lista de muebles, cajas o mercancía, puedes pegar el inventario aqui."
@@ -347,7 +347,7 @@ export default function SolicitarMudanza() {
                         />
                         {errors.inventario && <p className="form-error">{errors.inventario}</p>}
 
-                        <label htmlFor="fecha_recoleccion">¿Cuándo necesitas la mudanza?</label>
+                        <label htmlFor="fecha_recoleccion">¿Cuándo necesitas la mudanza? *</label>
                         <select name="fecha_recoleccion" value={form.fecha_recoleccion} onChange={handleChange}>
                             <option value="">Selecciona una opción</option>
                             <option value="1-7">1-7 días</option>
@@ -358,7 +358,7 @@ export default function SolicitarMudanza() {
                         </select>
 
                         <label htmlFor="tipo_mudanza">
-                            Que tipo de mudanza necesitas
+                            ¿Qué tipo de mudanza necesito? *
                         </label>
                         <select name="tipo_mudanza" value={form.tipo_mudanza} onChange={handleChange}>
                             <option value="">Selecciona una opción</option>
@@ -370,10 +370,10 @@ export default function SolicitarMudanza() {
                         <Input label="Persona de contacto" name="nombre" value={form.nombre} onChange={handleChange} />
                         {errors.nombre && <p className="form-error">{errors.nombre}</p>}
 
-                        <Input label="Correo electrónico de contacto" name="email" type="email" value={form.email} onChange={handleChange} />
+                        <Input label="Correo electrónico de contacto *" name="email" type="email" value={form.email} onChange={handleChange} />
                         {errors.email && <p className="form-error">{errors.email}</p>}
 
-                        <Input label="Teléfono de contacto" name="telefono" value={form.telefono} onChange={handleChange} />
+                        <Input label="Teléfono de contacto *" name="telefono" value={form.telefono} onChange={handleChange} />
                         {errors.telefono && <p className="form-error">{errors.telefono}</p>}
                     </div>
 
@@ -403,6 +403,7 @@ export default function SolicitarMudanza() {
                                 <li><strong>Pisos destino:</strong> {form.destino_pisos || "—"}</li>
                                 <li><strong>Elevador destino:</strong> {form.destino_elevador || "—"}</li>
                                 <li><strong>Acarreo destino:</strong> {form.destino_acarreo || "—"}</li>
+                                <li><strong>Inventario:</strong> {form.inventario || "—"}</li>
 
                                 <li><strong>Fecha:</strong> {form.fecha_recoleccion}</li>
                                 <li><strong>Tipo mudanza:</strong> {form.tipo_mudanza}</li>

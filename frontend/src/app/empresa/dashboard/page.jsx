@@ -10,6 +10,7 @@ import ServiceCard from "@/components/cards/ServiceCard";
 import ServiceCardSkeleton from "@/components/skeletons/ServiceCardSkeleton";
 import SolicitudMudanzaCard from "@/components/cards/SolicitudMudanzaCard";
 import { useSearch } from "@/store/searchContext";
+import { getEmpresaToken } from "@/utils/auth";
 
 import "@/styles/pages/empresa/_empresaDashboard.scss";
 
@@ -18,7 +19,6 @@ export default function EmpresaDashboard() {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("todos");
-  const [solicitudes, setSolicitudes] = useState([]);
 
   const [filters, setFilters] = useState({
     origen: "",
@@ -84,45 +84,41 @@ export default function EmpresaDashboard() {
     Fetch solicitudes
  ========================= */
   useEffect(() => {
+    const token = getEmpresaToken();
+    if (!token) return;
+
     setLoading(true);
 
-    const params = new URLSearchParams({
-      search,
-      ...filters,
-    });
-
-    const fetchServicios = fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/servicios?${params}`,
-      { headers: { Accept: "application/json" } }
-    ).then((r) => r.json());
-
-    const fetchSolicitudes = fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/solicitudes-mudanza`,
-      {
-        headers: {
-          Accept: "application/json",
-        },
-      }
-    ).then((r) => r.json());
-
-    Promise.all([fetchServicios, fetchSolicitudes])
-      .then(([servJson, solJson]) => {
-        setServices(servJson.data || []);
-        setSolicitudes(Array.isArray(solJson) ? solJson : []);
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/feed`, {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((r) => r.json())
+      .then((json) => {
+        setServices(json.data || []);
       })
       .finally(() => setLoading(false));
-
-  }, [search, filters]);
+  }, []);
 
   const visibleServicios =
     filter === "todos"
       ? services
-      : services.filter((s) => s.tipo === filter);
+      : services.filter((s) => {
+        if (filter === "cliente") {
+          return s.tipo_item === "solicitud";
+        }
 
-  const visibleSolicitudes =
-    filter === "todos" || filter === "cliente"
-      ? solicitudes
-      : [];
+        if (filter === "busco" || filter === "ofrezco") {
+          return (
+            s.tipo_item === "servicio" &&
+            s.subtipo === filter
+          );
+        }
+
+        return true;
+      });
 
   return (
     <>
@@ -211,37 +207,45 @@ export default function EmpresaDashboard() {
 
           {!loading && (
             <>
-              {/* SOLICITUDES CLIENTES */}
-              {visibleSolicitudes.map((s) => (
-                <SolicitudMudanzaCard
-                  key={`sol-${s.id}`}
-                  id={s.id}
-                  origen={s.origen}
-                  destino={s.destino}
-                  fechaRecoleccion={s.fecha_recoleccion}
-                  distanciaKm={s.distancia_km}
-                  tipoMudanza={s.tipo_mudanza}
-                  inventario={s.inventario}
-                  fecha={new Date(s.created_at).toLocaleDateString()}
-                />
-              ))}
+              {visibleServicios.map((item) => {
+                if (item.tipo_item === "servicio") {
+                  return (
+                    <ServiceCard
+                      key={`serv-${item.id}`}
+                      id={item.id}
+                      type={item.subtipo}
+                      origen={item.origen}
+                      destino={item.destino}
+                      volumen={item.volumen ? `${item.volumen} m³` : "No especificado"}
+                      empresa={item.empresa}
+                      telefono={item.telefono}
+                      fecha={new Date(item.created_at).toLocaleDateString()}
+                      distanciaKm={item.distancia_km}
+                      importe={item.importe}
+                    />
+                  );
+                }
 
-              {/* SERVICIOS EMPRESAS */}
-              {visibleServicios.map((s) => (
-                <ServiceCard
-                  key={`serv-${s.id}`}
-                  id={s.id}
-                  type={s.tipo}
-                  origen={s.origen}
-                  destino={s.destino}
-                  volumen={s.volumen ? `${s.volumen} m³` : "No especificado"}
-                  empresa={s.empresa?.empresa ?? "Empresa"}
-                  telefono={s.empresa?.tel}
-                  fecha={new Date(s.created_at).toLocaleDateString()}
-                  distanciaKm={s.distancia_km}
-                  importe={s.importe}
-                />
-              ))}
+                if (item.tipo_item === "solicitud") {
+                  return (
+                    <SolicitudMudanzaCard
+                      key={`sol-${item.id}`}
+                      id={item.id}
+                      origen={item.origen}
+                      destino={item.destino}
+                      fechaRecoleccion={item.fecha_recoleccion}
+                      distanciaKm={item.distancia_km}
+                      tipoMudanza={item.tipo_mudanza}
+                      inventario={item.inventario}
+                      fecha={new Date(item.created_at).toLocaleDateString()}
+                      isLead={item.ya_comprado}
+                      telefono={item.telefono}
+                      nombreCliente={item.nombre_cliente}
+                      tipoVivienda={item.tipo_vivienda}
+                    />
+                  );
+                }
+              })}
             </>
           )}
 
