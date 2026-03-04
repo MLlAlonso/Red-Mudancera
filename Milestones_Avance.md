@@ -198,7 +198,8 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 ## Estrucrura de carpetas
 ├── 📁 backend
 │   ├── 📁 __borrar__
-│   │   └── 🐘 app.php
+│   │   ├── 🐘 app.php
+│   │   └── 🐘 session.php
 │   ├── 📁 app
 │   │   ├── 📁 Console
 │   │   │   ├── 📁 Commands
@@ -228,6 +229,7 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   │   ├── 📁 Controllers
 │   │   │   │   │   ├── 🐘 EmpresaAuthController.php
 │   │   │   │   │   ├── 🐘 EmpresaController.php
+│   │   │   │   │   ├── 🐘 EmpresaFeedController.php
 │   │   │   │   │   └── 🐘 EmpresaPublicController.php
 │   │   │   │   ├── 📁 Mail
 │   │   │   │   │   ├── 🐘 EmpresaGoodbyeMail.php
@@ -241,6 +243,7 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   │   │   ├── 🐘 LoginEmpresaRequest.php
 │   │   │   │   │   └── 🐘 RegisterEmpresaRequest.php
 │   │   │   │   ├── 📁 Services
+│   │   │   │   │   ├── 🐘 EmpresaFeedService.php
 │   │   │   │   │   └── 🐘 EmpresaService.php
 │   │   │   │   └── 🐘 routes.php
 │   │   │   ├── 📁 Notificacion
@@ -297,6 +300,22 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   │   ├── 📁 Services
 │   │   │   │   │   ├── 🐘 ServicioImagenService.php
 │   │   │   │   │   └── 🐘 ServicioService.php
+│   │   │   │   └── 🐘 routes.php
+│   │   │   ├── 📁 SolicitudMudanza
+│   │   │   │   ├── 📁 Controllers
+│   │   │   │   │   └── 🐘 SolicitudMudanzaController.php
+│   │   │   │   ├── 📁 Mail
+│   │   │   │   │   ├── 🐘 SolicitudMudanzaResumen.php
+│   │   │   │   │   └── 🐘 SolicitudMudanzaVerificationCode.php
+│   │   │   │   ├── 📁 Models
+│   │   │   │   │   ├── 🐘 LeadCompra.php
+│   │   │   │   │   └── 🐘 SolicitudMudanza.php
+│   │   │   │   ├── 📁 Requests
+│   │   │   │   │   ├── 🐘 ReenviarCodigoSolicitudRequest.php
+│   │   │   │   │   ├── 🐘 StoreSolicitudMudanzaRequest.php
+│   │   │   │   │   └── 🐘 VerifySolicitudMudanzaRequest.php
+│   │   │   │   ├── 📁 Services
+│   │   │   │   │   └── 🐘 SolicitudMudanzaService.php
 │   │   │   │   └── 🐘 routes.php
 │   │   │   └── 📁 Usuario
 │   │   │       ├── 📁 Controllers
@@ -362,7 +381,14 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   ├── 🐘 2026_02_13_054109_create_service_views_table.php
 │   │   │   ├── 🐘 2026_02_14_054657_add_expiration_notified_to_servicios_table.php
 │   │   │   ├── 🐘 2026_02_15_194227_create_notification_preferences_table.php
-│   │   │   └── 🐘 2026_02_16_230425_create_notification_metrics_table.php
+│   │   │   ├── 🐘 2026_02_16_230425_create_notification_metrics_table.php
+│   │   │   ├── 🐘 2026_02_21_234742_create_solicitudes_mudanza_table.php
+│   │   │   ├── 🐘 2026_02_25_014514_add_vivienda_destino_to_solicitudes_mudanza_table.php
+│   │   │   ├── 🐘 2026_02_25_222623_add_tokens_to_empresas_table.php
+│   │   │   ├── 🐘 2026_02_25_222805_create_lead_compras_table.php
+│   │   │   ├── 🐘 2026_02_26_214026_update_solicitudes_mudanza_add_new_fields.php
+│   │   │   ├── 🐘 2026_02_26_224140_update_fecha_recoleccion_enum_in_solicitudes_mudanza_table.php
+│   │   │   └── 🐘 2026_02_27_225816_update_elevador_enum_in_solicitudes_mudanza_table.php
 │   │   ├── 📁 seeders
 │   │   │   └── 🐘 DatabaseSeeder.php
 │   │   └── ⚙️ .gitignore
@@ -384,6 +410,8 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │       │   ├── 🐘 empresa_welcome.blade.php
 │   │       │   ├── 🐘 nueva-resena.blade.php
 │   │       │   ├── 🐘 recover_password.blade.php
+│   │       │   ├── 🐘 solicitud_mudanza_resumen.blade.php
+│   │       │   ├── 🐘 solicitud_mudanza_verification_code.blade.php
 │   │       │   ├── 🐘 usuario_goodbye.blade.php
 │   │       │   ├── 🐘 usuario_verification_code.blade.php
 │   │       │   ├── 🐘 usuario_welcome.blade.php
@@ -399,7 +427,8 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   ├── 📁 app
 │   │   │   ├── 📁 private
 │   │   │   │   └── ⚙️ .gitignore
-│   │   │   └── ⚙️ .gitignore
+│   │   │   ├── ⚙️ .gitignore
+│   │   │   └── 🖼️ temp_logo_1.png
 │   │   └── 📁 framework
 │   │       ├── 📁 testing
 │   │       │   └── ⚙️ .gitignore
@@ -438,12 +467,12 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   ├── 📁 public
 │   │   ├── 📁 icons
 │   │   │   ├── 🖼️ borrar.png
-│   │   │   ├── 🖼️ box.png
 │   │   │   ├── 🖼️ busco.png
 │   │   │   ├── 🖼️ busco_btn.png
 │   │   │   ├── 🖼️ campana.png
 │   │   │   ├── 🖼️ candado.png
 │   │   │   ├── 🖼️ check.png
+│   │   │   ├── 🖼️ cliente.png
 │   │   │   ├── 🖼️ cuenta.png
 │   │   │   ├── 🖼️ default-user.png
 │   │   │   ├── 🖼️ delete.png
@@ -452,7 +481,6 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   ├── 🖼️ eraser.png
 │   │   │   ├── 🖼️ eye.png
 │   │   │   ├── 🖼️ eye_off.png
-│   │   │   ├── 📄 favicon.ico
 │   │   │   ├── 🖼️ filtrar.png
 │   │   │   ├── 🖼️ help.png
 │   │   │   ├── 🖼️ hogar.png
@@ -472,14 +500,17 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   ├── 🖼️ telefono.png
 │   │   │   ├── 🖼️ todo.png
 │   │   │   ├── 🖼️ todos.png
+│   │   │   ├── 🖼️ token.png
+│   │   │   ├── 🖼️ tokenIcon.png
+│   │   │   ├── 🖼️ token_color.png
 │   │   │   ├── 🖼️ truck.png
 │   │   │   ├── 🖼️ user-placeholder.png
 │   │   │   └── 🖼️ whatsapp.png
 │   │   ├── 📁 logo
 │   │   │   ├── 🖼️ Logo2.png
-│   │   │   ├── 🖼️ Mikkel.png
 │   │   │   ├── 🖼️ logo.png
-│   │   │   └── 🖼️ logo3.png
+│   │   │   ├── 🖼️ logo3.png
+│   │   │   └── 🖼️ logo_A.png
 │   │   ├── 🖼️ file.svg
 │   │   ├── 🖼️ globe.svg
 │   │   ├── 🖼️ icon.svg
@@ -517,6 +548,9 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │   │   └── 📄 page.jsx
 │   │   │   │   ├── 📁 register
 │   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 solicitudes
+│   │   │   │   │   └── 📁 [id]
+│   │   │   │   │       └── 📄 page.jsx
 │   │   │   │   └── 📁 usuarios
 │   │   │   │       └── 📄 page.jsx
 │   │   │   ├── 📁 resena
@@ -530,6 +564,9 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │       │   └── 📁 ofrezco
 │   │   │   │       │       └── 📄 page.jsx
 │   │   │   │       └── 📄 page.jsx
+│   │   │   ├── 📁 solicitar-mudanza
+│   │   │   │   ├── 📄 SolicitarMudanzaClient.jsx
+│   │   │   │   └── 📄 page.jsx
 │   │   │   ├── 📁 usuario
 │   │   │   │   ├── 📁 dashboard
 │   │   │   │   │   └── 📄 page.jsx
@@ -557,6 +594,7 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │   ├── 📄 NotificationCard.jsx
 │   │   │   │   ├── 📄 ReviewCard.jsx
 │   │   │   │   ├── 📄 ServiceCard.jsx
+│   │   │   │   ├── 📄 SolicitudMudanzaCard.jsx
 │   │   │   │   └── 📄 UserCard.jsx
 │   │   │   ├── 📁 common
 │   │   │   │   ├── 📄 Button_crud.jsx
@@ -580,6 +618,7 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │   └── 📄 SideMenuUsuario.jsx
 │   │   │   ├── 📁 modals
 │   │   │   │   ├── 📄 BaseModal.jsx
+│   │   │   │   ├── 📄 ComprarLeadModal.jsx
 │   │   │   │   ├── 📄 ConfirmDeleteNotificationModal.jsx
 │   │   │   │   ├── 📄 ConfirmFinalizarServicioModal.jsx
 │   │   │   │   ├── 📄 ConfirmRecoverModal.jsx
@@ -632,6 +671,7 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │   │   ├── 🎨 __empresaNotificaciones.scss
 │   │   │   │   │   ├── 🎨 _empresaBusco.scss
 │   │   │   │   │   ├── 🎨 _empresaCargas.scss
+│   │   │   │   │   ├── 🎨 _empresaConfirmacion.scss
 │   │   │   │   │   ├── 🎨 _empresaDashboard.scss
 │   │   │   │   │   ├── 🎨 _empresaEditar.scss
 │   │   │   │   │   ├── 🎨 _empresaEmpresas.scss
@@ -645,12 +685,15 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │   ├── 📁 servicios
 │   │   │   │   │   ├── 🎨 _detallesServicio.scss
 │   │   │   │   │   └── 🎨 _eliminarServicio.scss
+│   │   │   │   ├── 📁 solicitudes
+│   │   │   │   │   └── 🎨 _detalleSolicitud.scss
 │   │   │   │   ├── 📁 usuario
 │   │   │   │   │   ├── 🎨 _usuarioEditar.scss
 │   │   │   │   │   ├── 🎨 _usuarioLogin.scss
 │   │   │   │   │   ├── 🎨 _usuarioNotificaciones.scss
 │   │   │   │   │   └── 🎨 _usuarioPerfil.scss
-│   │   │   │   └── 🎨 _error.scss
+│   │   │   │   ├── 🎨 _error.scss
+│   │   │   │   └── 🎨 _solicitarMudanza.scss
 │   │   │   ├── 📁 utils
 │   │   │   │   ├── 🎨 _containers.scss
 │   │   │   │   ├── 🎨 _mixins.scss
@@ -666,9 +709,6 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   ├── 📄 next.config.js
 │   ├── ⚙️ package-lock.json
 │   └── ⚙️ package.json
-├── ⚙️ .gitignore
-├── 📝 Milestones_Avance.md
-└── 📝 README.md
 
 Archivos clave / puntos de entrada:
 - Layout app: [`frontend/src/app/layout.js`](frontend/src/app/layout.js)

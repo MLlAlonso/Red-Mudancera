@@ -123,9 +123,9 @@ export default function MisServiciosEmpresa() {
 
       <main className="empresa-dashboard">
         <div className="empresa-dashboard__header">
-          <h1 className="empresa-dashboard__title">Mis publicaciones</h1>
+          <h1 className="empresa-dashboard__title">Actividad</h1>
           <p className="empresa-dashboard__subtitle">
-            Aquí puedes ver y gestionar todos tus servicios publicados
+            Aquí puedes ver y gestionar tus cargas y solicitudes de clientes
           </p>
         </div>
 

@@ -9,6 +9,8 @@ use App\Modules\SolicitudMudanza\Requests\StoreSolicitudMudanzaRequest;
 use App\Modules\SolicitudMudanza\Requests\VerifySolicitudMudanzaRequest;
 use App\Modules\SolicitudMudanza\Requests\ReenviarCodigoSolicitudRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Mail;
+use App\Modules\SolicitudMudanza\Mail\LeadCompradoMail;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -141,8 +143,17 @@ class SolicitudMudanzaController extends Controller
             return response()->json(['message' => 'Lead agotado'], 422);
         }
 
-        $esPrimeraVenta = $totalVentas === 0;
         $tokensNecesarios = $request->boolean('exclusivo') ? 2 : 1;
+
+        //Bloquear comprar exclusiva si ya hubo venta previa
+        $esExclusivo = $request->boolean('exclusivo');
+        if ($esExclusivo && $totalVentas > 0) {
+            return response()->json([
+                'message' => 'Este lead ya fue adquirido. No puede comprarse como exclusivo.'
+            ], 422);
+        }
+
+        $tokensNecesarios = $esExclusivo ? 2 : 1;
 
         if ($empresa->tokens < $tokensNecesarios) {
             return response()->json([
@@ -162,6 +173,15 @@ class SolicitudMudanzaController extends Controller
             $empresa->decrement('tokens', $tokensNecesarios);
             $solicitud->increment('compras_count');
         });
+
+        Mail::to($empresa->email)->send(
+            new LeadCompradoMail(
+                $solicitud,
+                $empresa,
+                $request->boolean('exclusivo'),
+                $tokensNecesarios
+            )
+        );
 
         return response()->json([
             'message' => 'Lead adquirido correctamente'

@@ -2,13 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { getEmpresaToken } from "@/utils/auth";
+import { openLeadWhatsappMessage } from "@/utils/whatsapp";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import { getEmpresaToken } from "@/utils/auth";
 import Button_cta from "@/components/common/Button_cta";
 import ComprarLeadModal from "@/components/modals/ComprarLeadModal";
-import { openLeadWhatsappMessage } from "@/utils/whatsapp";
-
 import "@/styles/pages/solicitudes/_detalleSolicitud.scss";
 
 export default function DetalleSolicitudPage() {
@@ -78,8 +77,6 @@ export default function DetalleSolicitudPage() {
 
                     {/* RUTA */}
                     <div className="detalle-solicitud__route">
-
-
                         <div className="detalle-solicitud__head">
                             <span className="detalle-solicitud__tag">
                                 Solicitud
@@ -99,7 +96,6 @@ export default function DetalleSolicitudPage() {
 
                     {/* ================= ORIGEN ================= */}
                     <h3 className="detalle-solicitud__section-title">Origen</h3>
-
                     <div className="detalle-solicitud__grid">
                         <div>
                             <label>Tipo vivienda:</label>
@@ -129,7 +125,6 @@ export default function DetalleSolicitudPage() {
 
                     {/* ================= DESTINO ================= */}
                     <h3 className="detalle-solicitud__section-title">Destino</h3>
-
                     <div className="detalle-solicitud__grid">
                         <div>
                             <label>Tipo vivienda:</label>
@@ -203,7 +198,6 @@ export default function DetalleSolicitudPage() {
 
                     {haComprado && (
                         <div className="detalle-solicitud__contacto">
-
                             <div className="detalle-solicitud__divider">
                                 <img src="/icons/default-user.png" alt="divider" />
                             </div>
@@ -231,7 +225,6 @@ export default function DetalleSolicitudPage() {
                     )}
 
                     <div className="detalle-solicitud__actions">
-
                         {!haComprado && (
                             <Button_cta
                                 value="Comprar lead"

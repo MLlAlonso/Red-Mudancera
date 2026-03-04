@@ -48,7 +48,7 @@ export default function SideMenu({ open }) {
       {tokens !== null && (
         <div className="side-menu__tokens">
           <img src="/icons/token_color.png" alt="Tokens" />
-          <span>{tokens} tokens</span>
+          <span>{tokens} Créditos</span>
         </div>
       )}
 
@@ -58,6 +58,34 @@ export default function SideMenu({ open }) {
             <div className="side-item">
               <img src="/icons/hogar.png" />
               <span>Home</span>
+            </div>
+          </Link>
+        </li>
+
+        <li>
+          <Link href="/empresa/publicaciones">
+            <div className="side-item">
+              <img src="/icons/docs.png" />
+              <span>Actividad</span>
+            </div>
+          </Link>
+        </li>
+
+        <li>
+          <Link href="/empresa/notificaciones">
+            <div className="side-item">
+              <img src="/icons/campana.png" />
+              <span>Notificaciones</span>
+              <NotificationBadge count={count} />
+            </div>
+          </Link>
+        </li>
+
+        <li>
+          <Link href="/empresa/empresas">
+            <div className="side-item">
+              <img src="/icons/team.png" />
+              <span>Directorio</span>
             </div>
           </Link>
         </li>
@@ -84,47 +112,19 @@ export default function SideMenu({ open }) {
           <Link href="/empresa/usuarios">
             <div className="side-item">
               <img src="/icons/team.png" />
-              <span>Mis usuarios</span>
+              <span>Mi organización</span>
             </div>
           </Link>
         </li>
 
-        <li>
+        {/*         <li>
           <Link href="/empresa/cargas">
             <div className="side-item">
               <img src="/icons/docs.png" />
               <span>Publicar</span>
             </div>
           </Link>
-        </li>
-
-        <li>
-          <Link href="/empresa/publicaciones">
-            <div className="side-item">
-              <img src="/icons/docs.png" />
-              <span>Mis publicaciones</span>
-            </div>
-          </Link>
-        </li>
-
-        <li>
-          <Link href="/empresa/empresas">
-            <div className="side-item">
-              <img src="/icons/team.png" />
-              <span>Directorio</span>
-            </div>
-          </Link>
-        </li>
-
-        <li>
-          <Link href="/empresa/notificaciones">
-            <div className="side-item">
-              <img src="/icons/campana.png" />
-              <span>Notificaciones</span>
-              <NotificationBadge count={count} />
-            </div>
-          </Link>
-        </li>
+        </li> */}
 
         <li>
           <Link href="/empresa/ayuda">

@@ -124,6 +124,10 @@ class SolicitudMudanzaService
 
     private function validarAntiSpam(array $data): void
     {
+        // EXCEPCIÓN ADMINISTRATIVA
+        if (strtolower($data['email']) === 'intermudanza@gmail.com') {
+            return;
+        }
         $hace24Horas = now()->subHours(24);
         // Buscar solicitudes del mismo email en las últimas 24h
         $existePorEmail = SolicitudMudanza::where('email', $data['email'])

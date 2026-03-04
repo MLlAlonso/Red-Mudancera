@@ -102,7 +102,7 @@ export default function EmpresaPerfil() {
               <img src="/icons/token_color.png" alt="Tokens" />
               <strong>{empresa.tokens ?? 0}</strong>
             </div>
-            <span>Tokens disponibles</span>
+            <span>Créditos disponibles</span>
           </div>
 
         </div>

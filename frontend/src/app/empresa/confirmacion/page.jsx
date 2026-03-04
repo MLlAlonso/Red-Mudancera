@@ -5,12 +5,16 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Input from "@/components/common/Input";
 import Button_cta from "@/components/common/Button_cta";
+import { useRouter } from "next/navigation";
+import "@/styles/pages/empresa/_empresaConfirmacion.scss";
 
 export default function EmpresaConfirmacion() {
   const [code, setCode] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [verified, setVerified] = useState(false);
+  const router = useRouter();
 
   // Obtener el email guardado después del registro
   useEffect(() => {
@@ -50,7 +54,8 @@ export default function EmpresaConfirmacion() {
       }
 
       // Código correcto
-      window.location.href = "/empresa/dashboard";
+      setVerified(true);
+      localStorage.removeItem("empresa_email");
 
     } catch (err) {
       console.error(err);
@@ -58,6 +63,47 @@ export default function EmpresaConfirmacion() {
       setLoading(false);
     }
   };
+
+  if (verified) {
+    return (
+      <>
+        <Header className="header--no-menu" />
+
+        <main className="empresa-confirmacion">
+          <div className="empresa-confirmacion__card">
+            <h1 className="empresa-confirmacion__title">
+              🎉 ¡Cuenta verificada!
+            </h1>
+
+            <p className="empresa-confirmacion__subtitle">
+              Tu empresa ya está activa.
+            </p>
+
+            <div className="empresa-confirmacion__tokens-box">
+              <h2 className="empresa-confirmacion__tokens-title">
+                🎁 Recibiste 30 créditos de Bienvenida
+              </h2>
+
+              <p className="empresa-confirmacion__tokens-text">
+                Úsalos para desbloquear <strong>Solicitudes de Clientes</strong>
+              </p>
+
+              <p className="empresa-confirmacion__warning">
+                ⚠️ No se utilizan para publicar servicios de Busco u Ofrezco.
+              </p>
+            </div>
+
+            <Button_cta
+              value="Ir al Dashboard"
+              onClick={() => router.push("/empresa/dashboard")}
+            />
+          </div>
+        </main>
+
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
@@ -88,4 +134,5 @@ export default function EmpresaConfirmacion() {
       <Footer />
     </>
   );
+
 }

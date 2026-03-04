@@ -9,6 +9,7 @@ import LoadingOverlay from "@/components/ui/LoadingOverlay";
 
 export default function SolicitarMudanza() {
     const API = process.env.NEXT_PUBLIC_API_URL;
+    const [errorModal, setErrorModal] = useState("");
 
     const [form, setForm] = useState({
         origen: "",
@@ -16,17 +17,14 @@ export default function SolicitarMudanza() {
         origen_pisos: "",
         origen_elevador: "",
         origen_acarreo: "",
-
         destino: "",
         vivienda_destino: "",
         destino_pisos: "",
         destino_elevador: "",
         destino_acarreo: "",
-
         inventario: "",
         fecha_recoleccion: "",
         tipo_mudanza: "",
-
         nombre: "",
         email: "",
         telefono: ""
@@ -111,7 +109,7 @@ export default function SolicitarMudanza() {
             setModalOpen(true);
             setTimeLeft(300);
         } catch (err) {
-            alert(err.message);
+            setErrorModal(err.message || "Ocurrió un error inesperado.");
         }
 
         setLoading(false);
@@ -140,7 +138,7 @@ export default function SolicitarMudanza() {
             setModalOpen(false);
             setSuccessModal(true);
         } catch (err) {
-            alert(err.message);
+            setErrorModal(err.message || "Error al verificar.");
         }
         setLoading(false);
     };
@@ -483,6 +481,20 @@ export default function SolicitarMudanza() {
                                 setSuccessModal(false);
                                 window.location.href = "https://mudanzafacil.com.mx/";
                             }}
+                        />
+                    </div>
+                </BaseModal>
+            )}
+
+            {/* MODAL ERROR */}
+            {errorModal && (
+                <BaseModal onClose={() => setErrorModal("")}>
+                    <div className="error-modal">
+                        <h3>Error</h3>
+                        <p>{errorModal}</p>
+                        <Button_success
+                            value="Cerrar"
+                            onClick={() => setErrorModal("")}
                         />
                     </div>
                 </BaseModal>

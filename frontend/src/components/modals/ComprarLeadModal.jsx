@@ -22,45 +22,53 @@ export default function ComprarLeadModal({
         return match ? match[2] : null;
     };
 
-    const token = typeof window !== "undefined"
-        ? getCookie("token_empresa")
-        : null;
+    const token =
+        typeof window !== "undefined"
+            ? getCookie("token_empresa")
+            : null;
 
-    /* =========================
-       Obtener tokens empresa
-    ========================= */
     useEffect(() => {
         if (!token) return;
 
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/me`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                Accept: "application/json",
-            },
-        })
-            .then(res => {
-                if (!res.ok) {
-                    console.error("No autenticado en modal");
-                    return null;
+        const fetchData = async () => {
+            try {
+                // Obtener tokens empresa
+                const empresaRes = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/empresa/me`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            Accept: "application/json",
+                        },
+                    }
+                );
+
+                if (empresaRes.ok) {
+                    const empresaData = await empresaRes.json();
+                    setTokens(empresaData.tokens ?? 0);
                 }
-                return res.json();
-            })
-            .then(data => {
-                if (data) {
-                    setTokens(data.tokens ?? 0);
+
+                // Obtener solicitud
+                const solicitudRes = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/solicitudes-mudanza/${solicitudId}`
+                );
+
+                if (solicitudRes.ok) {
+                    const solicitudData = await solicitudRes.json();
+                    setComprasCount(
+                        solicitudData.data?.compras_count ?? 0
+                    );
                 }
-            });
+            } catch (err) {
+                console.error("Error cargando datos del modal", err);
+            }
+        };
 
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/solicitudes-mudanza/${solicitudId}`)
-            .then(res => res.json())
-            .then(data => {
-                setComprasCount(data.compras_count ?? 0);
-            });
+        fetchData();
+    }, [solicitudId, token]);
 
-    }, [solicitudId]);
-
-    const tokensNecesarios = exclusivo ? 2 : 1;
     const esPrimeraCompra = comprasCount === 0;
+    const tokensNecesarios = exclusivo ? 2 : 1;
     const puedeComprar = tokens !== null && tokens >= tokensNecesarios;
 
     const handleComprar = async () => {
@@ -90,7 +98,6 @@ export default function ComprarLeadModal({
 
             onSuccess?.();
             onClose();
-
         } catch (err) {
             setError("Error inesperado");
             setLoading(false);
@@ -100,35 +107,26 @@ export default function ComprarLeadModal({
     return (
         <BaseModal onClose={onClose}>
             <div className="comprar-lead-modal">
-
                 <h2>Comprar lead</h2>
 
-                {/* =========================
-                    LOADING STATE
-                  ========================= */}
-                {tokens === null && (
-                    <p>Cargando información...</p>
-                )}
+                {tokens === null && <p>Cargando información...</p>}
 
-                {/* =========================
-                    TIENE TOKENS
-                 ========================= */}
                 {tokens !== null && tokens > 0 && (
                     <>
                         <p>
-                            Tus tokens disponibles: <strong>{tokens}</strong>
+                            Tus créditos disponibles: <strong>{tokens}</strong>
                         </p>
 
                         <p>
-                            Precio base: <strong>1 token</strong>
+                            Precio base: <strong>1 crédito</strong>
                         </p>
 
                         {esPrimeraCompra && (
                             <div className="comprar-lead-modal__exclusivo">
                                 <p>
                                     Eres la primera empresa interesada.
-                                    Puedes adquirirlo en modo exclusivo por <strong>2 tokens</strong>
-                                    y eliminarlo del marketplace.
+                                    Puedes adquirirlo en modo exclusivo por{" "}
+                                    <strong>2 créditos</strong> y eliminarlo del marketplace.
                                 </p>
 
                                 <label className="toggle">
@@ -146,12 +144,13 @@ export default function ComprarLeadModal({
                         )}
 
                         <p>
-                            Total a pagar: <strong>{tokensNecesarios} token(s)</strong>
+                            Total a pagar:{" "}
+                            <strong>{tokensNecesarios} crédito(s)</strong>
                         </p>
 
-                        {tokens < tokensNecesarios && (
+                        {!puedeComprar && (
                             <div className="comprar-lead-modal__error">
-                                No cuentas con los tokens suficientes para esta opción.
+                                No cuentas con los créditos suficientes para esta opción.
                             </div>
                         )}
 
@@ -162,39 +161,43 @@ export default function ComprarLeadModal({
                         )}
 
                         <div className="comprar-lead-modal__actions">
-                            {tokens >= tokensNecesarios ? (
+                            {puedeComprar ? (
                                 <Button_cta
-                                    value={loading ? "Procesando..." : "Confirmar compra"}
+                                    value={
+                                        loading ? "Procesando..." : "Confirmar compra"
+                                    }
                                     onClick={handleComprar}
                                 />
                             ) : (
                                 <Button_cta
-                                    value="Comprar tokens"
-                                    onClick={() => window.location.href = "/empresa/dashboard"}
+                                    value="Comprar créditos"
+                                    onClick={() =>
+                                    (window.location.href =
+                                        "/empresa/dashboard")
+                                    }
                                 />
                             )}
                         </div>
                     </>
                 )}
 
-                {/* =========================
-                     NO TIENE TOKENS
-                    ========================= */}
                 {tokens !== null && tokens === 0 && (
                     <>
                         <p>
-                            Actualmente no cuentas con tokens disponibles.
+                            Actualmente no cuentas con créditos disponibles.
                         </p>
 
                         <div className="comprar-lead-modal__actions">
                             <Button_cta
-                                value="Comprar tokens"
-                                onClick={() => window.location.href = "/empresa/dashboard"}
+                                value="Comprar créditos"
+                                onClick={() =>
+                                (window.location.href =
+                                    "/empresa/dashboard")
+                                }
                             />
                         </div>
                     </>
                 )}
-
             </div>
         </BaseModal>
     );

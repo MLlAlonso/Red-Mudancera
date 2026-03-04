@@ -4,19 +4,20 @@ namespace App\Modules\Empresa\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 use App\Modules\Empresa\Models\Empresa;
 use App\Modules\Empresa\Requests\RegisterEmpresaRequest;
 use App\Modules\Empresa\Requests\LoginEmpresaRequest;
 use App\Modules\Empresa\Requests\EmpresaUpdateRequest;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Http\Request;
 use App\Modules\Empresa\Mail\EmpresaVerificationCode;
+use App\Modules\Empresa\Mail\EmpresaWelcomeMail;
 use App\Models\EmailVerification;
 use App\Modules\Usuario\Models\Usuario;
-use App\Modules\Empresa\Mail\EmpresaWelcomeMail;
 use App\Modules\Notificacion\Services\NotificationDispatcher;
 use App\Modules\Notificacion\Events\LoginEmpresaEvent;
 use App\Modules\Notificacion\Models\NotificationPreference;
@@ -35,6 +36,8 @@ class EmpresaAuthController extends Controller
         $data['codigoEmpresa'] = strtoupper(
             substr(Str::slug($data['empresa'], ''), 0, 3) . rand(1000, 9999)
         );
+
+        $data['tokens'] = 30;
 
         // =============================
         // CREAR EMPRESA

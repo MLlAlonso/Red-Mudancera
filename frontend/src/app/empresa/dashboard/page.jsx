@@ -4,11 +4,10 @@ import { useEffect, useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ServiceFilters from "@/components/filters/ServiceFilters";
-import ServiceAdvancedFilters from "@/components/filters/ServiceAdvancedFilters";
 import Button_crud from "@/components/common/Button_crud";
 import ServiceCard from "@/components/cards/ServiceCard";
-import ServiceCardSkeleton from "@/components/skeletons/ServiceCardSkeleton";
 import SolicitudMudanzaCard from "@/components/cards/SolicitudMudanzaCard";
+import ServiceCardSkeleton from "@/components/skeletons/ServiceCardSkeleton";
 import { useSearch } from "@/store/searchContext";
 import { getEmpresaToken } from "@/utils/auth";
 
