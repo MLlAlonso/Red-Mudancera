@@ -90,11 +90,7 @@ export default function ServiceCard({
               })
             }
           >
-            <img
-              src="/icons/whatsapp.png"
-              alt="WhatsApp"
-              className="btn-contact__icon"
-            />
+            <img src="/icons/whatsapp.png" alt="WhatsApp" className="btn-contact__icon" />
             <span>Contactar</span>
           </button>
         )}

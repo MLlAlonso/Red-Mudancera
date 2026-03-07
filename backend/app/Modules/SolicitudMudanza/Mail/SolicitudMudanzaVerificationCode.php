@@ -17,7 +17,7 @@ class SolicitudMudanzaVerificationCode extends Mailable
 
     public function build()
     {
-        return $this->subject('Código de verificación - Busco Mudanza')
+        return $this->subject('Código de verificación - Mudanza Fácil')
             ->view('emails.solicitud_mudanza_verification_code')
             ->with([
                 'code' => $this->code,

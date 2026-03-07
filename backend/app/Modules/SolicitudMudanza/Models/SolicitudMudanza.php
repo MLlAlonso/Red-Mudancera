@@ -32,6 +32,7 @@ class SolicitudMudanza extends Model
         'codigo_expira_en',
         'telefono_verificado',
         'estado',
+        'referido_por_empresa_id',
         'ip_address',
         'compras_count'
     ];
@@ -45,6 +46,14 @@ class SolicitudMudanza extends Model
         return $this->hasMany(
             LeadCompra::class,
             'solicitud_id'
+        );
+    }
+
+    public function empresaReferente()
+    {
+        return $this->belongsTo(
+            \App\Modules\Empresa\Models\Empresa::class,
+            'referido_por_empresa_id'
         );
     }
 }

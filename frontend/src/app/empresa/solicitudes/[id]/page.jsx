@@ -66,7 +66,7 @@ export default function DetalleSolicitudPage() {
             <main className="detalle-solicitud">
                 <div className="detalle-solicitud__header">
                     <h1 className="detalle-solicitud__title">
-                        Detalle de solicitud
+                        Detalle de Contacto
                     </h1>
                     <p className="detalle-solicitud__subtitle">
                         Información completa de la solicitud de mudanza
@@ -79,7 +79,7 @@ export default function DetalleSolicitudPage() {
                     <div className="detalle-solicitud__route">
                         <div className="detalle-solicitud__head">
                             <span className="detalle-solicitud__tag">
-                                Solicitud
+                                Contacto
                             </span>
 
                             {fueExclusivo && (
@@ -227,7 +227,7 @@ export default function DetalleSolicitudPage() {
                     <div className="detalle-solicitud__actions">
                         {!haComprado && (
                             <Button_cta
-                                value="Comprar lead"
+                                value="Comprar"
                                 onClick={() => setShowModal(true)}
                             />
                         )}

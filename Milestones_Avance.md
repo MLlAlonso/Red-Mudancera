@@ -1,193 +1,380 @@
-# Red Mudancera – Documento de Estado y Guía para la Siguiente Milestone
+# Mudanza Facil – Documento de Estado y Guía para la Siguiente Milestone
 
 ---
 
 ## 1. Resumen General del Proyecto
 
-**Red Mudancera** es una plataforma web orientada a conectar empresas de mudanzas con usuarios, permitiendo la gestión de servicios, usuarios internos, perfiles, reputación y comunicación segura mediante autenticación por tokens.
-El sistema está diseñado con una **arquitectura modular**, escalable y preparada para crecer por milestones, evitando retrabajo y permitiendo incorporar nuevas funcionalidades sin romper lo existente.
-Actualmente el proyecto se encuentra en un **estado funcional sólido**, con autenticación real, perfiles operativos, envío de correos de verificación (Mailtrap) y una base técnica lista para producción futura.
+Mudanza Facil es una plataforma web orientada a conectar empresas de mudanzas entre sí y con clientes potenciales, permitiendo publicar servicios, gestionar cargas, recibir solicitudes de mudanza, administrar usuarios internos y operar mediante un sistema de notificaciones y comunicación externa (WhatsApp).
+
+El sistema está construido bajo una arquitectura modular desacoplada, con:
+
+- Backend Laravel API REST
+- Frontend Next.js
+- Autenticación mediante Laravel Sanctum
+- Comunicación mediante API
+- Sistema de eventos y notificaciones desacoplado
+
+La plataforma busca convertirse en el Centro Nacional de Cargas para Mudanzas, reemplazando la logística informal que actualmente ocurre en grupos de facebook y chats de WhatsApp.
+
+Actualmente el proyecto se encuentra en un estado funcional avanzado, con:
+
+- Autenticación completa
+- Gestión de empresas y usuarios
+- Publicación de servicios
+- Sistema de reseñas
+- Motor inicial de notificaciones
+- Sistema de solicitudes de mudanza (leads)
+- Sistema de tokens para compra de leads
+- Arquitectura preparada para escalar hacia SaaS
 
 ---
 
 ## 2. Funcionalidades Implementadas (Checklist General)
 
 ### 🔐 Autenticación y Seguridad
-* [x] Registro de empresa
-* [x] Registro de usuario asociado a empresa
-* [x] Login de empresa
-* [x] Login de usuario
-* [x] Autenticación con Laravel Sanctum
-* [x] Protección de rutas con middleware
-* [x] Manejo de tokens (logout, invalidación)
+
+- ✅ Registro de empresa
+- ✅ Registro de usuario asociado a empresa
+- ✅ Login de empresa
+- ✅ Login de usuario
+- ✅ Autenticación con Laravel Sanctum
+- ✅ Protección de rutas con middleware
+- ✅ Manejo de tokens (logout, invalidación)
+- ✅ Recuperación de contraseña por correo
 
 ### 👤 Usuarios
-* [x] Perfil de usuario
-* [x] Edición de datos personales
-* [x] Subida y actualización de avatar
-* [x] Eliminación de cuenta
-* [x] Asociación usuario ↔ empresa
-* [x] Listado de usuarios por empresa
-* [x] Cards de usuarios en dashboard empresa
+
+- ✅ Perfil de usuario
+- ✅ Edición de datos personales
+- ✅ Subida y actualización de avatar
+- ✅ Eliminación de cuenta
+- ✅ Asociación usuario ↔ empresa
+- ✅ Listado de usuarios por empresa
+- ✅ Pausar / reactivar usuarios
+- ✅ Cards de usuarios en dashboard empresa
 
 ### ✉️ Verificación por Correo
-* [x] Generación de código de verificación
-* [x] Envío de correo vía Mailtrap (local)
-* [x] Modal para ingresar código
-* [x] Validación de código
-* [x] Estado `email_verified_at`
-* [x] Botón dinámico “Verificar correo”
+
+- ✅ Generación de código de verificación
+- ✅ Envío de correo vía Mailtrap (entorno local)
+- ✅ Modal para ingresar código
+- ✅ Validación de código
+- ✅ Estado email_verified_at
+- ✅ Botón dinámico "Verificar correo"
 
 ### 🏢 Empresas
-* [x] Registro de empresa
-* [x] Perfil de empresa (datos básicos)
-* [x] Logo de empresa
-* [x] Relación empresa ↔ usuarios
-* [x] Edición avanzada de perfil de empresa
+
+- ✅ Registro de empresa
+- ✅ Perfil de empresa (datos básicos)
+- ✅ Logo de empresa
+- ✅ Relación empresa ↔ usuarios
+- ✅ Edición avanzada de perfil de empresa
+- ✅ Visualización pública de empresa
+
+### 🚚 Servicios (Busco / Ofrezco)
+
+- ✅ Crear servicio
+- ✅ Editar servicio
+- ✅ Eliminar servicio
+- ✅ Cambiar estado del servicio
+- ✅ Estados:
+  - activo
+  - asignado
+  - finalizado
+- ✅ Visualización pública de servicios
+- ✅ Filtros de servicios
+- ✅ Detalle completo del servicio
+- ✅ Imágenes de servicio
+- ✅ Cálculo de distancia aproximada (Google Distance API)
+- ✅ Registro de visualizaciones (service_views)
+- ✅ Reporte mensual de servicios
+- ✅ Generación de reporte mensual en PDF
+
+### ⭐ Sistema de Reseñas
+
+- ✅ Generación de link de reseña
+- ✅ Envío del link al cliente
+- ✅ Formulario público de reseña
+- ✅ Registro de calificación
+- ✅ Asociación reseña ↔ empresa
+- ✅ Visualización de reseñas en perfil empresa
+
+### 🔔 Sistema de Notificaciones
+
+Motor desacoplado basado en eventos.
+
+- ✅ Dispatcher multi-canal
+- ✅ Canal Database
+- ✅ Canal Email
+- ✅ Sistema de eventos de negocio
+- ✅ Notificaciones replicadas a usuarios de empresa
+- ✅ Lectura individual de notificaciones
+- ✅ Conteo de notificaciones
+- ✅ Eliminación de notificaciones
+
+**Eventos actuales:**
+
+- Servicio publicado
+- Servicio asignado
+- Servicio finalizado
+- Servicio visto múltiples veces
+- Servicio próximo a vencer
+- Resumen diario de vistas
+
+Este motor constituye el Notification Engine inicial del sistema.
+
+### 📦 Solicitudes de Mudanza (Leads)
+
+Nuevo módulo agregado al sistema.
+
+- ✅ Formulario público para solicitar mudanza
+- ✅ Verificación por correo del cliente
+- ✅ Registro de solicitud en base de datos
+- ✅ Envío de resumen al cliente
+- ✅ Visualización de solicitudes en dashboard empresa
+- ✅ Compra de leads mediante tokens
+- ✅ Sistema de leads comprados
 
 ### 🎨 UI / UX
-* [x] Layout general (Header / Footer)
-* [x] Menú lateral dinámico (empresa / usuario)
-* [x] Skeleton loaders
-* [x] Formularios con validaciones visuales
-* [x] Diseño responsive
-* [x] Animaciones suaves
+
+- ✅ Layout general (Header / Footer)
+- ✅ Menú lateral dinámico
+- ✅ Skeleton loaders
+- ✅ Modales reutilizables
+- ✅ Formularios con validaciones visuales
+- ✅ Diseño responsive
+- ✅ Animaciones suaves
+- ✅ Componentización modular
 
 ---
 
 ## 3. Funcionalidades Pendientes por Milestone
 
 ### 📦 Milestone 2 (cerrada)
-* [x] Arquitectura base
-* [x] Autenticación
-* [x] Dashboard inicial
-* [x] Perfil usuario
-* [x] Perfil empresa básico
 
-### 🚚 Milestone 3 (próxima)
-* [x] CRUD completo de Servicios
-* [x] Endpoint de servicios real
-* [x] Cards de servicios dinámicas
-* [x] Filtros conectados a backend
-* [x] Detalle de servicio
-* [x] Asociación servicio ↔ empresa
-* [x] Estado del servicio (activo / pausado)
-* [x] Migración Mailtrap → proveedor real (Resend, etc.)
+- ✅ Arquitectura base
+- ✅ Autenticación
+- ✅ Dashboard inicial
+- ✅ Perfil usuario
+- ✅ Perfil empresa básico
+- ✅ Verificación por correo
+
+### 🚚 Milestone 3 (en progreso)
+
+Esta milestone corresponde al núcleo funcional del sistema.
+
+**Implementado:**
+
+- ✅ CRUD completo de servicios
+- ✅ Sistema Busco / Ofrezco
+- ✅ Filtros de servicios
+- ✅ Estados del servicio
+- ✅ Registro de visualizaciones
+- ✅ Reporte mensual
+- ✅ Sistema de reseñas
+- ✅ Módulo de solicitudes de mudanza
+- ✅ Sistema de leads
+
+**Pendiente para cerrar milestone:**
+
+- ⏳ Anti-spam avanzado de servicios
+- ⏳ Búsqueda global optimizada
+- ⏳ Migración Mailtrap → proveedor real
 
 ### 🤝 Milestone 4 (futuro)
-* [x] Solicitudes / contratos
-* [x] Historial de servicios
-* [x] Sistema de reputación real
-* [ ] Notificaciones
-* [ ] Panel administrativo
+
+- ⏳ Radar de coincidencias entre servicios
+- ⏳ Directorio completo de empresas
+- ⏳ Sistema de reputación ampliado
+- ⏳ Notificaciones push reales
+- ⏳ PWA completa
+
+### 💳 Milestone 5 (futuro)
+
+- ⏳ Sistema de suscripciones
+- ⏳ Integración Stripe
+- ⏳ Plan Free / Base / Pro
+- ⏳ Limitaciones por plan
+- ⏳ Dashboard administrativo
 
 ---
 
 ## 4. Avances Técnicos, Decisiones y Estado Actual del Proyecto
 
-## Proyecto: Red Mudancera
+**Proyecto:** Mudanza Facil
 
 ### 4.1 Resumen General
-Hasta la milestone actual se construyó un **MVP robusto**, funcional tanto en backend como frontend, que incluye:
-* Autenticación real
-* Gestión de usuarios
-* Perfil de usuario y empresa
-* Envío de correos (entorno local)
-* UI profesional y escalable
 
-El sistema ya **no es un prototipo**, sino una base lista para crecer funcionalmente.
+Hasta la milestone actual se construyó un MVP funcional robusto que incluye:
+
+- Autenticación completa
+- Gestión de empresas y usuarios
+- Publicación de servicios
+- Sistema de reseñas
+- Motor inicial de notificaciones
+- Solicitudes de mudanza
+- Sistema de leads
+- Reportes y estadísticas básicas
+
+La base ya permite operar una plataforma funcional de logística para mudanzas.
 
 ---
 
 ## 5. Backend – Laravel (Estado Actual)
 
 ### ✔️ Arquitectura modular
-Módulos implementados:
-* `Empresa`
-* `Usuario`
+
+**Módulos implementados:**
+
+- Empresa
+- Usuario
+- Servicio
+- Notificacion
+- Resena
+- SolicitudMudanza
 
 Cada módulo contiene:
-* Controllers
-* Models
-* Requests
-* Rutas independientes
 
-Esto permite escalar sin acoplamientos.
+- Controllers
+- Models
+- Mails
+- Requests
+- Services
+- Repositories
+- Routes independientes
+
+Esto permite escalabilidad y separación de responsabilidades.
 
 ### ✔️ Autenticación
-* Laravel Sanctum configurado
-* Tokens funcionales
-* Middleware `auth:sanctum`
-* Separación clara empresa / usuario
 
-### ✔️ Base de dato
-Tablas activas:
-* empresas
-* usuarios
-* password_resets
-* personal_access_tokens
+- Laravel Sanctum configurado
+- Tokens funcionales
+- Middleware auth:sanctum
+- Autenticación empresa / usuario
 
-Campos relevantes:
-* avatar
-* email_verified_at
-* empresa_id
+### ✔️ Sistema de Notificaciones
+
+Arquitectura basada en eventos:
+
+- Dispatcher multi-canal
+- Channels desacoplados
+- Queue para envío de emails
+- Scheduler para eventos programados
+
+Esto permite escalar el sistema de notificaciones hacia push y alertas inteligentes.
+
+### ✔️ Base de datos
+
+**Tablas principales activas:**
+
+- empresas
+- usuarios
+- servicios
+- servicio_imagenes
+- service_views
+- notificaciones
+- notificacion_usuario
+- resenas
+- resena_links
+- solicitudes_mudanza
+- lead_compras
+- notification_preferences
+- notification_metrics
+
+La estructura está preparada para soportar:
+
+- reputación
+- suscripciones
+- notificaciones
+- alertas de búsqueda
+- monetización futura
 
 ---
 
 ## 6. Frontend – Next.js (Estado Actual)
 
 ### ✔️ App Router
-Rutas activas:
-* `/empresa/*`
-* `/usuario/*`
-* `/login`
-* `/register`
+
+**Rutas activas principales:**
+
+- /empresa/*
+- /usuario/*
+- /servicios/*
+- /resena/*
+- /solicitar-mudanza
+- /login
+- /register
 
 ### ✔️ Comunicación Front ↔ Back
-* Fetch directo a API
-* Manejo de tokens por cookies
-* Protección de rutas
+
+- Fetch directo a API
+- Token almacenado en localStorage
+- Headers Bearer en peticiones protegidas
 
 ### ✔️ Componentización
-* Componentes reutilizables
-* Separación por dominio
-* Estilos SCSS por módulo
+
+**Componentes organizados por dominio:**
+
+- cards
+- filters
+- modals
+- skeletons
+- layout
+
+Esto permite reutilización y escalabilidad del frontend.
 
 ---
 
 ## 7. UI / UX Implementado
-* Skeleton loaders
-* Modales
-* Estados dinámicos
-* Botones reutilizables
-* Feedback visual
+
+- ✅ Skeleton loaders
+- ✅ Modales reutilizables
+- ✅ Cards dinámicas
+- ✅ Dropdowns interactivos
+- ✅ Estados dinámicos
+- ✅ Feedback visual
+- ✅ Diseño responsive mobile-first
 
 ---
 
 ## 8. Qué está listo para producción futura
-* Arquitectura
-* Seguridad
-* Autenticación
-* Escalabilidad
-* Base de datos
-* Envío de correos (pendiente proveedor real)
+
+El sistema ya cuenta con:
+
+- Arquitectura modular
+- Seguridad básica
+- Autenticación estable
+- Motor de notificaciones inicial
+- Sistema de servicios funcional
+- Sistema de leads
+- Sistema de reseñas
+
+**Falta principalmente:**
+
+- monetización
+- push notifications
+- radar de coincidencias
+- panel administrativo
 
 ---
 
 ## 9. Recomendaciones para la Siguiente Milestone
-1. Implementar **Servicios** como nuevo módulo
-2. Mantener contratos API claros
-3. No romper estructura modular
-4. Migrar Mailtrap en Milestone 03
-5. Definir reglas de visibilidad de servicios
+
+- Finalizar Notification Engine
+- Implementar Radar de coincidencias entre servicios
+- Integrar Push Notifications reales
+- Migrar Mailtrap a proveedor real
+- Iniciar sistema de planes y suscripciones
 
 ---
 
 ## 10. Objetivo de este documento
+
 Este documento sirve como:
-* 📌 Punto de referencia técnico
-* 🧭 Guía para la siguiente milestone
-* 🤝 Contexto compartido entre chats
+
+- 📌 Punto de referencia técnico
+- 🧭 Guía para continuar el desarrollo
+- 🤝 Contexto compartido entre chats
 
 Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 
@@ -303,8 +490,10 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   │   └── 🐘 routes.php
 │   │   │   ├── 📁 SolicitudMudanza
 │   │   │   │   ├── 📁 Controllers
+│   │   │   │   │   ├── 🐘 LeadOperacionController.php
 │   │   │   │   │   └── 🐘 SolicitudMudanzaController.php
 │   │   │   │   ├── 📁 Mail
+│   │   │   │   │   ├── 🐘 LeadCompradoMail.php
 │   │   │   │   │   ├── 🐘 SolicitudMudanzaResumen.php
 │   │   │   │   │   └── 🐘 SolicitudMudanzaVerificationCode.php
 │   │   │   │   ├── 📁 Models
@@ -388,7 +577,8 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   ├── 🐘 2026_02_25_222805_create_lead_compras_table.php
 │   │   │   ├── 🐘 2026_02_26_214026_update_solicitudes_mudanza_add_new_fields.php
 │   │   │   ├── 🐘 2026_02_26_224140_update_fecha_recoleccion_enum_in_solicitudes_mudanza_table.php
-│   │   │   └── 🐘 2026_02_27_225816_update_elevador_enum_in_solicitudes_mudanza_table.php
+│   │   │   ├── 🐘 2026_02_27_225816_update_elevador_enum_in_solicitudes_mudanza_table.php
+│   │   │   └── 🐘 2026_03_04_125113_update_add_estado_operacion_to_lead_compras.php
 │   │   ├── 📁 seeders
 │   │   │   └── 🐘 DatabaseSeeder.php
 │   │   └── ⚙️ .gitignore
@@ -408,6 +598,7 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │       │   ├── 🐘 empresa_goodbye.blade.php
 │   │       │   ├── 🐘 empresa_verification_code.blade.php
 │   │       │   ├── 🐘 empresa_welcome.blade.php
+│   │       │   ├── 🐘 lead_comprado.blade.php
 │   │       │   ├── 🐘 nueva-resena.blade.php
 │   │       │   ├── 🐘 recover_password.blade.php
 │   │       │   ├── 🐘 solicitud_mudanza_resumen.blade.php
@@ -427,8 +618,7 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   ├── 📁 app
 │   │   │   ├── 📁 private
 │   │   │   │   └── ⚙️ .gitignore
-│   │   │   ├── ⚙️ .gitignore
-│   │   │   └── 🖼️ temp_logo_1.png
+│   │   │   └── ⚙️ .gitignore
 │   │   └── 📁 framework
 │   │       ├── 📁 testing
 │   │       │   └── ⚙️ .gitignore

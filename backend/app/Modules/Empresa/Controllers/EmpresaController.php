@@ -156,8 +156,6 @@ class EmpresaController extends Controller
         return response()->json(['message' => 'Usuario reanudado correctamente']);
     }
 
-
-
     public function misLeads()
     {
         $empresa = Auth::user();
@@ -167,18 +165,31 @@ class EmpresaController extends Controller
             ->latest()
             ->get()
             ->map(function ($compra) {
+
                 $sol = $compra->solicitud;
 
                 return [
                     'id' => $sol->id,
                     'tipo' => 'lead',
+
                     'origen' => $sol->origen,
                     'destino' => $sol->destino,
                     'telefono' => $sol->telefono,
-                    'nombre_cliente' => $sol->nombre,
+
+                    // nombres que tu frontend ya usa
+                    'nombre' => $sol->nombre,
                     'tipo_vivienda' => $sol->tipo_vivienda,
                     'vivienda_destino' => $sol->vivienda_destino,
+
+                    // estos también los usa tu card
+                    'inventario' => $sol->inventario,
+                    'fecha_recoleccion' => $sol->fecha_recoleccion,
+                    'tipo_mudanza' => $sol->tipo_mudanza,
+
                     'created_at' => $compra->created_at,
+                    'estado_operacion' => $compra->estado_operacion,
+                    'ganancia' => $compra->ganancia,
+                    'finalizado_at' => $compra->finalizado_at,
                 ];
             });
 

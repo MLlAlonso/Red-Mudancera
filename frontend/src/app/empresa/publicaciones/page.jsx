@@ -26,31 +26,38 @@ export default function MisServiciosEmpresa() {
   const [showReporte, setShowReporte] = useState(false);
   const { search, city } = useSearch(); const [empresa, setEmpresa] = useState(null);
 
-  const cambiarEstadoDirecto = async (id, estado) => {
-    try {
-      const token = getEmpresaToken();
+  const cambiarEstadoDirecto = async (id, estado, tipo) => {
+    const token = getEmpresaToken();
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/servicios/${id}/estado`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ estado }),
-        }
-      );
+    const endpoint =
+      tipo === "lead"
+        ? `/solicitudes-mudanza/leads/${id}/estado`
+        : `/servicios/${id}/estado`;
 
-      if (!res.ok) throw new Error();
-      const json = await res.json();
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}${endpoint}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ estado }),
+      }
+    );
 
-      setServices((prev) =>
-        prev.map((s) => (s.id === json.data.id ? json.data : s))
-      );
-    } catch {
+    if (!res.ok) {
       alert("No se pudo actualizar el estado");
+      return;
     }
+
+    const json = await res.json();
+
+    setServices((prev) =>
+      prev.map((s) =>
+        s.id === json.data.id ? { ...s, ...json.data } : s
+      )
+    );
   };
 
   useEffect(() => {
@@ -96,8 +103,26 @@ export default function MisServiciosEmpresa() {
           tipo_item: 'lead'
         }));
 
+        const estadoOrder = {
+          activo: 1,
+          asignado: 2,
+          finalizado: 3,
+        };
+
         const combinado = [...servicios, ...leads]
-          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+          .sort((a, b) => {
+            const estadoA = estadoOrder[a.estado_operacion || a.estado] || 99;
+            const estadoB = estadoOrder[b.estado_operacion || b.estado] || 99;
+
+            // primero por estado
+            if (estadoA !== estadoB) {
+              return estadoA - estadoB;
+            }
+
+            // luego por fecha
+            return new Date(b.created_at) - new Date(a.created_at);
+          });
+
 
         setServices(combinado);
       })
@@ -105,17 +130,34 @@ export default function MisServiciosEmpresa() {
 
   }, []);
 
-  const visible = services.filter((s) => {
-    if (!search) return true;
+  const visible = services
+    .filter((s) => {
+      if (filter === "todos") return true;
 
-    const q = search.toLowerCase();
+      if (filter === "cliente") {
+        return s.tipo_item === "lead";
+      }
 
-    return (
-      s.empresa?.empresa?.toLowerCase().includes(q) ||
-      s.origen?.toLowerCase().includes(q) ||
-      s.destino?.toLowerCase().includes(q)
-    );
-  });
+      if (filter === "busco" || filter === "ofrezco") {
+        return (
+          s.tipo_item === "servicio" &&
+          s.tipo === filter
+        );
+      }
+
+      return true;
+    })
+    .filter((s) => {
+      if (!search) return true;
+
+      const q = search.toLowerCase();
+
+      return (
+        s.empresa?.empresa?.toLowerCase().includes(q) ||
+        s.origen?.toLowerCase().includes(q) ||
+        s.destino?.toLowerCase().includes(q)
+      );
+    });
 
   return (
     <>
@@ -125,7 +167,7 @@ export default function MisServiciosEmpresa() {
         <div className="empresa-dashboard__header">
           <h1 className="empresa-dashboard__title">Actividad</h1>
           <p className="empresa-dashboard__subtitle">
-            Aquí puedes ver y gestionar tus cargas y solicitudes de clientes
+            Aquí puedes ver y gestionar tus cargas y contactos de clientes
           </p>
         </div>
 
@@ -138,10 +180,7 @@ export default function MisServiciosEmpresa() {
         </div>
 
         {/* BOTÓN CREAR */}
-        <Button_crud
-          value="+"
-          onClick={() => (window.location.href = "/empresa/cargas")}
-        />
+        <Button_crud value="+" onClick={() => (window.location.href = "/empresa/cargas")} />
 
         <div className="empresa-dashboard__cards">
           {loading &&
@@ -152,27 +191,47 @@ export default function MisServiciosEmpresa() {
           {!loading &&
             visible.map((s) => {
 
-              if (s.tipo_item === 'lead') {
+              if (s.tipo_item === "lead") {
+                const estadoLead = s.estado_operacion || "activo";
+
                 return (
                   <SolicitudMudanzaCard
                     key={`lead-${s.id}`}
                     id={s.id}
                     origen={s.origen}
                     destino={s.destino}
+                    fechaRecoleccion={s.fecha_recoleccion}
+                    inventario={s.inventario}
+                    tipoMudanza={s.tipo_mudanza}
                     fecha={new Date(s.created_at).toLocaleDateString()}
                     telefono={s.telefono}
-                    showContact={true}
-                    isLead
-                    nombreCliente={s.nombre_cliente}
+                    isLead={true}
+                    showContact={false}
+                    estado={estadoLead}
+                    nombreCliente={s.nombre}
                     tipoVivienda={s.tipo_vivienda}
                     empresaNombre={empresa?.empresa}
+                    onChangeEstado={(id, nuevoEstado) => {
+                      setSelectedService({
+                        ...s,
+                        tipo_item: "lead"
+                      });
+
+                      if (nuevoEstado === "finalizado") {
+                        setShowConfirmFinalizar(true);
+                        return;
+                      }
+
+                      cambiarEstadoDirecto(id, nuevoEstado, "lead");
+                      setSelectedService(null);
+                    }}
                   />
                 );
               }
 
               return (
                 <ServiceCard
-                  key={s.id}
+                  key={`servicio-${s.id}`}
                   id={s.id}
                   estado={s.estado}
                   type={s.tipo}
@@ -191,7 +250,7 @@ export default function MisServiciosEmpresa() {
                     }
 
                     // asignado → cambio directo
-                    cambiarEstadoDirecto(id, nuevoEstado);
+                    cambiarEstadoDirecto(id, nuevoEstado, "servicio");
                     setSelectedService(null);
                   }}
                 />
@@ -223,7 +282,11 @@ export default function MisServiciosEmpresa() {
         }}
         onSuccess={(updated) => {
           setServices((prev) =>
-            prev.map((s) => (s.id === updated.id ? updated : s))
+            prev.map((s) =>
+              s.id === updated.id
+                ? { ...s, ...updated }
+                : s
+            )
           );
         }}
       />

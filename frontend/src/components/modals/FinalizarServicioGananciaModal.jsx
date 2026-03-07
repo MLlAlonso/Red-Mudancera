@@ -21,24 +21,45 @@ export default function FinalizarServicioGananciaModal({
     try {
       const token = getEmpresaToken();
 
+      if (!ganancia || Number(ganancia) < 0) {
+        alert("Ingresa una ganancia válida, minimo 0");
+        setLoading(false);
+        return;
+      }
+
+      const endpoint =
+        servicio.tipo_item === "lead"
+          ? `/solicitudes-mudanza/leads/${servicio.id}/estado`
+          : `/servicios/${servicio.id}/finalizar`;
+
+      const body =
+        servicio.tipo_item === "lead"
+          ? { estado: "finalizado", ganancia }
+          : { ganancia };
+
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/servicios/${servicio.id}/finalizar`,
+        `${process.env.NEXT_PUBLIC_API_URL}${endpoint}`,
         {
-          method: "POST",
+          method: servicio.tipo_item === "lead" ? "PATCH" : "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ ganancia }),
+          body: JSON.stringify(body),
         }
       );
 
-      if (!res.ok) throw new Error();
+      if (!res.ok) {
+        const txt = await res.text();
+        console.error(txt);
+        throw new Error();
+      }
 
       const json = await res.json();
       onSuccess(json.data);
       onClose();
-    } catch {
+    } catch (err) {
+      console.error(err);
       alert("Error al finalizar el servicio");
     } finally {
       setLoading(false);

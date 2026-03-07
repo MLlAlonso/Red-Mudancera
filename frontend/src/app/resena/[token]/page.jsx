@@ -2,10 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-
 import Button_success from "@/components/common/Button_success";
 import Button_error from "@/components/common/Button_error";
 

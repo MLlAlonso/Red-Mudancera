@@ -16,7 +16,7 @@ const OPTIONS = {
     icon: "/icons/ofrezco.png",
   },
   cliente: {
-    label: "Clientes",
+    label: "Contacto",
     icon: "/icons/cliente.png",
   },
 };

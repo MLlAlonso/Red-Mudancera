@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Solicitud adquirida</title>
+    <title>Contacto adquirido</title>
 </head>
 
 <body style="margin:0;padding:0;background:#F4F7F6;font-family:Inter,Arial,Helvetica,sans-serif;">
@@ -18,7 +18,7 @@
                     <tr>
                         <td style="background:#09233E;padding:24px;text-align:center;">
                             <h2 style="margin:0;color:#ffffff;font-family:Nunito,Arial;font-size:22px;">
-                                Solicitud adquirida correctamente
+                                Contacto adquirido correctamente
                             </h2>
                         </td>
                     </tr>
@@ -37,7 +37,7 @@
 
                             <!-- Folio -->
                             <div style="text-align:center;margin-bottom:20px;">
-                                <div style="font-size:14px;color:#6F7F8D;">Folio de la Solicitud</div>
+                                <div style="font-size:14px;color:#6F7F8D;">Folio</div>
                                 <div style="font-size:22px;font-weight:bold;color:#09233E;letter-spacing:2px;">
                                     {{ $folio }}
                                 </div>

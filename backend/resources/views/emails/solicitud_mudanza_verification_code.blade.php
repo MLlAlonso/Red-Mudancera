@@ -37,7 +37,7 @@
             </div>
 
             <p style="font-size:14px;color:#6F7F8D;">
-              Este código expira en 15 minutos.
+              Este código expira en 5 minutos.
             </p>
           </td>
         </tr>

@@ -7,7 +7,7 @@ import Button_success from "@/components/common/Button_success";
 import BaseModal from "@/components/modals/BaseModal";
 import LoadingOverlay from "@/components/ui/LoadingOverlay";
 
-export default function SolicitarMudanza() {
+export default function SolicitarMudanza({ empresaSlug = null }) {
     const API = process.env.NEXT_PUBLIC_API_URL;
     const [errorModal, setErrorModal] = useState("");
 
@@ -91,6 +91,8 @@ export default function SolicitarMudanza() {
     const createSolicitud = async () => {
         setLoading(true);
 
+        console.log("empresaSlug:", empresaSlug);
+
         try {
             const res = await fetch(`${API}/solicitudes-mudanza`, {
                 method: "POST",
@@ -98,7 +100,10 @@ export default function SolicitarMudanza() {
                     "Content-Type": "application/json",
                     Accept: "application/json"
                 },
-                body: JSON.stringify(form)
+                body: JSON.stringify({
+                    ...form,
+                    ...(empresaSlug ? { empresa_referente_slug: empresaSlug } : {})
+                })
             });
 
             const data = await res.json();
@@ -111,7 +116,6 @@ export default function SolicitarMudanza() {
         } catch (err) {
             setErrorModal(err.message || "Ocurrió un error inesperado.");
         }
-
         setLoading(false);
     };
 

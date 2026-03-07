@@ -25,6 +25,7 @@ use App\Modules\Notificacion\Events\ServicioAsignadoEvent;
 use App\Modules\Notificacion\Events\ServiciosCreadosMesEvent;
 use App\Modules\Servicio\Models\ServiceView;
 use App\Modules\Notificacion\Events\ServicioVistoEvent;
+use App\Modules\SolicitudMudanza\Models\LeadCompra;
 
 class ServicioController extends Controller
 {
@@ -376,9 +377,17 @@ class ServicioController extends Controller
 
         $total = $servicios->sum('ganancia');
 
+        $leads = LeadCompra::where('empresa_id', $empresa->id)
+            ->where('estado_operacion', 'finalizado')
+            ->whereBetween('finalizado_at', [$inicio, $fin])
+            ->get();
+
+        $total = $servicios->sum('ganancia') + $leads->sum('ganancia');
+
         return response()->json([
             'total' => round($total, 2),
             'servicios' => $servicios,
+            'leads' => $leads
         ]);
     }
 
@@ -434,12 +443,18 @@ class ServicioController extends Controller
             ->whereBetween('finalizado_at', [$inicio, $fin])
             ->get();
 
-        $total = $servicios->sum('ganancia');
+        $leads = LeadCompra::where('empresa_id', $empresa->id)
+            ->where('estado_operacion', 'finalizado')
+            ->whereBetween('finalizado_at', [$inicio, $fin])
+            ->get();
+
+        $total = $servicios->sum('ganancia') + $leads->sum('ganancia');
 
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('pdf.reporte-mensual', [
             'empresa' => $empresa,
             'servicios' => $servicios,
+            'leads' => $leads,
             'total' => $total,
             'mes' => $validated['mes'],
             'anio' => $validated['anio'],

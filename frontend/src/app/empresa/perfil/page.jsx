@@ -105,6 +105,26 @@ export default function EmpresaPerfil() {
             <span>Créditos disponibles</span>
           </div>
 
+          <div className="stat">
+            <button
+              onClick={() => {
+                const slug = empresa.empresa
+                  .toLowerCase()
+                  .normalize("NFD")
+                  .replace(/[\u0300-\u036f]/g, "")
+                  .replace(/\s+/g, "-");
+                const link = `app.mudanzafacil.com.mx/solicitar-mudanza/${slug}`;
+                navigator.clipboard.writeText(link);
+                console.log("Link copiado:", link);
+              }}
+            >
+              Copiar
+            </button>
+            
+            <span>Link de referidos</span>
+
+          </div>
+
         </div>
 
         {/* Título + botón editar */}

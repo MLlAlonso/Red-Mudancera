@@ -47,7 +47,6 @@ export default function ReporteMensualModal({ open, onClose }) {
 
   const fetchReporte = async () => {
     if (!validarFecha()) return;
-
     const token = getEmpresaToken();
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/servicios/reporte/mensual?mes=${mes}&anio=${anio}`,

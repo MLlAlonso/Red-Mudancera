@@ -32,11 +32,62 @@ class SolicitudMudanzaService
             // Generar código de verificación
             $codigo = $this->generarCodigo();
 
+
+            Log::info('Codigo verificacion solicitud mudanza', [
+                'codigo' => $codigo,
+                'email' => $data['email'],
+                'telefono' => $data['telefono']
+            ]);
+
+
             $tipoServicio = strtolower(trim($data['origen'])) === strtolower(trim($data['destino']))
                 ? 'local'
                 : 'foranea';
-
             $fechaLimite = $this->calcularFechaLimite($data['fecha_recoleccion']);
+            $empresaReferenteId = null;
+            $slug = $data['empresa_referente_slug'] ?? null;
+
+            /*
+|---------------------------------------------------
+| Si el frontend no envía slug, lo sacamos del URL
+|---------------------------------------------------
+*/
+            if (!$slug) {
+                $referer = request()->headers->get('referer');
+                if ($referer) {
+                    if (preg_match('/solicitar-mudanza\/([^\/]+)/', $referer, $matches)) {
+                        $slug = $matches[1];
+                    }
+                }
+            }
+
+
+            Log::info('Slug final usado', [
+                'slug' => $slug
+            ]);
+
+
+            if ($slug) {
+                $empresa = \App\Modules\Empresa\Models\Empresa::all()
+                    ->first(function ($empresa) use ($slug) {
+                        return \Illuminate\Support\Str::slug($empresa->empresa) === $slug;
+                    });
+
+                if ($empresa) {
+                    $empresaReferenteId = $empresa->id;
+                }
+            }
+
+            if (!empty($data['empresa_referente_slug'])) {
+                $slug = strtolower($data['empresa_referente_slug']);
+                $empresa = \App\Modules\Empresa\Models\Empresa::all()
+                    ->first(function ($empresa) use ($slug) {
+                        return \Illuminate\Support\Str::slug($empresa->empresa) === $slug;
+                    });
+                if ($empresa) {
+                    $empresaReferenteId = $empresa->id;
+                }
+            }
 
             // Crear registro
             $solicitud = SolicitudMudanza::create([
@@ -63,6 +114,7 @@ class SolicitudMudanzaService
                 'destino_elevador' => $data['destino_elevador'] ?? null,
                 'destino_acarreo' => $data['destino_acarreo'] ?? null,
                 'vivienda_destino' => $data['vivienda_destino'],
+                'referido_por_empresa_id' => $empresaReferenteId,
                 'ip_address' => request()->ip(),
             ]);
 
@@ -101,7 +153,6 @@ class SolicitudMudanzaService
 
         Mail::to($solicitud->email)
             ->queue(new SolicitudMudanzaResumen($solicitud));
-
         return $solicitud;
     }
 
@@ -202,7 +253,6 @@ class SolicitudMudanzaService
             'lo_antes_posible' => 3,
             default => 7,
         };
-
         // +1 día extra
         return $hoy->addDays($dias + 1)->toDateString();
     }

@@ -18,7 +18,7 @@ class NuevaResenaMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Has recibido una nueva reseña')
+        return $this->subject('Has recibido una nueva reseña - Mudanza Fácil')
             ->view('emails.nueva-resena');
     }
 }

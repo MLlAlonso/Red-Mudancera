@@ -14,7 +14,6 @@ class EmpresaFeedService
         /* ==============================
            SERVICIOS ACTIVOS Y VIGENTES
         ============================== */
-
         $servicios = Servicio::with('empresa')
             ->where('estado', 'activo')
             ->whereDate('fin', '>=', now())
@@ -37,8 +36,11 @@ class EmpresaFeedService
             });
 
         /* ==============================
-           SOLICITUDES ACTIVAS DISPONIBLES
-        ============================== */
+            SOLICITUDES ACTIVAS DISPONIBLES
+          ============================== */
+        $comprasEmpresa = LeadCompra::where('empresa_id', $empresaId)
+            ->pluck('solicitud_id')
+            ->toArray();
 
         $solicitudes = SolicitudMudanza::where('estado', 'activo')
             ->whereDate('fecha_limite_visible', '>=', now())
@@ -48,11 +50,9 @@ class EmpresaFeedService
             })
             ->latest()
             ->get()
-            ->map(function ($s) use ($empresaId) {
+            ->map(function ($s) use ($comprasEmpresa) {
 
-                $yaComprado = LeadCompra::where('empresa_id', $empresaId)
-                    ->where('solicitud_id', $s->id)
-                    ->exists();
+                $yaComprado = in_array($s->id, $comprasEmpresa);
 
                 return [
                     'id' => $s->id,
@@ -76,7 +76,7 @@ class EmpresaFeedService
            MERGE + ORDEN CRONOLÓGICO
         ============================== */
 
-        return $servicios
+        return collect($servicios)
             ->merge($solicitudes)
             ->sortByDesc('created_at')
             ->values();

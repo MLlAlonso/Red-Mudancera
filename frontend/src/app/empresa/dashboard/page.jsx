@@ -18,6 +18,7 @@ export default function EmpresaDashboard() {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("todos");
+  const [empresa, setEmpresa] = useState(null);
 
   const [filters, setFilters] = useState({
     origen: "",
@@ -51,7 +52,7 @@ export default function EmpresaDashboard() {
         "Empresas que publican carga disponible.",
     },
     cliente: {
-      title: "Solicitudes de Clientes",
+      title: "Contactos de Clientes",
       subtitle:
         "Clientes que buscan servicio de mudanza y están listos para cotizar.",
     },
@@ -88,15 +89,24 @@ export default function EmpresaDashboard() {
 
     setLoading(true);
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/feed`, {
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((r) => r.json())
-      .then((json) => {
-        setServices(json.data || []);
+    Promise.all([
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/feed`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }).then(r => r.json()),
+
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/me`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }).then(r => r.json())
+    ])
+      .then(([feed, empresaData]) => {
+        setServices(feed.data || []);
+        setEmpresa(empresaData);
       })
       .finally(() => setLoading(false));
   }, []);
@@ -241,6 +251,9 @@ export default function EmpresaDashboard() {
                       telefono={item.telefono}
                       nombreCliente={item.nombre_cliente}
                       tipoVivienda={item.tipo_vivienda}
+
+                      empresaNombre={empresa?.empresa}
+                      empresaId={empresa?.id}
                     />
                   );
                 }

@@ -33,6 +33,7 @@ Quedo atento para coordinar
 export function openLeadWhatsappMessage({
   telefono,
   empresaNombre,
+  empresaId,
   nombreCliente,
   origen,
   destino,
@@ -43,15 +44,22 @@ export function openLeadWhatsappMessage({
     return;
   }
 
+  const perfilUrl = `https://app.mudanzafacil.com.mx/empresa/${empresaId}`;
+
   const mensaje = `
-Hola ${nombreCliente}, mucho gusto.
+Hola ${nombreCliente}, buen día.
 
-Te contacto desde Mudanza Fácil, mi empresa es ${empresaNombre} y vi tu solicitud de mudanza:
+Te escribo desde Mudanza Fácil.
+Mi empresa es ${empresaNombre} y vi tu solicitud de mudanza:
 
-Con origen en: ${origen}
-y destino en: ${destino}
+Origen: ${origen}
+Destino: ${destino}
 
-Quedo atento para ayudarte con tu mudanza.
+Puedes ver nuestro perfil aquí:
+${perfilUrl}
+
+Con gusto podemos ayudarte con tu mudanza.
+Quedo atento.
 `;
 
   const url = `https://wa.me/52${telefono}?text=${encodeURIComponent(mensaje)}`;

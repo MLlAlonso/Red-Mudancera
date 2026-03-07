@@ -25,10 +25,10 @@ export default function SolicitudMudanzaCard({
   nombreCliente = "",
   tipoVivienda = "",
   empresaNombre = "",
+  empresaId = null,
 }) {
 
   const router = useRouter();
-
   const [estadoLocal, setEstadoLocal] = useState(estado);
   const [showModal, setShowModal] = useState(false);
 
@@ -57,7 +57,7 @@ export default function SolicitudMudanzaCard({
       >
         <div className="service-card__title">
           <span className="service-card__tag">
-            Solicitud
+            Contacto
           </span>
 
           <h2 className="service-card__route">
@@ -90,7 +90,7 @@ export default function SolicitudMudanzaCard({
         </p>
 
         <div className="service-card__actions">
-          {/* VER DETALLES */}
+
           <button
             className="btn-outline"
             onClick={() => router.push(`/empresa/solicitudes/${id}`)}
@@ -98,39 +98,9 @@ export default function SolicitudMudanzaCard({
             Ver detalles
           </button>
 
-          {/* CONTACTAR */}
-          {isLead ? (
-            <Button_cta
-              value="Contactar"
-              icon="/icons/whatsapp.png"
-              iconAlt="WhatsApp"
-              onClick={() =>
-                openLeadWhatsappMessage({
-                  telefono,
-                  nombreCliente,
-                  origen,
-                  destino,
-                  tipoVivienda,
-                  empresaNombre,
-                })
-              }
-            />
-          ) : (
-            <button
-              className="btn-solid btn-contact"
-              onClick={() => setShowModal(true)}
-            >
-              <img
-                src="/icons/token.png"
-                alt="Comprar"
-                className="btn-contact__icon"
-              />
-              <span>Comprar</span>
-            </button>
-          )}
+          {/* SI EXISTE onChangeEstado → ESTAMOS EN PUBLICACIONES */}
+          {onChangeEstado ? (
 
-          {/* DROPDOWN ESTADO */}
-          {!showContact && onChangeEstado && (
             <ServiceStatusDropdown
               estado={estadoLocal}
               onSelect={(nuevoEstado) => {
@@ -138,6 +108,39 @@ export default function SolicitudMudanzaCard({
                 onChangeEstado(id, nuevoEstado);
               }}
             />
+
+          ) : (
+
+            <>
+              {/* HOME */}
+              {isLead ? (
+                <Button_cta
+                  value="Contactar"
+                  icon="/icons/whatsapp.png"
+                  iconAlt="WhatsApp"
+                  onClick={() =>
+                    openLeadWhatsappMessage({
+                      telefono,
+                      nombreCliente,
+                      origen,
+                      destino,
+                      tipoVivienda,
+                      empresaNombre,
+                      empresaId,
+                    })
+                  }
+                />
+              ) : (
+                <button
+                  className="btn-solid btn-contact"
+                  onClick={() => setShowModal(true)}
+                >
+                  <img src="/icons/token.png" alt="Comprar" className="btn-contact__icon" />
+                  <span>Comprar</span>
+                </button>
+              )}
+            </>
+
           )}
         </div>
       </motion.div>

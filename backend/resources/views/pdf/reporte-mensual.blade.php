@@ -64,7 +64,7 @@
                                     @forelse ($servicios as $s)
                                         <tr>
                                             <td style="padding:10px;border:1px solid #E2E8EE;">
-                                                {{ $s->origen }}  ->  {{ $s->destino }}
+                                                {{ $s->origen }} -> {{ $s->destino }}
                                             </td>
                                             <td align="center" style="padding:10px;border:1px solid #E2E8EE;">
                                                 {{ $s->finalizado_at?->format('d/m/Y') }}
@@ -84,6 +84,23 @@
                                             </td>
                                         </tr>
                                     @endforelse
+
+                                    @foreach ($leads as $l)
+                                        <tr>
+                                            <td style="padding:10px;border:1px solid #E2E8EE;">
+                                                {{ $l->solicitud->origen }} -> {{ $l->solicitud->destino }}
+                                            </td>
+                                            <td align="center" style="padding:10px;border:1px solid #E2E8EE;">
+                                                {{ $l->finalizado_at?->format('d/m/Y') }}
+                                            </td>
+                                            <td align="center" style="padding:10px;border:1px solid #E2E8EE;">
+                                                Contacto
+                                            </td>
+                                            <td align="right" style="padding:10px;border:1px solid #E2E8EE;">
+                                                ${{ number_format($l->ganancia, 2) }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </td>

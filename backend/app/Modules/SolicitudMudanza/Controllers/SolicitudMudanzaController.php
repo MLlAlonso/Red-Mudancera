@@ -8,15 +8,13 @@ use App\Modules\SolicitudMudanza\Services\SolicitudMudanzaService;
 use App\Modules\SolicitudMudanza\Requests\StoreSolicitudMudanzaRequest;
 use App\Modules\SolicitudMudanza\Requests\VerifySolicitudMudanzaRequest;
 use App\Modules\SolicitudMudanza\Requests\ReenviarCodigoSolicitudRequest;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Mail;
-use App\Modules\SolicitudMudanza\Mail\LeadCompradoMail;
-
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Modules\SolicitudMudanza\Models\LeadCompra;
-
-use Illuminate\Http\Request;
+use App\Modules\SolicitudMudanza\Mail\LeadCompradoMail;
 use Laravel\Sanctum\PersonalAccessToken;
 use App\Modules\Empresa\Models\Empresa;
 
@@ -120,18 +118,15 @@ class SolicitudMudanzaController extends Controller
     public function comprar(Request $request, $id): JsonResponse
     {
         $empresa = Auth::guard('empresa')->user();
-
         if (!$empresa) {
             return response()->json(['message' => 'No autenticado'], 401);
         }
-
         $solicitud = SolicitudMudanza::findOrFail($id);
 
         // Ya lo compró esta empresa?
         $yaComprado = LeadCompra::where('empresa_id', $empresa->id)
             ->where('solicitud_id', $id)
             ->exists();
-
         if ($yaComprado) {
             return response()->json(['message' => 'Ya adquiriste este lead'], 422);
         }
@@ -142,18 +137,23 @@ class SolicitudMudanzaController extends Controller
         if ($solicitud->compras_count >= 3) {
             return response()->json(['message' => 'Lead agotado'], 422);
         }
-
-        $tokensNecesarios = $request->boolean('exclusivo') ? 2 : 1;
-
-        //Bloquear comprar exclusiva si ya hubo venta previa
         $esExclusivo = $request->boolean('exclusivo');
+
         if ($esExclusivo && $totalVentas > 0) {
             return response()->json([
                 'message' => 'Este lead ya fue adquirido. No puede comprarse como exclusivo.'
             ], 422);
         }
 
-        $tokensNecesarios = $esExclusivo ? 2 : 1;
+        // NUEVOS PRECIOS
+        $tipo = $solicitud->tipo_servicio;
+        $tokensNecesarios = match (true) {
+            $tipo === 'local' && !$esExclusivo => 6,
+            $tipo === 'local' && $esExclusivo => 30,
+            $tipo === 'foranea' && !$esExclusivo => 15,
+            $tipo === 'foranea' && $esExclusivo => 35,
+            default => 15
+        };
 
         if ($empresa->tokens < $tokensNecesarios) {
             return response()->json([
@@ -162,7 +162,6 @@ class SolicitudMudanzaController extends Controller
         }
 
         DB::transaction(function () use ($empresa, $id, $tokensNecesarios, $request, $solicitud) {
-
             LeadCompra::create([
                 'solicitud_id' => $id,
                 'empresa_id' => $empresa->id,
@@ -172,6 +171,8 @@ class SolicitudMudanzaController extends Controller
 
             $empresa->decrement('tokens', $tokensNecesarios);
             $solicitud->increment('compras_count');
+            app(\App\Modules\SolicitudMudanza\Services\ReferralService::class)
+                ->procesarRecompensa($solicitud->fresh());
         });
 
         Mail::to($empresa->email)->send(
