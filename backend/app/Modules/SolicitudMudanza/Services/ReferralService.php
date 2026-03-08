@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Modules\SolicitudMudanza\Services;
+
 use App\Modules\SolicitudMudanza\Models\SolicitudMudanza;
+use App\Modules\Notificacion\Events\CreditosAgregadosEvent;
 use App\Modules\Empresa\Models\Empresa;
+use App\Modules\Notificacion\Services\NotificationDispatcher;
 
 class ReferralService
 {
@@ -50,6 +53,13 @@ class ReferralService
 
             if ($creditos > 0) {
                 $empresa->incrementQuietly('tokens', $creditos);
+
+                app(NotificationDispatcher::class)->dispatch(
+                    new CreditosAgregadosEvent(
+                        $empresa->id,
+                        $creditos
+                    )
+                );
             }
         }
 
@@ -66,6 +76,13 @@ class ReferralService
             };
             if ($bono > 0) {
                 $empresa->incrementQuietly('tokens', $bono);
+
+                app(NotificationDispatcher::class)->dispatch(
+                    new CreditosAgregadosEvent(
+                        $empresa->id,
+                        $bono
+                    )
+                );
             }
         }
     }
