@@ -36,8 +36,8 @@ class ReferralService
             // Si se compró como exclusiva
             if ($esExclusiva) {
                 $creditos = match ($tipoServicio) {
-                    'local' => 9,
-                    'foranea' => 15,
+                    'local' => 5,
+                    'foranea' => 13,
                     default => 0
                 };
             } else {
@@ -60,7 +60,7 @@ class ReferralService
     */
         if ($compras === 3) {
             $bono = match ($tipoServicio) {
-                'local' => 4,
+                'local' => 3,
                 'foranea' => 7,
                 default => 0
             };

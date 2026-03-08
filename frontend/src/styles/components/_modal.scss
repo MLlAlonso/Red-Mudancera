@@ -286,7 +286,11 @@
 
   &__actions {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
+
+    button{
+      width: 48%;
+    }
   }
 }
 

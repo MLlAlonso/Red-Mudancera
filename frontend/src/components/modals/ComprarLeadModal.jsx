@@ -176,6 +176,16 @@ export default function ComprarLeadModal({
                         )}
 
                         <div className="comprar-lead-modal__actions">
+
+                            <button
+                                className="btn-outline"
+                                onClick={onClose}
+                                disabled={loading}
+                                id="modal-btn-cancel"
+                            >
+                                Cancelar
+                            </button>
+
                             {puedeComprar ? (
                                 <Button_cta
                                     value={
