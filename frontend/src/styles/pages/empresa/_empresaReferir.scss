@@ -1,0 +1,356 @@
+@use "../../utils/variables";
+
+.referir {
+    min-height: calc(100vh - 120px);
+    padding: 40px 20px;
+
+    &__title {
+        font-family: variables.$font-title;
+        font-weight: 700;
+        font-size: 38px;
+        color: variables.$title;
+        margin-bottom: 0.2rem;
+    }
+
+    &__subtitle {
+        font-family: variables.$font-text;
+        font-weight: 400;
+        font-size: 22px;
+        color: variables.$text-muted;
+        margin: 0;
+
+        span {
+            font-weight: 600
+        }
+
+        ;
+    }
+
+    &__block {
+        margin: 40px 0px;
+    }
+
+    h3 {
+        font-family: variables.$font-title;
+        margin-bottom: 18px;
+        color: variables.$primary;
+    }
+
+    &__link {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: variables.$cards;
+        padding: 5px 10px;
+        border-radius: 12px;
+        margin-bottom: 15px;
+
+        span {
+            font-family: variables.$font-text;
+            color: variables.$title;
+            font-weight: 500;
+            font-size: 20px;
+            word-break: break-all;
+        }
+
+        button {
+            background: none;
+            border: none;
+            cursor: pointer;
+
+            img {
+                width: 30px;
+                height: 30px;
+            }
+        }
+    }
+
+    &__actions {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+
+        .referir__btn {
+            display: flex;
+            min-width: 200px;
+            max-width: 200px;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-family: variables.$font-title;
+            font-size: 20px;
+            color: white;
+
+            img {
+                width: 30px;
+                height: 30px;
+            }
+
+        }
+
+        .referir__btn--primary {
+            background: variables.$primary;
+
+            &:hover {
+                background: variables.$primary-hover;
+            }
+        }
+
+        .referir__btn--success {
+            background: variables.$success;
+
+            &:hover {
+                background: variables.$success-hover;
+            }
+        }
+    }
+
+    &__message {
+        background: variables.$cards;
+        padding: 20px;
+        border-radius: 14px;
+        position: relative;
+
+        p {
+            white-space: pre-line;
+            font-family: variables.$font-text;
+            color: variables.$text;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .referir__copy-message {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+
+            background: variables.$background;
+            color: variables.$primary;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 15px;
+            cursor: pointer;
+
+            font-family: variables.$font-title;
+
+            img {
+                width: 25px;
+                height: 25px;
+            }
+
+            &:hover,
+            &:active {
+                transform: scale(1.02);
+                background: variables.$background;
+            }
+        }
+    }
+
+    &__messages {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+
+    &__script-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px;
+        cursor: pointer;
+        border-radius: 12px;
+        border: 1px solid variables.$secondary;
+        color: variables.$primary;
+        font-family: variables.$font-title;
+        font-size: 18px;
+        font-weight: 500;
+
+        .referir__script-title {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 20px;
+        }
+    }
+
+    &__script-icon {
+        width: 22px;
+        height: 22px;
+    }
+
+    &__script-text {
+        flex: 1;
+        text-align: center;
+    }
+
+    &__script-arrow {
+        width: 18px;
+        height: 18px;
+        transition: transform 0.2s ease;
+    }
+
+    &__script-arrow--open {
+        transform: rotate(180deg);
+    }
+
+    &__script {
+        padding: 20px;
+        border-radius: 12px;
+        margin-top: 10px;
+        border: 1px solid variables.$secondary;
+        font-size: 18px;
+
+        ul {
+            padding: 20px;
+            background: variables.$cards;
+        }
+
+        li {
+            margin-bottom: 10px;
+            color: variables.$text;
+            font-family: variables.$font-text;
+            list-style: none;
+            font-size: 16px;
+        }
+    }
+
+    &__script-time {
+        margin-bottom: 10px;
+        color: variables.$text-muted;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        align-items: stretch;
+    }
+
+    &__benefits {
+        background: variables.$cards;
+        border-radius: 14px;
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        min-height: 140px;
+    }
+
+    &__benefit {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-family: variables.$font-text;
+        font-size: 18px;
+        color: variables.$text;
+
+        img {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+        }
+    }
+
+    &__stats {
+
+        background: variables.$cards;
+        border-radius: 14px;
+        padding: 25px;
+
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        min-height: 150px;
+    }
+
+    &__stat {
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+
+    }
+
+    &__stat-label {
+
+        font-family: variables.$font-text;
+        font-size: 16px;
+        color: variables.$text-muted;
+
+    }
+
+    &__stat-value {
+
+        font-family: variables.$font-title;
+        font-size: 36px;
+        font-weight: 700;
+        color: variables.$primary;
+
+    }
+}
+
+@media (max-width: 768px) {
+    .referir {
+        &__title {
+            font-size: 30px;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .referir {
+            &__messages {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        &__subtitle {
+            text-align: justify;
+            margin-bottom: 10px;
+        }
+
+        &__link {
+            span {
+                text-align: justify;
+                margin-right: 16px;
+            }
+        }
+
+        &__actions {
+            max-width: 650px;
+
+            .referir__btn {
+                min-width: 45%;
+                max-width: 45%;
+            }
+        }
+
+        &__benefits {
+            padding: 20px;
+        }
+
+        &__benefit {
+            font-size: 16px;
+        }
+
+        &__stats {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        &__grid {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        &__grid .referir__block {
+            margin: 10px 0;
+        }
+    }
+}

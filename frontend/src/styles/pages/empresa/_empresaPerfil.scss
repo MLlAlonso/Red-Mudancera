@@ -22,6 +22,7 @@
     text-align: justify;
   }
 
+  /* Perfil top */
   &__top {
     display: flex;
     flex-direction: column;
@@ -42,9 +43,42 @@
     font-family: variables.$font-title;
   }
 
+  &__name-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__base {
+    font-family: variables.$font-text;
+    font-size: 18px;
+    font-weight: 500;
+    color: variables.$text-muted;
+  }
+
+  &__verified {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 500;
+    font-family: variables.$font-text;
+    color: variables.$primary;
+    background: #E0EADF;
+    padding: 8px 15px;
+    border-radius: 15px;
+
+    img {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+    }
+  }
+
   /* Stats */
   &__stats {
-    margin: 30px 0;
+    margin: 30px 0px 10px 0px;
     display: flex;
     justify-content: center;
     align-items: stretch;
@@ -53,9 +87,29 @@
 
     .stat {
       text-align: center;
-      font-size: clamp(18px, 2vw, 22px);
+      font-size: 22px;
       font-family: variables.$font-text;
-      min-width: 120px;
+      background: white;
+      border: 2px solid #ccc;
+      border-radius: 15px;
+      padding: 10px 20px;
+      min-width: 200px;
+      max-width: 200px;
+
+      span {
+        display: block;
+        margin-bottom: 20px;
+        align-items: center;
+        font-size: 20px;
+        font-weight: 600;
+        color: variables.$primary;
+      }
+
+      img {
+        width: 20px;
+        height: 20px;
+        margin-bottom: 22px;
+      }
 
       &__top {
         display: flex;
@@ -63,167 +117,293 @@
         justify-content: center;
         gap: 8px;
       }
+    }
+  }
+
+  /* Actions btn */
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  &__action-btn {
+    gap: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 300px;
+    max-width: 300px;
+    padding: 20px 5px;
+    border-radius: 15px;
+    border: 2px solid #ccc;
+    font-family: variables.$font-text;
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    color: variables.$primary;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+
+    &:hover {
+      background: variables.$primary;
+      border-color: variables.$primary;
+      color: white;
 
       img {
-        width: clamp(20px, 3vw, 24px);
-        height: clamp(20px, 3vw, 24px);
-        object-fit: contain;
+        filter: brightness(0) invert(1);
       }
+    }
 
-      strong {
-        font-size: clamp(20px, 2.2vw, 24px);
-      }
-
-      span {
-        display: block;
-        font-size: clamp(14px, 1.8vw, 16px);
-        color: variables.$text-muted;
-        margin-top: 2px;
-      }
-
-      button {
-        margin-top: 4px;
-        margin-bottom: 2px;
-        padding: 6px 14px;
-        font-size: clamp(14px, 1.6vw, 16px);
-        font-weight: 500;
-        border-radius: 6px;
-        border: 1px solid variables.$primary;
-        background: variables.$primary;
-        color: white;
-        cursor: pointer;
-        transition: all 0.2s ease;
-
-        &:hover {
-          background: variables.$success;
-          border-color: variables.$success;
-        }
-
-        &:active {
-          transform: scale(0.97);
-        }
-      }
+    &:active {
+      transform: scale(0.97);
     }
   }
 
-  /* Tablet */
-  @media (max-width: 768px) {
-    &__stats {
-      gap: 24px;
-
-      .stat {
-        min-width: 110px;
-      }
-    }
+  &__card {
+    margin-top: 30px;
+    padding: 10px 24px 20px 24px;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e6e6e6;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   }
 
-  /* Mobile */
-  @media (max-width: 480px) {
-    &__stats {
-      justify-content: space-around;
-      gap: 16px;
-
-      .stat {
-        flex: 1 1 120px;
-      }
-    }
-  }
-
-  /* Secciones */
-  &__row {
+  &__card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-
-  &__section-title {
-    font-size: 28px;
-    font-family: variables.$font-title;
-    color: variables.$primary;
-  }
-
-  .empresa-perfil__section-actions {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    margin-bottom: 15px;
 
     .btn_crud {
-      font-size: 20px;
+      font-size: 18px;
+      padding: 5px;
     }
   }
 
-  /* Información */
-  &__info {
-    margin: 20px 0;
-
-    p {
-      font-size: 20px;
-      margin-bottom: 10px;
-      color: #4A5E71;
-
-      strong {
-        font-family: "Nunito", sans-serif;
-        font-weight: 700;
-        color: #09233e;
-        font-size: 26px;
-        margin-right: 10px;
-      }
-    }
-  }
-
-  /* División */
-  &__divider {
-    width: 100%;
-    height: 2px;
-    background: #abb0b4;
-    opacity: 0.5;
-    margin: 40px auto;
+  &__card-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 300px;
   }
 
   /* Reseñas */
-  &__reviews {
+  .empresa-perfil__card-body {
     display: grid;
-    grid-template-columns: 1fr;
-    margin-top: 20px;
-    gap: 10px;
-    margin-bottom: 20px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
 
-    @media (min-width: 900px) {
-      grid-template-columns: 1fr 1fr;
+  #header_resena {
+    .btn_crud {
+      width: 220px;
+      max-width: 220px;
     }
   }
 
-  &__vermas {
-    font-size: 20px;
-    font-weight: bold;
+  .empresa-perfil__card-body:has(.empresa-perfil__reviews-empty) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 180px;
+  }
+
+  .empresa-perfil__reviews-empty {
+    text-align: center;
+    font-size: 18px;
     color: variables.$text-muted;
+    max-width: 420px;
+
+    p {
+      margin-top: 10px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+  }
+
+  .empresa-perfil__card-footer {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .empresa-perfil__vermas {
+    font-size: 18px;
+    font-weight: 600;
+    color: variables.$primary;
     cursor: pointer;
+
+    border: none;
+    background: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
-.empresa-perfil__avatar {
-  width: 120px;
-  height: 120px;
-  border-radius: 100%;
-  object-fit: cover;
-}
 
-@media (max-width: 600px) {
+
+@media (max-width: 1024px) {
+
   .empresa-perfil {
+
     &__title {
-      font-size: 30px;
-      text-align: center;
-      margin-bottom: 5px;
+      font-size: 34px;
     }
 
     &__subtitle {
-      text-align: center;
-      margin-bottom: 10px;
+      font-size: 20px;
     }
 
-    &__info p {
-      display: flex;
-      flex-direction: column;
+    &__avatar {
+      width: 170px;
+      height: 170px;
     }
+
+    &__name {
+      font-size: 26px;
+    }
+
+    &__base {
+      font-size: 17px;
+    }
+
+    &__verified {
+      font-size: 17px;
+      padding: 6px 12px;
+
+      img {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    &__stats {
+
+      gap: 30px;
+
+      .stat {
+        font-size: 20px;
+        min-width: 180px;
+        max-width: 180px;
+
+        span {
+          font-size: 18px;
+        }
+      }
+    }
+
+    &__action-btn {
+      min-width: 260px;
+      max-width: 260px;
+      font-size: 18px;
+      padding: 16px 5px;
+    }
+
+    &__card-body {
+      gap: 12px 120px;
+    }
+
   }
+
+}
+
+@media (max-width: 768px) {
+
+  .empresa-perfil {
+
+    padding: 25px 15px;
+
+    &__title {
+      font-size: 30px;
+      text-align: center;
+    }
+
+    &__subtitle {
+      font-size: 18px;
+      text-align: center;
+    }
+
+    &__avatar {
+      width: 150px;
+      height: 150px;
+    }
+
+    &__name {
+      font-size: 24px;
+    }
+
+    &__base {
+      font-size: 16px;
+    }
+
+    &__verified {
+      font-size: 16px;
+      padding: 6px 12px;
+    }
+
+    &__stats {
+
+      gap: 20px;
+
+      .stat {
+        min-width: 120px;
+        max-width: 120px;
+        padding: 8px 15px;
+
+        span {
+          font-size: 16px;
+        }
+      }
+
+      #empresa_tokens{
+        .stat__top{
+          margin-top: 20px;
+        }
+      }
+    }
+
+    &__action-btn {
+      min-width: 240px;
+      max-width: 240px;
+      font-size: 17px;
+      padding: 14px 5px;
+    }
+
+    &__card-body {
+      gap: 10px 60px;
+    }
+
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  .empresa-perfil {
+
+    &__card-body.empresa-perfil__info {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+  }
+  
+  .empresa-perfil__actions {
+    gap: 10px;
+}
+
+  .empresa-perfil__card-body {
+    grid-template-columns: 1fr;
+  }
+
 }

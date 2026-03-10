@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Modules\Notificacion\Events;
-
 use Illuminate\Support\Facades\Log;
 
 class CreditosAgregadosEvent extends BaseNotificationEvent

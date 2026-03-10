@@ -5,28 +5,40 @@ import { useRouter } from "next/navigation";
 
 const ActionCard = ({ type }) => {
   const router = useRouter();
-  const isOfrezco = type === "ofrezco";
 
-  const data = {
-    icon: isOfrezco ? "/icons/ofrezco_btn.png" : "/icons/busco_btn.png",
-    title: isOfrezco ? "Ofrecer Carga" : "Buscar Carga",
-    info: isOfrezco
-      ? "Tengo mercancia para compartir"
-      : "Tengo ruta y quiero llenar mi camión",
-    bg: isOfrezco ? "actioncard--ofrezco" : "actioncard--busco",
+  const dataMap = {
+    ofrezco: {
+      icon: "/icons/ofrezco_btn.png",
+      title: "Ofrecer Carga",
+      info: "Tengo mercancía para compartir",
+      bg: "actioncard--ofrezco",
+      url: "/empresa/cargas/ofrezco",
+    },
+    busco: {
+      icon: "/icons/busco_btn.png",
+      title: "Buscar Carga",
+      info: "Encuentra carga disponible en tu ruta",
+      bg: "actioncard--busco",
+      url: "/empresa/cargas/busco",
+    },
+    referir: {
+      icon: "/icons/clientew.png",
+      title: "Referir Contacto",
+      info: "No trabajas esa ruta. Refiérelo y gana créditos",
+      bg: "actioncard--referir",
+      url: "/empresa/cargas/referir",
+    },
   };
 
+  const data = dataMap[type];
+
   const handleClick = () => {
-    router.push(`/empresa/cargas//${type}`);
+    router.push(data.url);
   };
 
   return (
     <div className={`actioncard ${data.bg}`} onClick={handleClick}>
-      <img
-        src={data.icon}
-        alt={data.title}
-        className="actioncard__icon"
-      />
+      <img src={data.icon} alt={data.title} className="actioncard__icon" />
 
       <h2 className="actioncard__title">{data.title}</h2>
       <p className="actioncard__info">{data.info}</p>

@@ -76,3 +76,11 @@
         background-color: variables.$primary-hover;
     }
 }
+
+.actioncard--referir {
+    background-color: variables.$tertiary;
+
+    &:hover {
+        background-color: variables.$tertiary-hover;
+    }
+}

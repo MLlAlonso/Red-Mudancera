@@ -197,4 +197,30 @@ class EmpresaController extends Controller
             'data' => $leads
         ]);
     }
+
+    public function referidosStats()
+    {
+        $empresa = auth()->user();
+
+        $inicioMes = now()->startOfMonth();
+
+        $referidosMes = \App\Modules\SolicitudMudanza\Models\SolicitudMudanza::where(
+            'referido_por_empresa_id',
+            $empresa->id
+        )
+            ->where('created_at', '>=', $inicioMes)
+            ->count();
+
+        $creditosMes = \App\Modules\SolicitudMudanza\Models\SolicitudMudanza::where(
+            'referido_por_empresa_id',
+            $empresa->id
+        )
+            ->where('created_at', '>=', $inicioMes)
+            ->sum('compras_count'); // aproximación basada en ventas
+
+        return response()->json([
+            'referidos_mes' => $referidosMes,
+            'creditos_mes' => $creditosMes
+        ]);
+    }
 }

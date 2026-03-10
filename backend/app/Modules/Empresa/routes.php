@@ -27,6 +27,7 @@ Route::prefix('empresa')->group(function () {
 
         Route::get('/mis-leads', [EmpresaController::class, 'misLeads']);
         Route::get('/feed', [EmpresaFeedController::class, 'index']);
+        Route::get('/referidos/stats', [EmpresaController::class, 'referidosStats']);
     });
 
     Route::get('/empresas/{id}', [EmpresaPublicController::class, 'show']);

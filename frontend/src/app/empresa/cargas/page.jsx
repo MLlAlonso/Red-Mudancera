@@ -30,6 +30,7 @@ export default function CargaPage() {
           <div className="carga__actions">
             <ActionCard type="ofrezco" />
             <ActionCard type="busco" />
+            <ActionCard type="referir" />
           </div>
         </div>
       </main>
