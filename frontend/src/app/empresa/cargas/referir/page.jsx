@@ -148,7 +148,7 @@ ${mensajeEmail}`;
                         </button>
 
                         <button className="referir__btn referir__btn--success" onClick={compartirWhatsapp} >
-                            <img src="/icons/whatsapp.png" alt="WhatsApp" />
+                            <img src="/icons/shareW.png" alt="WhatsApp" />
                             WhatsApp
                         </button>
                     </div>

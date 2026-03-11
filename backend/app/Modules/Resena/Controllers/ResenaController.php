@@ -32,7 +32,7 @@ class ResenaController extends Controller
     {
         $link = ResenaLink::where('token', $token)->first();
 
-        if (!$link || $link->usado) {
+        if (!$link) {
             return response()->json([
                 'message' => 'El enlace de reseña no es válido o ya fue usado'
             ], 404);
@@ -54,73 +54,114 @@ class ResenaController extends Controller
         ]);
     }
 
-
     public function store(Request $request, $token)
     {
-        $request->validate([
-            'comentario' => 'required|string|min:10|max:1000',
-            'rating' => 'required|numeric|min:1|max:5',
-        ]);
-
-        $autor = $request->user(); // Empresa o Usuario
         $link = ResenaLink::where('token', $token)->first();
-
-        if (!$link || $link->usado) {
+        if (!$link) {
             return response()->json(['message' => 'Link inválido'], 404);
         }
 
-        // Detectar empresa origen
-        $empresaOrigenId = $autor instanceof Empresa
-            ? $autor->id
-            : $autor->empresa_id;
+        $empresaDestino = Empresa::find($link->empresa_destino_id);
+        if (!$empresaDestino) {
+            return response()->json(['message' => 'Empresa no encontrada'], 404);
+        }
+        $autor = $request->user();
 
-        if (!$empresaOrigenId) {
-            return response()->json(['message' => 'Usuario sin empresa asociada'], 403);
+    /*
+    =================================
+    CASO 1 — EMPRESA LOGUEADA
+    =================================
+    */
+
+        if ($autor) {
+            $request->validate([
+                'comentario' => 'required|string|min:10|max:1000',
+                'rating' => 'required|numeric|min:1|max:5',
+            ]);
+
+            $empresaOrigenId = $autor instanceof Empresa
+                ? $autor->id
+                : $autor->empresa_id;
+
+            $resena = Resena::create([
+                'empresa_origen_id' => $empresaOrigenId,
+                'empresa_destino_id' => $empresaDestino->id,
+                'comentario' => $request->comentario,
+                'rating' => $request->rating,
+                'fecha_resena' => now(),
+            ]);
         }
 
-        // Crear reseña
-        $resena = Resena::create([
-            'empresa_origen_id' => $empresaOrigenId,
-            'empresa_destino_id' => $link->empresa_destino_id,
-            'comentario' => $request->comentario,
-            'rating' => $request->rating,
-            'fecha_resena' => now(),
-        ]);
+        /*
+    =================================
+    CASO 2 — CLIENTE EXTERNO
+    =================================
+    */ else {
+            $request->validate([
+                'nombre' => 'required|string|min:3|max:150',
+                'correo' => 'required|email|max:150',
+                'comentario' => 'required|string|min:10|max:1000',
+                'rating' => 'required|numeric|min:1|max:5',
+            ]);
 
-        $link->update([
-            'usado' => true,
-            'empresa_origen_id' => $empresaOrigenId,
-        ]);
+            /* ANTI SPAM 72h */
+            $exists = Resena::where('correo_cliente', $request->correo)
+                ->where('created_at', '>', now()->subHours(72))
+                ->exists();
+            if ($exists) {
+                return response()->json([
+                    'message' => 'Ya enviaste una reseña recientemente. Intenta en 72 horas.'
+                ], 429);
+            }
 
-        $this->recalcularReputacion($link->empresa_destino_id);
+            $resena = Resena::create([
+                'empresa_origen_id' => null,
+                'empresa_destino_id' => $empresaDestino->id,
+                'nombre_cliente' => $request->nombre,
+                'correo_cliente' => $request->correo,
+                'comentario' => $request->comentario,
+                'rating' => $request->rating,
+                'fecha_resena' => now(),
+            ]);
+        }
 
-        // Crear link de respuesta SOLO si quien reseñó fue empresa
+        /*
+    =================================
+    RECALCULAR REPUTACIÓN
+    =================================
+    */
+        $this->recalcularReputacion($empresaDestino->id);
+    /*
+    =================================
+    ENVIAR CORREO
+    =================================
+    */
+        $autorNombre = $resena->nombre_cliente
+            ?? optional(Empresa::find($resena->empresa_origen_id))->empresa
+            ?? 'Cliente';
+        $esCliente = $resena->empresa_origen_id === null;
+        
         $linkRespuesta = null;
-
-        if ($autor instanceof Empresa) {
+        if ($autor) {
             $respuesta = ResenaLink::create([
-                'empresa_origen_id' => $link->empresa_destino_id,
-                'empresa_destino_id' => $empresaOrigenId,
+                'empresa_origen_id' => $empresaDestino->id,
+                'empresa_destino_id' => $resena->empresa_origen_id,
                 'resena_id' => $resena->id,
                 'token' => Str::uuid(),
                 'tipo' => 'response',
             ]);
-
-            $linkRespuesta = 'https://app.mudanzafacil.com.mx/resena/' . $token;
+            $linkRespuesta = 'https://app.mudanzafacil.com.mx/resena/' . $respuesta->token;
         }
-
-        // Enviar correo
-        $empresaDestino = Empresa::find($link->empresa_destino_id);
 
         Mail::to($empresaDestino->email)->send(
             new NuevaResenaMail(
-                Empresa::find($empresaOrigenId)->empresa,
-                $request->comentario,
-                $request->rating,
-                $linkRespuesta
+                $autorNombre,
+                $resena->comentario,
+                $resena->rating,
+                $linkRespuesta,
+                $esCliente
             )
         );
-
         return response()->json(['success' => true]);
     }
 
@@ -128,7 +169,6 @@ class ResenaController extends Controller
     {
         $avg = Resena::where('empresa_destino_id', $empresaId)->avg('rating');
         $count = Resena::where('empresa_destino_id', $empresaId)->count();
-
         Empresa::where('id', $empresaId)->update([
             'reputacion' => round($avg, 2),
             'numServicios' => $count
@@ -138,7 +178,6 @@ class ResenaController extends Controller
     public function listar($empresaId, Request $request)
     {
         $limit = $request->query('limit');
-
         $query = Resena::where('empresa_destino_id', $empresaId)
             ->orderBy('created_at', 'DESC');
 
@@ -157,7 +196,6 @@ class ResenaController extends Controller
                 'comentario' => $resena->comentario,
             ];
         });
-
 
         return response()->json($resenas);
     }

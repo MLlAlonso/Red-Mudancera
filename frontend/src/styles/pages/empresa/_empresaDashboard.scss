@@ -84,6 +84,11 @@
             font-family: variables.$font-title;
             text-align: center;
         }
+
+        #reporte {
+            width: 120px;
+            color: white;
+        }
     }
 
     #publicaciones {
@@ -104,11 +109,20 @@
 
         /* Tablet 600px */
         @media (min-width: 600px) {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(1, 1fr);
         }
 
         /* Desktop 900px */
-        @media (min-width: 900px) {
+        @media (min-width: 900px) and (max-width: 1200px) {
+            grid-template-columns: repeat(2, 1fr);
+
+            .service-card {
+                max-width: 100%;
+                margin: 0 auto;
+            }
+        }
+
+        @media (min-width: 1200px) {
             grid-template-columns: repeat(3, 1fr);
         }
     }
@@ -137,17 +151,17 @@
         }
     }
 
-    .solicitud-card{
-        .btn_cta{
+    .solicitud-card {
+        .btn_cta {
             width: 50%;
             padding: 10px 0px;
             border-radius: 8px;
 
-            span{
+            span {
                 font-size: 16px;
             }
 
-            &__icon{
+            &__icon {
                 width: 30px;
                 height: 30px;
             }
@@ -158,7 +172,6 @@
 /* Mobile */
 @media (max-width: 600px) {
     .empresa-dashboard {
-
         &__title {
             font-size: 30px;
             text-align: center;
@@ -180,8 +193,8 @@
 
         &__controls {
             display: flex;
-            flex-direction: column;
             justify-content: center;
+            gap: 0px;
 
             .service-filters__trigger {
                 min-width: 350px;
@@ -191,7 +204,7 @@
                     font-size: 30px;
                 }
 
-                &:hover{
+                &:hover {
                     transform: scale(1);
                 }
             }

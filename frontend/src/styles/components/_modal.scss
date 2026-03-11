@@ -1,5 +1,9 @@
 @use "../utils/variables";
 
+/* ================================
+   OVERLAY
+================================ */
+
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -10,6 +14,10 @@
   z-index: 9999;
 }
 
+/* ================================
+   MODAL
+================================ */
+
 .modal {
   background: variables.$cards;
   border-radius: 12px;
@@ -18,175 +26,139 @@
   width: 90%;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
   animation: fadeIn 0.2s ease;
-}
 
-.modal-title {
-  font-size: 30px;
-  font-weight: 600;
-  font-family: variables.$font-title;
-  margin-bottom: 12px;
-  text-align: center;
-  color: variables.$title;
-}
-
-.modal-message {
-  font-size: 18px;
-  line-height: 1.5;
-  color: variables.$text;
-  font-family: variables.$font-text;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.modal-input {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-
-  .dropdown {
-    position: relative;
-    width: 100%;
+  &-title {
+    font-size: 30px;
+    font-weight: 600;
+    font-family: variables.$font-title;
+    margin-bottom: 12px;
+    text-align: center;
+    color: variables.$title;
   }
 
-  .dropdown-trigger {
-    width: 100%;
-    height: 44px;
-    border-radius: 10px;
-    background: #ffffff;
-    border: none;
+  &-message {
     font-size: 18px;
+    line-height: 1.5;
+    color: variables.$text;
+    font-family: variables.$font-text;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  /* ================================
+     INPUT
+  ================================ */
+
+  &-input {
+    width: 100%;
+    height: 42px;
+    border-radius: 10px;
+    border: none;
+    padding: 0 14px;
+    font-size: 15px;
     font-family: variables.$font-text;
     color: variables.$text;
+    background: #ffffff;
+    margin: 12px 0 16px 0;
+    text-align: center;
+    outline: none;
+  }
+
+  /* ================================
+     BODY
+  ================================ */
+
+  &-body {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    margin-top: 10px;
+
+    button {
+      flex: 1;
+      height: 42px;
+    }
+
+    .btn-solid img {
+      height: 18px;
+      margin-right: 6px;
+    }
+
+    .Button_success,
+    .Button_error,
+    input {
+      margin-bottom: 0px;
+      margin-top: 0px;
+    }
+  }
+
+  &-actions {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 15px;
+  }
+
+  /* ================================
+   BOTONES
+================================ */
+
+  .btn-outline {
+    flex: 1;
+    height: 42px;
+    border-radius: 10px;
+    border: 2px solid variables.$primary;
+    background: transparent;
+    color: variables.$primary;
+    font-family: variables.$font-text;
+    font-weight: 600;
+    font-size: 14px;
     cursor: pointer;
+    transition: all 0.2s ease;
 
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-  }
-
-  .dropdown-menu {
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 0;
-    width: 100%;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    z-index: 50;
-    max-height: 220px;
-    overflow-y: auto;
-  }
-
-  .dropdown-menu li {
-    padding: 12px;
-    text-align: center;
-    font-size: 18px;
-    cursor: pointer;
-    color: variables.$text;
-    transition: background 0.2s ease, color 0.2s ease;
 
     &:hover {
       background: variables.$primary;
       color: #ffffff;
-      font-weight: 600;
     }
   }
 
-  /* Flecha */
-  .arrow {
-    transition: transform 0.2s ease;
-    font-size: 20px;
-
-    &.open {
-      transform: rotate(180deg);
-    }
-  }
-
-  /* Mobile */
-  @media (max-width: 768px) {
-    .modal-input {
-      flex-direction: row;
-    }
-
-    .dropdown-trigger {
-      font-size: 16px;
-      height: 42px;
-    }
-
-    .dropdown-menu li {
-      font-size: 15px;
-      padding: 14px;
-    }
-  }
-
-
-}
-
-.modal-btn {
-  width: 100%;
-  padding: 10px;
-  background: variables.$success;
-  color: variables.$background;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-bottom: 0px;
-
-  &:hover {
-    opacity: 0.9;
-    background: variables.$success-hover;
-  }
-}
-
-.modal-body {
-  gap: 10px;
-
-  display: flex;
-  flex-direction: row;
-
-  .Button_success,
-  .Button_error,
-  input {
-    margin-bottom: 0px;
-    margin-top: 0px;
-  }
-
-  #modal_email {
-    width: 100%;
-    padding: 14px 18px;
-    background: #ffffff;
+  .btn-solid {
+    flex: 1;
+    height: 42px;
+    border-radius: 10px;
     border: none;
-    border-radius: 12px;
+    background: variables.$success;
+    color: #ffffff;
     font-family: variables.$font-text;
-    font-size: 20px;
-    color: #000;
-    outline: none;
-    padding-left: 55px !important;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
 
-    &::placeholder {
-      color: variables.$text-muted;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    img {
+      height: 18px;
+    }
+
+    &:hover {
+      background: variables.$success-hover;
     }
   }
 }
 
-.modal-actions {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  gap: 15px;
-}
 
-#modal-btn-cancel {
-  marginTop: 0px;
-  background: variables.$error;
 
-  &:hover {
-    background: variables.$error-hover;
-  }
-}
-
+/* ================================
+   FORM INPUTS
+================================ */
 #modal_email {
   width: 100%;
   height: 40px;
@@ -206,6 +178,9 @@
   font-size: 12px;
 }
 
+/* ================================
+   COMPRAR LEAD MODAL
+================================ */
 .comprar-lead-modal {
   display: flex;
   flex-direction: column;
@@ -288,11 +263,49 @@
     display: flex;
     justify-content: space-around;
 
-    button{
+    button {
       width: 48%;
     }
   }
 }
+
+/* ================================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px) {
+  .modal {
+    width: 92%;
+    padding: 20px;
+
+    &-title {
+      font-size: 24px;
+    }
+
+    &-message {
+      font-size: 16px;
+    }
+
+    &-input {
+      font-size: 14px;
+    }
+
+    &-body {
+      flex-direction: row;
+      gap: 10px;
+    }
+  }
+
+  .btn-outline,
+  .btn-solid,
+  .Button_error {
+    width: 100%;
+  }
+
+}
+
+/* ================================
+   ANIMATION
+================================ */
 
 @keyframes fadeIn {
   from {

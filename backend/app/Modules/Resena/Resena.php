@@ -9,8 +9,6 @@ class Resena extends Model
     protected $fillable = [
         'empresa_origen_id',
         'empresa_destino_id',
-        'nombre_cliente',
-        'correo_cliente',
         'comentario',
         'rating',
         'fecha_resena',

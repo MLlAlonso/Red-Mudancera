@@ -23,34 +23,31 @@ const getCookie = (name) => {
 export default function ResenaPage() {
   const { token } = useParams();
   const router = useRouter();
-
   const [empresa, setEmpresa] = useState(null);
   const [comentario, setComentario] = useState("");
   const [rating, setRating] = useState(0);
-
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
+  const [nombre, setNombre] = useState("");
+  const [correo, setCorreo] = useState("");
+  const [hover, setHover] = useState(0)
+  const tokenEmpresa = getCookie("token_empresa");
 
   useEffect(() => {
-    const tokenEmpresa = getCookie("token_empresa");
-
-    if (!tokenEmpresa) {
-      router.push("/login");
-      return;
-    }
 
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/resenas/link/${token}`)
       .then((res) => {
         if (!res.ok) throw new Error();
         return res.json();
       })
-      .then(data => setEmpresa(data.empresa_destino))
+      .then((data) => setEmpresa(data.empresa_destino))
       .catch(() =>
         setError("El enlace de reseña no es válido o ya no está disponible.")
       )
       .finally(() => setLoading(false));
-  }, [token, router]);
+
+  }, [token]);
 
   const enviar = async () => {
     setError("");
@@ -65,24 +62,45 @@ export default function ResenaPage() {
       return;
     }
 
+    if (!tokenEmpresa) {
+      if (!nombre.trim()) {
+        setError("Ingresa tu nombre");
+        return;
+      }
+
+      if (!correo.trim()) {
+        setError("Ingresa tu correo");
+        return;
+      }
+    }
+
     try {
       setSending(true);
+
+      const body = tokenEmpresa
+        ? { comentario, rating }
+        : { nombre, correo, comentario, rating };
+
+      const headers = {
+        "Content-Type": "application/json",
+      };
+
+      if (tokenEmpresa) {
+        headers.Authorization = `Bearer ${tokenEmpresa}`;
+      }
 
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/resenas/${token}`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${getCookie("token_empresa")}`,
-          },
-          body: JSON.stringify({ comentario, rating }),
+          headers,
+          body: JSON.stringify(body),
         }
       );
 
       if (!res.ok) throw new Error();
 
-      router.push("/empresa/perfil");
+      router.push(`/empresa/${empresa.id}`);
     } catch {
       setError("No se pudo enviar la reseña.");
     } finally {
@@ -123,6 +141,24 @@ export default function ResenaPage() {
 
           {error && <p className="resena-error">{error}</p>}
 
+          {!tokenEmpresa && (
+            <>
+              <label className="resena-label">Nombre</label>
+              <input
+                className="resena-input"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+              />
+
+              <label className="resena-label">Correo</label>
+              <input
+                className="resena-input"
+                value={correo}
+                onChange={(e) => setCorreo(e.target.value)}
+              />
+            </>
+          )}
+
           {/* Comentario */}
           <label className="resena-label">Reseña</label>
           <textarea
@@ -139,12 +175,19 @@ export default function ResenaPage() {
             {[1, 2, 3, 4, 5].map((v) => (
               <span
                 key={v}
-                className={`star ${v <= rating ? "active" : ""}`}
+                className={`star ${(hover || rating) >= v ? "active" : ""}`}
                 onClick={() => setRating(v)}
+                onMouseEnter={() => setHover(v)}
+                onMouseLeave={() => setHover(0)}
               >
                 ★
               </span>
             ))}
+          </div>
+
+          <div className="resena-scale">
+            <span>1 • Malo</span>
+            <span>5 • Excelente</span>
           </div>
 
           {/* Acciones */}
@@ -153,10 +196,7 @@ export default function ResenaPage() {
               value={sending ? "Enviando..." : "Enviar reseña"}
               onClick={enviar}
             />
-            <Button_error
-              value="Cancelar"
-              onClick={() => router.back()}
-            />
+            <Button_error value="Cancelar" onClick={() => router.back()} />
           </div>
         </div>
       </main>

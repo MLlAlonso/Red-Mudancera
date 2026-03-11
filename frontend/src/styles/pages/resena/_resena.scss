@@ -45,35 +45,55 @@
   padding: 14px;
   border-radius: 12px;
   border: none;
-  resize: none;
+  resize: vertical;
+  min-height: 120px;
   font-family: variables.$font-text;
   font-size: 18px;
+  background: #ffffff;
+  color: variables.$text;
+  outline: none;
+
+  &:focus {
+    box-shadow: 0 0 0 2px variables.$primary;
+  }
 }
 
 .resena-stars {
   display: flex;
   gap: 10px;
   justify-content: center;
+  margin-top: 4px;
 
   .star {
-    font-size: 34px;
+    font-size: 36px;
     cursor: pointer;
     color: #ccc;
-    transition: 0.2s;
+    transition: all 0.2s ease;
 
     &.active {
       color: #ffd700;
     }
 
     &:hover {
-      transform: scale(1.1);
+      transform: scale(1.15);
+      color: #ffd700;
     }
   }
 }
 
+.resena-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-family: variables.$font-text;
+  color: variables.$text-muted;
+  margin-top: -4px;
+  padding: 0 6px;
+}
+
 .resena-actions {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 12px;
   margin-top: 10px;
 }
@@ -88,4 +108,54 @@
   padding: 60px;
   text-align: center;
   font-size: 20px;
+}
+
+.resena-input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  font-family: variables.$font-text;
+  font-size: 18px;
+  background: #ffffff;
+  color: variables.$text;
+  outline: none;
+
+  &:focus {
+    box-shadow: 0 0 0 2px variables.$primary;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .resena {
+    padding: 20px 16px;
+    align-items: flex-start;
+  }
+
+  .resena-card {
+    padding: 24px;
+    border-radius: 16px;
+  }
+
+  .resena-title {
+    font-size: 28px;
+  }
+
+  .resena-subtitle {
+    font-size: 16px;
+  }
+
+  .resena-input,
+  .resena-textarea {
+    font-size: 16px;
+  }
+
+  .resena-stars .star {
+    font-size: 30px;
+  }
+
+  .resena-actions {
+    flex-direction: row;
+  }
 }

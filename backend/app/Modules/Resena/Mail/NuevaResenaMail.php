@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Modules\Resena\Mail;
-
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -9,11 +8,13 @@ use Illuminate\Queue\SerializesModels;
 
 class NuevaResenaMail extends Mailable
 {
+    use Queueable, SerializesModels;
     public function __construct(
         public $empresaOrigen,
         public $comentario,
         public $rating,
-        public $linkRespuesta
+        public $linkRespuesta,
+        public $esCliente = false
     ) {}
 
     public function build()

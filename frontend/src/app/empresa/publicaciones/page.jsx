@@ -13,6 +13,7 @@ import ConfirmFinalizarServicioModal from "@/components/modals/ConfirmFinalizarS
 import FinalizarServicioGananciaModal from "@/components/modals/FinalizarServicioGananciaModal";
 import ReporteMensualModal from "@/components/modals/ReporteMensualModal";
 import { useSearch } from "@/store/searchContext";
+import ShareClienteReviewLinkModal from "@/components/modals/ShareClienteReviewLinkModal";
 
 import "@/styles/pages/empresa/_empresaDashboard.scss";
 
@@ -25,6 +26,8 @@ export default function MisServiciosEmpresa() {
   const [showGananciaModal, setShowGananciaModal] = useState(false);
   const [showReporte, setShowReporte] = useState(false);
   const { search, city } = useSearch(); const [empresa, setEmpresa] = useState(null);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [reviewLink, setReviewLink] = useState("");
 
   const cambiarEstadoDirecto = async (id, estado, tipo) => {
     const token = getEmpresaToken();
@@ -174,7 +177,7 @@ export default function MisServiciosEmpresa() {
         <div className="empresa-dashboard__controls" id="publicaciones">
           <ServiceFilters onChange={setFilter} />
 
-          <button className="btn-outline" onClick={() => setShowReporte(true)} >
+          <button className="btn-outline" id="reporte" onClick={() => setShowReporte(true)} >
             Crear reporte
           </button>
         </div>
@@ -280,7 +283,8 @@ export default function MisServiciosEmpresa() {
           setShowGananciaModal(false);
           setSelectedService(null);
         }}
-        onSuccess={(updated) => {
+        onSuccess={async (updated) => {
+
           setServices((prev) =>
             prev.map((s) =>
               s.id === updated.id
@@ -288,12 +292,44 @@ export default function MisServiciosEmpresa() {
                 : s
             )
           );
+
+          try {
+            const token = getEmpresaToken();
+            const res = await fetch(
+              `${process.env.NEXT_PUBLIC_API_URL}/empresa/resenas/link`,
+              {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+
+            const data = await res.json();
+            if (data?.url) {
+              setReviewLink(data.url);
+              setShowReviewModal(true);
+            }
+
+          } catch (err) {
+            console.error("Error generando link de reseña");
+          }
+
         }}
       />
 
       <ReporteMensualModal
         open={showReporte}
         onClose={() => setShowReporte(false)}
+      />
+
+      <ShareClienteReviewLinkModal
+        open={showReviewModal}
+        link={reviewLink}
+        onClose={() => {
+          setShowReviewModal(false);
+          setReviewLink("");
+        }}
       />
 
       <Footer />
