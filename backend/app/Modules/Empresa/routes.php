@@ -6,6 +6,7 @@ use App\Modules\Empresa\Controllers\EmpresaController;
 use App\Modules\Servicio\Controllers\ServicioController;
 use App\Modules\Empresa\Controllers\EmpresaPublicController;
 use App\Modules\Empresa\Controllers\EmpresaFeedController;
+use App\Modules\Empresa\Controllers\CreditosController;
 
 Route::prefix('empresa')->group(function () {
     Route::post('/register', [EmpresaAuthController::class, 'register']);
@@ -23,11 +24,14 @@ Route::prefix('empresa')->group(function () {
         Route::delete('/usuario/{id}', [EmpresaController::class, 'eliminarUsuario']);
         Route::patch('/usuario/{id}/pausar', [EmpresaController::class, 'pausarUsuario']);
         Route::patch('/usuario/{id}/reanudar', [EmpresaController::class, 'reanudarUsuario']);
-        Route::get('/servicios', [ServicioController::class, 'misServicios']);
 
+        Route::get('/servicios', [ServicioController::class, 'misServicios']);
         Route::get('/mis-leads', [EmpresaController::class, 'misLeads']);
         Route::get('/feed', [EmpresaFeedController::class, 'index']);
+
         Route::get('/referidos/stats', [EmpresaController::class, 'referidosStats']);
+
+        Route::post('/creditos/comprar', [CreditosController::class, 'comprar']);
     });
 
     Route::get('/empresas/{id}', [EmpresaPublicController::class, 'show']);

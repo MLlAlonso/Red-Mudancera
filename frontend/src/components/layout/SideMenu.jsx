@@ -9,8 +9,29 @@ export default function SideMenu({ open }) {
   const [count, setCount] = useState(0);
   const [tokens, setTokens] = useState(null);
 
+  const getToken = () =>
+    document.cookie.match(/token_empresa=([^;]+)/)?.[1];
+
+  // ===============================
+  // OBTENER CRÉDITOS
+  // ===============================
+  const fetchTokens = () => {
+    const token = getToken();
+    if (!token) return;
+
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    })
+      .then(res => res.json())
+      .then(data => setTokens(data.tokens ?? 0))
+      .catch(() => { });
+  };
+
   useEffect(() => {
-    const token = document.cookie.match(/token_empresa=([^;]+)/)?.[1];
+    const token = getToken();
     if (!token) return;
 
     // Notificaciones
@@ -24,16 +45,22 @@ export default function SideMenu({ open }) {
       .then(data => setCount(data.count || 0))
       .catch(() => { });
 
-    // Tokens
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    })
-      .then(res => res.json())
-      .then(data => setTokens(data.tokens ?? 0))
-      .catch(() => { });
+    fetchTokens();
+  }, []);
+
+  // ===============================
+  // ESCUCHAR ACTUALIZACIÓN CRÉDITOS
+  // ===============================
+  useEffect(() => {
+    const actualizar = () => {
+      fetchTokens();
+    };
+
+    window.addEventListener("creditosActualizados", actualizar);
+
+    return () => {
+      window.removeEventListener("creditosActualizados", actualizar);
+    };
 
   }, []);
 
@@ -53,6 +80,7 @@ export default function SideMenu({ open }) {
       )}
 
       <ul>
+
         <li>
           <Link href="/empresa/dashboard">
             <div className="side-item">
@@ -99,15 +127,6 @@ export default function SideMenu({ open }) {
           </Link>
         </li>
 
-        {/* <li>
-          <Link href="/empresa/acuerdos">
-            <div className="side-item">
-              <img src="/icons/acuerdo_2.png" />
-              <span>Mis acuerdos</span>
-            </div>
-          </Link>
-        </li> */}
-
         <li>
           <Link href="/empresa/usuarios">
             <div className="side-item">
@@ -117,14 +136,14 @@ export default function SideMenu({ open }) {
           </Link>
         </li>
 
-        {/*         <li>
-          <Link href="/empresa/cargas">
+        <li>
+          <Link href="/empresa/creditos">
             <div className="side-item">
-              <img src="/icons/docs.png" />
-              <span>Publicar</span>
+              <img src="/icons/token_blue.png" />
+              <span>Comprar créditos</span>
             </div>
           </Link>
-        </li> */}
+        </li>
 
         <li>
           <Link href="/empresa/ayuda">
@@ -145,6 +164,7 @@ export default function SideMenu({ open }) {
         </li>
 
       </ul>
+
     </motion.div>
   );
 }

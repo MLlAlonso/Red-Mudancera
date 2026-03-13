@@ -1,0 +1,69 @@
+@use "../utils/variables";
+
+.credit-card {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  border: 1px solid #e6e6e6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+  }
+
+  &__title {
+    font-family: variables.$font-title;
+    font-size: 26px;
+    color: variables.$primary;
+    margin-bottom: 8px;
+  }
+
+  &__description {
+    font-family: variables.$font-text;
+    font-size: 15px;
+    color: variables.$text-muted;
+    margin-bottom: 20px;
+    max-width: 240px;
+  }
+
+  &__credits {
+    font-size: 36px;
+    font-weight: 800;
+    color: variables.$tertiary;
+    margin-bottom: 6px;
+  }
+
+  &__price {
+    font-size: 24px;
+    font-weight: 700;
+    color: variables.$primary;
+    margin-bottom: 20px;
+  }
+
+  &__button {
+    width: 100%;
+    padding: 14px;
+    font-family: variables.$font-text;
+    font-size: 16px;
+    font-weight: 600;
+    background: variables.$primary;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: variables.$primary-hover;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}
