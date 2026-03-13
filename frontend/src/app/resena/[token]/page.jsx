@@ -186,7 +186,7 @@ export default function ResenaPage() {
           </div>
 
           <div className="resena-scale">
-            <span>1 • Malo</span>
+            <span>1 • Podría mejorar</span>
             <span>5 • Excelente</span>
           </div>
 

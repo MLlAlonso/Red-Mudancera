@@ -140,27 +140,26 @@ export default function ComprarLeadModal({
                             <div className="comprar-lead-modal__exclusivo">
                                 <p>
                                     Eres la primera empresa interesada.
-                                    Puedes adquirirlo en modo exclusivo por{" "}
-                                    <strong>{tipoServicio === "local" ? 30 : 35} créditos</strong> y evitar que otras empresas lo compren.
+                                    <br />
+                                    Compra este contacto en modo exclusivo.
                                 </p>
 
                                 <label className="toggle">
-                                    <input
-                                        type="checkbox"
-                                        checked={exclusivo}
-                                        onChange={() => setExclusivo(!exclusivo)}
-                                    />
+                                    <input type="checkbox" checked={exclusivo} onChange={() => setExclusivo(!exclusivo)} />
                                     <span className="toggle__slider"></span>
-                                    <span className="toggle__label">
-                                        Comprar en modo exclusivo
-                                    </span>
+                                    <div className="toggle__inf">
+                                        <span className="toggle__label">
+                                            Adquirir por <strong>{tipoServicio === "local" ? 30 : 35} créditos</strong>
+                                        </span>
+                                        <p>Evita que otras empresas lo compren</p>
+                                    </div>
                                 </label>
                             </div>
                         )}
 
                         <p>
                             Total a pagar:{" "}
-                            <strong>{tokensNecesarios} crédito(s)</strong>
+                            <strong>{tokensNecesarios} créditos</strong>
                         </p>
 
                         {!puedeComprar && (
@@ -175,17 +174,7 @@ export default function ComprarLeadModal({
                             </div>
                         )}
 
-                        <div className="comprar-lead-modal__actions">
-
-                            <button
-                                className="btn-outline"
-                                onClick={onClose}
-                                disabled={loading}
-                                id="modal-btn-cancel"
-                            >
-                                Cancelar
-                            </button>
-
+                        <div className="comprar-lead-modal__actions" id="comprar">
                             {puedeComprar ? (
                                 <Button_cta
                                     value={
@@ -201,6 +190,17 @@ export default function ComprarLeadModal({
                                     }
                                 />
                             )}
+                        </div>
+
+                        <div className="comprar-lead-modal__actions">
+                            <button
+                                className="btn-outline"
+                                onClick={onClose}
+                                disabled={loading}
+                                id="modal-btn-cancel"
+                            >
+                                Cancelar
+                            </button>
                         </div>
                     </>
                 )}

@@ -8,6 +8,9 @@ import "@/styles/pages/empresa/_empresaReferir.scss";
 export default function ReferirPage() {
     const [empresa, setEmpresa] = useState(null);
     const [openScript, setOpenScript] = useState(false);
+    const [copiadoMensaje, setCopiadoMensaje] = useState(false);
+    const [copiadoCorreo, setCopiadoCorreo] = useState(false);
+    const [copiadoLink, setCopiadoLink] = useState(false);
 
     const getCookie = (name) => {
         const match = document.cookie.match(
@@ -96,18 +99,32 @@ Esto suele ayudar a encontrar mejores opciones de precio y disponibilidad.
     // =========================
     const copiarLink = () => {
         navigator.clipboard.writeText(referLink);
+        setCopiadoLink(true);
+        setTimeout(() => {
+            setCopiadoLink(false);
+        }, 2000);
     };
 
     const copiarMensaje = () => {
         navigator.clipboard.writeText(mensaje);
+
+        setCopiadoMensaje(true);
+
+        setTimeout(() => {
+            setCopiadoMensaje(false);
+        }, 2000);
     };
 
     const copiarCorreo = () => {
-        const texto = `Asunto: ${asuntoEmail}
-
-${mensajeEmail}`;
+        const texto = `Asunto: ${asuntoEmail}\n\n${mensajeEmail}`;
 
         navigator.clipboard.writeText(texto);
+
+        setCopiadoCorreo(true);
+
+        setTimeout(() => {
+            setCopiadoCorreo(false);
+        }, 2000);
     };
 
     const compartirWhatsapp = () => {
@@ -142,9 +159,12 @@ ${mensajeEmail}`;
                     </div>
 
                     <div className="referir__actions">
-                        <button className="referir__btn referir__btn--primary" onClick={copiarLink}>
+                        <button
+                            className="referir__btn referir__btn--primary"
+                            onClick={copiarLink}
+                        >
                             <img src="/icons/copyw.png" alt="Copiar" />
-                            Copiar enlace
+                            {copiadoLink ? "Enlace copiado" : "Copiar enlace"}
                         </button>
 
                         <button className="referir__btn referir__btn--success" onClick={compartirWhatsapp} >
@@ -219,7 +239,7 @@ ${mensajeEmail}`;
 
                         <button onClick={copiarMensaje} className="referir__copy-message">
                             <img src="/icons/copy.png" alt="Copiar" />
-                            Copiar mensaje
+                            {copiadoMensaje ? "Mensaje copiado" : "Copiar mensaje"}
                         </button>
                     </div>
                 </div>
@@ -239,7 +259,7 @@ ${mensajeEmail}`;
 
                         <button onClick={copiarCorreo} className="referir__copy-message">
                             <img src="/icons/copy.png" alt="Copiar" />
-                            Copiar correo
+                            {copiadoCorreo ? "Mensaje copiado" : "Copiar mensaje"}
                         </button>
 
                     </div>

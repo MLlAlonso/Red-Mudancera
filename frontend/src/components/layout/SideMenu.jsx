@@ -66,7 +66,7 @@ export default function SideMenu({ open }) {
           <Link href="/empresa/publicaciones">
             <div className="side-item">
               <img src="/icons/docs.png" />
-              <span>Actividad</span>
+              <span>Mi actividad</span>
             </div>
           </Link>
         </li>
@@ -85,7 +85,7 @@ export default function SideMenu({ open }) {
           <Link href="/empresa/empresas">
             <div className="side-item">
               <img src="/icons/team.png" />
-              <span>Directorio</span>
+              <span>Explorar empresas</span>
             </div>
           </Link>
         </li>

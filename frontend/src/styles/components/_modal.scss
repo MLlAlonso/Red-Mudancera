@@ -212,6 +212,9 @@
       gap: 12px;
       cursor: pointer;
       user-select: none;
+      background-color: variables.$cards;
+      padding: 5px;
+      border-radius: 10px;
 
       input {
         display: none;
@@ -224,6 +227,7 @@
         border-radius: 50px;
         position: relative;
         transition: all 0.25s ease;
+        margin-right: 10px;
 
         &::before {
           content: "";
@@ -239,17 +243,32 @@
       }
 
       input:checked+.toggle__slider {
-        background: variables.$primary;
+        background: #4677B2;
       }
 
       input:checked+.toggle__slider::before {
         transform: translateX(20px);
       }
 
+      &__inf {
+        display: flex;
+        flex-direction: column;
+
+        p {
+          color: variables.$text-muted;
+          font-size: 14px;
+          font-weight: 400;
+        }
+      }
+
       &__label {
-        font-weight: 600;
-        font-size: 15px;
+        font-weight: 500;
+        font-size: 16px;
         color: variables.$primary;
+
+        strong {
+          font-weight: 600px;
+        }
       }
     }
   }
@@ -259,12 +278,38 @@
     font-weight: 600;
   }
 
+  #comprar {
+    border: 1px solid transparent;
+    border-top: 2px solid variables.$primary;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    margin-top: 10px;
+    max-width: 372px;
+    margin-left: 2px;
+  }
+
   &__actions {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
+    margin: -0.8rem;
+    padding: 5px 8px;
 
     button {
-      width: 48%;
+      width: 100%;
+      padding: 8px;
+
+      &:hover {
+        transform: scale(1.01);
+      }
+    }
+
+    #modal-btn-cancel {
+      border: 2px solid transparent;
+      font-size: 18px;
+
+      &:hover {
+        background-color: variables.$error;
+      }
     }
   }
 }

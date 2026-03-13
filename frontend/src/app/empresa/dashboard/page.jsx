@@ -37,7 +37,7 @@ export default function EmpresaDashboard() {
   ========================= */
   const dashboardTexts = {
     todos: {
-      title: "Últimas publicaciones",
+      title: "Actividad reciente",
       subtitle:
         "Nuevas oportunidades todos los días: Empresas que ofrecen, empresas que buscan y clientes listos para cerrar.",
     },
@@ -54,7 +54,7 @@ export default function EmpresaDashboard() {
     cliente: {
       title: "Contactos de Clientes",
       subtitle:
-        "Clientes que buscan servicio de mudanza y están listos para cotizar.",
+        "Contactos de mudanza, cargas publicadas en la red.",
     },
   };
 

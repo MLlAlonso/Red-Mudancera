@@ -75,7 +75,7 @@ export default function EmpresaCatalogo() {
           <div>
             <h1 className="empresa-empresas__title">Directorio de empresas</h1>
             <p className="empresa-empresas__subtitle">
-              Empresas registradas en la plataforma
+              Empresas activas dentro de la red
             </p>
           </div>
 

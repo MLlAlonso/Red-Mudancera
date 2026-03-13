@@ -127,12 +127,12 @@
             width: 100%;
             display: flex;
             align-items: center;
-            justify-content: flex-end;
-            gap: 8px;
+            justify-content: center;
+            gap: 20px;
 
-            background: variables.$background;
+            background: #f2f4f7;
             color: variables.$primary;
-            border: none;
+            border: 1px solid #D0D5DD;
             padding: 10px 16px;
             border-radius: 15px;
             cursor: pointer;
@@ -323,11 +323,12 @@
         }
 
         &__actions {
-            max-width: 650px;
+            max-width: 100%;
+            gap: 10px;
 
             .referir__btn {
-                min-width: 45%;
-                max-width: 45%;
+                min-width: 50%;
+                max-width: 50%;
             }
         }
 

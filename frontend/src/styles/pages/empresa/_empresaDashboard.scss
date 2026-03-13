@@ -129,7 +129,7 @@
 
     .btn_crud {
         position: fixed;
-        right: 15px;
+        right: 20px;
         bottom: 400px;
         z-index: 11;
         width: 60px;
@@ -193,12 +193,14 @@
 
         &__controls {
             display: flex;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
             gap: 0px;
 
             .service-filters__trigger {
                 min-width: 350px;
-                max-width: 650px;
+                max-width: 600px;
 
                 span {
                     font-size: 30px;
@@ -210,7 +212,12 @@
             }
 
             .btn-outline {
-                width: 100%;
+                max-width: 100px;
+            }
+
+            #reporte{
+                min-width: 350px;
+                max-width: 600px;
             }
         }
     }
