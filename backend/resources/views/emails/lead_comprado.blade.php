@@ -18,7 +18,7 @@
                     <tr>
                         <td style="background:#09233E;padding:24px;text-align:center;">
                             <h2 style="margin:0;color:#ffffff;font-family:Nunito,Arial;font-size:22px;">
-                                Contacto adquirido correctamente
+                                Has adquirido un nuevo contacto
                             </h2>
                         </td>
                     </tr>
@@ -26,8 +26,7 @@
                     <!-- Logo -->
                     <tr>
                         <td align="center" style="padding:20px;">
-                            <img src="https://app.mudanzafacil.com.mx/logo/logo_A.png"
-                                alt="Mudanza Fácil"
+                            <img src="https://app.mudanzafacil.com.mx/logo/logo_A.png" alt="Mudanza Fácil"
                                 style="height:60px;">
                         </td>
                     </tr>
@@ -85,7 +84,8 @@
 
                                     <tr>
                                         <td style="color:#6F7F8D;">Tipo vivienda:</td>
-                                        <td align="right"><strong>{{ ucfirst($solicitud->tipo_vivienda) }}</strong></td>
+                                        <td align="right"><strong>{{ ucfirst($solicitud->tipo_vivienda) }}</strong>
+                                        </td>
                                     </tr>
 
                                     <tr>
@@ -95,7 +95,8 @@
 
                                     <tr>
                                         <td style="color:#6F7F8D;">Elevador:</td>
-                                        <td align="right"><strong>{{ $solicitud->origen_elevador ?? '—' }}</strong></td>
+                                        <td align="right"><strong>{{ $solicitud->origen_elevador ?? '—' }}</strong>
+                                        </td>
                                     </tr>
 
                                     <tr>
@@ -119,7 +120,8 @@
 
                                     <tr>
                                         <td style="color:#6F7F8D;">Tipo vivienda:</td>
-                                        <td align="right"><strong>{{ ucfirst($solicitud->vivienda_destino) }}</strong></td>
+                                        <td align="right"><strong>{{ ucfirst($solicitud->vivienda_destino) }}</strong>
+                                        </td>
                                     </tr>
 
                                     <tr>
@@ -129,12 +131,14 @@
 
                                     <tr>
                                         <td style="color:#6F7F8D;">Elevador:</td>
-                                        <td align="right"><strong>{{ $solicitud->destino_elevador ?? '—' }}</strong></td>
+                                        <td align="right"><strong>{{ $solicitud->destino_elevador ?? '—' }}</strong>
+                                        </td>
                                     </tr>
 
                                     <tr>
                                         <td style="color:#6F7F8D;">Acarreo:</td>
-                                        <td align="right"><strong>{{ $solicitud->destino_acarreo ?? '—' }}</strong></td>
+                                        <td align="right"><strong>{{ $solicitud->destino_acarreo ?? '—' }}</strong>
+                                        </td>
                                     </tr>
                                 </table>
                             </div>
@@ -204,7 +208,8 @@
 
                             <div style="text-align:center;font-size:14px;">
                                 <p>
-                                    Ya puedes contactar al cliente.
+                                    Te recomendamos contactar al cliente lo antes posible para cotizar su
+                                    mudanza.
                                 </p>
 
                                 <p style="color:#1C8F6A;font-weight:bold;margin-top:16px;">
@@ -229,4 +234,5 @@
     </table>
 
 </body>
+
 </html>

@@ -28,7 +28,7 @@ class CompraCreditosMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Confirmación de compra de créditos')
+        return $this->subject('Tus créditos ya están disponibles')
             ->view('emails.compra_creditos')
             ->with([
                 'empresa' => $this->empresa,

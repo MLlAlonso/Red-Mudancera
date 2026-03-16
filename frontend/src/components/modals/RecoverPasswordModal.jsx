@@ -3,6 +3,7 @@
 import { useState } from "react";
 import BaseModal from "./BaseModal";
 import Button_cta from "@/components/common/Button_cta";
+import Button_error from "../common/Button_error";
 
 export default function RecoverPasswordModal({ onClose, onConfirm }) {
   const [email, setEmail] = useState("");
@@ -12,7 +13,7 @@ export default function RecoverPasswordModal({ onClose, onConfirm }) {
       <h2 className="modal-title">Recuperar contraseña</h2>
 
       <p className="modal-message">
-        Se enviará un código a tu correo con el cual podrás iniciar sesión.
+        Te enviaremos un código a tu correo para restablecer tu contraseña.
       </p>
 
       <div className="modal-body">
@@ -24,14 +25,25 @@ export default function RecoverPasswordModal({ onClose, onConfirm }) {
           onChange={(e) => setEmail(e.target.value)}
         />
       </div>
-      
-        <Button_cta
-          value="Continuar"
-          onClick={() => {
-            if (!email) return;
-            onConfirm(email);
-          }}
-        />
+
+      <p className="modal_securityText">
+        <img src="/icons/candado.png" alt="" />
+        Tu información está protegida y no compartiremos tu correo
+      </p>
+
+      <Button_cta
+        value="Enviar código"
+        onClick={() => {
+          if (!email) return;
+          onConfirm(email);
+        }}
+      />
+
+      <Button_error
+        value="Cancelar"
+        onClick={onClose}
+      />
+
     </BaseModal>
   );
 }

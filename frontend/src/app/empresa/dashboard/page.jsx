@@ -39,7 +39,7 @@ export default function EmpresaDashboard() {
     todos: {
       title: "Actividad reciente",
       subtitle:
-        "Nuevas oportunidades todos los días: Empresas que ofrecen, empresas que buscan y clientes listos para cerrar.",
+        "Publicaciones recientes de carga y solicitudes de mudanza.",
     },
     busco: {
       title: "Publicaciones de Búsqueda",
@@ -111,23 +111,34 @@ export default function EmpresaDashboard() {
       .finally(() => setLoading(false));
   }, []);
 
-  const visibleServicios =
-    filter === "todos"
-      ? services
-      : services.filter((s) => {
-        if (filter === "cliente") {
-          return s.tipo_item === "solicitud";
-        }
+  const visibleServicios = services
+    .filter((s) => {
+      if (filter === "todos") return true;
 
-        if (filter === "busco" || filter === "ofrezco") {
-          return (
-            s.tipo_item === "servicio" &&
-            s.subtipo === filter
-          );
-        }
+      if (filter === "cliente") {
+        return s.tipo_item === "solicitud";
+      }
 
-        return true;
-      });
+      if (filter === "busco" || filter === "ofrezco") {
+        return (
+          s.tipo_item === "servicio" &&
+          s.subtipo === filter
+        );
+      }
+
+      return true;
+    })
+    .filter((s) => {
+      if (!search) return true;
+
+      const q = search.toLowerCase();
+
+      return (
+        s.empresa?.toLowerCase().includes(q) ||
+        s.origen?.toLowerCase().includes(q) ||
+        s.destino?.toLowerCase().includes(q)
+      );
+    });
 
   return (
     <>

@@ -34,7 +34,7 @@ class LeadCompradoMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Contacto adquirido correctamente - Mudanza Fácil')
+        return $this->subject('Has adquirido un nuevo contacto')
             ->view('emails.lead_comprado');
     }
 }

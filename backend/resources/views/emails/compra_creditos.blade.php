@@ -18,8 +18,18 @@
                     <tr>
                         <td style="background:#09233E;padding:24px;text-align:center;">
                             <h2 style="margin:0;color:#ffffff;font-family:Nunito;font-size:22px;">
-                                Compra de créditos confirmada
+                                COMPRA CONFIRMADA - Tus créditos ya están disponibles
                             </h2>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="background:#09233E;padding:0 24px 24px 24px;text-align:center;">
+                            <p style="margin:0;color:#ffffff;font-family:Nunito;font-size:15px;line-height:1.5;">
+                                Gracias por tu compra. Tus créditos ya fueron agregados correctamente a tu cuenta y
+                                están
+                                disponibles para usarse en Mudanza Fácil.
+                            </p>
                         </td>
                     </tr>
 
@@ -75,15 +85,26 @@
                             <div style="border-top:2px dashed #ABB0B4;margin:28px 0;"></div>
 
                             <div style="text-align:center;font-size:14px;">
-                                Tus créditos ya están disponibles en tu cuenta.
+                                Tus créditos han sido añadidos correctamente a tu cuenta. Ya puedes utilizarlos para
+                                adquirir contactos de mudanza dentro de la red.
                             </div>
 
                         </td>
                     </tr>
 
                     <tr>
+                        <td align="center" style="padding:24px;">
+                            <a href="https://app.mudanzafacil.com.mx/empresa/login" target="_blank"
+                                style="display:inline-block;padding:12px 32px;background:#09233E;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold;font-size:16px;">
+                                Ir a Mudanza Fácil
+                            </a>
+                        </td>
+                    </tr>
+
+                    <tr>
                         <td style="background:#F4F7F6;padding:16px;text-align:center;">
                             <p style="font-size:12px;color:#6F7F8D;">
+                                Si tienes alguna duda sobre tu compra puedes responder directamente a este correo:
                                 soporte@mudanzafacil.com.mx
                             </p>
                         </td>

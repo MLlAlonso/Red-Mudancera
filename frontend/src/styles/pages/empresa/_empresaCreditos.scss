@@ -24,7 +24,29 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
+    margin-bottom: 20px;
   }
+
+
+  &__help {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-family: variables.$font-text;
+    color: variables.$text-muted;
+    gap: 20px;
+
+    a {
+      text-decoration: none;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      color: variables.$primary;
+      margin-right: 10px;
+    }
+  }
+
+
 }
 
 @media (max-width: 900px) {

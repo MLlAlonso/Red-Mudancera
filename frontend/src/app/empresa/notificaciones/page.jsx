@@ -144,7 +144,7 @@ export default function EmpresaNotificacionesPage() {
 
             <main className="empresa-notificaciones">
                 <div className="empresa-notificaciones__header">
-                    <h1 className="title">Notificaciones</h1>
+                    <h1 className="title">Actividad y avisos de la red</h1>
                     <p className="subtitle">Avisos importantes del sistema</p>
                 </div>
 

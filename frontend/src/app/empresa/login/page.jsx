@@ -74,9 +74,25 @@ export default function EmpresaLogin() {
 
       <main className="empresa-login">
         <div className="empresa-login__form">
+
+          <div className="empresa-login__header">
+            <h1 className="empresa-login__title">
+              <img src="/icons/truck.png" alt="" />
+              Mudanza Fácil
+            </h1>
+            <p className="empresa-login__hint">
+              Red profesional de empresas de mudanzas
+            </p>
+          </div>
+
+
+
+
+          <hr className="empresa-login__divider" />
+
           <h1 className="empresa-login__title">Iniciar sesión</h1>
           <p className="empresa-login__hint">
-            Administra tu perfil, servicios y equipo desde aquí
+            Accede a tu cuenta para gestionar contactos, cargas y oportunidades en la red
           </p>
 
           {error && <p className="empresa-login__error">{error}</p>}
@@ -109,9 +125,11 @@ export default function EmpresaLogin() {
           </div>
 
           <Button_cta
-            value={loading ? "Iniciando..." : "Iniciar sesión"}
+            value={loading ? "Entrando a cuenta..." : "Entrar a mi cuenta"}
             onClick={handleSubmit}
           />
+
+          <p> <img src="/icons/candado-cerrado.png" alt="" /> Acceso seguro para empresas verificadas de la red</p>
 
 
           <button
@@ -128,16 +146,16 @@ export default function EmpresaLogin() {
             🔧 Ir a Solicitar Mudanza (TEST)
           </button>
 
-
+          <hr className="empresa-login__divider" />
 
           {/* Registrarse */}
           <p className="empresa-login__register">
-            <Link href="/empresa/register">Regístrate y empieza</Link>
+            <Link href="/empresa/register">¿No tienes cuenta? <strong>Crear cuenta</strong> </Link>
           </p>
 
           {/* Olvidé contraseña */}
           <p className="empresa-login__forgot" onClick={() => setShowRecover(true)}>
-            Olvidé mi contraseña
+            ¿Olvidaste tu contraseña?
           </p>
 
         </div>
@@ -175,11 +193,10 @@ export default function EmpresaLogin() {
                 }
               );
 
-              const data = await res.json();
-
+              // Cambia el mensaje aquí
               setMessageModal({
-                title: res.ok ? "Correo enviado" : "Atención",
-                message: data.message,
+                title: "Correo enviado",
+                message: "Revisa tu correo. Te enviamos un código para restablecer tu contraseña",
               });
 
             } catch (e) {

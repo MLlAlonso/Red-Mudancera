@@ -3,7 +3,6 @@
 /* ================================
    OVERLAY
 ================================ */
-
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -17,7 +16,6 @@
 /* ================================
    MODAL
 ================================ */
-
 .modal {
   background: variables.$cards;
   border-radius: 12px;
@@ -153,8 +151,6 @@
     }
   }
 }
-
-
 
 /* ================================
    FORM INPUTS
@@ -315,6 +311,62 @@
 }
 
 /* ================================
+   COMPRAR CREDITOS MODAL
+================================ */
+.compra-creditos-modal {
+  img {
+    width: 64px;
+    margin-bottom: 20px;
+  }
+
+  .compra-creditos-modal__info {
+    margin: 20px 0;
+
+    strong {
+      margin-top: 10px;
+    }
+  }
+
+  .compra-creditos-modal__divider {
+    width: 100%;
+    height: 1px;
+    background: variables.$text-muted;
+    margin: 10px 0;
+    border-radius: 2px;
+    opacity: 0.4;
+  }
+
+  p{
+    margin-top: 10px;
+    color: variables.$text-muted;
+    font-size: 14px;
+  }
+}
+
+.modal_securityText{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+  text-align: justify;
+  font-size: 16px;
+  color: variables.$text-muted;
+  
+  img{
+    width: 20px;
+  }
+}
+
+.btn_error{
+  span{
+    font-weight: 600;
+    font-size: 20px;
+  }
+}
+
+/* ================================
    RESPONSIVE
 ================================ */
 @media (max-width: 768px) {
@@ -351,7 +403,6 @@
 /* ================================
    ANIMATION
 ================================ */
-
 @keyframes fadeIn {
   from {
     opacity: 0;
