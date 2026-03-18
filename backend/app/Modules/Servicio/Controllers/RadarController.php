@@ -29,7 +29,8 @@ class RadarController extends Controller
         $matches = $matchingService->matchForServicio($servicio);
         return response()->json([
             'servicio' => $servicio->id,
-            'matches_count' => count($matches),
+            'matches_servicios_count' => count($matches['servicios']),
+            'matches_solicitudes_count' => count($matches['solicitudes']),
             'matches' => $matches
         ]);
     }
