@@ -26,5 +26,5 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->create();
 
-// 👇 Esto lo agregas ANTES del return
-// config()->set('cors', require __DIR__.'/../config/cors.php');
+// Esto lo agregas ANTES del return
+// config()->set('cors', require __DIR__ . '/../config/cors.php');
