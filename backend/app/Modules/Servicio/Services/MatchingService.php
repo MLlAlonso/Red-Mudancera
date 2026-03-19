@@ -5,6 +5,7 @@ namespace App\Modules\Servicio\Services;
 use App\Modules\Servicio\Models\Servicio;
 use App\Modules\Servicio\Models\ServiceMatch;
 use App\Events\RadarMatchFound;
+use App\Modules\Servicio\Models\RadarMatch;
 use App\Modules\SolicitudMudanza\Models\SolicitudMudanza;
 
 class MatchingService
@@ -15,7 +16,7 @@ class MatchingService
 
         /*
     |--------------------------------------------------------------------------
-    | MATCHES SERVICIOS (LO QUE YA TENÍAS)
+    | MATCHES SERVICIOS
     |--------------------------------------------------------------------------
     */
         $candidatosServicios = Servicio::query()
@@ -26,27 +27,27 @@ class MatchingService
             ->where('id', '!=', $servicio->id)
             ->limit(20)
             ->get();
-
         $matchesServicios = [];
 
         foreach ($candidatosServicios as $candidato) {
-
-            $existe = ServiceMatch::where(function ($q) use ($servicio, $candidato) {
-                $q->where('servicio_id', $servicio->id)
-                    ->where('match_id', $candidato->id);
-            })->orWhere(function ($q) use ($servicio, $candidato) {
-                $q->where('servicio_id', $candidato->id)
-                    ->where('match_id', $servicio->id);
-            })->exists();
+            $existe = RadarMatch::where([
+                'servicio_id' => $servicio->id,
+                'match_type' => 'servicio',
+                'matched_servicio_id' => $candidato->id,
+            ])->exists();
 
             if (!$existe) {
-                ServiceMatch::create([
+                // guardar relación real
+                ServiceMatch::firstOrCreate([
                     'servicio_id' => $servicio->id,
                     'match_id' => $candidato->id,
                 ]);
-
-                // 🔔 Evento SOLO para servicios
-                event(new RadarMatchFound($servicio, $candidato));
+                // guardar en radar (tracking)
+                RadarMatch::create([
+                    'servicio_id' => $servicio->id,
+                    'match_type' => 'servicio',
+                    'matched_servicio_id' => $candidato->id,
+                ]);
             }
 
             $matchesServicios[] = $candidato;
@@ -54,14 +55,12 @@ class MatchingService
 
         /*
     |--------------------------------------------------------------------------
-    | MATCHES SOLICITUDES (NUEVO 🔥)
+    | MATCHES SOLICITUDES
     |--------------------------------------------------------------------------
     */
         $matchesSolicitudes = [];
-
         // SOLO aplica cuando alguien BUSCA
         if ($servicio->tipo === 'busco') {
-
             $solicitudes = SolicitudMudanza::query()
                 ->where('estado', 'activo')
                 ->where('compras_count', '<', 3)
@@ -79,10 +78,19 @@ class MatchingService
                 ->get();
 
             foreach ($solicitudes as $solicitud) {
+                $existe = RadarMatch::where([
+                    'servicio_id' => $servicio->id,
+                    'match_type' => 'solicitud',
+                    'solicitud_id' => $solicitud->id,
+                ])->exists();
 
-                // 🔴 Aquí NO guardamos en service_matches
-                // 🔴 Tampoco disparamos RadarMatchFound (otro tipo de evento después)
-
+                if (!$existe) {
+                    RadarMatch::create([
+                        'servicio_id' => $servicio->id,
+                        'match_type' => 'solicitud',
+                        'solicitud_id' => $solicitud->id,
+                    ]);
+                }
                 $matchesSolicitudes[] = $solicitud;
             }
         }
