@@ -6,14 +6,11 @@ use Illuminate\Console\Command;
 use App\Modules\Servicio\Models\Servicio;
 use App\Modules\Servicio\Models\RadarMatch;
 use App\Modules\Servicio\Services\MatchingService;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use App\Modules\Notificacion\Services\NotificationDispatcher;
-use App\Modules\Notificacion\Events\RadarMatchNotificationEvent;
 use Illuminate\Support\Facades\Mail;
 use App\Modules\Servicio\Mail\RadarMatchesMail;
 use App\Modules\Empresa\Models\Empresa;
+use App\Modules\Notificacion\Services\NotificationDispatcher;
+use App\Modules\Notificacion\Events\RadarMatchNotificationEvent;
 
 class ProcessRadarMatches extends Command
 {
@@ -24,37 +21,105 @@ class ProcessRadarMatches extends Command
     {
         $this->info('Procesando radar...');
         $matchingService = new MatchingService();
+        $now = now();
 
         /*
         |--------------------------------------------------------------------------
-        | Ejecutar matching en ventanas de tiempo
+        | SOLO SERVICIOS QUE REALMENTE NECESITAN CORRER
         |--------------------------------------------------------------------------
         */
-        $servicios = Servicio::where('estado', 'activo')->get();
+        $servicios = Servicio::where('estado', 'activo')
+            ->where(function ($q) use ($now) {
+                $q->whereNull('last_radar_run_at')
+                  ->orWhere('last_radar_run_at', '<=', $now->copy()->subMinutes(30));
+            })
+            ->get();
+
         foreach ($servicios as $servicio) {
-            $created = Carbon::parse($servicio->created_at);
-            $now = Carbon::now();
+            $created = $servicio->created_at;
             $minutes = $created->diffInMinutes($now);
-            $hours = $created->diffInHours($now);
-            $days = $created->diffInDays($now);
-            if (
-                $minutes === 5 ||
-                $hours === 24 ||
-                $days === 3 ||
-                $days === 5 ||
-                $days === 7
-            ) {
-                $this->info("Ejecutando matching para servicio {$servicio->id}");
+            $stage = $servicio->radar_stage ?? 0;
+            $shouldRun = false;
+            $lastRun = $servicio->last_radar_run_at;
+            $minutesSinceLastRun = $lastRun
+                ? $lastRun->diffInMinutes($now)
+                : null;
+
+            /*
+            |--------------------------------------------------------------------------
+            | FRECUENCIA DINÁMICA
+            |--------------------------------------------------------------------------
+            */
+            if ($minutes < 60 * 24 * 4) {
+                $dynamicInterval = 60 * 12; // 1–3 días
+            } elseif ($minutes < 60 * 24 * 6) {
+                $dynamicInterval = 60 * 24; // 4–5 días
+            } else {
+                $dynamicInterval = 60 * 48; // 6+
+            }
+
+            if ($lastRun && $minutesSinceLastRun < $dynamicInterval) {
+                continue;
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | RADAR STAGE
+            |--------------------------------------------------------------------------
+            */
+            switch ($stage) {
+                case 0:
+                    if ($minutes >= 5) {
+                        $shouldRun = true;
+                        $servicio->radar_stage = 1;
+                    }
+                    break;
+                case 1:
+                    if ($minutes >= 60 * 24) {
+                        $shouldRun = true;
+                        $servicio->radar_stage = 2;
+                    }
+                    break;
+                case 2:
+                    if ($minutes >= 60 * 24 * 3) {
+                        $shouldRun = true;
+                        $servicio->radar_stage = 3;
+                    }
+                    break;
+                case 3:
+                    if ($minutes >= 60 * 24 * 5) {
+                        $shouldRun = true;
+                        $servicio->radar_stage = 4;
+                    }
+                    break;
+                case 4:
+                    if ($minutes >= 60 * 24 * 7) {
+                        $shouldRun = true;
+                        $servicio->radar_stage = 5;
+                    }
+                    break;
+                default:
+                    $shouldRun = false;
+                    break;
+            }
+
+            if ($shouldRun) {
+                $this->info("Matching servicio {$servicio->id} (stage {$stage})");
                 $matchingService->matchForServicio($servicio);
+                $servicio->update([
+                    'last_radar_run_at' => $now,
+                    'radar_stage' => $servicio->radar_stage
+                ]);
             }
         }
 
         /*
         |--------------------------------------------------------------------------
-        | Obtener matches no notificados
+        | MATCHES NO NOTIFICADOS
         |--------------------------------------------------------------------------
         */
         $matches = RadarMatch::where('notified', false)->get();
+
         if ($matches->isEmpty()) {
             $this->info('No hay matches nuevos');
             return;
@@ -62,7 +127,7 @@ class ProcessRadarMatches extends Command
 
         /*
         |--------------------------------------------------------------------------
-        | Agrupar por servicio
+        | AGRUPAR POR SERVICIO
         |--------------------------------------------------------------------------
         */
         $grouped = $matches->groupBy('servicio_id');
@@ -79,21 +144,23 @@ class ProcessRadarMatches extends Command
                 }
             }
 
+            $totalMatches = count($serviciosMatches) + count($solicitudesMatches);
+            if ($totalMatches === 0) {
+                continue;
+            }
+
             /*
             |--------------------------------------------------------------------------
-            | Enviar correo (placeholder por ahora)
+            | NOTIFICACIÓN FRONTEND
             |--------------------------------------------------------------------------
             */
             $dispatcher = app(NotificationDispatcher::class);
-            $totalMatches = count($serviciosMatches) + count($solicitudesMatches);
-            $origen = $servicio->origen;
-            $destino = $servicio->destino;
 
             $dispatcher->dispatch(
                 new RadarMatchNotificationEvent(
                     empresaId: $servicio->empresa_id,
                     titulo: 'Nuevas coincidencias encontradas',
-                    mensaje: "Se encontraron {$totalMatches} coincidencias para tu ruta {$origen} → {$destino},  consulta tu correo para mayor detalle",
+                    mensaje: "Se encontraron {$totalMatches} coincidencias para tu ruta {$servicio->origen} → {$servicio->destino}",
                     data: [
                         'servicio_id' => $servicio->id,
                         'servicios_matches' => $serviciosMatches,
@@ -102,10 +169,14 @@ class ProcessRadarMatches extends Command
                 )
             );
 
+            /*
+            |--------------------------------------------------------------------------
+            | EMAIL
+            |--------------------------------------------------------------------------
+            */
             $empresa = Empresa::find($servicio->empresa_id);
-
             if ($empresa && $empresa->email) {
-                Mail::to($empresa->email)->send(
+                Mail::to($empresa->email)->queue(
                     new RadarMatchesMail(
                         $empresa,
                         $servicio,
@@ -117,13 +188,13 @@ class ProcessRadarMatches extends Command
 
             /*
             |--------------------------------------------------------------------------
-            | Marcar como notificados
+            | MARCAR COMO NOTIFICADO
             |--------------------------------------------------------------------------
             */
-            RadarMatch::whereIn('id', $items->pluck('id'))->update([
-                'notified' => true
-            ]);
+            RadarMatch::whereIn('id', $items->pluck('id'))
+                ->update(['notified' => true]);
         }
+
         $this->info('Radar procesado correctamente');
     }
 }

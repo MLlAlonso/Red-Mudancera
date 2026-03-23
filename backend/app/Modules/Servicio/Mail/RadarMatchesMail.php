@@ -7,8 +7,9 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use App\Modules\Empresa\Models\Empresa;
 use App\Modules\Servicio\Models\Servicio;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class RadarMatchesMail extends Mailable
+class RadarMatchesMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
     public Empresa $empresa;

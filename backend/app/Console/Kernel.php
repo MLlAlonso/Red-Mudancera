@@ -22,7 +22,7 @@ class Kernel extends ConsoleKernel
             ->hourly();
 
         //Agrupar matches
-        $schedule->command('radar:process')->everyMinute();
+        $schedule->command('radar:process')->everyFiveMinute();
 
         // Aquí luego pondremos:
         // - resumen diario de vistas

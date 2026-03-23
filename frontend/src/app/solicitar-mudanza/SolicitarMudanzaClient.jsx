@@ -392,6 +392,11 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
                             <h3>Confirma tu solicitud</h3>
                         </div>
 
+                        <p id="code_header">
+                            Te enviaremos un <strong>código </strong>
+                            a tu correo para validar tu solicitud y compartirla con empresas verificadas
+                        </p>
+
                         <div className="resumen-modal__body">
                             <ul>
                                 <li><strong>Origen:</strong> {form.origen}</li>
@@ -415,9 +420,9 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
                             </ul>
                         </div>
 
-                        <div className="resumen-modal__footer">
+                        <div className="resumen-modal__footer" id="footer_solicitudes">
                             <Button_success
-                                value="Confirmar y enviar código"
+                                value="Enviar código a mi correo"
                                 onClick={createSolicitud}
                             />
 
@@ -429,6 +434,11 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
                             </button>
                         </div>
 
+                        <p id="codigo_msg">
+                            <img src="/icons/mensaje.png" alt="Mensaje" />
+                            El código llegará en menos de 1 minuto
+                        </p>
+
                     </div>
                 </BaseModal>
             )}
@@ -436,39 +446,56 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
             {/* MODAL VERIFICACIÓN */}
             {modalOpen && (
                 <BaseModal onClose={() => { }}>
-                    <div className="verificacion-modal">
-                        <h3>Verifica tu correo</h3>
-                        <p>Hemos enviado un código a tu correo.</p>
-                        <p>Revisa bandeja de entrada o spam.</p>
+                    <div className="verificacion-modal" id="verificaion-modal">
+                        <h3>Verifica tu correo <br /> para publicar tu solicitud</h3>
+                        <h4>
+                            Enviamos un <strong>código </strong> a tu correo para validar <br />
+                            tu solicitud y compartirla con empresas verificadas.
+                        </h4>
+
+                        <div className="modal__divider"> </div>
+
+                        <div className="validar_body">
+                            <img src="/icons/correo_verificado.png" alt="divider" />
+
+                            <div className="vaidar_body_text">
+                                <h4>
+                                    Código enviado a: <strong>{form.email || "tu correo"}</strong>.
+                                </h4>
+                                <p>
+                                    Revisa bandeja de entrada o spam
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="modal__divider"> </div>
+
+
+                        <div className="verificacion-modal__contador">
+                            <img src="/icons/reloj_de_arena.png" alt="" />
+                            El código expira en: <strong>{formatTime()}</strong>
+                        </div>
 
                         <Input
-                            label="Código"
                             name="codigo"
                             value={codigo}
+                            placeholder="Ingresa tu código de 6 digitos"
                             onChange={(e) => setCodigo(e.target.value)}
                         />
 
-                        <div className="verificacion-modal__contador">
-                            El código expira en: {formatTime()}
-                        </div>
+                        <Button_success value="Validar mi solicitud" onClick={handleVerify} />
 
-                        <Button_success value="Verificar" onClick={handleVerify} />
+                        <div className="validar_actions">
+                            <p> ¿No recibiste el código? </p>
 
-                        {timeLeft === 0 && (
-                            <button
-                                className="verificacion-modal__reenviar"
-                                onClick={handleReenviar}
-                            >
+                            <button className="verificacion-modal__reenviar" onClick={handleReenviar} >
                                 Reenviar código
                             </button>
-                        )}
 
-                        <button
-                            className="verificacion-modal__cancelar"
-                            onClick={() => setModalOpen(false)}
-                        >
-                            Cancelar
-                        </button>
+                            <button className="verificacion-modal__cancelar" onClick={() => setModalOpen(false)} >
+                                Editar correo o Cancelar
+                            </button>
+                        </div>
                     </div>
                 </BaseModal>
             )}
@@ -476,17 +503,39 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
             {/* MODAL ÉXITO */}
             {successModal && (
                 <BaseModal onClose={() => setSuccessModal(false)}>
+
+
                     <div className="exito-modal">
-                        <h3>Solicitud publicada correctamente</h3>
-                        <p>Algún agente se pondrá en contacto contigo pronto.</p>
+                        <img src="/icons/comprobado.png" alt="Solicitud aprobada" />
+
+                        <h3>¡Tu solicitud ya está en la red!</h3>
+
+                        <p>Empresas de mudanza verificadas ya pueden ver tu solicitud y enviarte cotizaciones.</p>
+
+                        <div className="exito-modal-item">
+                            <img src="/icons/tel.png" alt="Telefono" />
+                            <p>Comenzarás a recibir propuestas en breve por <strong>Whatsapp</strong> o teléfono</p>
+                        </div>
+
+
+                        <div className="exito-modal-item">
+                            <img src="/icons/verificado.png" alt="Telefono" />
+                            <p>Solo trabajamos con <strong>empresas</strong>  previamente <strong>validadas</strong>  para tu seguridad</p>
+                        </div>
+
+                        <h4>No olvides proteger tu mudanza</h4>
+
                         <Button_success
-                            value="Aceptar"
+                            value="Recibir información"
                             onClick={() => {
                                 setSuccessModal(false);
-                                window.location.href = "https://mudanzafacil.com.mx/";
+                                window.location.href = "https://mudanzafacil.com.mx/seguro-para-mudanzas/";
                             }}
                         />
+
+                        <p>Respuesta rápida, sin compromiso y con grandes ventajas</p>
                     </div>
+
                 </BaseModal>
             )}
 

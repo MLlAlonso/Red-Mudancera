@@ -152,6 +152,91 @@
   }
 }
 
+
+
+/* ================================
+   MODAL Solicitudes
+================================ */
+#code_header {
+  font-size: 16px;
+  text-align: center;
+  padding: 20px;
+}
+
+#footer_solicitudes {
+  gap: 2px;
+  padding: 8px 20px;
+}
+
+#codigo_msg {
+  font-size: 14px;
+  color: variables.$text-muted;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+
+  img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+  }
+}
+
+#verificaion-modal {
+  h4 {
+    text-align: center;
+    color: variables.$text;
+    font-size: 16px;
+
+    strong {
+      color: variables.$primary;
+      font-weight: 700;
+      font-size: 17px;
+    }
+  }
+
+  .validar_actions{
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0px;
+  }
+}
+
+  .modal__divider {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 15px 0px;
+
+    &::before,
+    &::after {
+      content: "";
+      flex: 1;
+      border-top: 2px dashed #abb0b4;
+      opacity: 0.5;
+    }
+  }
+
+  .validar_body{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 20px;
+
+    img{
+      width: 40px;
+      height: 40px;
+    }
+
+    p{
+      font-size: 14px;
+      margin-top: 8px;
+    }
+  }
+
 /* ================================
    FORM INPUTS
 ================================ */
@@ -336,14 +421,14 @@
     opacity: 0.4;
   }
 
-  p{
+  p {
     margin-top: 10px;
     color: variables.$text-muted;
     font-size: 14px;
   }
 }
 
-.modal_securityText{
+.modal_securityText {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -353,14 +438,14 @@
   text-align: justify;
   font-size: 16px;
   color: variables.$text-muted;
-  
-  img{
+
+  img {
     width: 20px;
   }
 }
 
-.btn_error{
-  span{
+.btn_error {
+  span {
     font-weight: 600;
     font-size: 20px;
   }

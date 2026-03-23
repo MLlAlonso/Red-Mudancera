@@ -43,7 +43,6 @@
         }
     }
 
-
     /* =========================
      CARD FLOATING
      ========================= */
@@ -257,33 +256,49 @@
         }
 
         &__contador {
-            margin: 1.5rem 0;
-            font-weight: 600;
-            font-size: 20px;
-            background: rgba(9, 35, 62, 0.05);
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
             padding: 14px;
             border-radius: 14px;
-            color: $primary;
+            color: $text_muted;
+
+            img{
+                width: 30px;
+                height: 30px;
+            }
+            
+            strong{
+                color: $primary;
+                font-weight: 600;
+                font-size: 20px;
+            }
         }
 
         &__reenviar {
-            margin-top: 1rem;
             background: none;
             border: none;
-            color: $primary;
+            color: $success;
             font-weight: 600;
+            font-size: 16px;
             cursor: pointer;
+            text-decoration: underline;
+            margin: -15px 0px;
 
             &:hover {
-                text-decoration: underline;
+                transform: scale(1.2);
+                color: $success_hover;
             }
         }
 
         &__cancelar {
-            margin-top: 1rem;
             background: none;
             border: none;
-            color: $text-muted;
+            color: $text-muted;            
+            font-size: 16px;
             cursor: pointer;
         }
     }
@@ -297,8 +312,8 @@
 
         h3 {
             font-family: $font-title;
-            font-size: 30px;
-            color: $success;
+            font-size: 26px;
+            color: $success_hover;
             margin-bottom: 1rem;
         }
 
@@ -307,9 +322,40 @@
             color: $text;
             margin-bottom: 2rem;
         }
+
+        &-item{
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+
+            img{
+                width: 40px;
+                height: 40px;
+            }
+
+            p{
+                text-align: left;
+            }
+
+            strong{
+                color: $primary;
+                font-weight: 600;
+            }
+        }
+
+        h4{
+            font-size: 20px;
+            color: #2B424A;
+            font-weight: 600;
+        }
+
+        .btn_success{
+            background: #fff;
+            border: solid 2px $secondary;
+            color: $text;
+        }
     }
 }
-
 
 /* =========================
    Tooltip
