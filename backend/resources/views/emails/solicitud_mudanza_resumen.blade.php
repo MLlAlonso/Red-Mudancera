@@ -31,6 +31,71 @@
                         </td>
                     </tr>
 
+
+                    <!-- ================= ÉXITO ================= -->
+                    <tr>
+                        <td style="padding:24px;color:#4A5E71;text-align:center;">
+
+                            <!-- Título -->
+                            <h3 style="margin:0;color:#09233E;font-size:18px;">
+                                ¡Tu solicitud ya está en la red!
+                            </h3>
+
+                            <!-- Texto -->
+                            <p style="margin:12px 0 20px;">
+                                Empresas de mudanza verificadas ya pueden ver tu solicitud y enviarte cotizaciones.
+                            </p>
+
+                            <!-- Item 1 -->
+                            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:12px;">
+                                <tr>
+                                    <td align="center">
+                                        <img src="https://app.mudanzafacil.com.mx/icons/tel.png"
+                                            style="height:20px;margin-right:6px;vertical-align:middle;">
+                                        <span style="font-size:14px;">
+                                            Comenzarás a recibir propuestas por <strong>WhatsApp</strong> o teléfono
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Item 2 -->
+                            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
+                                <tr>
+                                    <td align="center">
+                                        <img src="https://app.mudanzafacil.com.mx/icons/verificado.png"
+                                            style="height:20px;margin-right:6px;vertical-align:middle;">
+                                        <span style="font-size:14px;">
+                                            Solo trabajamos con <strong>empresas validadas</strong> para tu seguridad
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Subtitulo -->
+                            <h4 style="margin:16px 0 10px;color:#09233E;">
+                                No olvides proteger tu mudanza
+                            </h4>
+
+                            <!-- Botón -->
+                            <a href="https://mudanzafacil.com.mx/seguro-para-mudanzas/" style="display:inline-block;background:#1C8F6A;color:#ffffff;
+                  padding:12px 20px;border-radius:8px;text-decoration:none;
+                  font-weight:bold;font-size:14px;">
+                                Recibir información
+                            </a>
+
+                            <!-- Texto final -->
+                            <p style="margin-top:16px;font-size:13px;">
+                                Respuesta rápida, sin compromiso y con grandes ventajas
+                            </p>
+
+                        </td>
+                    </tr>
+
+                    <!-- Línea final -->
+                    <div style="border-top:2px dashed #ABB0B4;margin:28px 0;"></div>
+
+
                     <tr>
                         <td style="padding:24px;color:#4A5E71;">
 
@@ -150,7 +215,8 @@
                                         <td style="color:#6F7F8D;">Distancia estimada:</td>
                                         <td align="right">
                                             <strong>
-                                                {{ $solicitud->distancia_km ? $solicitud->distancia_km . ' km' : 'No disponible' }}
+                                                {{ $solicitud->distancia_km ? $solicitud->distancia_km . ' km' : 'No
+                                                disponible' }}
                                             </strong>
                                         </td>
                                     </tr>

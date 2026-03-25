@@ -44,29 +44,45 @@
                         <td style="padding:24px;color:#4A5E71;">
 
                             {{-- SERVICIOS --}}
-                            @if (count($serviciosMatches) > 0)
+                            @if ($serviciosMatches->count() > 0)
                                 <div style="font-weight:bold;color:#09233E;margin-bottom:10px;">
-                                    🔗 Coincidencias con empresas
+                                    🔗 Servicios disponibles
                                 </div>
 
-                                <ul>
-                                    @foreach ($serviciosMatches as $id)
-                                        <li>Servicio #{{ $id }}</li>
-                                    @endforeach
-                                </ul>
+                                @foreach ($serviciosMatches as $servicioMatch)
+                                    <div
+                                        style="padding:12px;border:1px solid #E5E7EB;border-radius:8px;margin-bottom:10px;">
+                                        <div style="font-weight:bold;">
+                                            {{ $servicioMatch->origen }} → {{ $servicioMatch->destino }}
+                                        </div>
+
+                                        <a href="https://app.mudanzafacil.com.mx/servicios/{{ $servicioMatch->id }}"
+                                            style="font-size:13px;color:#2563EB;text-decoration:none;">
+                                            Ver servicio
+                                        </a>
+                                    </div>
+                                @endforeach
                             @endif
 
                             {{-- SOLICITUDES --}}
-                            @if (count($solicitudesMatches) > 0)
+                            @if ($solicitudesMatches->count() > 0)
                                 <div style="font-weight:bold;color:#09233E;margin:20px 0 10px;">
-                                    📦 Nuevas solicitudes disponibles
+                                    📦 Contactos disponibles
                                 </div>
 
-                                <ul>
-                                    @foreach ($solicitudesMatches as $id)
-                                        <li>Solicitud #{{ $id }}</li>
-                                    @endforeach
-                                </ul>
+                                @foreach ($solicitudesMatches as $solicitud)
+                                    <div
+                                        style="padding:12px;border:1px solid #E5E7EB;border-radius:8px;margin-bottom:10px;">
+                                        <div style="font-weight:bold;">
+                                            {{ $solicitud->origen }} → {{ $solicitud->destino }}
+                                        </div>
+
+                                        <a href="https://app.mudanzafacil.com.mx/solicitudes/{{ $solicitud->id }}"
+                                            style="font-size:13px;color:#2563EB;text-decoration:none;">
+                                            Ver contacto
+                                        </a>
+                                    </div>
+                                @endforeach
                             @endif
 
                             <div style="border-top:2px dashed #ABB0B4;margin:28px 0;"></div>
@@ -82,7 +98,7 @@
                         <td align="center" style="padding:24px;">
                             <a href="https://app.mudanzafacil.com.mx/empresa/notificaciones" target="_blank"
                                 style="display:inline-block;padding:12px 32px;background:#09233E;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold;font-size:16px;">
-                                Ver coincidencias
+                                Ver oportunidades ahora
                             </a>
                         </td>
                     </tr>

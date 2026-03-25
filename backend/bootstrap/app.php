@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Support\Facades\Log;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -21,10 +22,17 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
 
+    ->withSchedule(function ($schedule) {
+        Log::info('SCHEDULER FUNCIONANDO');
+
+        $schedule->command('radar:process')
+            ->everyMinute();
+    })
+
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })
     ->create();
 
-// 👇 Esto lo agregas ANTES del return
-// config()->set('cors', require __DIR__.'/../config/cors.php');
+// Esto lo agregas ANTES del return
+// config()->set('cors', require __DIR__ . '/../config/cors.php');

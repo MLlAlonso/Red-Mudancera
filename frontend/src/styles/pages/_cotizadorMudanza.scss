@@ -1,0 +1,428 @@
+@use "../utils/variables" as *;
+
+.cotizador-mudanza {
+    min-height: 100dvh;
+    background: $background;
+    position: relative;
+
+    /* =========================
+     HERO SECTION
+     ========================= */
+
+    &__hero {
+        background: $primary;
+        padding: 2rem 1.5rem 8rem 1.5rem;
+        text-align: center;
+        color: white;
+
+        .title {
+            font-family: $font-title;
+            font-size: 52px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-family: $font-text;
+            font-size: 18px;
+            opacity: 0.7;
+            max-width: 520px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+    }
+
+    .hero-logo {
+        margin-bottom: 2rem;
+
+        img {
+            height: 90px;
+            object-fit: contain;
+            opacity: 0.95;
+        }
+    }
+
+    /* =========================
+     CARD FLOATING
+     ========================= */
+    &__container {
+        max-width: 760px;
+        margin: -5rem auto 4rem auto;
+        padding: 0 1.5rem;
+    }
+
+    &__form {
+        background: #ffffff;
+        border-radius: 26px;
+        padding: 3rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        box-shadow:
+            0 30px 60px rgba(0, 0, 0, 0.08),
+            0 10px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    .form-section {
+        margin-bottom: 20px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid #eee;
+
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .form-section__title {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #222;
+        text-align: center;
+    }
+
+    /* =========================
+     INPUT STYLE RADICAL
+     ========================= */
+    .input-group__field {
+        border-radius: 16px !important;
+        border: 1px solid rgba(25, 2, 81, 0.08);
+        padding: 16px !important;
+        transition: all 0.2s ease;
+
+        &:focus {
+            border-color: $primary;
+            box-shadow: 0 0 0 3px rgba(9, 35, 62, 0.1);
+        }
+    }
+
+    select {
+        border-radius: 16px;
+        padding: 16px;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        transition: all 0.2s ease;
+
+        &:focus {
+            border-color: $primary;
+            box-shadow: 0 0 0 3px rgba(9, 35, 62, 0.1);
+            outline: none;
+        }
+    }
+
+    label {
+        font-weight: 600;
+        font-size: 15px;
+        color: $text;
+    }
+
+    .form-error {
+        font-size: 13px;
+        color: $error;
+        margin-top: -6px;
+        margin-bottom: 6px;
+    }
+
+    /* =========================
+     BOTÓN MÁS MODERNO
+     ========================= */
+    .btn_success {
+        margin-top: 1rem;
+        border-radius: 20px;
+        padding: 16px 0;
+        font-size: 16px;
+        font-weight: 600;
+        background: linear-gradient(135deg,
+                $success 0%,
+                $primary 100%);
+        border: none;
+        transition: all 0.25s ease;
+
+        &:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(9, 35, 62, 0.2);
+        }
+    }
+
+    /* =========================
+     MODAL Validación
+     ========================= */
+    .resumen-modal {
+        width: 100%;
+        max-width: 520px;
+        height: 85vh;
+        max-height: 700px;
+        display: flex;
+        flex-direction: column;
+        background: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+
+        &__header {
+            padding: 20px;
+            text-align: center;
+            background: $primary;
+            border-bottom: 1px solid $secondary;
+
+            h3 {
+                margin: 0;
+                font-size: 22px;
+                color: $background;
+            }
+        }
+
+        &__body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #F8FAFC;
+
+            ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+
+                li {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 10px;
+                    padding: 10px 0;
+                    border-bottom: 1px solid #E5EAF0;
+                    font-size: 14px;
+
+                    strong {
+                        color: #6F7F8D;
+                        font-weight: 500;
+                        font-size: 16px;
+                    }
+
+                    span,
+                    &>*:last-child {
+                        font-weight: 600;
+                        color: #09233E;
+                        text-align: left;
+                        word-break: break-word;
+                    }
+                }
+            }
+        }
+
+        &__footer {
+            padding: 16px 20px;
+            border-top: 1px solid #E5EAF0;
+            background: #ffffff;
+
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-edit {
+            background: transparent;
+            border: none;
+            color: #6F7F8D;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 600;
+
+            &:hover {
+                color: #09233E;
+            }
+        }
+    }
+
+    /* =========================
+     MODAL VERIFICACIÓN
+     ========================= */
+    .verificacion-modal {
+        text-align: center;
+
+        h3 {
+            font-family: $font-title;
+            font-size: 28px;
+            color: $primary;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 14px;
+            color: $text-muted;
+            margin-bottom: 0.8rem;
+        }
+
+        .input-group__field {
+            text-align: center;
+            font-weight: 600;
+        }
+
+        &__contador {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            padding: 14px;
+            border-radius: 14px;
+            color: $text_muted;
+
+            img{
+                width: 30px;
+                height: 30px;
+            }
+            
+            strong{
+                color: $primary;
+                font-weight: 600;
+                font-size: 20px;
+            }
+        }
+
+        &__reenviar {
+            background: none;
+            border: none;
+            color: $success;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: underline;
+            margin: -15px 0px;
+
+            &:hover {
+                transform: scale(1.2);
+                color: $success_hover;
+            }
+        }
+
+        &__cancelar {
+            background: none;
+            border: none;
+            color: $text-muted;            
+            font-size: 16px;
+            cursor: pointer;
+        }
+    }
+
+    /* =========================
+     MODAL ÉXITO
+     ========================= */
+
+    .exito-modal {
+        text-align: center;
+
+        h3 {
+            font-family: $font-title;
+            font-size: 26px;
+            color: $success_hover;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 16px;
+            color: $text;
+            margin-bottom: 2rem;
+        }
+
+        &-item{
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+
+            img{
+                width: 40px;
+                height: 40px;
+            }
+
+            p{
+                text-align: left;
+            }
+
+            strong{
+                color: $primary;
+                font-weight: 600;
+            }
+        }
+
+        h4{
+            font-size: 20px;
+            color: #2B424A;
+            font-weight: 600;
+        }
+
+        .btn_success{
+            background: #fff;
+            border: solid 2px $secondary;
+            color: $text;
+        }
+    }
+}
+
+/* =========================
+   Tooltip
+========================= */
+
+.input-group__label--tooltip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tooltip {
+    position: relative;
+    font-size: 14px;
+    cursor: pointer;
+    color: $text-muted;
+    user-select: none;
+
+    &:hover .tooltip__content,
+    &:focus-within .tooltip__content {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+    &__content {
+        position: absolute;
+        top: 28px;
+        left: 50%;
+        transform: translate(-50%, 6px);
+        width: 260px;
+        background: #ffffff;
+        color: $text;
+        font-size: 13px;
+        line-height: 1.4;
+        padding: 12px 14px;
+        border-radius: 10px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.2s ease;
+        z-index: 10;
+        text-align: center;
+    }
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 768px) {
+    .cotizador-mudanza {
+
+        &__hero {
+            padding: 4rem 1rem 7rem 1rem;
+
+            .title {
+                font-size: 36px;
+            }
+        }
+
+        &__container {
+            margin-top: -4rem;
+        }
+
+        &__form {
+            padding: 2rem 1.6rem;
+        }
+    }
+}

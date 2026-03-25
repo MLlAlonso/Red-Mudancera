@@ -8,20 +8,22 @@ use Illuminate\Queue\SerializesModels;
 use App\Modules\Empresa\Models\Empresa;
 use App\Modules\Servicio\Models\Servicio;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Collection;
+
 
 class RadarMatchesMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
     public Empresa $empresa;
     public Servicio $servicio;
-    public array $serviciosMatches;
-    public array $solicitudesMatches;
+    public Collection $serviciosMatches;
+    public Collection $solicitudesMatches;
 
     public function __construct(
         Empresa $empresa,
         Servicio $servicio,
-        array $serviciosMatches,
-        array $solicitudesMatches
+        Collection $serviciosMatches,
+        Collection $solicitudesMatches
     ) {
         $this->empresa = $empresa;
         $this->servicio = $servicio;

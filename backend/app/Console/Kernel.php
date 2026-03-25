@@ -4,11 +4,14 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
     protected function schedule(Schedule $schedule): void
     {
+        Log::info('KERNEL SCHEDULE EJECUTADO');      
+
         // Limpieza de verificaciones de email cada 24 horas
         $schedule->command('email:clean')->daily();
 
@@ -22,7 +25,6 @@ class Kernel extends ConsoleKernel
             ->hourly();
 
         //Agrupar matches
-        $schedule->command('radar:process')->everyFiveMinute();
 
         // Aquí luego pondremos:
         // - resumen diario de vistas

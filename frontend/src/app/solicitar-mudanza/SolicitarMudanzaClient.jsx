@@ -37,7 +37,6 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
     const [resumeModal, setResumeModal] = useState(false);
     const [codigo, setCodigo] = useState("");
     const [timeLeft, setTimeLeft] = useState(300);
-    const [successModal, setSuccessModal] = useState(false);
 
     const handleChange = (e) => {
         setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -140,7 +139,7 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
             const data = await res.json();
             if (!res.ok) throw new Error(data.message);
             setModalOpen(false);
-            setSuccessModal(true);
+            window.location.href = "https://mudanzafacil.com.mx/";
         } catch (err) {
             setErrorModal(err.message || "Error al verificar.");
         }
@@ -436,7 +435,7 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
 
                         <p id="codigo_msg">
                             <img src="/icons/mensaje.png" alt="Mensaje" />
-                            El código llegará en menos de 1 minuto
+                            El código llegará en menos de 1 minuto. Esta validación se realiza por su seguridad y la de las empresas.
                         </p>
 
                     </div>
@@ -497,45 +496,6 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
                             </button>
                         </div>
                     </div>
-                </BaseModal>
-            )}
-
-            {/* MODAL ÉXITO */}
-            {successModal && (
-                <BaseModal onClose={() => setSuccessModal(false)}>
-
-
-                    <div className="exito-modal">
-                        <img src="/icons/comprobado.png" alt="Solicitud aprobada" />
-
-                        <h3>¡Tu solicitud ya está en la red!</h3>
-
-                        <p>Empresas de mudanza verificadas ya pueden ver tu solicitud y enviarte cotizaciones.</p>
-
-                        <div className="exito-modal-item">
-                            <img src="/icons/tel.png" alt="Telefono" />
-                            <p>Comenzarás a recibir propuestas en breve por <strong>Whatsapp</strong> o teléfono</p>
-                        </div>
-
-
-                        <div className="exito-modal-item">
-                            <img src="/icons/verificado.png" alt="Telefono" />
-                            <p>Solo trabajamos con <strong>empresas</strong>  previamente <strong>validadas</strong>  para tu seguridad</p>
-                        </div>
-
-                        <h4>No olvides proteger tu mudanza</h4>
-
-                        <Button_success
-                            value="Recibir información"
-                            onClick={() => {
-                                setSuccessModal(false);
-                                window.location.href = "https://mudanzafacil.com.mx/seguro-para-mudanzas/";
-                            }}
-                        />
-
-                        <p>Respuesta rápida, sin compromiso y con grandes ventajas</p>
-                    </div>
-
                 </BaseModal>
             )}
 

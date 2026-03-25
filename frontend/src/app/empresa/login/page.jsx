@@ -77,16 +77,13 @@ export default function EmpresaLogin() {
 
           <div className="empresa-login__header">
             <h1 className="empresa-login__title">
-              <img src="/icons/truck.png" alt="" />
+              <img src="/logo/icon.png" alt="" />
               Mudanza Fácil
             </h1>
             <p className="empresa-login__hint">
               Red profesional de empresas de mudanzas
             </p>
           </div>
-
-
-
 
           <hr className="empresa-login__divider" />
 
@@ -130,7 +127,6 @@ export default function EmpresaLogin() {
           />
 
           <p> <img src="/icons/candado-cerrado.png" alt="" /> Acceso seguro para empresas verificadas de la red</p>
-
 
           <button
             style={{

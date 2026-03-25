@@ -12,6 +12,8 @@ use App\Modules\Empresa\Models\Empresa;
 use App\Modules\Notificacion\Services\NotificationDispatcher;
 use App\Modules\Notificacion\Events\RadarMatchNotificationEvent;
 
+use App\Modules\SolicitudMudanza\Models\SolicitudMudanza;
+
 class ProcessRadarMatches extends Command
 {
     protected $signature = 'radar:process';
@@ -25,21 +27,23 @@ class ProcessRadarMatches extends Command
 
         /*
         |--------------------------------------------------------------------------
-        | SOLO SERVICIOS QUE REALMENTE NECESITAN CORRER
+        | SERVICIOS A PROCESAR
         |--------------------------------------------------------------------------
         */
         $servicios = Servicio::where('estado', 'activo')
             ->where(function ($q) use ($now) {
                 $q->whereNull('last_radar_run_at')
-                  ->orWhere('last_radar_run_at', '<=', $now->copy()->subMinutes(30));
+                    ->orWhere('last_radar_run_at', '<=', $now->copy()->subMinutes(30));
             })
             ->get();
 
         foreach ($servicios as $servicio) {
+
             $created = $servicio->created_at;
             $minutes = $created->diffInMinutes($now);
             $stage = $servicio->radar_stage ?? 0;
             $shouldRun = false;
+
             $lastRun = $servicio->last_radar_run_at;
             $minutesSinceLastRun = $lastRun
                 ? $lastRun->diffInMinutes($now)
@@ -47,24 +51,7 @@ class ProcessRadarMatches extends Command
 
             /*
             |--------------------------------------------------------------------------
-            | FRECUENCIA DINÁMICA
-            |--------------------------------------------------------------------------
-            */
-            if ($minutes < 60 * 24 * 4) {
-                $dynamicInterval = 60 * 12; // 1–3 días
-            } elseif ($minutes < 60 * 24 * 6) {
-                $dynamicInterval = 60 * 24; // 4–5 días
-            } else {
-                $dynamicInterval = 60 * 48; // 6+
-            }
-
-            if ($lastRun && $minutesSinceLastRun < $dynamicInterval) {
-                continue;
-            }
-
-            /*
-            |--------------------------------------------------------------------------
-            | RADAR STAGE
+            | RADAR STAGE (PRIORIDAD)
             |--------------------------------------------------------------------------
             */
             switch ($stage) {
@@ -74,38 +61,69 @@ class ProcessRadarMatches extends Command
                         $servicio->radar_stage = 1;
                     }
                     break;
+
                 case 1:
                     if ($minutes >= 60 * 24) {
                         $shouldRun = true;
                         $servicio->radar_stage = 2;
                     }
                     break;
+
                 case 2:
                     if ($minutes >= 60 * 24 * 3) {
                         $shouldRun = true;
                         $servicio->radar_stage = 3;
                     }
                     break;
+
                 case 3:
                     if ($minutes >= 60 * 24 * 5) {
                         $shouldRun = true;
                         $servicio->radar_stage = 4;
                     }
                     break;
+
                 case 4:
                     if ($minutes >= 60 * 24 * 7) {
                         $shouldRun = true;
                         $servicio->radar_stage = 5;
                     }
                     break;
-                default:
-                    $shouldRun = false;
-                    break;
             }
 
+            /*
+            |--------------------------------------------------------------------------
+            | FRECUENCIA DINÁMICA
+            |--------------------------------------------------------------------------
+            */
+            if (!$shouldRun) {
+
+                if ($minutes < 60 * 24 * 4) {
+                    $dynamicInterval = 60 * 12;
+                } elseif ($minutes < 60 * 24 * 6) {
+                    $dynamicInterval = 60 * 24;
+                } else {
+                    $dynamicInterval = 60 * 48;
+                }
+
+                if ($lastRun !== null && $minutesSinceLastRun < $dynamicInterval) {
+                    continue;
+                }
+
+                $shouldRun = true;
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | 🔥 EJECUTAR MATCHING
+            |--------------------------------------------------------------------------
+            */
             if ($shouldRun) {
-                $this->info("Matching servicio {$servicio->id} (stage {$stage})");
+
+                $this->info("Matching servicio {$servicio->id}");
+
                 $matchingService->matchForServicio($servicio);
+
                 $servicio->update([
                     'last_radar_run_at' => $now,
                     'radar_stage' => $servicio->radar_stage
@@ -115,7 +133,7 @@ class ProcessRadarMatches extends Command
 
         /*
         |--------------------------------------------------------------------------
-        | MATCHES NO NOTIFICADOS
+        | MATCHES NO NOTIFICADOS (GLOBAL)
         |--------------------------------------------------------------------------
         */
         $matches = RadarMatch::where('notified', false)->get();
@@ -131,40 +149,41 @@ class ProcessRadarMatches extends Command
         |--------------------------------------------------------------------------
         */
         $grouped = $matches->groupBy('servicio_id');
+
         foreach ($grouped as $servicioId => $items) {
+
             $servicio = Servicio::find($servicioId);
             if (!$servicio) continue;
+
             $serviciosMatches = [];
             $solicitudesMatches = [];
-            foreach ($items as $item) {
-                if ($item->match_type === 'servicio') {
-                    $serviciosMatches[] = $item->matched_servicio_id;
-                } else {
-                    $solicitudesMatches[] = $item->solicitud_id;
-                }
-            }
 
-            $totalMatches = count($serviciosMatches) + count($solicitudesMatches);
-            if ($totalMatches === 0) {
-                continue;
-            }
+            $serviciosMatches = Servicio::whereIn(
+                'id',
+                $items->where('match_type', 'servicio')->pluck('matched_servicio_id')
+            )->get();
+
+            $solicitudesMatches = SolicitudMudanza::whereIn(
+                'id',
+                $items->where('match_type', 'solicitud')->pluck('solicitud_id')
+            )->get();
+
+            $totalMatches = $serviciosMatches->count() + $solicitudesMatches->count();
+
+            if ($totalMatches === 0) continue;
 
             /*
             |--------------------------------------------------------------------------
             | NOTIFICACIÓN FRONTEND
             |--------------------------------------------------------------------------
             */
-            $dispatcher = app(NotificationDispatcher::class);
-
-            $dispatcher->dispatch(
+            app(NotificationDispatcher::class)->dispatch(
                 new RadarMatchNotificationEvent(
                     empresaId: $servicio->empresa_id,
                     titulo: 'Nuevas coincidencias encontradas',
                     mensaje: "Se encontraron {$totalMatches} coincidencias para tu ruta {$servicio->origen} → {$servicio->destino}",
                     data: [
                         'servicio_id' => $servicio->id,
-                        'servicios_matches' => $serviciosMatches,
-                        'solicitudes_matches' => $solicitudesMatches,
                     ]
                 )
             );
@@ -175,8 +194,9 @@ class ProcessRadarMatches extends Command
             |--------------------------------------------------------------------------
             */
             $empresa = Empresa::find($servicio->empresa_id);
+
             if ($empresa && $empresa->email) {
-                Mail::to($empresa->email)->queue(
+                Mail::to($empresa->email)->send(
                     new RadarMatchesMail(
                         $empresa,
                         $servicio,

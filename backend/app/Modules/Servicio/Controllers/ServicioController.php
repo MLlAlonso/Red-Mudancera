@@ -26,6 +26,7 @@ use App\Modules\Notificacion\Events\ServiciosCreadosMesEvent;
 use App\Modules\Servicio\Models\ServiceView;
 use App\Modules\Notificacion\Events\ServicioVistoEvent;
 use App\Modules\SolicitudMudanza\Models\LeadCompra;
+use App\Modules\Servicio\Services\MatchingService;
 
 class ServicioController extends Controller
 {
@@ -157,6 +158,9 @@ class ServicioController extends Controller
                     );
                 }
             }
+
+            app(MatchingService::class)->matchForServicio($servicio);
+            Log::info('MATCHING EJECUTADO', ['servicio_id' => $servicio->id]);
 
             return response()->json([
                 'message' => 'Servicio creado correctamente',
