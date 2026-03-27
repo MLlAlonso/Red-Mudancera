@@ -29,6 +29,8 @@ class Empresa extends Authenticatable
         'subInicio',
         'subFin',
         'tokens',
+        'plan',
+        'freeSince',
     ];
 
     protected $hidden = [
@@ -41,6 +43,7 @@ class Empresa extends Authenticatable
         'subInicio' => 'date',
         'subFin' => 'date',
         'subActiva' => 'boolean',
+        'freeSince' => 'date',
     ];
 
     // ===========================================

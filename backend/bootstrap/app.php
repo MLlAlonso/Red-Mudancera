@@ -27,6 +27,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $schedule->command('radar:process')
             ->everyMinute();
+
+        $schedule->command('subscriptions:check')
+            ->daily();
     })
 
     ->withExceptions(function (Exceptions $exceptions): void {

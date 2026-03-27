@@ -250,7 +250,34 @@
   }
 }
 
+.empresa-perfil-bagdes{
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
 
+.plan-badge {
+  padding: 10px 12px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  font-size: 13px;
+  font-weight: bold;
+
+  &--free {
+    background: variables.$cards;
+  }
+
+  &--conector {
+    background: variables.$azul_001;
+    color: #fff;
+  }
+
+  &--radar {
+    background: variables.$morado_001;
+    color: #fff;
+  }
+}
 
 @media (max-width: 1024px) {
 

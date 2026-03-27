@@ -7,6 +7,7 @@ use App\Modules\Servicio\Controllers\ServicioController;
 use App\Modules\Empresa\Controllers\EmpresaPublicController;
 use App\Modules\Empresa\Controllers\EmpresaFeedController;
 use App\Modules\Empresa\Controllers\CreditosController;
+use App\Modules\Empresa\Controllers\PlanController;
 
 Route::prefix('empresa')->group(function () {
     Route::post('/register', [EmpresaAuthController::class, 'register']);
@@ -32,6 +33,7 @@ Route::prefix('empresa')->group(function () {
         Route::get('/referidos/stats', [EmpresaController::class, 'referidosStats']);
 
         Route::post('/creditos/comprar', [CreditosController::class, 'comprar']);
+        Route::post('/plan/cambiar', [PlanController::class, 'cambiarPlan']);
     });
 
     Route::get('/empresas/{id}', [EmpresaPublicController::class, 'show']);

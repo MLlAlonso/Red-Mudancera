@@ -8,14 +8,15 @@ import NotificationBadge from "@/components/common/NotificationBadge";
 export default function SideMenu({ open }) {
   const [count, setCount] = useState(0);
   const [tokens, setTokens] = useState(null);
+  const [plan, setPlan] = useState(null);
 
   const getToken = () =>
     document.cookie.match(/token_empresa=([^;]+)/)?.[1];
 
   // ===============================
-  // OBTENER CRÉDITOS
+  // OBTENER DATOS EMPRESA
   // ===============================
-  const fetchTokens = () => {
+  const fetchEmpresa = () => {
     const token = getToken();
     if (!token) return;
 
@@ -26,7 +27,10 @@ export default function SideMenu({ open }) {
       },
     })
       .then(res => res.json())
-      .then(data => setTokens(data.tokens ?? 0))
+      .then(data => {
+        setTokens(data.tokens ?? 0);
+        setPlan(data.plan);
+      })
       .catch(() => { });
   };
 
@@ -45,23 +49,24 @@ export default function SideMenu({ open }) {
       .then(data => setCount(data.count || 0))
       .catch(() => { });
 
-    fetchTokens();
+    fetchEmpresa();
   }, []);
 
   // ===============================
-  // ESCUCHAR ACTUALIZACIÓN CRÉDITOS
+  // ESCUCHAR ACTUALIZACIONES
   // ===============================
   useEffect(() => {
     const actualizar = () => {
-      fetchTokens();
+      fetchEmpresa();
     };
 
     window.addEventListener("creditosActualizados", actualizar);
+    window.addEventListener("planActualizado", actualizar);
 
     return () => {
       window.removeEventListener("creditosActualizados", actualizar);
+      window.removeEventListener("planActualizado", actualizar);
     };
-
   }, []);
 
   return (
@@ -76,6 +81,14 @@ export default function SideMenu({ open }) {
         <div className="side-menu__tokens">
           <img src="/icons/token_color.png" alt="Tokens" />
           <span>{tokens} Créditos</span>
+        </div>
+      )}
+
+      {plan && (
+        <div className={`side-menu__plan side-menu__plan--${plan}`}>
+          {plan === "free" && "Explorador"}
+          {plan === "conector" && "Conector"}
+          {plan === "radar" && "Radar"}
         </div>
       )}
 
@@ -140,7 +153,16 @@ export default function SideMenu({ open }) {
           <Link href="/empresa/creditos">
             <div className="side-item">
               <img src="/icons/token_blue.png" />
-              <span>Comprar créditos</span>
+              <span>Recargar créditos</span>
+            </div>
+          </Link>
+        </li>
+
+        <li>
+          <Link href="/empresa/planes">
+            <div className="side-item">
+              <img src="/icons/token_blue.png" />
+              <span>Planes</span>
             </div>
           </Link>
         </li>

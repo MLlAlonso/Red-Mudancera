@@ -23,8 +23,18 @@ class NotificationDispatcher
 
     public function dispatch(BaseNotificationEvent $event): void
     {
+        $hasCustomEmail = method_exists($event, 'sendCustomEmail');
         foreach ($this->channels as $channel) {
+            // Evitar doble email
+            if ($hasCustomEmail && $channel instanceof \App\Modules\Notificacion\Channels\EmailChannel) {
+                continue;
+            }
             $channel->send($event);
+        }
+
+        // email personalizado
+        if ($hasCustomEmail) {
+            $event->sendCustomEmail();
         }
     }
 }

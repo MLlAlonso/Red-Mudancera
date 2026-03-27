@@ -44,6 +44,10 @@ class EmpresaAuthController extends Controller
         // =============================
         $empresa = Empresa::create($data);
 
+        $empresa->update([
+            'freeSince' => now(),
+        ]);
+
         // =============================
         // CREAR USUARIO ADMIN INICIAL
         // =============================
@@ -112,7 +116,7 @@ class EmpresaAuthController extends Controller
         $empresa->tokens()->delete();
         // Crear token nuevo
         $token = $empresa->createToken('api-token')->plainTextToken;
-       /*  Disparar evento de notificación
+        /*  Disparar evento de notificación
         app(NotificationDispatcher::class)->dispatch(
             new LoginEmpresaEvent([
                 'empresa_id' => $empresa->id,

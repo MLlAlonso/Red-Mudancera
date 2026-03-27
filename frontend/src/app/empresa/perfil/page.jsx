@@ -100,10 +100,19 @@ export default function EmpresaPerfil() {
               {empresa.base ?? "Sede no especificada"}
             </span>
 
-            <span className="empresa-perfil__verified">
-              <img src="/icons/verificado.png" alt="Verificada" />
-              Empresa verificada
-            </span>
+            <div className="empresa-perfil-bagdes">
+              <span className="empresa-perfil__verified">
+                <img src="/icons/verificado.png" alt="Verificada" />
+                Empresa verificada
+              </span>
+
+              <div className={`plan-badge plan-badge--${empresa.plan}`}>
+                {empresa.plan === "free" && "Explorador"}
+                {empresa.plan === "conector" && "Conector"}
+                {empresa.plan === "radar" && "Radar"}
+              </div>
+            </div>
+
           </div>
         </div>
 

@@ -39,7 +39,7 @@ class MatchingService
 
         foreach ($candidatos as $candidato) {
 
-            // 🔥 SIEMPRE crea o reutiliza
+            // SIEMPRE crea o reutiliza
             ServiceMatch::firstOrCreate([
                 'servicio_id' => $servicio->id,
                 'match_id' => $candidato->id,
@@ -51,7 +51,7 @@ class MatchingService
                 'matched_servicio_id' => $candidato->id,
             ]);
 
-            // 🔥 SOLO dispara evento si es NUEVO
+            // SOLO dispara evento si es NUEVO
             if ($radar->wasRecentlyCreated) {
                 event(new RadarMatchFound($servicio, $candidato));
             }

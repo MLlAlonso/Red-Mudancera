@@ -139,7 +139,7 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
             const data = await res.json();
             if (!res.ok) throw new Error(data.message);
             setModalOpen(false);
-            window.location.href = "https://mudanzafacil.com.mx/";
+            window.location.href = "https://mudanzafacil.com.mx/seguro-para-mudanzas/";
         } catch (err) {
             setErrorModal(err.message || "Error al verificar.");
         }
@@ -340,7 +340,9 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
                     <div className="form-section">
                         <h2 className="form-section__title">Detalles y contacto</h2>
 
-                        <label htmlFor="inventario">Artículos a transportar</label>
+                        <label htmlFor="inventario">
+                            Artículos a transportar <span className="hint">(mínimo 10 caracteres)</span>
+                        </label>
                         <SimpleEditor
                             value={form.inventario}
                             placeholder="Lista de muebles, cajas o mercancía, puedes pegar el inventario aqui."

@@ -95,3 +95,28 @@
     text-align: center;
   }
 }
+
+.side-menu__plan {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  text-align: center;
+  font-weight: 600;
+
+  &--free {
+    background: variables.$cards;
+    color: #fff;
+  }
+
+  &--conector {
+    background: variables.$azul_001;
+    color: #fff;
+  }
+
+  &--radar {
+    background: variables.$morado_001;
+    color: #fff;
+  }
+}

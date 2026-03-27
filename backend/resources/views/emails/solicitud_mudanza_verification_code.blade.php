@@ -114,14 +114,6 @@
                                         </table>
 
                                     </td>
-
-                                    <!-- IMAGEN -->
-                                    <td align="center" style="padding-right: 5px;vertical-align:middle;width:35%;">
-                                        <img src="https://res.cloudinary.com/dt3jhwxfw/image/upload/v1774235071/correo_verificado_zjtfig.png"
-                                            alt="Verificación"
-                                            style="max-width:180px;width:100%;height:auto;display:block;">
-                                    </td>
-
                                 </tr>
                             </table>
 
