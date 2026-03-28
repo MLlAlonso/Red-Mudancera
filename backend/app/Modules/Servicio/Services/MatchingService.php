@@ -24,15 +24,7 @@ class MatchingService
             ->where('estado', 'activo')
             ->where('empresa_id', '!=', $servicio->empresa_id)
             ->where('id', '!=', $servicio->id)
-            ->where(function ($q) use ($servicio) {
-                $q->where(function ($q2) use ($servicio) {
-                    $q2->where('origen', $servicio->origen)
-                       ->where('destino', $servicio->destino);
-                })->orWhere(function ($q2) use ($servicio) {
-                    $q2->where('origen', $servicio->destino)
-                       ->where('destino', $servicio->origen);
-                });
-            })
+            ->where('destino', $servicio->destino)
             ->get();
 
         $matchesServicios = [];
@@ -55,7 +47,6 @@ class MatchingService
             if ($radar->wasRecentlyCreated) {
                 event(new RadarMatchFound($servicio, $candidato));
             }
-
             $matchesServicios[] = $candidato;
         }
 
@@ -65,31 +56,19 @@ class MatchingService
         |--------------------------------------------------------------------------
         */
         $matchesSolicitudes = [];
-
         if ($servicio->tipo === 'busco') {
-
             $solicitudes = SolicitudMudanza::query()
                 ->where('estado', 'activo')
                 ->where('compras_count', '<', 3)
-                ->where(function ($q) use ($servicio) {
-                    $q->where(function ($q2) use ($servicio) {
-                        $q2->where('origen', $servicio->origen)
-                           ->where('destino', $servicio->destino);
-                    })->orWhere(function ($q2) use ($servicio) {
-                        $q2->where('origen', $servicio->destino)
-                           ->where('destino', $servicio->origen);
-                    });
-                })
+                ->where('destino', $servicio->destino)
                 ->get();
 
             foreach ($solicitudes as $solicitud) {
-
                 RadarMatch::firstOrCreate([
                     'servicio_id' => $servicio->id,
                     'match_type' => 'solicitud',
                     'solicitud_id' => $solicitud->id,
                 ]);
-
                 $matchesSolicitudes[] = $solicitud;
             }
         }

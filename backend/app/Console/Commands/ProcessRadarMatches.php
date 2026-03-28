@@ -38,12 +38,10 @@ class ProcessRadarMatches extends Command
             ->get();
 
         foreach ($servicios as $servicio) {
-
             $created = $servicio->created_at;
             $minutes = $created->diffInMinutes($now);
             $stage = $servicio->radar_stage ?? 0;
             $shouldRun = false;
-
             $lastRun = $servicio->last_radar_run_at;
             $minutesSinceLastRun = $lastRun
                 ? $lastRun->diffInMinutes($now)
@@ -97,7 +95,6 @@ class ProcessRadarMatches extends Command
             |--------------------------------------------------------------------------
             */
             if (!$shouldRun) {
-
                 if ($minutes < 60 * 24 * 4) {
                     $dynamicInterval = 60 * 12;
                 } elseif ($minutes < 60 * 24 * 6) {
@@ -109,7 +106,6 @@ class ProcessRadarMatches extends Command
                 if ($lastRun !== null && $minutesSinceLastRun < $dynamicInterval) {
                     continue;
                 }
-
                 $shouldRun = true;
             }
 
@@ -119,11 +115,8 @@ class ProcessRadarMatches extends Command
             |--------------------------------------------------------------------------
             */
             if ($shouldRun) {
-
                 $this->info("Matching servicio {$servicio->id}");
-
                 $matchingService->matchForServicio($servicio);
-
                 $servicio->update([
                     'last_radar_run_at' => $now,
                     'radar_stage' => $servicio->radar_stage
@@ -137,7 +130,6 @@ class ProcessRadarMatches extends Command
         |--------------------------------------------------------------------------
         */
         $matches = RadarMatch::where('notified', false)->get();
-
         if ($matches->isEmpty()) {
             $this->info('No hay matches nuevos');
             return;
@@ -149,15 +141,11 @@ class ProcessRadarMatches extends Command
         |--------------------------------------------------------------------------
         */
         $grouped = $matches->groupBy('servicio_id');
-
         foreach ($grouped as $servicioId => $items) {
-
             $servicio = Servicio::find($servicioId);
             if (!$servicio) continue;
-
             $serviciosMatches = [];
             $solicitudesMatches = [];
-
             $serviciosMatches = Servicio::whereIn(
                 'id',
                 $items->where('match_type', 'servicio')->pluck('matched_servicio_id')
@@ -169,7 +157,6 @@ class ProcessRadarMatches extends Command
             )->get();
 
             $totalMatches = $serviciosMatches->count() + $solicitudesMatches->count();
-
             if ($totalMatches === 0) continue;
 
             /*
@@ -180,8 +167,8 @@ class ProcessRadarMatches extends Command
             app(NotificationDispatcher::class)->dispatch(
                 new RadarMatchNotificationEvent(
                     empresaId: $servicio->empresa_id,
-                    titulo: 'Nuevas coincidencias encontradas',
-                    mensaje: "Se encontraron {$totalMatches} coincidencias para tu ruta {$servicio->origen} → {$servicio->destino}",
+                    titulo: 'Tienes nuevas coincidencias disponibles',
+                    mensaje: 'Encontramos nuevas oportunidades. Revisa tu correo para ver los detalles.',
                     data: [
                         'servicio_id' => $servicio->id,
                     ]
@@ -194,7 +181,6 @@ class ProcessRadarMatches extends Command
             |--------------------------------------------------------------------------
             */
             $empresa = Empresa::find($servicio->empresa_id);
-
             if ($empresa && $empresa->email) {
                 Mail::to($empresa->email)->send(
                     new RadarMatchesMail(

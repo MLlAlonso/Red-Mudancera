@@ -62,7 +62,7 @@
 
                                 <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;">
 
-                                    @if($plan === 'conector')
+                                    @if($plan === 'Conector')
                                     <tr>
                                         <td width="24" style="color:#1C8F6A;font-weight:bold;">✔</td>
                                         <td>Acceso a búsquedas y ofertas limitadas</td>
@@ -77,7 +77,7 @@
                                     </tr>
                                     @endif
 
-                                    @if($plan === 'radar')
+                                    @if($plan === 'Radar')
                                     <tr>
                                         <td width="24" style="color:#1C8F6A;font-weight:bold;">✔</td>
                                         <td>Detectarás oportunidades automáticamente</td>
