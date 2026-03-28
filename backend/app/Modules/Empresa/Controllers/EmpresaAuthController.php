@@ -45,7 +45,13 @@ class EmpresaAuthController extends Controller
         $empresa = Empresa::create($data);
 
         $empresa->update([
-            'freeSince' => now(),
+            'plan' => 'radar',
+            'subActiva' => true,
+            'subInicio' => now(),
+            'subFin' => now()->addDays(30),
+            'isTrial' => true,
+            'trialEndsAt' => now()->addDays(30),
+            'freeSince' => null,
         ]);
 
         // =============================

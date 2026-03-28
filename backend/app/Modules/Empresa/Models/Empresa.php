@@ -31,6 +31,8 @@ class Empresa extends Authenticatable
         'tokens',
         'plan',
         'freeSince',
+        'isTrial',
+        'trialEndsAt',
     ];
 
     protected $hidden = [
@@ -44,6 +46,8 @@ class Empresa extends Authenticatable
         'subFin' => 'date',
         'subActiva' => 'boolean',
         'freeSince' => 'date',
+        'isTrial' => 'boolean',
+        'trialEndsAt' => 'date',
     ];
 
     // ===========================================

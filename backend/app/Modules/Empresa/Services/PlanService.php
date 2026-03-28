@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Modules\Empresa\Services;
-
 use App\Modules\Empresa\Models\Empresa;
 use Carbon\Carbon;
 use Exception;
@@ -17,10 +16,11 @@ class PlanService
         $this->validateTipo($tipo);
         $inicio = now();
 
-        $fin = match ($tipo) {
-            'mensual' => $inicio->copy()->addMonth(),
-            'anual' => $inicio->copy()->addYear(),
-        };
+        if ($tipo === 'anual') {
+            $fin = now()->endOfYear();
+        } else {
+            $fin = $inicio->copy()->addMonth();
+        }
 
         $empresa->update([
             'plan' => $plan,
@@ -28,6 +28,8 @@ class PlanService
             'subInicio' => $inicio,
             'subFin' => $fin,
             'freeSince' => null,
+            'isTrial' => false,
+            'trialEndsAt' => null,
         ]);
 
         return $empresa->fresh();

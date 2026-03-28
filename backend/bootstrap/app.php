@@ -29,7 +29,7 @@ return Application::configure(basePath: dirname(__DIR__))
             ->everyMinute();
 
         $schedule->command('subscriptions:check')
-            ->daily();
+            ->dailyAt('08:00');
     })
 
     ->withExceptions(function (Exceptions $exceptions): void {
