@@ -17,8 +17,8 @@
 @use "./components/serviceAdvancedFilters";
 @use "./components/serviceStatusDropdown";
 @use "./components/_simpleEditor";
-@use "./components/_notificationBadge";
 @use "./components/loadingOverlay";
+@use "./components/_notificationBadge";
 
 //Pages Empresas
 @use "./pages/empresa/empresaRegister";

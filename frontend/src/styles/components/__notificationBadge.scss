@@ -1,7 +1,7 @@
 @use "../utils/variables";
 
 .notification-badge {
-  background: variables.$success;
+  background: variables.$tertiary;
   color: #fff;
   font-size: 12px;
   font-weight: bold;
