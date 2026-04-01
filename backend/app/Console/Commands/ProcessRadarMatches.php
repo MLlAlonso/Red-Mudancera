@@ -11,6 +11,7 @@ use App\Modules\Servicio\Mail\RadarMatchesMail;
 use App\Modules\Empresa\Models\Empresa;
 use App\Modules\Notificacion\Services\NotificationDispatcher;
 use App\Modules\Notificacion\Events\RadarMatchNotificationEvent;
+use App\Modules\Empresa\Services\PlanService;
 
 use App\Modules\SolicitudMudanza\Models\SolicitudMudanza;
 
@@ -111,7 +112,7 @@ class ProcessRadarMatches extends Command
 
             /*
             |--------------------------------------------------------------------------
-            | 🔥 EJECUTAR MATCHING
+            | EJECUTAR MATCHING
             |--------------------------------------------------------------------------
             */
             if ($shouldRun) {
@@ -144,6 +145,23 @@ class ProcessRadarMatches extends Command
         foreach ($grouped as $servicioId => $items) {
             $servicio = Servicio::find($servicioId);
             if (!$servicio) continue;
+            $planService = app(PlanService::class);
+            $empresa = Empresa::find($servicio->empresa_id);
+            if (!$empresa) continue;
+
+            /*
+            |--------------------------------------------------------------------------
+            | PRIORIDAD POR PLAN (RADAR vs CONECTOR)
+            |--------------------------------------------------------------------------
+            */
+            if ($planService->isConector($empresa)) {
+
+                $firstMatch = $items->first();
+
+                if ($firstMatch && $firstMatch->created_at->diffInMinutes(now()) < 20) {
+                    continue; // todavía no notificar (delay 20 min)
+                }
+            }
             $serviciosMatches = [];
             $solicitudesMatches = [];
             $serviciosMatches = Servicio::whereIn(

@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-
 class ServicioService
 {
     public function create(array $data, Empresa $empresa): Servicio
@@ -66,6 +65,7 @@ class ServicioService
             'inicio' => $inicio,
             'fin' => $fin,
             'tipo_carga' => $data['tipo_carga'],
+            'tipo_vehiculo' => $data['tipo_vehiculo'] ?? null,
             'nota' => $data['nota'] ?? null,
             'responsable_nombre' => $data['responsable_nombre'] ?? null,
             'responsable_telefono' => $data['responsable_telefono'] ?? null,

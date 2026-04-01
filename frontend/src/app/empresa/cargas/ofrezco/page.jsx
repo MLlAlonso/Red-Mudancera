@@ -28,6 +28,7 @@ export default function OfrezcoServicioPage() {
     tipoCarga: "",
     importe: "",
     estadoCarga: "",
+    tipoVehiculo: "",
   });
 
   /**
@@ -99,7 +100,19 @@ export default function OfrezcoServicioPage() {
   ========================= */
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "tipoCarga") {
+      setForm(prev => ({
+        ...prev,
+        tipoCarga: value,
+        volumen: value === "vehiculo" ? "" : prev.volumen,
+        tipoVehiculo: value === "vehiculo" ? prev.tipoVehiculo : ""
+      }));
+      return;
+    }
+
     if (name === "volumen" && Number(value) > 120) return;
+
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
@@ -138,7 +151,6 @@ export default function OfrezcoServicioPage() {
     const errores = [];
 
     for (const file of files) {
-
       // Validar peso
       if (file.size > MAX_SIZE) {
         errores.push(`${file.name} supera los 5MB`);
@@ -216,11 +228,12 @@ export default function OfrezcoServicioPage() {
           },
           body: JSON.stringify({
             tipo: "ofrezco",
-            volumen: form.volumen,
+            volumen: form.tipoCarga === "vehiculo" ? null : form.volumen,
+            tipo_vehiculo: form.tipoVehiculo || null,
             origen: form.origen,
             destino: form.destino,
             rangoDias: form.rangoDias,
-            tipo_carga: "menaje",
+            tipo_carga: form.tipoCarga,
             nota: form.nota,
             responsable_id: form.responsableId,
             responsable_nombre: form.responsableNombre,
@@ -268,11 +281,10 @@ export default function OfrezcoServicioPage() {
 
             <Input label="Origen *" name="origen" value={form.origen} placeholder={"Ciudad o zona donde se recoge la carga"} onChange={handleChange} autocomplete />
             <Input label="Destino *" name="destino" value={form.destino} placeholder={"Ciudad donde se entrega la carga"} onChange={handleChange} autocomplete />
-            <Input label="Volumen estimado (m³)*" name="volumen" type="number" value={form.volumen} placeholder={"Espacio que ocupa la carga (m³)"} onChange={handleChange} />
 
             <div className="input-group">
               <label className="input-group__label">Tipo de carga *</label>
-              
+
               <select name="tipoCarga" className="input-group__field" value={form.tipoCarga} onChange={handleChange}>
                 <option value="">Selecciona una opción</option>
                 <option value="menaje">Menaje de casa</option>
@@ -281,12 +293,40 @@ export default function OfrezcoServicioPage() {
               </select>
             </div>
 
+            {form.tipoCarga === "vehiculo" && (
+              <div className="input-group">
+                <label className="input-group__label">Tipo de vehículo *</label>
+
+                <select name="tipoVehiculo" className="input-group__field" value={form.tipoVehiculo} onChange={handleChange} >
+                  <option value="">Selecciona</option>
+                  <option value="compacto">Auto compacto</option>
+                  <option value="camioneta">Camioneta</option>
+                  <option value="motocicleta">Motocicleta</option>
+                </select>
+              </div>
+            )}
+
+            {form.tipoCarga && form.tipoCarga !== "vehiculo" && (
+              <Input
+                label="Volumen estimado (m³)*"
+                name="volumen"
+                type="number"
+                value={form.volumen}
+                placeholder="Espacio que ocupa la carga (m³)"
+                onChange={handleChange}
+              />
+            )}
+
             <div className="input-group">
               <label>Descripción de carga</label>
               <SimpleEditor
                 value={form.nota}
                 onChange={(html) => setForm(prev => ({ ...prev, nota: html }))}
-                placeholder=" Lista de muebles, cajas o mercancía. Puedes pegar el inventario del cliente."
+                placeholder={
+                  form.tipoCarga === "vehiculo"
+                    ? "Marca, modelo, año y especificaciones del vehículo"
+                    : "Lista de muebles, cajas o mercancía. Puedes pegar el inventario del cliente."
+                }
               />
             </div>
 
@@ -315,12 +355,7 @@ export default function OfrezcoServicioPage() {
                   {imagenes.map((img, index) => (
                     <div key={index} className="imagenes-preview__item">
                       <img src={img.preview} alt={`imagen-${index}`} />
-                      <button
-                        type="button"
-                        className="imagen-remove-btn"
-                        onClick={() => eliminarImagen(index)}
-                        aria-label="Eliminar imagen"
-                      >
+                      <button type="button" className="imagen-remove-btn" onClick={() => eliminarImagen(index)} aria-label="Eliminar imagen" >
                         <img src="/icons/delete.png" alt="Eliminar" />
                       </button>
                     </div>

@@ -25,6 +25,7 @@ class Servicio extends Model
         'inicio',
         'fin',
         'tipo_carga',
+        'tipo_vehiculo',
         'nota',
         'responsable_nombre',
         'responsable_telefono',

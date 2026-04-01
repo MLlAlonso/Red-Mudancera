@@ -1,0 +1,195 @@
+@use "../../utils/variables";
+
+.configuracion {
+    padding: 40px 20px;
+
+    &__title {
+        font-family: variables.$font-title;
+        font-weight: 700;
+        font-size: 38px;
+        color: variables.$title;
+        margin-bottom: 0.2rem;
+    }
+
+    &__subtitle {
+        font-family: variables.$font-text;
+        font-weight: 400;
+        font-size: 22px;
+        color: variables.$text-muted;
+        margin-bottom: 20px;
+
+        span {
+            font-weight: 600
+        }
+    }
+
+    &__block {
+        background: variables.$cards;
+        padding: 25px;
+        border-radius: 14px;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        color: variables.$primary;
+        margin-bottom: 10px;
+        font-size: 24px;
+    }
+
+    &__copy {
+        color: variables.$text;
+        margin-bottom: 15px;
+    }
+
+    &__box {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin: 15px 0;
+
+        input {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid variables.$secondary;
+        }
+    }
+
+    &__addDestino {
+        background: variables.$primary;
+
+        &:hover {
+            transform: scale(1.03);
+        }
+    }
+
+    &__btn {
+        background: variables.$primary;
+        color: white;
+        padding: 10px 16px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+
+        &:hover {
+            background: variables.$primary-hover;
+        }
+    }
+
+    &__limit {
+        font-size: 14px;
+        color: variables.$text-muted;
+    }
+
+    &__upgrade {
+        margin-top: 20px;
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+
+        button {
+            margin-top: 10px;
+            background: variables.$success;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    }
+
+    &__pro {
+        margin-top: 15px;
+        font-size: 19px;
+        font-weight: 700;
+        color: variables.$success;
+    }
+
+    &__info {
+        margin: 15px 0px;
+        font-size: 16px;
+    }
+
+    &__warning {
+        color: variables.$tertiary;
+        font-weight: 500;
+    }
+
+    &__success {
+        color: variables.$success;
+        font-weight: 500;
+    }
+}
+
+.configuracion__modal {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    h3 {
+        font-family: variables.$font-title;
+        color: variables.$primary;
+    }
+
+    p {
+        font-family: variables.$font-text;
+        color: variables.$text;
+    }
+
+    &-actions {
+        display: flex;
+        justify-content: space-around;
+        gap: 10px;
+
+        button {
+            width: 45%;
+        }
+    }
+
+    &-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin: 10px 0;
+    }
+
+    &-item {
+        background: white;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-family: variables.$font-text;
+        color: variables.$text;
+        border: 1px solid variables.$secondary;
+    }
+
+    &-error {
+        text-align: center;
+        font-size: 18px;
+    }
+}
+
+.configuracion__btn--secondary {
+    background: variables.$secondary;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .configuracion {
+        &__title {
+            text-align: center;
+        }
+
+        &__subtitle {
+            text-align: center;
+        }
+
+        &__copy {
+            text-align: justify;
+        }
+
+        &__pro {
+            text-align: justify;
+        }
+    }
+}

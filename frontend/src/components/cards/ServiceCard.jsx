@@ -20,6 +20,8 @@ export default function ServiceCard({
   onChangeEstado = null,
   distanciaKm = null,
   importe = null,
+  tipoCarga = null,
+  tipoVehiculo = null,
 }) {
 
   const router = useRouter();
@@ -27,6 +29,19 @@ export default function ServiceCard({
 
   // ESTADO LOCAL VISUAL
   const [estadoLocal, setEstadoLocal] = useState(estado);
+
+  const tipoCargaLabel = {
+    menaje: "Menaje de casa",
+    vehiculo: "Vehículo",
+    menaje_vehiculo: "Menaje + vehículo",
+    otro: "Otro",
+  }[tipoCarga] || "No especificado";
+
+  const tipoVehiculoLabel = {
+    compacto: "Auto compacto",
+    camioneta: "Camioneta",
+    motocicleta: "Motocicleta",
+  }[tipoVehiculo] || "No especificado";
 
   // Sincroniza cuando el backend responda
   useEffect(() => {
@@ -49,7 +64,34 @@ export default function ServiceCard({
         </h2>
       </div>
 
-      <p className="service-card__info">Volumen: {volumen}</p>
+      {/* ========================= INFO CARGA ========================= */}
+
+      {/* BUSCO → comportamiento normal */}
+      {!isOffer && (
+        <p className="service-card__info">
+          Volumen: {volumen || "No especificado"}
+        </p>
+      )}
+
+      {/* OFREZCO → lógica avanzada */}
+      {isOffer && (
+        <>
+          <p className="service-card__info">
+            Tipo de carga: {tipoCargaLabel}
+          </p>
+
+          {tipoCarga === "vehiculo" ? (
+            <p className="service-card__info">
+              Vehículo: {tipoVehiculoLabel}
+            </p>
+          ) : (
+            <p className="service-card__info">
+              Volumen: {volumen || "No especificado"}
+            </p>
+          )}
+        </>
+      )}
+
       <p className="service-card__info">{empresa}</p>
       {distanciaKm && (
         <p className="service-card__info" id="kilometros">
@@ -86,6 +128,8 @@ export default function ServiceCard({
                 origen,
                 destino,
                 volumen,
+                tipoCarga,
+                tipoVehiculo,
                 servicioId: id,
               })
             }

@@ -15,7 +15,7 @@ class StoreServicioRequest extends FormRequest
     public function rules(): array
     {
         $tipo = $this->input('tipo');
-        $tipoCarga = $this->input('tipo_carga');
+        $tipoCarga = $this->input('tipo_carga') ?? $this->input('tipoCarga');
 
         if ($tipo === 'busco') {
             return [
@@ -31,7 +31,6 @@ class StoreServicioRequest extends FormRequest
 
                 'origen' => ['required', 'string', 'min:3', 'max:100'],
                 'destino' => ['required', 'string', 'min:3', 'max:100'],
-
                 'inicio' => ['required', 'date', 'after_or_equal:today'],
                 'fin' => ['required', 'date', 'after_or_equal:inicio'],
 
@@ -60,7 +59,6 @@ class StoreServicioRequest extends FormRequest
 
             'origen' => ['required', 'string', 'min:3', 'max:100'],
             'destino' => ['required', 'string', 'min:3', 'max:100'],
-
             'rangoDias' => ['required', 'string'],
 
             'tipo_carga' => [
@@ -73,12 +71,17 @@ class StoreServicioRequest extends FormRequest
                 ]),
             ],
 
+            'tipo_vehiculo' => [
+                Rule::requiredIf(fn() => $this->input('tipo_carga') === 'vehiculo'),
+                'nullable',
+                Rule::in(['compacto', 'camioneta', 'motocicleta']),
+            ],
+
             'nota' => ['nullable', 'string', 'max:1000'],
             'responsable_nombre' => ['nullable', 'string', 'max:120'],
             'responsable_telefono' => ['nullable', 'string', 'max:20'],
             'importe' => ['nullable', 'numeric', 'min:0'],
             'estado_carga' => ['nullable', Rule::in(['mi_almacen', 'tu_almacen', 'en_ruta'])],
-
             'imagenes' => ['nullable', 'array', 'max:3'],
             'imagenes.*.url' => ['required', 'url'],
             'imagenes.*.public_id' => ['required', 'string'],
@@ -90,6 +93,7 @@ class StoreServicioRequest extends FormRequest
         return [
             'volumen.required' => 'El volumen es obligatorio para este tipo de carga.',
             'tipo_carga.in' => 'El tipo de carga seleccionado no es válido.',
+            'tipo_vehiculo.required' => 'Debes seleccionar el tipo de vehículo.',
         ];
     }
 

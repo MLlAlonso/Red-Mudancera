@@ -177,6 +177,15 @@ export default function SideMenu({ open }) {
         </li>
 
         <li>
+          <Link href="/empresa/configuracion">
+            <div className="side-item">
+              <img src="/icons/ajustes.png" />
+              <span>Ajustes</span>
+            </div>
+          </Link>
+        </li>
+
+        <li>
           <Link href="/empresa/logout">
             <div className="side-item">
               <img src="/icons/logout.png" />

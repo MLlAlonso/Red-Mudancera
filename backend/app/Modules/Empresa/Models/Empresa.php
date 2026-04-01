@@ -81,4 +81,9 @@ class Empresa extends Authenticatable
             'solicitud_id'
         );
     }
+
+    public function radarConfig()
+    {
+        return $this->hasOne(\App\Modules\Empresa\Models\EmpresaRadarConfig::class);
+    }
 }

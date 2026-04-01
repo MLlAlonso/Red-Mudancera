@@ -40,6 +40,7 @@ export default function EditarOfrezcoServicioPage() {
         nota: "",
         tipoCarga: "",
         importe: "",
+        tipoVehiculo: "",
         estadoCarga: "mi_almacen",
     });
 
@@ -116,6 +117,17 @@ export default function EditarOfrezcoServicioPage() {
     ====================== */
     const handleChange = (e) => {
         const { name, value } = e.target;
+
+        if (name === "tipoCarga") {
+            setForm(prev => ({
+                ...prev,
+                tipoCarga: value,
+                volumen: value === "vehiculo" ? "" : prev.volumen,
+                tipoVehiculo: value === "vehiculo" ? prev.tipoVehiculo : ""
+            }));
+            return;
+        }
+
         if (name === "volumen" && Number(value) > 120) return;
         setForm(prev => ({ ...prev, [name]: value }));
     };
@@ -150,9 +162,7 @@ export default function EditarOfrezcoServicioPage() {
     const handleImagenesChange = (e) => {
         const MAX_SIZE = 5 * 1024 * 1024;
         const files = Array.from(e.target.files);
-
         if (!files.length) return;
-
         const imagenesValidas = [];
         const errores = [];
 
@@ -227,9 +237,10 @@ export default function EditarOfrezcoServicioPage() {
                     Accept: "application/json",
                 },
                 body: JSON.stringify({
-                    volumen: form.volumen,
+                    volumen: form.tipoCarga === "vehiculo" ? null : form.volumen,
                     origen: form.origen,
                     destino: form.destino,
+                    tipo_vehiculo: form.tipoVehiculo || null,
                     rangoDias: form.rangoDias,
                     tipo_carga: form.tipoCarga,
                     nota: form.nota,
@@ -298,8 +309,6 @@ export default function EditarOfrezcoServicioPage() {
                             <h2 className="subtitle">Actualiza la información</h2>
                         </div>
 
-                        <Input label="Volumen" name="volumen" type="number" value={form.volumen} onChange={handleChange} />
-
                         <div className="input-group">
                             <label className="input-group__label">Tipo de carga</label>
                             <select name="tipoCarga" className="input-group__field" value={form.tipoCarga} onChange={handleChange}>
@@ -311,12 +320,44 @@ export default function EditarOfrezcoServicioPage() {
                             </select>
                         </div>
 
+                        {form.tipoCarga === "vehiculo" && (
+                            <div className="input-group">
+                                <label className="input-group__label">Tipo de vehículo</label>
+
+                                <select
+                                    name="tipoVehiculo"
+                                    className="input-group__field"
+                                    value={form.tipoVehiculo}
+                                    onChange={handleChange}
+                                >
+                                    <option value="">Selecciona</option>
+                                    <option value="compacto">Auto compacto</option>
+                                    <option value="camioneta">Camioneta</option>
+                                    <option value="motocicleta">Motocicleta</option>
+                                </select>
+                            </div>
+                        )}
+
+                        {form.tipoCarga && form.tipoCarga !== "vehiculo" && (
+                            <Input
+                                label="Volumen"
+                                name="volumen"
+                                type="number"
+                                value={form.volumen}
+                                onChange={handleChange}
+                            />
+                        )}
+
                         <div className="input-group">
                             <label className="input-group__label">Descripción de la carga</label>
                             <SimpleEditor
                                 value={form.nota}
                                 onChange={(value) => setForm((prev) => ({ ...prev, nota: value }))}
-                                placeholder={`¿Qué lleva la mudanza? Escríbelo o pega la lista del cliente.`}
+                                placeholder={
+                                    form.tipoCarga === "vehiculo"
+                                        ? "Marca, modelo, año y especificaciones del vehículo"
+                                        : "¿Qué lleva la mudanza? Escríbelo o pega la lista del cliente."
+                                }
                             />
                         </div>
 
@@ -470,7 +511,7 @@ Al confirmar, este servicio será eliminado de forma permanente`}
                 show={errorModal.show}
                 title="Error en imágenes"
                 message={errorModal.message}
-                onClose={() => setErrorModal({ show: false, message: "" }) }
+                onClose={() => setErrorModal({ show: false, message: "" })}
             />
 
             <LoadingOverlay show={loading} message="Actualizando servicio..." />

@@ -122,10 +122,43 @@ export default function DetalleServicioPage() {
           </div>
 
           <div className="detalle-servicio__grid">
+
+
             <div>
-              <label>Volumen:</label>
-              <span>{servicio.volumen} m³</span>
+              <label>Tipo de carga:</label>
+              <span>
+                {{
+                  menaje: "Menaje de casa",
+                  vehiculo: "Vehículo",
+                  menaje_vehiculo: "Menaje + vehículo",
+                  otro: "Otro",
+                }[servicio.tipo_carga] || servicio.tipo_carga}
+              </span>
             </div>
+
+            {isOffer && servicio.tipo_carga === "vehiculo" && (
+              <div>
+                <label>Tipo de vehículo:</label>
+                <span>
+                  {
+                    {
+                      compacto: "Auto compacto",
+                      camioneta: "Camioneta",
+                      motocicleta: "Motocicleta"
+                    }[servicio.tipo_vehiculo] || "—"
+                  }
+                </span>
+              </div>
+            )}
+
+            {(!isOffer || servicio.tipo_carga !== "vehiculo") && (
+              <div>
+                <label>Volumen:</label>
+                <span>
+                  {servicio.volumen ? `${servicio.volumen} m³` : "—"}
+                </span>
+              </div>
+            )}
 
             {isOffer && (
               <div>
@@ -135,6 +168,13 @@ export default function DetalleServicioPage() {
                     ? `${servicio.distancia_km} km`
                     : "—"}
                 </span>
+              </div>
+            )}
+
+            {servicio.tipo === "ofrezco" && (
+              <div>
+                <label>Estado de carga:</label>
+                <span>{estadoCargaLabel(servicio.estado_carga)}</span>
               </div>
             )}
 
@@ -150,11 +190,6 @@ export default function DetalleServicioPage() {
             )}
 
             <div>
-              <label>Tipo de carga:</label>
-              <span>{servicio.tipo_carga}</span>
-            </div>
-
-            <div>
               <label>Rango de salida:</label>
               <span id="salida">
                 {servicio.inicio && servicio.fin
@@ -162,14 +197,6 @@ export default function DetalleServicioPage() {
                   : "—"}
               </span>
             </div>
-
-            {servicio.tipo === "ofrezco" && (
-              <div>
-                <label>Estado de carga:</label>
-                <span>{estadoCargaLabel(servicio.estado_carga)}</span>
-              </div>
-            )}
-
           </div>
 
           <div className="detalle-servicio__divider">
@@ -241,7 +268,9 @@ export default function DetalleServicioPage() {
                     tipo: isOffer ? "Ofrezco" : "Busco",
                     origen: servicio.origen,
                     destino: servicio.destino,
-                    volumen: `${servicio.volumen} m³`,
+                    tipoCarga: servicio.tipo_carga,
+                    volumen: servicio.volumen,
+                    tipoVehiculo: servicio.tipo_vehiculo,
                     servicioId: servicio.id,
                   })
                 }

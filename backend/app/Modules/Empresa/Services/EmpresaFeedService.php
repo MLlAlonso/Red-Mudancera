@@ -27,6 +27,8 @@ class EmpresaFeedService
                     'origen' => $s->origen,
                     'destino' => $s->destino,
                     'volumen' => $s->volumen,
+                    'tipoCarga' => $s->tipo_carga,
+                    'tipoVehiculo' => $s->tipo_vehiculo,
                     'empresa' => $s->empresa?->empresa,
                     'telefono' => $s->empresa?->tel,
                     'distancia_km' => $s->distancia_km,

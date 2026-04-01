@@ -241,6 +241,10 @@ export default function MisServiciosEmpresa() {
                   origen={s.origen}
                   destino={s.destino}
                   volumen={s.volumen ? `${s.volumen} m³` : "No especificado"}
+
+                  tipoCarga={s.tipo_carga}
+                  tipoVehiculo={s.tipo_vehiculo}
+
                   empresa={s.empresa?.empresa ?? "Empresa"}
                   fecha={new Date(s.created_at).toLocaleDateString()}
                   showContact={false}
@@ -252,7 +256,6 @@ export default function MisServiciosEmpresa() {
                       return;
                     }
 
-                    // asignado → cambio directo
                     cambiarEstadoDirecto(id, nuevoEstado, "servicio");
                     setSelectedService(null);
                   }}

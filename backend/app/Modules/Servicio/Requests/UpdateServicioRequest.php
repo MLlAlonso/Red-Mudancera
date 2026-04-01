@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Modules\Servicio\Requests;
+
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -25,7 +26,6 @@ class UpdateServicioRequest extends FormRequest
 
             'origen'  => ['nullable', 'string', 'min:3', 'max:100'],
             'destino' => ['nullable', 'string', 'min:3', 'max:100'],
-
             'rangoDias' => ['nullable', 'string'],
 
             'tipo_carga' => [
@@ -37,6 +37,11 @@ class UpdateServicioRequest extends FormRequest
                     'otro',
                     'libre',
                 ]),
+            ],
+
+            'tipo_vehiculo' => [
+                'nullable',
+                Rule::in(['compacto', 'camioneta', 'motocicleta']),
             ],
 
             'nota' => ['nullable', 'string', 'max:1000'],
@@ -51,11 +56,9 @@ class UpdateServicioRequest extends FormRequest
 
             'eliminar_imagenes' => ['nullable', 'array'],
             'eliminar_imagenes.*' => ['integer', 'exists:servicio_imagenes,id'],
-
             'imagenes' => ['nullable', 'array', 'max:3'],
             'imagenes.*.url' => ['required', 'url'],
             'imagenes.*.public_id' => ['required', 'string'],
-
         ];
     }
 }

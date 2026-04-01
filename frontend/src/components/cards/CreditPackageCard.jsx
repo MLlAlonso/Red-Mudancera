@@ -7,11 +7,19 @@ export default function CreditPackageCard({
     credits,
     price,
     description,
-    onBuy
+    onBuy,
+    badge
 }) {
 
     return (
         <div className="credit-card">
+
+            {badge && (
+                <div className="credit-card__badge">
+                    {badge}
+                </div>
+            )}
+
             <h3 className="credit-card__title">
                 {title}
             </h3>
@@ -28,7 +36,7 @@ export default function CreditPackageCard({
                 ${price}
             </div>
 
-            <button className="credit-card__button" onClick={onBuy} >
+            <button className="credit-card__button" onClick={onBuy}>
                 Comprar
             </button>
         </div>

@@ -22,7 +22,6 @@ export default function ComprarCreditos() {
         setLoading(plan);
 
         try {
-
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_API_URL}/empresa/creditos/comprar`,
                 {
@@ -36,7 +35,6 @@ export default function ComprarCreditos() {
             );
 
             const data = await res.json();
-
             setFolio(data.folio);
             setCreditos(data.creditos);
             setModalOpen(true);
@@ -46,7 +44,6 @@ export default function ComprarCreditos() {
             setErrorMessage("No se pudo completar la compra. Intenta nuevamente.");
             setErrorModal(true);
         }
-
         setLoading(null);
     };
 
@@ -56,27 +53,20 @@ export default function ComprarCreditos() {
 
             <main className="creditos">
                 <h1 className="creditos__title">
-                    Comprar créditos
+                    Consigue más servicios de mudanza
                 </h1>
 
                 <p className="creditos__subtitle">
-                    Adquiere créditos para contactar clientes y cerrar más servicios.
+                    Compra créditos y accede a contactos reales que ya estan buscando mover sus cosas.
                 </p>
 
                 <div className="creditos__grid">
-                    <CreditPackageCard
-                        title="Impulso"
-                        credits={100}
-                        price="790 mxn"
-                        description="Perfecto para empresas que comienzan a generar oportunidades."
-                        onBuy={() => comprar("impulso")}
-                    />
-
                     <CreditPackageCard
                         title="Profesional"
                         credits={250}
                         price="1,890 mxn"
                         description="La opción más popular para empresas con flujo constante."
+                        badge="Más popular"
                         onBuy={() => comprar("profesional")}
                     />
 
@@ -87,13 +77,19 @@ export default function ComprarCreditos() {
                         description="Para empresas que quieren maximizar oportunidades."
                         onBuy={() => comprar("crecimiento")}
                     />
+
+                    <CreditPackageCard
+                        title="Impulso"
+                        credits={100}
+                        price="790 mxn"
+                        description="Perfecto para empresas que comienzan a generar oportunidades."
+                        onBuy={() => comprar("impulso")}
+                    />
                 </div>
-
-
 
                 <p className="creditos__help">
                     <a href="ayuda/">¿Cómo funcionan los créditos?</a>
-                    Los créditos te permiten adquirir contactos de mudanza dentro de la red. 
+                    Los créditos te permiten adquirir contactos de mudanza dentro de la red.
                     Cada contacto se comparte con un máximo de 3 empresas
                 </p>
 

@@ -43,14 +43,10 @@ export default function PlanesPage() {
 
   const getPrecioAnualProporcional = (plan) => {
     const p = precios[plan];
-
     if (!p) return 0;
-
     const mesesRestantes = getMesesRestantes();
     const precioPorMes = p.anual / 12;
-
     const total = precioPorMes * mesesRestantes;
-
     return Math.round(total);
   };
 
@@ -72,7 +68,7 @@ export default function PlanesPage() {
     return `$${p.mensual} / mes`;
   };
 
-  // AMBIO DE PLAN (TERCER NIVEL PRO)
+  // AMBIO DE PLAN
   const cambiarPlan = async () => {
     const token = getToken();
 
@@ -90,7 +86,7 @@ export default function PlanesPage() {
           plan: confirm.plan,
           tipo: config.tipo,
 
-          // PROTECCIÓN REAL (NO CONFÍES EN EL FRONT)
+          // PROTECCIÓN REAL
           recurrente:
             config.tipo === "anual" ? true : config.recurrente,
         }),
@@ -102,7 +98,7 @@ export default function PlanesPage() {
     window.location.reload();
   };
 
-  // ABRIR MODAL (IMPORTANTE: resetear config)
+  // ABRIR MODAL
   const abrirModal = (plan) => {
     setConfirm({ plan });
 
@@ -118,87 +114,24 @@ export default function PlanesPage() {
 
       <main className="planes">
         <h1 className="planes__title">
-          Haz crecer tu operación con el plan correcto
+          Elige cómo quieres participar en la red
         </h1>
 
         <p className="planes__subtitle">
-          Más publicaciones, coincidencias inteligentes y contacto directo con oportunidades reales.
+          Empieza gratis o activa tu cuenta para recibir y aprovechar oportunidades reales de mudanza.
         </p>
 
         <div className="planes__grid">
-
-          {/* EXPLORADOR */}
-          <div className="plan-card" id="free">
-            <h2 className="plan-title">
-              <img src="/icons/explorar.png" alt="Explorador" />
-              <span>Explorador</span>
-            </h2>
-
-            <p className="price">Gratis</p>
-
-            <button onClick={() => abrirModal("explorador")}>
-              Activar
-            </button>
-
-            <div className="divider"></div>
-
-            <ul>
-              <li><span>✔</span> Explorar publicaciones</li>
-              <li><span>✔</span> Explorar plataforma</li>
-              <li><span>✔</span> Buscar empresas</li>
-            </ul>
-
-            <div className="divider"></div>
-          </div>
-
-          {/* RADAR */}
-          <div className="plan-card plan-card--morado">
-            <div className="top-badge">Más popular</div>
-
-            <h2 className="plan-title">
-              <img src="/icons/radar.png" alt="Radar" />
-              <span>Radar</span>
-            </h2>
-
-            <div className="price">
-              $899/mes
-              <p className="price_year">
-                <span className="year">$9,199/año</span>
-                <span className="badge">-15%</span>
-              </p>
-            </div>
-
-            <button
-              onClick={() => abrirModal("radar")}
-              disabled={loading === "radar"}
-            >
-              {loading === "radar" ? "Procesando..." : "Empezar"}
-            </button>
-
-            <div className="divider"></div>
-
-            <ul>
-              <li><span>✔</span> Publicaciones ilimitadas</li>
-              <li><span>✔</span> Radar automático</li>
-              <li><span>✔</span> Coincidencias en tiempo real</li>
-              <li><span>✔</span> Prioridad en alertas</li>
-            </ul>
-
-            <div className="divider"></div>
-
-            <p className="recurring">
-              Cargo recurrente Mens:
-              <strong>$854 <span>/mes</span></strong>
-              <span>-5% descuento automático</span>
-            </p>
-          </div>
-
           {/* CONECTOR */}
           <div className="plan-card plan-card--azul">
+            <div className="top-badge">Más popular</div>
+
             <h2 className="plan-title">
               <img src="/icons/conectar.png" alt="Conector" />
               <span>Conector</span>
             </h2>
+
+            <p className="plan_microCopy">Empieza a generar oportunidades dentro de la red</p>
 
             <div className="price">
               $649/mes
@@ -233,6 +166,73 @@ export default function PlanesPage() {
             </p>
           </div>
 
+          {/* RADAR */}
+          <div className="plan-card plan-card--morado">
+            <h2 className="plan-title">
+              <img src="/icons/radar.png" alt="Radar" />
+              <span>Radar</span>
+            </h2>
+
+            <p className="plan_microCopy">Recibe oportunidades sin buscarlas</p>
+
+            <div className="price">
+              $899/mes
+              <p className="price_year">
+                <span className="year">$9,199/año</span>
+                <span className="badge">-15%</span>
+              </p>
+            </div>
+
+            <button
+              onClick={() => abrirModal("radar")}
+              disabled={loading === "radar"}
+            >
+              {loading === "radar" ? "Procesando..." : "Empezar"}
+            </button>
+
+            <div className="divider"></div>
+
+            <ul>
+              <li><span>✔</span> Publicaciones ilimitadas</li>
+              <li><span>✔</span> Radar automático</li>
+              <li><span>✔</span> Coincidencias en tiempo real</li>
+              <li><span>✔</span> Prioridad en alertas</li>
+            </ul>
+
+            <div className="divider"></div>
+
+            <p className="recurring">
+              Cargo recurrente Mens:
+              <strong>$854 <span>/mes</span></strong>
+              <span>-5% descuento automático</span>
+            </p>
+          </div>
+
+          {/* EXPLORADOR */}
+          <div className="plan-card" id="free">
+            <h2 className="plan-title">
+              <img src="/icons/explorar.png" alt="Explorador" />
+              <span>Explorador</span>
+            </h2>
+
+            <p className="plan_microCopy">Ideal para conocer cómo funciona la red</p>
+
+            <p className="price">Gratis</p>
+
+            <button onClick={() => abrirModal("explorador")}>
+              Activar
+            </button>
+
+            <div className="divider"></div>
+
+            <ul>
+              <li><span>✔</span> Explorar publicaciones</li>
+              <li><span>✔</span> Explorar plataforma</li>
+              <li><span>✔</span> Buscar empresas</li>
+            </ul>
+
+            <div className="divider"></div>
+          </div>
         </div>
       </main>
 
