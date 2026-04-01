@@ -26,7 +26,8 @@ return Application::configure(basePath: dirname(__DIR__))
         Log::info('SCHEDULER FUNCIONANDO');
 
         $schedule->command('radar:process')
-            ->everyMinute();
+            ->hourly()
+            ->between('09:00', '21:00');
 
         $schedule->command('subscriptions:check')
             ->dailyAt('08:00');
