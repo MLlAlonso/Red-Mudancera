@@ -5,10 +5,13 @@ use App\Modules\Servicio\Controllers\ServicioController;
 use App\Modules\Servicio\Controllers\RadarController;
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::post('/servicios', [ServicioController::class, 'store']);
-    Route::patch('/servicios/{id}/estado', [ServicioController::class, 'changeEstado']);
+    Route::post('/servicios', [ServicioController::class, 'store'])
+        ->middleware('plan.permission:create_servicio');
+    Route::patch('/servicios/{id}/estado', [ServicioController::class, 'changeEstado'])
+    ->middleware('plan.permission:change_estado');
     Route::delete('/servicios/{id}', [ServicioController::class, 'destroy']);
-    Route::patch('/servicios/{id}', [ServicioController::class, 'update']);
+    Route::patch('/servicios/{id}', [ServicioController::class, 'update'])
+    ->middleware('plan.permission:edit_servicio');
     Route::post('/servicios/{id}/finalizar', [ServicioController::class, 'finalizar']);
     Route::get('/servicios/reporte/mensual', [ServicioController::class, 'reporteMensual']);
 });

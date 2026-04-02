@@ -118,7 +118,22 @@ export default function SolicitudMudanzaCard({
                   value="Contactar"
                   icon="/icons/whatsapp.png"
                   iconAlt="WhatsApp"
-                  onClick={() =>
+                  onClick={() => {
+                    const plan = document.cookie.match(/plan=([^;]+)/)?.[1];
+
+                    if (plan === "free" || plan === "explorador") {
+                      window.dispatchEvent(
+                        new CustomEvent("plan-limit", {
+                          detail: {
+                            message:
+                              "Necesitas un plan activo para contactar clientes.",
+                            required_plan: "conector",
+                          },
+                        })
+                      );
+                      return;
+                    }
+
                     openLeadWhatsappMessage({
                       telefono,
                       nombreCliente,
@@ -127,8 +142,8 @@ export default function SolicitudMudanzaCard({
                       tipoVivienda,
                       empresaNombre,
                       empresaId,
-                    })
-                  }
+                    });
+                  }}
                 />
               ) : (
                 <button

@@ -35,6 +35,28 @@ export default function EmpresaUsuarios() {
 
   const DEFAULT_PASSWORD = "Mudanzas123";
 
+  const getPlan = () => {
+    const match = document.cookie.match(/plan=([^;]+)/);
+    return match ? match[1] : "free";
+  };
+
+  const handleOpenModal = () => {
+    const plan = getPlan();
+
+    if (["free", "explorador"].includes(plan)) {
+      window.dispatchEvent(
+        new CustomEvent("plan-limit", {
+          detail: {
+            message: "Tu plan actual no permite agregar usuarios. Activa un plan superior para gestionar tu equipo.",
+          },
+        })
+      );
+      return;
+    }
+
+    setModalOpen(true);
+  };
+
   const getCookie = (name) => {
     const match = document.cookie.match(
       new RegExp("(^| )" + name + "=([^;]+)")
@@ -85,6 +107,19 @@ export default function EmpresaUsuarios() {
       codigoEmpresa: empresaCodigo,
     };
 
+    const plan = getPlan();
+
+    if (["free", "explorador"].includes(plan)) {
+      window.dispatchEvent(
+        new CustomEvent("plan-limit", {
+          detail: {
+            message: "Tu plan actual no permite agregar usuarios.",
+          },
+        })
+      );
+      return;
+    }
+
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/usuario/register`,
@@ -97,12 +132,12 @@ export default function EmpresaUsuarios() {
 
       const data = await res.json();
       if (!res.ok) {
-      alert(
-        data.message ||
-        "Este correo ya está registrado. Intenta con otro."
-      );
-      return;
-    }
+        alert(
+          data.message ||
+          "Este correo ya está registrado. Intenta con otro."
+        );
+        return;
+      }
 
       setModalOpen(false);
       setForm({
@@ -149,7 +184,7 @@ export default function EmpresaUsuarios() {
     );
 
     await fetchUsuarios();
-    
+
     if (usuario.activoEmpresa) {
       setModalSuccessPause(true);
       setTimeout(() => setModalSuccessPause(false), 2000);
@@ -189,7 +224,7 @@ export default function EmpresaUsuarios() {
             <p className="empresa-usuarios__subtitle">Miembros de mi equipo</p>
           </div>
 
-          <Button_crud value="Añadir" onClick={() => setModalOpen(true)} />
+          <Button_crud value="Añadir" onClick={handleOpenModal} />
         </div>
 
         <div className="empresa-usuarios__grid">
@@ -220,9 +255,9 @@ export default function EmpresaUsuarios() {
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h2 className="modal__title">Registrar usuario</h2>
 
-            <Input label="Nombre" name="nombre" placeholder="Nombre" value={form.nombre} onChange={handleInput}/>
-            <Input label="Correo" name="email" placeholder="Correo" value={form.email} onChange={handleInput}/>
-            <Input label="Teléfono" name="telefono" placeholder="Teléfono" value={form.telefono} onChange={handleInput}/>
+            <Input label="Nombre" name="nombre" placeholder="Nombre" value={form.nombre} onChange={handleInput} />
+            <Input label="Correo" name="email" placeholder="Correo" value={form.email} onChange={handleInput} />
+            <Input label="Teléfono" name="telefono" placeholder="Teléfono" value={form.telefono} onChange={handleInput} />
 
             <Button_crud value="Registrar" onClick={handleSubmit} />
           </div>

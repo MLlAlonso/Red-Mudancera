@@ -72,16 +72,13 @@ class ServicioController extends Controller
         }
 
         /* =========================
-   REGISTRAR VISTA
-========================= */
+            REGISTRAR VISTA
+        ========================= */
 
         if (auth('empresa')->check()) {
-
             $empresaViewer = auth('empresa')->user();
-
             // No contar vista propia
             if ($empresaViewer->id !== $servicio->empresa_id) {
-
                 ServiceView::create([
                     'servicio_id' => $servicio->id,
                     'empresa_id' => $empresaViewer->id,
@@ -105,7 +102,6 @@ class ServicioController extends Controller
                 }
             }
         }
-
         return response()->json($servicio);
     }
 
@@ -116,10 +112,30 @@ class ServicioController extends Controller
         StoreServicioRequest $request,
         ServicioImagenService $imagenService
     ): JsonResponse {
+
         $empresa = auth('empresa')->user();
 
-        return DB::transaction(function () use ($request, $empresa, $imagenService) {
+        /**
+         * ==========================================
+         * LÍMITE PLAN CONECTOR (20 POR MES)
+         * ==========================================
+         */
+        if ($empresa->plan === 'conector') {
+            $inicioMes = now()->startOfMonth();
+            $serviciosEsteMes = \App\Modules\Servicio\Models\Servicio::where('empresa_id', $empresa->id)
+                ->where('created_at', '>=', $inicioMes)
+                ->count();
 
+            if ($serviciosEsteMes >= 20) {
+                return response()->json([
+                    'error' => 'PLAN_LIMIT_SERVICIOS',
+                    'message' => 'Has alcanzado el límite de publicaciones de tu plan.',
+                    'cta' => 'upgrade_radar'
+                ], 403);
+            }
+        }
+
+        return DB::transaction(function () use ($request, $empresa, $imagenService) {
             // Crear servicio + calcular distancia
             $servicio = $this->servicioService->create(
                 $request->validated(),
@@ -140,16 +156,19 @@ class ServicioController extends Controller
                 ])
             );
 
+            /**
+             * ==========================================
+             * CONTADOR GLOBAL (LO QUE YA TENÍAS)
+             * ==========================================
+             */
             $totalMes = \App\Modules\Servicio\Models\Servicio::whereMonth('created_at', now()->month)
                 ->whereYear('created_at', now()->year)
                 ->count();
 
             if ($totalMes % 100 === 0) {
-
                 $empresas = \App\Modules\Empresa\Models\Empresa::where('subActiva', true)->get();
 
                 foreach ($empresas as $empresaActiva) {
-
                     app(NotificationDispatcher::class)->dispatch(
                         new ServiciosCreadosMesEvent([
                             'empresa_id' => $empresaActiva->id,
@@ -411,7 +430,6 @@ class ServicioController extends Controller
         }
 
         $empresa = $accessToken->tokenable;
-
         $logoPath = null;
         $logoUrl = $empresa->logo_url;
 

@@ -121,7 +121,22 @@ export default function ServiceCard({
         {showContact && (
           <button
             className={`btn-solid btn-contact ${isOffer ? "offer-btn" : ""}`}
-            onClick={() =>
+            onClick={() => {
+              const plan = document.cookie.match(/plan=([^;]+)/)?.[1];
+
+              if (plan === "free" || plan === "explorador") {
+                window.dispatchEvent(
+                  new CustomEvent("plan-limit", {
+                    detail: {
+                      message:
+                        "Necesitas un plan activo para contactar empresas.",
+                      required_plan: "conector",
+                    },
+                  })
+                );
+                return;
+              }
+
               openWhatsappMessage({
                 telefono,
                 tipo: isOffer ? "Ofrezco" : "Busco",
@@ -131,8 +146,8 @@ export default function ServiceCard({
                 tipoCarga,
                 tipoVehiculo,
                 servicioId: id,
-              })
-            }
+              });
+            }}
           >
             <img src="/icons/whatsapp.png" alt="WhatsApp" className="btn-contact__icon" />
             <span>Contactar</span>

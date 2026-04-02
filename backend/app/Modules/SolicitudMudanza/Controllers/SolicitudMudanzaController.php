@@ -85,7 +85,6 @@ class SolicitudMudanzaController extends Controller
             ->findOrFail($id);
 
         $empresa = Auth::guard('empresa')->user();
-
         $haComprado = false;
         $fueExclusivo = false;
 
@@ -118,15 +117,30 @@ class SolicitudMudanzaController extends Controller
     public function comprar(Request $request, $id): JsonResponse
     {
         $empresa = Auth::guard('empresa')->user();
+
         if (!$empresa) {
             return response()->json(['message' => 'No autenticado'], 401);
         }
+
+        $plan = strtolower($empresa->plan ?? 'explorador');
+        $esExclusivo = $request->boolean('exclusivo');
+
+        // 🔒 BLOQUEO: PLAN CONECTOR NO PUEDE EXCLUSIVO
+        if ($plan === 'conector' && $esExclusivo) {
+            return response()->json([
+                'error' => 'PLAN_LIMIT_EXCLUSIVO',
+                'message' => 'Tu plan actual no permite comprar contactos exclusivos. Activa Radar para acceder a esta ventaja.',
+                'required_plan' => 'radar'
+            ], 403);
+        }
+
         $solicitud = SolicitudMudanza::findOrFail($id);
 
         // Ya lo compró esta empresa?
         $yaComprado = LeadCompra::where('empresa_id', $empresa->id)
             ->where('solicitud_id', $id)
             ->exists();
+
         if ($yaComprado) {
             return response()->json(['message' => 'Ya adquiriste este lead'], 422);
         }
@@ -137,16 +151,17 @@ class SolicitudMudanzaController extends Controller
         if ($solicitud->compras_count >= 3) {
             return response()->json(['message' => 'Lead agotado'], 422);
         }
-        $esExclusivo = $request->boolean('exclusivo');
 
+        // Validación de exclusivo por negocio
         if ($esExclusivo && $totalVentas > 0) {
             return response()->json([
                 'message' => 'Este lead ya fue adquirido. No puede comprarse como exclusivo.'
             ], 422);
         }
 
-        // NUEVOS PRECIOS
+        // PRECIOS
         $tipo = $solicitud->tipo_servicio;
+
         $tokensNecesarios = match (true) {
             $tipo === 'local' && !$esExclusivo => 6,
             $tipo === 'local' && $esExclusivo => 30,
@@ -161,16 +176,17 @@ class SolicitudMudanzaController extends Controller
             ], 422);
         }
 
-        DB::transaction(function () use ($empresa, $id, $tokensNecesarios, $request, $solicitud) {
+        DB::transaction(function () use ($empresa, $id, $tokensNecesarios, $esExclusivo, $solicitud) {
             LeadCompra::create([
                 'solicitud_id' => $id,
                 'empresa_id' => $empresa->id,
-                'exclusivo' => $request->boolean('exclusivo'),
+                'exclusivo' => $esExclusivo,
                 'tokens_pagados' => $tokensNecesarios,
             ]);
 
             $empresa->decrement('tokens', $tokensNecesarios);
             $solicitud->increment('compras_count');
+
             app(\App\Modules\SolicitudMudanza\Services\ReferralService::class)
                 ->procesarRecompensa($solicitud->fresh());
         });
@@ -179,7 +195,7 @@ class SolicitudMudanzaController extends Controller
             new LeadCompradoMail(
                 $solicitud,
                 $empresa,
-                $request->boolean('exclusivo'),
+                $esExclusivo,
                 $tokensNecesarios
             )
         );

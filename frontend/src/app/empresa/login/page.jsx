@@ -21,7 +21,6 @@ export default function EmpresaLogin() {
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
   const [showRecover, setShowRecover] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [recoverEmail, setRecoverEmail] = useState("");
@@ -59,6 +58,8 @@ export default function EmpresaLogin() {
 
       // Guardamos token en cookies
       document.cookie = `token_empresa=${data.token}; path=/; max-age=86400`;
+      // PLAN (CLAVE PARA LOS BLOQUEOS)
+      document.cookie = `plan=${data.empresa.plan}; path=/; max-age=86400`;
 
       window.location.href = "/empresa/dashboard";
     } catch (err) {
@@ -97,7 +98,6 @@ export default function EmpresaLogin() {
           {/* EMAIL */}
           <div className="empresa-login__input-wrapper">
             <Image src="/icons/mensaje.png" alt="email icon" width={24} height={24} className="empresa-login__icon" />
-
             <input type="email" placeholder="Correo empresa" className="empresa-login__input" value={formData.email} onChange={(e) => handleChange("email", e.target.value)} />
           </div>
 
@@ -113,10 +113,7 @@ export default function EmpresaLogin() {
               onChange={(e) => handleChange("password", e.target.value)}
             />
 
-            <span
-              className="empresa-login__showpass"
-              onClick={() => setShowPass(!showPass)}
-            >
+            <span className="empresa-login__showpass" onClick={() => setShowPass(!showPass)} >
               {showPass ? "👁️" : "👁️‍🗨️"}
             </span>
           </div>

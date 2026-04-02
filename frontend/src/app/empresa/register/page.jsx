@@ -28,7 +28,7 @@ export default function EmpresaRegister() {
   const validateForm = () => {
     if (!formData.empresa.trim()) return "El nombre de la empresa es obligatorio.";
     if (!formData.email.includes("@")) return "Ingresa un correo válido.";
-    if (!/^(?=.*[A-Z])(?=.*\d).{8,}$/.test(formData.password))
+    if (!/^(?=.*\d).{8,}$/.test(formData.password))
       return "La contraseña no cumple los requisitos.";
     if (!formData.representante.trim())
       return "El nombre del representante es obligatorio.";
@@ -104,7 +104,7 @@ export default function EmpresaRegister() {
             <Input
               label="Contraseña"
               type="password"
-              placeholder="Mín. 8, 1 mayús. y 1 num"
+              placeholder="Mín. 8 caracteres y 1 número"
               value={formData.password}
               onChange={(e) => handleChange("password", e.target.value)}
             />
@@ -121,7 +121,6 @@ export default function EmpresaRegister() {
               <div className="empresa-register__tooltip">
                 La contraseña debe incluir:
                 <br />• Al menos 8 caracteres
-                <br />• 1 mayúscula
                 <br />• 1 número
               </div>
             )}

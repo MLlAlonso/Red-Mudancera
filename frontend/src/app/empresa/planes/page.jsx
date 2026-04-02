@@ -74,28 +74,45 @@ export default function PlanesPage() {
 
     setLoading(confirm.plan);
 
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/empresa/plan/cambiar`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          plan: confirm.plan,
-          tipo: config.tipo,
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/empresa/plan/cambiar`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            plan: confirm.plan,
+            tipo: config.tipo,
+            recurrente:
+              config.tipo === "anual" ? true : config.recurrente,
+          }),
+        }
+      );
 
-          // PROTECCIÓN REAL
-          recurrente:
-            config.tipo === "anual" ? true : config.recurrente,
-        }),
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message || "Error al cambiar plan");
+        setLoading(null);
+        return;
       }
-    );
 
-    setConfirm(null);
-    setLoading(null);
-    window.location.reload();
+      // Actualizar cookie del plan
+      document.cookie = `plan=${confirm.plan}; path=/; max-age=86400`;
+
+      setConfirm(null);
+      setLoading(null);
+
+      window.location.reload();
+
+    } catch (error) {
+      console.error(error);
+      alert("Error de conexión");
+      setLoading(null);
+    }
   };
 
   // ABRIR MODAL
@@ -196,6 +213,7 @@ export default function PlanesPage() {
               <li><span>✔</span> Publicaciones ilimitadas</li>
               <li><span>✔</span> Radar automático</li>
               <li><span>✔</span> Coincidencias en tiempo real</li>
+              <li><span>✔</span> Compra exclusiva  de contactos</li>
               <li><span>✔</span> Prioridad en alertas</li>
             </ul>
 
@@ -295,7 +313,7 @@ export default function PlanesPage() {
                     })
                   }
                 />
-                Activar cobro automático (-5%)
+                Ahorra 5% con pago automatico
               </label>
             </div>
           )}
@@ -316,7 +334,7 @@ export default function PlanesPage() {
               ? `Pago proporcional hasta diciembre (${getMesesRestantes()} meses). 
        La suscripción se renovará automáticamente el 01 de enero.`
               : config.recurrente
-                ? "Se cobrará automáticamente cada mes"
+                ? "Se cobrará automáticamente cada mes, puedes cancelar en cualquier momento"
                 : "Pago manual cada mes"}
           </p>
         </BaseModal>

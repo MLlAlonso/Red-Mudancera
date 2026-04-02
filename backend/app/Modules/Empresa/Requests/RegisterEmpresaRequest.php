@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Modules\Empresa\Requests;
+
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterEmpresaRequest extends FormRequest
@@ -19,7 +20,7 @@ class RegisterEmpresaRequest extends FormRequest
             'base' => 'nullable|string|max:100',
             'tel' => 'required|string|max:20',
             'email' => 'required|email|unique:empresas,email',
-            'password' => 'required|min:8',
+            'password' => [ 'required', 'min:8', 'regex:/[0-9]/' ],
         ];
     }
 }

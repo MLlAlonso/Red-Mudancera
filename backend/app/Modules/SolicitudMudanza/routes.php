@@ -10,6 +10,7 @@ Route::prefix('solicitudes-mudanza')->group(function () {
     Route::post('/reenviar-codigo', [SolicitudMudanzaController::class, 'reenviarCodigo']);
     Route::get('/', [SolicitudMudanzaController::class, 'index']);
     Route::get('/{id}', [SolicitudMudanzaController::class, 'show']);
-    Route::post('/{id}/comprar', [SolicitudMudanzaController::class, 'comprar']) ->middleware('auth:empresa');
-    Route::patch( '/leads/{id}/estado', [LeadOperacionController::class, 'changeEstado'] )->middleware('auth:empresa');
+    Route::post('/{id}/comprar', [SolicitudMudanzaController::class, 'comprar'])
+        ->middleware(['auth:empresa', 'plan.permission:comprar_lead']);
+    Route::patch('/leads/{id}/estado', [LeadOperacionController::class, 'changeEstado'])->middleware('auth:empresa');
 });

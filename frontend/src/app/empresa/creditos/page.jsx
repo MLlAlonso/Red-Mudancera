@@ -62,6 +62,14 @@ export default function ComprarCreditos() {
 
                 <div className="creditos__grid">
                     <CreditPackageCard
+                        title="Impulso"
+                        credits={100}
+                        price="790 mxn"
+                        description="Perfecto para empresas que comienzan a generar oportunidades."
+                        onBuy={() => comprar("impulso")}
+                    />
+
+                    <CreditPackageCard
                         title="Profesional"
                         credits={250}
                         price="1,890 mxn"
@@ -76,14 +84,6 @@ export default function ComprarCreditos() {
                         price="4,290 mxn"
                         description="Para empresas que quieren maximizar oportunidades."
                         onBuy={() => comprar("crecimiento")}
-                    />
-
-                    <CreditPackageCard
-                        title="Impulso"
-                        credits={100}
-                        price="790 mxn"
-                        description="Perfecto para empresas que comienzan a generar oportunidades."
-                        onBuy={() => comprar("impulso")}
                     />
                 </div>
 

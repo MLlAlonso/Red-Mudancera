@@ -77,20 +77,22 @@ export default function SideMenu({ open }) {
       transition={{ duration: 0.25 }}
     >
 
-      {tokens !== null && (
-        <div className="side-menu__tokens">
-          <img src="/icons/token_color.png" alt="Tokens" />
-          <span>{tokens} Créditos</span>
-        </div>
-      )}
+      <div className="side-menu__account">
+        {tokens !== null && (
+          <div className="account__tokens">
+            <img src="/icons/token_color.png" alt="Tokens" />
+            <span>{tokens} Créditos</span>
+          </div>
+        )}
 
-      {plan && (
-        <div className={`side-menu__plan side-menu__plan--${plan}`}>
-          {plan === "free" && "Explorador"}
-          {plan === "conector" && "Conector"}
-          {plan === "radar" && "Radar"}
-        </div>
-      )}
+        {plan && (
+          <div className={`account__plan account__plan--${plan}`}>
+            {plan === "free" && "Explorador"}
+            {plan === "conector" && "Conector"}
+            {plan === "radar" && "Radar"}
+          </div>
+        )}
+      </div>
 
       <ul>
 
@@ -98,7 +100,7 @@ export default function SideMenu({ open }) {
           <Link href="/empresa/dashboard">
             <div className="side-item">
               <img src="/icons/hogar.png" />
-              <span>Home</span>
+              <span>Inicio</span>
             </div>
           </Link>
         </li>

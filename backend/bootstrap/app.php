@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Middleware interno (AQUÍ ESTÁ LA CLAVE)
         $middleware->alias([
             'internal.api' => \App\Http\Middleware\InternalApiMiddleware::class,
+            'plan.permission' => \App\Http\Middleware\CheckPlanPermission::class,
         ]);
     })
 

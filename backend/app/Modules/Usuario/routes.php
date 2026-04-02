@@ -7,7 +7,8 @@ use App\Modules\Usuario\Controllers\UsuarioController;
 Route::prefix('usuario')->group(function () {
 
     // Registro y autenticación
-    Route::post('/register', [UsuarioAuthController::class, 'register']);
+    Route::post('/register', [UsuarioAuthController::class, 'register'])
+        ->middleware(['auth:sanctum', 'plan.permission:add_users']);
     Route::post('/login',    [UsuarioAuthController::class, 'login']);
 
     // Verificación por correo

@@ -99,14 +99,15 @@
                                     Ver contacto
                                 </a>
                             </div>
+                            
+                            @endforeach
+                            @endif
 
                             <div style="margin-top: 5px;padding:12px;margin-bottom:10px;">
-                                <p>💡<strong style="color: #011430;">Este contacto </strong> puede coincidir con tu
+                                <p>💡<strong style="color: #011430;">Estas publicaciones </strong> puede coincidir con tu
                                     <strong style="color: #011430;">ruta actual </strong> y generar ingreso adicional
                                 </p>
                             </div>
-                            @endforeach
-                            @endif
 
                             <div style="border-top:2px dashed #ABB0B4;margin:28px 0;"></div>
 
@@ -121,7 +122,7 @@
                         <td align="center" style="padding:24px;">
                             <a href="https://app.mudanzafacil.com.mx/empresa/login" target="_blank"
                                 style="display:inline-block;padding:12px 32px;background:#09233E;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold;font-size:16px;">
-                                Contacta ahora
+                                Explorar publicaciones
                             </a>
                         </td>
                     </tr>
