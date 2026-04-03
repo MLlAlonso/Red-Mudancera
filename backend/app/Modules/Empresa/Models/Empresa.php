@@ -24,6 +24,7 @@ class Empresa extends Authenticatable
         'logo',
         'reputacion',
         'numServicios',
+        'verificado',
         'estadoRFC',
         'subActiva',
         'subInicio',
@@ -48,6 +49,7 @@ class Empresa extends Authenticatable
         'freeSince' => 'date',
         'isTrial' => 'boolean',
         'trialEndsAt' => 'date',
+        'verificado' => 'boolean',
     ];
 
     // ===========================================

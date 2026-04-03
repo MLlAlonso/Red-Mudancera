@@ -15,9 +15,12 @@ export default function EmpresaPublicPerfil() {
   const [empresa, setEmpresa] = useState(null);
   const [loading, setLoading] = useState(true);
   const [resenas, setResenas] = useState([]);
-
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [allResenas, setAllResenas] = useState([]);
+
+  // 🔥 FIX REAL
+  const isVerified =
+    empresa?.verificado === true || empresa?.verificado === 1;
 
   // =========================
   // FETCH EMPRESA
@@ -33,6 +36,7 @@ export default function EmpresaPublicPerfil() {
         return res.json();
       })
       .then((data) => {
+        console.log("EMPRESA DATA:", data); // 👈 DEBUG
         setEmpresa(data);
         setLoading(false);
       })
@@ -43,7 +47,7 @@ export default function EmpresaPublicPerfil() {
   }, [id]);
 
   // =========================
-  // FETCH RESEÑAS (4)
+  // FETCH RESEÑAS
   // =========================
   useEffect(() => {
     if (!empresa?.id) return;
@@ -56,9 +60,6 @@ export default function EmpresaPublicPerfil() {
       .catch(() => setResenas([]));
   }, [empresa]);
 
-  // =========================
-  // FETCH TODAS LAS RESEÑAS
-  // =========================
   useEffect(() => {
     if (!showAllReviews || !empresa?.id) return;
 
@@ -93,6 +94,34 @@ export default function EmpresaPublicPerfil() {
     );
   }
 
+  // =========================
+  // ACTIONS
+  // =========================
+  const handleShareProfile = () => {
+    const link = `${window.location.origin}/empresa/${empresa.id}`;
+    navigator.clipboard.writeText(link);
+    alert("Link del perfil copiado");
+  };
+
+  const handleWhatsapp = () => {
+    if (!empresa?.tel) {
+      alert("Esta empresa no tiene teléfono disponible");
+      return;
+    }
+
+    let phone = empresa.tel.replace(/\D/g, "");
+
+    if (!phone.startsWith("52")) {
+      phone = "52" + phone;
+    }
+
+    const message = encodeURIComponent(
+      `Hola, vi tu empresa "${empresa.empresa}" en Mudanza Fácil y me gustaría obtener más información.`
+    );
+
+    window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
+  };
+
   return (
     <>
       <Header />
@@ -104,157 +133,127 @@ export default function EmpresaPublicPerfil() {
           Información pública de la empresa
         </p>
 
-        {/* TOP PERFIL */}
-        <div className="empresa-perfil__top">
+        <div className="empresa-perfil__layout">
 
-          <img
-            src={empresa.logo_url || "/icons/user-placeholder.png"}
-            className="empresa-perfil__avatar"
-            alt="Logo empresa"
-          />
+          {/* LEFT */}
+          <div className="empresa-perfil__left">
 
-          <div className="empresa-perfil__name-block">
-
-            <h2 className="empresa-perfil__name">
-              {empresa.empresa}
-            </h2>
-
-            <span className="empresa-perfil__base">
-              {empresa.base ?? "Sede no especificada"}
-            </span>
-
-            <span className="empresa-perfil__verified">
-              <img src="/icons/verificado.png" alt="Verificada" />
-              Empresa verificada
-            </span>
-
-          </div>
-
-        </div>
-
-        {/* STATS */}
-        <div className="empresa-perfil__stats">
-
-          <div className="stat">
-            <span>⭐ Reputación</span>
-
-            {empresa.reputacion > 0
-              ? empresa.reputacion
-              : "Sin reseñas"}
-          </div>
-
-          <div className="stat">
-            <span>📦 Acuerdos</span>
-
-            {empresa.numServicios > 0
-              ? empresa.numServicios
-              : "Usuario nuevo"}
-          </div>
-
-        </div>
-
-        {/* CARD DETALLES */}
-        <div className="empresa-perfil__card">
-
-          <div className="empresa-perfil__card-header">
-            <h3 className="empresa-perfil__section-title">
-              Detalles de empresa
-            </h3>
-          </div>
-
-          <div className="empresa-perfil__card-body empresa-perfil__info">
-
-            <p><strong>Nombre:</strong> {empresa.empresa}</p>
-            <p><strong>Descripción:</strong> {empresa.descripcion ?? "—"}</p>
-            <p><strong>Sede:</strong> {empresa.base ?? "—"}</p>
-            <p><strong>Representante legal:</strong> {empresa.representante}</p>
-            <p><strong>Correo:</strong> {empresa.email}</p>
-            <p><strong>Teléfono:</strong> {empresa.tel}</p>
-
-          </div>
-
-        </div>
-
-        {/* CARD RESEÑAS */}
-
-        <div className="empresa-perfil__card">
-
-          <div className="empresa-perfil__card-header">
-
-            <h3 className="empresa-perfil__section-title">
-              Reseñas
-            </h3>
-
-          </div>
-
-          <div className="empresa-perfil__card-body">
-
-            {resenas.length === 0 && !showAllReviews && (
-              <div className="empresa-perfil__reviews-empty">
-                ⭐ Esta empresa aún no tiene reseñas.
-
-                <p>
-                  Esta es una empresa nueva en la plataforma.
-                  Cuando comience a trabajar con otras empresas o clientes,
-                  aquí aparecerán sus reseñas.
-                </p>
+            <div className="empresa-perfil__card">
+              <div className="empresa-perfil__card-header">
+                <h3>Detalles de empresa</h3>
               </div>
-            )}
 
-            {!showAllReviews &&
-              resenas.map((r) => (
-                <ReviewCard
-                  key={r.id}
-                  empresa={r.empresa}
-                  fecha={r.fecha}
-                  comentario={r.comentario}
-                  rating={r.rating}
-                />
-              ))}
+              <div className="empresa-perfil__card-body empresa-perfil__info">
+                <p><strong>Nombre:</strong> {empresa.empresa}</p>
+                <p><strong>Descripción:</strong> {empresa.descripcion ?? "—"}</p>
+                <p><strong>Sede:</strong> {empresa.base ?? "—"}</p>
+                <p><strong>Representante legal:</strong> {empresa.representante}</p>
+                <p><strong>Correo:</strong> {empresa.email}</p>
+                <p><strong>Teléfono:</strong> {empresa.tel}</p>
+              </div>
+            </div>
 
-            {showAllReviews &&
-              allResenas.map((r) => (
-                <ReviewCard
-                  key={r.id}
-                  empresa={r.empresa}
-                  fecha={r.fecha}
-                  comentario={r.comentario}
-                  rating={r.rating}
-                />
-              ))}
+            <div className="empresa-perfil__card">
+              <div className="empresa-perfil__card-header">
+                <h3>Reseñas</h3>
+              </div>
 
-          </div>
+              <div className="empresa-perfil__card-body">
 
-          {resenas.length > 0 && (
-            <div className="empresa-perfil__card-footer">
+                {resenas.length === 0 && !showAllReviews && (
+                  <div className="empresa-perfil__reviews-empty">
+                    ⭐ Esta empresa aún no tiene reseñas.
+                  </div>
+                )}
 
-              {!showAllReviews && (
-                <button
-                  className="empresa-perfil__vermas"
-                  onClick={() => setShowAllReviews(true)}
-                >
-                  Ver más reseñas
-                </button>
-              )}
+                {!showAllReviews &&
+                  resenas.map((r) => (
+                    <ReviewCard key={r.id} {...r} />
+                  ))}
 
-              {showAllReviews && (
-                <button
-                  className="empresa-perfil__vermas"
-                  onClick={() => setShowAllReviews(false)}
-                >
-                  Ver menos
-                </button>
-              )}
+                {showAllReviews &&
+                  allResenas.map((r) => (
+                    <ReviewCard key={r.id} {...r} />
+                  ))}
+
+              </div>
 
             </div>
-          )}
+
+          </div>
+
+          {/* RIGHT */}
+          <div className="empresa-perfil__right">
+
+            <div className="empresa-perfil__hero">
+
+              <img
+                src={empresa.logo_url || "/icons/user-placeholder.png"}
+                className="empresa-perfil__avatar"
+              />
+
+              <div className="empresa-perfil__name-block">
+
+                <h2 className="empresa-perfil__name">
+                  {isVerified && (
+                    <img
+                      src="/icons/verificado.png"
+                      className="empresa-perfil__verified-icon"
+                      alt="Verificado"
+                    />
+                  )}
+
+                  {empresa.empresa}
+                </h2>
+
+                <span className="empresa-perfil__base">
+                  {empresa.base ?? "Sede no especificada"}
+                </span>
+
+              </div>
+
+            </div>
+
+            <div className="empresa-perfil__stats">
+              <div className="stat">
+                <span>⭐ Reputación</span>
+                {empresa.reputacion || "Sin reseñas"}
+              </div>
+
+              <div className="stat">
+                <span>📦 Acuerdos</span>
+                {empresa.numServicios || "Usuario nuevo"}
+              </div>
+            </div>
+
+            <div className="empresa-perfil__actions">
+
+              <button
+                className="empresa-perfil__action-btn"
+                onClick={handleShareProfile}
+              >
+                <img src="/icons/share.png" alt="Compartir" />
+                Compartir perfil
+              </button>
+
+              <button
+                className="empresa-perfil__action-btn"
+                onClick={handleWhatsapp}
+                id="contactar"
+              >
+                <img src="/icons/whatsapp.png" alt="WhatsApp" />
+                Contactar
+              </button>
+
+            </div>
+
+          </div>
 
         </div>
 
       </main>
 
       <Footer />
-
     </>
   );
 }

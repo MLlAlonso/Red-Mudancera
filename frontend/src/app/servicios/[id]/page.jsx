@@ -262,7 +262,23 @@ export default function DetalleServicioPage() {
                 value="Contactar"
                 icon="/icons/whatsapp.png"
                 iconAlt="WhatsApp"
-                onClick={() =>
+                onClick={() => {
+                  const plan = document.cookie.match(/plan=([^;]+)/)?.[1];
+
+                  // BLOQUEO PLAN FREE
+                  if (plan === "free" || plan === "explorador") {
+                    window.dispatchEvent(
+                      new CustomEvent("plan-limit", {
+                        detail: {
+                          error: "PLAN_LIMIT",
+                          message: "Necesitas un plan activo para contactar empresas.",
+                          required_plan: "conector",
+                        },
+                      })
+                    );
+                    return;
+                  }
+
                   openWhatsappMessage({
                     telefono: telefonoContacto,
                     tipo: isOffer ? "Ofrezco" : "Busco",
@@ -272,8 +288,8 @@ export default function DetalleServicioPage() {
                     volumen: servicio.volumen,
                     tipoVehiculo: servicio.tipo_vehiculo,
                     servicioId: servicio.id,
-                  })
-                }
+                  });
+                }}
               />
             </div>
           )}

@@ -31,6 +31,7 @@ class EmpresaPublicController extends Controller
             'logo_url'     => $empresa->logo_url,
             'reputacion'   => $empresa->reputacion,
             'numServicios' => $empresa->numServicios,
+            'verificado' => $empresa->verificado,
         ]);
     }
 

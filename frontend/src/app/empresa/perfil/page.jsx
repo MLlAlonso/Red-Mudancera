@@ -86,197 +86,157 @@ export default function EmpresaPerfil() {
         <h1 className="empresa-perfil__title">Perfil empresa</h1>
         <p className="empresa-perfil__subtitle">Datos sobre la empresa</p>
 
-        {/* Foto + nombre */}
-        <div className="empresa-perfil__top">
-          <img
-            src={empresa.logo_url || "/icons/user-placeholder.png"}
-            className="empresa-perfil__avatar"
-          />
+        <div className="empresa-perfil__layout">
 
-          <div className="empresa-perfil__name-block">
-            <h2 className="empresa-perfil__name">{empresa.empresa}</h2>
+          {/* LEFT */}
+          <div className="empresa-perfil__left">
 
-            <span className="empresa-perfil__base">
-              {empresa.base ?? "Sede no especificada"}
-            </span>
+            {/* DETALLES */}
+            <div className="empresa-perfil__card">
+              <div className="empresa-perfil__card-header">
+                <h3 className="empresa-perfil__section-title">
+                  Detalles de empresa
+                </h3>
 
-            <div className="empresa-perfil-bagdes">
-              <span className="empresa-perfil__verified">
-                <img src="/icons/verificado.png" alt="Verificada" />
-                Empresa verificada
-              </span>
+                <Button_crud value="Editar" onClick={() => router.push("/empresa/perfil/editar")} />
+              </div>
 
-              <div className={`plan-badge plan-badge--${empresa.plan}`}>
-                {empresa.plan === "free" && "Explorador"}
-                {empresa.plan === "conector" && "Conector"}
-                {empresa.plan === "radar" && "Radar"}
+              <div className="empresa-perfil__card-body empresa-perfil__info">
+                <p><strong>Nombre:</strong> {empresa.empresa}</p>
+                <p><strong>Descripción:</strong> {empresa.descripcion ?? "—"}</p>
+                <p><strong>Sede:</strong> {empresa.base ?? "—"}</p>
+                <p><strong>Representante legal:</strong> {empresa.representante}</p>
+                <p><strong>Correo:</strong> {empresa.email}</p>
+                <p><strong>Teléfono:</strong> {empresa.tel}</p>
               </div>
             </div>
 
-          </div>
-        </div>
+            {/* RESEÑAS */}
+            <div className="empresa-perfil__card">
+              <div className="empresa-perfil__card-header" id="header_resena">
+                <h3 className="empresa-perfil__section-title">Reseñas</h3>
 
-        {/* Stats */}
-        <div className="empresa-perfil__stats">
-          <div className="stat">
-            <span>⭐ Reputación</span>
-
-            {empresa.reputacion > 0
-              ? empresa.reputacion
-              : "Sin reseñas"}
-          </div>
-
-          <div className="stat">
-            <span>📦 Acuerdos</span>
-
-            {empresa.numServicios > 0
-              ? empresa.numServicios
-              : "Usuario nuevo"}
-          </div>
-
-          <div className="stat stat--tokens" id="empresa_tokens">
-            <div className="stat__top">
-              <img src="/icons/token_color.png" alt="Tokens" />
-              <span>Créditos</span>
-            </div>
-
-            {empresa.tokens > 0
-              ? empresa.tokens
-              : "Sin créditos"}
-          </div>
-        </div>
-
-        {/* ACCIONES DE PERFIL */}
-        <div className="empresa-perfil__actions">
-          {/* Copiar link de referidos */}
-          <button className="empresa-perfil__action-btn"
-            onClick={() => {
-              const slug = empresa.empresa
-                .toLowerCase()
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "")
-                .replace(/\s+/g, "-");
-
-              const link = `app.mudanzafacil.com.mx/solicitar-mudanza/${slug}`;
-              navigator.clipboard.writeText(link);
-              setCopiedReferral(true);
-              setTimeout(() => setCopiedReferral(false), 2000);
-              console.log("Link copiado:", link);
-            }}
-          >
-            <img src="/icons/copy.png" alt="Referidos" />
-            {copiedReferral ? "Link copiado" : "Copiar link de referidos"}
-          </button>
-
-          {/* Compartir perfil */}
-          <button
-            className="empresa-perfil__action-btn"
-            onClick={() => {
-              const link = `${window.location.origin}/empresa/${empresa.id}`;
-              navigator.clipboard.writeText(link);
-              setCopiedProfile(true);
-              setTimeout(() => setCopiedProfile(false), 2000);
-              console.log("Perfil copiado:", link);
-            }}
-          >
-            <img src="/icons/share.png" alt="Perfil" />
-            {copiedProfile ? "Link copiado" : "Compartir perfil"}
-          </button>
-        </div>
-
-        {/* DETALLES EMPRESA */}
-        <div className="empresa-perfil__card">
-          <div className="empresa-perfil__card-header">
-            <h3 className="empresa-perfil__section-title">
-              Detalles de empresa
-            </h3>
-
-            <Button_crud value="Editar" onClick={() => router.push("/empresa/perfil/editar")} />
-          </div>
-
-          <div className="empresa-perfil__card-body empresa-perfil__info">
-            <p><strong>Nombre:</strong> {empresa.empresa}</p>
-            <p><strong>Descripción:</strong> {empresa.descripcion ?? "—"}</p>
-            <p><strong>Sede:</strong> {empresa.base ?? "—"}</p>
-            <p><strong>Representante legal:</strong> {empresa.representante}</p>
-            <p><strong>Correo:</strong> {empresa.email}</p>
-            <p><strong>Teléfono:</strong> {empresa.tel}</p>
-          </div>
-        </div>
-
-        {/* Reseñas */}
-        <div className="empresa-perfil__card">
-          <div className="empresa-perfil__card-header" id="header_resena">
-            <h3 className="empresa-perfil__section-title">
-              Reseñas
-            </h3>
-
-            <Button_crud
-              value="Copiar link de reseñas"
-              onClick={() => setOpenModal(true)}
-            />
-          </div>
-
-          <div className="empresa-perfil__card-body">
-            {resenas.length === 0 && !showAllReviews && (
-              <div className="empresa-perfil__reviews-empty">
-                ⭐ Esta empresa aún no tiene reseñas.
-
-                <p>
-                  Comparte tu link de reseñas con clientes o empresas con las que hayas
-                  trabajado para comenzar a construir tu reputación.
-                </p>
+                <Button_crud
+                  value="Copiar link de reseñas"
+                  onClick={() => setOpenModal(true)}
+                />
               </div>
-            )}
 
-            {!showAllReviews &&
-              resenas.map((r) => (
-                <ReviewCard
-                  key={r.id}
-                  empresa={r.empresa}
-                  fecha={r.fecha}
-                  comentario={r.comentario}
-                  rating={r.rating}
-                />
-              ))}
+              <div className="empresa-perfil__card-body">
+                {resenas.length === 0 && !showAllReviews && (
+                  <div className="empresa-perfil__reviews-empty">
+                    ⭐ Esta empresa aún no tiene reseñas.
+                    <p>
+                      Comparte tu link de reseñas para comenzar a construir tu reputación.
+                    </p>
+                  </div>
+                )}
 
-            {showAllReviews &&
-              allResenas.map((r) => (
-                <ReviewCard
-                  key={r.id}
-                  empresa={r.empresa}
-                  fecha={r.fecha}
-                  comentario={r.comentario}
-                  rating={r.rating}
-                />
-              ))}
+                {!showAllReviews && resenas.map((r) => (
+                  <ReviewCard key={r.id} {...r} />
+                ))}
+
+                {showAllReviews && allResenas.map((r) => (
+                  <ReviewCard key={r.id} {...r} />
+                ))}
+              </div>
+
+              {(resenas.length > 0 || allResenas.length > 0) && (
+                <div className="empresa-perfil__card-footer">
+                  <button
+                    className="empresa-perfil__vermas"
+                    onClick={() => setShowAllReviews(!showAllReviews)}
+                  >
+                    {showAllReviews ? "Ver menos" : "Ver más reseñas"}
+                  </button>
+                </div>
+              )}
+            </div>
+
           </div>
 
-          {(resenas.length > 0 || allResenas.length > 0) && (
-            <div className="empresa-perfil__card-footer">
+          {/* RIGHT */}
+          <div className="empresa-perfil__right">
+            <div className="empresa-perfil__hero">
+              <div className={`empresa-perfil__avatar-wrapper plan-${empresa.plan}`}>
+                <img src={empresa.logo_url || "/icons/user-placeholder.png"} className="empresa-perfil__avatar" />
+              </div>
 
-              {!showAllReviews && (
-                <button
-                  className="empresa-perfil__vermas"
-                  onClick={() => setShowAllReviews(true)}
-                >
-                  Ver más reseñas
-                </button>
-              )}
+              <div className="empresa-perfil__name-block">
+                <h2 className="empresa-perfil__name">
+                  {empresa.verificado && (
+                    <img src="/icons/verificado.png" className="empresa-perfil__verified-icon" />
+                  )}
 
-              {showAllReviews && (
-                <button
-                  className="empresa-perfil__vermas"
-                  onClick={() => setShowAllReviews(false)}
-                >
-                  Ver menos
-                </button>
-              )}
+                  {empresa.empresa}
+                </h2>
 
+                <span className="empresa-perfil__base">
+                  {empresa.base ?? "Sede no especificada"}
+                </span>
+              </div>
             </div>
-          )}
-        </div>
 
+            {/* STATS */}
+            <div className="empresa-perfil__stats">
+              <div className="stat">
+                <span>⭐ Reputación</span>
+                {empresa.reputacion > 0 ? empresa.reputacion : "Sin reseñas"}
+              </div>
+
+              <div className="stat">
+                <span>📦 Acuerdos</span>
+                {empresa.numServicios > 0 ? empresa.numServicios : "Usuario nuevo"}
+              </div>
+
+              <div className="stat stat--tokens">
+                <div className="stat__top">
+                  <img src="/icons/token_color.png" />
+                  <span>Créditos</span>
+                </div>
+                {empresa.tokens > 0 ? empresa.tokens : "Sin créditos"}
+              </div>
+            </div>
+
+            {/* ACTIONS */}
+            <div className="empresa-perfil__actions">
+              {/* Copiar link de referidos */}
+              <button className="empresa-perfil__action-btn"
+                onClick={() => {
+                  const slug = empresa.empresa
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .replace(/\s+/g, "-");
+
+                  const link = `app.mudanzafacil.com.mx/solicitar-mudanza/${slug}`;
+                  navigator.clipboard.writeText(link);
+                  setCopiedReferral(true);
+                  setTimeout(() => setCopiedReferral(false), 2000);
+                  console.log("Link copiado:", link);
+                }}
+              >
+                <img src="/icons/copy.png" alt="Referidos" />
+                {copiedReferral ? "Link copiado" : "Copiar link de referidos"}
+              </button>
+
+              {/* Compartir perfil */}
+              <button
+                className="empresa-perfil__action-btn"
+                onClick={() => {
+                  const link = `${window.location.origin}/empresa/${empresa.id}`;
+                  navigator.clipboard.writeText(link);
+                  setCopiedProfile(true);
+                  setTimeout(() => setCopiedProfile(false), 2000);
+                  console.log("Perfil copiado:", link);
+                }}
+              >
+                <img src="/icons/share.png" alt="Perfil" />
+                {copiedProfile ? "Link copiado" : "Compartir perfil"}
+              </button>
+            </div>
+          </div>
+        </div>
       </main>
 
       <ShareReviewLinkModal
