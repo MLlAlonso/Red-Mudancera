@@ -10,7 +10,6 @@ use App\Modules\Servicio\Models\Servicio;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
 
-
 class RadarMatchesMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
@@ -18,6 +17,8 @@ class RadarMatchesMail extends Mailable implements ShouldQueue
     public Servicio $servicio;
     public Collection $serviciosMatches;
     public Collection $solicitudesMatches;
+    public Collection $serviciosBusco;
+    public Collection $serviciosOfrezco;
 
     public function __construct(
         Empresa $empresa,
@@ -29,6 +30,8 @@ class RadarMatchesMail extends Mailable implements ShouldQueue
         $this->servicio = $servicio;
         $this->serviciosMatches = $serviciosMatches;
         $this->solicitudesMatches = $solicitudesMatches;
+        $this->serviciosBusco = $serviciosMatches->where('tipo', 'busco');
+        $this->serviciosOfrezco = $serviciosMatches->where('tipo', 'ofrezco');
     }
 
     public function build()
@@ -38,7 +41,8 @@ class RadarMatchesMail extends Mailable implements ShouldQueue
             ->with([
                 'empresa' => $this->empresa,
                 'servicio' => $this->servicio,
-                'serviciosMatches' => $this->serviciosMatches,
+                'serviciosBusco' => $this->serviciosBusco,
+                'serviciosOfrezco' => $this->serviciosOfrezco,
                 'solicitudesMatches' => $this->solicitudesMatches,
             ]);
     }

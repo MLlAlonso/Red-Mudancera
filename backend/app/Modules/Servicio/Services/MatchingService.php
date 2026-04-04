@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Modules\Servicio\Services;
-
 use App\Modules\Servicio\Models\Servicio;
 use App\Modules\Servicio\Models\ServiceMatch;
 use App\Modules\Servicio\Models\RadarMatch;
@@ -69,7 +68,35 @@ class MatchingService
             ->where('empresa_id', '!=', $servicio->empresa_id)
             ->where('id', '!=', $servicio->id)
             ->where('destino', $servicio->destino)
-            ->get();
+            ->get()
+            ->map(function ($item) use ($servicio) {
+
+                $score = 0;
+
+                // destino (core)
+                if ($item->destino === $servicio->destino) {
+                    $score += 50;
+                }
+
+                // origen similar
+                if ($item->origen === $servicio->origen) {
+                    $score += 30;
+                }
+
+                // volumen cercano
+                if ($servicio->volumen && $item->volumen) {
+                    if (abs($item->volumen - $servicio->volumen) <= 5) {
+                        $score += 20;
+                    }
+                }
+
+                // opcional: más recientes primero
+                $score += max(0, 10 - now()->diffInDays($item->created_at));
+                $item->score = $score;
+                return $item;
+            })
+            ->sortByDesc('score')
+            ->take(10);
 
         foreach ($candidatos as $candidato) {
             ServiceMatch::firstOrCreate([
@@ -99,7 +126,24 @@ class MatchingService
                 ->where('estado', 'activo')
                 ->where('compras_count', '<', 3)
                 ->where('destino', $servicio->destino)
-                ->get();
+                ->get()
+                ->map(function ($item) use ($servicio) {
+                    $score = 0;
+
+                    if ($item->destino === $servicio->destino) {
+                        $score += 50;
+                    }
+
+                    if ($item->origen === $servicio->origen) {
+                        $score += 30;
+                    }
+
+                    $score += max(0, 10 - now()->diffInDays($item->created_at));
+                    $item->score = $score;
+                    return $item;
+                })
+                ->sortByDesc('score')
+                ->take(20);
 
             foreach ($solicitudes as $solicitud) {
                 RadarMatch::firstOrCreate([

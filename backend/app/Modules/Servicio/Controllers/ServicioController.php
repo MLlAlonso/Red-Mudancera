@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Sanctum\PersonalAccessToken;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
@@ -178,7 +179,21 @@ class ServicioController extends Controller
                 }
             }
 
-            app(MatchingService::class)->matchForServicio($servicio);
+            $matches = app(MatchingService::class)->matchForServicio($servicio);
+
+            if (
+                count($matches['servicios']) > 0 ||
+                count($matches['solicitudes']) > 0
+            ) {
+                Mail::to($empresa->email)->send(
+                    new \App\Modules\Servicio\Mail\RadarMatchesMail(
+                        $empresa,
+                        $servicio,
+                        collect($matches['servicios']),
+                        collect($matches['solicitudes'])
+                    )
+                );
+            }
             Log::info('MATCHING EJECUTADO', ['servicio_id' => $servicio->id]);
 
             return response()->json([
