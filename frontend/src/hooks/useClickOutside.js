@@ -5,7 +5,13 @@ import { useEffect } from "react";
 export default function useClickOutside(ref, callback) {
   useEffect(() => {
     const handleClick = (event) => {
-      if (ref.current && !ref.current.contains(event.target)) {
+      if (!ref.current) return;
+
+      if (event.target.closest(".pac-container")) {
+        return;
+      }
+
+      if (!ref.current.contains(event.target)) {
         callback();
       }
     };

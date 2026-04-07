@@ -9,6 +9,7 @@ use App\Modules\Empresa\Controllers\EmpresaFeedController;
 use App\Modules\Empresa\Controllers\CreditosController;
 use App\Modules\Empresa\Controllers\PlanController;
 use App\Modules\Empresa\Controllers\EmpresaRadarConfigController;
+use App\Modules\Empresa\Controllers\TrialController;
 
 Route::prefix('empresa')->group(function () {
     Route::post('/register', [EmpresaAuthController::class, 'register']);
@@ -39,6 +40,8 @@ Route::prefix('empresa')->group(function () {
         Route::post('/plan/cambiar', [PlanController::class, 'cambiarPlan']);
         Route::post('/radar/config', [EmpresaRadarConfigController::class, 'update']);
         Route::get('/radar/config', [EmpresaRadarConfigController::class, 'show']);
+        
+        Route::post('/trial-request', [TrialController::class, 'store']);
     });
 
     Route::get('/empresas/{id}', [EmpresaPublicController::class, 'show']);

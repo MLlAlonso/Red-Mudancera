@@ -43,15 +43,14 @@ class EmpresaAuthController extends Controller
         // CREAR EMPRESA
         // =============================
         $empresa = Empresa::create($data);
-
         $empresa->update([
-            'plan' => 'radar',
-            'subActiva' => true,
-            'subInicio' => now(),
-            'subFin' => now()->addDays(30),
-            'isTrial' => true,
-            'trialEndsAt' => now()->addDays(30),
-            'freeSince' => null,
+            'plan' => 'free',
+            'subActiva' => false,
+            'subInicio' => null,
+            'subFin' => null,
+            'isTrial' => false,
+            'trialEndsAt' => null,
+            'freeSince' => now(),
         ]);
 
         // =============================
@@ -85,14 +84,12 @@ class EmpresaAuthController extends Controller
         // VERIFICACIÓN DE CORREO
         // =============================
         $code = rand(100000, 999999);
-
         EmailVerification::create([
             'email'      => $empresa->email,
             'code'       => $code,
             'tipo'       => 'empresa',
             'expires_at' => now()->addMinutes(15),
         ]);
-
         Mail::to($empresa->email)->send(new EmpresaVerificationCode($code));
 
         // =============================
@@ -155,7 +152,6 @@ class EmpresaAuthController extends Controller
                 'expires_at' => now()->addMinutes(15),
             ]
         );
-
         Mail::to($request->email)->send(new EmpresaVerificationCode($code));
         return response()->json(['message' => 'Código enviado exitosamente']);
     }

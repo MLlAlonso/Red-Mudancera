@@ -4,6 +4,7 @@ import { useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import BaseModal from "@/components/modals/BaseModal";
+import TrialRequestModal from "@/components/modals/TrialRequestModal";
 
 import "@/styles/pages/empresa/_empresaPlanes.scss";
 
@@ -55,7 +56,7 @@ export default function PlanesPage() {
 
     if (!p) return "";
 
-    // 🔥 ANUAL PRORRATEADO
+    // ANUAL PRORRATEADO
     if (config.tipo === "anual") {
       const total = getPrecioAnualProporcional(plan);
       return `$${total} (hasta diciembre)`;
@@ -102,10 +103,8 @@ export default function PlanesPage() {
 
       // Actualizar cookie del plan
       document.cookie = `plan=${confirm.plan}; path=/; max-age=86400`;
-
       setConfirm(null);
       setLoading(null);
-
       window.location.reload();
 
     } catch (error) {
@@ -118,7 +117,6 @@ export default function PlanesPage() {
   // ABRIR MODAL
   const abrirModal = (plan) => {
     setConfirm({ plan });
-
     setConfig({
       tipo: "mensual",
       recurrente: true,
@@ -237,8 +235,8 @@ export default function PlanesPage() {
 
             <p className="price">Gratis</p>
 
-            <button onClick={() => abrirModal("explorador")}>
-              Activar
+            <button onClick={() => abrirModal("trial")} id="prueba_btn">
+              Solicitar prueba gratuita
             </button>
 
             <div className="divider"></div>
@@ -257,7 +255,13 @@ export default function PlanesPage() {
       <Footer />
 
       {/* MODAL */}
-      {confirm && (
+      {confirm?.plan === "trial" && (
+        <BaseModal onClose={() => setConfirm(null)}>
+          <TrialRequestModal onClose={() => setConfirm(null)} />
+        </BaseModal>
+      )}
+
+      {confirm && confirm.plan !== "trial" && (
         <BaseModal onClose={() => setConfirm(null)}>
           <h2 className="modal_title">Configurar plan</h2>
 

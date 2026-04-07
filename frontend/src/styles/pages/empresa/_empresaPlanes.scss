@@ -66,7 +66,7 @@
     }
   }
 
-  .plan_microCopy{
+  .plan_microCopy {
     margin-top: 20px;
     color: $text-muted;
     font-weight: 600;
@@ -167,6 +167,11 @@
       box-shadow:
         0 1px 0 rgba(0, 0, 0, 0.2);
     }
+  }
+
+  #prueba_btn {
+    font-weight: 600;
+    font-size: 20px;
   }
 
   .divider {
@@ -285,7 +290,7 @@
 }
 
 /* MODAL */
-.modal_title{
+.modal_title {
   text-align: center;
 }
 
@@ -399,14 +404,12 @@
   margin-top: 15px;
   padding: 14px 18px;
   border-radius: 12px;
-  font-size: 13px;  
+  font-size: 13px;
   line-height: 1.5;
   color: $text;
-  background: linear-gradient(
-    135deg,
-    rgba($primary, 0.06),
-    rgba($primary, 0.02)
-  );
+  background: linear-gradient(135deg,
+      rgba($primary, 0.06),
+      rgba($primary, 0.02));
 
   border: 1px solid rgba($primary, 0.1);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04);

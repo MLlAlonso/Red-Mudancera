@@ -61,12 +61,12 @@
 
                                 <p style="margin:0;">
                                     Estos tokens te permiten desbloquear
-                                    <strong style="color:#F1A43F;">Solicitudes de Clientes</strong>
-                                    dentro del dashboard.
+                                    <strong style="color:#F1A43F;">Contactos de Clientes</strong>
+                                    dentro del inicio.
                                 </p>
 
                                 <p style="margin-top:10px;font-size:14px;">
-                                    Las solicitudes están identificadas con el color
+                                    Los contactos están identificadas con el color
                                     <strong style="color:#F1A43F;">Naranja</strong>
                                     dentro de la plataforma.
                                 </p>

@@ -85,7 +85,7 @@ export default function EmpresaConfirmacion() {
               </h2>
 
               <p className="empresa-confirmacion__tokens-text">
-                Úsalos para desbloquear <strong>Solicitudes de Clientes</strong>
+                Úsalos para desbloquear <strong>Contactos de Clientes</strong>
               </p>
 
               <p className="empresa-confirmacion__warning">
@@ -94,7 +94,7 @@ export default function EmpresaConfirmacion() {
             </div>
 
             <Button_cta
-              value="Ir al Dashboard"
+              value="Iniciemos tu experiencia"
               onClick={() => router.push("/empresa/dashboard")}
             />
           </div>
