@@ -402,6 +402,8 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   │   └── 🐘 Controller.php
 │   │   │   ├── 📁 Middleware
 │   │   │   │   ├── 🐘 Authenticate.php
+│   │   │   │   ├── 🐘 CheckPlanPermission.php
+│   │   │   │   ├── 🐘 ForceJsonResponse.php
 │   │   │   │   ├── 🐘 InternalApiMiddleware.php
 │   │   │   │   └── 🐘 RedirectIfAuthenticated.php
 │   │   │   └── 🐘 Kernel.php
@@ -423,7 +425,9 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   │   │   ├── 🐘 EmpresaController.php
 │   │   │   │   │   ├── 🐘 EmpresaFeedController.php
 │   │   │   │   │   ├── 🐘 EmpresaPublicController.php
-│   │   │   │   │   └── 🐘 PlanController.php
+│   │   │   │   │   ├── 🐘 EmpresaRadarConfigController.php
+│   │   │   │   │   ├── 🐘 PlanController.php
+│   │   │   │   │   └── 🐘 TrialController.php
 │   │   │   │   ├── 📁 Mail
 │   │   │   │   │   ├── 🐘 CompraCreditosMail.php
 │   │   │   │   │   ├── 🐘 CreditosBajosMail.php
@@ -432,9 +436,12 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   │   │   ├── 🐘 EmpresaWelcomeMail.php
 │   │   │   │   │   ├── 🐘 PlanActivatedMail.php
 │   │   │   │   │   ├── 🐘 TrialEndingMail.php
-│   │   │   │   │   └── 🐘 TrialExpiredMail.php
+│   │   │   │   │   ├── 🐘 TrialExpiredMail.php
+│   │   │   │   │   └── 🐘 TrialRequestMail.php
 │   │   │   │   ├── 📁 Models
-│   │   │   │   │   └── 🐘 Empresa.php
+│   │   │   │   │   ├── 🐘 Empresa.php
+│   │   │   │   │   ├── 🐘 EmpresaRadarConfig.php
+│   │   │   │   │   └── 🐘 TrialRequest.php
 │   │   │   │   ├── 📁 Repositories
 │   │   │   │   ├── 📁 Requests
 │   │   │   │   │   ├── 🐘 EmpresaUpdateRequest.php
@@ -444,7 +451,8 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   │   │   ├── 🐘 EmpresaFeedService.php
 │   │   │   │   │   ├── 🐘 EmpresaService.php
 │   │   │   │   │   ├── 🐘 PlanService.php
-│   │   │   │   │   └── 🐘 PricingService.php
+│   │   │   │   │   ├── 🐘 PricingService.php
+│   │   │   │   │   └── 🐘 TrialService.php
 │   │   │   │   └── 🐘 routes.php
 │   │   │   ├── 📁 Notificacion
 │   │   │   │   ├── 📁 Channels
@@ -492,7 +500,6 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   │   ├── 📁 Repositories
 │   │   │   │   ├── 📁 Request
 │   │   │   │   ├── 📁 Services
-│   │   │   │   ├── 🐘 Resena.php
 │   │   │   │   └── 🐘 routes.php
 │   │   │   ├── 📁 Servicio
 │   │   │   │   ├── 📁 Controllers
@@ -620,7 +627,14 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   ├── 🐘 2026_03_19_150640_add_radar_stage_to_servicios_table.php
 │   │   │   ├── 🐘 2026_03_26_220249_add_plan_to_empresas_table.php
 │   │   │   ├── 🐘 2026_03_26_235431_add_free_since_to_empresas_table.php
-│   │   │   └── 🐘 2026_03_27_155329_add_trial_fields_to_empresas_table.php
+│   │   │   ├── 🐘 2026_03_27_155329_add_trial_fields_to_empresas_table.php
+│   │   │   ├── 🐘 2026_03_30_110001_create_empresa_radar_configs_table.php
+│   │   │   ├── 🐘 2026_03_31_184643_add_tipo_vehiculo_to_servicios_table.php
+│   │   │   ├── 🐘 2026_03_31_190104_make_volumen_nullable_on_servicios_table.php
+│   │   │   ├── 🐘 2026_04_02_214130_add_verificado_to_empresas_table.php
+│   │   │   ├── 🐘 2026_04_05_144601_create_trial_requests_table.php
+│   │   │   ├── 🐘 2026_04_06_214823_add_docs_to_trial_requests_table.php
+│   │   │   └── 🐘 2026_04_06_223008_update_trial_urls_columns.php
 │   │   ├── 📁 seeders
 │   │   │   └── 🐘 DatabaseSeeder.php
 │   │   └── ⚙️ .gitignore
@@ -651,6 +665,7 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │       │   ├── 🐘 solicitud_mudanza_verification_code.blade.php
 │   │       │   ├── 🐘 trial_ending.blade.php
 │   │       │   ├── 🐘 trial_expired.blade.php
+│   │       │   ├── 🐘 trial_request.blade.php
 │   │       │   ├── 🐘 usuario_goodbye.blade.php
 │   │       │   ├── 🐘 usuario_verification_code.blade.php
 │   │       │   ├── 🐘 usuario_welcome.blade.php
@@ -703,6 +718,7 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 ├── 📁 frontend
 │   ├── 📁 public
 │   │   ├── 📁 icons
+│   │   │   ├── 🖼️ ajustes.png
 │   │   │   ├── 🖼️ arrow_down.png
 │   │   │   ├── 🖼️ borrar.png
 │   │   │   ├── 🖼️ busco.png
@@ -720,6 +736,7 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   ├── 🖼️ copy.png
 │   │   │   ├── 🖼️ copyw.png
 │   │   │   ├── 🖼️ correo_verificado.png
+│   │   │   ├── 🖼️ credito.png
 │   │   │   ├── 🖼️ cuenta.png
 │   │   │   ├── 🖼️ default-user.png
 │   │   │   ├── 🖼️ delete.png
@@ -747,6 +764,7 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   ├── 🖼️ reloj_de_arena.png
 │   │   │   ├── 🖼️ share.png
 │   │   │   ├── 🖼️ shareW.png
+│   │   │   ├── 🖼️ suscripcion.png
 │   │   │   ├── 🖼️ team.png
 │   │   │   ├── 🖼️ tel.png
 │   │   │   ├── 🖼️ telefono.png
@@ -788,6 +806,8 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │   │   │   └── 📄 page.jsx
 │   │   │   │   │   ├── 📁 referir
 │   │   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 configuracion
 │   │   │   │   │   └── 📄 page.jsx
 │   │   │   │   ├── 📁 confirmacion
 │   │   │   │   │   └── 📄 page.jsx
@@ -896,12 +916,16 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │   ├── 📄 RecoverPasswordModal.jsx
 │   │   │   │   ├── 📄 ReporteMensualModal.jsx
 │   │   │   │   ├── 📄 ShareClienteReviewLinkModal.jsx
-│   │   │   │   └── 📄 ShareReviewLinkModal.jsx
+│   │   │   │   ├── 📄 ShareReviewLinkModal.jsx
+│   │   │   │   └── 📄 TrialRequestModal.jsx
 │   │   │   ├── 📁 skeletons
 │   │   │   │   ├── 📄 ProfileSkeleton.jsx
 │   │   │   │   ├── 📄 ServiceCardSkeleton.jsx
 │   │   │   │   └── 📄 UserCardSkeleton.jsx
+│   │   │   ├── 📁 system
+│   │   │   │   └── 📄 PlanWatcher.jsx
 │   │   │   └── 📁 ui
+│   │   │       ├── 📄 FeedbackModal.jsx
 │   │   │       └── 📄 LoadingOverlay.jsx
 │   │   ├── 📁 hooks
 │   │   │   ├── 📄 useClickOutside.js
@@ -909,6 +933,7 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   └── 📄 useServicios.js
 │   │   ├── 📁 modules
 │   │   ├── 📁 services
+│   │   │   └── 📄 api.js
 │   │   ├── 📁 store
 │   │   │   └── 📄 searchContext.js
 │   │   ├── 📁 styles
@@ -922,6 +947,7 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │   ├── 🎨 _confirmDeleteModal.scss
 │   │   │   │   ├── 🎨 _creditPackageCard.scss
 │   │   │   │   ├── 🎨 _empresaCard.scss
+│   │   │   │   ├── 🎨 _feedbackModal.scss
 │   │   │   │   ├── 🎨 _inputs.scss
 │   │   │   │   ├── 🎨 _loadingOverlay.scss
 │   │   │   │   ├── 🎨 _modal.scss
@@ -932,6 +958,7 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │   ├── 🎨 _serviceCard.scss
 │   │   │   │   ├── 🎨 _serviceFilters.scss
 │   │   │   │   ├── 🎨 _serviceStatusDropdown.scss
+│   │   │   │   ├── 🎨 _trialRequestModal.scss
 │   │   │   │   └── 🎨 _userCard.scss
 │   │   │   ├── 📁 layout
 │   │   │   │   ├── 🎨 _footer.scss
@@ -942,6 +969,7 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │   │   ├── 🎨 __empresaNotificaciones.scss
 │   │   │   │   │   ├── 🎨 _empresaBusco.scss
 │   │   │   │   │   ├── 🎨 _empresaCargas.scss
+│   │   │   │   │   ├── 🎨 _empresaConfiguracion.scss
 │   │   │   │   │   ├── 🎨 _empresaConfirmacion.scss
 │   │   │   │   │   ├── 🎨 _empresaCreditos.scss
 │   │   │   │   │   ├── 🎨 _empresaDashboard.scss
@@ -978,12 +1006,15 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │       ├── 📄 auth.js
 │   │       ├── 📄 cloudinaryUpload.js
 │   │       └── 📄 whatsapp.js
-│   ├── 📝 carpetas.md
 │   ├── 📄 eslint.config.mjs
 │   ├── ⚙️ jsconfig.json
 │   ├── 📄 next.config.js
 │   ├── ⚙️ package-lock.json
 │   └── ⚙️ package.json
+├── ⚙️ .gitignore
+├── 📝 LICENSE.md
+├── 📝 Milestones_Avance.md
+└── 📝 README.md
 
 Archivos clave / puntos de entrada:
 - Layout app: [`frontend/src/app/layout.js`](frontend/src/app/layout.js)

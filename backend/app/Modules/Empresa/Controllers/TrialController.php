@@ -111,7 +111,7 @@ class TrialController extends Controller
         // ENVIAR CORREO (SIN GUARDAR ARCHIVOS)
         // ===========================================
         try {
-            Mail::to("mikkel_03@outlook.com")->send(
+            Mail::to("intermudanza@gmail.com")->send(
                 new TrialRequestMail($trial)
             );
         } catch (\Throwable $e) {

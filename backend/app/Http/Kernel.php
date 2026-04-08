@@ -17,6 +17,7 @@ class Kernel extends HttpKernel
         \Illuminate\Http\Middleware\HandleCors::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \Illuminate\Session\Middleware\StartSession::class,
+        \App\Http\Middleware\ForceJsonResponse::class,
     ];
 
     /**

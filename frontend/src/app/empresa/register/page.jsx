@@ -7,6 +7,7 @@ import Input from "@/components/common/Input";
 import Button_cta from "@/components/common/Button_cta";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
 export default function EmpresaRegister() {
   const [formData, setFormData] = useState({
     empresa: "",
@@ -50,8 +51,12 @@ export default function EmpresaRegister() {
         `${process.env.NEXT_PUBLIC_API_URL}/empresa/register`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+          },
           body: JSON.stringify(formData),
+          cache: "no-store",
         }
       );
 
