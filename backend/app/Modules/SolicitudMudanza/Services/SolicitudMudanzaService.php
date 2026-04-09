@@ -32,13 +32,11 @@ class SolicitudMudanzaService
             // Generar código de verificación
             $codigo = $this->generarCodigo();
 
-
             Log::info('Codigo verificacion solicitud mudanza', [
                 'codigo' => $codigo,
                 'email' => $data['email'],
                 'telefono' => $data['telefono']
             ]);
-
 
             $tipoServicio = strtolower(trim($data['origen'])) === strtolower(trim($data['destino']))
                 ? 'local'
@@ -61,11 +59,9 @@ class SolicitudMudanzaService
                 }
             }
 
-
             Log::info('Slug final usado', [
                 'slug' => $slug
             ]);
-
 
             if ($slug) {
                 $empresa = \App\Modules\Empresa\Models\Empresa::all()
@@ -152,7 +148,7 @@ class SolicitudMudanzaService
         ]);
 
         Mail::to($solicitud->email)
-            ->queue(new SolicitudMudanzaResumen($solicitud));
+            ->later(now()->addSeconds(70), new SolicitudMudanzaResumen($solicitud));
         return $solicitud;
     }
 

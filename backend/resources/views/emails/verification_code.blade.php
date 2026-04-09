@@ -55,7 +55,7 @@
             <p style="font-size:12px;color:#999;">
               Si no reconoces esta acción, puedes ignorar o contactar a soporte:
               <br>
-              soporte@mudanzafacil.com.mx · xxx-xxx-xxxx
+              soporte@mudanzafacil.com.mx
             </p>
           </td>
         </tr>

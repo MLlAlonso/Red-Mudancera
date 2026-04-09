@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Input from "@/components/common/Input";
 import SimpleEditor from "@/components/common/SimpleEditor";
 import Button_success from "@/components/common/Button_success";
@@ -10,6 +11,7 @@ import LoadingOverlay from "@/components/ui/LoadingOverlay";
 export default function SolicitarMudanza({ empresaSlug = null }) {
     const API = process.env.NEXT_PUBLIC_API_URL;
     const [errorModal, setErrorModal] = useState("");
+    const router = useRouter();
 
     const [form, setForm] = useState({
         origen: "",
@@ -139,7 +141,9 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
             const data = await res.json();
             if (!res.ok) throw new Error(data.message);
             setModalOpen(false);
-            window.location.href = "https://mudanzafacil.com.mx/seguro-para-mudanzas/";
+
+            router.push(`/seguros?id=${solicitudId}`);
+
         } catch (err) {
             setErrorModal(err.message || "Error al verificar.");
         }
@@ -470,7 +474,6 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
                         </div>
 
                         <div className="modal__divider"> </div>
-
 
                         <div className="verificacion-modal__contador">
                             <img src="/icons/reloj_de_arena.png" alt="" />

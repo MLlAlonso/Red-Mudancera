@@ -8,14 +8,13 @@ export default function SimpleEditor({
     const editorRef = useRef(null);
     const lastHtml = useRef(value);
 
-    // SOLO sincroniza si el valor viene de FUERA
     useEffect(() => {
         if (
             editorRef.current &&
             value !== lastHtml.current &&
             document.activeElement !== editorRef.current
         ) {
-            editorRef.current.innerHTML = value;
+            editorRef.current.innerHTML = value || "<br>";
             lastHtml.current = value;
         }
     }, [value]);
@@ -23,18 +22,21 @@ export default function SimpleEditor({
     const handleInput = () => {
         const html = editorRef.current.innerHTML;
         lastHtml.current = html;
-        onChange?.(html); // solo reporta, NO re-renderiza
+        onChange?.(html);
+    };
+
+    const handleFocus = () => {
+        if (editorRef.current.innerHTML === "<br>") {
+            editorRef.current.innerHTML = "";
+        }
+    };
+
+    const handleClick = () => {
+        editorRef.current?.focus();
     };
 
     return (
         <div className="simple-editor">
-            {/* <div className="simple-editor__toolbar">
-                <button type="button" onClick={() => document.execCommand("bold")}> B </button>
-                <button type="button" onClick={() => document.execCommand("italic")}> I </button>
-                <button type="button" onClick={() => document.execCommand("insertUnorderedList")}> • Lista </button>
-                <button type="button" onClick={() => document.execCommand("insertOrderedList")}> 1. </button>
-            </div> */}
-
             <div
                 ref={editorRef}
                 className="simple-editor__content"
@@ -42,7 +44,14 @@ export default function SimpleEditor({
                 suppressContentEditableWarning
                 dir="ltr"
                 data-placeholder={placeholder}
+                tabIndex={0}
                 onInput={handleInput}
+                onFocus={handleFocus}
+                onClick={handleClick}
+                style={{
+                    minHeight: "120px",
+                    outline: "none",
+                }}
             />
         </div>
     );

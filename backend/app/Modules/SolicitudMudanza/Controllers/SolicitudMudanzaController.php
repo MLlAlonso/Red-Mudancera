@@ -125,7 +125,7 @@ class SolicitudMudanzaController extends Controller
         $plan = strtolower($empresa->plan ?? 'explorador');
         $esExclusivo = $request->boolean('exclusivo');
 
-        // 🔒 BLOQUEO: PLAN CONECTOR NO PUEDE EXCLUSIVO
+        // BLOQUEO: PLAN CONECTOR NO PUEDE EXCLUSIVO
         if ($plan === 'conector' && $esExclusivo) {
             return response()->json([
                 'error' => 'PLAN_LIMIT_EXCLUSIVO',
@@ -202,6 +202,19 @@ class SolicitudMudanzaController extends Controller
 
         return response()->json([
             'message' => 'Lead adquirido correctamente'
+        ]);
+    }
+
+    public function solicitarSeguro(Request $request): JsonResponse
+    {
+        $solicitud = SolicitudMudanza::findOrFail($request->id);
+
+        Mail::to('intermudanza@gmail.com')->send(
+            new \App\Modules\SolicitudMudanza\Mail\SolicitudSeguroMail($solicitud)
+        );
+
+        return response()->json([
+            'message' => 'Solicitud de seguro enviada correctamente'
         ]);
     }
 }

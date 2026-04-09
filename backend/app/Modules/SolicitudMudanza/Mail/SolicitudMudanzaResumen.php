@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Modules\SolicitudMudanza\Mail;
+
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -13,7 +14,10 @@ class SolicitudMudanzaResumen extends Mailable
 
     public function __construct($solicitud)
     {
-        $this->solicitud = $solicitud;
+        // Clonar para no modificar el original en memoria
+        $this->solicitud = clone $solicitud;
+        // Limpiar HTML del inventario
+        $this->solicitud->inventario = trim(preg_replace('/\s+/', ' ', strip_tags($solicitud->inventario)));
     }
 
     public function build()

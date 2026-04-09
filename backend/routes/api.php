@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RecoverPasswordController;
 use App\Modules\Servicio\Controllers\ServicioController;
+use App\Modules\SolicitudMudanza\Controllers\SolicitudMudanzaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,3 +64,6 @@ require base_path('app/Modules/Notificacion/routes.php');
 |--------------------------------------------------------------------------
 */
 require base_path('app/Modules/SolicitudMudanza/routes.php');
+
+
+Route::post('/solicitudes-mudanza/solicitar-seguro', [SolicitudMudanzaController::class, 'solicitarSeguro']);

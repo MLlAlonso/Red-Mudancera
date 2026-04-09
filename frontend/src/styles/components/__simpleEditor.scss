@@ -63,3 +63,15 @@
     margin-bottom: 4px;
   }
 }
+
+.simple-editor__content {
+    padding: 10px;
+    min-height: 120px;
+    cursor: text;
+
+    &:empty:before {
+        content: attr(data-placeholder);
+        color: #999;
+        pointer-events: none;
+    }
+}
