@@ -209,7 +209,11 @@ class SolicitudMudanzaController extends Controller
     {
         $solicitud = SolicitudMudanza::findOrFail($request->id);
 
-        Mail::to('intermudanza@gmail.com')->send(
+        Mail::to([
+            'intermudanza@gmail.com',
+            'atnclientes@segurosdecarga.com',
+            'ventas12@segurosdecarga.com'
+        ])->send(
             new \App\Modules\SolicitudMudanza\Mail\SolicitudSeguroMail($solicitud)
         );
 

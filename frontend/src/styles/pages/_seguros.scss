@@ -19,7 +19,7 @@
             max-width: 600px;
 
             h1 {
-                font-size: 32px;
+                font-size: 40px;
                 color: #034436;
                 font-weight: 900;
                 font-family: $font-title;
@@ -28,7 +28,7 @@
             }
 
             p {
-                font-size: 24px;
+                font-size: 26px;
                 color: #0C71C3;
                 line-height: 1.1;
             }
@@ -66,7 +66,7 @@
             margin-bottom: 40px;
 
             h2 {
-                font-size: 24px;
+                font-size: 26px;
                 font-weight: 700;
                 margin-bottom: 10px;
                 color: #0C71C3;
@@ -75,7 +75,7 @@
             }
 
             .subtitulo {
-                font-size: 20px;
+                font-size: 24px;
                 color: $text;
                 text-align: left;
             }
@@ -96,7 +96,7 @@
 
             p {
                 line-height: 1.6;
-                font-size: 20px;
+                font-size: 24px;
                 color: $text;
                 text-align: left;
 
@@ -110,7 +110,7 @@
         &__highlight {
             margin: 20px 0;
             line-height: 1.6;
-            font-size: 20px;
+            font-size: 24px;
             color: $text;
             text-align: left;
 
@@ -129,7 +129,7 @@
                 margin-bottom: 5px;
                 position: relative;
                 padding-left: 30px;
-                font-size: 20px;
+                font-size: 24px;
                 color: $text;
                 font-weight: 700;
 
@@ -151,7 +151,7 @@
         padding: 14px 30px;
         border-radius: 10px;
         cursor: pointer;
-        font-size: 20px;
+        font-size: 24px;
         display: inline-flex;
         align-items: center;
         box-shadow: 0 4px 0 $success;
@@ -170,7 +170,7 @@
             .arrow {
                 opacity: 1;
                 transform: translateX(0);
-                font-size: 28px;
+                font-size: 32px;
                 margin-top: 3px;
             }
         }
@@ -185,7 +185,7 @@
         margin-top: 10px;
 
         p {
-            font-size: 18px;
+            font-size: 22px;
             color: $text-muted;
         }
     }
@@ -225,7 +225,7 @@
         &__question {
             padding: 10px 20px;
             cursor: pointer;
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 500;
             color: $text;
             display: flex;
@@ -243,7 +243,7 @@
             p {
                 margin: 0;
                 color: $text-muted;
-                font-size: 18px;
+                font-size: 20px;
                 line-height: 1.6;
             }
         }
@@ -296,17 +296,15 @@
         .seguroHero {
             &__container {
                 flex-direction: column;
-                padding: 20px 40px;
+                padding: 60px 40px 20px 40px;
             }
 
             &__content {
                 h1 {
-                    font-size: 34px;
                     text-align: left;
                 }
 
                 p {
-                    font-size: 22px;
                     line-height: 1.3;
                     text-align: left;
                 }
@@ -353,7 +351,7 @@
         }
 
         #btnLegend{
-            margin-left: 40px;
+            margin-left: 30px;
         }
 
         .faq {
@@ -374,11 +372,11 @@
         .seguroHero {
             &__content {
                 h1 {
-                    font-size: 20px;
+                    font-size: 24px;
                 }
 
                 p {
-                    font-size: 16px;
+                    font-size: 20px;
                 }
             }
         }
@@ -386,33 +384,33 @@
         .seguroInfo {
             &__header {
                 h2 {
-                    font-size: 18px;
+                    font-size: 22px;
                 }
 
                 .subtitulo {
-                    font-size: 15px;
+                    font-size: 18px;
                 }
             }
 
             &__textWithLine p,
             &__highlight,
             &__list li {
-                font-size: 15px;
+                font-size: 18px;
             }
         }
 
         .btnSeguro {
-            font-size: 16px;
+            font-size: 22px;
             padding: 12px 20px;
         }
 
         .faq {
             &__question {
-                font-size: 15px;
+                font-size: 22px;
             }
 
             &__answer p {
-                font-size: 14px;
+                font-size: 18px;
             }
         }
     }

@@ -27,8 +27,7 @@
                     <!-- LOGO -->
                     <tr>
                         <td align="center" style="padding:20px;">
-                            <img src="https://app.mudanzafacil.com.mx/logo/logo_A.png"
-                                alt="Mudanza Fácil"
+                            <img src="https://app.mudanzafacil.com.mx/logo/logo_A.png" alt="Mudanza Fácil"
                                 style="height:60px;">
                         </td>
                     </tr>
@@ -83,9 +82,9 @@
                             </p>
 
                             <div style="text-align:center;">
-                                <a href="mailto:{{ $solicitud->email }}"
+                                <a href="{{ $whatsappUrl }}" target="_blank"
                                     style="display:inline-block;margin-top:10px;padding:12px 20px;background:#1C8F6A;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:600;">
-                                    Contactar cliente
+                                    Contactar por WhatsApp
                                 </a>
                             </div>
 
