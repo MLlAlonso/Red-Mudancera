@@ -46,10 +46,7 @@ Route::post('/auth/recover-password', [RecoverPasswordController::class, 'recove
 | Images
 |--------------------------------------------------------------------------
 */
-Route::post(
-    '/servicios/{id}/imagenes',
-    [ServicioController::class, 'updateImagenes']
-)->middleware('auth:empresa');
+Route::post( '/servicios/{id}/imagenes', [ServicioController::class, 'updateImagenes'] )->middleware('auth:empresa');
 
 /*
 |--------------------------------------------------------------------------
@@ -65,5 +62,9 @@ require base_path('app/Modules/Notificacion/routes.php');
 */
 require base_path('app/Modules/SolicitudMudanza/routes.php');
 
-
+/*
+|--------------------------------------------------------------------------
+| Solicitud de Seguros Mudanza
+|--------------------------------------------------------------------------
+*/
 Route::post('/solicitudes-mudanza/solicitar-seguro', [SolicitudMudanzaController::class, 'solicitarSeguro']);

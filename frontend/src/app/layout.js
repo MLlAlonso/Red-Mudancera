@@ -36,7 +36,6 @@ export default function RootLayout({ children }) {
         <SearchProvider>
           {children}
 
-          {/* 👇 AQUÍ VA */}
           <PlanWatcher />
         </SearchProvider>
 

@@ -16,9 +16,16 @@ class SolicitudMudanzaResumen extends Mailable
     {
         // Clonar para no modificar el original en memoria
         $this->solicitud = clone $solicitud;
-        // Limpiar HTML del inventario
-        $clean = strip_tags($solicitud->inventario);
-        $clean = preg_replace('/\r\n|\r|\n/', ', ', $clean);
+        // Normalizar HTML del inventario
+        $clean = $solicitud->inventario;
+
+        // Convertir div, br, p en separadores
+        $clean = preg_replace('/<\/(div|p|br)>/i', ', ', $clean);
+
+        // Eliminar etiquetas restantes
+        $clean = strip_tags($clean);
+
+        // Limpiar espacios y comas duplicadas
         $clean = preg_replace('/\s*,\s*/', ', ', $clean);
         $clean = trim(preg_replace('/\s+/', ' ', $clean), ', ');
 

@@ -259,6 +259,202 @@
     }
 }
 
+/* =========================
+   MODALES
+========================= */
+.success-modal,
+.error-modal {
+    text-align: center;
+    padding: 24px;
+    max-width: 400px;
+
+    h3 {
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+
+    p {
+        font-size: 18px;
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+
+    button {
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        color: #fff;
+        font-size: 16px;
+    }
+}
+
+.success-modal button {
+    background: #1C8F6A;
+}
+
+.error-modal button {
+    background: #c0392b;
+}
+
+/* =========================
+   FORMULARIO EXTERNO
+========================= */
+.seguroForm {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 500px;
+    width: 100%;
+    margin: 30px auto;
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+
+        label {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #034436;
+        }
+
+        input,
+        textarea {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            transition: border 0.2s ease;
+
+            &:focus {
+                outline: none;
+                border-color: #2ea3f2;
+            }
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: none;
+        }
+    }
+}
+
+/* =========================
+   TABLET
+========================= */
+@media (max-width: 1024px) {
+
+    .success-modal,
+    .error-modal {
+        padding: 20px;
+
+        h3 {
+            font-size: 20px;
+        }
+
+        p {
+            font-size: 17px;
+        }
+    }
+
+    .seguroForm {
+        max-width: 90%;
+        margin: 20px auto;
+
+        .form-group {
+            label {
+                font-size: 15px;
+            }
+
+            input,
+            textarea {
+                font-size: 15px;
+            }
+        }
+    }
+}
+
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 768px) {
+    .success-modal,
+    .error-modal {
+        padding: 18px;
+
+        h3 {
+            font-size: 18px;
+        }
+
+        p {
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+        }
+    }
+
+    .seguroForm {
+        gap: 14px;
+        margin: 20px auto;
+        padding: 0 20px;
+
+        .form-group {
+            label {
+                font-size: 14px;
+            }
+
+            input,
+            textarea {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+    }
+}
+
+/* =========================
+   MOBILE PEQUEÑO
+========================= */
+@media (max-width: 480px) {
+    .success-modal,
+    .error-modal {
+        padding: 16px;
+
+        h3 {
+            font-size: 16px;
+        }
+
+        p {
+            font-size: 14px;
+        }
+    }
+
+    .seguroForm {
+        gap: 12px;
+
+        .form-group {
+            label {
+                font-size: 13px;
+            }
+
+            input,
+            textarea {
+                font-size: 13px;
+            }
+        }
+    }
+}
+
+input:disabled,
+textarea:disabled {
+    background: #f5f5f5;
+    cursor: not-allowed;
+}
+
 /* TABLET */
 @media (max-width: 1024px) {
     .seguros {
@@ -350,7 +546,7 @@
             justify-content: center;
         }
 
-        #btnLegend{
+        #btnLegend {
             margin-left: 30px;
         }
 

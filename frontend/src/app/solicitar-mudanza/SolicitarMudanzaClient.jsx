@@ -188,6 +188,17 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
         return `${min}:${sec < 10 ? "0" : ""}${sec}`;
     };
 
+    const cleanInventario = (html) => {
+        if (!html) return "—";
+
+        return html
+            .replace(/<\/(div|p|br)>/gi, ", ")
+            .replace(/<[^>]*>/g, "")
+            .replace(/\s*,\s*/g, ", ")
+            .replace(/\s+/g, " ")
+            .trim();
+    };
+
     return (
         <div className="solicitar-mudanza">
             {loading && <LoadingOverlay />}
@@ -415,7 +426,7 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
                                 <li><strong>Pisos destino:</strong> {form.destino_pisos || "—"}</li>
                                 <li><strong>Elevador destino:</strong> {form.destino_elevador || "—"}</li>
                                 <li><strong>Acarreo destino:</strong> {form.destino_acarreo || "—"}</li>
-                                <li><strong>Inventario:</strong> {form.inventario || "—"}</li>
+                                <li><strong>Inventario:</strong> {cleanInventario(form.inventario)}</li>
 
                                 <li><strong>Fecha:</strong> {form.fecha_recoleccion}</li>
                                 <li><strong>Tipo mudanza:</strong> {form.tipo_mudanza}</li>

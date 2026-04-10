@@ -221,4 +221,30 @@ class SolicitudMudanzaController extends Controller
             'message' => 'Solicitud de seguro enviada correctamente'
         ]);
     }
+
+    public function solicitarSeguroExterno(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'email' => 'required|email',
+            'telefono' => 'required|string|max:20',
+            'origen' => 'required|string',
+            'destino' => 'required|string',
+            'inventario' => 'required|string|min:10',
+        ]);
+
+        $fakeSolicitud = (object) $data;
+
+        Mail::to([
+            'intermudanza@gmail.com',
+            'atnclientes@segurosdecarga.com',
+            'ventas12@segurosdecarga.com'
+        ])->send(
+            new \App\Modules\SolicitudMudanza\Mail\SolicitudSeguroMail($fakeSolicitud)
+        );
+
+        return response()->json([
+            'message' => 'Solicitud enviada correctamente'
+        ]);
+    }
 }

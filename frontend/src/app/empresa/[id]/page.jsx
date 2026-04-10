@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ReviewCard from "@/components/cards/ReviewCard";
+import { getPlan, canContact, canSeePhone } from "@/utils/plan";
 
 import "@/styles/pages/empresa/_empresaPerfil.scss";
 
@@ -104,6 +105,21 @@ export default function EmpresaPublicPerfil() {
   };
 
   const handleWhatsapp = () => {
+    const plan = getPlan();
+
+    if (!canContact(plan)) {
+      window.dispatchEvent(
+        new CustomEvent("plan-limit", {
+          detail: {
+            error: "PLAN_LIMIT",
+            message: "Necesitas un plan activo para contactar empresas.",
+            required_plan: "conector",
+          },
+        })
+      );
+      return;
+    }
+
     if (!empresa?.tel) {
       alert("Esta empresa no tiene teléfono disponible");
       return;
@@ -149,7 +165,10 @@ export default function EmpresaPublicPerfil() {
                 <p><strong>Sede:</strong> {empresa.base ?? "—"}</p>
                 <p><strong>Representante legal:</strong> {empresa.representante}</p>
                 <p><strong>Correo:</strong> {empresa.email}</p>
-                <p><strong>Teléfono:</strong> {empresa.tel}</p>
+                <p>
+                  <strong>Teléfono:</strong>{" "}
+                  {canSeePhone(getPlan()) ? empresa.tel : "🔒 Disponible con plan activo"}
+                </p>
               </div>
             </div>
 

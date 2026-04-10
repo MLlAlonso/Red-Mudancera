@@ -12,5 +12,9 @@ Route::prefix('solicitudes-mudanza')->group(function () {
     Route::get('/{id}', [SolicitudMudanzaController::class, 'show']);
     Route::post('/{id}/comprar', [SolicitudMudanzaController::class, 'comprar'])
         ->middleware(['auth:empresa', 'plan.permission:comprar_lead']);
-    Route::patch('/leads/{id}/estado', [LeadOperacionController::class, 'changeEstado'])->middleware('auth:empresa');
+    Route::patch('/leads/{id}/estado', [LeadOperacionController::class, 'changeEstado'])
+        ->middleware('auth:empresa');
+
+    Route::post('/solicitar-seguro', [SolicitudMudanzaController::class, 'solicitarSeguro']);
+    Route::post('/solicitar-seguro-externo', [SolicitudMudanzaController::class, 'solicitarSeguroExterno']);
 });

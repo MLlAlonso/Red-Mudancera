@@ -84,6 +84,7 @@ export default function SegurosPage() {
 
                     <ul className="seguroInfo__list">
                         <li>Evita pérdidas económicas</li>
+                        <li>Puedes ahorrar hasta un 70% en tu seguro</li>
                         <li>Proceso simple con la aseguradora</li>
                         <li>Aplica aunque contrates fuera</li>
                     </ul>

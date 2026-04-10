@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { openWhatsappMessage } from "@/utils/whatsapp";
+import { getPlan, canContact } from "@/utils/plan";
 import ServiceStatusDropdown from "@/components/common/ServiceStatusDropdown";
 
 export default function ServiceCard({
@@ -122,14 +123,14 @@ export default function ServiceCard({
           <button
             className={`btn-solid btn-contact ${isOffer ? "offer-btn" : ""}`}
             onClick={() => {
-              const plan = document.cookie.match(/plan=([^;]+)/)?.[1];
+              const plan = getPlan();
 
-              if (plan === "free" || plan === "explorador") {
+              if (!canContact(plan)) {
                 window.dispatchEvent(
                   new CustomEvent("plan-limit", {
                     detail: {
-                      message:
-                        "Necesitas un plan activo para contactar empresas.",
+                      error: "PLAN_LIMIT",
+                      message: "Necesitas un plan activo para contactar empresas.",
                       required_plan: "conector",
                     },
                   })

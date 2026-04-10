@@ -7,6 +7,7 @@ import Footer from "@/components/layout/Footer";
 import Button_crud from "@/components/common/Button_crud";
 import Button_cta from "@/components/common/Button_cta";
 import { openWhatsappMessage } from "@/utils/whatsapp";
+import { getPlan, canContact, canSeePhone } from "@/utils/plan";
 
 import "@/styles/pages/servicios/_detallesServicio.scss";
 
@@ -231,7 +232,11 @@ export default function DetalleServicioPage() {
 
             <div>
               <label>Número alternativo:</label>
-              <span>{servicio.responsable_telefono || "—"}</span>
+              {canSeePhone(getPlan()) ? (
+                <span>{servicio.responsable_telefono || "—"}</span>
+              ) : (
+                <span>🔒 Disponible con plan activo</span>
+              )}
             </div>
           </div>
 
@@ -263,10 +268,9 @@ export default function DetalleServicioPage() {
                 icon="/icons/whatsapp.png"
                 iconAlt="WhatsApp"
                 onClick={() => {
-                  const plan = document.cookie.match(/plan=([^;]+)/)?.[1];
+                  const plan = getPlan();
 
-                  // BLOQUEO PLAN FREE
-                  if (plan === "free" || plan === "explorador") {
+                  if (!canContact(plan)) {
                     window.dispatchEvent(
                       new CustomEvent("plan-limit", {
                         detail: {
