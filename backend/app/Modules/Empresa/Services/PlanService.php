@@ -6,19 +6,21 @@ use App\Modules\Empresa\Models\Empresa;
 use Carbon\Carbon;
 use Exception;
 
+// TODO: usar $recurrente cuando integremos Stripe
+
 class PlanService
 {
     /**
      * Cambiar plan de empresa
      */
-    public function changePlan(Empresa $empresa, string $plan, string $tipo = 'mensual'): Empresa
+    public function changePlan(Empresa $empresa, string $plan, string $tipo = 'mensual', bool $recurrente = true): Empresa
     {
         $this->validatePlan($plan);
         $this->validateTipo($tipo);
         $inicio = now();
 
         if ($tipo === 'anual') {
-            $fin = now()->endOfYear();
+            $fin = $inicio->copy()->addYear();
         } else {
             $fin = $inicio->copy()->addMonth();
         }

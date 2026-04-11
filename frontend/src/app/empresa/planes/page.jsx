@@ -36,37 +36,19 @@ export default function PlanesPage() {
   };
 
   // LÓGICA DE PRECIO
-  const getMesesRestantes = () => {
-    const hoy = new Date();
-    const mesActual = hoy.getMonth(); // 0 = enero, 11 = diciembre
-    return 12 - mesActual;
-  };
-
-  const getPrecioAnualProporcional = (plan) => {
-    const p = precios[plan];
-    if (!p) return 0;
-    const mesesRestantes = getMesesRestantes();
-    const precioPorMes = p.anual / 12;
-    const total = precioPorMes * mesesRestantes;
-    return Math.round(total);
-  };
-
   const getPrecio = (plan, config) => {
     const p = precios[plan];
-
     if (!p) return "";
 
-    // ANUAL PRORRATEADO
     if (config.tipo === "anual") {
-      const total = getPrecioAnualProporcional(plan);
-      return `$${total} (hasta diciembre)`;
+      return `$${p.anual.toLocaleString()} / año`;
     }
 
     if (config.recurrente) {
-      return `$${p.mensual_auto} / mes`;
+      return `$${p.mensual_auto.toLocaleString()} / mes`;
     }
 
-    return `$${p.mensual} / mes`;
+    return `$${p.mensual.toLocaleString()} / mes`;
   };
 
   // AMBIO DE PLAN
@@ -295,12 +277,6 @@ export default function PlanesPage() {
             <p>Total a pagar:</p>
 
             <h3>{getPrecio(confirm.plan, config)}</h3>
-
-            {config.tipo === "anual" && confirm.plan !== "explorador" && (
-              <p className="price-breakdown">
-                ${Math.round(precios[confirm.plan].anual / 12)} x {getMesesRestantes()} meses
-              </p>
-            )}
           </div>
 
           {/* CHECKBOX */}
@@ -335,8 +311,7 @@ export default function PlanesPage() {
           {/* NOTA */}
           <p className="price-note">
             {config.tipo === "anual"
-              ? `Pago proporcional hasta diciembre (${getMesesRestantes()} meses). 
-       La suscripción se renovará automáticamente el 01 de enero.`
+              ? "Pago anual único. La suscripción dura 12 meses desde la fecha de compra."
               : config.recurrente
                 ? "Se cobrará automáticamente cada mes, puedes cancelar en cualquier momento"
                 : "Pago manual cada mes"}

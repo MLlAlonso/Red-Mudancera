@@ -24,12 +24,20 @@ class PlanController extends Controller
         $request->validate([
             'plan' => 'required|string|in:free,conector,radar',
             'tipo' => 'nullable|string|in:mensual,anual',
+            'recurrente' => 'nullable|boolean',
         ]);
 
         $empresa = $request->user();
         $plan = $request->plan;
         $tipo = $request->tipo ?? 'mensual';
-        $empresa = $this->service->changePlan($empresa, $plan, $tipo);
+        $recurrente = $request->recurrente ?? true;
+
+        $empresa = $this->service->changePlan(
+            $empresa,
+            $plan,
+            $tipo,
+            $recurrente
+        );
 
         // DISPARAR NOTIFICACIÓN
         app(NotificationDispatcher::class)->dispatch(
