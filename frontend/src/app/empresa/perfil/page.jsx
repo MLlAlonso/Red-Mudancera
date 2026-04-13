@@ -20,6 +20,7 @@ export default function EmpresaPerfil() {
   const [copiedProfile, setCopiedProfile] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [allResenas, setAllResenas] = useState([]);
+  const [imagenSeleccionada, setImagenSeleccionada] = useState(null);
 
   const getCookie = (name) => {
     const match = document.cookie.match(
@@ -90,7 +91,6 @@ export default function EmpresaPerfil() {
 
           {/* LEFT */}
           <div className="empresa-perfil__left">
-
             {/* DETALLES */}
             <div className="empresa-perfil__card">
               <div className="empresa-perfil__card-header">
@@ -153,6 +153,24 @@ export default function EmpresaPerfil() {
               )}
             </div>
 
+            {/* Imagenes */}
+            <div className="empresa-perfil__card">
+              <div className="empresa-perfil__card-header" id="header_resena">
+                <h3 className="empresa-perfil__section-title">Imagenes</h3>
+              </div>
+
+              {empresa.imagenes?.length > 0 && (
+                <div className="empresa-galeria">
+                  {empresa.imagenes.map((img) => (
+                    <img
+                      key={img.id}
+                      src={img.url}
+                      onClick={() => setImagenSeleccionada(img.url)}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* RIGHT */}
@@ -243,6 +261,28 @@ export default function EmpresaPerfil() {
         open={openModal}
         onClose={() => setOpenModal(false)}
       />
+
+      {imagenSeleccionada && (
+        <div
+          className="imagen-modal"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setImagenSeleccionada(null);
+            }
+          }}
+        >
+          <div className="imagen-modal__content">
+            <button
+              className="imagen-modal__close"
+              onClick={() => setImagenSeleccionada(null)}
+            >
+              ✕
+            </button>
+
+            <img src={imagenSeleccionada} alt="preview" />
+          </div>
+        </div>
+      )}
 
       <Footer />
     </>

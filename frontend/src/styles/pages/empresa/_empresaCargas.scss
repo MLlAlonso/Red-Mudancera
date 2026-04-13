@@ -102,3 +102,52 @@
         }
     }
 }
+
+@media (max-width: 480px) {
+  .carga {
+
+    padding: 1.5rem 0.8rem;
+
+    .title {
+      font-size: 24px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+    }
+
+    &__actions {
+      gap: 1rem;
+    }
+  }
+
+  .actioncard {
+    padding: 2rem 1rem;
+
+    &__title {
+      font-size: 20px;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .carga {
+
+    .title {
+      font-size: 20px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+    }
+  }
+}
+
+@media (max-width: 300px) {
+  .carga {
+
+    .title {
+      font-size: 18px;
+    }
+  }
+}

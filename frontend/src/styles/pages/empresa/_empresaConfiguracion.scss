@@ -193,3 +193,60 @@
         }
     }
 }
+
+@media (max-width: 480px) {
+  .configuracion {
+
+    padding: 20px 12px;
+
+    &__title {
+      font-size: 26px;
+    }
+
+    &__subtitle {
+      font-size: 16px;
+    }
+
+    &__block {
+      padding: 18px;
+    }
+
+    h2 {
+      font-size: 20px;
+    }
+
+    &__box input {
+      font-size: 16px; /* 🔥 evita zoom iOS */
+    }
+  }
+
+  .configuracion__modal-actions {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .configuracion {
+
+    &__title {
+      font-size: 22px;
+    }
+
+    &__subtitle {
+      font-size: 14px;
+    }
+  }
+}
+
+@media (max-width: 300px) {
+  .configuracion {
+
+    &__title {
+      font-size: 18px;
+    }
+  }
+}

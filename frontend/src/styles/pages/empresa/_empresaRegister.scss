@@ -101,3 +101,42 @@
 .header .header__content .header__icon, .header .header__content .header__menu {
     display: none;
 }
+
+@media (max-width: 480px) {
+  .empresa-register {
+
+    padding: 20px 10px;
+
+    &__card {
+      padding: 20px;
+    }
+
+    &__title {
+      font-size: 26px;
+    }
+
+    &__tooltip {
+      width: 90%;
+      right: 50%;
+      transform: translateX(50%);
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .empresa-register {
+
+    &__title {
+      font-size: 22px;
+    }
+  }
+}
+
+@media (max-width: 300px) {
+  .empresa-register {
+
+    &__title {
+      font-size: 18px;
+    }
+  }
+}

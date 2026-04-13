@@ -45,3 +45,27 @@
     }
   }
 }
+
+@media (max-width: 480px) {
+  .usuario-notificaciones {
+    padding: 1rem;
+
+    &__divider {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .usuario-notificaciones {
+    &__divider {
+      font-size: 1rem;
+    }
+  }
+}
+
+@media (max-width: 300px) {
+  .usuario-notificaciones {
+    padding: 0.8rem;
+  }
+}

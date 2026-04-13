@@ -13,7 +13,7 @@ class EmpresaPublicController extends Controller
      */
     public function show($id)
     {
-        $empresa = Empresa::find($id);
+        $empresa = Empresa::with('imagenes')->find($id);
 
         if (! $empresa) {
             return response()->json([
@@ -31,7 +31,12 @@ class EmpresaPublicController extends Controller
             'logo_url'     => $empresa->logo_url,
             'reputacion'   => $empresa->reputacion,
             'numServicios' => $empresa->numServicios,
-            'verificado' => $empresa->verificado,
+            'verificado'   => $empresa->verificado,
+
+            'imagenes' => $empresa->imagenes->map(fn($img) => [
+                'id' => $img->id,
+                'url' => $img->url,
+            ]),
         ]);
     }
 

@@ -123,3 +123,55 @@
 .notif-btn--danger:hover {
   background: #8f0906;
 }
+
+@media (max-width: 480px) {
+  .empresa-notificaciones {
+
+    padding: 1rem;
+
+    .title {
+      font-size: 24px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+    }
+
+    &__divider {
+      font-size: 1.2rem;
+    }
+
+    &__actions {
+      width: 100%;
+    }
+  }
+
+  .notif-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 360px) {
+  .empresa-notificaciones {
+
+    .title {
+      font-size: 20px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+    }
+
+    &__divider {
+      font-size: 1rem;
+    }
+  }
+}
+
+@media (max-width: 300px) {
+  .empresa-notificaciones {
+
+    padding: 0.8rem;
+  }
+}

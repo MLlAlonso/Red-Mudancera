@@ -237,3 +237,69 @@
         }
     }
 }
+
+@media (max-width: 480px) {
+  .empresa-dashboard {
+
+    &__title {
+      font-size: 24px;
+    }
+
+    &__subtitle {
+      font-size: 14px;
+    }
+
+    &__controls {
+
+      .btn-advanced-filters {
+        width: 50px;
+        height: 50px;
+
+        img {
+          width: 25px;
+          height: 25px;
+        }
+      }
+
+      .btn-outline {
+        font-size: 16px;
+        height: 50px;
+      }
+
+      #reporte {
+        min-width: 100%;
+      }
+    }
+
+    .btn_crud {
+      width: 55px;
+      height: 55px;
+      font-size: 28px;
+      bottom: 120px; /* 🔥 iPhone safe area */
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .empresa-dashboard {
+
+    &__title {
+      font-size: 20px;
+    }
+
+    .btn_crud {
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+    }
+  }
+}
+
+@media (max-width: 300px) {
+  .empresa-dashboard {
+
+    &__title {
+      font-size: 18px;
+    }
+  }
+}

@@ -436,3 +436,96 @@
     }
   }
 }
+
+/* 480px (móviles estándar) */
+@media (max-width: 480px) {
+  .planes {
+    padding: 20px 10px;
+
+    &__title {
+      font-size: 24px;
+    }
+
+    &__subtitle {
+      font-size: 16px;
+      margin-bottom: 30px;
+    }
+
+    &__grid {
+      padding: 0 10px;
+      gap: 25px;
+    }
+  }
+
+  .plan-card {
+    padding: 18px;
+
+    .plan-title {
+      font-size: 28px;
+      gap: 10px;
+
+      img {
+        width: 28px;
+        height: 28px;
+      }
+    }
+
+    .price {
+      font-size: 22px;
+    }
+
+    button {
+      width: 100%;
+      font-size: 14px;
+    }
+  }
+
+  .plan-card--morado {
+    transform: none;
+  }
+}
+
+/* 360px (iPhone promedio real) */
+@media (max-width: 360px) {
+  .planes {
+    &__title {
+      font-size: 22px;
+    }
+  }
+
+  .plan-card {
+    padding: 15px;
+
+    .plan-title {
+      font-size: 24px;
+    }
+
+    .price {
+      font-size: 20px;
+    }
+
+    ul li {
+      font-size: 13px;
+    }
+  }
+}
+
+/* 300px (casos extremos) */
+@media (max-width: 300px) {
+  .plan-card {
+    padding: 12px;
+
+    .plan-title {
+      font-size: 20px;
+    }
+
+    .price {
+      font-size: 18px;
+    }
+
+    button {
+      font-size: 12px;
+      padding: 10px;
+    }
+  }
+}

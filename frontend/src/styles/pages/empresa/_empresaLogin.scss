@@ -204,3 +204,52 @@ p{
     }
   }
 }
+
+@media (max-width: 480px) {
+  .empresa-login {
+    padding: 20px 10px;
+  }
+
+  .empresa-login__form {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .empresa-login__title {
+    font-size: 26px;
+
+    img {
+      width: 35px;
+      margin-right: 10px;
+    }
+  }
+
+  .empresa-login__input {
+    font-size: 16px; /* 🔥 evita zoom en iOS */
+    padding-left: 45px !important;
+  }
+
+  .empresa-login__forgot {
+    font-size: 16px;
+  }
+
+  .empresa-login__register {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  .empresa-login__title {
+    font-size: 22px;
+  }
+
+  .empresa-login__input {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 300px) {
+  .empresa-login__title {
+    font-size: 18px;
+  }
+}

@@ -81,24 +81,24 @@ export default function PlanWatcher() {
       ) : planModal.error === "PLAN_LIMIT_EXCLUSIVO" ? (
 
         <>
-          <h2 className="modal-title">Función exclusiva</h2>
+          <h2 className="modal-title">Este cliente puede ser solo tuyo</h2>
 
           <p className="modal-message">
-            Tu plan actual no permite comprar contactos exclusivos.
+            Evita competir por el mismo cliente y cierra más ventas.
             <br /><br />
-            Activa Radar para acceder a oportunidades sin competencia.
+            Más del 70% de los contactos exclusivos se convierten más rápido.
           </p>
 
           <div className="modal-actions">
             <button className="btn-outline" onClick={() => setPlanModal(null)}>
-              Cancelar
+              Seguir viendo
             </button>
 
             <button
               className="btn-solid"
               onClick={() => (window.location.href = "/empresa/planes")}
             >
-              Activar Radar
+              Quiero Radar
             </button>
           </div>
         </>

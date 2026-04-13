@@ -12,7 +12,7 @@ import "@/styles/pages/empresa/_empresaPerfil.scss";
 export default function EmpresaPublicPerfil() {
   const { id } = useParams();
   const router = useRouter();
-
+  const [imagenSeleccionada, setImagenSeleccionada] = useState(null);
   const [empresa, setEmpresa] = useState(null);
   const [loading, setLoading] = useState(true);
   const [resenas, setResenas] = useState([]);
@@ -199,6 +199,27 @@ export default function EmpresaPublicPerfil() {
 
             </div>
 
+            {/* IMÁGENES */}
+            <div className="empresa-perfil__card">
+              <div className="empresa-perfil__card-header">
+                <h3>Imágenes</h3>
+              </div>
+
+              {empresa.imagenes?.length > 0 ? (
+                <div className="empresa-galeria">
+                  {empresa.imagenes.map((img) => (
+                    <img
+                      key={img.id}
+                      src={img.url}
+                      onClick={() => setImagenSeleccionada(img.url)}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p style={{ color: "#6f7f8d" }}>Esta empresa no tiene imágenes.</p>
+              )}
+            </div>
+
           </div>
 
           {/* RIGHT */}
@@ -271,6 +292,28 @@ export default function EmpresaPublicPerfil() {
         </div>
 
       </main>
+
+      {imagenSeleccionada && (
+        <div
+          className="imagen-modal"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setImagenSeleccionada(null);
+            }
+          }}
+        >
+          <div className="imagen-modal__content">
+            <button
+              className="imagen-modal__close"
+              onClick={() => setImagenSeleccionada(null)}
+            >
+              ✕
+            </button>
+
+            <img src={imagenSeleccionada} alt="preview" />
+          </div>
+        </div>
+      )}
 
       <Footer />
     </>

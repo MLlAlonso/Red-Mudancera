@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Modules\Empresa\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Modules\Empresa\Models\EmpresaImagen;
 
 class Empresa extends Authenticatable
 {
@@ -31,6 +33,7 @@ class Empresa extends Authenticatable
         'subFin',
         'tokens',
         'plan',
+        'recurrente',
         'freeSince',
         'isTrial',
         'trialEndsAt',
@@ -46,6 +49,7 @@ class Empresa extends Authenticatable
         'subInicio' => 'date',
         'subFin' => 'date',
         'subActiva' => 'boolean',
+        'recurrente' => 'boolean',
         'freeSince' => 'date',
         'isTrial' => 'boolean',
         'trialEndsAt' => 'date',
@@ -61,7 +65,6 @@ class Empresa extends Authenticatable
             return null;
         }
 
-        // seguridad extra por si llega basura
         if (!is_string($this->logo)) {
             return null;
         }
@@ -70,7 +73,6 @@ class Empresa extends Authenticatable
             return $this->logo;
         }
 
-        // legacy storage
         return asset('storage/' . $this->logo);
     }
 
@@ -87,5 +89,10 @@ class Empresa extends Authenticatable
     public function radarConfig()
     {
         return $this->hasOne(\App\Modules\Empresa\Models\EmpresaRadarConfig::class);
+    }
+
+    public function imagenes()
+    {
+        return $this->hasMany(EmpresaImagen::class)->orderBy('orden');
     }
 }

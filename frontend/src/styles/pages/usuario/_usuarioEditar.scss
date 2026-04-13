@@ -144,3 +144,60 @@
     text-align: center;
   }
 }
+
+@media (max-width: 480px) {
+  .usuario-editar {
+
+    &__title {
+      font-size: 28px;
+    }
+
+    &__subtitle {
+      font-size: 16px;
+    }
+
+    &__avatar {
+      width: 140px;
+      height: 140px;
+    }
+
+    .input-group__label {
+      font-size: 20px;
+    }
+
+    .input-group__field {
+      font-size: 16px;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .usuario-editar {
+
+    &__title {
+      font-size: 22px;
+    }
+
+    &__avatar {
+      width: 110px;
+      height: 110px;
+    }
+
+    .input-group__label {
+      font-size: 18px;
+    }
+  }
+}
+
+@media (max-width: 300px) {
+  .usuario-editar {
+
+    &__title {
+      font-size: 18px;
+    }
+
+    .input-group__field {
+      font-size: 14px;
+    }
+  }
+}

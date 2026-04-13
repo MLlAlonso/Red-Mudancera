@@ -120,6 +120,18 @@ class SolicitudMudanzaService
         });
     }
 
+    private function limpiarInventario(string $text): string
+    {
+        // Convertir div, p, br en separadores
+        $text = preg_replace('/<(\/)?(div|p|br)[^>]*>/i', ', ', $text);
+        // Eliminar cualquier HTML restante
+        $text = strip_tags($text);
+        // Normalizar espacios y comas
+        $text = preg_replace('/\s*,\s*/', ', ', $text);
+
+        return trim($text, ', ');
+    }
+
     public function verificar(int $id, string $codigo): SolicitudMudanza
     {
         $solicitud = SolicitudMudanza::findOrFail($id);
@@ -140,15 +152,19 @@ class SolicitudMudanzaService
             abort(422, 'Código incorrecto.');
         }
 
+        $solicitud->inventario = $this->limpiarInventario($solicitud->inventario);
+
         $solicitud->update([
             'telefono_verificado' => true,
             'estado' => 'activo',
             'codigo_verificacion' => null,
-            'codigo_expira_en' => null
+            'codigo_expira_en' => null,
+            'inventario' => $solicitud->inventario
         ]);
 
         Mail::to($solicitud->email)
             ->later(now()->addSeconds(70), new SolicitudMudanzaResumen($solicitud));
+
         return $solicitud;
     }
 

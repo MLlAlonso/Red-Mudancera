@@ -120,3 +120,69 @@
         }
     }
 }
+
+@media (max-width: 768px) {
+  .usuario-login__form {
+    padding: 25px;
+  }
+
+  .usuario-login__title {
+    font-size: 32px;
+  }
+
+  .usuario-login__hint {
+    font-size: 16px;
+  }
+
+  .usuario-login__input {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .usuario-login {
+    padding: 20px 10px;
+  }
+
+  .usuario-login__form {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .usuario-login__title {
+    font-size: 26px;
+  }
+
+  .usuario-login__hint {
+    font-size: 14px;
+  }
+
+  .usuario-login__input {
+    font-size: 16px;
+    padding-left: 45px !important;
+  }
+
+  .usuario-login__forgot {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 360px) {
+  .usuario-login__title {
+    font-size: 22px;
+  }
+
+  .usuario-login__input {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 300px) {
+  .usuario-login__title {
+    font-size: 18px;
+  }
+
+  .usuario-login__input {
+    font-size: 13px;
+  }
+}

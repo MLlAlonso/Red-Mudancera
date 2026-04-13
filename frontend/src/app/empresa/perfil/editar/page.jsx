@@ -9,20 +9,22 @@ import Button_success from "@/components/common/Button_success";
 import Button_error from "@/components/common/Button_error";
 import ErrorModal from "@/components/common/ErrorModal";
 import LoadingOverlay from "@/components/ui/LoadingOverlay";
+import { uploadToCloudinary } from "@/utils/cloudinaryUpload";
 
 import "@/styles/pages/empresa/_empresaEditar.scss";
 
 export default function EmpresaEditar() {
   const router = useRouter();
   const API = process.env.NEXT_PUBLIC_API_URL;
-
   const [empresa, setEmpresa] = useState(null);
   const [loadingPage, setLoadingPage] = useState(true);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
-
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
+  const [imagenesActuales, setImagenesActuales] = useState([]);
+  const [imagenesEliminar, setImagenesEliminar] = useState([]);
+  const [imagenesNuevas, setImagenesNuevas] = useState([]);
 
   const [errorModal, setErrorModal] = useState({
     show: false,
@@ -43,8 +45,7 @@ export default function EmpresaEditar() {
   });
 
   const [previewLogo, setPreviewLogo] = useState(null);
-
-  const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+  const MAX_SIZE = 5 * 1024 * 1024;
 
   const getCookie = (name) => {
     const match = document.cookie.match(
@@ -65,9 +66,15 @@ export default function EmpresaEditar() {
     }
 
     fetch(`${API}/empresa/me`, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
     })
-      .then((res) => res.json())
+      .then(async (res) => {
+        if (!res.ok) throw new Error("Error al cargar empresa");
+        return res.json();
+      })
       .then((data) => {
         setEmpresa(data);
 
@@ -85,9 +92,13 @@ export default function EmpresaEditar() {
         });
 
         setPreviewLogo(data.logo_url || "/icons/user-placeholder.png");
+        setImagenesActuales(data.imagenes || []);
         setLoadingPage(false);
       })
-      .catch(() => setLoadingPage(false));
+      .catch((err) => {
+        console.error(err);
+        setLoadingPage(false);
+      });
   }, [API]);
 
   if (loadingPage) return <p style={{ padding: 40 }}>Cargando...</p>;
@@ -97,27 +108,68 @@ export default function EmpresaEditar() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  /* ===============================
-     VALIDACIÓN DE IMAGEN
-  =============================== */
+  const handleImagenesChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+    const imagenesValidas = [];
+    const errores = [];
+
+    const disponibles =
+      5 - (imagenesActuales.length - imagenesEliminar.length + imagenesNuevas.length);
+
+    if (disponibles <= 0) {
+      return setErrorModal({ show: true, message: "Máximo 5 imágenes" });
+    }
+
+    for (const file of files) {
+      if (file.size > MAX_SIZE) {
+        errores.push(`${file.name} supera los 5MB`);
+        continue;
+      }
+
+      if (!file.type.startsWith("image/")) {
+        errores.push(`${file.name} no es imagen válida`);
+        continue;
+      }
+
+      imagenesValidas.push({
+        file,
+        preview: URL.createObjectURL(file),
+      });
+    }
+
+    if (imagenesValidas.length > disponibles) {
+      errores.push(`Solo puedes subir ${disponibles} más`);
+    }
+
+    const final = imagenesValidas.slice(0, disponibles);
+
+    if (errores.length > 0) {
+      setErrorModal({
+        show: true,
+        message: errores.join("\n"),
+      });
+    }
+
+    setImagenesNuevas(prev => [...prev, ...final]);
+  };
+
   const handleFile = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     if (file.size > MAX_SIZE) {
-      setErrorModal({
+      return setErrorModal({
         show: true,
         message: "El logo no puede superar los 5MB.",
       });
-      return;
     }
 
     if (!file.type.startsWith("image/")) {
-      setErrorModal({
+      return setErrorModal({
         show: true,
-        message: "El archivo seleccionado no es una imagen válida.",
+        message: "Archivo no válido",
       });
-      return;
     }
 
     setForm({ ...form, logo: file });
@@ -134,33 +186,46 @@ export default function EmpresaEditar() {
     setLoadingSubmit(true);
 
     const token = getCookie("token_empresa");
-    if (!API || !token) return;
 
-    const formData = new FormData();
-    formData.append("_method", "PUT");
-
-    Object.keys(form).forEach((key) => {
-      if (form[key] !== null && form[key] !== "") {
-        formData.append(key, form[key]);
-      }
-    });
+    if (!API || !token) {
+      setLoadingSubmit(false);
+      return;
+    }
 
     try {
+      const nuevasCloud = [];
+
+      for (const img of imagenesNuevas) {
+        const uploaded = await uploadToCloudinary(img.file);
+        nuevasCloud.push(uploaded);
+      }
+
+      const formData = new FormData();
+      formData.append("_method", "PUT");
+
+      Object.keys(form).forEach((key) => {
+        if (form[key] !== null && form[key] !== "") {
+          formData.append(key, form[key]);
+        }
+      });
+
+      formData.append("imagenes", JSON.stringify(nuevasCloud));
+      formData.append("eliminar_imagenes", JSON.stringify(imagenesEliminar));
+
       const res = await fetch(`${API}/empresa/update`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
+          Accept: "application/json",
         },
         body: formData,
       });
 
+      const data = await res.json().catch(() => null);
+
       if (!res.ok) {
-        setLoadingSubmit(false);
-        setErrorModal({
-          show: true,
-          message: "No se pudo actualizar la empresa.",
-        });
-        return;
+        console.error("BACK ERROR:", data);
+        throw new Error(data?.message || "Error backend");
       }
 
       setShowSuccessModal(true);
@@ -170,11 +235,13 @@ export default function EmpresaEditar() {
       }, 1500);
 
     } catch (err) {
-      setLoadingSubmit(false);
+      console.error("ERROR:", err);
       setErrorModal({
         show: true,
-        message: "Error de conexión.",
+        message: err.message || "Error de conexión",
       });
+    } finally {
+      setLoadingSubmit(false);
     }
   };
 
@@ -183,7 +250,10 @@ export default function EmpresaEditar() {
 
     const res = await fetch(`${API}/empresa/delete`, {
       method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
     });
 
     if (res.ok) {
@@ -245,16 +315,74 @@ export default function EmpresaEditar() {
             />
           </div>
 
+
+
+          <div className="input-group">
+            <label>Fotos empresa</label>
+
+            <p className="imagenes-counter">
+              {imagenesActuales.length - imagenesEliminar.length + imagenesNuevas.length} / 5 imágenes
+            </p>
+
+            <input
+              type="file"
+              multiple
+              accept="image/png,image/jpeg,image/webp"
+              onClick={(e) => (e.target.value = null)}
+              onChange={handleImagenesChange}
+            />
+
+            <div className="imagenes-preview">
+              {/* EXISTENTES */}
+              {imagenesActuales.map(img => (
+                <div key={img.id} className="imagen-item">
+                  <img src={img.url} />
+
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={imagenesEliminar.includes(img.id)}
+                      onChange={() =>
+                        setImagenesEliminar(prev =>
+                          prev.includes(img.id)
+                            ? prev.filter(i => i !== img.id)
+                            : [...prev, img.id]
+                        )
+                      }
+                    />
+                    Eliminar
+                  </label>
+                </div>
+              ))}
+
+              {/* NUEVAS */}
+              {imagenesNuevas.map((img, i) => (
+                <div key={i} className="imagen-item">
+                  <img src={img.preview} />
+
+                  <button
+                    type="button"
+                    className="img_button"
+                    onClick={() =>
+                      setImagenesNuevas(prev =>
+                        prev.filter((_, x) => x !== i)
+                      )
+                    }
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div className="empresa-editar__buttons">
             <Button_error value="Cancelar" onClick={() => router.push("/empresa/perfil")} />
             <Button_success value="Aceptar" type="submit" />
           </div>
         </form>
 
-        <p
-          className="empresa-editar__delete"
-          onClick={() => setShowDeleteModal(true)}
-        >
+        <p className="empresa-editar__delete" onClick={() => setShowDeleteModal(true)} >
           ¿Desea eliminar su perfil de empresa?
         </p>
       </main>

@@ -159,3 +159,50 @@
     flex-direction: row;
   }
 }
+
+@media (max-width: 480px) {
+  .resena-card {
+    padding: 20px;
+  }
+
+  .resena-title {
+    font-size: 24px;
+  }
+
+  .resena-subtitle {
+    font-size: 14px;
+  }
+
+  .resena-stars .star {
+    font-size: 26px;
+  }
+
+  .resena-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 360px) {
+  .resena-title {
+    font-size: 20px;
+  }
+
+  .resena-stars .star {
+    font-size: 22px;
+  }
+
+  .resena-input,
+  .resena-textarea {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 300px) {
+  .resena-title {
+    font-size: 18px;
+  }
+
+  .resena-stars .star {
+    font-size: 18px;
+  }
+}

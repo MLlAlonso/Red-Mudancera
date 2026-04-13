@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -27,7 +27,7 @@ export default function EmpresaLogin() {
   const [messageModal, setMessageModal] = useState(null);
 
   const handleChange = (field, value) => {
-    setFormData({ ...formData, [field]: value });
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async () => {
@@ -56,18 +56,40 @@ export default function EmpresaLogin() {
         return;
       }
 
-      // Guardamos token en cookies
-      document.cookie = `token_empresa=${data.token}; path=/; max-age=86400`;
-      // PLAN (CLAVE PARA LOS BLOQUEOS)
-      document.cookie = `plan=${data.empresa.plan}; path=/; max-age=86400`;
+      // Detectar si estamos en HTTPS
+      const isSecure = typeof window !== "undefined" && window.location.protocol === "https:";
 
-      window.location.href = "/empresa/dashboard";
+      // Guardar cookies correctamente
+      document.cookie = `token_empresa=${data.token}; path=/; max-age=2592000; SameSite=Lax${isSecure ? "; Secure" : ""}`;
+      document.cookie = `plan=${data.empresa.plan}; path=/; max-age=2592000; SameSite=Lax${isSecure ? "; Secure" : ""}`;
+
+      // Fallback robusto (clave para iPhone)
+      localStorage.setItem("token_empresa", data.token);
+      localStorage.setItem("plan", data.empresa.plan);
+
+      // Delay para Safari iOS
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          window.location.href = "/empresa/dashboard";
+        }, 50);
+      });
+
     } catch (err) {
       console.error(err);
       setError("No se pudo conectar al servidor.");
       setLoading(false);
     }
   };
+
+  // Debug de sesión
+  useEffect(() => {
+    const plan = document.cookie
+      .split("; ")
+      .find(row => row.startsWith("plan="))
+      ?.split("=")[1];
+
+    console.log("plan detectado:", plan);
+  }, []);
 
   return (
     <>

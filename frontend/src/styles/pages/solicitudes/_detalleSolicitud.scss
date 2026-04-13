@@ -343,3 +343,92 @@
     }
   }
 }
+
+@media (max-width: 480px) {
+  .detalle-solicitud {
+
+    &__title {
+      font-size: 24px;
+    }
+
+    &__section-title {
+      font-size: 20px;
+    }
+
+    &__subtitle {
+      font-size: 16px;
+    }
+
+    &__route-title {
+      font-size: 22px;
+
+      img {
+        width: 35px;
+        height: 28px;
+      }
+    }
+
+    label {
+      font-size: 16px;
+    }
+
+    span,
+    p {
+      font-size: 16px;
+    }
+
+    .badge-exclusivo {
+      font-size: 14px;
+      padding: 4px 20px;
+    }
+
+    &__actions .btn_cta {
+      font-size: 18px;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .detalle-solicitud {
+
+    &__title {
+      font-size: 20px;
+    }
+
+    &__route-title {
+      font-size: 18px;
+    }
+
+    label {
+      font-size: 14px;
+    }
+
+    span,
+    p {
+      font-size: 14px;
+    }
+
+    .badge-exclusivo {
+      font-size: 12px;
+      padding: 3px 15px;
+    }
+  }
+}
+
+@media (max-width: 300px) {
+  .detalle-solicitud {
+
+    &__title {
+      font-size: 18px;
+    }
+
+    &__route-title {
+      font-size: 16px;
+    }
+
+    span,
+    p {
+      font-size: 13px;
+    }
+  }
+}

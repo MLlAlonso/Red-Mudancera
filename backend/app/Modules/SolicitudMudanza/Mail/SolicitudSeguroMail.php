@@ -32,11 +32,10 @@ class SolicitudSeguroMail extends Mailable
             $telefono = '52' . $telefono;
         }
 
-        $mensaje = "Hola, {$this->solicitud->nombre}.\n"
-            . "Te contacto del área de seguros por tu solicitud para proteger tu mudanza de {$this->solicitud->origen} a {$this->solicitud->destino}.\n"
-            . "La cobertura es con Chubb Seguros México.\n"
-            . "Con gusto puedo explicarte en una llamada breve cómo funciona y resolver tus dudas.\n"
-            . "¿Tienes unos minutos ahora o prefieres que agendemos en un horario específico más tarde?";
+        $mensaje = "Hola, apreciable {$this->solicitud->nombre}.\n"
+            . "Te contacto del área de seguros de carga en seguimiento a tu solicitud para proteger tu mudanza de {$this->solicitud->origen} a {$this->solicitud->destino}.\n"
+            . "Con gusto puedo explicarte brevemente en una llamada cómo funcionan las coberturas de la póliza, qué incluye y resolver cualquier duda que tengas.\n"
+            . "¿Tienes unos minutos ahora o prefieres que agendemos en un horario específico para más tarde?";
 
         $whatsappUrl = "https://wa.me/{$telefono}?text=" . urlencode($mensaje);
 

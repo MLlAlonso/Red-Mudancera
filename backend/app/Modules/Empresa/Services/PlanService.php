@@ -3,7 +3,6 @@
 namespace App\Modules\Empresa\Services;
 
 use App\Modules\Empresa\Models\Empresa;
-use Carbon\Carbon;
 use Exception;
 
 // TODO: usar $recurrente cuando integremos Stripe
@@ -27,6 +26,7 @@ class PlanService
 
         $empresa->update([
             'plan' => $plan,
+            'recurrente' => $recurrente,
             'subActiva' => true,
             'subInicio' => $inicio,
             'subFin' => $fin,

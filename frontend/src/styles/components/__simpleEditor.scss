@@ -75,3 +75,29 @@
         pointer-events: none;
     }
 }
+
+
+
+
+.simple-editor {
+  position: relative;
+  z-index: 5;
+}
+
+.simple-editor__content {
+  position: relative;
+  z-index: 10;
+
+  -webkit-user-select: text;
+  user-select: text;
+
+  -webkit-touch-callout: default;
+}
+
+.simple-editor__content {
+  touch-action: manipulation;
+}
+
+.simple-editor__content {
+  -webkit-user-modify: read-write;
+}

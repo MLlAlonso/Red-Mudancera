@@ -32,8 +32,20 @@ export default function SimpleEditor({
     };
 
     const handleClick = () => {
-        editorRef.current?.focus();
-    };
+    const el = editorRef.current;
+    if (!el) return;
+
+    el.focus();
+
+    const range = document.createRange();
+    const sel = window.getSelection();
+
+    range.selectNodeContents(el);
+    range.collapse(false);
+
+    sel.removeAllRanges();
+    sel.addRange(range);
+};
 
     return (
         <div className="simple-editor">

@@ -150,3 +150,103 @@
     background: variables.$morado_001;
   }
 }
+
+/* 480px */
+@media (max-width: 480px) {
+  .side-menu {
+    top: 90px;
+    right: 10px;
+    padding: 15px;
+    max-width: calc(100vw - 20px);
+    border-radius: 10px;
+
+    li {
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    img {
+      width: 28px;
+    }
+
+    span {
+      font-size: 18px;
+    }
+
+    .notification-badge {
+      font-size: 14px;
+      min-width: 18px;
+      height: 18px;
+    }
+  }
+
+  .account__tokens span {
+    font-size: 18px;
+  }
+
+  .account__plan {
+    font-size: 16px;
+  }
+}
+
+/* 360px */
+@media (max-width: 360px) {
+  .side-menu {
+    top: 80px;
+    right: 5px;
+    padding: 12px;
+
+    img {
+      width: 24px;
+    }
+
+    span {
+      font-size: 16px;
+    }
+  }
+
+  .account__tokens {
+    gap: 6px;
+
+    img {
+      width: 24px;
+    }
+
+    span {
+      font-size: 16px;
+    }
+  }
+
+  .account__plan {
+    font-size: 14px;
+
+    &::before {
+      width: 14px;
+      height: 14px;
+    }
+  }
+}
+
+/* 300px */
+@media (max-width: 300px) {
+  .side-menu {
+    top: 70px;
+    padding: 10px;
+
+    span {
+      font-size: 14px;
+    }
+
+    img {
+      width: 20px;
+    }
+  }
+
+  .account__tokens span {
+    font-size: 14px;
+  }
+
+  .account__plan {
+    font-size: 12px;
+  }
+}

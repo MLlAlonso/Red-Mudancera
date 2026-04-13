@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Services\CloudinaryService;
 use Illuminate\Support\Facades\Auth;
 use App\Modules\SolicitudMudanza\Models\LeadCompra;
+use App\Modules\Empresa\Services\EmpresaImagenService;
 
 class EmpresaController extends Controller
 {
@@ -21,11 +22,11 @@ class EmpresaController extends Controller
      */
     public function me(Request $request)
     {
-        $empresa = $request->user();
+        $empresa = $request->user()->load('imagenes');
         if (! $empresa) {
             return response()->json(['message' => 'No autenticado'], 401);
         }
-        // Asegurar logo_url siempre
+        // Asegurar logo_url
         $empresa->append('logo_url');
         return response()->json($empresa);
     }
@@ -33,18 +34,23 @@ class EmpresaController extends Controller
     /**
      * Actualizar datos de la empresa
      */
-    public function update(EmpresaUpdateRequest $request)
-    {
+    public function update(
+        EmpresaUpdateRequest $request,
+        EmpresaImagenService $imagenService
+    ) {
         $empresa = $request->user();
         $data = $request->validated();
+        $imagenes = $request->input('imagenes', []);
+        $eliminar = $request->input('eliminar_imagenes', []);
 
-        /**
-         * Logo (opcional)
-         */
+        // =========================
+        // LOGO
+        // =========================
+
         if ($request->hasFile('logo')) {
             $cloudinary = new CloudinaryService();
-            // borrar logo anterior si existe
             $cloudinary->deleteByUrl($empresa->logo);
+
             $upload = $cloudinary->upload(
                 $request->file('logo'),
                 'empresas/logos'
@@ -53,9 +59,32 @@ class EmpresaController extends Controller
             $data['logo'] = $upload['url'];
         }
 
-        /**
-         * Password (opcional) SOLO si viene en el request
-         */
+        // =========================
+        // IMÁGENES EMPRESA
+        // =========================
+
+        if (!empty($eliminar)) {
+            $imagenService->eliminarPorIds($empresa, $eliminar);
+        }
+
+        $totalActuales = $empresa->imagenes()->count();
+        $eliminadas = count($eliminar);
+        $nuevas = count($imagenes);
+
+        if (($totalActuales - $eliminadas + $nuevas) > 5) {
+            return response()->json([
+                'message' => 'Máximo 5 imágenes',
+            ], 422);
+        }
+
+        if (!empty($imagenes)) {
+            $imagenService->guardarDesdeFrontend($empresa, $imagenes);
+        }
+
+        // =========================
+        // PASSWORD
+        // =========================
+
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
         } else {
@@ -63,7 +92,8 @@ class EmpresaController extends Controller
         }
 
         $empresa->update($data);
-        $empresa->append('logo_url');
+        $empresa->load('imagenes');
+
         return response()->json([
             'message' => 'Empresa actualizada correctamente',
             'empresa' => $empresa
@@ -171,21 +201,15 @@ class EmpresaController extends Controller
                 return [
                     'id' => $sol->id,
                     'tipo' => 'lead',
-
                     'origen' => $sol->origen,
                     'destino' => $sol->destino,
                     'telefono' => $sol->telefono,
-
-                    // nombres que tu frontend ya usa
                     'nombre' => $sol->nombre,
                     'tipo_vivienda' => $sol->tipo_vivienda,
                     'vivienda_destino' => $sol->vivienda_destino,
-
-                    // estos también los usa tu card
                     'inventario' => $sol->inventario,
                     'fecha_recoleccion' => $sol->fecha_recoleccion,
                     'tipo_mudanza' => $sol->tipo_mudanza,
-
                     'created_at' => $compra->created_at,
                     'estado_operacion' => $compra->estado_operacion,
                     'ganancia' => $compra->ganancia,
@@ -201,7 +225,6 @@ class EmpresaController extends Controller
     public function referidosStats()
     {
         $empresa = auth()->user();
-
         $inicioMes = now()->startOfMonth();
 
         $referidosMes = \App\Modules\SolicitudMudanza\Models\SolicitudMudanza::where(
@@ -216,7 +239,7 @@ class EmpresaController extends Controller
             $empresa->id
         )
             ->where('created_at', '>=', $inicioMes)
-            ->sum('compras_count'); // aproximación basada en ventas
+            ->sum('compras_count');
 
         return response()->json([
             'referidos_mes' => $referidosMes,
