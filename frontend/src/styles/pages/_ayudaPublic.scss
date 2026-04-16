@@ -1,0 +1,142 @@
+@use "../utils/variables" as *;
+
+.ayudaPublic {
+    min-height: 100dvh;
+    background: $background;
+
+    &__hero {
+        background: $primary;
+        padding: 2rem 1.5rem 7rem;
+        text-align: center;
+        color: white;
+    }
+
+    .hero-logo {
+        margin-bottom: 1rem;
+
+        img {
+            height: 140px;
+            object-fit: contain;
+            opacity: 0.95;
+        }
+    }
+
+    &__container {
+        max-width: 1000px;
+        margin: -5rem auto 3rem;
+        padding: 0 1.5rem;
+    }
+
+    &__card {
+        background: #ffffff;
+        border-radius: 26px;
+        padding: 2.5rem;
+
+        box-shadow:
+            0 30px 60px rgba(0, 0, 0, 0.08),
+            0 10px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    &__end {
+        text-align: center;
+        padding: 20px 10px 40px;
+        font-size: 13px;
+        color: $text-muted;
+        font-family: $font-text;
+    }
+}
+
+@media (max-width: 768px) {
+    .ayudaPublic {
+        &__hero {
+            padding: 3rem 1rem 6rem;
+        }
+
+        &__container {
+            margin-top: -4rem;
+        }
+
+        &__card {
+            padding: 1.8rem;
+            border-radius: 20px;
+        }
+
+        .hero-logo img {
+            height: 70px;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .ayudaPublic {
+        &__hero {
+            padding: 2.5rem 1rem 5rem;
+        }
+
+        &__container {
+            margin-top: -3rem;
+            padding: 0 1rem;
+        }
+
+        &__card {
+            padding: 1.5rem 1rem;
+            border-radius: 18px;
+        }
+
+        .hero-logo {
+            margin-bottom: 0.8rem;
+
+            img {
+                height: 65px;
+            }
+        }
+    }
+}
+
+@media (max-width: 360px) {
+    .ayudaPublic {
+        &__hero {
+            padding: 2rem 0.8rem 4.5rem;
+        }
+
+        &__container {
+            margin-top: -2.5rem;
+            padding: 0 0.8rem;
+        }
+
+        &__card {
+            padding: 1.2rem 0.9rem;
+            border-radius: 16px;
+        }
+
+        .hero-logo {
+            margin-bottom: 0.6rem;
+
+            img {
+                height: 55px;
+            }
+        }
+    }
+}
+
+@media (max-width: 300px) {
+    .ayudaPublic {
+        &__hero {
+            padding: 1.8rem 0.6rem 4rem;
+        }
+
+        &__container {
+            margin-top: -2rem;
+            padding: 0 0.6rem;
+        }
+
+        &__card {
+            padding: 1rem 0.7rem;
+            border-radius: 14px;
+        }
+
+        .hero-logo img {
+            height: 48px;
+        }
+    }
+}

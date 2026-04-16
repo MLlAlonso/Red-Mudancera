@@ -220,8 +220,8 @@ export default function EmpresaUsuarios() {
       <main className="empresa-usuarios">
         <div className="empresa-usuarios__header">
           <div>
-            <h1 className="empresa-usuarios__title">Mis usuarios</h1>
-            <p className="empresa-usuarios__subtitle">Miembros de mi equipo</p>
+            <h1 className="empresa-usuarios__title">Tus usuarios</h1>
+            <p className="empresa-usuarios__subtitle">Miembros de tu equipo de trabajo</p>
           </div>
 
           <Button_crud value="Añadir" onClick={handleOpenModal} />
@@ -255,9 +255,9 @@ export default function EmpresaUsuarios() {
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h2 className="modal__title">Registrar usuario</h2>
 
-            <Input label="Nombre" name="nombre" placeholder="Nombre" value={form.nombre} onChange={handleInput} />
-            <Input label="Correo" name="email" placeholder="Correo" value={form.email} onChange={handleInput} />
-            <Input label="Teléfono" name="telefono" placeholder="Teléfono" value={form.telefono} onChange={handleInput} />
+            <Input label="Nombre *" name="nombre" placeholder="Nombre" value={form.nombre} onChange={handleInput} />
+            <Input label="Correo *" name="email" placeholder="Correo" value={form.email} onChange={handleInput} />
+            <Input label="Teléfono *" name="telefono" placeholder="Teléfono" value={form.telefono} onChange={handleInput} />
 
             <Button_crud value="Registrar" onClick={handleSubmit} />
           </div>

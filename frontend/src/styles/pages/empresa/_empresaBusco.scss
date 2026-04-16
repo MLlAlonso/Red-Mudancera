@@ -43,7 +43,7 @@
   ============================== */
 
   label {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
     color: $title;
   }
@@ -100,7 +100,7 @@
   }
 
   /* ==============================
-     📦 INPUT GROUPS
+     INPUT GROUPS
   ============================== */
 
   .input-group {
@@ -130,7 +130,7 @@
   }
 
   /* ==============================
-     🔘 ACCIONES
+     ACCIONES
   ============================== */
 
   &__actions {
@@ -139,7 +139,7 @@
     margin-top: 1.5rem;
   }
 
-   /* =========================
+  /* =========================
    Tooltip
 ========================= */
 
@@ -212,7 +212,6 @@
   }
 }
 
-/* 480px */
 @media (max-width: 480px) {
   .busco {
     padding: 1.5rem 0.8rem;
@@ -230,7 +229,7 @@
     }
 
     label {
-      font-size: 15px;
+      font-size: 18px;
     }
 
     .input-group__field {
@@ -239,7 +238,6 @@
   }
 }
 
-/* 360px */
 @media (max-width: 360px) {
   .busco {
     .title {
@@ -262,7 +260,6 @@
   }
 }
 
-/* 300px */
 @media (max-width: 300px) {
   .busco {
     .title {

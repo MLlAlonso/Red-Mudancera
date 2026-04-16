@@ -1,0 +1,281 @@
+@use "../utils/variables";
+
+.ayuda {
+    min-height: calc(100vh - 120px);
+    padding: 40px 20px;
+
+    /* =========================
+       HEADER
+    ========================= */
+    &__title {
+        font-family: variables.$font-title;
+        font-size: 38px;
+        color: variables.$title;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    &__subtitle {
+        font-family: variables.$font-text;
+        font-size: 20px;
+        color: variables.$text-muted;
+        margin-bottom: 30px;
+
+        span {
+            font-weight: 600;
+            color: variables.$primary;
+        }
+    }
+
+    &__block {
+        margin-bottom: 25px;
+    }
+
+    /* =========================
+       ACCORDION
+    ========================= */
+    &__accordion-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 20px;
+        border-radius: 14px;
+        background: white;
+        border: 1px solid #E5E7EB;
+        font-family: variables.$font-title;
+        font-size: 18px;
+        color: variables.$primary;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background: variables.$background;
+            transform: scale(1.01);
+        }
+    }
+
+    &__arrow {
+        width: 18px;
+        transition: transform 0.25s ease;
+
+        &.open {
+            transform: rotate(180deg);
+        }
+    }
+
+    /* =========================
+       CONTENT WRAPPER
+    ========================= */
+    &__content {
+        margin-top: 12px;
+        padding: 25px;
+        border-radius: 16px;
+        background: white;
+        border: 1px solid #E5E7EB;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+    }
+
+    /* =========================
+       CARDS GRID
+    ========================= */
+    &__cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    /* =========================
+       CARD
+    ========================= */
+    &__card {
+        display: flex;
+        gap: 15px;
+        align-items: flex-start;
+        padding: 18px;
+        border-radius: 14px;
+        background: white;
+        border: 1px solid #E5E7EB;
+
+        transition: all 0.2s ease;
+
+        img {
+            width: 28px;
+            height: 28px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        h4 {
+            font-family: variables.$font-title;
+            font-size: 16px;
+            color: variables.$title;
+            margin-bottom: 4px;
+        }
+
+        p {
+            font-family: variables.$font-text;
+            font-size: 14px;
+            color: variables.$text;
+            line-height: 1.5;
+        }
+
+        &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.06);
+            border-color: variables.$primary;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .ayuda {
+        &__title {
+            font-size: 28px;
+            text-align: center;
+        }
+
+        &__subtitle {
+            font-size: 16px;
+            text-align: justify;
+        }
+
+        &__content {
+            padding: 20px;
+        }
+
+        &__cards {
+            grid-template-columns: 1fr;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .ayuda {
+        padding: 30px 15px;
+
+        &__title {
+            font-size: 24px;
+        }
+
+        &__subtitle {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        &__accordion-header {
+            padding: 14px;
+            font-size: 15px;
+        }
+
+        &__content {
+            padding: 16px;
+            border-radius: 14px;
+        }
+
+        &__cards {
+            gap: 12px;
+        }
+
+        &__card {
+            padding: 14px;
+            gap: 12px;
+
+            img {
+                width: 24px;
+                height: 24px;
+            }
+
+            h4 {
+                font-size: 14px;
+            }
+
+            p {
+                font-size: 13px;
+                line-height: 1.4;
+            }
+        }
+    }
+}
+
+@media (max-width: 360px) {
+    .ayuda {
+        padding: 25px 12px;
+
+        &__title {
+            font-size: 20px;
+        }
+
+        &__subtitle {
+            font-size: 13px;
+        }
+
+        &__accordion-header {
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        &__content {
+            padding: 14px;
+        }
+
+        &__card {
+            padding: 12px;
+            gap: 10px;
+
+            img {
+                width: 22px;
+                height: 22px;
+            }
+
+            h4 {
+                font-size: 13px;
+            }
+
+            p {
+                font-size: 12.5px;
+            }
+        }
+    }
+}
+
+@media (max-width: 300px) {
+    .ayuda {
+        padding: 20px 10px;
+
+        &__title {
+            font-size: 18px;
+        }
+
+        &__subtitle {
+            font-size: 12px;
+        }
+
+        &__accordion-header {
+            padding: 10px;
+            font-size: 13px;
+        }
+
+        &__content {
+            padding: 12px;
+        }
+
+        &__card {
+            padding: 10px;
+            gap: 8px;
+
+            img {
+                width: 20px;
+                height: 20px;
+            }
+
+            h4 {
+                font-size: 12.5px;
+            }
+
+            p {
+                font-size: 12px;
+                line-height: 1.3;
+            }
+        }
+    }
+}

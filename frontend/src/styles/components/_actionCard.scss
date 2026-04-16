@@ -32,7 +32,7 @@
 
     &__title {
         font-family: variables.$font-title;
-        font-size: clamp(28px, 7vw, 50px);
+        font-size: clamp(32px, 13vw, 55px) !important;
         font-weight: bold;
         margin-bottom: 10px;
     }

@@ -51,15 +51,53 @@ export default function PlanesPage() {
     return `$${p.mensual.toLocaleString()} / mes`;
   };
 
-  // AMBIO DE PLAN
+  // CAMBIO DE PLAN
   const cambiarPlan = async () => {
     const token = getToken();
-
     setLoading(confirm.plan);
 
     try {
+      console.log("CONFIG ACTUAL:", config);
+
+      // SOLO manual mensual usa backend directo
+      const esManualMensual =
+        config.tipo === "mensual" && config.recurrente === false;
+
+      if (esManualMensual) {
+        console.log("👉 FLOW: BACKEND DIRECTO");
+
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/empresa/plan/cambiar`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              plan: confirm.plan,
+              tipo: "mensual",
+              recurrente: false,
+            }),
+          }
+        );
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert(data.message || "Error");
+          setLoading(null);
+          return;
+        }
+
+        window.location.reload();
+        return;
+      }
+
+      console.log("👉 FLOW: STRIPE");
+
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/empresa/plan/cambiar`,
+        `${process.env.NEXT_PUBLIC_API_URL}/stripe/checkout`,
         {
           method: "POST",
           headers: {
@@ -69,25 +107,29 @@ export default function PlanesPage() {
           body: JSON.stringify({
             plan: confirm.plan,
             tipo: config.tipo,
-            recurrente:
-              config.tipo === "anual" ? true : config.recurrente,
+            recurrente: config.recurrente
           }),
         }
       );
 
       const data = await res.json();
 
+      console.log("STRIPE RESPONSE:", data);
+
       if (!res.ok) {
-        alert(data.message || "Error al cambiar plan");
+        alert(data.error || "Error creando sesión");
         setLoading(null);
         return;
       }
 
-      // Actualizar cookie del plan
-      document.cookie = `plan=${confirm.plan}; path=/; max-age=86400`;
-      setConfirm(null);
-      setLoading(null);
-      window.location.reload();
+      if (!data.url) {
+        alert("Stripe no devolvió URL");
+        setLoading(null);
+        return;
+      }
+
+      // REDIRECCIÓN REAL
+      window.location.href = data.url;
 
     } catch (error) {
       console.error(error);
@@ -261,11 +303,11 @@ export default function PlanesPage() {
             <button
               className={config.tipo === "anual" ? "active" : ""}
               onClick={() =>
-                setConfig({
-                  ...config,
+                setConfig(prev => ({
+                  ...prev,
                   tipo: "anual",
                   recurrente: true,
-                })
+                }))
               }
             >
               Anual

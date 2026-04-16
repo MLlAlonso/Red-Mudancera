@@ -275,8 +275,8 @@ export default function OfrezcoServicioPage() {
         <div className="ofrezco__container">
           <form className="ofrezco__form" onSubmit={handleSubmit}>
             <div className="ofrezco__header">
-              <h1 className="title">Publicar carga disponible</h1>
-              <h2 className="subtitle">Detalles de la carga</h2>
+              <h1 className="title">Ofrece tu carga</h1>
+              <h2 className="subtitle">Colóca tu fracción con un colega de confianza</h2>
             </div>
 
             <Input label="Origen *" name="origen" value={form.origen} placeholder={"Ciudad o zona donde se recoge la carga"} onChange={handleChange} autocomplete />

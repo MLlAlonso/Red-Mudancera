@@ -12,6 +12,7 @@ return [
     'cipher' => 'AES-256-CBC',
     'key' => env('APP_KEY'),
     'internal_api_token' => env('INTERNAL_API_TOKEN'),
+    'frontend_url' => env('FRONTEND_URL'),
 
     'previous_keys' => [
         ...array_filter(

@@ -181,12 +181,12 @@ export default function BuscoServicioPage() {
         <div className="busco__container">
           <form className="busco__form" onSubmit={handleSubmit}>
             <div className="busco__header">
-              <h1 className="title">Publicar necesidades de Carga</h1>
-              <h2 className="subtitle">Indica tu ruta y encuentra carga compatible en el trayecto.</h2>
+              <h1 className="title">Busca carga para tus unidades</h1>
+              <h2 className="subtitle">Menciona tu ruta, encuentra cargas  y evita espacios vacios.</h2>
             </div>
 
-            <Input label="Origen *" name="origen" value={form.origen} placeholder={"Ciudad o zona desde donde sale mi unidad"} onChange={handleChange} autocomplete />
-            <Input label="Destino *" name="destino" value={form.destino} placeholder={"Ciudad donde termina mi viaje"} onChange={handleChange} autocomplete />
+            <Input label="Origen *" name="origen" value={form.origen} placeholder={"Ciudad o zona desde donde sale la unidad"} onChange={handleChange} autocomplete />
+            <Input label="Destino *" name="destino" value={form.destino} placeholder={"Ciudad donde termina el viaje"} onChange={handleChange} autocomplete />
 
             <label className="input-group__label input-group__label--tooltip">
               <span className="tooltip">

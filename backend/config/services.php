@@ -46,4 +46,9 @@ return [
         'api_secret' => env('CLOUDINARY_API_SECRET'),
         'secure'     => true,
     ],
+
+    'stripe' => [
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
+    ],
 ];

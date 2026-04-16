@@ -10,20 +10,20 @@ export default function Footer() {
           </p>
 
           <div className="footer__links">
-            <a href="https://mudanzafacil.com.mx/reglas-de-uso-comunidad/" target="_blank">Términos y Condiciones</a>
+            <a href="/ayuda" target="_blank">Términos y Condiciones</a>
             <span>|</span>
-            <a href="https://mudanzafacil.com.mx/reglas-de-uso-comunidad/" target="_blank">Aviso de Privacidad</a>
+            <a href="/ayuda" target="_blank">Aviso de Privacidad</a>
             <span>|</span>
-            <a href="https://mudanzafacil.com.mx/reglas-de-uso-comunidad/" target="_blank">Reglas de la comunidad</a>
+            <a href="/ayuda" target="_blank">Reglas de la comunidad</a>
             <span>|</span>
-            <a href="https://mudanzafacil.com.mx/reglas-de-uso-comunidad/" target="_blank">Soporte</a>
+            <a href="/ayuda" target="_blank">Soporte</a>
           </div>
         </div>
 
         <div className="footer__divider" />
 
         <div className="footer__bottom">
-          © 2026 MudanzaFácil. Todos los derechos reservados
+          © {new Date().getFullYear()} MudanzaFácil. Todos los derechos reservados
         </div>
 
       </div>
