@@ -399,7 +399,9 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   ├── 📁 Controllers
 │   │   │   │   ├── 📁 Auth
 │   │   │   │   │   └── 🐘 RecoverPasswordController.php
-│   │   │   │   └── 🐘 Controller.php
+│   │   │   │   ├── 🐘 Controller.php
+│   │   │   │   ├── 🐘 StripeController.php
+│   │   │   │   └── 🐘 StripeCreditosController.php
 │   │   │   ├── 📁 Middleware
 │   │   │   │   ├── 🐘 Authenticate.php
 │   │   │   │   ├── 🐘 CheckPlanPermission.php
@@ -440,6 +442,7 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   │   │   └── 🐘 TrialRequestMail.php
 │   │   │   │   ├── 📁 Models
 │   │   │   │   │   ├── 🐘 Empresa.php
+│   │   │   │   │   ├── 🐘 EmpresaImagen.php
 │   │   │   │   │   ├── 🐘 EmpresaRadarConfig.php
 │   │   │   │   │   └── 🐘 TrialRequest.php
 │   │   │   │   ├── 📁 Repositories
@@ -449,6 +452,7 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   │   │   └── 🐘 RegisterEmpresaRequest.php
 │   │   │   │   ├── 📁 Services
 │   │   │   │   │   ├── 🐘 EmpresaFeedService.php
+│   │   │   │   │   ├── 🐘 EmpresaImagenService.php
 │   │   │   │   │   ├── 🐘 EmpresaService.php
 │   │   │   │   │   ├── 🐘 PlanService.php
 │   │   │   │   │   ├── 🐘 PricingService.php
@@ -531,7 +535,8 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   │   ├── 📁 Mail
 │   │   │   │   │   ├── 🐘 LeadCompradoMail.php
 │   │   │   │   │   ├── 🐘 SolicitudMudanzaResumen.php
-│   │   │   │   │   └── 🐘 SolicitudMudanzaVerificationCode.php
+│   │   │   │   │   ├── 🐘 SolicitudMudanzaVerificationCode.php
+│   │   │   │   │   └── 🐘 SolicitudSeguroMail.php
 │   │   │   │   ├── 📁 Models
 │   │   │   │   │   ├── 🐘 LeadCompra.php
 │   │   │   │   │   └── 🐘 SolicitudMudanza.php
@@ -568,7 +573,8 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │       ├── 📁 Google
 │   │       │   └── 🐘 GoogleDistanceService.php
 │   │       ├── 🐘 CloudinaryService.php
-│   │       └── 🐘 MailtrapService.php
+│   │       ├── 🐘 MailtrapService.php
+│   │       └── 🐘 StripeService.php
 │   ├── 📁 bootstrap
 │   │   ├── 🐘 app.php
 │   │   └── 🐘 providers.php
@@ -584,7 +590,9 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   ├── 🐘 queue.php
 │   │   ├── 🐘 sanctum.php
 │   │   ├── 🐘 services.php
-│   │   └── 🐘 session.php
+│   │   ├── 🐘 session.php
+│   │   ├── 🐘 stripe_creditos.php
+│   │   └── 🐘 stripe_plans.php
 │   ├── 📁 database
 │   │   ├── 📁 factories
 │   │   │   └── 🐘 UserFactory.php
@@ -634,7 +642,11 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   ├── 🐘 2026_04_02_214130_add_verificado_to_empresas_table.php
 │   │   │   ├── 🐘 2026_04_05_144601_create_trial_requests_table.php
 │   │   │   ├── 🐘 2026_04_06_214823_add_docs_to_trial_requests_table.php
-│   │   │   └── 🐘 2026_04_06_223008_update_trial_urls_columns.php
+│   │   │   ├── 🐘 2026_04_06_223008_update_trial_urls_columns.php
+│   │   │   ├── 🐘 2026_04_10_222542_add_recurrente_to_empresas_table.php
+│   │   │   ├── 🐘 2026_04_11_124451_create_empresa_imagens_table.php
+│   │   │   ├── 🐘 2026_04_14_225538_add_stripe_fields_to_empresas.php
+│   │   │   └── 🐘 2026_04_24_000457_add_cancel_flag_to_empresas.php
 │   │   ├── 📁 seeders
 │   │   │   └── 🐘 DatabaseSeeder.php
 │   │   └── ⚙️ .gitignore
@@ -663,6 +675,7 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │       │   ├── 🐘 recover_password.blade.php
 │   │       │   ├── 🐘 solicitud_mudanza_resumen.blade.php
 │   │       │   ├── 🐘 solicitud_mudanza_verification_code.blade.php
+│   │       │   ├── 🐘 solicitud_seguro.blade.php
 │   │       │   ├── 🐘 trial_ending.blade.php
 │   │       │   ├── 🐘 trial_expired.blade.php
 │   │       │   ├── 🐘 trial_request.blade.php
@@ -697,7 +710,6 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   ├── 📝 ENDPOINTS.md
 │   ├── 📄 artisan
 │   ├── ⚙️ composer.json
-│   ├── ⚙️ package.json
 │   ├── ⚙️ phpunit.xml
 │   ├── 📄 red_mudancera_dev
 │   └── 📄 vite.config.js
@@ -723,6 +735,7 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   ├── 🖼️ borrar.png
 │   │   │   ├── 🖼️ busco.png
 │   │   │   ├── 🖼️ busco_btn.png
+│   │   │   ├── 🖼️ cambios.png
 │   │   │   ├── 🖼️ campana.png
 │   │   │   ├── 🖼️ candado-cerrado.png
 │   │   │   ├── 🖼️ candado.png
@@ -733,13 +746,16 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   ├── 🖼️ comprobado.png
 │   │   │   ├── 🖼️ conectar.png
 │   │   │   ├── 🖼️ conector.png
+│   │   │   ├── 🖼️ cookies.png
 │   │   │   ├── 🖼️ copy.png
 │   │   │   ├── 🖼️ copyw.png
 │   │   │   ├── 🖼️ correo_verificado.png
 │   │   │   ├── 🖼️ credito.png
 │   │   │   ├── 🖼️ cuenta.png
+│   │   │   ├── 🖼️ datos.png
 │   │   │   ├── 🖼️ default-user.png
 │   │   │   ├── 🖼️ delete.png
+│   │   │   ├── 🖼️ derechos.png
 │   │   │   ├── 🖼️ destino.png
 │   │   │   ├── 🖼️ docs.png
 │   │   │   ├── 🖼️ eraser.png
@@ -750,6 +766,7 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   ├── 🖼️ help.png
 │   │   │   ├── 🖼️ hogar.png
 │   │   │   ├── 🖼️ hogar_2.png
+│   │   │   ├── 🖼️ icon.svg
 │   │   │   ├── 🖼️ logout.png
 │   │   │   ├── 🖼️ lupa.png
 │   │   │   ├── 🖼️ mensaje.png
@@ -759,12 +776,15 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   ├── 🖼️ ojo.png
 │   │   │   ├── 🖼️ pause.png
 │   │   │   ├── 🖼️ place-marker.png
+│   │   │   ├── 🖼️ planes.png
 │   │   │   ├── 🖼️ play.png
+│   │   │   ├── 🖼️ prohibicion.png
 │   │   │   ├── 🖼️ radar.png
 │   │   │   ├── 🖼️ reloj_de_arena.png
 │   │   │   ├── 🖼️ share.png
 │   │   │   ├── 🖼️ shareW.png
 │   │   │   ├── 🖼️ suscripcion.png
+│   │   │   ├── 🖼️ suspendido.png
 │   │   │   ├── 🖼️ team.png
 │   │   │   ├── 🖼️ tel.png
 │   │   │   ├── 🖼️ telefono.png
@@ -777,6 +797,8 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   ├── 🖼️ user-placeholder.png
 │   │   │   ├── 🖼️ verificado.png
 │   │   │   └── 🖼️ whatsapp.png
+│   │   ├── 📁 images
+│   │   │   └── 🖼️ hero_seguro.png
 │   │   ├── 📁 logo
 │   │   │   ├── 🖼️ Logo2.png
 │   │   │   ├── 🖼️ icon.png
@@ -791,6 +813,8 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   └── 🖼️ window.svg
 │   ├── 📁 src
 │   │   ├── 📁 app
+│   │   │   ├── 📁 ayuda
+│   │   │   │   └── 📄 page.jsx
 │   │   │   ├── 📁 cotizar-mudanza
 │   │   │   │   ├── 📄 CotizadorMudanzaClient.jsx
 │   │   │   │   └── 📄 page.jsx
@@ -841,6 +865,10 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   ├── 📁 resena
 │   │   │   │   └── 📁 [token]
 │   │   │   │       └── 📄 page.jsx
+│   │   │   ├── 📁 seguros
+│   │   │   │   ├── 📄 FAQItem.jsx
+│   │   │   │   ├── 📄 SeguroClient.jsx
+│   │   │   │   └── 📄 page.jsx
 │   │   │   ├── 📁 servicios
 │   │   │   │   └── 📁 [id]
 │   │   │   │       ├── 📁 editar
@@ -906,6 +934,7 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │   └── 📄 SideMenuUsuario.jsx
 │   │   │   ├── 📁 modals
 │   │   │   │   ├── 📄 BaseModal.jsx
+│   │   │   │   ├── 📄 CancelSubscriptionModal.jsx
 │   │   │   │   ├── 📄 CompraCreditosModal.jsx
 │   │   │   │   ├── 📄 ComprarLeadModal.jsx
 │   │   │   │   ├── 📄 ConfirmDeleteNotificationModal.jsx
@@ -923,6 +952,7 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │   ├── 📄 ServiceCardSkeleton.jsx
 │   │   │   │   └── 📄 UserCardSkeleton.jsx
 │   │   │   ├── 📁 system
+│   │   │   │   ├── 📄 AyudaContent.jsx
 │   │   │   │   └── 📄 PlanWatcher.jsx
 │   │   │   └── 📁 ui
 │   │   │       ├── 📄 FeedbackModal.jsx
@@ -994,8 +1024,11 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │   │   ├── 🎨 _usuarioLogin.scss
 │   │   │   │   │   ├── 🎨 _usuarioNotificaciones.scss
 │   │   │   │   │   └── 🎨 _usuarioPerfil.scss
+│   │   │   │   ├── 🎨 _ayuda.scss
+│   │   │   │   ├── 🎨 _ayudaPublic.scss
 │   │   │   │   ├── 🎨 _cotizadorMudanza.scss
 │   │   │   │   ├── 🎨 _error.scss
+│   │   │   │   ├── 🎨 _seguros.scss
 │   │   │   │   └── 🎨 _solicitarMudanza.scss
 │   │   │   ├── 📁 utils
 │   │   │   │   ├── 🎨 _containers.scss
@@ -1005,16 +1038,13 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   └── 📁 utils
 │   │       ├── 📄 auth.js
 │   │       ├── 📄 cloudinaryUpload.js
+│   │       ├── 📄 plan.js
 │   │       └── 📄 whatsapp.js
 │   ├── 📄 eslint.config.mjs
 │   ├── ⚙️ jsconfig.json
 │   ├── 📄 next.config.js
 │   ├── ⚙️ package-lock.json
 │   └── ⚙️ package.json
-├── ⚙️ .gitignore
-├── 📝 LICENSE.md
-├── 📝 Milestones_Avance.md
-└── 📝 README.md
 
 Archivos clave / puntos de entrada:
 - Layout app: [`frontend/src/app/layout.js`](frontend/src/app/layout.js)

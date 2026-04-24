@@ -54,6 +54,7 @@ class Empresa extends Authenticatable
         'isTrial' => 'boolean',
         'trialEndsAt' => 'date',
         'verificado' => 'boolean',
+        'cancel_at_period_end' => 'boolean',
     ];
 
     // ===========================================

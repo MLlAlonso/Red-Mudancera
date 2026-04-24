@@ -23,7 +23,7 @@ export default function ComprarCreditos() {
 
         try {
             const res = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/empresa/creditos/comprar`,
+                `${process.env.NEXT_PUBLIC_API_URL}/stripe/creditos/checkout`,
                 {
                     method: "POST",
                     headers: {
@@ -35,13 +35,15 @@ export default function ComprarCreditos() {
             );
 
             const data = await res.json();
-            setFolio(data.folio);
-            setCreditos(data.creditos);
-            setModalOpen(true);
-            window.dispatchEvent(new Event("creditosActualizados"));
+
+            if (!data.url) {
+                throw new Error("No hay URL");
+            }
+
+            window.location.href = data.url;
 
         } catch (e) {
-            setErrorMessage("No se pudo completar la compra. Intenta nuevamente.");
+            setErrorMessage("No se pudo iniciar el pago.");
             setErrorModal(true);
         }
         setLoading(null);

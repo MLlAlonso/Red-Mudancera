@@ -25,4 +25,19 @@ class StripeService
             'cancel_url' => $cancelUrl,
         ]);
     }
+
+    public function createPaymentSession($priceId, $successUrl, $cancelUrl, $email)
+    {
+        return \Stripe\Checkout\Session::create([
+            'payment_method_types' => ['card'],
+            'mode' => 'payment',
+            'customer_email' => $email,
+            'line_items' => [[
+                'price' => $priceId,
+                'quantity' => 1,
+            ]],
+            'success_url' => $successUrl,
+            'cancel_url' => $cancelUrl,
+        ]);
+    }
 }

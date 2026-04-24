@@ -75,11 +75,6 @@
                                     <td align="right"><strong>{{ $creditos }}</strong></td>
                                 </tr>
 
-                                <tr>
-                                    <td style="color:#6F7F8D;">Total pagado:</td>
-                                    <td align="right"><strong>${{ number_format($precio) }} MXN</strong></td>
-                                </tr>
-
                             </table>
 
                             <div style="border-top:2px dashed #ABB0B4;margin:28px 0;"></div>

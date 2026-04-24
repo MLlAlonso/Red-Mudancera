@@ -17,11 +17,6 @@ class StripeController extends Controller
         $this->stripe = $stripe;
     }
 
-    /**
-     * ============================================
-     * CHECKOUT
-     * ============================================
-     */
     public function checkout(Request $request)
     {
         $request->validate([
@@ -33,7 +28,6 @@ class StripeController extends Controller
         $tipo = $request->tipo;
         $recurrente = $request->input('recurrente', true);
 
-        // lógica de price
         $key = $tipo === 'mensual'
             ? ($recurrente ? 'mensual_auto' : 'mensual')
             : 'anual';
@@ -48,7 +42,7 @@ class StripeController extends Controller
 
         $session = $this->stripe->createCheckoutSession(
             $priceId,
-            config('app.frontend_url') . '/empresa/planes?success=1',
+            config('app.frontend_url') . '/empresa/perfil?payment=success&type=plan',
             config('app.frontend_url') . '/empresa/planes?cancel=1',
             $empresa->email
         );
@@ -58,16 +52,11 @@ class StripeController extends Controller
         ]);
     }
 
-    /**
-     * ============================================
-     * WEBHOOK (CEREBRO REAL DEL SISTEMA)
-     * ============================================
-     */
     public function webhook(Request $request)
     {
         $payload = $request->getContent();
         $sigHeader = $request->header('Stripe-Signature');
-        $secret = env('STRIPE_WEBHOOK_SECRET');
+        $secret = config('services.stripe.webhook_secret');
 
         try {
             $event = \Stripe\Webhook::constructEvent(
@@ -76,17 +65,16 @@ class StripeController extends Controller
                 $secret
             );
         } catch (\Exception $e) {
-            Log::error('Webhook inválido', ['error' => $e->getMessage()]);
+            Log::error('Webhook inválido', [
+                'error' => $e->getMessage(),
+                'secret' => $secret,
+                'signature' => $sigHeader
+            ]);
+
             return response('Invalid signature', 400);
         }
 
-        /**
-         * ============================================
-         * 1. CHECKOUT COMPLETADO (PRIMER PAGO)
-         * ============================================
-         */
         if ($event->type === 'checkout.session.completed') {
-
             $session = $event->data->object;
 
             $empresa = Empresa::where(
@@ -95,61 +83,107 @@ class StripeController extends Controller
             )->first();
 
             if (!$empresa) {
-                Log::error('Empresa no encontrada en checkout');
+                Log::error('Empresa no encontrada');
                 return response('ok', 200);
             }
 
-            // guardar IDs de Stripe
-            $empresa->update([
-                'stripe_subscription_id' => $session->subscription,
-                'stripe_customer_id' => $session->customer,
-            ]);
+            // ============================
+            // CRÉDITOS (PAGO ÚNICO)
+            // ============================
+            if ($session->mode === 'payment') {
 
-            // obtener subscription real
-            $subscription = \Stripe\Subscription::retrieve($session->subscription);
+                $lineItems = \Stripe\Checkout\Session::allLineItems($session->id);
+                $priceId = $lineItems->data[0]->price->id ?? null;
 
-            $priceId = $subscription->items->data[0]->price->id ?? null;
+                Log::info('PRICE CREDITOS', ['price_id' => $priceId]);
 
-            Log::info('PRICE ID DETECTADO', [
-                'price_id' => $priceId
-            ]);
+                foreach (config('stripe_creditos') as $key => $plan) {
+                    if ($plan['price_id'] === $priceId) {
+                        $empresa->tokens += $plan['creditos'];
+                        $empresa->save();
 
-            // mapear plan
-            foreach (config('stripe_plans') as $plan => $tipos) {
-                foreach ($tipos as $tipo => $id) {
+                        app(\App\Modules\Notificacion\Services\NotificationDispatcher::class)
+                            ->dispatch(
+                                new \App\Modules\Notificacion\Events\CreditosAgregadosEvent(
+                                    $empresa->id,
+                                    $plan['creditos']
+                                )
+                            );
 
-                    if ($id === $priceId) {
-
-                        app(PlanService::class)->changePlan(
-                            $empresa,
-                            $plan,
-                            str_contains($tipo, 'anual') ? 'anual' : 'mensual',
-                            str_contains($tipo, 'auto')
+                        \Mail::to($empresa->email)->send(
+                            new \App\Modules\Empresa\Mail\CompraCreditosMail(
+                                $empresa,
+                                $key,
+                                $plan['creditos'],
+                                0,
+                                strtoupper('CR-' . uniqid())
+                            )
                         );
 
-                        Log::info('PLAN CAMBIADO', [
+                        Log::info('CRÉDITOS AGREGADOS', [
                             'empresa' => $empresa->id,
-                            'plan' => $plan,
-                            'tipo' => $tipo
+                            'creditos' => $plan['creditos']
                         ]);
+                    }
+                }
+            }
+
+            // ============================
+            // SUSCRIPCIONES
+            // ============================
+            if ($session->mode === 'subscription') {
+
+                $empresa->update([
+                    'stripe_subscription_id' => $session->subscription,
+                    'stripe_customer_id' => $session->customer,
+                ]);
+
+                $subscription = \Stripe\Subscription::retrieve($session->subscription);
+                $priceId = $subscription->items->data[0]->price->id ?? null;
+                Log::info('PRICE PLAN', ['price_id' => $priceId]);
+
+                foreach (config('stripe_plans') as $planName => $tipos) {
+                    foreach ($tipos as $tipo => $id) {
+
+                        if ($id === $priceId) {
+                            $empresa = app(PlanService::class)->changePlan(
+                                $empresa,
+                                $planName,
+                                str_contains($tipo, 'anual') ? 'anual' : 'mensual',
+                                str_contains($tipo, 'auto')
+                            );
+
+                            $empresa->refresh();
+
+                            app(\App\Modules\Notificacion\Services\NotificationDispatcher::class)
+                                ->dispatch(
+                                    new \App\Modules\Notificacion\Events\PlanChangedEvent(
+                                        $empresa->id,
+                                        $planName,
+                                        optional($empresa->subInicio)->format('d/m/Y'),
+                                        optional($empresa->subFin)->format('d/m/Y')
+                                    )
+                                );
+
+                            Log::info('PLAN CAMBIADO', [
+                                'empresa' => $empresa->id,
+                                'plan' => $planName,
+                                'tipo' => $tipo
+                            ]);
+                        }
                     }
                 }
             }
         }
 
-        /**
-         * ============================================
-         * 2. RENOVACIÓN AUTOMÁTICA
-         * ============================================
-         */
+        // ============================
+        // RENOVACIÓN
+        // ============================
         if ($event->type === 'invoice.payment_succeeded') {
-
             $subscriptionId = $event->data->object->subscription;
-
             $empresa = Empresa::where('stripe_subscription_id', $subscriptionId)->first();
 
             if ($empresa) {
-
                 $empresa->update([
                     'subActiva' => true,
                     'subFin' => now()->addMonth()
@@ -161,56 +195,45 @@ class StripeController extends Controller
             }
         }
 
-        /**
-         * ============================================
-         * 3. PAGO FALLIDO
-         * ============================================
-         */
+        // ============================
+        // CANCELACIÓN PROGRAMADA
+        // ============================
+        if ($event->type === 'customer.subscription.updated') {
+            $subscription = $event->data->object;
+
+            $empresa = Empresa::where(
+                'stripe_subscription_id',
+                $subscription->id
+            )->first();
+
+            if ($empresa) {
+                $empresa->update([
+                    'cancel_at_period_end' => $subscription->cancel_at_period_end
+                ]);
+                Log::info('ESTADO CANCELACIÓN ACTUALIZADO', [
+                    'empresa' => $empresa->id,
+                    'cancel_at_period_end' => $subscription->cancel_at_period_end
+                ]);
+            }
+        }
+
+        // ============================
+        // FALLA DE PAGO
+        // ============================
         if ($event->type === 'invoice.payment_failed') {
             $subscriptionId = $event->data->object->subscription;
             $empresa = Empresa::where('stripe_subscription_id', $subscriptionId)->first();
 
             if ($empresa) {
-
-                $empresa->update([
-                    'subActiva' => false
-                ]);
-
-                Log::warning('PAGO FALLIDO → PLAN DESACTIVADO', [
+                $empresa->update(['subActiva' => false]);
+                Log::warning('PAGO FALLIDO', [
                     'empresa' => $empresa->id
                 ]);
             }
         }
-
-        /**
-         * ============================================
-         * 4. CANCELACIÓN
-         * ============================================
-         */
-        if ($event->type === 'customer.subscription.deleted') {
-            $subscriptionId = $event->data->object->id;
-            $empresa = Empresa::where('stripe_subscription_id', $subscriptionId)->first();
-
-            if ($empresa) {
-                $empresa->update([
-                    'subActiva' => false,
-                    'plan' => 'free'
-                ]);
-
-                Log::info('SUSCRIPCIÓN CANCELADA', [
-                    'empresa' => $empresa->id
-                ]);
-            }
-        }
-
         return response('ok', 200);
     }
 
-    /**
-     * ============================================
-     * CANCELAR DESDE TU APP
-     * ============================================
-     */
     public function cancel(Request $request)
     {
         $empresa = $request->user();
@@ -219,13 +242,23 @@ class StripeController extends Controller
             return response()->json(['error' => 'No subscription'], 400);
         }
 
-        \Stripe\Subscription::update(
-            $empresa->stripe_subscription_id,
-            ['cancel_at_period_end' => true]
-        );
+        try {
+            \Stripe\Subscription::update(
+                $empresa->stripe_subscription_id,
+                ['cancel_at_period_end' => true]
+            );
 
-        return response()->json([
-            'message' => 'Se cancelará al final del periodo'
-        ]);
+            return response()->json([
+                'message' => 'Se cancelará al final del periodo'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('ERROR CANCEL STRIPE', [
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'error' => 'Error al cancelar suscripción'
+            ], 500);
+        }
     }
 }

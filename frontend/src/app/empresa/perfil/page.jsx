@@ -6,6 +6,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ReviewCard from "@/components/cards/ReviewCard";
 import Button_crud from "@/components/common/Button_crud";
+import CancelSubscriptionModal from "@/components/modals/CancelSubscriptionModal";
 import ShareReviewLinkModal from "@/components/modals/ShareReviewLinkModal";
 
 import "@/styles/pages/empresa/_empresaPerfil.scss";
@@ -21,6 +22,9 @@ export default function EmpresaPerfil() {
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [allResenas, setAllResenas] = useState([]);
   const [imagenSeleccionada, setImagenSeleccionada] = useState(null);
+  const [openCancelModal, setOpenCancelModal] = useState(false);
+  const [paymentMessage, setPaymentMessage] = useState(null);
+
 
   const getCookie = (name) => {
     const match = document.cookie.match(
@@ -76,8 +80,74 @@ export default function EmpresaPerfil() {
       .catch(() => { });
   }, [showAllReviews, empresa]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const params = new URLSearchParams(window.location.search);
+
+    const payment = params.get("payment");
+    const type = params.get("type");
+
+    if (payment === "success") {
+      if (type === "plan") {
+        setPaymentMessage("Plan activado correctamente");
+      } else if (type === "creditos") {
+        setPaymentMessage("Créditos agregados correctamente");
+      }
+
+      window.history.replaceState({}, document.title, "/empresa/perfil");
+    }
+  }, []);
+
   if (loading) return <p>Cargando...</p>;
   if (!empresa) return <p>Error: no se pudo cargar el perfil.</p>;
+
+  // =========================
+  // SUBSCRIPCIÓN INFO
+  // =========================
+  const getDiasRestantes = () => {
+    if (!empresa?.subFin) return null;
+    const hoy = new Date();
+    const fin = new Date(empresa.subFin);
+    const diff = Math.ceil((fin - hoy) / (1000 * 60 * 60 * 24));
+    return diff > 0 ? diff : 0;
+  };
+
+  const cancelarSuscripcion = async () => {
+    const token = getCookie("token_empresa");
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/stripe/cancel`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || "Error");
+        return;
+      }
+
+      setOpenCancelModal(false);
+      alert("Suscripción cancelada al final del periodo");
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+
+    } catch (e) {
+      alert("Error de conexión");
+    }
+  };
+
+
+
 
   return (
     <>
@@ -86,6 +156,12 @@ export default function EmpresaPerfil() {
       <main className="empresa-perfil">
         <h1 className="empresa-perfil__title">Perfil empresa</h1>
         <p className="empresa-perfil__subtitle">Datos sobre la empresa</p>
+
+        {paymentMessage && (
+          <div className="empresa-perfil__success">
+            {paymentMessage}
+          </div>
+        )}
 
         <div className="empresa-perfil__layout">
 
@@ -162,11 +238,7 @@ export default function EmpresaPerfil() {
               {empresa.imagenes?.length > 0 && (
                 <div className="empresa-galeria">
                   {empresa.imagenes.map((img) => (
-                    <img
-                      key={img.id}
-                      src={img.url}
-                      onClick={() => setImagenSeleccionada(img.url)}
-                    />
+                    <img key={img.id} src={img.url} onClick={() => setImagenSeleccionada(img.url)} />
                   ))}
                 </div>
               )}
@@ -197,6 +269,14 @@ export default function EmpresaPerfil() {
 
             {/* STATS */}
             <div className="empresa-perfil__stats">
+              <div className="stat stat--tokens">
+                <div className="stat__top">
+                  <img src="/icons/token_color.png" />
+                  <span>Créditos</span>
+                </div>
+                {empresa.tokens > 0 ? empresa.tokens : "Sin créditos"}
+              </div>
+
               <div className="stat">
                 <span>⭐ Reputación</span>
                 {empresa.reputacion > 0 ? empresa.reputacion : "Sin reseñas"}
@@ -205,14 +285,6 @@ export default function EmpresaPerfil() {
               <div className="stat">
                 <span>📦 Acuerdos</span>
                 {empresa.numServicios > 0 ? empresa.numServicios : "Usuario nuevo"}
-              </div>
-
-              <div className="stat stat--tokens">
-                <div className="stat__top">
-                  <img src="/icons/token_color.png" />
-                  <span>Créditos</span>
-                </div>
-                {empresa.tokens > 0 ? empresa.tokens : "Sin créditos"}
               </div>
             </div>
 
@@ -253,6 +325,55 @@ export default function EmpresaPerfil() {
                 {copiedProfile ? "Link copiado" : "Compartir perfil"}
               </button>
             </div>
+
+            {/* SUSCRIPCIÓN */}
+            {empresa.plan !== "free" && (
+              <div className="empresa-perfil__card" id="suscripcion_card">
+                <h3 className="empresa-perfil__section-title">
+                  Suscripción
+                </h3>
+
+                <div className="empresa-perfil__card-body empresa-perfil__subscription">
+
+                  <div className="suscripcion-info">
+                    <p>
+                      <strong>Renovación:</strong>{" "}
+                      {empresa.subFin
+                        ? new Date(empresa.subFin).toLocaleDateString()
+                        : "—"}
+                    </p>
+
+                    <p>
+                      <strong>Días restantes:</strong>{" "}
+                      {getDiasRestantes() ?? "—"}
+                    </p>
+                  </div>
+
+                  {/* SOLO SI ES AUTOMÁTICA */}
+                  {empresa.stripe_subscription_id && empresa.subActiva && !Boolean(empresa.cancel_at_period_end) && (
+                    <button className="empresa-perfil__cancel-btn" onClick={() => setOpenCancelModal(true)} >
+                      Cancelar renovación automática
+                    </button>
+                  )}
+
+                  {empresa.cancel_at_period_end && (
+                    <p className="empresa-perfil__no-auto">
+                      Tu suscripción se cancelará el{" "}
+                      {empresa.subFin
+                        ? new Date(empresa.subFin).toLocaleDateString()
+                        : "—"}
+                    </p>
+                  )}
+
+                  {!empresa.stripe_subscription_id && (
+                    <p className="empresa-perfil__no-auto">
+                      Pago manual (sin suscripción activa)
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
+
           </div>
         </div>
       </main>
@@ -260,6 +381,12 @@ export default function EmpresaPerfil() {
       <ShareReviewLinkModal
         open={openModal}
         onClose={() => setOpenModal(false)}
+      />
+
+      <CancelSubscriptionModal
+        open={openCancelModal}
+        onClose={() => setOpenCancelModal(false)}
+        onConfirm={cancelarSuscripcion}
       />
 
       {imagenSeleccionada && (

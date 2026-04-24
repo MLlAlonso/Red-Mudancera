@@ -35,8 +35,8 @@ Route::prefix('empresa')->group(function () {
 
         Route::get('/referidos/stats', [EmpresaController::class, 'referidosStats']);
 
-        Route::post('/creditos/comprar', [CreditosController::class, 'comprar'])
-            ->middleware('plan.permission:buy_credits');
+        /* Route::post('/creditos/comprar', [CreditosController::class, 'comprar'])
+            ->middleware('plan.permission:buy_credits'); */
         Route::post('/plan/cambiar', [PlanController::class, 'cambiarPlan']);
         Route::post('/radar/config', [EmpresaRadarConfigController::class, 'update']);
         Route::get('/radar/config', [EmpresaRadarConfigController::class, 'show']);

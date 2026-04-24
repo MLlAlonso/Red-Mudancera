@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RecoverPasswordController;
 use App\Modules\Servicio\Controllers\ServicioController;
 use App\Http\Controllers\StripeController;
+use App\Http\Controllers\StripeCreditosController;
 use App\Modules\SolicitudMudanza\Controllers\SolicitudMudanzaController;
 
 /*
@@ -11,7 +12,6 @@ use App\Modules\SolicitudMudanza\Controllers\SolicitudMudanzaController;
 | Empresa
 |--------------------------------------------------------------------------
 */
-
 require base_path('app/Modules/Empresa/routes.php');
 
 /*
@@ -77,3 +77,6 @@ Route::post('/solicitudes-mudanza/solicitar-seguro', [SolicitudMudanzaController
 */
 Route::middleware('auth:sanctum')->post('/stripe/checkout', [StripeController::class, 'checkout']);
 Route::post('/stripe/webhook', [StripeController::class, 'webhook']);
+
+Route::middleware('auth:sanctum')->post( '/stripe/creditos/checkout', [StripeCreditosController::class, 'checkout'] );
+Route::middleware('auth:sanctum')->post('/stripe/cancel', [StripeController::class, 'cancel']);

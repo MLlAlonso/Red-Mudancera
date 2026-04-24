@@ -160,7 +160,7 @@ export default function SideMenu({ open }) {
           </Link>
         </li>
 
-        <li>
+       {/*  <li>
           <Link href="/empresa/usuarios">
             <div className="side-item">
               <img src="/icons/team.png" />
@@ -168,7 +168,7 @@ export default function SideMenu({ open }) {
             </div>
           </Link>
         </li>
-
+ */}
         <li>
           <Link href="/empresa/ayuda">
             <div className="side-item">
