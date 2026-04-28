@@ -40,7 +40,7 @@
   &__help {
     position: absolute;
     right: 55px;
-    top: 40px;
+    top: 30px;
     font-size: 23px;
     color: variables.$primary;
     font-weight: bold;
@@ -115,6 +115,10 @@
       font-size: 26px;
     }
 
+    &__subtitle {
+      font-size: 16px;
+    }
+
     &__tooltip {
       width: 90%;
       right: 50%;
@@ -128,6 +132,10 @@
 
     &__title {
       font-size: 22px;
+    }
+
+    &__subtitle {
+      font-size: 14px;
     }
   }
 }

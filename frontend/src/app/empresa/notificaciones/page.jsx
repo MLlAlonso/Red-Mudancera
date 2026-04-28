@@ -167,7 +167,7 @@ export default function EmpresaNotificacionesPage() {
 
                                 {noVistas.length > 0 && (
                                     <button className="notif-btn notif-btn--secondary" onClick={marcarTodas} >
-                                        Leer todo
+                                        Marcar todo como leído
                                     </button>
                                 )}
                             </div>

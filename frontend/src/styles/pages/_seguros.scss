@@ -216,7 +216,9 @@
                 }
 
                 .faq__answer {
-                    max-height: 200px;
+                    max-height: 1000px;
+                    overflow-y: auto;
+                    -webkit-overflow-scrolling: touch;
                     padding: 10px 20px;
                 }
             }
@@ -340,10 +342,43 @@
     }
 }
 
+input:disabled,
+textarea:disabled {
+    background: #f5f5f5;
+    cursor: not-allowed;
+}
+
 /* =========================
    TABLET
 ========================= */
 @media (max-width: 1024px) {
+    .seguros {
+        .seguroHero {
+            &__container {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+
+            &__content {
+                max-width: 100%;
+            }
+
+            &__image img {
+                max-width: 300px;
+            }
+        }
+
+        .seguroInfo {
+            &__container {
+                padding: 40px 20px;
+            }
+
+            &__textWithLine {
+                gap: 10px;
+            }
+        }
+    }
 
     .success-modal,
     .error-modal {
@@ -379,6 +414,7 @@
    MOBILE
 ========================= */
 @media (max-width: 768px) {
+
     .success-modal,
     .error-modal {
         padding: 18px;
@@ -414,80 +450,7 @@
             }
         }
     }
-}
 
-/* =========================
-   MOBILE PEQUEÑO
-========================= */
-@media (max-width: 480px) {
-    .success-modal,
-    .error-modal {
-        padding: 16px;
-
-        h3 {
-            font-size: 16px;
-        }
-
-        p {
-            font-size: 14px;
-        }
-    }
-
-    .seguroForm {
-        gap: 12px;
-
-        .form-group {
-            label {
-                font-size: 13px;
-            }
-
-            input,
-            textarea {
-                font-size: 13px;
-            }
-        }
-    }
-}
-
-input:disabled,
-textarea:disabled {
-    background: #f5f5f5;
-    cursor: not-allowed;
-}
-
-/* TABLET */
-@media (max-width: 1024px) {
-    .seguros {
-        .seguroHero {
-            &__container {
-                flex-direction: column;
-                text-align: center;
-                gap: 20px;
-            }
-
-            &__content {
-                max-width: 100%;
-            }
-
-            &__image img {
-                max-width: 300px;
-            }
-        }
-
-        .seguroInfo {
-            &__container {
-                padding: 40px 20px;
-            }
-
-            &__textWithLine {
-                gap: 10px;
-            }
-        }
-    }
-}
-
-/* MOBILE */
-@media (max-width: 768px) {
     .seguros {
         .seguroHero {
             &__container {
@@ -562,8 +525,39 @@ textarea:disabled {
     }
 }
 
-/* MOBILE PEQUEÑO */
+/* =========================
+   MOBILE PEQUEÑO
+========================= */
 @media (max-width: 480px) {
+
+    .success-modal,
+    .error-modal {
+        padding: 16px;
+
+        h3 {
+            font-size: 16px;
+        }
+
+        p {
+            font-size: 14px;
+        }
+    }
+
+    .seguroForm {
+        gap: 12px;
+
+        .form-group {
+            label {
+                font-size: 13px;
+            }
+
+            input,
+            textarea {
+                font-size: 13px;
+            }
+        }
+    }
+
     .seguros {
         .seguroHero {
             &__content {
@@ -608,6 +602,61 @@ textarea:disabled {
             &__answer p {
                 font-size: 18px;
             }
+        }
+    }
+}
+
+/* =========================
+   MOBILE 360
+========================= */
+@media (max-width: 360px) {
+    .seguros {
+        .seguroHero__content h1 {
+            font-size: 24px;
+        }
+
+        .seguroHero__content p {
+            font-size: 18px;
+        }
+
+        .seguroInfo__textWithLine p,
+        .seguroInfo__list li {
+            font-size: 16px;
+        }
+
+        .btnSeguro{
+            padding: 20px 10px;
+            font-size: 18px;
+        }
+
+        .faq {
+            &__question {
+                font-size: 18px;
+            }
+
+            &__answer p {
+                font-size: 16px;
+            }
+        }
+    }
+}
+
+/* =========================
+   MOBILE 300
+========================= */
+@media (max-width: 300px) {
+    .seguros {
+        .seguroHero__content h1 {
+            font-size: 20px;
+        }
+
+        .seguroHero__content p {
+            font-size: 16px;
+        }
+
+        .btnSeguro {
+            font-size: 16px;
+            padding: 10px;
         }
     }
 }

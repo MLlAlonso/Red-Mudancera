@@ -81,15 +81,15 @@ export default function SideMenu({ open }) {
         {tokens !== null && (
           <div className="account__tokens">
             <img src="/icons/token_color.png" alt="Tokens" />
-            <span>{tokens} Créditos</span>
+            <span>{tokens} créditos</span>
           </div>
         )}
 
         {plan && (
           <div className={`account__plan account__plan--${plan}`}>
             {plan === "free" && "Explorador"}
-            {plan === "conector" && "Conector"}
-            {plan === "radar" && "Radar"}
+            {plan === "conector" && "Plan Conector"}
+            {plan === "radar" && "Plan Radar"}
           </div>
         )}
       </div>

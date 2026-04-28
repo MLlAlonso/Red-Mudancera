@@ -17,8 +17,8 @@ class SendRadarMatchNotification
         $dispatcher->dispatch(
             new RadarMatchNotificationEvent(
                 empresaId: $servicio->empresa_id,
-                titulo: 'Nuevo match encontrado',
-                mensaje: 'Se encontró una coincidencia para tu servicio',
+                titulo: 'Nueva oportunidad en tu ruta',
+                mensaje: 'Hay una carga o cliente que coincide con tu servicio, revísala antes de que alguien más la tome.',
                 data: [
                     'servicio_id' => $servicio->id,
                     'match_id' => $match->id,
@@ -30,8 +30,8 @@ class SendRadarMatchNotification
         $dispatcher->dispatch(
             new RadarMatchNotificationEvent(
                 empresaId: $match->empresa_id,
-                titulo: 'Nuevo match disponible',
-                mensaje: 'Hay una oportunidad que coincide con tu servicio',
+                titulo: 'Nueva oportunidad en tu ruta',
+                mensaje: 'Hay una carga o cliente que coincide con tu servicio, revísala antes de que alguien más la tome.',
                 data: [
                     'servicio_id' => $match->id,
                     'match_id' => $servicio->id,

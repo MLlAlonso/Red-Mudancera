@@ -14,7 +14,7 @@ export default function Footer() {
             <span>|</span>
             <a href="/ayuda" target="_blank">Aviso de Privacidad</a>
             <span>|</span>
-            <a href="/ayuda" target="_blank">Reglas de la comunidad</a>
+            <a href="/reglas" target="_blank">Reglas de la comunidad</a>
             <span>|</span>
             <a href="/ayuda" target="_blank">Soporte</a>
           </div>

@@ -159,7 +159,7 @@ class ServicioController extends Controller
 
             /**
              * ==========================================
-             * CONTADOR GLOBAL (LO QUE YA TENÍAS)
+             * CONTADOR GLOBAL
              * ==========================================
              */
             $totalMes = \App\Modules\Servicio\Models\Servicio::whereMonth('created_at', now()->month)

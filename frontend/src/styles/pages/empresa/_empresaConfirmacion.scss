@@ -24,6 +24,7 @@
         color: $primary;
         font-size: 26px;
         margin-bottom: 10px;
+        font-weight: bold;
     }
 
     &__subtitle {
@@ -83,7 +84,11 @@
     }
 
     &__title {
-      font-size: 22px;
+      font-size: 26px;
+    }
+
+    &__subtitle {
+      font-size: 16px;
     }
 
     &__tokens-title {
@@ -104,11 +109,11 @@
     }
 
     &__title {
-      font-size: 18px;
+      font-size: 22px;
     }
 
     &__tokens-text {
-      font-size: 13px;
+      font-size: 14px;
     }
   }
 }

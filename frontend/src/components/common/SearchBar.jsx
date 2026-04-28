@@ -18,12 +18,12 @@ const SearchBar = () => {
 
   const [mounted, setMounted] = useState(false);
 
-  // 🔑 Evita mismatch SSR / Client
+  // Evita mismatch SSR / Client
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // ⛔️ NO renderizar nada hasta estar montado
+  // NO renderizar nada hasta estar montado
   if (!mounted) {
     return (
       <div className="searchbar searchbar--disabled">
@@ -45,8 +45,8 @@ const SearchBar = () => {
 
   const placeholder =
     pathname.startsWith("/empresa/empresas")
-      ? "Ciudad o nombre de empresa"
-      : "Origen, destino o empresa";
+      ? "Buscar por ciudad o nombre de empresa"
+      : "Buscar por origen, destino o empresa";
 
   return (
     <div className={`searchbar ${!isEnabled ? "searchbar--disabled" : ""}`}>

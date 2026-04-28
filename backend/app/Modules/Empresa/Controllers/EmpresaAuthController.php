@@ -115,8 +115,6 @@ class EmpresaAuthController extends Controller
             ]);
         }
 
-        // Eliminar tokens anteriores
-        $empresa->tokens()->delete();
         // Crear token nuevo
         $token = $empresa->createToken('api-token')->plainTextToken;
         /*  Disparar evento de notificación
@@ -131,6 +129,15 @@ class EmpresaAuthController extends Controller
             'message' => 'Inicio de sesión exitoso',
             'empresa' => $empresa,
             'token' => $token
+        ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Sesión cerrada correctamente'
         ]);
     }
 

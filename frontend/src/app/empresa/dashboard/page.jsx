@@ -39,7 +39,7 @@ export default function EmpresaDashboard() {
     todos: {
       title: "Actividad reciente",
       subtitle:
-        "Publicaciones recientes de carga y solicitudes de mudanza.",
+        "Publicaciones recientes de carga y contactos de mudanza.",
     },
     busco: {
       title: "Publicaciones de Búsqueda",

@@ -90,6 +90,7 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
     };
 
     const createSolicitud = async () => {
+        if (loading) return;
         setLoading(true);
 
         console.log("empresaSlug:", empresaSlug);
@@ -461,7 +462,17 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
 
             {/* MODAL VERIFICACIÓN */}
             {modalOpen && (
-                <BaseModal onClose={() => { }}>
+                <BaseModal
+                    onClose={async () => {
+                        setModalOpen(false);
+
+                        if (solicitudId) {
+                            await fetch(`${API}/solicitudes-mudanza/${solicitudId}/cancelar`, {
+                                method: "POST"
+                            });
+                        }
+                    }}
+                >
                     <div className="verificacion-modal" id="verificaion-modal">
                         <h3>Verifica tu correo <br /> para publicar tu solicitud</h3>
                         <h4>
@@ -507,7 +518,17 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
                                 Reenviar código
                             </button>
 
-                            <button className="verificacion-modal__cancelar" onClick={() => setModalOpen(false)} >
+                            <button className="verificacion-modal__cancelar"
+                                onClick={async () => {
+                                    setModalOpen(false);
+
+                                    if (solicitudId) {
+                                        await fetch(`${API}/solicitudes-mudanza/${solicitudId}/cancelar`, {
+                                            method: "POST"
+                                        });
+                                    }
+                                }}
+                            >
                                 Editar correo o Cancelar
                             </button>
                         </div>

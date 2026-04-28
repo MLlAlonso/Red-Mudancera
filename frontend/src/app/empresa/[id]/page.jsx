@@ -19,7 +19,7 @@ export default function EmpresaPublicPerfil() {
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [allResenas, setAllResenas] = useState([]);
 
-  // 🔥 FIX REAL
+  // FIX REAL
   const isVerified =
     empresa?.verificado === true || empresa?.verificado === 1;
 
@@ -164,7 +164,7 @@ export default function EmpresaPublicPerfil() {
                 <p><strong>Descripción:</strong> {empresa.descripcion ?? "—"}</p>
                 <p><strong>Sede:</strong> {empresa.base ?? "—"}</p>
                 <p><strong>Representante legal:</strong> {empresa.representante}</p>
-                <p><strong>Correo:</strong> {empresa.email}</p>
+                <p><strong>Correo:</strong> {empresa.email ?? "—"} </p>
                 <p>
                   <strong>Teléfono:</strong>{" "}
                   {canSeePhone(getPlan()) ? empresa.tel : "🔒 Disponible con plan activo"}

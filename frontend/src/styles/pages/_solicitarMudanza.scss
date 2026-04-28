@@ -18,7 +18,7 @@
         .title {
             font-family: $font-title;
             font-size: 52px;
-            font-weight: 700;
+            font-weight: bold;
             margin-bottom: 1rem;
             letter-spacing: -1px;
         }
@@ -465,11 +465,11 @@
             padding: 3rem 1rem 6rem;
 
             .title {
-                font-size: 28px;
+                font-size: 26px;
             }
 
             .subtitle {
-                font-size: 14px;
+                font-size: 16px;
             }
         }
 
@@ -506,7 +506,7 @@
     .solicitar-mudanza {
 
         &__hero .title {
-            font-size: 24px;
+            font-size: 26px;
         }
 
         &__form {
@@ -526,11 +526,6 @@
 
 @media (max-width: 300px) {
     .solicitar-mudanza {
-
-        &__hero .title {
-            font-size: 20px;
-        }
-
         .hero-logo img {
             height: 55px;
         }

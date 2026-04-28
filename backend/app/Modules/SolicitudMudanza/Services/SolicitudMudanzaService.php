@@ -23,6 +23,7 @@ class SolicitudMudanzaService
     public function crear(array $data): SolicitudMudanza
     {
         return DB::transaction(function () use ($data) {
+            $this->limpiarPendientesAntiguos($data['email']);
             // Anti-duplicación estricta
             $this->validarDuplicado($data);
             // Anti spam 24 horas
@@ -46,10 +47,10 @@ class SolicitudMudanzaService
             $slug = $data['empresa_referente_slug'] ?? null;
 
             /*
-|---------------------------------------------------
-| Si el frontend no envía slug, lo sacamos del URL
-|---------------------------------------------------
-*/
+            |---------------------------------------------------
+            | Si el frontend no envía slug, lo sacamos del URL
+            |---------------------------------------------------
+            */
             if (!$slug) {
                 $referer = request()->headers->get('referer');
                 if ($referer) {
@@ -187,23 +188,23 @@ class SolicitudMudanzaService
 
     private function validarAntiSpam(array $data): void
     {
-        // EXCEPCIÓN ADMINISTRATIVA
+        // EXCEPCIÓN ADMIN
         if (strtolower($data['email']) === 'intermudanza@gmail.com') {
             return;
         }
         $hace24Horas = now()->subHours(24);
-        // Buscar solicitudes del mismo email en las últimas 24h
-        $existePorEmail = SolicitudMudanza::where('email', $data['email'])
-            ->where('created_at', '>=', $hace24Horas)
-            ->exists();
 
-        if ($existePorEmail) {
-            // Si además coincide teléfono
-            $existeEmailTelefono = SolicitudMudanza::where('email', $data['email'])
+        // SOLO solicitudes ACTIVAS (verificadas)
+        $queryBase = SolicitudMudanza::where('email', $data['email'])
+            ->where('estado', 'activo')
+            ->where('created_at', '>=', $hace24Horas);
+
+        if ($queryBase->exists()) {
+            $mismoTelefono = (clone $queryBase)
                 ->where('telefono', $data['telefono'])
-                ->where('created_at', '>=', $hace24Horas)
                 ->exists();
-            if ($existeEmailTelefono) {
+
+            if ($mismoTelefono) {
                 abort(429, 'Ya enviaste una solicitud en las últimas 24 horas con este correo y teléfono. Intenta nuevamente mañana.');
             }
             abort(429, 'Ya enviaste una solicitud en las últimas 24 horas con este correo. Intenta nuevamente mañana.');
@@ -261,11 +262,19 @@ class SolicitudMudanzaService
             '1-7' => 7,
             '8-15' => 15,
             '15-30' => 30,
-            '30+' => 45,
-            'lo_antes_posible' => 3,
+            '30+' => 90,
+            'lo_antes_posible' => 6,
             default => 7,
         };
         // +1 día extra
         return $hoy->addDays($dias + 1)->toDateString();
+    }
+
+    private function limpiarPendientesAntiguos(string $email): void
+    {
+        SolicitudMudanza::where('email', $email)
+            ->where('estado', 'pendiente')
+            ->where('codigo_expira_en', '<', now())
+            ->delete();
     }
 }

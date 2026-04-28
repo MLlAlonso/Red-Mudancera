@@ -21,6 +21,7 @@ Route::prefix('empresa')->group(function () {
         Route::get('/me', [EmpresaController::class, 'me']);
         Route::put('/update', [EmpresaController::class, 'update']);
         Route::delete('/delete', [EmpresaController::class, 'destroy']);
+        Route::post('/logout', [EmpresaAuthController::class, 'logout']);
 
         // RUTAS PARA CRUD DE USUARIOS
         Route::get('/usuarios', [EmpresaController::class, 'usuariosEmpresa']);

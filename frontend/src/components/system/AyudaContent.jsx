@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
-export default function AyudaContent() {
+export default function AyudaContent({ isPrivate = false }) {
     const [openPrivacy, setOpenPrivacy] = useState(true);
     const [openTerms, setOpenTerms] = useState(false);
 
@@ -31,7 +32,7 @@ export default function AyudaContent() {
                                 <img src="/icons/team.png" />
                                 <div>
                                     <h4>¿Quién es responsable?</h4>
-                                    <p>Mudanza Fácil es responsable del tratamiento de tus datos personales.</p>
+                                    <p>Mudanza Fácil es responsable del tratamiento de tus datos personales y se compromete a utilizarlos conforme a la legislación aplicable, protegiendo tu información en todo momento.</p>
                                 </div>
                             </div>
 
@@ -39,7 +40,7 @@ export default function AyudaContent() {
                                 <img src="/icons/docs.png" />
                                 <div>
                                     <h4>Datos que recopilamos</h4>
-                                    <p>Nombre, contacto, rutas, perfil, actividad, verificación, pagos y contenido generado.</p>
+                                    <p>Recopilamos información como nombre, datos de contacto, rutas, perfil, actividad dentro de la plataforma, información de verificación, pagos y contenido que generas al utilizar el servicio.</p>
                                 </div>
                             </div>
 
@@ -47,7 +48,7 @@ export default function AyudaContent() {
                                 <img src="/icons/datos.png" />
                                 <div>
                                     <h4>Uso de tus datos</h4>
-                                    <p>Para conectarte con oportunidades, gestionar servicios, pagos y mejorar la plataforma.</p>
+                                    <p>Utilizamos tus datos para conectarte con oportunidades, facilitar la operación de servicios, procesar pagos, mejorar la experiencia en la plataforma y optimizar el funcionamiento del sistema.</p>
                                 </div>
                             </div>
 
@@ -55,7 +56,7 @@ export default function AyudaContent() {
                                 <img src="/icons/ojo.png" />
                                 <div>
                                     <h4>Visibilidad entre usuarios</h4>
-                                    <p>Parte de tu información puede ser visible para facilitar contacto y operación.</p>
+                                    <p>Parte de tu información puede ser visible para otros usuarios con el fin de facilitar el contacto, la negociación y la operación de servicios dentro de la red.</p>
                                 </div>
                             </div>
 
@@ -63,7 +64,7 @@ export default function AyudaContent() {
                                 <img src="/icons/candado.png" />
                                 <div>
                                     <h4>Seguridad</h4>
-                                    <p>Aplicamos medidas de protección, pero ningún sistema es 100% invulnerable.</p>
+                                    <p>Aplicamos medidas de seguridad técnicas y administrativas para proteger tu información. Sin embargo, ningún sistema es completamente invulnerable.</p>
                                 </div>
                             </div>
 
@@ -71,7 +72,7 @@ export default function AyudaContent() {
                                 <img src="/icons/share.png" />
                                 <div>
                                     <h4>Compartición de datos</h4>
-                                    <p>Solo con usuarios, proveedores tecnológicos o por requerimiento legal.</p>
+                                    <p>Tu información solo se comparte con otros usuarios de la red, proveedores tecnológicos necesarios para la operación o cuando sea requerido por ley.</p>
                                 </div>
                             </div>
 
@@ -79,7 +80,7 @@ export default function AyudaContent() {
                                 <img src="/icons/derechos.png" />
                                 <div>
                                     <h4>Tus derechos</h4>
-                                    <p>Puedes acceder, rectificar, eliminar u oponerte al uso de tus datos.</p>
+                                    <p>Puedes acceder, rectificar, cancelar u oponerte al uso de tus datos en cualquier momento, de acuerdo con la normativa aplicable.</p>
                                 </div>
                             </div>
 
@@ -87,7 +88,7 @@ export default function AyudaContent() {
                                 <img src="/icons/cookies.png" />
                                 <div>
                                     <h4>Cookies</h4>
-                                    <p>Usamos cookies para mejorar experiencia y analizar uso.</p>
+                                    <p>Utilizamos cookies para mejorar tu experiencia, analizar el uso de la plataforma y ofrecer un servicio más eficiente.</p>
                                 </div>
                             </div>
 
@@ -95,7 +96,7 @@ export default function AyudaContent() {
                                 <img src="/icons/cambios.png" />
                                 <div>
                                     <h4>Cambios</h4>
-                                    <p>Podemos actualizar este aviso en cualquier momento.</p>
+                                    <p>Podemos actualizar este aviso en cualquier momento. Te recomendamos revisarlo periódicamente para mantenerte informado.</p>
                                 </div>
                             </div>
 
@@ -103,7 +104,7 @@ export default function AyudaContent() {
                                 <img src="/icons/correo_verificado.png" />
                                 <div>
                                     <h4>Contacto</h4>
-                                    <p>soporte@mudanzafacil.com.mx</p>
+                                    <p>Si tienes dudas o solicitudes relacionadas con tus datos, puedes contactarnos en: soporte@mudanzafacil.com.mx</p>
                                 </div>
                             </div>
 
@@ -127,7 +128,7 @@ export default function AyudaContent() {
                                 <img src="/icons/check.png" />
                                 <div>
                                     <h4>Aceptación</h4>
-                                    <p>Al usar la plataforma aceptas estos términos.</p>
+                                    <p>Al utilizar la plataforma, aceptas estos términos y condiciones, así como las políticas aplicables al uso del servicio.</p>
                                 </div>
                             </div>
 
@@ -135,7 +136,7 @@ export default function AyudaContent() {
                                 <img src="/icons/icon.svg" />
                                 <div>
                                     <h4>Qué es Mudanza Fácil</h4>
-                                    <p>Conectamos empresas, transportistas y clientes. No realizamos mudanzas.</p>
+                                    <p>Mudanza Fácil es una plataforma que conecta empresas, transportistas y clientes. No realizamos servicios de mudanza directamente.</p>
                                 </div>
                             </div>
 
@@ -143,7 +144,7 @@ export default function AyudaContent() {
                                 <img src="/icons/user-placeholder.png" />
                                 <div>
                                     <h4>Cuenta</h4>
-                                    <p>Debes proporcionar datos reales y eres responsable de tu cuenta.</p>
+                                    <p>Debes proporcionar información verídica y mantener tus datos actualizados. Eres responsable de la seguridad y uso de tu cuenta.</p>
                                 </div>
                             </div>
 
@@ -151,7 +152,7 @@ export default function AyudaContent() {
                                 <img src="/icons/prohibicion.png" />
                                 <div>
                                     <h4>Uso permitido</h4>
-                                    <p>Prohibido spam, fraude o uso indebido.</p>
+                                    <p>Está prohibido el uso de la plataforma para actividades fraudulentas, spam o cualquier uso indebido que afecte a otros usuarios o al sistema.</p>
                                 </div>
                             </div>
 
@@ -159,7 +160,7 @@ export default function AyudaContent() {
                                 <img src="/icons/docs.png" />
                                 <div>
                                     <h4>Publicaciones</h4>
-                                    <p>Eres responsable del contenido que publicas.</p>
+                                    <p>Eres responsable del contenido que publicas. La información debe ser clara, verídica y relacionada con los servicios ofrecidos dentro de la plataforma.</p>
                                 </div>
                             </div>
 
@@ -167,7 +168,7 @@ export default function AyudaContent() {
                                 <img src="/icons/token_blue.png" />
                                 <div>
                                     <h4>Créditos</h4>
-                                    <p>No son reembolsables y el contacto es tu responsabilidad.</p>
+                                    <p>Los créditos no son reembolsables. El uso de los contactos adquiridos y la gestión de las oportunidades es responsabilidad del usuario.</p>
                                 </div>
                             </div>
 
@@ -175,7 +176,7 @@ export default function AyudaContent() {
                                 <img src="/icons/planes.png" />
                                 <div>
                                     <h4>Planes</h4>
-                                    <p>Las funciones dependen del plan activo.</p>
+                                    <p>Las funcionalidades disponibles dependen del plan activo y pueden variar según el nivel de suscripción contratado.</p>
                                 </div>
                             </div>
 
@@ -183,7 +184,7 @@ export default function AyudaContent() {
                                 <img src="/icons/team.png" />
                                 <div>
                                     <h4>Interacción</h4>
-                                    <p>No participamos en acuerdos entre usuarios.</p>
+                                    <p>Mudanza Fácil no participa en acuerdos, negociaciones ni servicios realizados entre usuarios.</p>
                                 </div>
                             </div>
 
@@ -191,7 +192,7 @@ export default function AyudaContent() {
                                 <img src="/icons/candado.png" />
                                 <div>
                                     <h4>Seguridad</h4>
-                                    <p>No garantizamos veracidad total de usuarios.</p>
+                                    <p>Implementamos medidas de seguridad, pero no garantizamos la veracidad total de la información proporcionada por otros usuarios.</p>
                                 </div>
                             </div>
 
@@ -199,13 +200,19 @@ export default function AyudaContent() {
                                 <img src="/icons/suspendido.png" />
                                 <div>
                                     <h4>Suspensión</h4>
-                                    <p>Podemos eliminar cuentas que incumplan reglas.</p>
+                                    <p>Nos reservamos el derecho de suspender o eliminar cuentas que incumplan estos términos o hagan uso indebido de la plataforma.</p>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 )}
+            </div>
+
+            {/* 🔗 LINK A REGLAS */}
+            <div style={{ marginBottom: "20px" }}>
+                <Link href={isPrivate ? "/empresa/reglas" : "/reglas"} className="ayuda__link">
+                    Ver Reglas de la Comunidad →
+                </Link>
             </div>
         </main>
     );

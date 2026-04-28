@@ -153,7 +153,7 @@ Esto suele ayudar a encontrar mejores opciones de precio y disponibilidad.
 
                     <div className="referir__link">
                         <span>{referLink}</span>
-                        <button onClick={copiarLink}>
+                        <button onClick={copiarLink} title="Copiar enlace">
                             <img src="/icons/copy.png" alt="Copiar" />
                         </button>
                     </div>
@@ -164,7 +164,7 @@ Esto suele ayudar a encontrar mejores opciones de precio y disponibilidad.
                             onClick={copiarLink}
                         >
                             <img src="/icons/copyw.png" alt="Copiar" />
-                            {copiadoLink ? "Enlace copiado" : "Copiar enlace"}
+                            {copiadoLink ? "Enlace copiado" : "Compartir enlace"}
                         </button>
 
                         <button className="referir__btn referir__btn--success" onClick={compartirWhatsapp} >

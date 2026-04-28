@@ -112,7 +112,7 @@ export default function EmpresaLogin() {
 
           <h1 className="empresa-login__title">Iniciar sesión</h1>
           <p className="empresa-login__hint">
-            Accede a tu cuenta para gestionar contactos, cargas y oportunidades en la red
+            Accede a tu cuenta para gestionar contactos, cargas y oportunidades dentro de la red
           </p>
 
           {error && <p className="empresa-login__error">{error}</p>}
@@ -145,7 +145,7 @@ export default function EmpresaLogin() {
             onClick={handleSubmit}
           />
 
-          <p> <img src="/icons/candado-cerrado.png" alt="" /> Acceso seguro para empresas verificadas de la red</p>
+          <p> <img src="/icons/candado-cerrado.png" alt="" /> Acceso seguro solo para empresas verificadas</p>
 
           <button
             style={{

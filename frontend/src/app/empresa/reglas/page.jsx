@@ -2,14 +2,14 @@
 
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import AyudaContent from "@/components/system/AyudaContent";
+import ReglasContent from "@/components/system/ReglasContent";
 import "@/styles/pages/_ayuda.scss";
 
-export default function AyudaPage() {
+export default function ReglasPage() {
     return (
         <>
             <Header />
-            <AyudaContent isPrivate />
+            <ReglasContent isPrivate />
             <Footer />
         </>
     );

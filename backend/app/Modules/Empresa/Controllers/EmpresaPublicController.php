@@ -32,6 +32,7 @@ class EmpresaPublicController extends Controller
             'reputacion'   => $empresa->reputacion,
             'numServicios' => $empresa->numServicios,
             'verificado'   => $empresa->verificado,
+            'email' => $empresa->email,
 
             'imagenes' => $empresa->imagenes->map(fn($img) => [
                 'id' => $img->id,

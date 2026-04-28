@@ -14,6 +14,7 @@ Route::prefix('solicitudes-mudanza')->group(function () {
         ->middleware(['auth:empresa', 'plan.permission:comprar_lead']);
     Route::patch('/leads/{id}/estado', [LeadOperacionController::class, 'changeEstado'])
         ->middleware('auth:empresa');
+    Route::post('/{id}/cancelar', [SolicitudMudanzaController::class, 'cancelar']);
 
     Route::post('/solicitar-seguro', [SolicitudMudanzaController::class, 'solicitarSeguro']);
     Route::post('/solicitar-seguro-externo', [SolicitudMudanzaController::class, 'solicitarSeguroExterno']);

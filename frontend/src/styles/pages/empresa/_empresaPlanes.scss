@@ -71,7 +71,7 @@
     color: $text-muted;
     font-weight: 600;
     text-align: center;
-    font-size: 14px;
+    font-size: 18px;
   }
 
   .price {
@@ -142,6 +142,7 @@
     padding: 12px;
     border-radius: 10px;
     border: none;
+    font-size: 22px;
     cursor: pointer;
     margin-top: 20px;
     position: relative;
@@ -443,7 +444,7 @@
     padding: 20px 10px;
 
     &__title {
-      font-size: 24px;
+      font-size: 26px;
     }
 
     &__subtitle {
@@ -476,7 +477,7 @@
 
     button {
       width: 100%;
-      font-size: 14px;
+      font-size: 24px;
     }
   }
 
@@ -490,6 +491,10 @@
   .planes {
     &__title {
       font-size: 22px;
+    }
+
+    &__subtitle {
+      font-size: 14px;
     }
   }
 

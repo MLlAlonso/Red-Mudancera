@@ -48,7 +48,7 @@ const NotificationCard = ({
       <div className="notification-card__actions" onClick={(e) => e.stopPropagation()} >
         <Button_error value="Eliminar" onClick={onDelete} />
         <Button_success
-          value={leida ? "Leído" : "Visto"}
+          value={leida ? "Visto" : "Ver"}
           onClick={onAccept}
           disabled={leida}
         />

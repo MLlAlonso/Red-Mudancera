@@ -23,7 +23,8 @@
 
 .resena-title {
   font-family: variables.$font-title;
-  font-size: 36px;
+  font-size: 40px;
+  font-weight: bold;
   color: variables.$primary;
   text-align: center;
 }
@@ -166,11 +167,11 @@
   }
 
   .resena-title {
-    font-size: 24px;
+    font-size: 26px;
   }
 
   .resena-subtitle {
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .resena-stars .star {
@@ -184,7 +185,11 @@
 
 @media (max-width: 360px) {
   .resena-title {
-    font-size: 20px;
+    font-size: 22px;
+  }
+
+  .resena-subtitle {
+    font-size: 14px;
   }
 
   .resena-stars .star {
@@ -198,10 +203,6 @@
 }
 
 @media (max-width: 300px) {
-  .resena-title {
-    font-size: 18px;
-  }
-
   .resena-stars .star {
     font-size: 18px;
   }

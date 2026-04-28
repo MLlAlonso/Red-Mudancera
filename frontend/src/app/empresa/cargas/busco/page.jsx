@@ -182,7 +182,7 @@ export default function BuscoServicioPage() {
           <form className="busco__form" onSubmit={handleSubmit}>
             <div className="busco__header">
               <h1 className="title">Busca carga para tus unidades</h1>
-              <h2 className="subtitle">Menciona tu ruta, encuentra cargas  y evita espacios vacios.</h2>
+              <h2 className="subtitle">Menciona tu ruta, encuentra cargas  y evita viajar vacio.</h2>
             </div>
 
             <Input label="Origen *" name="origen" value={form.origen} placeholder={"Ciudad o zona desde donde sale la unidad"} onChange={handleChange} autocomplete />
@@ -192,7 +192,7 @@ export default function BuscoServicioPage() {
               <span className="tooltip">
                 ⓘ
                 <span className="tooltip__content">
-                  Indica entre qué fechas viajará tu unidad
+                  Indica entre qué fechas viajará tu unidad, puedes seleccionar un dia especifico o un rango de dias aproximado
                 </span>
               </span>
               Fechas aproximadas de salida a Ruta *

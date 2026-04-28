@@ -324,7 +324,7 @@ export default function OfrezcoServicioPage() {
                 onChange={(html) => setForm(prev => ({ ...prev, nota: html }))}
                 placeholder={
                   form.tipoCarga === "vehiculo"
-                    ? "Marca, modelo, año y especificaciones del vehículo"
+                    ? "Marca, modelo, año y especificaciones del vehículo (puedes agregar foto para mayor certeza)"
                     : "Lista de muebles, cajas o mercancía. Puedes pegar el inventario del cliente."
                 }
               />
@@ -338,7 +338,7 @@ export default function OfrezcoServicioPage() {
                     Sube hasta 3 imágenes máximo para facilitar validación y negociación.
                   </span>
                 </span>
-                Fotos de la carga ({imagenes.length}/3)
+                Imágenes relacionadas ({imagenes.length}/3)
               </label>
 
               <input
@@ -366,7 +366,7 @@ export default function OfrezcoServicioPage() {
 
             <div className="input-group">
               <label className="input-group__label input-group__label--tooltip">
-                Plazo máximo de entrega *
+                ¿Cuándo debe estar entregada? *
               </label>
 
               <select name="rangoDias" className="input-group__field" value={form.rangoDias} onChange={handleChange}>
@@ -382,10 +382,10 @@ export default function OfrezcoServicioPage() {
                 <span className="tooltip">
                   ⓘ
                   <span className="tooltip__content">
-                    ¿Dónde está la carga actualmente?
+                    Como le entregarás la carga a tu colega
                   </span>
                 </span>
-                Disponibilidad de la carga *
+                ¿En donde esta la carga? *
               </label>
 
               <select name="estadoCarga" className="input-group__field" value={form.estadoCarga} onChange={handleChange} >

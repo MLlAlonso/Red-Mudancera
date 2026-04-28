@@ -247,4 +247,15 @@ class SolicitudMudanzaController extends Controller
             'message' => 'Solicitud enviada correctamente'
         ]);
     }
+
+    public function cancelar($id)
+    {
+        $solicitud = SolicitudMudanza::findOrFail($id);
+
+        if ($solicitud->estado === 'pendiente') {
+            $solicitud->delete();
+        }
+
+        return response()->json(['message' => 'Solicitud cancelada']);
+    }
 }

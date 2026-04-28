@@ -610,6 +610,16 @@ RESPONSIVE
       height: 120px;
     }
   }
+
+  .empresa-perfil {
+    &__title {
+      font-size: 26px;
+    }
+
+    &__subtitle {
+      font-size: 16px;
+    }
+  }
 }
 
 @media (max-width: 320px) {
@@ -618,6 +628,16 @@ RESPONSIVE
 
     img {
       height: 140px;
+    }
+  }
+
+  .empresa-perfil {
+    &__title {
+      font-size: 22px;
+    }
+
+    &__subtitle {
+      font-size: 14px;
     }
   }
 

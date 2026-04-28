@@ -91,8 +91,8 @@ export default function ComprarCreditos() {
 
                 <p className="creditos__help">
                     <a href="ayuda/">¿Cómo funcionan los créditos?</a>
-                    Los créditos te permiten adquirir contactos de mudanza dentro de la red.
-                    Cada contacto se comparte con un máximo de 3 empresas
+                    Cada crédito te permite acceder a clientes que ya solicitaron una mudanza.
+                    Cada solicitud se comparte con un máximo de 3 empresas para mantener la calidad y competencia justa.
                 </p>
 
             </main>

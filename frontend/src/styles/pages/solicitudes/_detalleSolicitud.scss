@@ -348,7 +348,7 @@
   .detalle-solicitud {
 
     &__title {
-      font-size: 24px;
+      font-size: 26px;
     }
 
     &__section-title {
@@ -392,7 +392,11 @@
   .detalle-solicitud {
 
     &__title {
-      font-size: 20px;
+      font-size: 22px;
+    }
+
+    &__subtitle {
+      font-size: 14px;
     }
 
     &__route-title {
@@ -417,11 +421,6 @@
 
 @media (max-width: 300px) {
   .detalle-solicitud {
-
-    &__title {
-      font-size: 18px;
-    }
-
     &__route-title {
       font-size: 16px;
     }
