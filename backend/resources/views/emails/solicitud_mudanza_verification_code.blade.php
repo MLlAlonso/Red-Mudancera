@@ -126,7 +126,7 @@
                             <table width="100%" style="background:#EDEFF1;border-radius:10px;padding:16px;">
                                 <tr>
                                     <td style="font-size:13px;color:#5F6F7F;text-align:center;">
-                                        Si no solicitaste una esta solicitud, puedes ignorar este mensaje sin problema.
+                                        Si no realizaste esta solicitud, puedes ignorar este mensaje sin problema.
                                         <br>
                                         Utilizaremos <span style="color: #1C8F6A; font-weight: 600;">tus datos</span>
                                         únicamente para validar tu solicitud.

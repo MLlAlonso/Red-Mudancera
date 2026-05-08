@@ -136,14 +136,35 @@ export default function SeguroClient() {
                         window.location.href = "https://segurosdecarga.com/";
                     }}>
                         <div className="success-modal">
+                            <img src="/icons/verificado.png" alt="verificado" className="success-img" />
+
                             <h3>Solicitud enviada</h3>
-                            <p>{modalMsg}</p>
-                            <button onClick={() => {
-                                setModalMsg("");
-                                window.location.href = "https://segurosdecarga.com/";
-                            }}>
-                                Cerrar
+
+                            <div className="success-divider"></div>
+
+                            <p>
+                                {modalMsg || "Tu interés fue registrado correctamente."}
+                            </p>
+
+                            <p>
+                                Un especialista del área de seguros se pondrá en contacto contigo para darte más información sobre la protección para tu mudanza.
+                            </p>
+
+                            <section>
+                                <img src="/icons/web.png" alt="web" />
+                                <p>
+                                    Al continuar podrás visitar el sitio oficial de <span>Chubb Seguros México</span>
+                                </p>
+                            </section>
+
+                            <button onClick={() => { setModalMsg(""); window.location.href = "https://segurosdecarga.com/"; }}>
+                                Ir al sitio oficial de Chubb
                             </button>
+
+                            <p className="privacy-note">
+                                <img src="/icons/candado.png" />
+                                Tu información será utilizada únicamente para dar seguimiento a tu solicitud
+                            </p>
                         </div>
                     </BaseModal>
                 )}
@@ -240,7 +261,7 @@ export default function SeguroClient() {
                         <section>
                             <img src="/icons/web.png" alt="web" />
                             <p>
-                                Al continuar podrás visitar el sitio oficial de <span>Chubb Seguros México</span> 
+                                Al continuar podrás visitar el sitio oficial de <span>Chubb Seguros México</span>
                             </p>
                         </section>
 
@@ -249,7 +270,7 @@ export default function SeguroClient() {
                         </button>
 
                         <p className="privacy-note">
-                            <img src="/icons/candado.png"/>
+                            <img src="/icons/candado.png" />
                             Tu información será utilizada únicamente para dar seguimiento a tu solicitud
                         </p>
                     </div>
