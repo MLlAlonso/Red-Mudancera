@@ -4,13 +4,15 @@
 .notification-card {
   width: 100%;
   max-width: 650px;
-  background: variables.$cards;
-  padding: 25px;
-  border-radius: 12px;
+  background: variables.$background;
+  border: 2px solid variables.$cards;
+  padding: 20px;
+  border-radius: 15px;
   display: flex;
   flex-direction: column;
   gap: 20px;
   transition: all 0.25s ease;
+  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.12);
 
   &--leida {
     opacity: 0.45;
@@ -19,8 +21,26 @@
   /* Header */
   &__header {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: 12px;
+    gap: 20px;
+    padding: 10px;
+
+    img {
+      width: 50px;
+      height: 50px;
+    }
+
+    p {
+      font-size: 20px;
+      color: variables.$text-muted;
+    }
+  }
+
+  .notification-card__divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(variables.$text, 0.08);
   }
 
   &__icon {
@@ -53,7 +73,7 @@
     color: variables.$text;
     margin-top: auto;
 
-    > * {
+    >* {
       max-width: 300px;
       width: 100%;
     }

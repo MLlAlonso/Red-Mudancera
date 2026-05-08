@@ -144,7 +144,7 @@ export default function EmpresaNotificacionesPage() {
 
             <main className="empresa-notificaciones">
                 <div className="empresa-notificaciones__header">
-                    <h1 className="title">Actividad y avisos de la red</h1>
+                    <h1 className="title">Notificaciones</h1>
                     <p className="subtitle">Avisos importantes del sistema</p>
                 </div>
 
@@ -171,6 +171,14 @@ export default function EmpresaNotificacionesPage() {
                                     </button>
                                 )}
                             </div>
+
+                            <section className="empresa-notificaciones__consejo">
+                                <img src="/icons/foco.png" alt="" />
+                                <div >
+                                    <strong>Consejo</strong>
+                                    <p>Revisa tu bandeja de entrada y también tu carpeta de spam o promociones.</p>
+                                </div>
+                            </section>
 
                             <div className="empresa-notificaciones__grid">
                                 {noVistas.map((item) => (

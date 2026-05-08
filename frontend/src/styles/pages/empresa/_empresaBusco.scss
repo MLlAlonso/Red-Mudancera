@@ -135,8 +135,14 @@
 
   &__actions {
     display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
+    flex-direction: column;
+    gap: 0px;
+
+    .btn_error {
+      background-color: transparent;
+      color: $primary;
+      margin-top: -2px;
+    }
   }
 
   /* =========================

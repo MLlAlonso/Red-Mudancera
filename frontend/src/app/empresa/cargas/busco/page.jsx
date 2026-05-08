@@ -226,8 +226,8 @@ export default function BuscoServicioPage() {
             <Input label="Teléfono" name="telefono" value={form.telefono} onChange={handleChange} placeholder="Número de teléfono del contacto" />
 
             <div className="busco__actions">
-              <Button_error value="Cancelar" onClick={() => router.back()} />
               <Button_success value="Buscar carga" type="submit" />
+              <Button_error value="Cancelar" onClick={() => router.back()} />
             </div>
           </form>
         </div>

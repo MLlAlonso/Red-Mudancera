@@ -68,7 +68,6 @@
 
   &-body {
     display: flex;
-    gap: 10px;
     justify-content: space-between;
     margin-top: 10px;
 
@@ -88,6 +87,18 @@
       margin-bottom: 0px;
       margin-top: 0px;
     }
+
+  }
+  
+  .btn_error{
+    background-color: transparent;
+    color: black;
+    font-weight: 300;
+    margin-top: -2px;
+  }
+
+  .modal-body{
+    flex-direction: column;
   }
 
   &-actions {
@@ -113,6 +124,7 @@
     font-size: 14px;
     cursor: pointer;
     transition: all 0.2s ease;
+    margin: 10px 0px;
 
     display: flex;
     align-items: center;
@@ -136,7 +148,7 @@
     font-size: 14px;
     cursor: pointer;
     transition: all 0.2s ease;
-
+    margin: 10px 0px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -265,12 +277,101 @@
 .comprar-lead-modal {
   display: flex;
   flex-direction: column;
+  padding: 20px;
   gap: 1rem;
 
   h2 {
-    font-size: 24px;
+    font-size: 16px;
     font-weight: bold;
     text-align: center;
+    color: variables.$primary-hover;
+  }
+
+  .creditos-disp{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+    font-size: 14px;
+    border-radius: 5px;
+    padding: 5px;
+
+    img{
+      width: 20px;
+    }
+
+    strong{
+      color: variables.$success;
+      font-weight: bold;
+      font-size: 16px;
+    }
+  }
+
+  h3{
+    font-size: 30px;
+    font-weight: 600;
+    text-align: center;
+    color: variables.$title;
+
+    span{
+      color: variables.$success;
+    }
+  }
+
+  &__info{
+    text-align: center;
+    font-size: 14px;
+    color: variables.$text;
+  }
+
+  &__costo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: rgba(40, 146, 58, 0.1);
+    text-align: center;
+    font-weight: 600;
+    color: variables.$title;
+    gap: 5px;
+
+    strong{
+      color: variables.$success;
+      font-size: 25px;
+      margin: 0px 10px;
+    }
+
+    span{
+      color: variables.$success;
+    }
+
+    img{
+      width: 25px;
+      margin-right: 10px;
+    }
+  }
+
+  &__alert{
+    background-color: rgba(241, 164, 63, 0.1);
+    padding: 10px;
+    border-radius: 10px;
+    text-align: justify;
+    color: black;
+    font-weight: 400;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    img{
+      width: 30px;
+      margin-right: 10px;
+    }
   }
 
   &__exclusivo {
@@ -285,6 +386,11 @@
     p {
       font-size: 16px;
       line-height: 1.4;
+      color: variables.$text-muted;
+
+      strong{
+        color: variables.$primary;
+      }
     }
 
     .toggle {
@@ -294,7 +400,7 @@
       cursor: pointer;
       user-select: none;
       background-color: variables.$cards;
-      padding: 5px;
+      padding: 10px;
       border-radius: 10px;
 
       input {
@@ -359,28 +465,40 @@
     font-weight: 600;
   }
 
-  #comprar {
-    border: 1px solid transparent;
-    border-top: 2px solid variables.$primary;
-    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.4);
-    border-radius: 10px;
-    margin-top: 10px;
-    max-width: 372px;
-    margin-left: 2px;
+  &__total{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    color: variables.$text-muted;
+
+    strong {
+      color: variables.$success;
+      font-weight: 800;
+      font-size: 26px;
+
+      span{
+        font-size: 18px;
+        font-weight: 600;
+      }
+    }
   }
 
   &__actions {
     display: flex;
     flex-direction: column;
     margin: -0.8rem;
-    padding: 5px 8px;
+    padding: 0px 8px;
 
     button {
       width: 100%;
       padding: 8px;
+      background-color: variables.$success;
 
       &:hover {
         transform: scale(1.01);
+      background-color: variables.$success-hover;
       }
     }
 
@@ -451,6 +569,125 @@
   }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+.dropdown {
+  position: relative;
+  width: 100%;
+  max-width: 220px;
+}
+
+/* BOTÓN */
+.dropdown-trigger {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #d0d7e2;
+  background: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+  }
+}
+
+/* FLECHA */
+.arrow {
+  font-size: 12px;
+  transition: transform 0.2s ease;
+
+  &.open {
+    transform: rotate(180deg);
+  }
+}
+
+#reporteMensual{
+  display: flex;
+  flex-direction: row;
+  background-color: transparent;
+  gap: 10px;
+}
+
+/* MENU */
+.dropdown-menu {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  max-height: 220px;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  z-index: 50;
+  padding: 6px 0;
+
+  /* scroll bonito */
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5f5;
+    border-radius: 10px;
+  }
+}
+
+/* ITEMS */
+.dropdown-menu li {
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: rgba(37, 99, 235, 0.08);
+    color: #2563eb;
+  }
+
+  &:active {
+    background: rgba(37, 99, 235, 0.15);
+  }
+}
+
+.dropdown-menu li.active {
+  background: rgba(37, 99, 235, 0.12);
+  color: #2563eb;
+  font-weight: 600;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 /* ================================
    RESPONSIVE
 ================================ */
@@ -473,7 +710,6 @@
 
     &-body {
       flex-direction: row;
-      gap: 10px;
     }
   }
 

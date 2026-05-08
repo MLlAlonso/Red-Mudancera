@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Input from "@/components/common/Input";
 import BaseModal from "@/components/modals/BaseModal";
+import usePushNotifications from "@/hooks/usePushNotifications";
 import "@/styles/pages/empresa/_empresaConfiguracion.scss";
 
 export default function ConfiguracionPage() {
@@ -18,6 +19,7 @@ export default function ConfiguracionPage() {
     const ciudadesValidas = ciudades.filter(c => c && c.trim() !== "");
     const [diasRestantes, setDiasRestantes] = useState(null);
     const [ultimaModificacion, setUltimaModificacion] = useState(null);
+    const { subscribe } = usePushNotifications();
 
     const getCookie = (name) => {
         const match = document.cookie.match(
@@ -298,6 +300,12 @@ export default function ConfiguracionPage() {
                         </div>
                     </div>
                 )}
+
+                <div className="configuracion__block">
+                    <button onClick={subscribe}>
+                        Activar notificaciones
+                    </button>
+                </div>
             </main>
 
             {showConfirmModal && (

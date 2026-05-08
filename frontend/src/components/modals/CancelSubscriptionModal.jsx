@@ -14,12 +14,12 @@ export default function CancelSubscriptionModal({ open, onClose, onConfirm }) {
       </p>
 
       <div className="modal-actions">
-        <button className="btn-cancel" onClick={onClose}>
-          Volver
-        </button>
-
         <button className="btn-confirm" onClick={onConfirm}>
           Confirmar cancelación
+        </button>
+
+        <button className="btn-cancel" onClick={onClose}>
+          Volver
         </button>
       </div>
     </BaseModal>

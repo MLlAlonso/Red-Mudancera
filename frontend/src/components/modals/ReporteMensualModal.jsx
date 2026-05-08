@@ -76,7 +76,7 @@ export default function ReporteMensualModal({ open, onClose }) {
             <h2 className="modal-title">Reporte mensual</h2>
             <p className="modal-message"> Selecciona el mes y año del reporte que deseas generar. </p>
 
-            <div className="modal-input">
+            <div className="modal-input" id="reporteMensual">
 
               {/* MES */}
               <div className="dropdown">
@@ -147,8 +147,8 @@ export default function ReporteMensualModal({ open, onClose }) {
             )}
 
             <div className="modal-body">
-              <Button_error value="Cancelar" onClick={onClose} />
               <Button_success value="Generar reporte" onClick={fetchReporte} />
+              <Button_error value="Cancelar" onClick={onClose} />
             </div>
           </>
         ) : (

@@ -1,3 +1,5 @@
+@use "../../utils/variables";
+
 .empresa-notificaciones {
   padding: 1.5rem;
   min-height: 100dvh;
@@ -34,6 +36,35 @@
 
     &--vistas {
       color: #888;
+    }
+  }
+
+  &__consejo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 1rem;
+    background: variables.$cards;
+    border-radius: 10px;
+    padding: 20px;
+    color: variables.$text-muted;
+
+    img{
+      width: 40px;
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+
+      strong {
+        color: variables.$success;
+        font-weigth: 800;
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
     }
   }
 

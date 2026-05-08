@@ -86,12 +86,12 @@ export default function FinalizarServicioGananciaModal({
         />
 
         <div className="modal-body">
-          <Button_error value="Cancelar" onClick={onClose} />
-
           <Button_success
             value={loading ? "Guardando..." : "Finalizar servicio"}
             onClick={handleSubmit}
           />
+
+          <Button_error value="Cancelar" onClick={onClose} />
         </div>
       </div>
     </div>

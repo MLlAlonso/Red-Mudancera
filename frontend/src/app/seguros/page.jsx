@@ -112,6 +112,12 @@ export default function SegurosPage() {
                 </div>
             </section>
 
+            <section className="ctaBottom">
+                <Suspense fallback={<div></div>}>
+                    <SeguroClient />
+                </Suspense>
+            </section>
+
             <Footer />
         </div>
     );

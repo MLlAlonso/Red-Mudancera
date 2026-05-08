@@ -255,7 +255,7 @@
 
                             <div style="text-align:center;font-size:14px;">
                                 <p>
-                                    Algún agente se pondrá en contacto con usted pronto.
+                                    Algún agente se pondrá en contacto contigo pronto.
                                 </p>
 
                                 <p style="color:#1C8F6A;font-weight:bold;margin-top:16px;">

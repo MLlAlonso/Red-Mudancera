@@ -46,7 +46,14 @@
 
   &__actions {
     display: flex;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 0px;
+
+    .btn_error{
+      background-color: transparent;
+      color: $primary;
+      margin-top: -2px;
+    }
   }
 
   /* =========================

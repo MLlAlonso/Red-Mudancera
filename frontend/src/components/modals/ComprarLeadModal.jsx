@@ -128,20 +128,33 @@ export default function ComprarLeadModal({
 
                 {tokens !== null && tokens > 0 && (
                     <>
-                        <p>
+                        <p className="creditos-disp">
+                            <img src="/icons/credito.png" alt="" />
                             Tus créditos disponibles: <strong>{tokens}</strong>
                         </p>
+                        
+                        <h3>Este cliente puede ser tuyo <span>ahora</span></h3>
 
-                        <p>
-                            Precio del contacto: <strong>{tipoServicio === "local" ? 6 : 15} créditos</strong>
+                        <p className="comprar-lead-modal__info">
+                            Accede a sus datos de contacto y convierte esta oportunidad en una mudanza
+                        </p>
+
+                        <p className="comprar-lead-modal__costo">
+                            <img src="/icons/token-verde.png" alt="costo total" />
+                            Costo: <strong>{tipoServicio === "local" ? 6 : 15} </strong> <span>créditos</span>
+                        </p>
+
+                        <p className="comprar-lead-modal__alert">
+                            <img src="/icons/reloj.png" alt="reloj"/>
+                            Puede ser comprado por otras empresas en cualquier momento
                         </p>
 
                         {esPrimeraCompra && (
                             <div className="comprar-lead-modal__exclusivo">
                                 <p>
-                                    Eres la primera empresa interesada.
-                                    <br />
-                                    Compra este contacto en modo exclusivo.
+                                    <strong>Compra en modo exclusivo</strong>
+                                    <br/>
+                                    Evita que otras empresas lo compren
                                 </p>
 
                                 <label className="toggle">
@@ -151,15 +164,14 @@ export default function ComprarLeadModal({
                                         <span className="toggle__label">
                                             Adquirir por <strong>{tipoServicio === "local" ? 30 : 35} créditos</strong>
                                         </span>
-                                        <p>Evita que otras empresas lo compren</p>
                                     </div>
                                 </label>
                             </div>
                         )}
 
-                        <p>
+                        <p className="comprar-lead-modal__total">
                             Total a pagar:{" "}
-                            <strong>{tokensNecesarios} créditos</strong>
+                            <strong>{tokensNecesarios} <span>créditos</span> </strong>
                         </p>
 
                         {!puedeComprar && (
@@ -178,7 +190,7 @@ export default function ComprarLeadModal({
                             {puedeComprar ? (
                                 <Button_cta
                                     value={
-                                        loading ? "Procesando..." : "Adquirir contacto"
+                                        loading ? "Procesando..." : "Obtener contacto"
                                     }
                                     onClick={handleComprar}
                                 />

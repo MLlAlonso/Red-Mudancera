@@ -7,16 +7,14 @@ import BaseModal from "@/components/modals/BaseModal";
 export default function SeguroClient() {
     const searchParams = useSearchParams();
     const id = searchParams.get("id");
-
     const API = process.env.NEXT_PUBLIC_API_URL;
-
     const [solicitud, setSolicitud] = useState(null);
     const [modalMsg, setModalMsg] = useState("");
     const [modalError, setModalError] = useState("");
     const [loading, setLoading] = useState(false);
     const [sent, setSent] = useState(false);
-
     const [showForm, setShowForm] = useState(false);
+    const PREVIEW_MODAL = true;
 
     const [form, setForm] = useState({
         nombre: "",
@@ -116,7 +114,7 @@ export default function SeguroClient() {
        RENDER
     ========================= */
 
-    // 🔥 FLUJO NORMAL
+    // FLUJO NORMAL
     if (id) {
         return (
             <>
@@ -133,11 +131,19 @@ export default function SeguroClient() {
 
                 {/* MODALES */}
                 {modalMsg && (
-                    <BaseModal onClose={() => setModalMsg("")}>
+                    <BaseModal onClose={() => {
+                        setModalMsg("");
+                        window.location.href = "https://segurosdecarga.com/";
+                    }}>
                         <div className="success-modal">
                             <h3>Solicitud enviada</h3>
                             <p>{modalMsg}</p>
-                            <button onClick={() => setModalMsg("")}>Cerrar</button>
+                            <button onClick={() => {
+                                setModalMsg("");
+                                window.location.href = "https://segurosdecarga.com/";
+                            }}>
+                                Cerrar
+                            </button>
                         </div>
                     </BaseModal>
                 )}
@@ -155,7 +161,7 @@ export default function SeguroClient() {
         );
     }
 
-    // 🔥 USUARIO EXTERNO
+    // USUARIO EXTERNO
     return (
         <>
             {!showForm && (
@@ -214,12 +220,38 @@ export default function SeguroClient() {
             )}
 
             {/* MODALES */}
-            {modalMsg && (
-                <BaseModal onClose={() => setModalMsg("")}>
+            {(modalMsg) && (
+                <BaseModal onClose={() => { setModalMsg(""); window.location.href = "https://segurosdecarga.com/"; }}>
                     <div className="success-modal">
+                        <img src="/icons/verificado.png" alt="verificado" className="success-img" />
+
                         <h3>Solicitud enviada</h3>
-                        <p>{modalMsg}</p>
-                        <button onClick={() => setModalMsg("")}>Cerrar</button>
+
+                        <div className="success-divider"></div>
+
+                        <p>
+                            {modalMsg || "Tu interés fue registrado correctamente."}
+                        </p>
+
+                        <p>
+                            Un especialista del área de seguros se pondrá en contacto contigo para darte más información sobre la protección para tu mudanza.
+                        </p>
+
+                        <section>
+                            <img src="/icons/web.png" alt="web" />
+                            <p>
+                                Al continuar podrás visitar el sitio oficial de <span>Chubb Seguros México</span> 
+                            </p>
+                        </section>
+
+                        <button onClick={() => { setModalMsg(""); window.location.href = "https://segurosdecarga.com/"; }}>
+                            Ir al sitio oficial de Chubb
+                        </button>
+
+                        <p className="privacy-note">
+                            <img src="/icons/candado.png"/>
+                            Tu información será utilizada únicamente para dar seguimiento a tu solicitud
+                        </p>
                     </div>
                 </BaseModal>
             )}

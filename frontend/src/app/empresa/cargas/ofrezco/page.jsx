@@ -430,8 +430,8 @@ export default function OfrezcoServicioPage() {
             </div>
 
             <div className="ofrezco__actions">
-              <Button_error value="Cancelar" onClick={() => router.back()} />
               <Button_success value="Ofrecer carga" type="submit" />
+              <Button_error value="Cancelar" onClick={() => router.back()} />
             </div>
           </form>
         </div>

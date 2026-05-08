@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Modules\Notificacion\Controllers\NotificacionController;
+use App\Modules\Notificacion\Controllers\PushSubscriptionController;
+use App\Modules\Notificacion\Controllers\TestPushController;
 
 Route::middleware('auth:empresa')->prefix('empresa')->group(function () {
     Route::get('/notificaciones', [NotificacionController::class, 'indexEmpresa']);
@@ -21,3 +23,6 @@ Route::middleware('auth:usuario')->prefix('usuario')->group(function () {
     Route::delete('/notificaciones/{id}', [NotificacionController::class, 'eliminarUsuario'])
         ->whereNumber('id');
 });
+
+Route::middleware('auth:empresa')->post( '/push-subscriptions', [PushSubscriptionController::class, 'store'] );
+Route::middleware('auth:empresa')->post( '/test-push', [TestPushController::class, 'send'] );

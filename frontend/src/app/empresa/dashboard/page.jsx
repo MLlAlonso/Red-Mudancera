@@ -237,10 +237,8 @@ export default function EmpresaDashboard() {
                       origen={item.origen}
                       destino={item.destino}
                       volumen={item.volumen ? `${item.volumen} m³` : "No especificado"}
-
                       tipoCarga={item.tipoCarga}
                       tipoVehiculo={item.tipoVehiculo}
-
                       empresa={item.empresa}
                       telefono={item.telefono}
                       fecha={new Date(item.created_at).toLocaleDateString()}
@@ -266,7 +264,6 @@ export default function EmpresaDashboard() {
                       telefono={item.telefono}
                       nombreCliente={item.nombre_cliente}
                       tipoVivienda={item.tipo_vivienda}
-
                       empresaNombre={empresa?.empresa}
                       empresaId={empresa?.id}
                     />

@@ -48,8 +48,6 @@ export default function ShareClienteReviewLinkModal({
 
       <div className="modal-body">
 
-        <Button_error value="Cerrar" onClick={onClose} />
-
         <button className="btn-outline" onClick={copiar} >
           {copied ? "Copiado ✓" : "Copiar link"}
         </button>
@@ -59,6 +57,7 @@ export default function ShareClienteReviewLinkModal({
           Compartir
         </button>
 
+        <Button_error value="Cerrar" onClick={onClose} />
       </div>
     </BaseModal>
   );

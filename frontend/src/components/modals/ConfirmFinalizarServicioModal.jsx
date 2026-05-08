@@ -22,8 +22,8 @@ export default function ConfirmFinalizarServicioModal({
         </p>
 
         <div className="modal-body">
-          <Button_error value="Cancelar" onClick={onCancel} />
           <Button_success value="Aceptar" onClick={onConfirm} />
+          <Button_error value="Cancelar" onClick={onCancel} />
         </div>
       </div>
     </div>

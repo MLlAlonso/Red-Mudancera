@@ -14,8 +14,8 @@ export default function ConfirmDeleteNotificationModal({ onCancel, onConfirm }) 
       </p>
 
       <div className="modal-body">
-        <Button_error value="Cancelar" onClick={onCancel} />
         <Button_success value="Eliminar" onClick={onConfirm} />
+        <Button_error value="Cancelar" onClick={onCancel} />
       </div>
     </BaseModal>
   );
