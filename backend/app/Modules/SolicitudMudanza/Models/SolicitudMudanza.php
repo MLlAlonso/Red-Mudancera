@@ -34,7 +34,8 @@ class SolicitudMudanza extends Model
         'estado',
         'referido_por_empresa_id',
         'ip_address',
-        'compras_count'
+        'compras_count',
+        'partner_referral_id',
     ];
 
     protected $casts = [
@@ -54,6 +55,14 @@ class SolicitudMudanza extends Model
         return $this->belongsTo(
             \App\Modules\Empresa\Models\Empresa::class,
             'referido_por_empresa_id'
+        );
+    }
+
+    public function partnerReferral()
+    {
+        return $this->belongsTo(
+            \App\Modules\PartnerReferral\Models\PartnerReferral::class,
+            'partner_referral_id'
         );
     }
 }

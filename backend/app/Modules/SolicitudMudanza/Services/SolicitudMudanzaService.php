@@ -44,6 +44,8 @@ class SolicitudMudanzaService
                 : 'foranea';
             $fechaLimite = $this->calcularFechaLimite($data['fecha_recoleccion']);
             $empresaReferenteId = null;
+            $partnerReferralId = null;
+
             $slug = $data['empresa_referente_slug'] ?? null;
 
             /*
@@ -65,24 +67,42 @@ class SolicitudMudanzaService
             ]);
 
             if ($slug) {
-                $empresa = \App\Modules\Empresa\Models\Empresa::all()
-                    ->first(function ($empresa) use ($slug) {
-                        return \Illuminate\Support\Str::slug($empresa->empresa) === $slug;
-                    });
 
-                if ($empresa) {
-                    $empresaReferenteId = $empresa->id;
-                }
-            }
+                /*
+    |--------------------------------------------------------------------------
+    | Buscar partner
+    |--------------------------------------------------------------------------
+    */
 
-            if (!empty($data['empresa_referente_slug'])) {
-                $slug = strtolower($data['empresa_referente_slug']);
-                $empresa = \App\Modules\Empresa\Models\Empresa::all()
-                    ->first(function ($empresa) use ($slug) {
-                        return \Illuminate\Support\Str::slug($empresa->empresa) === $slug;
-                    });
-                if ($empresa) {
-                    $empresaReferenteId = $empresa->id;
+                $partner = \App\Modules\PartnerReferral\Models\PartnerReferral::where(
+                    'slug',
+                    $slug
+                )
+                    ->where('activo', true)
+                    ->first();
+
+                if ($partner) {
+
+                    $partnerReferralId = $partner->id;
+                } else {
+
+                    /*
+        |--------------------------------------------------------------------------
+        | Compatibilidad con sistema viejo
+        |--------------------------------------------------------------------------
+        */
+
+                    $empresa = \App\Modules\Empresa\Models\Empresa::all()
+                        ->first(function ($empresa) use ($slug) {
+
+                            return \Illuminate\Support\Str::slug(
+                                $empresa->empresa
+                            ) === $slug;
+                        });
+
+                    if ($empresa) {
+                        $empresaReferenteId = $empresa->id;
+                    }
                 }
             }
 
@@ -113,6 +133,7 @@ class SolicitudMudanzaService
                 'vivienda_destino' => $data['vivienda_destino'],
                 'referido_por_empresa_id' => $empresaReferenteId,
                 'ip_address' => request()->ip(),
+                'partner_referral_id' => $partnerReferralId,
             ]);
 
             Mail::to($solicitud->email)

@@ -66,7 +66,7 @@ export default function ComprarCreditos() {
                     <CreditPackageCard
                         title="Impulso"
                         credits={100}
-                        price="790 mxn"
+                        price="890 mxn"
                         description="Perfecto para empresas que comienzan a generar oportunidades."
                         onBuy={() => comprar("impulso")}
                     />
@@ -74,7 +74,7 @@ export default function ComprarCreditos() {
                     <CreditPackageCard
                         title="Profesional"
                         credits={250}
-                        price="1,890 mxn"
+                        price="2,190 mxn"
                         description="La opción más popular para empresas con flujo constante."
                         badge="Más popular"
                         onBuy={() => comprar("profesional")}
@@ -83,7 +83,7 @@ export default function ComprarCreditos() {
                     <CreditPackageCard
                         title="Crecimiento"
                         credits={600}
-                        price="4,290 mxn"
+                        price="4,990 mxn"
                         description="Para empresas que quieren maximizar oportunidades."
                         onBuy={() => comprar("crecimiento")}
                     />

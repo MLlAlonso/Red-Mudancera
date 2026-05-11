@@ -2,11 +2,11 @@
 
 return [
     'impulso' => [
-        'price_id' => 'price_1TMuWIGmFiA80OHauQxkZ0Qp',
+        'price_id' => 'price_1TVbMfGmFiA80OHaHjOg1dIA',
         'creditos' => 100,
     ],
     'profesional' => [
-        'price_id' => 'price_1TMuWoGmFiA80OHakchqY0ll',
+        'price_id' => 'price_1TVbMmGmFiA80OHaODzivAhV',
         'creditos' => 250,
     ],
     'crecimiento' => [

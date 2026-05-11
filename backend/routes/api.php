@@ -80,3 +80,10 @@ Route::post('/stripe/webhook', [StripeController::class, 'webhook']);
 
 Route::middleware('auth:sanctum')->post( '/stripe/creditos/checkout', [StripeCreditosController::class, 'checkout'] );
 Route::middleware('auth:sanctum')->post('/stripe/cancel', [StripeController::class, 'cancel']);
+
+/*
+|--------------------------------------------------------------------------
+| Partner Referrals
+|--------------------------------------------------------------------------
+*/
+require base_path('app/Modules/PartnerReferral/routes.php');
