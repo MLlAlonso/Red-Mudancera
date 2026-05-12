@@ -99,7 +99,7 @@ export default function LoadingOverlay({ show }) {
                 </div>
 
                 <p className="loading-message">
-                    Publicando ...
+                    Enviando información ...
                 </p>
             </div>
         </div>

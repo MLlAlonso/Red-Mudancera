@@ -2,6 +2,7 @@
 
 namespace App\Modules\PartnerReferral\Controllers;
 
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Modules\PartnerReferral\Models\PartnerReferral;
@@ -21,21 +22,25 @@ class PartnerReferralController extends Controller
         | Mes seleccionado
         |--------------------------------------------------------------------------
         */
+        $month = (int) $request->query(
+            'month',
+            now()->month
+        );
 
-        $month = $request->query('month', now()->month);
-
-        $year = $request->query('year', now()->year);
+        $year = (int) $request->query(
+            'year',
+            now()->year
+        );
 
         /*
         |--------------------------------------------------------------------------
         | Solicitudes generadas
         |--------------------------------------------------------------------------
         */
-
         $solicitudesIds = SolicitudMudanza::where(
-                'partner_referral_id',
-                $partner->id
-            )
+            'partner_referral_id',
+            $partner->id
+        )
             ->whereMonth('created_at', $month)
             ->whereYear('created_at', $year)
             ->pluck('id');
@@ -47,11 +52,10 @@ class PartnerReferralController extends Controller
         | Compras
         |--------------------------------------------------------------------------
         */
-
         $compras = LeadCompra::whereIn(
-                'solicitud_id',
-                $solicitudesIds
-            )
+            'solicitud_id',
+            $solicitudesIds
+        )
             ->whereMonth('created_at', $month)
             ->whereYear('created_at', $year);
 
@@ -67,12 +71,42 @@ class PartnerReferralController extends Controller
             ->where('exclusivo', false)
             ->count();
 
-        $creditosGenerados = (clone $compras)
-            ->sum('tokens_pagados');
+        $creditosGenerados = (clone $compras)->sum('tokens_pagados');
+        $conversionRate = $solicitudesGeneradas > 0
+            ? round(
+                ($solicitudesVendidas / $solicitudesGeneradas) * 100,
+                1
+            )
+            : 0;
+
+        $averageTokens = $solicitudesVendidas > 0
+            ? round(
+                $creditosGenerados / $solicitudesVendidas,
+                1
+            )
+            : 0;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Últimas solicitudes
+        |--------------------------------------------------------------------------
+        */
+        $latestRequests = SolicitudMudanza::where(
+            'partner_referral_id',
+            $partner->id
+        )
+            ->latest()
+            ->take(5)
+            ->get([
+                'id',
+                'origen',
+                'destino',
+                'tipo_servicio',
+                'created_at'
+            ]);
 
         return response()->json([
             'data' => [
-
                 'partner' => [
                     'nombre' => $partner->nombre,
                     'slug' => $partner->slug,
@@ -85,23 +119,105 @@ class PartnerReferralController extends Controller
                 ],
 
                 'metricas' => [
+                    'solicitudes_generadas' => $solicitudesGeneradas,
+                    'solicitudes_vendidas' => $solicitudesVendidas,
+                    'ventas_exclusivas' => $ventasExclusivas,
+                    'ventas_normales' => $ventasNormales,
+                    'creditos_generados' => $creditosGenerados,
+                    'conversion_rate' => $conversionRate,
+                    'average_tokens' => $averageTokens,
+                ],
 
-                    'solicitudes_generadas' =>
-                        $solicitudesGeneradas,
-
-                    'solicitudes_vendidas' =>
-                        $solicitudesVendidas,
-
-                    'ventas_exclusivas' =>
-                        $ventasExclusivas,
-
-                    'ventas_normales' =>
-                        $ventasNormales,
-
-                    'creditos_generados' =>
-                        $creditosGenerados,
-                ]
+                'latest_requests' => $latestRequests,
             ]
         ]);
+    }
+
+    public function exportPdf(Request $request, $slug)
+    {
+        $partner = PartnerReferral::where('slug', $slug)
+            ->where('activo', true)
+            ->firstOrFail();
+
+        $month = (int) $request->query(
+            'month',
+            now()->month
+        );
+
+        $year = (int) $request->query(
+            'year',
+            now()->year
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Solicitudes
+        |--------------------------------------------------------------------------
+        */
+        $solicitudesIds = SolicitudMudanza::where(
+            'partner_referral_id',
+            $partner->id
+        )
+            ->whereMonth('created_at', $month)
+            ->whereYear('created_at', $year)
+            ->pluck('id');
+        $solicitudesGeneradas = $solicitudesIds->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Compras
+        |--------------------------------------------------------------------------
+        */
+
+        $compras = LeadCompra::whereIn(
+            'solicitud_id',
+            $solicitudesIds
+        )
+            ->whereMonth('created_at', $month)
+            ->whereYear('created_at', $year);
+
+        $solicitudesVendidas = $compras
+            ->distinct('solicitud_id')
+            ->count();
+
+        $creditosGenerados = (clone $compras)
+            ->sum('tokens_pagados');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Mes nombre
+        |--------------------------------------------------------------------------
+        */
+        Carbon::setLocale('es');
+        $monthName = Carbon::create()
+            ->month((int) $month)
+            ->translatedFormat('F');
+
+        /*
+        |--------------------------------------------------------------------------
+        | PDF
+        |--------------------------------------------------------------------------
+        */
+        $pdf = app('dompdf.wrapper');
+
+        $pdf->loadView('pdf.partner-dashboard', [
+            'partner' => $partner,
+            'month' => $month,
+            'year' => $year,
+            'monthName' => ucfirst($monthName),
+            'solicitudesGeneradas' => $solicitudesGeneradas,
+            'solicitudesVendidas' => $solicitudesVendidas,
+            'creditosGenerados' => $creditosGenerados,
+        ]);
+
+        return $pdf->download(
+            'partner_' .
+                $partner->slug .
+                '_' .
+                str_pad($month, 2, '0', STR_PAD_LEFT) .
+                '_' .
+                $year .
+                '.pdf'
+        );
     }
 }

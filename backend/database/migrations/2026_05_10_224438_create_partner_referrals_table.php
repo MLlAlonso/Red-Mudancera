@@ -11,21 +11,11 @@ return new class extends Migration
         Schema::create('partner_referrals', function (Blueprint $table) {
 
             $table->id();
-
             $table->string('nombre');
-
-            $table->string('slug')
-                ->unique();
-
-            $table->string('logo')
-                ->nullable();
-
-            $table->string('access_token')
-                ->unique();
-
-            $table->boolean('activo')
-                ->default(true);
-
+            $table->string('slug') ->unique();
+            $table->string('logo') ->nullable();
+            $table->string('access_token') ->unique();
+            $table->boolean('activo') ->default(true);
             $table->timestamps();
         });
     }

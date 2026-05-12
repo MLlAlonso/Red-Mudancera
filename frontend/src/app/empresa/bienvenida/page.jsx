@@ -74,8 +74,8 @@ export default function BienvenidaPage() {
                     </p>
 
                     <div className="hero__actions">
-                        <button className="btn-primary" onClick={() => window.location.href = "https://app.mudanzafacil.com.mx/empresa/register"}>
-                            Crear cuenta
+                        <button className="btn-primary" onClick={() => window.location.href = "https://app.mudanzafacil.com.mx/empresa/dashboard"}>
+                            Comienza ahora
                         </button>
                     </div>
                 </div>
@@ -245,7 +245,7 @@ export default function BienvenidaPage() {
                 <h2>Empieza a generar oportunidades hoy</h2>
                 <p>No pierdas más viajes vacíos.</p>
 
-                <button className="btn-primary" onClick={() => window.location.href = "https://app.mudanzafacil.com.mx/empresa/register"}>
+                <button className="btn-primary" onClick={() => window.location.href = "https://app.mudanzafacil.com.mx/empresa/dashboard"}>
                     Comienza ahora
                 </button>
             </section>

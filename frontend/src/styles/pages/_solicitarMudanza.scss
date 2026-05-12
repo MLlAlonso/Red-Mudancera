@@ -148,6 +148,18 @@
         }
     }
 
+    .form-info{
+        color: $text-muted;
+        text-align: justify;
+        font-size: 14px;
+
+        a{
+            color: $primary;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    }
+
     /* =========================
      MODAL Validación
      ========================= */

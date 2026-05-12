@@ -72,11 +72,11 @@ export default function EmpresaConfirmacion() {
         <main className="empresa-confirmacion">
           <div className="empresa-confirmacion__card">
             <h1 className="empresa-confirmacion__title">
-              🎉 ¡Cuenta verificada!
+              🎉 ¡Bienvenido!
             </h1>
 
             <p className="empresa-confirmacion__subtitle">
-              Tu empresa ya está activa.
+              Tu cuenta fue creada correctamente, comencemos a explorar.
             </p>
 
             <div className="empresa-confirmacion__tokens-box">
@@ -85,7 +85,7 @@ export default function EmpresaConfirmacion() {
               </h2>
 
               <p className="empresa-confirmacion__tokens-text">
-                Úsalos para desbloquear <strong>Contactos de Clientes</strong>
+                Úsalos para comprar <strong>Contactos de Clientes</strong>
               </p>
 
               <p className="empresa-confirmacion__warning">
@@ -95,7 +95,7 @@ export default function EmpresaConfirmacion() {
 
             <Button_cta
               value="Iniciemos tu experiencia"
-              onClick={() => router.push("/empresa/dashboard")}
+              onClick={() => router.push("/empresa/bienvenida")}
             />
           </div>
         </main>

@@ -16,6 +16,7 @@ export default function ComprarLeadModal({
     const [loading, setLoading] = useState(false);
     const [exclusivo, setExclusivo] = useState(false);
     const [error, setError] = useState("");
+    const [plan, setPlan] = useState(null);
     const router = useRouter();
 
     const getCookie = (name) => {
@@ -49,6 +50,7 @@ export default function ComprarLeadModal({
                 if (empresaRes.ok) {
                     const empresaData = await empresaRes.json();
                     setTokens(empresaData.tokens ?? 0);
+                    setPlan(empresaData.plan ?? "free");
                 }
 
                 // Obtener solicitud
@@ -132,7 +134,7 @@ export default function ComprarLeadModal({
                             <img src="/icons/credito.png" alt="" />
                             Tus créditos disponibles: <strong>{tokens}</strong>
                         </p>
-                        
+
                         <h3>Este cliente puede ser tuyo <span>ahora</span></h3>
 
                         <p className="comprar-lead-modal__info">
@@ -145,7 +147,7 @@ export default function ComprarLeadModal({
                         </p>
 
                         <p className="comprar-lead-modal__alert">
-                            <img src="/icons/reloj.png" alt="reloj"/>
+                            <img src="/icons/reloj.png" alt="reloj" />
                             Puede ser comprado por otras empresas en cualquier momento
                         </p>
 
@@ -153,7 +155,7 @@ export default function ComprarLeadModal({
                             <div className="comprar-lead-modal__exclusivo">
                                 <p>
                                     <strong>Compra en modo exclusivo</strong>
-                                    <br/>
+                                    <br />
                                     Evita que otras empresas lo compren
                                 </p>
 
@@ -198,7 +200,7 @@ export default function ComprarLeadModal({
                                 <Button_cta
                                     value="Comprar créditos"
                                     onClick={() =>
-                                        router.push("/empresa/dashboard")
+                                        router.push("/empresa/creditos")
                                     }
                                 />
                             )}
@@ -226,10 +228,13 @@ export default function ComprarLeadModal({
                         <div className="comprar-lead-modal__actions">
                             <Button_cta
                                 value="Comprar créditos"
-                                onClick={() =>
-                                (window.location.href =
-                                    "/empresa/dashboard")
-                                }
+                                onClick={() => {
+                                    if (plan === "free") {
+                                        router.push("/empresa/planes");
+                                        return;
+                                    }
+                                    router.push("/empresa/creditos");
+                                }}
                             />
                         </div>
                     </>

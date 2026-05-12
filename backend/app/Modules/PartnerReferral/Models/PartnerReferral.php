@@ -1,13 +1,11 @@
 <?php
 
 namespace App\Modules\PartnerReferral\Models;
-
 use Illuminate\Database\Eloquent\Model;
 
 class PartnerReferral extends Model
 {
     protected $table = 'partner_referrals';
-
     protected $fillable = [
         'nombre',
         'slug',

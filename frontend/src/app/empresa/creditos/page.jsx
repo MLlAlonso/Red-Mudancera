@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CreditPackageCard from "@/components/cards/CreditPackageCard";
 import CompraCreditosModal from "@/components/modals/CompraCreditosModal";
 import MessageModal from "@/components/modals/MessageModal";
+import PlanRequiredModal from "@/components/modals/PlanRequiredModal";
 
 import "@/styles/pages/empresa/_empresaCreditos.scss";
 
@@ -16,10 +17,18 @@ export default function ComprarCreditos() {
     const [creditos, setCreditos] = useState(null);
     const [errorModal, setErrorModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const [plan, setPlan] = useState(null);
+    const [planModal, setPlanModal] = useState(false);
 
-    const comprar = async (plan) => {
+    const comprar = async (packagePlan) => {
         const token = document.cookie.match(/token_empresa=([^;]+)/)?.[1];
-        setLoading(plan);
+
+        if (plan === "free") {
+            setPlanModal(true);
+            return;
+        }
+
+        setLoading(packagePlan);
 
         try {
             const res = await fetch(
@@ -30,7 +39,7 @@ export default function ComprarCreditos() {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`
                     },
-                    body: JSON.stringify({ plan })
+                    body: JSON.stringify({ plan: packagePlan })
                 }
             );
 
@@ -48,6 +57,37 @@ export default function ComprarCreditos() {
         }
         setLoading(null);
     };
+
+    useEffect(() => {
+        const fetchEmpresa = async () => {
+            try {
+                const token = document.cookie.match(/token_empresa=([^;]+)/)?.[1];
+
+                if (!token) return;
+
+                const res = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/empresa/me`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            Accept: "application/json",
+                        },
+                    }
+                );
+
+                if (!res.ok) return;
+
+                const data = await res.json();
+
+                setPlan(data.plan ?? "free");
+
+            } catch (error) {
+                console.error("Error obteniendo plan", error);
+            }
+        };
+
+        fetchEmpresa();
+    }, []);
 
     return (
         <>
@@ -111,6 +151,12 @@ export default function ComprarCreditos() {
                     title="Error en la compra"
                     message={errorMessage}
                     onClose={() => setErrorModal(false)}
+                />
+            )}
+
+            {planModal && (
+                <PlanRequiredModal
+                    onClose={() => setPlanModal(false)}
                 />
             )}
         </>

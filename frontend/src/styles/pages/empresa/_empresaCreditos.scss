@@ -97,6 +97,47 @@
   }
 }
 
+.plan-required-modal{
+  padding: 10px;
+  text-align: center;
+
+  h2{
+    color: variables.$title;
+  }
+
+  .plan-required-modal__text{
+    text-align: justify;
+    margin-top: 15px;
+    font-size: 16px;
+  }
+
+  .plan-required-modal__legend{
+    margin-top: 20px;
+    font-size: 14px;
+
+    img{
+      width: 22px;
+      height: 22px;
+      margin-right: 8px;
+    }
+  }
+
+  span{
+    color: variables.$success;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  #plan-required-modal__later-btn{
+    background: transparent;
+    border: none;
+    color: variables.$text-muted;
+    width: 100%;
+    padding: 0px;
+    margin-top: 10px;
+  }
+}
+
 @media (max-width: 480px) {
   .creditos {
 

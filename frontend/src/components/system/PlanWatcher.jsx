@@ -104,7 +104,7 @@ export default function PlanWatcher() {
         </>
       ) : (
         <>
-          <h2 className="modal-title">Activa tu cuenta para participar</h2>
+          <h2 className="modal-title">Verfica tu cuenta para continuar</h2>
 
           <p className="modal-message">
             {planModal.message}
@@ -115,14 +115,14 @@ export default function PlanWatcher() {
               className="btn-outline"
               onClick={() => setPlanModal(null)}
             >
-              Cancelar
+              Más tarde
             </button>
 
             <button
               className="btn-solid"
               onClick={() => (window.location.href = "/empresa/planes")}
             >
-              Ver planes
+              Verificar cuenta
             </button>
           </div>
         </>

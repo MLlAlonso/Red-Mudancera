@@ -136,8 +136,7 @@ class SolicitudMudanzaService
                 'partner_referral_id' => $partnerReferralId,
             ]);
 
-            Mail::to($solicitud->email)
-                ->queue(new SolicitudMudanzaVerificationCode($codigo));
+            Mail::to($solicitud->email) ->queue(new SolicitudMudanzaVerificationCode($codigo));
             return $solicitud;
         });
     }
@@ -175,7 +174,6 @@ class SolicitudMudanzaService
         }
 
         $solicitud->inventario = $this->limpiarInventario($solicitud->inventario);
-
         $solicitud->update([
             'telefono_verificado' => true,
             'estado' => 'activo',
@@ -184,8 +182,7 @@ class SolicitudMudanzaService
             'inventario' => $solicitud->inventario
         ]);
 
-        Mail::to($solicitud->email)
-            ->later(now()->addSeconds(70), new SolicitudMudanzaResumen($solicitud));
+        Mail::to($solicitud->email) ->later(now()->addSeconds(70), new SolicitudMudanzaResumen($solicitud));
 
         return $solicitud;
     }

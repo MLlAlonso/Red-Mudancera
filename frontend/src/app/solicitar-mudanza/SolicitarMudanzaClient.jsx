@@ -397,6 +397,10 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
                     </div>
 
                     <Button_success value="Solicitar Mudanza" type="submit" />
+
+                    <p className="form-info">
+                        Al enviar esta solicitud, aceptas nuestros <a href="/reglas" target="_blank" rel="noopener noreferrer">términos y condiciones</a>. Tus datos serán utilizados únicamente para gestionar tu solicitud de mudanza.
+                    </p>
                 </form>
             </div>
 

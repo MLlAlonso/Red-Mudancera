@@ -9,7 +9,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('solicitudes_mudanza', function (Blueprint $table) {
-
             $table->foreignId('partner_referral_id')
                 ->nullable()
                 ->after('referido_por_empresa_id')
@@ -22,7 +21,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('solicitudes_mudanza', function (Blueprint $table) {
-
             $table->dropForeign(['partner_referral_id']);
             $table->dropColumn('partner_referral_id');
 
