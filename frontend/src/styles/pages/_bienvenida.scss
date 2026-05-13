@@ -7,11 +7,17 @@
 
     section {
         padding: 80px 20px;
-        max-width: 1400px;
         margin: 0 auto;
         opacity: 0;
         transform: translateY(40px);
         animation: sectionFade 0.8s ease forwards;
+    }
+
+    .tutorial,
+    .screenshots,
+    .pagos,
+    .cta {
+        max-width: 1400px;
     }
 
     section:nth-child(1) {
@@ -61,47 +67,242 @@
      HERO
     ========================= */
     .hero {
+        position: relative;
+        overflow: hidden;
+        min-height: 80vh;
         display: grid;
         grid-template-columns: 1fr 1fr;
         align-items: center;
-        gap: 50px;
+        gap: 60px;
+        padding: 40px 40px 60px 40px !important;
+        background:
+            linear-gradient(135deg,
+                #09233E 0%,
+                #123B63 60%,
+                #1B568F 100%);
+        border-radius: 0 0 20px 20px;
 
-        &__actions {
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
-        }
+        &__bg {
+            position: absolute;
+            inset: 0;
+            opacity: 0.08;
 
-        &__img {
-            width: 100%;
-            max-width: 500px;
-            border-radius: 12px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background-image:
+                radial-gradient(circle at 20% 20%, white 1px, transparent 1px),
+                radial-gradient(circle at 80% 40%, white 1px, transparent 1px);
+
+            background-size: 80px 80px;
+
+            pointer-events: none;
         }
 
         &__content {
-            animation: fadeInUp 0.8s ease forwards;
+            position: relative;
+            z-index: 2;
+            color: white;
+        }
+
+        &__logo {
+            margin-bottom: 24px;
+
+            img {
+                height: 90px;
+                object-fit: contain;
+            }
+        }
+
+        &__badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 14px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 4.2rem;
+            line-height: 1.05;
+            margin-bottom: 24px;
+            color: white;
+
+            span {
+                color: #4ADE80;
+            }
+        }
+
+        p {
+            color: rgba(255, 255, 255, 0.82);
+            font-size: 1.15rem;
+            line-height: 1.7;
+            max-width: 620px;
+        }
+
+        &__actions {
+            display: flex;
+            gap: 14px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        &__stats {
+            display: flex;
+            gap: 16px;
+            margin-top: 35px;
+            flex-wrap: wrap;
+        }
+
+        &__visual {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     }
 
+    /* =========================
+    HERO CARD
+    ========================= */
+    .hero-card {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(18px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 28px;
+        padding: 18px;
+        box-shadow:
+            0 30px 60px rgba(0, 0, 0, 0.25);
+
+        animation: floatHero 6s ease-in-out infinite;
+
+        img {
+            width: 100%;
+            max-width: 650px;
+            border-radius: 18px;
+            display: block;
+        }
+    }
+
+    /* =========================
+    STATS
+    ========================= */
+    .hero-stat {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 18px;
+        padding: 14px 16px;
+        min-width: 170px;
+        backdrop-filter: blur(10px);
+
+        strong {
+            display: block;
+            color: white;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        span {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+        }
+    }
+
+    /* =========================
+    FLOATING TAGS
+    ========================= */
+    .hero-floating {
+        position: absolute;
+        background: white;
+        color: #09233E;
+        padding: 12px 16px;
+        border-radius: 16px;
+        font-size: 14px;
+        font-weight: 600;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        animation: floatTag 5s ease-in-out infinite;
+    }
+
+    .hero-floating--1 {
+        top: 10%;
+        left: -30px;
+    }
+
+    .hero-floating--2 {
+        bottom: 20%;
+        right: -10px;
+    }
+
+    .hero-floating--3 {
+        bottom: -10px;
+        left: 20%;
+    }
+
+    /* =========================
+    BOTONES
+    ========================= */
+    .btn-secondary {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 20px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        text-decoration: none;
+        transition: all 0.25s ease;
+
+        &:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.12);
+        }
+    }
+
+    /* =========================
+    ANIMACIONES
+    ========================= */
+    @keyframes floatHero {
+
+        0%,
+        100% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    @keyframes floatTag {
+
+        0%,
+        100% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-8px);
+        }
+    }
 
     /* =========================
      BOTONES
-  ========================= */
+    ========================= */
     .btn-primary {
         padding: 12px 20px;
         border-radius: 8px;
+        height: 60px;
         cursor: pointer;
         transition: all 0.25s ease;
-    }
-
-    .btn-primary {
-        background: variables.$primary;
+        background: variables.$success;
         color: white;
         border: none;
 
         &:hover {
-            background: variables.$primary-hover;
+            background: variables.$success-hover;
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
@@ -153,6 +354,17 @@
             }
         }
 
+        span {
+            font-size: 14px;
+            color: variables.$text-muted;
+            font-weight: 600;
+        }
+
+        strong {
+            color: variables.$success;
+            font-weight: 600;
+        }
+
         &__img-wrapper {
             width: 100%;
             max-width: 450px;
@@ -190,8 +402,8 @@
     }
 
     /* =========================
-   SCREENSHOTS
-========================= */
+        SCREENSHOTS
+    ========================= */
     .screenshots {
         &__grid {
             display: grid;
@@ -245,50 +457,61 @@
 
     /* =========================
      PAGOS
-  ========================= */
+    ========================= */
+
     .pagos {
         text-align: center;
 
-        &__box {
+        &__grid {
+            margin-top: 50px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        &__card {
             background: white;
-            margin-top: 30px;
-            padding: 30px;
-            border-radius: 16px;
-            border: 1px solid variables.$cards;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
+            border-radius: 20px;
+            padding: 35px 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
             transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.04);
 
             &:hover {
-                transform: translateY(-6px);
+                transform: translateY(-8px);
                 box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
             }
 
             h3 {
-                margin-bottom: 10px;
+                margin-bottom: 14px;
                 color: variables.$primary;
             }
 
-            ul {
-                text-align: left;
-                margin: 15px 0;
-
-                li {
-                    margin-bottom: 8px;
-                }
-            }
-
-            span {
-                font-size: 0.9rem;
+            p {
                 color: variables.$text-muted;
+                line-height: 1.7;
             }
+        }
+
+        &__icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            background:
+                linear-gradient(135deg,
+                    rgba(58, 110, 165, 0.12),
+                    rgba(58, 110, 165, 0.05));
+            font-size: 30px;
         }
     }
 
     /* =========================
      CTA
-  ========================= */
+     ========================= */
     .cta {
         text-align: center;
 
@@ -299,7 +522,7 @@
 
     /* =========================
      ANIMACIONES
-  ========================= */
+    ========================= */
     .reveal {
         opacity: 0;
         transform: translateY(60px) scale(0.98);
@@ -331,7 +554,7 @@
 
     /* =========================
      KEYFRAMES
-  ========================= */
+    ========================= */
     @keyframes fadeInUp {
         from {
             opacity: 0;
@@ -368,10 +591,9 @@
     }
 
     /* =========================
-     RESPONSIVE
-  ========================= */
+        RESPONSIVE
+     ========================= */
     @media (max-width: 768px) {
-
         .hero,
         .radar {
             grid-template-columns: 1fr;
@@ -430,6 +652,10 @@
 
         .pagos {
             padding: 30px 20px 30px 20px;
+        }
+
+        .pagos__grid {
+            grid-template-columns: 1fr;
         }
 
         .cta {

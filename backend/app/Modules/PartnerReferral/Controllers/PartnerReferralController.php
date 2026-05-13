@@ -71,7 +71,32 @@ class PartnerReferralController extends Controller
             ->where('exclusivo', false)
             ->count();
 
-        $creditosGenerados = (clone $compras)->sum('tokens_pagados');
+        $creditosGenerados = 0;
+
+        foreach ((clone $compras)->get() as $compra) {
+
+            $solicitud = SolicitudMudanza::find(
+                $compra->solicitud_id
+            );
+
+            if (!$solicitud) {
+                continue;
+            }
+
+            $tipo = $solicitud->tipo_servicio;
+            $esExclusivo = $compra->exclusivo;
+
+            $monto = match (true) {
+                $tipo === 'local' && !$esExclusivo => 6,
+                $tipo === 'local' && $esExclusivo => 30,
+                $tipo === 'foranea' && !$esExclusivo => 15,
+                $tipo === 'foranea' && $esExclusivo => 35,
+                default => 15
+            };
+
+            $creditosGenerados += $monto;
+        }
+
         $conversionRate = $solicitudesGeneradas > 0
             ? round(
                 ($solicitudesVendidas / $solicitudesGeneradas) * 100,
@@ -83,6 +108,16 @@ class PartnerReferralController extends Controller
             ? round(
                 $creditosGenerados / $solicitudesVendidas,
                 1
+            )
+            : 0;
+
+        $averageSalesPerRequest = $solicitudesGeneradas > 0
+            ? round(
+                (
+                    $ventasNormales +
+                    $ventasExclusivas
+                ) / $solicitudesGeneradas,
+                2
             )
             : 0;
 
@@ -126,6 +161,7 @@ class PartnerReferralController extends Controller
                     'creditos_generados' => $creditosGenerados,
                     'conversion_rate' => $conversionRate,
                     'average_tokens' => $averageTokens,
+                    'average_sales_per_request' => $averageSalesPerRequest,
                 ],
 
                 'latest_requests' => $latestRequests,
@@ -168,7 +204,6 @@ class PartnerReferralController extends Controller
         | Compras
         |--------------------------------------------------------------------------
         */
-
         $compras = LeadCompra::whereIn(
             'solicitud_id',
             $solicitudesIds
@@ -180,8 +215,46 @@ class PartnerReferralController extends Controller
             ->distinct('solicitud_id')
             ->count();
 
-        $creditosGenerados = (clone $compras)
-            ->sum('tokens_pagados');
+        $creditosGenerados = 0;
+
+        foreach ((clone $compras)->get() as $compra) {
+            $solicitud = SolicitudMudanza::find(
+                $compra->solicitud_id
+            );
+
+            if (!$solicitud) {
+                continue;
+            }
+
+            $tipo = $solicitud->tipo_servicio;
+            $esExclusivo = $compra->exclusivo;
+
+            $monto = match (true) {
+                $tipo === 'local' && !$esExclusivo => 6,
+                $tipo === 'local' && $esExclusivo => 30,
+                $tipo === 'foranea' && !$esExclusivo => 15,
+                $tipo === 'foranea' && $esExclusivo => 35,
+                default => 15
+            };
+
+            $creditosGenerados += $monto;
+        }
+
+        $averageTokens = $solicitudesVendidas > 0
+            ? round(
+                $creditosGenerados / $solicitudesVendidas,
+                1
+            )
+            : 0;
+
+        $averageSalesPerRequest = $solicitudesGeneradas > 0
+            ? round(
+                (
+                    $solicitudesVendidas
+                ) / $solicitudesGeneradas,
+                2
+            )
+            : 0;
 
         /*
         |--------------------------------------------------------------------------
@@ -208,6 +281,8 @@ class PartnerReferralController extends Controller
             'solicitudesGeneradas' => $solicitudesGeneradas,
             'solicitudesVendidas' => $solicitudesVendidas,
             'creditosGenerados' => $creditosGenerados,
+            'averageTokens' => $averageTokens,
+            'averageSalesPerRequest' => $averageSalesPerRequest,
         ]);
 
         return $pdf->download(

@@ -12,7 +12,7 @@ export default function TrialRequestModal({ onClose }) {
     const [loading, setLoading] = useState(false);
     const [feedback, setFeedback] = useState(null);
     const [hasGoogle, setHasGoogle] = useState(false);
-    
+
     const [form, setForm] = useState({
         empresa: "",
         representante: "",
@@ -23,8 +23,18 @@ export default function TrialRequestModal({ onClose }) {
         web: "",
 
         referencias: [
-            { nombre: "", telefono: "", correo: "", web: "" },
-            { nombre: "", telefono: "", correo: "", web: "" },
+            {
+                nombre: "",
+                encargado: "",
+                telefono: "",
+                correo: "",
+            },
+            {
+                nombre: "",
+                encargado: "",
+                telefono: "",
+                correo: "",
+            },
         ],
     });
 
@@ -249,6 +259,19 @@ export default function TrialRequestModal({ onClose }) {
                                     </div>
 
                                     <div className="body_input">
+                                        <label htmlFor="tel">Nombre de encargado</label>
+
+                                        <input
+                                            placeholder="Encargado"
+                                            className="trial_input"
+                                            value={ref.encargado}
+                                            onChange={(e) =>
+                                                handleReferenciaChange(i, "encargado", e.target.value)
+                                            }
+                                        />
+                                    </div>
+
+                                    <div className="body_input">
                                         <label htmlFor="tel">Telefono de contacto</label>
 
                                         <input placeholder="Teléfono" className="trial_input" value={ref.telefono}
@@ -264,13 +287,7 @@ export default function TrialRequestModal({ onClose }) {
                                         />
                                     </div>
 
-                                    <div className="body_input">
-                                        <label htmlFor="tel">Página web</label>
-
-                                        <input placeholder="Web" className="trial_input" value={ref.web}
-                                            onChange={(e) => handleReferenciaChange(i, "web", e.target.value)}
-                                        />
-                                    </div>
+                                    
 
                                 </div>
                             ))}

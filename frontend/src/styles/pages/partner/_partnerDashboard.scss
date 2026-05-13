@@ -207,6 +207,17 @@ main {
         gap: .8rem;
     }
 
+    .partner-dashboard__stat-description {
+        display: block;
+        margin-top: 1rem;
+        font-size: 14px;
+        line-height: 1.5;
+        color: $text-muted;
+        max-width: 240px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
     &__icon {
         font-size: 28px;
     }
@@ -216,9 +227,8 @@ main {
     | Referral Card
     |--------------------------------------------------------------------------
     */
-
     &__referral-card {
-        margin-bottom: 2rem;
+        margin: 2rem 0px;
         background: white;
         border-radius: 28px;
         padding: 2rem;
@@ -247,7 +257,7 @@ main {
     }
 
     &__referral-badge {
-        background:rgba(34, 197, 94, .12);
+        background: rgba(34, 197, 94, .12);
         color: #15803d;
         padding: 10px 16px;
         border-radius: 999px;

@@ -139,17 +139,31 @@ export default function PartnerDashboardClient({ slug }) {
         {
             title: "Solicitudes generadas",
             value: data.metricas.solicitudes_generadas,
-            icon: "📦"
+            icon: "📦",
+            description:
+                "Solicitudes generadas durante este periodo"
         },
+
         {
-            title: "Solicitudes vendidas",
-            value: data.metricas.solicitudes_vendidas,
-            icon: "💰"
+            title: "Compras realizadas",
+            value:
+                data.metricas.ventas_normales +
+                data.metricas.ventas_exclusivas,
+
+            icon: "💰",
+
+            description:
+                `Tus solicitudes se vendieron ${data.metricas.average_sales_per_request} veces en promedio`
         },
+
         {
             title: "Créditos generados",
             value: data.metricas.creditos_generados,
-            icon: "🪙"
+
+            icon: "🪙",
+
+            description:
+                `${data.metricas.average_tokens} créditos por compra`
         }
     ];
 
@@ -216,7 +230,7 @@ export default function PartnerDashboardClient({ slug }) {
                                         Mes
                                     </label>
 
-                                    <select value={month} onChange={(e) => setMonth(Number(e.target.value)) } >
+                                    <select value={month} onChange={(e) => setMonth(Number(e.target.value))} >
                                         {months.map((monthName, index) => (
                                             <option key={index + 1} value={index + 1} >
                                                 {monthName}
@@ -230,7 +244,7 @@ export default function PartnerDashboardClient({ slug }) {
                                         Año
                                     </label>
 
-                                    <select value={year} onChange={(e) => setYear(Number(e.target.value)) } >
+                                    <select value={year} onChange={(e) => setYear(Number(e.target.value))} >
                                         {years.map((yearOption) => (
                                             <option key={yearOption} value={yearOption} >
                                                 {yearOption}
@@ -263,6 +277,10 @@ export default function PartnerDashboardClient({ slug }) {
                                 <p>
                                     {metric.value}
                                 </p>
+
+                                <span className="partner-dashboard__stat-description">
+                                    {metric.description}
+                                </span>
                             </div>
                         ))}
                     </div>
@@ -297,10 +315,6 @@ export default function PartnerDashboardClient({ slug }) {
                                     ? "Enlace copiado"
                                     : "Copiar enlace"}
                             </button>
-
-                            <a href={referralUrl} target="_blank" rel="noopener noreferrer" className="partner-dashboard__open-btn" >
-                                Abrir enlace
-                            </a>
                         </div>
                     </div>
 
