@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import "@/styles/pages/_bienvenida.scss";
+import { useEffect } from "react";
+import "@/styles/pages/empresa/_empresaBienvenida.scss";
 
 export default function BienvenidaPage() {
 
     useEffect(() => {
         const elements = document.querySelectorAll(".reveal");
+
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
@@ -22,328 +23,412 @@ export default function BienvenidaPage() {
         return () => observer.disconnect();
     }, []);
 
-    const [showCTA, setShowCTA] = useState(false);
-
-    useEffect(() => {
-        const elements = document.querySelectorAll(".reveal");
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add("active");
-                    }
-                });
-            },
-            { threshold: 0.15 }
-        );
-
-        elements.forEach((el) => observer.observe(el));
-
-        // CTA sticky logic
-        const handleScroll = () => {
-            if (window.scrollY > 500) {
-                setShowCTA(true);
-            } else {
-                setShowCTA(false);
-            }
-        };
-
-        window.addEventListener("scroll", handleScroll);
-
-        return () => {
-            observer.disconnect();
-            window.removeEventListener("scroll", handleScroll);
-        };
-    }, []);
-
     return (
-        <div className="bienvenida">
+        <div className="empresa-bienvenida">
 
             {/* HERO */}
             <section className="hero">
                 <div className="hero__bg"></div>
+
+                {/* LEFT */}
                 <div className="hero__content reveal">
-                    <div className="hero__logo">
-                        <img src="/logo/logo.png" alt="Mudanza Fácil" />
-                    </div>
-
-                    <div className="hero__badge">
-                        Bienvenido a MudanzaFacil, plataforma para empresas de mudanza
-                    </div>
-
                     <h1>
-                        Encuentra cargas. <br />
-                        Llena tus viajes. <br />
-                        <span>Gana más.</span>
+                        ¡Bienvenido a <span>Mudanza Fácil</span>!
                     </h1>
 
-                    <p>
-                        Conecta con empresas de mudanza en todo México y recibe
-                        oportunidades automáticamente mediante nuestro sistema Radar.
-                    </p>
+                    <div className="hero__badge">
+                        <span>
+                            Tu cuenta fue creada correctamente
+                        </span>
 
-                    <div className="hero__stats">
-                        <div className="hero-stat">
-                            <strong>+Más oportunidades</strong>
-                            <span>Sin buscar manualmente</span>
-                        </div>
-
-                        <div className="hero-stat">
-                            <strong>Radar inteligente</strong>
-                            <span>Coincidencias automáticas</span>
-                        </div>
-
-                        <div className="hero-stat">
-                            <strong>Menos viajes vacíos</strong>
-                            <span>Optimiza tus rutas</span>
-                        </div>
-
+                        <img src="/icons/check_success.png" alt="Cuenta creada" />
                     </div>
 
-                    <div className="hero__actions">
-                        <a href="#tutorial" className="btn-secondary">
-                            Ver cómo funciona
-                        </a>
+                    <p>
+                        Mudanza Fácil conecta empresas de mudanzas con
+                        oportunidades reales de carga, rutas y clientes en todo México.
+                    </p>
 
-                        <button className="btn-primary" onClick={() => window.location.href = "/empresa/dashboard"} >
-                            Comienza ahora
+                    <p>
+                        Antes de comenzar, aquí te mostramos cómo funciona la
+                        plataforma y qué necesitas para activar tu acceso completo.
+                    </p>
+                </div>
+
+                {/* RIGHT */}
+                <div className="hero__visual reveal delay-1">
+                    <div className="hero-card">
+                        <img src="/logo/logo.png" alt="Mudanza Fácil" />
+                    </div>
+                </div>
+            </section>
+
+            {/* STEPS*/}
+            <section className="step-section">
+                <div className="step-card reveal">
+
+                    {/* LEFT */}
+                    <div className="step-card__content">
+                        <div className="step-card__badge">
+                            01
+                        </div>
+
+                        <h2>
+                            ¿Cómo funciona Mudanza Fácil?
+                        </h2>
+
+                        <div className="step-card__subtitle">
+                            <div className="step-card__icon">
+                                <img src="/icons/busco.png" alt="Radar" />
+                            </div>
+
+                            <span>
+                                Encuentra oportunidades reales dentro de la red
+                            </span>
+                        </div>
+
+                        <ul className="step-card__list">
+                            <li>
+                                <img src="/icons/check_success.png" alt="check" />
+
+                                <span>
+                                    Comprar contactos de clientes interesados
+                                </span>
+                            </li>
+
+                            <li>
+                                <img src="/icons/check_success.png" alt="check" />
+
+                                <span>
+                                    Publicar cargas disponibles
+                                </span>
+                            </li>
+
+                            <li>
+                                <img src="/icons/check_success.png" alt="check" />
+
+                                <span>
+                                    Encontrar empresas por ruta
+                                </span>
+                            </li>
+
+                            <li>
+                                <img src="/icons/check_success.png" alt="check" />
+
+                                <span>
+                                    Detectar coincidencias automáticamente
+                                </span>
+                            </li>
+
+                            <li>
+                                <img src="/icons/check_success.png" alt="check" />
+
+                                <span>
+                                    Acceder a contactos exclusivos
+                                </span>
+                            </li>
+                        </ul>
+
+                        <p className="step-card__footer">
+                            Solo trabajamos con empresas verificadas para mantener
+                            una red profesional y funcional.
+                        </p>
+                    </div>
+
+                    {/* RIGHT */}
+                    <div className="step-card__video">
+                        <div className="step-card__video-wrapper">
+                            <iframe
+                                src="https://www.youtube.com/embed/17ozSeGw-fY"
+                                title="Cómo funciona Mudanza Fácil"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                            ></iframe>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="step-card reveal">
+                    {/* LEFT */}
+                    <div className="step-card__content">
+                        <div className="step-card__badge">
+                            02
+                        </div>
+
+                        <h2>
+                            Explora la plataforma
+                        </h2>
+
+                        <div className="step-card__subtitle">
+                            <div className="step-card__icon">
+                                <img src="/icons/default-user.png" alt="Radar" />
+                            </div>
+
+                            <span>
+                                Actualmente tu cuenta se encuentra en modo Explorador
+                            </span>
+                        </div>
+
+                        <ul className="step-card__list">
+                            <li>
+                                <img src="/icons/check_success.png" alt="check" />
+
+                                <span>
+                                    Explora la app
+                                </span>
+                            </li>
+
+                            <li>
+                                <img src="/icons/check_success.png" alt="check" />
+
+                                <span>
+                                    Ver oportunidades disponibles
+                                </span>
+                            </li>
+
+                            <li>
+                                <img src="/icons/check_success.png" alt="check" />
+
+                                <span>
+                                    Conoce las herramientas y módulos
+                                </span>
+                            </li>
+                        </ul>
+
+                        <p className="step-card__footer">
+                            Entra y conoce cómo funciona nuestra plataforma, verfica tu cuenta para activar tu acceso completo.
+                        </p>
+                    </div>
+
+                    {/* RIGHT */}
+                    <div className="step-card__locked">
+                        <div className="step-card__locked-box">
+                            <div className="step-card__locked-header">
+                                <div className="step-card__locked-icon">
+                                    <img src="/icons/candado.png" alt="Bloqueado" />
+                                </div>
+
+                                <h3>
+                                    No disponible aún:
+                                </h3>
+                            </div>
+
+                            <ul className="step-card__locked-list">
+                                <li>
+                                    Comprar contactos
+                                </li>
+
+                                <li>
+                                    Publicar cargas
+                                </li>
+
+                                <li>
+                                    Contactar empresas
+                                </li>
+                            </ul>
+
+                            <p className="step-card__locked-footer">
+                                Estas funciones se desbloquean al verificar tu cuenta.
+                            </p>
+                        </div>
+
+                        <button className="step-card__button" onClick={() => window.location.href = "/empresa/dashboard"} >
+                            <span>
+                                Entra y explora
+                            </span>
+
+                            <img src="/icons/arrow_down.png" alt="Ir" />
                         </button>
                     </div>
                 </div>
 
-                <div className="hero__visual reveal delay-1">
-                    <div className="hero-card hero-card--main">
-                        <img
-                            src="/images/dashboard.png"
-                            alt="Dashboard Mudanza Fácil"
-                        />
+                <div className="step-card reveal">
+                    {/* LEFT */}
+                    <div className="step-card__content">
+                        <div className="step-card__badge">
+                            03
+                        </div>
+
+                        <h2>
+                            Verifica tu empresa
+                        </h2>
+
+                        <div className="step-card__subtitle">
+                            <div className="step-card__icon">
+                                <img src="/icons/verificado.png" alt="Verificado" />
+                            </div>
+
+                            <span>
+                                Para proteger la red y garantizar contactos reales, necesitamos validar tu empresa
+                            </span>
+                        </div>
+
+                        <ul className="step-card__list">
+                            <li>
+                                <span>
+                                    La validación ayuda a mantener una comunidad más segura, profesional y confiable para todos
+                                </span>
+                            </li>
+                        </ul>
+
+                        <div className="step-card__footer step-card__footer--with-image">
+                            <img src="/icons/reloj_de_arena.png" alt="Tiempo de validación" />
+
+                            <span>
+                                El proceso normalmente toma menos de 24 horas hábiles
+                            </span>
+                        </div>
                     </div>
 
-                    <div className="hero-floating hero-floating--1">
-                        ⚡ Nueva oportunidad detectada
-                    </div>
+                    {/* RIGHT */}
+                    <div className="step-card__locked">
+                        <div className="step-card__image-box">
+                            <img src="/images/verificarCuenta.png" alt="Verificación empresa" />
+                        </div>
 
-                    <div className="hero-floating hero-floating--2">
-                        🚚 CDMX → Monterrey
-                    </div>
+                        <button className="step-card__button" onClick={() => window.location.href = "/empresa/planes"} >
+                            <span>
+                                Verificar cuenta
+                            </span>
 
-                    <div className="hero-floating hero-floating--3">
-                        📦 Espacio disponible encontrado
+                            <img src="/icons/arrow_down.png" alt="Ir" />
+                        </button>
                     </div>
                 </div>
             </section>
 
-            {/* TUTORIAL */}
-            <section className="tutorial" id="tutorial">
-                <h2 className="reveal">Empieza en minutos</h2>
-
-                <div className="tutorial__block reveal">
-                    <div className="tutorial__content">
-                        <h3>1. Activa tu cuenta y prueba Radar</h3>
-
-                        <ul>
-                            <li>Ten listos tus documentos oficiales <span>(RFC, Constancia Fiscal, Comprobante de domicilio)</span></li>
-                            <li>Ve a "Mi suscripción" dentro de tu dashboard</li>
-                            <li><strong>Activa tu prueba gratuita</strong></li>
-                            <li>Empieza a recibir oportunidades automáticamente</li>
-                        </ul>
-                    </div>
-
-                    <div className="tutorial__img-wrapper">
-                        <img
-                            src="/images/prueba.png"
-                            alt="Activar prueba gratuita"
-                        />
-                    </div>
-                </div>
-
-                <div className="tutorial__block reveal delay-1">
-                    <div className="tutorial__content">
-                        <h3>2. Crea un servicio</h3>
-                        <ul>
-                            <li>Ve a "Ofrezco" si tienes espacio disponible</li>
-                            <li>O a "Busco" si necesitas transportar</li>
-                            <li>Agrega origen, destino y fechas</li>
-                            <li>Define el volumen y detalles</li>
-                            <li><strong>Publica en segundos</strong></li>
-                        </ul>
-                    </div>
-
-                    <div className="tutorial__img-wrapper">
-                        <img
-                            src="/images/servicios.png"
-                            alt="Crear servicio"
-                        />
-                    </div>
-                </div>
-
-                <div className="tutorial__block reveal delay-2">
-                    <div className="tutorial__content">
-                        <h3>3. Recibe oportunidades con Radar</h3>
-                        <ul>
-                            <li>Recibes oportunidades listas para contactar</li>
-                            <li>No necesitas buscar todo el tiempo</li>
-                            <li><strong>El sistema detecta coincidencias automáticamente</strong></li>
-                            <li>Nuestro sistema detecta coincidencias entre servicios y te notifica
-                                automáticamente cuando hay una oportunidad para ti.</li>
-                        </ul>
-                    </div>
-
-                    <div className="tutorial__img-wrapper">
-                        <img
-                            src="/images/radar.png"
-                            alt="Radar de oportunidades"
-                        />
-                    </div>
-                </div>
-
-                <div className="tutorial__block reveal delay-3">
-                    <div className="tutorial__content">
-                        <h3>4. Contacta y cierra trato</h3>
-                        <ul>
-                            <li>Abre <strong>contacto con un clic</strong></li>
-                            <li>Se abre WhatsApp automáticamente</li>
-                            <li>Negocian directo sin intermediarios</li>
-                        </ul>
-                    </div>
-
-                    <div className="tutorial__img-wrapper">
-                        <img
-                            src="/images/contacta.png"
-                            alt="Contactar con oportunidades"
-                        />
-                    </div>
-                </div>
-
-                <div className="tutorial__block tutorial__block--highlight reveal delay-4">
-                    <div className="tutorial__content">
-                        <h3>Gana con contactos que no puedes tomar</h3>
-                        <ul>
-                            <li>¿Te contacta alguien pero no puedes hacer ese servicio?</li>
-                            <li>En lugar de perderlo, envíalo a la plataforma</li>
-                            <li>Nosotros lo convertimos en una solicitud de mudanza</li>
-                            <li><strong>Gana créditos</strong> cuando otras empresas compren ese contacto</li>
-                        </ul>
-                    </div>
-
-                    <div className="tutorial__img-wrapper">
-                        <img src="/images/referidos.png" alt="Referir solicitudes de mudanza" />
-                    </div>
-                </div>
-            </section>
-
-            {/* SCREENSHOTS */}
-            <section className="screenshots">
-                <h2 className="reveal">Todo en un solo lugar</h2>
-
-                <div className="screenshots__grid">
-                    <div className="screenshot-card reveal delay-2">
-                        <div className="screenshot-card__img">
-                            <img src="/images/dashboard.png" alt="Dashboard" />
-                        </div>
-                        <p>Inicio</p>
-                    </div>
-
-                    <div className="screenshot-card reveal">
-                        <div className="screenshot-card__img">
-                            <img src="/images/publicar.png" alt="Publicar servicio" />
-                        </div>
-                        <p>Publicar servicio</p>
-                    </div>
-
-                    <div className="screenshot-card reveal delay-2">
-                        <div className="screenshot-card__img">
-                            <img src="/images/perfil.png" alt="Mi perfil" />
-                        </div>
-                        <p>Gestiona tu perfil</p>
-                    </div>
-
-                    <div className="screenshot-card reveal delay-2">
-                        <div className="screenshot-card__img">
-                            <img src="/images/reseña.png" alt="Reseñas" />
-                        </div>
-                        <p>Que no falten tus reseñas</p>
-                    </div>
-
-                    <div className="screenshot-card reveal">
-                        <div className="screenshot-card__img">
-                            <img src="/images/creditos.png" alt="Créditos" />
-                        </div>
-                        <p>Adquiere créditos</p>
-                    </div>
-
-                    <div className="screenshot-card reveal delay-1">
-                        <div className="screenshot-card__img">
-                            <img src="/images/planes.png" alt="Buscar cargas" />
-                        </div>
-                        <p>Administra tus suscripciones</p>
-                    </div>
-                </div>
-            </section>
-
-            {/* PAGOS */}
-            <section className="pagos">
-
+            {/* BENEFICIOS */}
+            <section className="beneficios">
                 <h2 className="reveal">
-                    Pagos seguros y suscripciones flexibles
+                    ¿Qué desbloqueas al verificar tu cuenta?
                 </h2>
 
-                <p className="reveal delay-1">
-                    Activa tu prueba gratuita del Plan Radar y comienza a recibir
-                    oportunidades automáticamente. Puedes cancelar en cualquier momento.
-                </p>
-
-                <div className="pagos__grid">
-                    <div className="pagos__card reveal delay-2">
-                        <div className="pagos__icon">
-                            🔒
+                <div className="beneficios__grid">
+                    {/* CARD */}
+                    <article className="beneficio-card reveal">
+                        <div className="beneficio-card__icon">
+                            <img src="/icons/cliente.png" alt="Contactos" />
                         </div>
 
-                        <h3>Pagos 100% seguros</h3>
+                        <h3>
+                            Comprar contactos
+                        </h3>
 
                         <p>
-                            Todos los pagos son procesados directamente por Stripe,
-                            una de las plataformas de pago más utilizadas y seguras del mundo.
+                            de clientes interesados
                         </p>
-                    </div>
+                    </article>
 
-                    <div className="pagos__card reveal delay-3">
-                        <div className="pagos__icon">
-                            💳
+                    {/* CARD */}
+                    <article className="beneficio-card reveal delay-1">
+                        <div className="beneficio-card__icon">
+                            <img src="/icons/busco.png" alt="Busco" />
                         </div>
 
-                        <h3>No almacenamos tarjetas</h3>
+                        <h3>
+                            Publicar cargas
+                        </h3>
 
                         <p>
-                            Tu información bancaria nunca es almacenada en nuestra plataforma.
-                            Todo el proceso de pago se realiza de forma segura mediante Stripe.
+                            y encontrar empresas
                         </p>
-                    </div>
+                    </article>
 
-                    <div className="pagos__card reveal delay-4">
-                        <div className="pagos__icon">
-                            ⚡
+                    {/* CARD */}
+                    <article className="beneficio-card reveal delay-2">
+                        <div className="beneficio-card__icon">
+                            <img src="/icons/team.png" alt="Contactar" />
                         </div>
 
-                        <h3>Prueba gratuita disponible</h3>
+                        <h3>
+                            Contactar empresas
+                        </h3>
 
                         <p>
-                            Activa tu prueba del Plan Radar y descubre oportunidades,
-                            coincidencias automáticas y más beneficios para tu empresa.
+                            de mudanzas verificadas
                         </p>
-                    </div>
+                    </article>
+
+                    {/* CARD */}
+                    <article className="beneficio-card reveal delay-3">
+                        <div className="beneficio-card__icon">
+                            <img src="/icons/notificacion.png" alt="notificacion" />
+                        </div>
+
+                        <h3>
+                            Recibir alertas de rutas
+                        </h3>
+
+                        <p>
+                            y coincidencias automáticas
+                        </p>
+                    </article>
+
+                    {/* CARD */}
+                    <article className="beneficio-card reveal delay-4">
+                        <div className="beneficio-card__icon">
+                            <img src="/icons/suscripcion.png" alt="Leads" />
+                        </div>
+
+                        <h3>
+                            Acceder a contactos exclusivos
+                        </h3>
+
+                        <p>
+                            de la red
+                        </p>
+                    </article>
+
+                    {/* CARD */}
+                    <article className="beneficio-card reveal delay-1">
+                        <div className="beneficio-card__icon">
+                            <img src="/icons/conector.png" alt="Visibilidad" />
+                        </div>
+
+                        <h3>
+                            Participar en la red completa
+                        </h3>
+
+                        <p>
+                            y aumentar tu visibilidad
+                        </p>
+                    </article>
+
+                    {/* CARD */}
+                    <article className="beneficio-card reveal delay-2">
+                        <div className="beneficio-card__icon">
+                            <img src="/icons/talento.png" alt="Negocio" />
+                        </div>
+
+                        <h3>
+                            Impulsa tu negocio
+                        </h3>
+
+                        <p>
+                            con más oportunidades
+                        </p>
+                    </article>
                 </div>
             </section>
 
-            {/* CTA */}
-            <section className="cta reveal">
-                <h2>Empieza a generar oportunidades hoy</h2>
-                <p>No pierdas más viajes vacíos.</p>
+            {/* FOOTER */}
+            <footer className="bienvenida-footer">
+                <div className="bienvenida-footer__content">
+                    <div className="bienvenida-footer__top">
+                        <div className="bienvenida-footer__icon">
+                            <img src="/icons/verificado.png" alt="Verificado" />
+                        </div>
 
-                <button className="btn-primary" onClick={() => window.location.href = "https://app.mudanzafacil.com.mx/empresa/dashboard"}>
-                    Comienza ahora
-                </button>
-            </section>
+                        <p>
+                            En Mudanza Fácil trabajamos para que tu empresa crezca con seguridad, confianza y oportunidades reales.
+                        </p>
+                    </div>
+
+                    <strong>
+                        ¡Gracias por ser parte de nuestra red!
+                    </strong>
+                </div>
+            </footer>
         </div>
     );
 }
