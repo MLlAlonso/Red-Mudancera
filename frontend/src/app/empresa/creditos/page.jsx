@@ -19,15 +19,21 @@ export default function ComprarCreditos() {
     const [errorMessage, setErrorMessage] = useState("");
     const [plan, setPlan] = useState(null);
     const [planModal, setPlanModal] = useState(false);
+    const [verificado, setVerificado] = useState(false);
 
     const comprar = async (packagePlan) => {
         const token = document.cookie.match(/token_empresa=([^;]+)/)?.[1];
+
+        if (!verificado) {
+            setPlanModal(true);
+            return;
+        }
 
         if (plan === "free") {
             setPlanModal(true);
             return;
         }
-
+        
         setLoading(packagePlan);
 
         try {
@@ -42,15 +48,11 @@ export default function ComprarCreditos() {
                     body: JSON.stringify({ plan: packagePlan })
                 }
             );
-
             const data = await res.json();
-
             if (!data.url) {
                 throw new Error("No hay URL");
             }
-
             window.location.href = data.url;
-
         } catch (e) {
             setErrorMessage("No se pudo iniciar el pago.");
             setErrorModal(true);
@@ -62,9 +64,7 @@ export default function ComprarCreditos() {
         const fetchEmpresa = async () => {
             try {
                 const token = document.cookie.match(/token_empresa=([^;]+)/)?.[1];
-
                 if (!token) return;
-
                 const res = await fetch(
                     `${process.env.NEXT_PUBLIC_API_URL}/empresa/me`,
                     {
@@ -76,16 +76,13 @@ export default function ComprarCreditos() {
                 );
 
                 if (!res.ok) return;
-
                 const data = await res.json();
-
                 setPlan(data.plan ?? "free");
-
+                setVerificado(data.verificado ?? false);
             } catch (error) {
                 console.error("Error obteniendo plan", error);
             }
         };
-
         fetchEmpresa();
     }, []);
 

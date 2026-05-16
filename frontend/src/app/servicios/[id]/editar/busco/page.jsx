@@ -169,8 +169,8 @@ export default function EditarBuscoServicioPage() {
           volumen: form.volumen,
           origen: form.origen,
           destino: form.destino,
-          inicio: form.inicio,
-          fin: form.fin,
+/*           inicio: form.inicio,
+          fin: form.fin, */
           tipo_carga: form.tipoCarga,
           nota: form.nota,
           responsable: form.responsableNombre,
@@ -223,8 +223,8 @@ export default function EditarBuscoServicioPage() {
 
             <Input label="Volumen" name="volumen" type="number" value={form.volumen} onChange={handleChange} />
 
-            <label className="labels">Rango de salida</label>
-            <DateRange ranges={range} onChange={item => setRange([item.selection])} minDate={new Date()} />
+{/*             <label className="labels">Rango de salida</label>
+            <DateRange ranges={range} onChange={item => setRange([item.selection])} minDate={new Date()} /> */}
 
             <div className="input-group">
               <label className="input-group__label">Responsable</label>

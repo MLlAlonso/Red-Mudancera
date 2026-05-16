@@ -8,7 +8,8 @@ export default function PlanRequiredModal({ onClose }) {
     const router = useRouter();
 
     const handleRedirect = () => {
-        router.push("/empresa/planes");
+        onClose?.();
+        router.push("/empresa/planes?trial=true");
     };
 
     return (
@@ -20,25 +21,17 @@ export default function PlanRequiredModal({ onClose }) {
                     Para mantener una red profesional, necesitamos validar tu empresa.
                 </p>
 
-
                 <p className="plan-required-modal__legend">
                     <img src="/icons/reloj-pared.png" alt="Reloj" />
                     El proceso normalmente toma <span> menos de 24 horas hábiles</span>.
                 </p>
 
                 <div className="plan-required-modal__actions">
-                    <Button_cta
-                        value="Verificar cuenta"
-                        onClick={handleRedirect}
-                    />
+                    <Button_cta value="Verificar cuenta" onClick={handleRedirect} />
                 </div>
 
                 <div className="plan-required-modal__actions">
-                    <button
-                        className="btn-outline"
-                        onClick={onClose}
-                        id="plan-required-modal__later-btn"
-                    >
+                    <button className="btn-outline" onClick={onClose} id="plan-required-modal__later-btn" >
                         Más tarde
                     </button>
                 </div>

@@ -231,14 +231,6 @@ export default function BienvenidaPage() {
                                 Estas funciones se desbloquean al verificar tu cuenta.
                             </p>
                         </div>
-
-                        <button className="step-card__button" onClick={() => window.location.href = "/empresa/dashboard"} >
-                            <span>
-                                Entra y explora
-                            </span>
-
-                            <img src="/icons/arrow_down.png" alt="Ir" />
-                        </button>
                     </div>
                 </div>
 
@@ -250,7 +242,7 @@ export default function BienvenidaPage() {
                         </div>
 
                         <h2>
-                            Verifica tu empresa
+                            Verificación de Empresa
                         </h2>
 
                         <div className="step-card__subtitle">
@@ -259,14 +251,48 @@ export default function BienvenidaPage() {
                             </div>
 
                             <span>
-                                Para proteger la red y garantizar contactos reales, necesitamos validar tu empresa
+                                En Mudanza Fácil buscamos construir una red seria, profesional y confiable para todos los mudanceros y clientes.
                             </span>
                         </div>
 
                         <ul className="step-card__list">
                             <li>
+                                <img src="/icons/check_success.png" alt="check" />
+
                                 <span>
-                                    La validación ayuda a mantener una comunidad más segura, profesional y confiable para todos
+                                    Es necesario verificar tu empresa para participar de manera activa en la plataforma. 
+                                </span>
+                            </li>
+
+                            <li>
+                                <img src="/icons/check_success.png" alt="check" />
+
+                                <span>
+                                    RFC de persona física o persona moral
+                                </span>
+                            </li>
+
+                            <li>
+                                <img src="/icons/check_success.png" alt="check" />
+
+                                <span>
+                                    Identificación oficial (frente y reverso)
+                                </span>
+                            </li>
+
+                            <li>
+                                <img src="/icons/check_success.png" alt="check" />
+
+                                <span>
+                                    2 referencias de empresas de mudanzas con las que hayas trabajado anteriormente
+                                </span>
+                            </li>
+
+                            <li>
+                                <img src="/icons/check_success.png" alt="check" />
+
+                                <span>
+                                    El proceso normalmente toma menos de 24 horas hábiles
                                 </span>
                             </li>
                         </ul>
@@ -275,7 +301,7 @@ export default function BienvenidaPage() {
                             <img src="/icons/reloj_de_arena.png" alt="Tiempo de validación" />
 
                             <span>
-                                El proceso normalmente toma menos de 24 horas hábiles
+                                Este proceso nos ayuda a mantener una comunidad de empresas reales y comprometidas, evitando cuentas falsas o empresas informales dentro de la plataforma
                             </span>
                         </div>
                     </div>
@@ -285,14 +311,6 @@ export default function BienvenidaPage() {
                         <div className="step-card__image-box">
                             <img src="/images/verificarCuenta.png" alt="Verificación empresa" />
                         </div>
-
-                        <button className="step-card__button" onClick={() => window.location.href = "/empresa/planes"} >
-                            <span>
-                                Verificar cuenta
-                            </span>
-
-                            <img src="/icons/arrow_down.png" alt="Ir" />
-                        </button>
                     </div>
                 </div>
             </section>
@@ -300,7 +318,7 @@ export default function BienvenidaPage() {
             {/* BENEFICIOS */}
             <section className="beneficios">
                 <h2 className="reveal">
-                    ¿Qué desbloqueas al verificar tu cuenta?
+                    ¿Qué puedes hacer una vez tu empresa está verificada?
                 </h2>
 
                 <div className="beneficios__grid">
@@ -331,6 +349,21 @@ export default function BienvenidaPage() {
 
                         <p>
                             y encontrar empresas
+                        </p>
+                    </article>
+
+                    {/* CARD */}
+                    <article className="beneficio-card beneficio-card--highlight reveal delay-2">
+                        <div className="beneficio-card__icon">
+                            <img src="/icons/radar.png" alt="Explorar" />
+                        </div>
+
+                        <h3>
+                            Acceso inicial incluido
+                        </h3>
+
+                        <p>
+                            Explora las funciones principales antes de activar tu plan definitivo
                         </p>
                     </article>
 
@@ -409,6 +442,16 @@ export default function BienvenidaPage() {
                         </p>
                     </article>
                 </div>
+            </section>
+
+            <section className="cta">
+                <button className="step-card__button" onClick={() => window.location.href = "/empresa/dashboard"} >
+                    <span>
+                        Explorar la plataforma ahora
+                    </span>
+
+                    <img src="/icons/arrow_down.png" alt="Ir" />
+                </button>
             </section>
 
             {/* FOOTER */}

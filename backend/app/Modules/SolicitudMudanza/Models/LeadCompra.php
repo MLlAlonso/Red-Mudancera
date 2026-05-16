@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Modules\SolicitudMudanza\Models;
+
 use Illuminate\Database\Eloquent\Model;
 
 class LeadCompra extends Model

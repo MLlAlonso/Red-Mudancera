@@ -1,16 +1,60 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import BaseModal from "@/components/modals/BaseModal";
 import TrialRequestModal from "@/components/modals/TrialRequestModal";
+import PlanRequiredModal from "@/components/modals/PlanRequiredModal";
 
 import "@/styles/pages/empresa/_empresaPlanes.scss";
 
 export default function PlanesPage() {
   const [loading, setLoading] = useState(null);
   const [confirm, setConfirm] = useState(null);
+  const [verificado, setVerificado] = useState(false);
+  const [verificationModal, setVerificationModal] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const openTrial = params.get("trial");
+
+    if (openTrial === "true") {
+      setConfirm({ plan: "trial" });
+      window.history.replaceState({}, "", "/empresa/planes");
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchEmpresa = async () => {
+      try {
+        const token = getToken();
+
+        if (!token) return;
+
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/empresa/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+            },
+          }
+        );
+
+        if (!res.ok) return;
+
+        const data = await res.json();
+
+        setVerificado(data.verificado ?? false);
+
+      } catch (error) {
+        console.error("Error obteniendo empresa", error);
+      }
+    };
+
+    fetchEmpresa();
+  }, []);
 
   // config del modal
   const [config, setConfig] = useState({
@@ -140,7 +184,22 @@ export default function PlanesPage() {
 
   // ABRIR MODAL
   const abrirModal = (plan) => {
+
+    // trial SIEMPRE permitido
+    if (plan === "trial") {
+      setConfirm({ plan });
+      return;
+    }
+
+    // empresa NO verificada
+    if (!verificado) {
+      setVerificationModal(true);
+      return;
+    }
+
+    // modal normal de planes
     setConfirm({ plan });
+
     setConfig({
       tipo: "mensual",
       recurrente: true,
@@ -279,6 +338,12 @@ export default function PlanesPage() {
       <Footer />
 
       {/* MODAL */}
+      {verificationModal && (
+        <PlanRequiredModal
+          onClose={() => setVerificationModal(false)}
+        />
+      )}
+
       {confirm?.plan === "trial" && (
         <BaseModal onClose={() => setConfirm(null)}>
           <TrialRequestModal onClose={() => setConfirm(null)} />

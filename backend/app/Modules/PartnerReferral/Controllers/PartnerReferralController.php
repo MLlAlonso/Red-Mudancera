@@ -52,32 +52,30 @@ class PartnerReferralController extends Controller
         | Compras
         |--------------------------------------------------------------------------
         */
-        $compras = LeadCompra::whereIn(
-            'solicitud_id',
-            $solicitudesIds
-        )
+        $compras = LeadCompra::with('solicitud')
+            ->whereIn(
+                'solicitud_id',
+                $solicitudesIds
+            )
             ->whereMonth('created_at', $month)
             ->whereYear('created_at', $year);
 
-        $solicitudesVendidas = $compras
+        $solicitudesConVenta = $compras
             ->distinct('solicitud_id')
             ->count();
 
-        $ventasExclusivas = (clone $compras)
-            ->where('exclusivo', true)
-            ->count();
-
-        $ventasNormales = (clone $compras)
-            ->where('exclusivo', false)
-            ->count();
+        $comprasRealizadas = SolicitudMudanza::where(
+            'partner_referral_id',
+            $partner->id
+        )
+            ->whereMonth('created_at', $month)
+            ->whereYear('created_at', $year)
+            ->sum('compras_count');
 
         $creditosGenerados = 0;
 
         foreach ((clone $compras)->get() as $compra) {
-
-            $solicitud = SolicitudMudanza::find(
-                $compra->solicitud_id
-            );
+            $solicitud = $compra->solicitud;
 
             if (!$solicitud) {
                 continue;
@@ -99,24 +97,22 @@ class PartnerReferralController extends Controller
 
         $conversionRate = $solicitudesGeneradas > 0
             ? round(
-                ($solicitudesVendidas / $solicitudesGeneradas) * 100,
+                ($solicitudesConVenta / $solicitudesGeneradas) * 100,
                 1
             )
             : 0;
 
-        $averageTokens = $solicitudesVendidas > 0
+        $averageTokens = $comprasRealizadas > 0
             ? round(
-                $creditosGenerados / $solicitudesVendidas,
+                $creditosGenerados / $comprasRealizadas,
                 1
             )
             : 0;
 
         $averageSalesPerRequest = $solicitudesGeneradas > 0
             ? round(
-                (
-                    $ventasNormales +
-                    $ventasExclusivas
-                ) / $solicitudesGeneradas,
+                $comprasRealizadas /
+                    $solicitudesGeneradas,
                 2
             )
             : 0;
@@ -155,9 +151,7 @@ class PartnerReferralController extends Controller
 
                 'metricas' => [
                     'solicitudes_generadas' => $solicitudesGeneradas,
-                    'solicitudes_vendidas' => $solicitudesVendidas,
-                    'ventas_exclusivas' => $ventasExclusivas,
-                    'ventas_normales' => $ventasNormales,
+                    'compras_realizadas' => $comprasRealizadas,
                     'creditos_generados' => $creditosGenerados,
                     'conversion_rate' => $conversionRate,
                     'average_tokens' => $averageTokens,
@@ -204,23 +198,30 @@ class PartnerReferralController extends Controller
         | Compras
         |--------------------------------------------------------------------------
         */
-        $compras = LeadCompra::whereIn(
-            'solicitud_id',
-            $solicitudesIds
-        )
+        $compras = LeadCompra::with('solicitud')
+            ->whereIn(
+                'solicitud_id',
+                $solicitudesIds
+            )
             ->whereMonth('created_at', $month)
             ->whereYear('created_at', $year);
 
-        $solicitudesVendidas = $compras
+        $solicitudesConVenta = $compras
             ->distinct('solicitud_id')
             ->count();
 
         $creditosGenerados = 0;
 
+        $comprasRealizadas = SolicitudMudanza::where(
+            'partner_referral_id',
+            $partner->id
+        )
+            ->whereMonth('created_at', $month)
+            ->whereYear('created_at', $year)
+            ->sum('compras_count');
+
         foreach ((clone $compras)->get() as $compra) {
-            $solicitud = SolicitudMudanza::find(
-                $compra->solicitud_id
-            );
+            $solicitud = $compra->solicitud;
 
             if (!$solicitud) {
                 continue;
@@ -240,18 +241,17 @@ class PartnerReferralController extends Controller
             $creditosGenerados += $monto;
         }
 
-        $averageTokens = $solicitudesVendidas > 0
+        $averageTokens = $comprasRealizadas > 0
             ? round(
-                $creditosGenerados / $solicitudesVendidas,
+                $creditosGenerados / $comprasRealizadas,
                 1
             )
             : 0;
 
         $averageSalesPerRequest = $solicitudesGeneradas > 0
             ? round(
-                (
-                    $solicitudesVendidas
-                ) / $solicitudesGeneradas,
+                $comprasRealizadas /
+                    $solicitudesGeneradas,
                 2
             )
             : 0;
@@ -279,7 +279,7 @@ class PartnerReferralController extends Controller
             'year' => $year,
             'monthName' => ucfirst($monthName),
             'solicitudesGeneradas' => $solicitudesGeneradas,
-            'solicitudesVendidas' => $solicitudesVendidas,
+            'comprasRealizadas' => $comprasRealizadas,
             'creditosGenerados' => $creditosGenerados,
             'averageTokens' => $averageTokens,
             'averageSalesPerRequest' => $averageSalesPerRequest,

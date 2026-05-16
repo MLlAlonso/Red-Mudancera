@@ -297,7 +297,7 @@
             width: 100%;
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
+            align-items: center;
             gap: 24px;
         }
 
@@ -398,8 +398,8 @@
             overflow: hidden;
 
             img {
-                width: 60%;
-                height: 60%;
+                width: 80%;
+                height: 80%;
                 object-fit: cover;
                 display: block;
             }
@@ -421,7 +421,7 @@
 
         &__grid {
             display: grid;
-            grid-template-columns: repeat(7, 1fr);
+            grid-template-columns: repeat(8, 1fr);
             gap: 18px;
             align-items: stretch;
         }
@@ -480,6 +480,24 @@
     }
 
     /* =========================
+        CTA
+    ========================= */
+    .cta {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        max-width: 1400px;
+        justify-content: center;
+        align-items: center;
+
+        button {
+            &:hover {
+                transform: scale(1.2);
+            }
+        }
+    }
+
+    /* =========================
         FOOTER
     ========================= */
     .bienvenida-footer {
@@ -520,7 +538,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background:rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.12);
             border: 1px solid rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
 
@@ -538,7 +556,6 @@
             line-height: 1.6;
         }
     }
-
 
     /* =========================
        REVEAL
@@ -594,7 +611,7 @@
             min-height: auto;
 
             h1 {
-                font-size: 2.8rem;
+                font-size: 3rem;
                 text-align: center;
             }
 
@@ -619,7 +636,11 @@
             padding: 28px;
 
             h2 {
-                font-size: 2rem;
+                font-size: 30px;
+            }
+
+            &__badge {
+                font-size: 30px;
             }
 
             &__video-wrapper {
@@ -628,6 +649,24 @@
 
             &__subtitle {
                 align-items: flex-start;
+
+                span {
+                    font-size: 22px;
+                }
+            }
+
+            &__list {
+                li {
+                    img {
+                        width: 22px;
+                        height: 22px;
+                    }
+
+                    span {
+                        font-size: 20px;
+                        text-align: justify;
+                    }
+                }
             }
 
             &__locked {
@@ -638,6 +677,31 @@
                 width: 100%;
             }
 
+            &__locked-header {
+                display: flex;
+                align-items: center;
+
+                h3 {
+                    font-size: 24px;
+                    color: variables.$title;
+                }
+            }
+
+            &__locked-icon {
+                width: 75px;
+                height: 75px;
+            }
+
+            &__locked-list {
+                li {
+                    font-size: 20px;
+                }
+            }
+
+            &__locked-footer {
+                font-size: 18px;
+            }
+
             &__button {
                 font-size: 20px;
                 width: 100%;
@@ -645,15 +709,22 @@
             }
 
             &__footer {
+                font-size: 18px;
+                text-align: justify;
+
                 &--with-image {
                     justify-content: center;
-                    text-align: center;
                 }
             }
 
             &__image-box {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+
                 img {
-                    width: 70%;
+                    width: 90%;
                 }
             }
         }
@@ -678,12 +749,16 @@
                 height: 62px;
 
                 img {
-                    width: 40px;
-                    height: 40px;
+                    width: 44px;
+                    height: 44px;
                 }
             }
 
             h3 {
+                font-size: 20px;
+            }
+
+            p {
                 font-size: 18px;
             }
         }

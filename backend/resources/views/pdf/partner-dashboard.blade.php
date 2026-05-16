@@ -74,7 +74,7 @@
                                         </p>
 
                                         <h2 style=" margin:12px 0 0; color:#09233E; font-size:38px; text-align:center; ">
-                                            {{ $solicitudesVendidas }}
+                                            {{ $comprasRealizadas }}
                                         </h2>
 
                                         <p style=" margin-top:12px; color:#7C8B98; font-size:13px; line-height:1.5; text-align:center; ">

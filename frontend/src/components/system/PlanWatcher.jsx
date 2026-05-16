@@ -63,17 +63,11 @@ export default function PlanWatcher() {
           </p>
 
           <div className="modal-actions">
-            <button
-              className="btn-solid"
-              onClick={() => (window.location.href = "/empresa/planes")}
-            >
+            <button className="btn-solid" onClick={() => (window.location.href = "/empresa/planes")} >
               Publicar sin límite
             </button>
 
-            <button
-              className="btn-outline"
-              onClick={() => (window.location.href = "/empresa/planes")}
-            >
+            <button className="btn-outline" onClick={() => (window.location.href = "/empresa/planes")} >
               Ver mi plan
             </button>
           </div>
@@ -94,10 +88,7 @@ export default function PlanWatcher() {
               Seguir viendo
             </button>
 
-            <button
-              className="btn-solid"
-              onClick={() => (window.location.href = "/empresa/planes")}
-            >
+            <button className="btn-solid" onClick={() => (window.location.href = "/empresa/planes")} >
               Quiero Radar
             </button>
           </div>
@@ -111,17 +102,11 @@ export default function PlanWatcher() {
           </p>
 
           <div className="modal-actions">
-            <button
-              className="btn-outline"
-              onClick={() => setPlanModal(null)}
-            >
+            <button className="btn-outline" onClick={() => setPlanModal(null)} >
               Más tarde
             </button>
 
-            <button
-              className="btn-solid"
-              onClick={() => (window.location.href = "/empresa/planes")}
-            >
+            <button className="btn-solid" onClick={() => (window.location.href = "/empresa/planes?trial=true")} >
               Verificar cuenta
             </button>
           </div>

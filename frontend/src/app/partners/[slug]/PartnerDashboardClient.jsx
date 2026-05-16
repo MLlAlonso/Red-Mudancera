@@ -46,7 +46,7 @@ export default function PartnerDashboardClient({ slug }) {
     */
     const years = useMemo(() => {
         const currentYear = new Date().getFullYear();
-        const startYear = 2025;
+        const startYear = 2026;
         const yearsArray = [];
 
         for (
@@ -68,7 +68,6 @@ export default function PartnerDashboardClient({ slug }) {
         async function fetchDashboard() {
             try {
                 setLoading(true);
-
                 const response = await fetch(
                     `${process.env.NEXT_PUBLIC_API_URL}/partners/${slug}?month=${month}&year=${year}`
                 );
@@ -147,11 +146,8 @@ export default function PartnerDashboardClient({ slug }) {
         {
             title: "Compras realizadas",
             value:
-                data.metricas.ventas_normales +
-                data.metricas.ventas_exclusivas,
-
+                data.metricas.compras_realizadas,
             icon: "💰",
-
             description:
                 `Tus solicitudes se vendieron ${data.metricas.average_sales_per_request} veces en promedio`
         },
@@ -159,9 +155,7 @@ export default function PartnerDashboardClient({ slug }) {
         {
             title: "Créditos generados",
             value: data.metricas.creditos_generados,
-
             icon: "🪙",
-
             description:
                 `${data.metricas.average_tokens} créditos por compra`
         }
@@ -201,9 +195,7 @@ export default function PartnerDashboardClient({ slug }) {
     return (
         <>
             <main className="partner-dashboard">
-
                 {/* HERO */}
-
                 <div className="partner-dashboard__hero">
                     <div className="hero-logo">
                         <img src="/logo/logo.png" alt="Mudanza Fácil" />

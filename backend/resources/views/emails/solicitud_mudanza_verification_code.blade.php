@@ -28,7 +28,7 @@
                     <!-- LOGO -->
                     <tr>
                         <td align="center" style="padding:24px 20px 10px;">
-                            <img src="https://app.mudanzafacil.com.mx/logo/logo_A.png" alt="Mudanza Fácil"
+                            <img src="https://app.mudanzafacil.com.mx/logo/logo_B.png" alt="Mudanza Fácil"
                                 style="height:60px;">
                         </td>
                     </tr>
