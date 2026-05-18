@@ -87,3 +87,10 @@ Route::middleware('auth:sanctum')->post('/stripe/cancel', [StripeController::cla
 |--------------------------------------------------------------------------
 */
 require base_path('app/Modules/PartnerReferral/routes.php');
+
+/*
+|--------------------------------------------------------------------------
+| SuperAdmin
+|--------------------------------------------------------------------------
+*/
+require base_path('app/Modules/SuperAdmin/routes.php');

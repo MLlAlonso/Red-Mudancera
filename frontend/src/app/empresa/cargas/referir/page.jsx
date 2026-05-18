@@ -69,11 +69,15 @@ export default function ReferirPage() {
     // =========================
     // MENSAJE SUGERIDO (WhatsAoo)
     // =========================
-    const mensaje = `Hola, gracias por contactarnos.
+    const mensaje = `Hola 😊 muchas gracias por contactarnos.
 
-En este caso nosotros no trabajamos directamente esa ruta, pero formamos parte de una red profesional de empresas de mudanzas verificadas llamada Mudanza Fácil.
+Nos da pena no poder ayudarte directamente en esta ocasión, ya que actualmente no trabajamos esa ruta de forma directa.
 
-Puedes registrar tu solicitud de mudanza en este enlace seguro que usamos dentro de nuestra red y te contactarán un máximo de 3 empresas que coincidan con tu ruta. Podrás ahorrar tiempo y dinero.
+Sin embargo, formamos parte de una red profesional de empresas de mudanzas verificadas llamada Mudanza Fácil 🚛
+
+Puedes registrar tu solicitud en el siguiente enlace seguro y nuestro sistema buscará empresas que ya trabajen tu ruta o la realicen con frecuencia.
+
+Solo te contactarán hasta 3 empresas que realmente coincidan con tu mudanza, para ayudarte a ahorrar tiempo, vueltas innecesarias… y probablemente también dinero 
 
 ${referLink}
 `;

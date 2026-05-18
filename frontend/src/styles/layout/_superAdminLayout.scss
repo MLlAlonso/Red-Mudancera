@@ -1,0 +1,85 @@
+@use "../utils/variables" as *;
+
+.superadmin-layout {
+    min-height: 100vh;
+    background: $background;
+}
+
+.superadmin-content {
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.superadmin-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 30px;
+
+    h1 {
+        color: $title;
+        font-size: 1.8rem;
+    }
+
+    p {
+        color: $text-muted;
+        margin-top: 4px;
+    }
+
+    .logout-btn {
+        border: none;
+        background: $error-hover;
+        color: white;
+        height: 30px;
+        font-size: 18px;
+        padding: 0 20px;
+        border-radius: 12px;
+        cursor: pointer;
+    }
+}
+
+.superadmin-menu-btn {
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 12px;
+    background: $primary;
+    cursor: pointer;
+    flex-shrink: 0;
+
+    img {
+        width: 20px;
+    }
+}
+
+.superadmin-page {
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .superadmin-content {
+        margin-left: 280px;
+        padding: 32px;
+    }
+
+    .superadmin-menu-btn {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .superadmin-topbar {
+        flex-wrap: wrap;
+        gap: 5px;
+        justify-content: space-around;
+
+        h1 {
+            font-size: 1.5rem;
+        }
+
+        .logout-btn {
+            width: 100%;
+        }
+    }
+}

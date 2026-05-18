@@ -99,6 +99,14 @@
     background: rgba($primary, 0.08);
   }
 
+  .dateLegend{
+    color: $text-muted;
+    font-size: 14px;
+    text-align: justify;
+    margin-top: 0px;
+    font-weight: 600;
+  }
+
   /* ==============================
      INPUT GROUPS
   ============================== */

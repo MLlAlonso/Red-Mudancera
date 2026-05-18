@@ -193,12 +193,14 @@ export default function BuscoServicioPage() {
                 ⓘ
                 <span className="tooltip__content">
                   Indica entre qué fechas viajará tu unidad, puedes seleccionar un dia especifico o un rango de dias aproximado
+                  Recuerda que tu publicación se eliminará automáticamente al día siguiente de la última fecha indicada.
                 </span>
               </span>
               Fechas aproximadas de salida a Ruta *
             </label>
 
             <DateRange ranges={range} onChange={item => setRange([item.selection])} minDate={new Date()} moveRangeOnFirstSelection={false} />
+            <p className="dateLegend"> Recuerda que tu publicación se eliminará automáticamente al día siguiente de la última fecha indicada.</p>
             <Input label="Espacio disponible (m³)*" name="volumen" type="number" value={form.volumen} placeholder={"Metros cúbicos disponibles en la unidad."} onChange={handleChange} />
 
             {/* <div className="input-group">
@@ -212,7 +214,7 @@ export default function BuscoServicioPage() {
 
             <div className="input-group">
               <label className="input-group__label">Condiciones o restricciones</label>
-              <textarea name="nota" className="input-group__field" value={form.nota} onChange={handleChange} placeholder="Indica qué tipo de carga no manejas o condiciones especiales."/>
+              <textarea name="nota" className="input-group__field" value={form.nota} onChange={handleChange} placeholder="Indica qué tipo de carga no manejas o condiciones especiales." />
             </div>
 
             <div className="input-group">

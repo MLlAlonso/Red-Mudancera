@@ -1,0 +1,374 @@
+@use "../../utils/variables" as *;
+
+.superadmin-dashboard {
+
+    min-height: 100vh;
+    background: $background;
+
+    padding: clamp(16px, 4vw, 40px);
+
+    &__grid {
+
+        display: grid;
+
+        grid-template-columns: repeat(
+            auto-fit,
+            minmax(220px, 1fr)
+        );
+
+        gap: 16px;
+
+        margin-bottom: 32px;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| CARDS
+|--------------------------------------------------------------------------
+*/
+
+.admin-card {
+
+    background: #fff;
+
+    border-radius: 24px;
+
+    padding: 22px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,.04);
+
+    border: 1px solid rgba(0,0,0,.04);
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    min-width: 0;
+
+    &__top {
+
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    h3 {
+
+        font-size: 15px;
+
+        color: $text-muted;
+
+        font-weight: 600;
+
+        line-height: 1.4;
+    }
+
+    &__value {
+
+        font-size: clamp(2.2rem, 7vw, 3.4rem);
+
+        font-weight: 800;
+
+        line-height: 1;
+
+        color: $primary;
+
+        word-break: break-word;
+    }
+
+    p {
+
+        color: $text-muted;
+
+        font-size: 14px;
+
+        line-height: 1.5;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| BADGES
+|--------------------------------------------------------------------------
+*/
+
+.badge {
+
+    padding: 6px 12px;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    width: fit-content;
+
+    &.total {
+
+        background: #EEF2FF;
+        color: #4338CA;
+    }
+
+    &.active {
+
+        background: #DCFCE7;
+        color: #166534;
+    }
+
+    &.warning {
+
+        background: #FEF3C7;
+        color: #92400E;
+    }
+
+    &.monthly {
+
+        background: #DBEAFE;
+        color: #1D4ED8;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| SECTION
+|--------------------------------------------------------------------------
+*/
+
+.superadmin-section {
+
+    margin-top: 10px;
+
+    &__header {
+
+        margin-bottom: 20px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        span {
+
+            font-size: 13px;
+
+            color: $text-muted;
+
+            display: block;
+
+            margin-bottom: 4px;
+        }
+
+        h2 {
+
+            font-size: clamp(1.2rem, 4vw, 1.6rem);
+
+            font-weight: 800;
+
+            color: $title;
+        }
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| RECENT COMPANIES
+|--------------------------------------------------------------------------
+*/
+
+.recent-companies {
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.recent-company-card {
+
+    background: #fff;
+
+    border-radius: 20px;
+
+    padding: 18px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 16px;
+
+    border: 1px solid rgba(0,0,0,.04);
+
+    box-shadow: 0 8px 20px rgba(0,0,0,.03);
+
+    &__left {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 14px;
+
+        min-width: 0;
+    }
+
+    &__logo {
+
+        width: 52px;
+        height: 52px;
+
+        border-radius: 50%;
+
+        overflow: hidden;
+
+        flex-shrink: 0;
+
+        background: $primary;
+
+        color: #fff;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-weight: 700;
+
+        img {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+        }
+    }
+
+    &__content {
+
+        min-width: 0;
+
+        h3 {
+
+            font-size: 15px;
+
+            color: $title;
+
+            margin-bottom: 4px;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        p {
+
+            font-size: 13px;
+
+            color: $text-muted;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    &__right {
+
+        display: flex;
+
+        align-items: center;
+
+        flex-wrap: wrap;
+
+        justify-content: flex-end;
+
+        gap: 8px;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| TAGS
+|--------------------------------------------------------------------------
+*/
+
+.plan,
+.verified,
+.trial {
+
+    padding: 6px 12px;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.plan {
+
+    background: #EEF2FF;
+
+    color: #4338CA;
+}
+
+.verified {
+
+    background: #DCFCE7;
+
+    color: #166534;
+}
+
+.trial {
+
+    background: #FEF3C7;
+
+    color: #92400E;
+}
+
+/*
+|--------------------------------------------------------------------------
+| MOBILE
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 640px) {
+
+    .recent-company-card {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        &__right {
+
+            width: 100%;
+
+            justify-content: flex-start;
+        }
+    }
+
+    .admin-card {
+
+        padding: 18px;
+    }
+}
+
+@media (max-width: 400px) {
+
+    .superadmin-dashboard {
+
+        padding: 14px;
+    }
+
+    .admin-card {
+
+        border-radius: 18px;
+    }
+
+    .recent-company-card {
+
+        border-radius: 18px;
+    }
+}

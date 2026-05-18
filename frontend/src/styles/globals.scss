@@ -37,6 +37,13 @@
 //Cotizador mudanza
 @use "./pages/_cotizadorMudanza";
 
+//SuperAdmin
+@use "./pages/superadmin/superAdminLogin";
+@use "./pages/superadmin/superAdminDashboard";
+@use "./layout/superAdminSidebar";
+@use "./layout/superAdminLayout";
+@use "./pages/superadmin/trialRequests";
+
 * {
   margin: 0;
   padding: 0;

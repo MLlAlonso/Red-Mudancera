@@ -147,19 +147,7 @@ export default function EmpresaLogin() {
 
           <p> <img src="/icons/candado-cerrado.png" alt="" /> Acceso seguro solo para empresas verificadas</p>
 
-          <button
-            style={{
-              marginTop: "10px",
-              background: "#F1A43F",
-              border: "1px dashed #ccc",
-              padding: "8px",
-              fontSize: "14px",
-              cursor: "pointer"
-            }}
-            onClick={() => (window.location.href = "/solicitar-mudanza")}
-          >
-            🔧 Ir a Solicitar Mudanza (TEST)
-          </button>
+
 
           <hr className="empresa-login__divider" />
 
