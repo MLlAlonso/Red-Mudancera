@@ -139,7 +139,7 @@ export default function BienvenidaPage() {
                     <div className="step-card__video">
                         <div className="step-card__video-wrapper">
                             <iframe
-                                src="https://www.youtube.com/embed/17ozSeGw-fY"
+                                src="https://app.mudanzafacil.com.mx/logo/logo_A.png"
                                 title="Cómo funciona Mudanza Fácil"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen

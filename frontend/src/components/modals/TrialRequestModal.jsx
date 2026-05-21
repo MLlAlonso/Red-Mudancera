@@ -3,8 +3,10 @@
 import { useState, useEffect } from "react";
 import LoadingOverlay from "@/components/ui/LoadingOverlay";
 import Input from "@/components/common/Input";
-import { uploadPdfToCloudinary } from "@/utils/cloudinaryUpload";
+import { uploadDocumentToCloudinary } from "@/utils/cloudinaryUpload";
+import BaseModal from "@/components/modals/BaseModal";
 import FeedbackModal from "@/components/ui/FeedbackModal";
+import TrialSuccessModal from "@/components/modals/TrialSuccessModal";
 import "@/styles/components/_trialRequestModal.scss";
 
 export default function TrialRequestModal({ onClose }) {
@@ -33,7 +35,7 @@ export default function TrialRequestModal({ onClose }) {
                 nombre: "",
                 encargado: "",
                 telefono: "",
-                correo: "",
+                /*                 correo: "", */
             },
         ],
     });
@@ -66,7 +68,15 @@ export default function TrialRequestModal({ onClose }) {
     }, []);
 
     const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+
+        setForm({
+            ...form,
+            [name]:
+                name === "rfc"
+                    ? value.toUpperCase()
+                    : value,
+        });
     };
 
     const handleReferenciaChange = (i, field, value) => {
@@ -82,23 +92,166 @@ export default function TrialRequestModal({ onClose }) {
     const next = () => setStep((s) => s + 1);
     const back = () => setStep((s) => s - 1);
 
-    const handleSubmit = async () => {
-        const token = document.cookie.match(/token_empresa=([^;]+)/)?.[1];
+    const validateForm = () => {
 
+        // STEP 1
+        if (!form.empresa.trim()) {
+            return "El nombre de la empresa es obligatorio";
+        }
+
+        if (form.empresa.length < 3) {
+            return "El nombre de la empresa es demasiado corto";
+        }
+
+        if (!form.representante.trim()) {
+            return "El representante legal es obligatorio";
+        }
+
+        if (form.representante.length < 3) {
+            return "El nombre del representante es demasiado corto";
+        }
+
+        if (!form.rfc.trim()) {
+            return "El RFC es obligatorio";
+        }
+
+        // RFC México
+        const rfcRegex =
+            /^([A-ZÑ&]{3,4}) ?-?(\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])) ?-?([A-Z\d]{3})$/i;
+
+        if (form.rfc.trim().length > 13) {
+            return "El RFC no puede exceder 13 caracteres";
+        }
+
+        if (!rfcRegex.test(form.rfc.trim())) {
+            return "El RFC ingresado no es válido";
+        }
+
+        if (!form.base.trim()) {
+            return "La sede es obligatoria";
+        }
+
+        if (!form.tel.trim()) {
+            return "El teléfono es obligatorio";
+        }
+
+        // teléfono simple MX
+        const telRegex = /^[0-9+\-\s()]{8,20}$/;
+
+        if (!telRegex.test(form.tel.trim())) {
+            return "El teléfono ingresado no es válido";
+        }
+
+        // GOOGLE URL
+        if (hasGoogle && form.google_url.trim()) {
+            try {
+                new URL(form.google_url);
+            } catch {
+                return "La URL de Google My Business no es válida";
+            }
+        }
+
+        // WEB URL
+        if (form.web.trim()) {
+            try {
+                new URL(form.web);
+            } catch {
+                return "La página web no es válida";
+            }
+        }
+
+        // STEP 3
         if (!files.ine || !files.csf || !files.domicilio) {
+            return "Debes subir todos los documentos obligatorios";
+        }
+
+        const validTypes = [
+            "application/pdf",
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+        ];
+
+        // INE
+        if (files.ine && !validTypes.includes(files.ine.type)) {
+            return "El INE debe ser PDF, JPG o PNG";
+        }
+
+        // CSF
+        if (files.csf && files.csf.type !== "application/pdf") {
+            return "La constancia fiscal debe ser PDF";
+        }
+
+        // DOMICILIO
+        if (
+            files.domicilio &&
+            !validTypes.includes(files.domicilio.type)
+        ) {
+            return "El comprobante de domicilio debe ser PDF, JPG o PNG";
+        }
+
+        return null;
+    };
+
+    const translateError = (message) => {
+
+        if (!message) {
+            return "Ocurrió un error inesperado";
+        }
+
+        const errorsMap = {
+            "The empresa field is required.":
+                "El nombre de la empresa es obligatorio",
+
+            "The representante field is required.":
+                "El representante legal es obligatorio",
+
+            "The rfc field is required.":
+                "El RFC es obligatorio",
+
+            "The rfc has already been taken.":
+                "Este RFC ya está registrado",
+
+            "The tel field is required.":
+                "El teléfono es obligatorio",
+
+            "The base field is required.":
+                "La sede es obligatoria",
+
+            "The ine url field is required.":
+                "Debes subir el INE",
+
+            "The csf url field is required.":
+                "Debes subir la constancia fiscal",
+
+            "The domicilio url field is required.":
+                "Debes subir el comprobante de domicilio",
+        };
+
+        return errorsMap[message] || message;
+    };
+
+    const handleSubmit = async () => {
+
+        const validationError = validateForm();
+
+        if (validationError) {
             setFeedback({
                 type: "error",
-                message: "Debes subir todos los documentos obligatorios",
+                message: validationError,
             });
+
             return;
         }
+
+        const token = document.cookie.match(/token_empresa=([^;]+)/)?.[1];
 
         try {
             setLoading(true);
 
-            const ineUploaded = await uploadPdfToCloudinary(files.ine);
-            const csfUploaded = await uploadPdfToCloudinary(files.csf);
-            const domicilioUploaded = await uploadPdfToCloudinary(files.domicilio);
+            const ineUploaded = await uploadDocumentToCloudinary(files.ine);
+            const csfUploaded = await uploadDocumentToCloudinary(files.csf);
+            const domicilioUploaded = await uploadDocumentToCloudinary(files.domicilio);
 
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_API_URL}/empresa/trial-request`,
@@ -124,7 +277,7 @@ export default function TrialRequestModal({ onClose }) {
             if (!res.ok) {
                 setFeedback({
                     type: "error",
-                    message: data.message || "Error al enviar solicitud",
+                    message: translateError(data.message),
                 });
                 return;
             }
@@ -185,7 +338,7 @@ export default function TrialRequestModal({ onClose }) {
 
                             <div className="body_input">
                                 <label htmlFor="rfc">RFC <span>*</span></label>
-                                <input className="trial_input" name="rfc" value={form.rfc} onChange={handleChange} placeholder="RFC de empresa o representante legal" />
+                                <input className="trial_input" name="rfc" value={form.rfc} onChange={handleChange} placeholder="RFC de empresa o representante legal" maxLength={13} />
                             </div>
 
                             <label htmlFor="base">Sede <span>*</span></label>
@@ -279,16 +432,13 @@ export default function TrialRequestModal({ onClose }) {
                                         />
                                     </div>
 
-                                    <div className="body_input">
+                                    {/*                                     <div className="body_input">
                                         <label htmlFor="tel">Correo de contacto</label>
 
                                         <input placeholder="Correo" className="trial_input" value={ref.correo}
                                             onChange={(e) => handleReferenciaChange(i, "correo", e.target.value)}
                                         />
-                                    </div>
-
-                                    
-
+                                    </div> */}
                                 </div>
                             ))}
                         </>
@@ -301,7 +451,14 @@ export default function TrialRequestModal({ onClose }) {
 
                             <div className="body_input">
                                 <label>INE <span>*</span></label>
-                                <input className="file_input" type="file" name="ine" onChange={handleFile} accept=".pdf" />
+                                <input
+                                    className="file_input"
+                                    type="file"
+                                    name="ine"
+                                    onChange={handleFile}
+                                    accept=".pdf,image/*"
+                                    capture="environment"
+                                />
                             </div>
 
                             <div className="body_input">
@@ -311,7 +468,14 @@ export default function TrialRequestModal({ onClose }) {
 
                             <div className="body_input">
                                 <label>Comprobante domicilio <span>*</span></label>
-                                <input className="file_input" type="file" name="domicilio" onChange={handleFile} accept=".pdf" />
+                                <input
+                                    className="file_input"
+                                    type="file"
+                                    name="domicilio"
+                                    onChange={handleFile}
+                                    accept=".pdf,image/*"
+                                    capture="environment"
+                                />
                             </div>
                         </>
                     )}
@@ -325,17 +489,17 @@ export default function TrialRequestModal({ onClose }) {
                 </div>
             </div>
 
-            {feedback && (
+            {feedback?.type === "success" && (
+                <BaseModal onClose={() => setFeedback(null)}>
+                    <TrialSuccessModal />
+                </BaseModal>
+            )}
+
+            {feedback && feedback.type !== "success" && (
                 <FeedbackModal
                     type={feedback.type}
                     message={feedback.message}
-                    onClose={() => {
-                        if (feedback.type === "success") {
-                            window.location.href = "/empresa/perfil";
-                        } else {
-                            setFeedback(null);
-                        }
-                    }}
+                    onClose={() => setFeedback(null)}
                 />
             )}
         </>

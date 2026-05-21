@@ -78,10 +78,15 @@
 
   /* Textos login */
   &__code-text {
-    margin: 15px;
+    margin-left: 15px;
+    margin-bottom: 10px;
     text-align: justify;
     font-family: variables.$font-text;
     color: variables.$text-muted;
+
+    span{
+      font-weight: 600;
+    }
   }
 
   #code_card {
@@ -89,6 +94,26 @@
     max-height: 380px !important;
   }
 
+}
+
+.empresa-register__help-contact {
+    margin-top: 18px;
+    text-align: left;
+    font-size: 14px;
+    color: variables.$text-muted;
+    line-height: 1.5;
+
+    a {
+        color: variables.$success;
+        font-weight: 600;
+        font-size: 16px;
+        text-decoration: none;
+        transition: .2s ease;
+        
+        &:hover {
+            color: variables.$success-hover;
+        }
+    }
 }
 
 .header {

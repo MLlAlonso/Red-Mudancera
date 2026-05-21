@@ -8,7 +8,7 @@ import Button_success from "@/components/common/Button_success";
 import BaseModal from "@/components/modals/BaseModal";
 import LoadingOverlay from "@/components/ui/LoadingOverlay";
 
-export default function SolicitarMudanza({ empresaSlug = null }) {
+export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {} }) {
     const API = process.env.NEXT_PUBLIC_API_URL;
     const [errorModal, setErrorModal] = useState("");
     const router = useRouter();
@@ -200,6 +200,17 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
             .trim();
     };
 
+    const heroTitle =
+        landingConfig.heroTitle || "Busco Mudanza";
+
+    const heroSubtitle =
+        landingConfig.heroSubtitle ||
+        "Publica tu solicitud en menos de 2 minutos y recibe contacto de empresas verificadas.";
+
+    const buttonText =
+        landingConfig.buttonText ||
+        "Solicitar Mudanza";
+
     return (
         <div className="solicitar-mudanza">
             {loading && <LoadingOverlay />}
@@ -209,11 +220,8 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
                     <img src="/logo/logo.png" alt="Mudanza Fácil" />
                 </div>
 
-                <h1 className="title">Busco Mudanza</h1>
-
-                <p className="subtitle">
-                    Publica tu solicitud en menos de 2 minutos y recibe contacto de empresas verificadas.
-                </p>
+                <h1 className="title">{heroTitle}</h1>
+                <p className="subtitle"> {heroSubtitle} </p>
             </div>
 
             <div className="solicitar-mudanza__container">
@@ -396,7 +404,7 @@ export default function SolicitarMudanza({ empresaSlug = null }) {
                         {errors.telefono && <p className="form-error">{errors.telefono}</p>}
                     </div>
 
-                    <Button_success value="Solicitar Mudanza" type="submit" />
+                    <Button_success value={buttonText} type="submit" />
 
                     <p className="form-info">
                         Al enviar esta solicitud, aceptas nuestros <a href="/reglas" target="_blank" rel="noopener noreferrer">términos y condiciones</a>. Tus datos serán utilizados únicamente para gestionar tu solicitud de mudanza.

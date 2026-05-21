@@ -1,40 +1,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import SuperAdminLayout from "@/components/layout/SuperAdminLayout";
-
 import { getDashboardMetrics } from "@/services/superAdmin";
 
 export default function SuperAdminDashboardPage() {
-
     const [metrics, setMetrics] = useState(null);
-
+    
     useEffect(() => {
-
         loadData();
-
     }, []);
 
     const loadData = async () => {
-
         const data = await getDashboardMetrics();
-
         setMetrics(data);
     };
 
     if (!metrics) return null;
 
     return (
-        <SuperAdminLayout
-            title="Dashboard"
-            subtitle="Resumen general del sistema"
-        >
+        <SuperAdminLayout title="Dashboard" subtitle="Resumen general del sistema" >
 
             {/* METRICS */}
-
             <section className="superadmin-dashboard__grid">
-
                 <article className="admin-card">
 
                     <div className="admin-card__top">
@@ -60,13 +48,10 @@ export default function SuperAdminDashboardPage() {
                 </article>
 
                 <article className="admin-card">
-
                     <div className="admin-card__top">
-
                         <span className="badge active">
                             Activo
                         </span>
-
                     </div>
 
                     <h3>
@@ -80,17 +65,13 @@ export default function SuperAdminDashboardPage() {
                     <p>
                         Servicios visibles actualmente
                     </p>
-
                 </article>
 
                 <article className="admin-card">
-
                     <div className="admin-card__top">
-
                         <span className="badge active">
                             Activo
                         </span>
-
                     </div>
 
                     <h3>
@@ -104,17 +85,13 @@ export default function SuperAdminDashboardPage() {
                     <p>
                         Leads disponibles actualmente
                     </p>
-
                 </article>
 
                 <article className="admin-card">
-
                     <div className="admin-card__top">
-
                         <span className="badge warning">
                             Pendiente
                         </span>
-
                     </div>
 
                     <h3>
@@ -128,17 +105,13 @@ export default function SuperAdminDashboardPage() {
                     <p>
                         Empresas pendientes por aprobar
                     </p>
-
                 </article>
 
                 <article className="admin-card">
-
                     <div className="admin-card__top">
-
                         <span className="badge monthly">
                             Este mes
                         </span>
-
                     </div>
 
                     <h3>
@@ -152,19 +125,13 @@ export default function SuperAdminDashboardPage() {
                     <p>
                         Créditos gastados en leads
                     </p>
-
                 </article>
-
             </section>
 
             {/* EMPRESAS */}
-
             <section className="superadmin-section">
-
                 <div className="superadmin-section__header">
-
                     <div>
-
                         <span>
                             Actividad reciente
                         </span>
@@ -172,42 +139,27 @@ export default function SuperAdminDashboardPage() {
                         <h2>
                             Últimas empresas registradas
                         </h2>
-
                     </div>
-
                 </div>
 
                 <div className="recent-companies">
-
                     {
                         metrics.ultimas_empresas.map((empresa) => (
-
-                            <article
-                                className="recent-company-card"
-                                key={empresa.id}
-                            >
-
+                            <article className="recent-company-card" key={empresa.id} >
                                 <div className="recent-company-card__left">
-
                                     <div className="recent-company-card__logo">
-
                                         {
                                             empresa.logo ? (
-                                                <img
-                                                    src={empresa.logo}
-                                                    alt={empresa.empresa}
-                                                />
+                                                <img src={empresa.logo} alt={empresa.empresa} />
                                             ) : (
                                                 <span>
                                                     {empresa.empresa?.charAt(0)}
                                                 </span>
                                             )
                                         }
-
                                     </div>
 
                                     <div className="recent-company-card__content">
-
                                         <h3>
                                             {empresa.empresa}
                                         </h3>
@@ -215,13 +167,10 @@ export default function SuperAdminDashboardPage() {
                                         <p>
                                             {empresa.email}
                                         </p>
-
                                     </div>
-
                                 </div>
 
                                 <div className="recent-company-card__right">
-
                                     <span className={`plan ${empresa.plan}`}>
                                         {empresa.plan || "explorador"}
                                     </span>
@@ -241,15 +190,12 @@ export default function SuperAdminDashboardPage() {
                                             </span>
                                         )
                                     }
-
                                 </div>
-
                             </article>
                         ))
                     }
 
                 </div>
-
             </section>
 
         </SuperAdminLayout>

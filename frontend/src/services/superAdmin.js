@@ -42,3 +42,78 @@ export async function rejectTrial(id) {
     );
     return handleResponse(res);
 }
+
+export async function getEmpresas(search = "") {
+    const res = await fetch(
+        `${API}/superadmin/empresas?search=${search}`
+    );
+    return handleResponse(res);
+}
+
+export async function addCreditos(id, creditos) {
+    const res = await fetch(
+        `${API}/superadmin/empresas/${id}/creditos`,
+        {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                creditos
+            })
+        }
+    );
+    return handleResponse(res);
+}
+
+export async function changePlan(id, plan) {
+    const res = await fetch(
+        `${API}/superadmin/empresas/${id}/plan`,
+        {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                plan
+            })
+        }
+    );
+    return handleResponse(res);
+}
+
+export async function createPartner(data) {
+    const res = await fetch(
+        `${API}/superadmin/partners`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        }
+    );
+    return handleResponse(res);
+}
+
+export const deleteEmpresa = async (empresaId) => {
+    const token = localStorage.getItem("token");
+    const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/superadmin/empresas/${empresaId}`,
+        {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application/json"
+            }
+        }
+    );
+
+    const data = await res.json();
+    if (!res.ok) {
+        throw new Error(data.message || "Error al eliminar empresa");
+    }
+    return data;
+};

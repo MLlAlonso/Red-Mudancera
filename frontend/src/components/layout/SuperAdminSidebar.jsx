@@ -14,22 +14,22 @@ export default function SuperAdminSidebar({
         {
             label: "Inicio",
             href: "/superadmin/dashboard",
-            icon: "/icons/hogar.png"
+            icon: "/icons/hogar_2.png"
         },
-/*         {
+         {
             label: "Empresas",
             href: "/superadmin/empresas",
-            icon: "/icons/team.png"
+            icon: "/icons/clientew.png"
         },
-        {
+/*         {
             label: "Servicios",
             href: "/superadmin/servicios",
             icon: "/icons/truck.png"
-        }, */
+        },  */
         {
             label: "Verificación",
             href: "/superadmin/trial-requests",
-            icon: "/icons/docs.png"
+            icon: "/icons/comprobado.png"
         },
 /*         {
             label: "Notificaciones",

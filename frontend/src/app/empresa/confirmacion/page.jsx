@@ -53,7 +53,8 @@ export default function EmpresaConfirmacion() {
         return;
       }
 
-      // Código correcto
+      // Guardar token
+      document.cookie = `token_empresa=${data.token}; path=/`;
       setVerified(true);
       localStorage.removeItem("empresa_email");
 
@@ -115,19 +116,20 @@ export default function EmpresaConfirmacion() {
 
           {error && <p className="empresa-register__error">{error}</p>}
 
-          <p className="empresa-register__code-text">Enviamos un código de verificación a tu correo. Revisa tu bandeja de entrada, Spam u otros.</p>
+          <div className="empresa-register__code-wrapper">
+            <p className="empresa-register__code-text">
+              Enviamos un código de verificación a tu correo, revisa tu bandeja de entrada, Spam u otros. 
+              <br />
+              <br />
 
-          <Input
-            label="Código"
-            placeholder="Ingresa código de verificación"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-          />
+              <span>
+                El código puede tardar de 1 a 2 minutos en llegar, ten paciencia.
+              </span>
+            </p>
+          </div>
+          <Input label="Código" placeholder="Ingresa código de verificación" value={code} onChange={(e) => setCode(e.target.value)} />
 
-          <Button_cta
-            value={loading ? "Validando..." : "Continuar"}
-            onClick={handleSubmit}
-          />
+          <Button_cta value={loading ? "Validando..." : "Continuar"} onClick={handleSubmit} />
         </div>
       </main>
 

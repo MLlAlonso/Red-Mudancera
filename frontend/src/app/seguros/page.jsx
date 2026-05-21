@@ -64,7 +64,7 @@ export default function SegurosPage() {
             <section className="seguroInfo">
                 <div className="seguroInfo__container">
                     <div className="seguroInfo__header">
-                        <h2>Protege tu mudanza con tarifa preferencial</h2>
+                        <h2>No dejes de proteger tu mudanza con tarifa preferencial</h2>
                         <p className="subtitulo">
                             Muchas personas asumen que su mudanza ya cuenta con protección, pero no siempre conocen los detalles.
                         </p>

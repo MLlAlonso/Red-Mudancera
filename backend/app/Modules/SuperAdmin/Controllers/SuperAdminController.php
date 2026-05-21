@@ -9,7 +9,6 @@ use App\Modules\Empresa\Mail\TrialApprovedMail;
 use App\Http\Controllers\Controller;
 use App\Modules\Empresa\Models\Empresa;
 use App\Modules\Empresa\Models\TrialRequest;
-use App\Modules\Usuario\Models\Usuario;
 use App\Modules\Servicio\Models\Servicio;
 use App\Modules\SolicitudMudanza\Models\LeadCompra;
 use App\Modules\SolicitudMudanza\Models\SolicitudMudanza;
@@ -22,7 +21,6 @@ class SuperAdminController extends Controller
     public function dashboard()
     {
         $inicioMes = now()->startOfMonth();
-
         return response()->json([
 
             /*
@@ -30,7 +28,6 @@ class SuperAdminController extends Controller
         | MÉTRICAS
         |--------------------------------------------------------------------------
         */
-
             'empresas' => Empresa::count(),
 
             'servicios_activos' => Servicio::where(
@@ -53,7 +50,6 @@ class SuperAdminController extends Controller
         | CRÉDITOS CONSUMIDOS MES
         |--------------------------------------------------------------------------
         */
-
             'creditos_mes' => LeadCompra::where(
                 'created_at',
                 '>=',
@@ -65,7 +61,6 @@ class SuperAdminController extends Controller
         | ÚLTIMAS EMPRESAS
         |--------------------------------------------------------------------------
         */
-
             'ultimas_empresas' => Empresa::latest()
                 ->take(10)
                 ->get([
@@ -116,6 +111,8 @@ class SuperAdminController extends Controller
         }
 
         $empresa->update([
+            'verificado' => true,
+            'estadoRFC' => 'validado',
             'isTrial' => true,
             'trialEndsAt' => now()->addDays(30),
             'plan' => 'radar',
@@ -130,7 +127,6 @@ class SuperAdminController extends Controller
                 new TrialApprovedMail($empresa)
             );
         } catch (\Throwable $e) {
-
             Log::error(
                 'Error enviando correo trial aprobado: '
                     . $e->getMessage()

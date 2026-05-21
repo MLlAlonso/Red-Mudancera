@@ -45,7 +45,7 @@
                                 utilizando el mismo correo y contraseña con los que te registraste.
                             </p>
 
-                    <!-- Gift Tokens Box -->
+                    <!-- Gift créditos Box -->
                     <tr>
                         <td style="padding:0 24px 24px 24px;">
                             <div
@@ -56,11 +56,11 @@
                                 text-align:center;
                                 color:#4A5E71;">
                                 <h3 style="margin:0 0 10px 0; color:#F1A43F;">
-                                    🎁 Has recibido 30 Tokens de Bienvenida
+                                    🎁 Has recibido 30 créditos de bienvenida
                                 </h3>
 
                                 <p style="margin:0;">
-                                    Estos tokens te permiten desbloquear
+                                    Estos créditos te permiten desbloquear
                                     <strong style="color:#F1A43F;">Contactos de Clientes</strong>
                                     dentro del inicio.
                                 </p>
@@ -72,7 +72,7 @@
                                 </p>
 
                                 <p style="margin-top:10px;font-size:13px;color:#777;">
-                                    ⚠️ Los tokens NO se utilizan para publicar servicios
+                                    ⚠️ Los créditos NO se utilizan para publicar servicios
                                     de "Busco" u "Ofrezco".
                                     Solo se utilizan para adquirir datos de contacto de clientes.
                                 </p>

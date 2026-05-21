@@ -21,7 +21,7 @@ export default function PlanesPage() {
 
     if (openTrial === "true") {
       setConfirm({ plan: "trial" });
-      window.history.replaceState({}, "", "/empresa/planes");
+      window.history.replaceState({}, "", "/empresa/planes?trial=true");
     }
   }, []);
 
@@ -341,6 +341,10 @@ export default function PlanesPage() {
       {verificationModal && (
         <PlanRequiredModal
           onClose={() => setVerificationModal(false)}
+          onVerify={() => {
+            setVerificationModal(false);
+            setConfirm({ plan: "trial" });
+          }}
         />
       )}
 

@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Modules\Empresa\Models\EmpresaImagen;
+use App\Modules\Usuario\Models\Usuario;
+use App\Modules\Servicio\Models\Servicio;
+use App\Modules\Notificacion\Models\Notificacion;
+use App\Modules\SolicitudMudanza\Models\LeadCompra;
+use App\Modules\SolicitudMudanza\Models\SolicitudMudanza;
 
 class Empresa extends Authenticatable
 {
@@ -95,5 +100,25 @@ class Empresa extends Authenticatable
     public function imagenes()
     {
         return $this->hasMany(EmpresaImagen::class)->orderBy('orden');
+    }
+
+    public function usuarios()
+    {
+        return $this->hasMany(Usuario::class);
+    }
+
+    public function servicios()
+    {
+        return $this->hasMany(Servicio::class);
+    }
+
+    public function notificaciones()
+    {
+        return $this->hasMany(Notificacion::class);
+    }
+
+    public function leadCompras()
+    {
+        return $this->hasMany(LeadCompra::class);
     }
 }

@@ -68,8 +68,7 @@ export default function EmpresaRegister() {
         return;
       }
 
-      // Registro exitoso
-      document.cookie = `token_empresa=${data.token}; path=/`;
+      // Registro temporal exitoso
       localStorage.setItem("empresa_email", formData.email);
       window.location.href = "/empresa/confirmacion";
     } catch (err) {
@@ -89,36 +88,22 @@ export default function EmpresaRegister() {
 
           {error && <p className="empresa-register__error">{error}</p>}
 
-          <Input
-            label="Nombre de la empresa"
-            placeholder="Nombre de la empresa"
-            value={formData.empresa}
+          <Input label="Nombre de la empresa" placeholder="Nombre de la empresa" value={formData.empresa}
             onChange={(e) => handleChange("empresa", e.target.value)}
           />
 
-          <Input
-            label="Correo de la empresa"
-            placeholder="Correo de la empresa"
-            type="email"
+          <Input label="Correo de la empresa" placeholder="Correo de la empresa" type="email"
             value={formData.email}
             onChange={(e) => handleChange("email", e.target.value)}
           />
 
           {/* Contraseña con tooltip */}
           <div style={{ position: "relative", width: "100%" }}>
-            <Input
-              label="Contraseña"
-              type="password"
-              placeholder="Mín. 8 caracteres y 1 número"
-              value={formData.password}
+            <Input label="Contraseña" type="password" placeholder="Mín. 8 caracteres y 1 número" value={formData.password}
               onChange={(e) => handleChange("password", e.target.value)}
             />
 
-            <span
-              className="empresa-register__help"
-              onMouseEnter={() => setShowPasswordRules(true)}
-              onMouseLeave={() => setShowPasswordRules(false)}
-            >
+            <span className="empresa-register__help" onMouseEnter={() => setShowPasswordRules(true)} onMouseLeave={() => setShowPasswordRules(false)} >
               ?
             </span>
 
@@ -131,24 +116,23 @@ export default function EmpresaRegister() {
             )}
           </div>
 
-          <Input
-            label="Nombre del responsable"
-            placeholder="Administrador empresa"
-            value={formData.representante}
+          <Input label="Nombre del responsable" placeholder="Administrador empresa" value={formData.representante}
             onChange={(e) => handleChange("representante", e.target.value)}
           />
 
-          <Input
-            label="Teléfono"
-            placeholder="Whatsapp de empresa"
-            value={formData.tel}
+          <Input label="Teléfono" placeholder="Whatsapp de empresa" value={formData.tel}
             onChange={(e) => handleChange("tel", e.target.value)}
           />
 
-          <Button_cta
-            value={loading ? "Registrando..." : "Registrarse"}
-            onClick={handleSubmit}
-          />
+          <p className="empresa-register__help-contact">
+            ¿Necesitas ayuda para registrarte y verificar tu empresa?{" "}
+
+            <a href="https://wa.me/5214421866719" target="_blank" rel="noopener noreferrer" >
+              Contáctanos
+            </a>
+          </p>
+
+          <Button_cta value={loading ? "Registrando..." : "Registrarse"} onClick={handleSubmit} />
 
           <p className="empresa-register__login-text">
             ¿Ya tienes una cuenta?{" "}
