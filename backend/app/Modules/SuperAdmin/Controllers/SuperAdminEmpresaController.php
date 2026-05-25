@@ -16,9 +16,7 @@ class SuperAdminEmpresaController extends Controller
 {
     protected PlanService $planService;
 
-    public function __construct(
-        PlanService $planService
-    ) {
+    public function __construct( PlanService $planService) {
         $this->planService = $planService;
     }
 
@@ -28,27 +26,66 @@ class SuperAdminEmpresaController extends Controller
     public function index(Request $request)
     {
         $search = $request->query('search');
-        $empresas = Empresa::query()
 
+        // EMPRESAS
+        $empresas = Empresa::query()
             ->when($search, function ($query) use ($search) {
                 $query->where('empresa', 'LIKE', "%{$search}%")
                     ->orWhere('email', 'LIKE', "%{$search}%")
-                    ->orWhere('representante', 'LIKE', "%{$search}%");
+                    ->orWhere(
+                        'representante',
+                        'LIKE',
+                        "%{$search}%"
+                    );
             })
             ->latest()
-            ->take(50)
+            ->take(200)
             ->get();
+
+        // FECHAS
+        $inicioMes = now()->startOfMonth();
+
+        // MÉTRICAS
+        $empresasTotal = Empresa::count();
+        $empresasMes = Empresa::where( 'created_at', '>=', $inicioMes )->count();
+
+        $trialsActivos = Empresa::where( 'isTrial', true )
+            ->where( 'trialEndsAt', '>=', now() )
+            ->count();
+
+        $premiumRadar = Empresa::where( 'plan', 'radar' )->count();
+        $premiumConector = Empresa::where( 'plan', 'conector' )->count();
+        $premiumTotal = $premiumRadar + $premiumConector;
+
+        $sinVerificar = Empresa::where( 'verificado', false )->count();
+
+        // LEADS / CRÉDITOS
+        $leadsMes = LeadCompra::where( 'created_at', '>=', $inicioMes )->count();
+        $creditosMes = LeadCompra::where( 'created_at', '>=', $inicioMes )->sum('tokens_pagados');
+
+        // PARTNERS
+        $partnersActivos = PartnerReferral::where( 'activo', true )->count();
+
+        // ACTIVIDAD EMPRESAS
+        $empresasActivasMes = Empresa::where( 'updated_at', '>=', $inicioMes )->count();
+        $empresasInactivas = $empresasTotal - $empresasActivasMes;
 
         return response()->json([
             'data' => $empresas,
 
             'metrics' => [
-                'trials_activos' => Empresa::where('isTrial', true)->where('trialEndsAt', '>=', now())->count(),
-                'premium_radar' => Empresa::where('plan', 'radar')->count(),
-                'premium_conector' => Empresa::where('plan', 'conector')->count(),
-                'leads_mes' => LeadCompra::whereMonth('created_at', Carbon::now()->month)->count(),
-                'sin_verificar' => Empresa::where('verificado', false)->count(),
-                'empresas_mes' => Empresa::whereMonth('created_at', Carbon::now()->month)->count(),
+                'empresas_total' => $empresasTotal,
+                'empresas_mes' => $empresasMes,
+                'trials_activos' => $trialsActivos,
+                'premium_total' => $premiumTotal,
+                'premium_radar' => $premiumRadar,
+                'premium_conector' => $premiumConector,
+                'sin_verificar' => $sinVerificar,
+                'leads_mes' => $leadsMes,
+                'creditos_mes' => $creditosMes,
+                'partners_activos' => $partnersActivos,
+                'empresas_activas_mes' => $empresasActivasMes,
+                'empresas_inactivas' => $empresasInactivas,
             ]
         ]);
     }
@@ -58,14 +95,9 @@ class SuperAdminEmpresaController extends Controller
      */
     public function addCreditos(Request $request, $id)
     {
-        $request->validate([
-            'creditos' => 'required|integer|min:1'
-        ]);
-
+        $request->validate([ 'creditos' => 'required|integer|min:1' ]);
         $empresa = Empresa::findOrFail($id);
-
         $empresa->tokens += $request->creditos;
-
         $empresa->save();
 
         return response()->json([
@@ -79,10 +111,7 @@ class SuperAdminEmpresaController extends Controller
      */
     public function changePlan(Request $request, $id)
     {
-        $request->validate([
-            'plan' => 'required|string|in:free,conector,radar'
-        ]);
-
+        $request->validate([ 'plan' => 'required|string|in:free,conector,radar' ]);
         $empresa = Empresa::findOrFail($id);
 
         $this->planService->changePlan(

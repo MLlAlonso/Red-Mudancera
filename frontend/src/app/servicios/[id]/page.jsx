@@ -8,6 +8,7 @@ import Button_crud from "@/components/common/Button_crud";
 import Button_cta from "@/components/common/Button_cta";
 import { openWhatsappMessage } from "@/utils/whatsapp";
 import { getPlan, canContact, canSeePhone } from "@/utils/plan";
+import LiveViewToast from "@/components/common/LiveViewToast";
 
 import "@/styles/pages/servicios/_detallesServicio.scss";
 
@@ -318,6 +319,8 @@ export default function DetalleServicioPage() {
         )}
 
       </main>
+
+      <LiveViewToast tipo="servicio" registroId={servicio.id} />
 
       <Footer />
     </>

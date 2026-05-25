@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Modules\SuperAdmin\Controllers\SuperAdminController;
 use App\Modules\SuperAdmin\Controllers\SuperAdminEmpresaController;
+use App\Modules\SuperAdmin\Controllers\SuperAdminServiciosController;
+use App\Modules\SuperAdmin\Controllers\SuperAdminAnalyticsController;
 
 Route::prefix('superadmin')->group(function () {
     Route::get('/dashboard', [SuperAdminController::class, 'dashboard']);
@@ -12,13 +14,26 @@ Route::prefix('superadmin')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Empresas Admin
+    | Empresas
     |--------------------------------------------------------------------------
     */
-    Route::get( '/empresas', [SuperAdminEmpresaController::class, 'index'] );
-    Route::patch( '/empresas/{id}/creditos', [SuperAdminEmpresaController::class, 'addCreditos'] );
-    Route::patch( '/empresas/{id}/plan', [SuperAdminEmpresaController::class, 'changePlan'] );
-    Route::post( '/partners', [SuperAdminEmpresaController::class, 'createPartner'] );
-    Route::delete( '/empresas/{id}', [SuperAdminEmpresaController::class, 'destroyEmpresa']);
+    Route::get('/empresas', [SuperAdminEmpresaController::class, 'index']);
+    Route::patch('/empresas/{id}/creditos', [SuperAdminEmpresaController::class, 'addCreditos']);
+    Route::patch('/empresas/{id}/plan', [SuperAdminEmpresaController::class, 'changePlan']);
+    Route::post('/partners', [SuperAdminEmpresaController::class, 'createPartner']);
+    Route::delete('/empresas/{id}', [SuperAdminEmpresaController::class, 'destroyEmpresa']);
 
+    /*
+    |--------------------------------------------------------------------------
+    | Servicios
+    |--------------------------------------------------------------------------
+    */
+    Route::get( '/servicios-dashboard', [SuperAdminServiciosController::class, 'dashboard'] );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Analisis
+    |--------------------------------------------------------------------------
+    */
+    Route::get( '/analytics/servicios', [SuperAdminAnalyticsController::class, 'servicios'] );
 });

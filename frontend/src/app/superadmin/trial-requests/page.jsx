@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import SuperAdminLayout from "@/components/layout/SuperAdminLayout";
-
 import { getTrialRequests, approveTrial, rejectTrial } from "@/services/superAdmin";
 
 export default function TrialRequestsPage() {

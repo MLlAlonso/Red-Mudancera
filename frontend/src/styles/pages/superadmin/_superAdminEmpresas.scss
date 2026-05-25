@@ -161,8 +161,7 @@
     }
 }
 
-.plan-badge,
-.status {
+.plan-badge, .status {
     padding: 8px 14px;
     border-radius: 999px;
     font-size: 12px;
@@ -182,6 +181,16 @@
 .status.pending {
     background: #FEF3C7;
     color: #92400E;
+}
+
+.status.warning {
+    background: #FEF3C7;
+    color: #92400E;
+}
+
+.status.inactive {
+    background: #E2E8F0;
+    color: #475569;
 }
 
 .table-actions {
@@ -310,6 +319,50 @@
             color: #047857;
         }
     }
+
+    &.premium {
+        background: #FAF5FF;
+
+        strong {
+            color: #7E22CE;
+        }
+    }
+
+    &.danger {
+        background: #FEF2F2;
+
+        strong {
+            color: #DC2626;
+        }
+    }
+
+    &.partner {
+        background: #EFF6FF;
+
+        strong {
+            color: #2563EB;
+        }
+    }
+
+    &.inactive {
+        background: #F8FAFC;
+
+        strong {
+            color: #475569;
+        }
+    }
+
+    &.dark {
+        background: #0F172A;
+
+        span {
+            color: #CBD5E1;
+        }
+
+        strong {
+            color: white;
+        }
+    }
 }
 
 .delete-btn {
@@ -370,7 +423,7 @@
     }
 }
 
-.secondary{
+.secondary {
     width: 90%;
     margin-top: -10px;
 }

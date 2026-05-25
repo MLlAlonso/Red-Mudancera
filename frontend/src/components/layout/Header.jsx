@@ -8,6 +8,9 @@ import SideMenuUsuario from "./SideMenuUsuario";
 import useClickOutside from "@/hooks/useClickOutside";
 import SearchBar from "@/components/common/SearchBar";
 import { useSearch } from "@/store/searchContext";
+import SystemToast from "@/components/common/SystemToast";
+import RealtimeNotificationToast from "@/components/common/RealtimeNotificationToast";
+import "@/styles/components/_systemToast.scss";
 
 export default function Header() {
   const [openMenu, setOpenMenu] = useState(false);
@@ -59,6 +62,10 @@ export default function Header() {
           <SideMenuEmpresa open={openMenu} />
         )}
       </div>
+
+      <SystemToast />
+      
+      <RealtimeNotificationToast />
     </header>
   );
 }

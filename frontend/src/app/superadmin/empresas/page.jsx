@@ -2,15 +2,7 @@
 
 import { useEffect, useState } from "react";
 import SuperAdminLayout from "@/components/layout/SuperAdminLayout";
-
-import {
-    getEmpresas,
-    addCreditos,
-    changePlan,
-    createPartner,
-    deleteEmpresa
-} from "@/services/superAdmin";
-
+import { getEmpresas, addCreditos, changePlan, createPartner, deleteEmpresa } from "@/services/superAdmin";
 import "@/styles/pages/superadmin/_superAdminEmpresas.scss";
 
 export default function SuperAdminEmpresasPage() {
@@ -19,10 +11,7 @@ export default function SuperAdminEmpresasPage() {
     const [search, setSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [perPage, setPerPage] = useState(10);
-
-    const [partner, setPartner] = useState({
-        nombre: ""
-    });
+    const [partner, setPartner] = useState({ nombre: "" });
 
     const [creditosModal, setCreditosModal] = useState({
         open: false,
@@ -146,19 +135,33 @@ export default function SuperAdminEmpresasPage() {
                 {
                     metrics && (
                         <section className="empresas-metrics">
-                            <article className="metric-card">
+                            {/* EMPRESAS */}
+                            <article className="metric-card success">
                                 <span>
-                                    Pruebas gratuitas activas
+                                    Nuevas este mes
                                 </span>
 
                                 <strong>
-                                    {metrics.trials_activos}
+                                    {metrics.empresas_mes}
+                                </strong>
+                            </article>
+
+                            
+
+                            {/* PREMIUM */}
+                            <article className="metric-card premium">
+                                <span>
+                                    Empresas premium
+                                </span>
+
+                                <strong>
+                                    {metrics.premium_total}
                                 </strong>
                             </article>
 
                             <article className="metric-card">
                                 <span>
-                                    plan Radar activos
+                                    Plan Radar
                                 </span>
 
                                 <strong>
@@ -168,7 +171,7 @@ export default function SuperAdminEmpresasPage() {
 
                             <article className="metric-card">
                                 <span>
-                                    plan Conector activos
+                                    Plan Conector
                                 </span>
 
                                 <strong>
@@ -176,17 +179,18 @@ export default function SuperAdminEmpresasPage() {
                                 </strong>
                             </article>
 
-                            <article className="metric-card">
+                            <article className="metric-card warning">
                                 <span>
-                                    Contactos comprados (mes)
+                                    Trials activos
                                 </span>
 
                                 <strong>
-                                    {metrics.leads_mes}
+                                    {metrics.trials_activos}
                                 </strong>
                             </article>
 
-                            <article className="metric-card warning">
+                            {/* VERIFICACIÓN */}
+                            <article className="metric-card danger">
                                 <span>
                                     Sin verificar
                                 </span>
@@ -196,13 +200,35 @@ export default function SuperAdminEmpresasPage() {
                                 </strong>
                             </article>
 
-                            <article className="metric-card success">
+                            {/* NEGOCIO */}
+                            <article className="metric-card">
                                 <span>
-                                    Nuevas este mes
+                                    Leads comprados
                                 </span>
 
                                 <strong>
-                                    {metrics.empresas_mes}
+                                    {metrics.leads_mes}
+                                </strong>
+                            </article>
+
+                            <article className="metric-card dark">
+                                <span>
+                                    Créditos consumidos
+                                </span>
+
+                                <strong>
+                                    {metrics.creditos_mes}
+                                </strong>
+                            </article>
+
+                            {/* PARTNERS */}
+                            <article className="metric-card partner">
+                                <span>
+                                    Partners activos
+                                </span>
+
+                                <strong>
+                                    {metrics.partners_activos}
                                 </strong>
                             </article>
                         </section>
@@ -213,15 +239,12 @@ export default function SuperAdminEmpresasPage() {
             <section className="empresas-table-wrapper">
                 <div className="search-box">
                     <img src="/icons/lupa.png" alt="Buscar" />
-
                     <input type="text" placeholder="Busca por nombre, correo, RFC..." value={search} onChange={(e) => setSearch(e.target.value)} />
                 </div>
 
                 <div className="pagination-top">
                     <div className="pagination-select">
-                        <span>
-                            Mostrar:
-                        </span>
+                        <span> Mostrar: </span>
 
                         <select value={perPage}
                             onChange={(e) => {
@@ -245,25 +268,12 @@ export default function SuperAdminEmpresasPage() {
                 <table className="empresas-table">
                     <thead>
                         <tr>
-                            <th>
-                                Empresa
-                            </th>
-
-                            <th>
-                                Plan
-                            </th>
-
-                            <th>
-                                Créditos
-                            </th>
-
-                            <th>
-                                Estado
-                            </th>
-
-                            <th>
-                                Acciones
-                            </th>
+                            <th> Empresa </th>
+                            <th> Plan </th>
+                            <th> Créditos </th>
+                            <th> Trial </th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
 
@@ -309,6 +319,22 @@ export default function SuperAdminEmpresasPage() {
 
                                     <td>
                                         {
+                                            empresa.isTrial ? (
+                                                <span className="status warning">
+                                                    Trial
+                                                </span>
+
+                                            ) : (
+
+                                                <span className="status inactive">
+                                                    No
+                                                </span>
+                                            )
+                                        }
+                                    </td>
+
+                                    <td>
+                                        {
                                             empresa.verificado ? (
                                                 <span className="status verified">
                                                     Verificada
@@ -345,7 +371,7 @@ export default function SuperAdminEmpresasPage() {
                 {
                     perPage !== "all" && totalPages > 1 && (
                         <div className="pagination">
-                            <button disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1) } >
+                            <button disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)} >
                                 Anterior
                             </button>
 
@@ -353,7 +379,7 @@ export default function SuperAdminEmpresasPage() {
                                 Página {currentPage} de {totalPages}
                             </span>
 
-                            <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(prev => prev + 1) } >
+                            <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(prev => prev + 1)} >
                                 Siguiente
                             </button>
                         </div>
@@ -383,9 +409,7 @@ export default function SuperAdminEmpresasPage() {
                 creditosModal.open && (
                     <div className="admin-modal-overlay">
                         <div className="admin-modal">
-                            <h2>
-                                Agregar créditos
-                            </h2>
+                            <h2> Agregar créditos </h2>
 
                             <input
                                 type="number"
@@ -426,9 +450,7 @@ export default function SuperAdminEmpresasPage() {
                 planModal.open && (
                     <div className="admin-modal-overlay">
                         <div className="admin-modal">
-                            <h2>
-                                Cambiar plan
-                            </h2>
+                            <h2> Cambiar plan </h2>
 
                             <select
                                 value={planModal.plan}
@@ -440,17 +462,9 @@ export default function SuperAdminEmpresasPage() {
                                 }
                             >
 
-                                <option value="free">
-                                    Free
-                                </option>
-
-                                <option value="conector">
-                                    Conector
-                                </option>
-
-                                <option value="radar">
-                                    Radar
-                                </option>
+                                <option value="free"> Free </option>
+                                <option value="conector"> Conector </option>
+                                <option value="radar"> Radar </option>
                             </select>
 
                             <div className="admin-modal__actions">
@@ -480,9 +494,7 @@ export default function SuperAdminEmpresasPage() {
                 deleteModal.open && (
                     <div className="admin-modal-overlay">
                         <div className="admin-modal danger">
-                            <h2>
-                                Eliminar empresa
-                            </h2>
+                            <h2> Eliminar empresa </h2>
 
                             <p className="danger-text">
                                 Estás a punto de eliminar permanentemente:
@@ -517,7 +529,7 @@ export default function SuperAdminEmpresasPage() {
                                         })}
                                 >
                                     Cancelar
-                                </button>                                
+                                </button>
                             </div>
                         </div>
                     </div>

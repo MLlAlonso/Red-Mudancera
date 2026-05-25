@@ -1,23 +1,14 @@
 @use "../../utils/variables" as *;
 
 .superadmin-dashboard {
-
     min-height: 100vh;
     background: $background;
-
     padding: clamp(16px, 4vw, 40px);
 
     &__grid {
-
         display: grid;
-
-        grid-template-columns: repeat(
-            auto-fit,
-            minmax(220px, 1fr)
-        );
-
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 16px;
-
         margin-bottom: 32px;
     }
 }
@@ -27,61 +18,41 @@
 | CARDS
 |--------------------------------------------------------------------------
 */
-
 .admin-card {
-
     background: #fff;
-
-    border-radius: 24px;
-
-    padding: 22px;
-
-    box-shadow: 0 10px 30px rgba(0,0,0,.04);
-
-    border: 1px solid rgba(0,0,0,.04);
-
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .04);
+    border: 1px solid rgba(0, 0, 0, .04);
     display: flex;
     flex-direction: column;
     gap: 12px;
-
     min-width: 0;
 
     &__top {
-
         display: flex;
         justify-content: flex-end;
     }
 
     h3 {
-
-        font-size: 15px;
-
+        font-size: 16px;
         color: $text-muted;
-
         font-weight: 600;
-
         line-height: 1.4;
     }
 
     &__value {
-
         font-size: clamp(2.2rem, 7vw, 3.4rem);
-
         font-weight: 800;
-
         line-height: 1;
-
+        text-align: center;
         color: $primary;
-
         word-break: break-word;
     }
 
     p {
-
         color: $text-muted;
-
         font-size: 14px;
-
         line-height: 1.5;
     }
 }
@@ -91,41 +62,38 @@
 | BADGES
 |--------------------------------------------------------------------------
 */
-
 .badge {
-
-    padding: 6px 12px;
-
+    padding: 6px 10px;
     border-radius: 999px;
-
-    font-size: 11px;
-
-    font-weight: 700;
-
+    font-size: 12px;
+    font-weight: 600;
     width: fit-content;
 
-    &.total {
-
-        background: #EEF2FF;
-        color: #4338CA;
-    }
-
     &.active {
-
         background: #DCFCE7;
         color: #166534;
     }
 
     &.warning {
-
         background: #FEF3C7;
         color: #92400E;
     }
 
-    &.monthly {
-
+    &.total,
+    &.monthly,
+    &.leads {
         background: #DBEAFE;
         color: #1D4ED8;
+    }
+
+    &.premium {
+        background: #F3E8FF;
+        color: #7E22CE;
+    }
+
+    &.trial {
+        background: #FEF3C7;
+        color: #92400E;
     }
 }
 
@@ -134,36 +102,25 @@
 | SECTION
 |--------------------------------------------------------------------------
 */
-
 .superadmin-section {
-
     margin-top: 10px;
 
     &__header {
-
         margin-bottom: 20px;
-
         display: flex;
         justify-content: space-between;
         align-items: center;
 
         span {
-
             font-size: 13px;
-
             color: $text-muted;
-
             display: block;
-
             margin-bottom: 4px;
         }
 
         h2 {
-
             font-size: clamp(1.2rem, 4vw, 1.6rem);
-
             font-weight: 800;
-
             color: $title;
         }
     }
@@ -174,113 +131,75 @@
 | RECENT COMPANIES
 |--------------------------------------------------------------------------
 */
-
 .recent-companies {
-
     display: flex;
     flex-direction: column;
     gap: 14px;
 }
 
 .recent-company-card {
-
     background: #fff;
-
     border-radius: 20px;
-
     padding: 18px;
-
     display: flex;
-
     justify-content: space-between;
-
     align-items: center;
-
     gap: 16px;
-
-    border: 1px solid rgba(0,0,0,.04);
-
-    box-shadow: 0 8px 20px rgba(0,0,0,.03);
+    border: 1px solid rgba(0, 0, 0, .04);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .03);
 
     &__left {
-
         display: flex;
-
         align-items: center;
-
         gap: 14px;
-
         min-width: 0;
     }
 
     &__logo {
-
         width: 52px;
         height: 52px;
-
         border-radius: 50%;
-
         overflow: hidden;
-
         flex-shrink: 0;
-
         background: $primary;
-
         color: #fff;
-
         display: flex;
         align-items: center;
         justify-content: center;
-
         font-weight: 700;
 
         img {
-
             width: 100%;
             height: 100%;
-
             object-fit: cover;
         }
     }
 
     &__content {
-
         min-width: 0;
 
         h3 {
-
             font-size: 15px;
-
             color: $title;
-
             margin-bottom: 4px;
-
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
         p {
-
             font-size: 13px;
-
             color: $text-muted;
-
             overflow: hidden;
             text-overflow: ellipsis;
         }
     }
 
     &__right {
-
         display: flex;
-
         align-items: center;
-
         flex-wrap: wrap;
-
         justify-content: flex-end;
-
         gap: 8px;
     }
 }
@@ -290,41 +209,186 @@
 | TAGS
 |--------------------------------------------------------------------------
 */
-
 .plan,
 .verified,
 .trial {
-
     padding: 6px 12px;
-
     border-radius: 999px;
-
     font-size: 11px;
-
     font-weight: 700;
-
     white-space: nowrap;
 }
 
 .plan {
-
     background: #EEF2FF;
-
     color: #4338CA;
 }
 
 .verified {
-
     background: #DCFCE7;
-
     color: #166534;
 }
 
 .trial {
-
     background: #FEF3C7;
-
     color: #92400E;
+}
+
+.announcement-box {
+    background: white;
+    border-radius: 28px;
+    padding: 26px;
+    margin-top: 24px;
+    margin-bottom: 14px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .05);
+    border: 1px solid rgba(9, 35, 62, .06);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg,
+                $tertiary,
+                $primary );
+    }
+
+    h2 {
+        font-size: 24px;
+        color: $title;
+        margin-bottom: 10px;
+        font-family: $font-title;
+    }
+
+    p {
+        color: $text-muted;
+        font-size: 14px;
+        line-height: 1.6;
+        max-width: 600px;
+    }
+}
+
+.announcement-form {
+    background: white;
+    border-radius: 28px;
+    padding: 26px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .05);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+    input,
+    textarea {
+        width: 100%;
+        border: 1px solid #D8E0E7;
+        border-radius: 18px;
+        padding: 16px 18px;
+        font-size: 15px;
+        font-family: $font-text;
+        transition: .2s ease;
+        outline: none;
+        background: #FAFCFD;
+
+        &:focus {
+            border-color: $primary;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(9, 35, 62, .06);
+        }
+    }
+
+    textarea {
+        min-height: 130px;
+        resize: vertical;
+        line-height: 1.6;
+    }
+
+    button {
+        width: fit-content;
+        min-width: 220px;
+        height: 54px;
+        border: none;
+        border-radius: 18px;
+        background: linear-gradient(135deg,
+                $primary,
+                $primary-hover );
+
+        color: white;
+        font-weight: 800;
+        font-size: 15px;
+        cursor: pointer;
+        transition: .25s ease;
+        box-shadow: 0 12px 24px rgba(9, 35, 62, .16);
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 32px rgba(9, 35, 62, .24);
+        }
+    }
+}
+
+.feedback-modal {
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    padding: 10px;
+
+    &__icon {
+        width: 82px;
+        height: 82px;
+        margin: 0 auto 22px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        font-weight: 900;
+
+        &.success {
+            background: rgba($success, .12);
+            color: $success;
+        }
+
+        &.error {
+            background: rgba(#EF4444, .12);
+            color: #EF4444;
+        }
+    }
+
+    h2 {
+        font-size: 26px;
+        color: $title;
+        margin-bottom: 12px;
+        font-family: $font-title;
+    }
+
+    p {
+        font-size: 15px;
+        line-height: 1.7;
+        color: $text-muted;
+        margin-bottom: 28px;
+    }
+
+    button {
+        width: 100%;
+        height: 54px;
+        border: none;
+        border-radius: 16px;
+        background: $primary;
+        color: white;
+        font-weight: 800;
+        font-size: 15px;
+        cursor: pointer;
+        transition: .2s ease;
+
+        &:hover {
+            background: $primary-hover;
+        }
+    }
 }
 
 /*
@@ -332,43 +396,44 @@
 | MOBILE
 |--------------------------------------------------------------------------
 */
-
 @media (max-width: 640px) {
-
     .recent-company-card {
-
         flex-direction: column;
-
         align-items: flex-start;
 
         &__right {
-
             width: 100%;
-
             justify-content: flex-start;
         }
     }
 
     .admin-card {
-
         padding: 18px;
+    }
+
+    .announcement-box,
+    .announcement-form {
+        padding: 20px;
+        border-radius: 22px;
+    }
+
+    .announcement-form {
+        button {
+            width: 100%;
+        }
     }
 }
 
 @media (max-width: 400px) {
-
     .superadmin-dashboard {
-
         padding: 14px;
     }
 
     .admin-card {
-
         border-radius: 18px;
     }
 
     .recent-company-card {
-
         border-radius: 18px;
     }
 }

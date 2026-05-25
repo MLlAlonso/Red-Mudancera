@@ -94,3 +94,17 @@ require base_path('app/Modules/PartnerReferral/routes.php');
 |--------------------------------------------------------------------------
 */
 require base_path('app/Modules/SuperAdmin/routes.php');
+
+/*
+|--------------------------------------------------------------------------
+| SystemAnnouncement
+|--------------------------------------------------------------------------
+*/
+require base_path( 'app/Modules/SystemAnnouncement/routes.php' );
+
+/*
+|--------------------------------------------------------------------------
+| Analytics - Live Viewers
+|--------------------------------------------------------------------------
+*/
+require base_path( 'app/Modules/Analytics/routes.php' );

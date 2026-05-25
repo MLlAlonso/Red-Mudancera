@@ -21,46 +21,62 @@ class SuperAdminController extends Controller
     public function dashboard()
     {
         $inicioMes = now()->startOfMonth();
+
+        /*
+        |--------------------------------------------------------------------------
+        | EMPRESAS
+        |--------------------------------------------------------------------------
+        */
+        $empresasTotal = Empresa::count();
+        $empresasMes = Empresa::where( 'created_at', '>=', $inicioMes )->count();
+        $empresasPremium = Empresa::whereIn( 'plan', ['radar', 'conector'] )->count();
+
+        $trialsActivos = Empresa::where( 'isTrial', true )
+            ->where( 'trialEndsAt', '>=', now() )
+            ->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | SERVICIOS / LEADS
+        |--------------------------------------------------------------------------
+        */
+        $serviciosActivos = Servicio::where( 'estado', 'activo' )->count();
+        $solicitudesActivas = SolicitudMudanza::where( 'estado', 'activo' )->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | MATCHINGS / COMPRAS
+        |--------------------------------------------------------------------------
+        */
+        $matchingsMes = LeadCompra::where( 'created_at', '>=', $inicioMes )->count();
+        $creditosMes = LeadCompra::where( 'created_at', '>=', $inicioMes )->sum('tokens_pagados');
+
+        /*
+        |--------------------------------------------------------------------------
+        | VERIFICACIONES
+        |--------------------------------------------------------------------------
+        */
+        $verificacionesPendientes = TrialRequest::where( 'status', 'pendiente' )->count();
+
         return response()->json([
+            'metrics' => [
+                'empresas_total' => $empresasTotal,
+                'empresas_mes' => $empresasMes,
+                'empresas_premium' => $empresasPremium,
+                'trials_activos' => $trialsActivos,
+                'servicios_activos' => $serviciosActivos,
+                'solicitudes_activas' => $solicitudesActivas,
+                'matchings_mes' => $matchingsMes,
+                'creditos_mes' => $creditosMes,
+                'verificaciones_pendientes' => $verificacionesPendientes,
+            ],
 
             /*
-        |--------------------------------------------------------------------------
-        | MÉTRICAS
-        |--------------------------------------------------------------------------
-        */
-            'empresas' => Empresa::count(),
+            |--------------------------------------------------------------------------
+            | ÚLTIMAS EMPRESAS
+            |--------------------------------------------------------------------------
+            */
 
-            'servicios_activos' => Servicio::where(
-                'estado',
-                'activo'
-            )->count(),
-
-            'solicitudes_activas' => SolicitudMudanza::where(
-                'estado',
-                'activo'
-            )->count(),
-
-            'verificaciones_pendientes' => TrialRequest::where(
-                'status',
-                'pendiente'
-            )->count(),
-
-            /*
-        |--------------------------------------------------------------------------
-        | CRÉDITOS CONSUMIDOS MES
-        |--------------------------------------------------------------------------
-        */
-            'creditos_mes' => LeadCompra::where(
-                'created_at',
-                '>=',
-                $inicioMes
-            )->sum('tokens_pagados'),
-
-            /*
-        |--------------------------------------------------------------------------
-        | ÚLTIMAS EMPRESAS
-        |--------------------------------------------------------------------------
-        */
             'ultimas_empresas' => Empresa::latest()
                 ->take(10)
                 ->get([
@@ -81,10 +97,7 @@ class SuperAdminController extends Controller
      */
     public function trialRequests()
     {
-        $trials = TrialRequest::with('empresa')
-            ->latest()
-            ->get();
-
+        $trials = TrialRequest::with('empresa') ->latest() ->get();
         return response()->json([
             'data' => $trials
         ]);
@@ -96,15 +109,10 @@ class SuperAdminController extends Controller
     public function approveTrial($id)
     {
         $trial = TrialRequest::findOrFail($id);
-
-        $trial->update([
-            'status' => 'aprobado'
-        ]);
-
+        $trial->update([ 'status' => 'aprobado' ]);
         $empresa = $trial->empresa()->first();
 
         if (!$empresa) {
-
             return response()->json([
                 'message' => 'Empresa no encontrada'
             ], 404);
@@ -122,10 +130,7 @@ class SuperAdminController extends Controller
         ]);
 
         try {
-
-            Mail::to($empresa->email)->send(
-                new TrialApprovedMail($empresa)
-            );
+            Mail::to($empresa->email)->send( new TrialApprovedMail($empresa) );
         } catch (\Throwable $e) {
             Log::error(
                 'Error enviando correo trial aprobado: '

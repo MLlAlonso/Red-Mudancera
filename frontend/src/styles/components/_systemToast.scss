@@ -1,0 +1,116 @@
+@use "../utils/variables" as *;
+
+.system-toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 32px);
+    max-width: 480px;
+    background: rgba(9, 35, 62, 0.96);
+    backdrop-filter: blur(12px);
+    color: white;
+    border-radius: 22px;
+    padding: 18px;
+    z-index: 999999;
+    box-shadow: 0 20px 50px rgba(0,0,0,.28);
+    animation: toastIn .28s ease;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid rgba(255,255,255,.08);
+
+    &__icon {
+        width: 60px;
+        height: 60px;
+        min-width: 60px;
+        border-radius: 16px;
+        background: linear-gradient(
+                135deg,
+                $tertiary,
+                #FFCA7A
+            );
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 24px rgba(241,164,63,.35);
+
+        img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+    }
+
+    &__content {
+        flex: 1;
+
+        strong {
+            display: block;
+            font-size: 15px;
+            margin-bottom: 6px;
+            color: white;
+            font-family: $font-title;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: rgba(255,255,255,.82);
+            white-space: pre-line;
+        }
+    }
+
+    &.realtime {
+        bottom: 24px;
+    }
+}
+
+@keyframes toastIn {
+    from {
+        opacity: 0;
+        transform:
+            translateX(-50%)
+            translateY(20px)
+            scale(.96);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateX(-50%)
+            translateY(0)
+            scale(1);
+    }
+}
+
+@media (max-width: 640px) {
+    .system-toast {
+        border-radius: 18px;
+        padding: 16px;
+        gap: 14px;
+
+        &__icon {
+            width: 50px;
+            height: 50px;
+            min-width: 50px;
+            border-radius: 14px;
+
+            img {
+                width: 30px;
+                height: 30px;
+            }
+        }
+
+        &__content {
+            strong {
+                font-size: 14px;
+            }
+
+            p {
+                font-size: 13px;
+            }
+        }
+    }
+}

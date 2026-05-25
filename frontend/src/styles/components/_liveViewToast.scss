@@ -1,0 +1,70 @@
+@use "../utils/variables" as *;
+
+.live-view-toast {
+    position: fixed;
+    bottom: 110px;
+    right: 20px;
+    z-index: 99999;
+    background: white;
+    border-radius: 999px;
+    height: 46px;
+    padding: 0 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.12);
+    border: 1px solid rgba(0,0,0,.06);
+    animation: liveToastIn .25s ease;
+
+    p {
+        font-size: 13px;
+        color: $title;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    strong {
+        color: $primary;
+    }
+
+    &__dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #22C55E;
+        position: relative;
+
+        &::before {
+            content: "";
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            background:rgba(34,197,94,.25);
+            animation: pulse 1.5s infinite;
+        }
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(.8);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.8);
+        opacity: 0;
+    }
+}
+
+@keyframes liveToastIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

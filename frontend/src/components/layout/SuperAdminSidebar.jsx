@@ -3,39 +3,34 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function SuperAdminSidebar({
-    isOpen,
-    setIsOpen
-}) {
-
+export default function SuperAdminSidebar({ isOpen, setIsOpen}) {
     const pathname = usePathname();
-
     const links = [
         {
             label: "Inicio",
             href: "/superadmin/dashboard",
             icon: "/icons/hogar_2.png"
         },
-         {
+        {
             label: "Empresas",
             href: "/superadmin/empresas",
             icon: "/icons/clientew.png"
         },
-/*         {
+        {
             label: "Servicios",
             href: "/superadmin/servicios",
-            icon: "/icons/truck.png"
-        },  */
+            icon: "/icons/ofrezco_btn.png"
+        },
         {
             label: "Verificación",
             href: "/superadmin/trial-requests",
             icon: "/icons/comprobado.png"
         },
-/*         {
-            label: "Notificaciones",
-            href: "/superadmin/planes",
-            icon: "/icons/planes.png"
-        }, */
+        /*         {
+                    label: "Notificaciones",
+                    href: "/superadmin/planes",
+                    icon: "/icons/planes.png"
+                }, */
     ];
 
     return (

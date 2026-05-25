@@ -4,8 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Modules\Notificacion\Controllers\NotificacionController;
 use App\Modules\Notificacion\Controllers\PushSubscriptionController;
 use App\Modules\Notificacion\Controllers\TestPushController;
+use App\Modules\Notificacion\Controllers\RealtimeToastController;
 
 Route::middleware('auth:empresa')->prefix('empresa')->group(function () {
+    Route::get( '/toast/latest', [RealtimeToastController::class, 'latestEmpresa'] );
     Route::get('/notificaciones', [NotificacionController::class, 'indexEmpresa']);
     Route::get('/notificaciones/count', [NotificacionController::class, 'countEmpresa']);
     Route::patch('/notificaciones/marcar-todas', [NotificacionController::class, 'marcarTodasLeidasEmpresa']);
@@ -24,5 +26,5 @@ Route::middleware('auth:usuario')->prefix('usuario')->group(function () {
         ->whereNumber('id');
 });
 
-Route::middleware('auth:empresa')->post( '/push-subscriptions', [PushSubscriptionController::class, 'store'] );
-Route::middleware('auth:empresa')->post( '/test-push', [TestPushController::class, 'send'] );
+Route::middleware('auth:empresa')->post('/push-subscriptions', [PushSubscriptionController::class, 'store']);
+Route::middleware('auth:empresa')->post('/test-push', [TestPushController::class, 'send']);

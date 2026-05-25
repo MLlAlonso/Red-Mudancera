@@ -44,6 +44,8 @@
 @use "./layout/superAdminLayout";
 @use "./pages/superadmin/trialRequests";
 
+@use "./components/systemToast";
+
 * {
   margin: 0;
   padding: 0;

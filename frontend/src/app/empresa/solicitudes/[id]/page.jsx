@@ -8,6 +8,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Button_cta from "@/components/common/Button_cta";
 import ComprarLeadModal from "@/components/modals/ComprarLeadModal";
+import LiveViewToast from "@/components/common/LiveViewToast";
 import "@/styles/pages/solicitudes/_detalleSolicitud.scss";
 
 export default function DetalleSolicitudPage() {
@@ -254,6 +255,8 @@ export default function DetalleSolicitudPage() {
 
                 </div>
             </main>
+
+            <LiveViewToast tipo="contacto" registroId={solicitud.id} />
 
             <Footer />
 

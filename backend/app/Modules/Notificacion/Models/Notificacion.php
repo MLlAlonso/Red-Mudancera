@@ -26,11 +26,9 @@ class Notificacion extends Model
     */
     public function usuarios()
     {
-        return $this->belongsToMany(
-            \App\Modules\Usuario\Models\Usuario::class,
-            'notificacion_usuario'
-        )->withPivot(['leida', 'leida_at'])
-         ->withTimestamps();
+        return $this->belongsToMany(\App\Modules\Usuario\Models\Usuario::class, 'notificacion_usuario')
+            ->withPivot(['leida', 'leida_at'])
+            ->withTimestamps();
     }
 
     /*

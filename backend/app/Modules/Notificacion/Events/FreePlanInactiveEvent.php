@@ -12,7 +12,6 @@ class FreePlanInactiveEvent extends BaseNotificationEvent
     public function __construct(int $empresaId, $fechaLimite)
     {
         parent::__construct();
-
         $this->empresaId = $empresaId;
         $this->fechaLimite = Carbon::parse($fechaLimite)->format('d/m/Y');
     }
