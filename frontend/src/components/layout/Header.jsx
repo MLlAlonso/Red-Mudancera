@@ -15,14 +15,18 @@ import "@/styles/components/_systemToast.scss";
 export default function Header() {
   const [openMenu, setOpenMenu] = useState(false);
   const [homeHref, setHomeHref] = useState("/");
-  const menuRef = useRef(null);
-  const pathname = usePathname();
-  const { search, setSearch } = useSearch();
-  const isEmpresaDashboard = pathname === "/empresa/dashboard";
-  const isUsuarioDashboard = pathname === "/usuario/dashboard";
-  const isDashboard = isEmpresaDashboard || isUsuarioDashboard;
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
-  useClickOutside(menuRef, () => setOpenMenu(false));
+  const menuRef = useRef(null);
+
+  const pathname = usePathname();
+
+  const { search, setSearch } = useSearch();
+
+  useClickOutside(menuRef, () => {
+    setOpenMenu(false);
+    setMobileSearchOpen(false);
+  });
 
   useEffect(() => {
     const cookies = document.cookie;
@@ -42,29 +46,42 @@ export default function Header() {
 
   return (
     <header className="header">
-      <div className="header__content">
-        {/* LOGO */}
-        <Link href={homeHref}>
-          <img src="/logo/logo.png" alt="app logo" className="header__logo" />
-        </Link>
-
-        {/* SEARCH BAR */}
-        <SearchBar disabled={false} />
-
-        {/* MENU */}
-        <img src="/icons/menu.png" alt="menu" className="header__menu" onClick={() => setOpenMenu(!openMenu)} />
-      </div>
-
       <div ref={menuRef}>
+        <div className="header__content">
+          {/* SEARCH MOBILE */}
+          <button className="header__searchButton" onClick={() => setMobileSearchOpen(!mobileSearchOpen)} >
+            <img src="/icons/lupa.png" alt="buscar" />
+          </button>
+
+          {/* LOGO */}
+          <Link href={homeHref} className="header__logoContainer">
+            <img src="/logo/logo.png" alt="app logo" className="header__logo" />
+          </Link>
+
+          {/* SEARCH DESKTOP */}
+          <div className="header__searchDesktop">
+            <SearchBar disabled={false} />
+          </div>
+
+          {/* MENU */}
+          <img src="/icons/menu.png" alt="menu" className="header__menu" onClick={() => setOpenMenu(!openMenu)} />
+        </div>
+
+        {/* SEARCH MOBILE EXPAND */}
+        <div className={`header__mobileSearch ${mobileSearchOpen ? "header__mobileSearch--active" : "" }`} >
+          <SearchBar disabled={false} />
+        </div>
+
         {homeHref.startsWith("/usuario") ? (
           <SideMenuUsuario open={openMenu} />
         ) : (
           <SideMenuEmpresa open={openMenu} />
         )}
+
       </div>
 
       <SystemToast />
-      
+
       <RealtimeNotificationToast />
     </header>
   );

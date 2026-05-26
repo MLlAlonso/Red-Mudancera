@@ -1,7 +1,11 @@
 <?php
 
 namespace App\Modules\Notificacion\Events;
+
 use App\Modules\Servicio\Models\Servicio;
+use Illuminate\Support\Facades\Mail;
+use App\Modules\Empresa\Models\Empresa;
+use App\Modules\Empresa\Mail\ServicioPorVencerMail;
 
 class ServicioPorVencerEvent extends BaseNotificationEvent
 {
@@ -42,5 +46,23 @@ class ServicioPorVencerEvent extends BaseNotificationEvent
     public function getType(): string
     {
         return 'alerta';
+    }
+
+    public function sendCustomEmail(): void
+    {
+        $empresa = Empresa::find(
+            $this->getEmpresaId()
+        );
+
+        if (!$empresa) {
+            return;
+        }
+
+        Mail::to($empresa->email)->queue(
+            new ServicioPorVencerMail(
+                $empresa,
+                $this->payload['servicio']
+            )
+        );
     }
 }

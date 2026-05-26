@@ -290,6 +290,10 @@ export default function EmpresaPerfil() {
 
             {/* ACTIONS */}
             <div className="empresa-perfil__actions">
+              <button className="empresa-perfil__action-btn" onClick={() => router.push("/empresa/configuracion")} >
+                Configuración
+              </button>
+
               {/* Copiar link de referidos */}
               <button className="empresa-perfil__action-btn"
                 onClick={() => {
@@ -307,7 +311,7 @@ export default function EmpresaPerfil() {
                 }}
               >
                 <img src="/icons/copy.png" alt="Referidos" />
-                {copiedReferral ? "Link copiado" : "Copiar link de referidos"}
+                {copiedReferral ? "Link copiado" : "Copiar link referidos"}
               </button>
 
               {/* Compartir perfil */}
@@ -325,6 +329,8 @@ export default function EmpresaPerfil() {
                 {copiedProfile ? "Link copiado" : "Compartir perfil"}
               </button>
             </div>
+
+
 
             {/* SUSCRIPCIÓN */}
             {empresa.plan !== "free" && (

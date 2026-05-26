@@ -1,7 +1,11 @@
 <?php
 
 namespace App\Modules\Notificacion\Events;
+
+use Illuminate\Support\Facades\Mail;
+use App\Modules\Empresa\Models\Empresa;
 use App\Modules\Servicio\Models\Servicio;
+use App\Modules\Empresa\Mail\ServicioFinalizadoMail;
 
 class ServicioFinalizadoEvent extends BaseNotificationEvent
 {
@@ -37,5 +41,28 @@ class ServicioFinalizadoEvent extends BaseNotificationEvent
     public function getType(): string
     {
         return 'alerta';
+    }
+
+    public function shouldSendEmail(): bool
+    {
+        return true;
+    }
+
+    public function sendCustomEmail(): void
+    {
+        $empresa = Empresa::find(
+            $this->getEmpresaId()
+        );
+
+        if (!$empresa) {
+            return;
+        }
+
+        Mail::to($empresa->email)->queue(
+            new ServicioFinalizadoMail(
+                $empresa,
+                $this->payload['servicio']
+            )
+        );
     }
 }

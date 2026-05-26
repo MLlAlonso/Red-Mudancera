@@ -205,7 +205,7 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
 
     const heroSubtitle =
         landingConfig.heroSubtitle ||
-        "Publica tu solicitud en menos de 2 minutos y recibe contacto de empresas verificadas.";
+        "Solicita tu presupuesto  en menos de 2 minutos y recibe  las mejores propuestas.";
 
     const buttonText =
         landingConfig.buttonText ||
