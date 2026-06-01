@@ -12,7 +12,7 @@ export default function LiveViewToast({ tipo, registroId }) {
         
         const interval = setInterval(() => {
             track();
-        }, 20000);
+        }, 30000);
         
         track();
 

@@ -17,6 +17,8 @@ class Notificacion extends Model
         'creado_por',
         'leida_empresa',
         'leida_empresa_at',
+        'toast_mostrado',
+        'toast_mostrado_at',
     ];
 
     /*

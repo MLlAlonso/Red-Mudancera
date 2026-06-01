@@ -11,7 +11,7 @@ export default function RealtimeNotificationToast() {
         loadToast();
         const interval = setInterval(
             loadToast,
-            10000
+            30000
         );
 
         return () => clearInterval(interval);
@@ -37,14 +37,20 @@ export default function RealtimeNotificationToast() {
             );
 
             const json = await res.json();
-
             if (!json.data) return;
-            const storageKey = `toast_${json.data.id}`;
-            const alreadySeen = sessionStorage.getItem( storageKey );
-            if (alreadySeen) return;
-            sessionStorage.setItem( storageKey, "1" );
             setToast(json.data);
             setVisible(true);
+
+            await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/empresa/toast/${json.data.id}/shown`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        Authorization:
+                            `Bearer ${token}`
+                    }
+                }
+            );
 
             setTimeout(() => {
                 setVisible(false);

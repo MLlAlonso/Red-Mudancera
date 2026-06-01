@@ -118,6 +118,22 @@
         color: variables.$success;
         font-weight: 500;
     }
+
+    .push-btn {
+        border: none;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all .25s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            transform: translateY(-1px);
+        }
+    }
 }
 
 .configuracion__modal {
@@ -175,6 +191,24 @@
     cursor: pointer;
 }
 
+.push-btn--inactive {
+    background: variables.$primary;
+    color: #fff;
+
+    &:hover {
+        background: variables.$primary-hover;
+    }
+}
+
+.push-btn--active {
+    background: variables.$error;
+    color: variables.$title;
+
+    &:hover {
+        background: variables.$error-hover;
+    }
+}
+
 @media (max-width: 768px) {
     .configuracion {
         &__title {
@@ -196,58 +230,58 @@
 }
 
 @media (max-width: 480px) {
-  .configuracion {
+    .configuracion {
 
-    padding: 20px 12px;
+        padding: 20px 12px;
 
-    &__title {
-      font-size: 26px;
+        &__title {
+            font-size: 26px;
+        }
+
+        &__subtitle {
+            font-size: 16px;
+        }
+
+        &__block {
+            padding: 18px;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        &__box input {
+            font-size: 16px;
+        }
     }
 
-    &__subtitle {
-      font-size: 16px;
-    }
+    .configuracion__modal-actions {
+        flex-direction: column;
 
-    &__block {
-      padding: 18px;
+        button {
+            width: 100%;
+        }
     }
-
-    h2 {
-      font-size: 20px;
-    }
-
-    &__box input {
-      font-size: 16px;
-    }
-  }
-
-  .configuracion__modal-actions {
-    flex-direction: column;
-
-    button {
-      width: 100%;
-    }
-  }
 }
 
 @media (max-width: 360px) {
-  .configuracion {
+    .configuracion {
 
-    &__title {
-      font-size: 22px;
-    }
+        &__title {
+            font-size: 22px;
+        }
 
-    &__subtitle {
-      font-size: 14px;
+        &__subtitle {
+            font-size: 14px;
+        }
     }
-  }
 }
 
 @media (max-width: 300px) {
-  .configuracion {
+    .configuracion {
 
-    &__title {
-      font-size: 18px;
+        &__title {
+            font-size: 18px;
+        }
     }
-  }
 }

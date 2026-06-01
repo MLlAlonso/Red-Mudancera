@@ -10,14 +10,19 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use App\Services\WhatsAppService;
 
 class SolicitudMudanzaService
 {
     protected GoogleDistanceService $distanceService;
+    protected WhatsAppService $whatsAppService;
 
-    public function __construct(GoogleDistanceService $distanceService)
-    {
+    public function __construct(
+        GoogleDistanceService $distanceService,
+        WhatsAppService $whatsAppService
+    ) {
         $this->distanceService = $distanceService;
+        $this->whatsAppService = $whatsAppService;
     }
 
     public function crear(array $data): SolicitudMudanza
@@ -136,7 +141,10 @@ class SolicitudMudanzaService
                 'partner_referral_id' => $partnerReferralId,
             ]);
 
-            Mail::to($solicitud->email) ->queue(new SolicitudMudanzaVerificationCode($codigo));
+            $this->enviarCodigoVerificacion(
+                $solicitud,
+                $codigo
+            );
             return $solicitud;
         });
     }
@@ -182,7 +190,7 @@ class SolicitudMudanzaService
             'inventario' => $solicitud->inventario
         ]);
 
-        Mail::to($solicitud->email) ->later(now()->addSeconds(70), new SolicitudMudanzaResumen($solicitud));
+        Mail::to($solicitud->email)->later(now()->addSeconds(70), new SolicitudMudanzaResumen($solicitud));
 
         return $solicitud;
     }
@@ -256,6 +264,62 @@ class SolicitudMudanzaService
         return str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
     }
 
+    private function enviarCodigoVerificacion(
+        SolicitudMudanza $solicitud,
+        string $codigo
+    ): void {
+
+        /*
+    |--------------------------------------------------------------------------
+    | Correo
+    |--------------------------------------------------------------------------
+    */
+        try {
+
+            Mail::to($solicitud->email)
+                ->queue(
+                    new SolicitudMudanzaVerificationCode($codigo)
+                );
+
+            Log::info('Codigo enviado por correo', [
+                'solicitud_id' => $solicitud->id,
+                'email' => $solicitud->email
+            ]);
+        } catch (\Throwable $e) {
+
+            Log::error('Error enviando correo verificacion', [
+                'solicitud_id' => $solicitud->id,
+                'email' => $solicitud->email,
+                'error' => $e->getMessage()
+            ]);
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | WhatsApp
+    |--------------------------------------------------------------------------
+    */
+        try {
+
+            $this->whatsAppService->sendVerificationCode(
+                $solicitud->telefono,
+                $codigo
+            );
+
+            Log::info('Codigo enviado por WhatsApp', [
+                'solicitud_id' => $solicitud->id,
+                'telefono' => $solicitud->telefono
+            ]);
+        } catch (\Throwable $e) {
+
+            Log::error('Error enviando WhatsApp verificacion', [
+                'solicitud_id' => $solicitud->id,
+                'telefono' => $solicitud->telefono,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
     public function reenviarCodigo(int $id): void
     {
         $solicitud = SolicitudMudanza::findOrFail($id);
@@ -269,8 +333,10 @@ class SolicitudMudanzaService
             'codigo_expira_en' => now()->addMinutes(15),
         ]);
 
-        Mail::to($solicitud->email)
-            ->queue(new SolicitudMudanzaVerificationCode($nuevoCodigo));
+        $this->enviarCodigoVerificacion(
+            $solicitud,
+            $nuevoCodigo
+        );
     }
 
     private function calcularFechaLimite(string $fechaSeleccionada): ?string

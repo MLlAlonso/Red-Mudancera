@@ -19,7 +19,7 @@
             font-family: $font-title;
             font-size: 52px;
             font-weight: bold;
-            margin-bottom: 1rem;
+            margin-bottom: 5px;
             letter-spacing: -1px;
         }
 
@@ -34,7 +34,7 @@
     }
 
     .hero-logo {
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
 
         img {
             height: 90px;
@@ -453,7 +453,7 @@
     .solicitar-mudanza {
 
         &__hero {
-            padding: 4rem 1rem 7rem 1rem;
+            padding: 4rem 1rem 5rem 1rem;
 
             .title {
                 font-size: 36px;
@@ -474,7 +474,7 @@
     .solicitar-mudanza {
 
         &__hero {
-            padding: 3rem 1rem 6rem;
+            padding: 2rem 1rem 4rem;
 
             .title {
                 font-size: 26px;
@@ -486,7 +486,7 @@
         }
 
         .hero-logo img {
-            height: 70px;
+            height: 60px;
         }
 
         &__container {
@@ -539,7 +539,7 @@
 @media (max-width: 300px) {
     .solicitar-mudanza {
         .hero-logo img {
-            height: 55px;
+            height: 40px;
         }
 
         &__form {

@@ -2,17 +2,25 @@
 
 namespace App\Modules\Notificacion\Channels;
 
+use App\Services\OneSignalService;
 use App\Modules\Notificacion\Events\BaseNotificationEvent;
 use App\Modules\Notificacion\Models\NotificationPreference;
 use App\Modules\Notificacion\Models\NotificationMetric;
 use App\Modules\Usuario\Models\Usuario;
-use Illuminate\Support\Facades\Log;
 
 class PushChannel implements NotificationChannelInterface
 {
+    protected OneSignalService $push;
+
+    public function __construct(OneSignalService $push)
+    {
+        $this->push = $push;
+    }
+
     public function send(BaseNotificationEvent $event): void
     {
         $empresaId = $event->getEmpresaId();
+
         if (!$empresaId) {
             return;
         }
@@ -21,9 +29,8 @@ class PushChannel implements NotificationChannelInterface
             return;
         }
 
-        $usuarios = Usuario::where('empresa_id', $empresaId)
-            ->where('activoEmpresa', true)
-            ->get();
+        $usuarios = Usuario::where('empresa_id', $empresaId) ->where('activoEmpresa', true) ->get();
+        $shouldSend = false;
 
         foreach ($usuarios as $usuario) {
             $pref = NotificationPreference::where([
@@ -32,23 +39,29 @@ class PushChannel implements NotificationChannelInterface
                 'canal' => 'push',
             ])->first();
 
-            if ($pref && !$pref->activo) {
-                continue;
+            // si NO existe preferencia → permitir
+            if (!$pref || $pref->activo) {
+                $shouldSend = true;
+                break;
             }
-
-            // Aquí irá envío real cuando conectemos Web Push
-            Log::info('Push estructural disparado', [
-                'usuario_id' => $usuario->id,
-                'titulo' => $event->getTitle(),
-                'mensaje' => $event->getMessage(),
-            ]);
-
-            NotificationMetric::create([
-                'notificacion_id' => null,
-                'tipo' => $event->getType(),
-                'canal' => 'push',
-                'evento' => 'sent',
-            ]);
         }
+
+        if (!$shouldSend) {
+            return;
+        }
+
+        $this->push->sendToEmpresa(
+            (string)$empresaId,
+            $event->getTitle(),
+            $event->getMessage(),
+            $event->getUrl()
+        );
+
+        NotificationMetric::create([
+            'notificacion_id' => null,
+            'tipo' => $event->getType(),
+            'canal' => 'push',
+            'evento' => 'sent',
+        ]);
     }
 }

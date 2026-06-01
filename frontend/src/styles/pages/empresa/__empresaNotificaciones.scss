@@ -51,7 +51,7 @@
     padding: 20px;
     color: variables.$text-muted;
 
-    img{
+    img {
       width: 40px;
     }
 
@@ -93,38 +93,10 @@
 }
 
 /* ===============================
-   Responsive
-================================= */
-
-@media (max-width: 768px) {
-  .empresa-notificaciones {
-    &__grid {
-      grid-template-columns: 1fr;
-    }
-
-    .title {
-      font-size: 30px;
-      text-align: center;
-    }
-
-    .subtitle {
-      font-size: 18px;
-      text-align: center;
-    }
-
-    &__actions {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.2rem;
-    }
-  }
-}
-
-/* ===============================
    Botones notificaciones
 ================================= */
-
-.notif-btn {
+.notif-btn,
+.push-btn {
   padding: 8px 14px;
   font-size: 0.85rem;
   border-radius: 8px;
@@ -155,6 +127,52 @@
   background: #8f0906;
 }
 
+.push-btn--inactive {
+    background: variables.$primary;
+    color: #fff;
+
+    &:hover {
+        background: variables.$primary-hover;
+    }
+}
+
+.push-btn--active {
+    background: variables.$error;
+    color: variables.$title;
+
+    &:hover {
+        background: variables.$error-hover;
+    }
+}
+
+/* ===============================
+   Responsive
+================================= */
+
+@media (max-width: 768px) {
+  .empresa-notificaciones {
+    &__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .title {
+      font-size: 30px;
+      text-align: center;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      text-align: center;
+    }
+
+    &__actions {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.2rem;
+    }
+  }
+}
+
 @media (max-width: 480px) {
   .empresa-notificaciones {
 
@@ -177,9 +195,11 @@
     }
   }
 
-  .notif-btn {
+  .notif-btn,
+  .push-btn {
     width: 100%;
     text-align: center;
+    margin: 5px;
   }
 }
 

@@ -2,7 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import { SearchProvider } from "@/store/searchContext";
 import PlanWatcher from "@/components/system/PlanWatcher";
-import PWARegister from "@/components/system/PWARegister";
+import OneSignalInit from "@/components/system/OneSignalInit";
 import "../styles/globals.scss";
 
 const geistSans = Geist({
@@ -17,9 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "Mudanza Fácil",
-  
-  description:
-    "Conecta empresas de mudanzas, encuentra cargas disponibles, publica servicios y genera oportunidades de transporte en todo México.",
+  description: "Conecta empresas de mudanzas, encuentra cargas disponibles, publica servicios y genera oportunidades de transporte en todo México.",
 
   keywords: [
     "mudanzas México",
@@ -39,8 +37,7 @@ export const metadata = {
 
   openGraph: {
     title: "Mudanza Fácil",
-    description:
-      "Plataforma para conectar empresas de mudanzas y generar oportunidades de carga en México.",
+    description: "Plataforma para conectar empresas de mudanzas y generar oportunidades de carga en México.",
     url: "https://app.mudanzafacil.com.mx/bienvenida",
     siteName: "Mudanza Fácil",
     locale: "es_MX",
@@ -102,7 +99,7 @@ export default function RootLayout({ children }) {
           />
         </noscript>
 
-        <PWARegister />
+        <OneSignalInit />
 
         <Script
           src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY}&libraries=places&language=es`}

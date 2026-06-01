@@ -30,7 +30,7 @@ export default function SystemToast() {
 
             setTimeout(() => {
                 setVisible(false);
-            }, 5000);
+            }, 30000);
 
         } catch (err) {
             console.error(err);

@@ -36,16 +36,9 @@ export default function CreditPackageCard({
                 ${price}
             </div>
 
-{/* 
             <button className="credit-card__button" onClick={onBuy}>
                 Comprar
             </button>
- */}
-
-            <button className="credit-card__button">
-                Comprar
-            </button>
-
         </div>
     );
 }

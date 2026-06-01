@@ -4,6 +4,7 @@ namespace App\Modules\SolicitudMudanza\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Modules\SolicitudMudanza\Models\LeadCompra;
+use App\Services\WhatsAppService;
 
 class SolicitudMudanza extends Model
 {

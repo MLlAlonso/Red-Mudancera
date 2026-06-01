@@ -201,7 +201,7 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
     };
 
     const heroTitle =
-        landingConfig.heroTitle || "Busco Mudanza";
+        landingConfig.heroTitle || "Comencemos con tu Mudanza";
 
     const heroSubtitle =
         landingConfig.heroSubtitle ||
@@ -418,12 +418,11 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
                     <div className="resumen-modal">
 
                         <div className="resumen-modal__header">
-                            <h3>Confirma tu solicitud</h3>
+                            <h3>Protegemos tu solicitud</h3>
                         </div>
 
                         <p id="code_header">
-                            Te enviaremos un <strong>código </strong>
-                            a tu correo para validar tu solicitud y compartirla con empresas verificadas
+                            Esta validación ayuda a <strong>proteger </strong> tanto a clientes como empresas registradas
                         </p>
 
                         <div className="resumen-modal__body">
@@ -451,7 +450,7 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
 
                         <div className="resumen-modal__footer" id="footer_solicitudes">
                             <Button_success
-                                value="Enviar código a mi correo"
+                                value="Enviar código"
                                 onClick={createSolicitud}
                             />
 
@@ -464,8 +463,8 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
                         </div>
 
                         <p id="codigo_msg">
-                            <img src="/icons/mensaje.png" alt="Mensaje" />
-                            El código llegará en menos de 1 minuto. Esta validación se realiza por su seguridad y la de las empresas.
+                            <img src="/icons/derechos.png" alt="Mensaje" />
+                            No compartimos tu información públicamente y solo empresas verificadas podran contactarte.
                         </p>
 
                     </div>

@@ -5,7 +5,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Input from "@/components/common/Input";
 import BaseModal from "@/components/modals/BaseModal";
-import usePushNotifications from "@/hooks/usePushNotifications";
+import OneSignal from "react-onesignal";
 import "@/styles/pages/empresa/_empresaConfiguracion.scss";
 
 export default function ConfiguracionPage() {
@@ -19,7 +19,8 @@ export default function ConfiguracionPage() {
     const ciudadesValidas = ciudades.filter(c => c && c.trim() !== "");
     const [diasRestantes, setDiasRestantes] = useState(null);
     const [ultimaModificacion, setUltimaModificacion] = useState(null);
-    const { subscribe } = usePushNotifications();
+    const [pushEnabled, setPushEnabled] = useState(false);
+    const [pushLoading, setPushLoading] = useState(true);
 
     const getCookie = (name) => {
         const match = document.cookie.match(
@@ -98,6 +99,21 @@ export default function ConfiguracionPage() {
 
     }, []);
 
+    useEffect(() => {
+        async function loadPushStatus() {
+            try {
+                const optedIn = await OneSignal.User.PushSubscription.optedIn;
+                setPushEnabled(!!optedIn);
+
+            } catch (e) {
+                console.error(e);
+            } finally {
+                setPushLoading(false);
+            }
+        }
+        loadPushStatus();
+    }, []);
+
     if (!empresa) return null;
 
     // =========================
@@ -147,6 +163,45 @@ export default function ConfiguracionPage() {
             console.error(e);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const togglePushNotifications = async () => {
+        try {
+            if (pushEnabled) {
+                await OneSignal.User.PushSubscription.optOut(); 
+                await OneSignal.User.removeTag( "empresa_id" );
+                setPushEnabled(false);
+                return;
+            }
+
+            const permission = await OneSignal.Notifications.permission;
+
+            if (!permission) {
+                await OneSignal.Notifications.requestPermission();
+            }
+
+            await OneSignal.User.addTag(
+                "empresa_id",
+                String(empresa.id)
+            );
+
+            const token = getCookie("token_empresa");
+
+            await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/test-push`,
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            setPushEnabled(true);
+
+        } catch (e) {
+            console.error(e);
         }
     };
 
@@ -302,9 +357,26 @@ export default function ConfiguracionPage() {
                 )}
 
                 <div className="configuracion__block">
-                    <button onClick={subscribe}>
-                        Activar notificaciones
-                    </button>
+                    <h2>Mis notificaciones</h2>
+
+                    <p className="configuracion__copy">
+                        Podrás activarlas o desactivarlas a tu gusto para recibir notificaciones push.
+                    </p>
+
+                    {!pushLoading && (
+                        <button
+                            className={`push-btn ${pushEnabled
+                                ? "push-btn--active"
+                                : "push-btn--inactive"
+                                }`}
+                            onClick={togglePushNotifications}
+                        >
+
+                            {pushEnabled
+                                ? "Desactivar notificaciones push"
+                                : "Activar notificaciones push"}
+                        </button>
+                    )}
                 </div>
             </main>
 
@@ -358,7 +430,6 @@ export default function ConfiguracionPage() {
                     </div>
                 </BaseModal>
             )}
-
             <Footer />
         </>
     );

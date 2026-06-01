@@ -3,21 +3,22 @@
 namespace App\Modules\Notificacion\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Services\WebPushService;
+use App\Services\OneSignalService;
 
 class TestPushController extends Controller
 {
-    public function send(Request $request, WebPushService $push)
-    {
-        $empresa = $request->user();
+    public function send( OneSignalService $push ) {
+        $empresa = auth('empresa')->user();
 
         $push->sendToEmpresa(
             $empresa->id,
-            "🚚 Nueva oportunidad",
-            "Tienes una nueva coincidencia disponible"
+            '🔔 Notificaciones activadas',
+            'Las notificaciones push están activas correctamente.',
+            '/empresa/notificaciones'
         );
 
-        return response()->json(['ok' => true]);
+        return response()->json([
+            'ok' => true
+        ]);
     }
 }
