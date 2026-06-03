@@ -33,7 +33,7 @@ class SolicitudMudanzaController extends Controller
     {
         $solicitud = $this->service->crear($request->validated());
         return response()->json([
-            'message' => 'Código de verificación enviado.',
+            'message' => 'Solicitud publicada correctamente.',
             'data' => [
                 'id' => $solicitud->id,
                 'telefono' => $solicitud->telefono,
@@ -67,7 +67,7 @@ class SolicitudMudanzaController extends Controller
 
     public function index(): JsonResponse
     {
-        $solicitudes = SolicitudMudanza::where('estado', 'activo')
+        $solicitudes = SolicitudMudanza::where('estado', 'activo')->where('reportada', false)
             ->whereDoesntHave('compras', function ($q) {
                 $q->where('exclusivo', true);
             })
@@ -82,6 +82,7 @@ class SolicitudMudanzaController extends Controller
     public function show($id): JsonResponse
     {
         $solicitud = SolicitudMudanza::where('estado', 'activo')
+            ->where('reportada', false)
             ->findOrFail($id);
 
         $empresa = Auth::guard('empresa')->user();
@@ -257,5 +258,27 @@ class SolicitudMudanzaController extends Controller
         }
 
         return response()->json(['message' => 'Solicitud cancelada']);
+    }
+
+    public function reportar(string $token)
+    {
+        $solicitud = SolicitudMudanza::where(
+            'report_token',
+            $token
+        )->first();
+
+        if (!$solicitud) {
+            return response()->json([
+                'message' => 'Solicitud no encontrada'
+            ], 404);
+        }
+
+        $solicitud->update([
+            'reportada' => true,
+        ]);
+
+        return response()->json([
+            'message' => 'Solicitud reportada correctamente'
+        ]);
     }
 }

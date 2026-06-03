@@ -1,0 +1,92 @@
+.reportar-solicitud {
+
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+
+    &__card {
+
+        max-width: 500px;
+        width: 100%;
+
+        background: white;
+
+        padding: 40px;
+
+        border-radius: 20px;
+
+        text-align: center;
+
+        box-shadow: 0 10px 30px rgba(0,0,0,.08);
+
+        img {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin-bottom: 15px;
+        }
+
+        p {
+            margin-bottom: 25px;
+            color: #666;
+        }
+
+        button {
+
+            width: 100%;
+
+            border: none;
+
+            background: #dc2626;
+
+            color: white;
+
+            padding: 14px;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+        }
+    }
+}
+
+.success {
+
+    flex-direction: column;
+    text-align: center;
+
+    img {
+        width: 90px;
+        margin-bottom: 20px;
+    }
+}
+
+.reportar-solicitud__new-request {
+
+    margin-top: 24px;
+
+    background: #1C8F6A;
+    color: #fff;
+
+    border: none;
+
+    padding: 14px 24px;
+
+    border-radius: 10px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+}

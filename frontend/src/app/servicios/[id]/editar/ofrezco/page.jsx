@@ -315,7 +315,7 @@ export default function EditarOfrezcoServicioPage() {
                                 <option value="">Selecciona</option>
                                 <option value="menaje">Menaje de casa</option>
                                 <option value="vehiculo">Vehículo</option>
-                                <option value="menaje_vehiculo">Menaje + vehículo</option>
+                                <option value="menaje_vehiculo">Menaje de casa + Vehículo</option>
                                 <option value="otro">Otro</option>
                             </select>
                         </div>

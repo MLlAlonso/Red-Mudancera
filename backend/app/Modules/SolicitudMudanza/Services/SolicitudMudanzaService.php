@@ -35,14 +35,6 @@ class SolicitudMudanzaService
             $this->validarAntiSpam($data);
             // Calcular distancia
             $distanciaKm = $this->calcularDistancia($data['origen'], $data['destino']);
-            // Generar código de verificación
-            $codigo = $this->generarCodigo();
-
-            Log::info('Codigo verificacion solicitud mudanza', [
-                'codigo' => $codigo,
-                'email' => $data['email'],
-                'telefono' => $data['telefono']
-            ]);
 
             $tipoServicio = strtolower(trim($data['origen'])) === strtolower(trim($data['destino']))
                 ? 'local'
@@ -111,24 +103,28 @@ class SolicitudMudanzaService
                 }
             }
 
+            $inventarioLimpio = $this->limpiarInventario(
+                $data['inventario']
+            );
+
             // Crear registro
             $solicitud = SolicitudMudanza::create([
                 'origen' => $data['origen'],
                 'destino' => $data['destino'],
                 'distancia_km' => $distanciaKm,
                 'tipo_vivienda' => $data['tipo_vivienda'],
-                'inventario' => $data['inventario'],
+                'inventario' => $inventarioLimpio,
                 'fecha_recoleccion' => $data['fecha_recoleccion'],
                 'tipo_mudanza' => $data['tipo_mudanza'],
                 'nombre' => $data['nombre'],
                 'email' => $data['email'],
                 'telefono' => $data['telefono'],
-                'codigo_verificacion' => $codigo,
-                'codigo_expira_en' => now()->addMinutes(5),
-                'estado' => 'pendiente',
+                'codigo_verificacion' => null,
+                'codigo_expira_en' => null,
+                'estado' => 'activo',
+                'telefono_verificado' => true,
                 'tipo_servicio' => $tipoServicio,
                 'fecha_limite_visible' => $fechaLimite,
-                'telefono_verificado' => false,
                 'origen_pisos' => $data['origen_pisos'] ?? null,
                 'origen_elevador' => $data['origen_elevador'] ?? null,
                 'origen_acarreo' => $data['origen_acarreo'] ?? null,
@@ -139,12 +135,15 @@ class SolicitudMudanzaService
                 'referido_por_empresa_id' => $empresaReferenteId,
                 'ip_address' => request()->ip(),
                 'partner_referral_id' => $partnerReferralId,
+                'report_token' => Str::uuid(),
             ]);
 
-            $this->enviarCodigoVerificacion(
-                $solicitud,
-                $codigo
-            );
+            Mail::to($solicitud->email)
+                ->later(
+                    now()->addSeconds(15),
+                    new SolicitudMudanzaResumen($solicitud)
+                );
+
             return $solicitud;
         });
     }
@@ -159,40 +158,6 @@ class SolicitudMudanzaService
         $text = preg_replace('/\s*,\s*/', ', ', $text);
 
         return trim($text, ', ');
-    }
-
-    public function verificar(int $id, string $codigo): SolicitudMudanza
-    {
-        $solicitud = SolicitudMudanza::findOrFail($id);
-
-        if ($solicitud->telefono_verificado) {
-            abort(422, 'Esta solicitud ya fue verificada.');
-        }
-
-        if (!$solicitud->codigo_verificacion) {
-            abort(422, 'No existe un código activo.');
-        }
-
-        if (now()->greaterThan($solicitud->codigo_expira_en)) {
-            abort(422, 'El código ha expirado. Solicite uno nuevo.');
-        }
-
-        if ($solicitud->codigo_verificacion !== $codigo) {
-            abort(422, 'Código incorrecto.');
-        }
-
-        $solicitud->inventario = $this->limpiarInventario($solicitud->inventario);
-        $solicitud->update([
-            'telefono_verificado' => true,
-            'estado' => 'activo',
-            'codigo_verificacion' => null,
-            'codigo_expira_en' => null,
-            'inventario' => $solicitud->inventario
-        ]);
-
-        Mail::to($solicitud->email)->later(now()->addSeconds(70), new SolicitudMudanzaResumen($solicitud));
-
-        return $solicitud;
     }
 
     private function validarDuplicado(array $data): void
@@ -257,86 +222,6 @@ class SolicitudMudanzaService
             ]);
             return null;
         }
-    }
-
-    private function generarCodigo(): string
-    {
-        return str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-    }
-
-    private function enviarCodigoVerificacion(
-        SolicitudMudanza $solicitud,
-        string $codigo
-    ): void {
-
-        /*
-    |--------------------------------------------------------------------------
-    | Correo
-    |--------------------------------------------------------------------------
-    */
-        try {
-
-            Mail::to($solicitud->email)
-                ->queue(
-                    new SolicitudMudanzaVerificationCode($codigo)
-                );
-
-            Log::info('Codigo enviado por correo', [
-                'solicitud_id' => $solicitud->id,
-                'email' => $solicitud->email
-            ]);
-        } catch (\Throwable $e) {
-
-            Log::error('Error enviando correo verificacion', [
-                'solicitud_id' => $solicitud->id,
-                'email' => $solicitud->email,
-                'error' => $e->getMessage()
-            ]);
-        }
-
-        /*
-    |--------------------------------------------------------------------------
-    | WhatsApp
-    |--------------------------------------------------------------------------
-    */
-        try {
-
-            $this->whatsAppService->sendVerificationCode(
-                $solicitud->telefono,
-                $codigo
-            );
-
-            Log::info('Codigo enviado por WhatsApp', [
-                'solicitud_id' => $solicitud->id,
-                'telefono' => $solicitud->telefono
-            ]);
-        } catch (\Throwable $e) {
-
-            Log::error('Error enviando WhatsApp verificacion', [
-                'solicitud_id' => $solicitud->id,
-                'telefono' => $solicitud->telefono,
-                'error' => $e->getMessage()
-            ]);
-        }
-    }
-
-    public function reenviarCodigo(int $id): void
-    {
-        $solicitud = SolicitudMudanza::findOrFail($id);
-        if ($solicitud->telefono_verificado) {
-            abort(422, 'Esta solicitud ya fue verificada.');
-        }
-
-        $nuevoCodigo = $this->generarCodigo();
-        $solicitud->update([
-            'codigo_verificacion' => $nuevoCodigo,
-            'codigo_expira_en' => now()->addMinutes(15),
-        ]);
-
-        $this->enviarCodigoVerificacion(
-            $solicitud,
-            $nuevoCodigo
-        );
     }
 
     private function calcularFechaLimite(string $fechaSeleccionada): ?string

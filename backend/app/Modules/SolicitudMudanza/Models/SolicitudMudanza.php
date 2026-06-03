@@ -37,6 +37,8 @@ class SolicitudMudanza extends Model
         'ip_address',
         'compras_count',
         'partner_referral_id',
+        'report_token',
+        'reportada',
     ];
 
     protected $casts = [

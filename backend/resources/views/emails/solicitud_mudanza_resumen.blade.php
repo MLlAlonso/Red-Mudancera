@@ -78,7 +78,8 @@
                             </h4>
 
                             <!-- Botón -->
-                            <a href="https://mudanzafacil.com.mx/seguro-para-mudanzas/" style="display:inline-block;background:#1C8F6A;color:#ffffff;
+                            <a href="https://mudanzafacil.com.mx/seguro-para-mudanzas/"
+                                style="display:inline-block;background:#1C8F6A;color:#ffffff;
                   padding:12px 20px;border-radius:8px;text-decoration:none;
                   font-weight:bold;font-size:14px;">
                                 Recibir información
@@ -215,8 +216,10 @@
                                         <td style="color:#6F7F8D;">Distancia estimada:</td>
                                         <td align="right">
                                             <strong>
-                                                {{ $solicitud->distancia_km ? $solicitud->distancia_km . ' km' : 'No
-                                                disponible' }}
+                                                {{ $solicitud->distancia_km
+                                                    ? $solicitud->distancia_km . ' km'
+                                                    : 'No
+                                                                                                                                                                                                                                                disponible' }}
                                             </strong>
                                         </td>
                                     </tr>
@@ -246,8 +249,19 @@
                                         <td style="color:#6F7F8D;">Teléfono:</td>
                                         <td align="right"><strong>{{ $solicitud->telefono }}</strong></td>
                                     </tr>
-
                                 </table>
+                            </div>
+
+                            <div
+                                style=" border-top:1px solid #EAEAEA; margin-top:30px; padding-top:20px; text-align:center; ">
+                                <p style=" color:#6F7F8D; font-size:12px; ">
+                                    Si no solicitaste esta mudanza, puedes eliminarla aquí.
+                                </p>
+
+                                <a href="{{ env('FRONTEND_URL') }}/reportar-solicitud/{{ $solicitud->report_token }}"
+                                    style=" color:#D93025; font-size:13px; font-weight:bold; ">
+                                    Eliminar solicitud 
+                                </a>
                             </div>
 
                             <!-- Línea final -->
@@ -255,7 +269,7 @@
 
                             <div style="text-align:center;font-size:14px;">
                                 <p>
-                                    Algún agente se pondrá en contacto contigo pronto.
+                                    Empresas compatibles con tu ruta podrán contactarte próximamente.
                                 </p>
 
                                 <p style="color:#1C8F6A;font-weight:bold;margin-top:16px;">

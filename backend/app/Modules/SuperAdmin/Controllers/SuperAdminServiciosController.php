@@ -57,6 +57,7 @@ class SuperAdminServiciosController extends Controller
 
         // CONTACTOS
         $contactosMes = SolicitudMudanza::where( 'created_at', '>=', $inicioMes );
+        $solicitudesReportadas = SolicitudMudanza::where( 'reportada', true )->count();
         $comprasMes = LeadCompra::where( 'created_at', '>=', $inicioMes );
 
         // CRÉDITOS CONSUMIDOS
@@ -129,6 +130,7 @@ class SuperAdminServiciosController extends Controller
                     'tipo_mudanza_top' => $tipoMudanzaTop?->tipo_mudanza,
                     'leads_exclusivos' => $leadsExclusivos,
                     'porcentaje_exclusivos' => $porcentajeExclusivos,
+                    'solicitudes_reportadas' => $solicitudesReportadas,
                 ],
 
                 'negocio' => [

@@ -34,12 +34,9 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
 
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
-    const [modalOpen, setModalOpen] = useState(false);
     const [solicitudId, setSolicitudId] = useState(null);
     const [resumeModal, setResumeModal] = useState(false);
-    const [codigo, setCodigo] = useState("");
-    const [timeLeft, setTimeLeft] = useState(300);
-
+    const [successModal, setSuccessModal] = useState(false);
     const handleChange = (e) => {
         setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };
@@ -113,80 +110,11 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
 
             setSolicitudId(data.data.id);
             setResumeModal(false);
-            setModalOpen(true);
-            setTimeLeft(300);
+            setSuccessModal(true);
         } catch (err) {
             setErrorModal(err.message || "Ocurrió un error inesperado.");
         }
         setLoading(false);
-    };
-
-    /* =========================
-       VERIFICAR
-    ========================= */
-    const handleVerify = async () => {
-        if (!codigo) return;
-        setLoading(true);
-        try {
-            const res = await fetch(`${API}/solicitudes-mudanza/verificar`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json"
-                },
-                body: JSON.stringify({
-                    id: solicitudId,
-                    codigo
-                })
-            });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.message);
-            setModalOpen(false);
-
-            router.push(`/seguros?id=${solicitudId}`);
-
-        } catch (err) {
-            setErrorModal(err.message || "Error al verificar.");
-        }
-        setLoading(false);
-    };
-
-    /* =========================
-       REENVIAR
-    ========================= */
-    const handleReenviar = async () => {
-        await fetch(`${API}/solicitudes-mudanza/reenviar-codigo`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json"
-            },
-            body: JSON.stringify({ id: solicitudId })
-        });
-        setTimeLeft(300);
-    };
-
-    /* =========================
-       CONTADOR
-    ========================= */
-    useEffect(() => {
-        if (!modalOpen) return;
-        const interval = setInterval(() => {
-            setTimeLeft(prev => {
-                if (prev <= 1) {
-                    clearInterval(interval);
-                    return 0;
-                }
-                return prev - 1;
-            });
-        }, 1000);
-        return () => clearInterval(interval);
-    }, [modalOpen]);
-
-    const formatTime = () => {
-        const min = Math.floor(timeLeft / 60);
-        const sec = timeLeft % 60;
-        return `${min}:${sec < 10 ? "0" : ""}${sec}`;
     };
 
     const cleanInventario = (html) => {
@@ -422,7 +350,7 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
                         </div>
 
                         <p id="code_header">
-                            Esta validación ayuda a <strong>proteger </strong> tanto a clientes como empresas registradas
+                            Trabajamos únicamente con empresas verificadas para brindarte una experiencia más segura.
                         </p>
 
                         <div className="resumen-modal__body">
@@ -449,15 +377,9 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
                         </div>
 
                         <div className="resumen-modal__footer" id="footer_solicitudes">
-                            <Button_success
-                                value="Enviar código"
-                                onClick={createSolicitud}
-                            />
+                            <Button_success value="Confirmar" onClick={createSolicitud} />
 
-                            <button
-                                className="btn-edit"
-                                onClick={() => setResumeModal(false)}
-                            >
+                            <button className="btn-edit" onClick={() => setResumeModal(false)} >
                                 Editar información
                             </button>
                         </div>
@@ -466,83 +388,81 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
                             <img src="/icons/derechos.png" alt="Mensaje" />
                             No compartimos tu información públicamente y solo empresas verificadas podran contactarte.
                         </p>
-
                     </div>
                 </BaseModal>
             )}
 
-            {/* MODAL VERIFICACIÓN */}
-            {modalOpen && (
+            {successModal && (
                 <BaseModal
-                    onClose={async () => {
-                        setModalOpen(false);
-
-                        if (solicitudId) {
-                            await fetch(`${API}/solicitudes-mudanza/${solicitudId}/cancelar`, {
-                                method: "POST"
-                            });
-                        }
+                    onClose={() => {
+                        setSuccessModal(false);
+                        router.push(`/seguros?id=${solicitudId}`);
                     }}
                 >
-                    <div className="verificacion-modal" id="verificaion-modal">
-                        <h3>Verifica tu correo <br /> para publicar tu solicitud</h3>
-                        <h4>
-                            Enviamos un <strong>código </strong> a tu correo para validar <br />
-                            tu solicitud y compartirla con empresas verificadas.
-                        </h4>
+                    <div className="success-modal">
 
-                        <div className="modal__divider"> </div>
-
-                        <div className="validar_body">
-                            <img src="/icons/correo_verificado.png" alt="divider" />
-
-                            <div className="vaidar_body_text">
-                                <h4>
-                                    Código enviado a: <strong>{form.email || "tu correo"}</strong>.
-                                </h4>
-                                <p>
-                                    Revisa bandeja de entrada o spam
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="modal__divider"> </div>
-
-                        <div className="verificacion-modal__contador">
-                            <img src="/icons/reloj_de_arena.png" alt="" />
-                            El código expira en: <strong>{formatTime()}</strong>
-                        </div>
-
-                        <Input
-                            name="codigo"
-                            value={codigo}
-                            placeholder="Ingresa tu código de 6 digitos"
-                            onChange={(e) => setCodigo(e.target.value)}
+                        <img
+                            src="/icons/check_success.png"
+                            alt="Solicitud publicada"
+                            className="success-modal__icon"
                         />
 
-                        <Button_success value="Validar mi solicitud" onClick={handleVerify} />
+                        <h2 className="success-modal__title">
+                            ¡Tu solicitud está publicada!
+                        </h2>
 
-                        <div className="validar_actions">
-                            <p> ¿No recibiste el código? </p>
+                        <p className="success-modal__subtitle">
+                            Hemos notificado a empresas verificadas que pueden ayudarte con tu mudanza.
+                        </p>
 
-                            <button className="verificacion-modal__reenviar" onClick={handleReenviar} >
-                                Reenviar código
-                            </button>
+                        <div className="success-modal__info">
 
-                            <button className="verificacion-modal__cancelar"
-                                onClick={async () => {
-                                    setModalOpen(false);
+                            <img
+                                src="/icons/check.png"
+                                alt="Información"
+                            />
 
-                                    if (solicitudId) {
-                                        await fetch(`${API}/solicitudes-mudanza/${solicitudId}/cancelar`, {
-                                            method: "POST"
-                                        });
-                                    }
-                                }}
-                            >
-                                Editar correo o Cancelar
-                            </button>
+                            <span>
+                                En breve podrás recibir cotizaciones de empresas interesadas.
+                            </span>
+
                         </div>
+
+                        <div className="success-modal__steps">
+
+                            <h3>
+                                <img
+                                    src="/icons/help.png"
+                                    alt="¿Qué sigue?"
+                                />
+
+                                ¿Qué sigue?
+                            </h3>
+
+                            <ul>
+                                <li>
+                                    Empresas verificadas verán tu solicitud.
+                                </li>
+
+                                <li>
+                                    Podrás comparar cotizaciones.
+                                </li>
+
+                                <li>
+                                    Eliges la mejor opción para tu mudanza.
+                                </li>
+                            </ul>
+
+                        </div>
+
+                        <Button_success
+                            value="Continuar"
+                            onClick={() => {
+                                setSuccessModal(false);
+                                router.push(`/seguros?id=${solicitudId}`);
+                            }}
+                        />
+
                     </div>
                 </BaseModal>
             )}

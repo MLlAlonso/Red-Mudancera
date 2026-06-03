@@ -289,11 +289,12 @@ export default function OfrezcoServicioPage() {
                 <option value="">Selecciona una opción</option>
                 <option value="menaje">Menaje de casa</option>
                 <option value="vehiculo">Vehículo</option>
+                <option value="menaje_vehiculo">Menaje de casa + Vehículo</option>
                 <option value="otro">Otro</option>
               </select>
             </div>
 
-            {form.tipoCarga === "vehiculo" && (
+            {["vehiculo", "menaje_vehiculo"].includes(form.tipoCarga) && (
               <div className="input-group">
                 <label className="input-group__label">Tipo de vehículo *</label>
 
@@ -307,15 +308,15 @@ export default function OfrezcoServicioPage() {
             )}
 
             {form.tipoCarga && form.tipoCarga !== "vehiculo" && (
-              <Input
-                label="Volumen estimado (m³)*"
-                name="volumen"
-                type="number"
-                value={form.volumen}
-                placeholder="Espacio que ocupa la carga (m³)"
-                onChange={handleChange}
-              />
-            )}
+                <Input
+                  label="Volumen estimado (m³)*"
+                  name="volumen"
+                  type="number"
+                  value={form.volumen}
+                  placeholder="Espacio que ocupa la carga (m³)"
+                  onChange={handleChange}
+                />
+              )}
 
             <div className="input-group">
               <label>Descripción de carga</label>

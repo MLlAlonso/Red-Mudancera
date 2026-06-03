@@ -173,8 +173,18 @@ export default function SuperAdminServiciosPage() {
 
                         <strong>
                             {
-                                data.metrics.contactos .tipo_mudanza_top || "-"
+                                data.metrics.contactos.tipo_mudanza_top || "-"
                             }
+                        </strong>
+                    </article>
+
+                    <article className="metric-card danger">
+                        <span>
+                            Solicitudes reportadas
+                        </span>
+
+                        <strong>
+                            {data.metrics.contactos.solicitudes_reportadas}
                         </strong>
                     </article>
                 </div>
@@ -194,7 +204,7 @@ export default function SuperAdminServiciosPage() {
 
                         <strong>
                             {
-                                data.metrics.negocio .creditos_consumidos_mes
+                                data.metrics.negocio.creditos_consumidos_mes
                             }
                         </strong>
                     </article>
@@ -204,7 +214,7 @@ export default function SuperAdminServiciosPage() {
 
                         <strong>
                             {
-                                data.metrics.negocio .leads_exclusivos_mes
+                                data.metrics.negocio.leads_exclusivos_mes
                             }
                         </strong>
                     </article>

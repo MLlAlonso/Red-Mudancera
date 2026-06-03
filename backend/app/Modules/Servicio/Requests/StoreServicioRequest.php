@@ -72,7 +72,9 @@ class StoreServicioRequest extends FormRequest
             ],
 
             'tipo_vehiculo' => [
-                Rule::requiredIf(fn() => $this->input('tipo_carga') === 'vehiculo'),
+                Rule::requiredIf(
+                    fn() => in_array($this->input('tipo_carga'), ['vehiculo', 'menaje_vehiculo'])
+                ),
                 'nullable',
                 Rule::in(['compacto', 'camioneta', 'motocicleta']),
             ],
