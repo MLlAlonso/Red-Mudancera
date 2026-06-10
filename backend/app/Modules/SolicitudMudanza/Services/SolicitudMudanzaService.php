@@ -36,7 +36,7 @@ class SolicitudMudanzaService
             // Calcular distancia
             $distanciaKm = $this->calcularDistancia($data['origen'], $data['destino']);
 
-            $tipoServicio = strtolower(trim($data['origen'])) === strtolower(trim($data['destino']))
+            $tipoServicio = ( $distanciaKm !== null &&  $distanciaKm <= 50)
                 ? 'local'
                 : 'foranea';
             $fechaLimite = $this->calcularFechaLimite($data['fecha_recoleccion']);
@@ -70,7 +70,6 @@ class SolicitudMudanzaService
     | Buscar partner
     |--------------------------------------------------------------------------
     */
-
                 $partner = \App\Modules\PartnerReferral\Models\PartnerReferral::where(
                     'slug',
                     $slug
@@ -88,7 +87,6 @@ class SolicitudMudanzaService
         | Compatibilidad con sistema viejo
         |--------------------------------------------------------------------------
         */
-
                     $empresa = \App\Modules\Empresa\Models\Empresa::all()
                         ->first(function ($empresa) use ($slug) {
 

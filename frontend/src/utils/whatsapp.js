@@ -53,7 +53,6 @@ Ver servicio:
 https://app.mudanzafacil.com.mx/servicios/${servicioId}
 
 Quedo atento para coordinar`;
-
   const telefonoLimpio = telefono.replace(/\D/g, "");
   const url = `https://wa.me/52${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
   window.open(url, "_blank");
@@ -78,17 +77,15 @@ export function openLeadWhatsappMessage({
   const mensaje = `
 Hola ${nombreCliente}, buen día.
 
-Te escribo desde Mudanza Fácil.
-Mi empresa es ${empresaNombre} y vi tu solicitud de mudanza:
+Soy representante de ${empresaNombre} y vi tu solicitud de mudanza publicada en Mudanza Fácil:
 
 Origen: ${origen}
 Destino: ${destino}
 
-Puedes ver nuestro perfil aquí:
-${perfilUrl}
-
 Con gusto podemos ayudarte con tu mudanza.
-Quedo atento.
+
+Antes de enviarte una cotización, me gustaría confirmar algunos detalles para asegurarme de cotizar correctamente. 
+¿Tienes unos minutos disponibles?.
 `;
 
   const url = `https://wa.me/52${telefono}?text=${encodeURIComponent(mensaje)}`;

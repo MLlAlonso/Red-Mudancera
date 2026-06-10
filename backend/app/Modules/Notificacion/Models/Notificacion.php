@@ -46,4 +46,9 @@ class Notificacion extends Model
             ->where('leida_empresa_at', '<=', Carbon::now()->subDays(7))
             ->delete();
     }
+
+    public function isToastExpired(): bool
+    {
+        return $this->created_at ->lt(now()->subHours(24));
+    }
 }

@@ -149,11 +149,11 @@ class SuperAdminServiciosController extends Controller
 
             'ultimos_servicios' => Servicio::with('empresa')
                 ->latest()
-                ->take(8)
+                ->take(20)
                 ->get(),
 
             'ultimos_contactos' => SolicitudMudanza::latest()
-                ->take(8)
+                ->take(25)
                 ->get(),
         ]);
     }

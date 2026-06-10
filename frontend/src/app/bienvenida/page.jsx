@@ -105,7 +105,7 @@ export default function BienvenidaPage() {
                             Ver cómo funciona
                         </a>
 
-                        <button className="btn-primary" onClick={() => window.location.href = "/empresa/login"} >
+                        <button className="btn-primary" onClick={() => window.location.href = "/empresa/register"} >
                             Comienza ahora
                         </button>
                     </div>
@@ -340,7 +340,7 @@ export default function BienvenidaPage() {
                 <h2>Empieza a generar oportunidades hoy</h2>
                 <p>No pierdas más viajes vacíos.</p>
 
-                <button className="btn-primary" onClick={() => window.location.href = "/empresa/login"}>
+                <button className="btn-primary" onClick={() => window.location.href = "/empresa/register"}>
                     Comienza ahora
                 </button>
             </section>

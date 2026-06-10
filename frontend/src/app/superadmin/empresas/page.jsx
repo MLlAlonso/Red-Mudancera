@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import SuperAdminLayout from "@/components/layout/SuperAdminLayout";
-import { getEmpresas, addCreditos, changePlan, createPartner, deleteEmpresa } from "@/services/superAdmin";
+import { getEmpresas, addCreditos, changePlan, createPartner, deleteEmpresa, verifyEmpresa } from "@/services/superAdmin";
 import "@/styles/pages/superadmin/_superAdminEmpresas.scss";
 
 export default function SuperAdminEmpresasPage() {
@@ -26,6 +26,12 @@ export default function SuperAdminEmpresasPage() {
     });
 
     const [deleteModal, setDeleteModal] = useState({
+        open: false,
+        empresaId: null,
+        empresaNombre: ""
+    });
+
+    const [verifyModal, setVerifyModal] = useState({
         open: false,
         empresaId: null,
         empresaNombre: ""
@@ -92,6 +98,30 @@ export default function SuperAdminEmpresasPage() {
         loadData();
     };
 
+    const submitVerify = async () => {
+        try {
+            await verifyEmpresa(verifyModal.empresaId);
+
+            setVerifyModal({
+                open: false,
+                empresaId: null,
+                empresaNombre: ""
+            });
+
+            loadData();
+        } catch (error) {
+            alert("No se pudo verificar la empresa");
+        }
+    };
+
+    const handleVerifyEmpresa = (empresa) => {
+        setVerifyModal({
+            open: true,
+            empresaId: empresa.id,
+            empresaNombre: empresa.empresa
+        });
+    };
+
     const handleDelete = (empresa) => {
         setDeleteModal({
             open: true,
@@ -146,7 +176,7 @@ export default function SuperAdminEmpresasPage() {
                                 </strong>
                             </article>
 
-                            
+
 
                             {/* PREMIUM */}
                             <article className="metric-card premium">
@@ -340,9 +370,12 @@ export default function SuperAdminEmpresasPage() {
                                                     Verificada
                                                 </span>
                                             ) : (
-                                                <span className="status pending">
-                                                    Pendiente
-                                                </span>
+                                                <button
+                                                    className="verify-btn"
+                                                    onClick={() => handleVerifyEmpresa(empresa)}
+                                                >
+                                                    Verificar
+                                                </button>
                                             )
                                         }
                                     </td>
@@ -483,6 +516,49 @@ export default function SuperAdminEmpresasPage() {
 
                                 <button onClick={submitPlan}>
                                     Guardar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
+            {
+                verifyModal.open && (
+                    <div className="admin-modal-overlay" id="verify-modal">
+                        <div className="admin-modal">
+                            <h2>
+                                Verificar empresa
+                            </h2>
+
+                            <p>
+                                ¿Deseas verificar manualmente la empresa?
+                            </p>
+
+                            <strong className="verify-company">
+                                {verifyModal.empresaNombre}
+                            </strong>
+
+                            <p>
+                                La empresa podrá acceder inmediatamente a las funciones que requieren verificación.
+                            </p>
+
+                            <div className="admin-modal__actions">
+                                <button className="success-btn" onClick={submitVerify} >
+                                    Verificar
+                                </button>
+
+                                <button
+                                    className="secondary"
+                                    onClick={() =>
+                                        setVerifyModal({
+                                            open: false,
+                                            empresaId: null,
+                                            empresaNombre: ""
+                                        })
+                                    }
+                                >
+                                    Cancelar
                                 </button>
                             </div>
                         </div>

@@ -148,7 +148,7 @@ export default function EmpresaNotificacionesPage() {
         try {
             if (pushEnabled) {
                 await OneSignal.User.PushSubscription.optOut();
-                await OneSignal.User.removeTag( "empresa_id" );
+                await OneSignal.User.removeTag("empresa_id");
                 setPushEnabled(false);
                 return;
             }
@@ -159,7 +159,7 @@ export default function EmpresaNotificacionesPage() {
                 await OneSignal.Notifications.requestPermission();
             }
 
-            await OneSignal.User.addTag( "empresa_id", String(empresa.id) );
+            await OneSignal.User.addTag("empresa_id", String(empresa.id));
             const token = getTokenEmpresa();
 
             await fetch(
@@ -206,60 +206,59 @@ export default function EmpresaNotificacionesPage() {
 
                 <div className="empresa-notificaciones__list">
                     {/* NO VISTAS */}
-                    {noVistas.length > 0 && (
-                        <>
-                            <div className="empresa-notificaciones__actions">
-                                <div className="empresa-notificaciones__actions_title">
-                                    <h2 className="empresa-notificaciones__divider">
-                                        No leídas
-                                    </h2>
-                                </div>
-
-                                {!pushLoading && (
-                                    <button
-                                        className={`push-btn ${pushEnabled
-                                            ? "push-btn--active"
-                                            : "push-btn--inactive"
-                                            }`}
-                                        onClick={togglePushNotifications}
-                                    >
-                                        {pushEnabled
-                                            ? "Desactivar notificaciones push"
-                                            : "Activar notificaciones push"}
-                                    </button>
-                                )}
-
-                                {noVistas.length > 0 && (
-                                    <button className="notif-btn notif-btn--secondary" onClick={marcarTodas} >
-                                        Marcar todo como leído
-                                    </button>
-                                )}
+                    <>
+                        <div className="empresa-notificaciones__actions">
+                            <div className="empresa-notificaciones__actions_title">
+                                <h2 className="empresa-notificaciones__divider">
+                                    No leídas
+                                </h2>
                             </div>
 
-                            <section className="empresa-notificaciones__consejo">
-                                <img src="/icons/foco.png" alt="" />
+                            {!pushLoading && (
+                                <button
+                                    className={`push-btn ${pushEnabled
+                                        ? "push-btn--active"
+                                        : "push-btn--inactive"
+                                        }`}
+                                    onClick={togglePushNotifications}
+                                >
+                                    {pushEnabled
+                                        ? "Desactivar notificaciones push"
+                                        : "Activar notificaciones push"}
+                                </button>
+                            )}
 
-                                <div >
-                                    <strong>Consejo</strong>
-                                    <p>Revisa tu bandeja de entrada y también tu carpeta de spam o promociones.</p>
-                                </div>
-                            </section>
+                            {noVistas.length > 0 && (
+                                <button className="notif-btn notif-btn--secondary" onClick={marcarTodas} >
+                                    Marcar todo como leído
+                                </button>
+                            )}
+                        </div>
 
-                            <div className="empresa-notificaciones__grid">
-                                {noVistas.map((item) => (
-                                    <NotificationCard
-                                        key={item.id}
-                                        title={item.titulo}
-                                        message={item.mensaje}
-                                        leida={item.leida_empresa}
-                                        url={item.url_destino}
-                                        onAccept={() => marcarLeida(item.id)}
-                                        onDelete={() => abrirModal(item.id)}
-                                    />
-                                ))}
+                        <section className="empresa-notificaciones__consejo">
+                            <img src="/icons/foco.png" alt="" />
+
+                            <div >
+                                <strong>Consejo</strong>
+                                <p>Revisa tu bandeja de entrada y también tu carpeta de spam o promociones.</p>
                             </div>
-                        </>
-                    )}
+                        </section>
+
+                        <div className="empresa-notificaciones__grid">
+                            {noVistas.map((item) => (
+                                <NotificationCard
+                                    key={item.id}
+                                    title={item.titulo}
+                                    message={item.mensaje}
+                                    leida={item.leida_empresa}
+                                    url={item.url_destino}
+                                    onAccept={() => marcarLeida(item.id)}
+                                    onDelete={() => abrirModal(item.id)}
+                                />
+                            ))}
+                        </div>
+                    </>
+
 
                     {/* VISTAS */}
                     {vistas.length > 0 && (

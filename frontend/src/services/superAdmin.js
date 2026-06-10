@@ -84,6 +84,17 @@ export async function changePlan(id, plan) {
     return handleResponse(res);
 }
 
+export async function verifyEmpresa(id) {
+    const res = await fetch(
+        `${API}/superadmin/empresas/${id}/verify`,
+        {
+            method: "PATCH"
+        }
+    );
+
+    return handleResponse(res);
+}
+
 export async function createPartner(data) {
     const res = await fetch(
         `${API}/superadmin/partners`,
