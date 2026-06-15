@@ -146,6 +146,8 @@
 ========================= */
 .solicitud-card {
     border-left: 10px solid variables.$tertiary;
+    position: relative;
+
 
     .service-card__tag {
         color: variables.$tertiary;
@@ -186,17 +188,38 @@
         font-size: 18px;
     }
 
-     &__inventario {
+    &__inventario {
         strong {
             font-size: 20px;
             font-weight: 700;
             color: variables.$primary;
         }
-        
+
         font-size: 18px;
         color: variables.$text;
         line-height: 1.4;
         margin-top: 6px;
+    }
+
+    .lead-delete-btn {
+        position: absolute;
+        top: 0px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        border: none;
+        border-radius: 10px;
+        background: variables.$secondary;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
     }
 
 }
@@ -207,31 +230,31 @@
 
 @media (max-width: 1100px) {
 
-  .service-card {
-    max-width: 100%;
-    padding: 16px;
+    .service-card {
+        max-width: 100%;
+        padding: 16px;
 
-    &__tag {
-      font-size: 24px;
+        &__tag {
+            font-size: 24px;
 
-      &::before {
-        width: 16px;
-        height: 16px;
-      }
+            &::before {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        &__route {
+            font-size: 20px;
+        }
+
+        &__info {
+            font-size: 18px;
+        }
+
+        &__date {
+            font-size: 16px;
+        }
     }
-
-    &__route {
-      font-size: 20px;
-    }
-
-    &__info {
-      font-size: 18px;
-    }
-
-    &__date {
-      font-size: 16px;
-    }
-  }
 
 }
 
@@ -241,34 +264,34 @@
 
 @media (max-width: 600px) {
 
-  .service-card {
+    .service-card {
 
-    padding: 14px;
-    border-left-width: 8px;
-    max-width: 650px;
+        padding: 14px;
+        border-left-width: 8px;
+        max-width: 650px;
 
-    &__actions {
-      flex-direction: row;
-      gap: 10px;
+        &__actions {
+            flex-direction: row;
+            gap: 10px;
 
-      .btn-outline,
-      .btn-solid {
-        width: 100%;
-        padding: 10px;
-        font-size: 18px;
-      }
+            .btn-outline,
+            .btn-solid {
+                width: 100%;
+                padding: 10px;
+                font-size: 18px;
+            }
 
-      .service-status__btn{
-        width: 100%;
-        padding: 10px;
-        text-align: center;
-        justify-content: center;
-        gap: 20px;
-      }
-      
+            .service-status__btn {
+                width: 100%;
+                padding: 10px;
+                text-align: center;
+                justify-content: center;
+                gap: 20px;
+            }
+
+
+        }
 
     }
-
-  }
 
 }

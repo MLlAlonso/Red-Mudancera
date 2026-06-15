@@ -1,17 +1,42 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import SuperAdminLayout from "@/components/layout/SuperAdminLayout";
-import { getEmpresas, addCreditos, changePlan, createPartner, deleteEmpresa, verifyEmpresa } from "@/services/superAdmin";
+import {
+    getEmpresas,
+    addCreditos,
+    changePlan,
+    createPartner,
+    deleteEmpresa,
+    verifyEmpresa,
+    getPartners,
+    updatePartner,
+    deletePartnerById
+} from "@/services/superAdmin";
 import "@/styles/pages/superadmin/_superAdminEmpresas.scss";
 
 export default function SuperAdminEmpresasPage() {
+    const router = useRouter();
     const [metrics, setMetrics] = useState(null);
     const [empresas, setEmpresas] = useState([]);
     const [search, setSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [perPage, setPerPage] = useState(10);
     const [partner, setPartner] = useState({ nombre: "" });
+    const [partners, setPartners] = useState([]);
+
+    const [editPartnerModal, setEditPartnerModal] = useState({
+        open: false,
+        id: null,
+        nombre: ""
+    });
+
+    const [deletePartnerModal, setDeletePartnerModal] = useState({
+        open: false,
+        id: null,
+        nombre: ""
+    });
 
     const [creditosModal, setCreditosModal] = useState({
         open: false,
@@ -42,9 +67,15 @@ export default function SuperAdminEmpresasPage() {
     }, [search]);
 
     const loadData = async () => {
-        const data = await getEmpresas(search);
-        setEmpresas(data.data);
-        setMetrics(data.metrics);
+        const [empresasData, partnersData] =
+            await Promise.all([
+                getEmpresas(search),
+                getPartners()
+            ]);
+
+        setEmpresas(empresasData.data);
+        setMetrics(empresasData.metrics);
+        setPartners(partnersData.data);
     };
 
     const handleCreditos = (id) => {
@@ -65,10 +96,44 @@ export default function SuperAdminEmpresasPage() {
 
     const handlePartner = async () => {
         await createPartner(partner);
+
         setPartner({
             nombre: ""
         });
+
+        loadData();
         alert("Partner creado");
+    };
+
+    const submitEditPartner = async () => {
+        await updatePartner(
+            editPartnerModal.id,
+            {
+                nombre: editPartnerModal.nombre
+            }
+        );
+
+        setEditPartnerModal({
+            open: false,
+            id: null,
+            nombre: ""
+        });
+
+        loadData();
+    };
+
+    const submitDeletePartner = async () => {
+        await deletePartnerById(
+            deletePartnerModal.id
+        );
+
+        setDeletePartnerModal({
+            open: false,
+            id: null,
+            nombre: ""
+        });
+
+        loadData();
     };
 
     const submitCreditos = async () => {
@@ -310,7 +375,7 @@ export default function SuperAdminEmpresasPage() {
                     <tbody>
                         {
                             paginatedEmpresas.map((empresa) => (
-                                <tr key={empresa.id}>
+                                <tr key={empresa.id} className="clickable-row" onClick={() => router.push(`/empresa/${empresa.id}`)}>
                                     <td>
                                         <div className="empresa-user">
                                             <div className="empresa-user__logo">
@@ -372,7 +437,10 @@ export default function SuperAdminEmpresasPage() {
                                             ) : (
                                                 <button
                                                     className="verify-btn"
-                                                    onClick={() => handleVerifyEmpresa(empresa)}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleVerifyEmpresa(empresa);
+                                                    }}
                                                 >
                                                     Verificar
                                                 </button>
@@ -382,15 +450,32 @@ export default function SuperAdminEmpresasPage() {
 
                                     <td>
                                         <div className="table-actions">
-                                            <button onClick={() => handleCreditos(empresa.id)}>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleCreditos(empresa.id);
+                                                }}
+                                            >
                                                 Créditos
                                             </button>
 
-                                            <button onClick={() => handlePlan(empresa.id)}>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handlePlan(empresa.id);
+                                                }}
+                                            >
                                                 Plan
                                             </button>
 
-                                            <button className="delete-btn" onClick={() => handleDelete(empresa)} title="Eliminar empresa" >
+                                            <button
+                                                className="delete-btn"
+                                                title="Eliminar empresa"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleDelete(empresa);
+                                                }}
+                                            >
                                                 <img src="/icons/delete.png" alt="Eliminar" />
                                             </button>
                                         </div>
@@ -436,6 +521,76 @@ export default function SuperAdminEmpresasPage() {
                         </button>
                     </div>
                 </div>
+            </section>
+
+            <section className="partners-table-wrapper">
+                <h2> Partners registrados</h2>
+
+                <table className="partners-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Slug</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {
+                            partners.map((item) => (
+                                <tr key={item.id}>
+                                    <td>{item.nombre}</td>
+                                    <td>{item.slug}</td>
+
+                                    <td>
+                                        {
+                                            item.activo ? (
+                                                <span className="status verified">
+                                                    Activo
+                                                </span>
+                                            ) : (
+                                                <span className="status inactive">
+                                                    Inactivo
+                                                </span>
+                                            )
+                                        }
+                                    </td>
+
+                                    <td>
+                                        <div className="table-actions">
+                                            <button
+                                                onClick={() =>
+                                                    setEditPartnerModal({
+                                                        open: true,
+                                                        id: item.id,
+                                                        nombre: item.nombre
+                                                    })
+                                                }
+                                            >
+                                                Editar
+                                            </button>
+
+                                            <button
+                                                className="delete-btn"
+                                                onClick={() =>
+                                                    setDeletePartnerModal({
+                                                        open: true,
+                                                        id: item.id,
+                                                        nombre: item.nombre
+                                                    })
+                                                }
+                                            >
+                                                Eliminar
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        }
+                    </tbody>
+                </table>
+
             </section>
 
             {
@@ -603,6 +758,77 @@ export default function SuperAdminEmpresasPage() {
                                         setDeleteModal({
                                             open: false, empresaId: null, empresaNombre: ""
                                         })}
+                                >
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
+            {
+                editPartnerModal.open && (
+                    <div className="admin-modal-overlay">
+                        <div className="admin-modal">
+                            <h2> Editar partner</h2>
+
+                            <input
+                                type="text"
+                                value={editPartnerModal.nombre}
+                                onChange={(e) =>
+                                    setEditPartnerModal({
+                                        ...editPartnerModal,
+                                        nombre: e.target.value
+                                    })
+                                }
+                            />
+
+                            <div className="admin-modal__actions">
+                                <button
+                                    className="secondary"
+                                    onClick={() =>
+                                        setEditPartnerModal({
+                                            open: false,
+                                            id: null,
+                                            nombre: ""
+                                        })
+                                    }
+                                >
+                                    Cancelar
+                                </button>
+
+                                <button onClick={submitEditPartner}>
+                                    Guardar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
+            {
+                deletePartnerModal.open && (
+                    <div className="admin-modal-overlay">
+                        <div className="admin-modal danger">
+                            <h2> Eliminar partner</h2>
+                            <p> ¿Deseas eliminar:</p>
+                            <strong> {deletePartnerModal.nombre}</strong>
+
+                            <div className="admin-modal__actions">
+                                <button className="danger-btn" onClick={submitDeletePartner}>
+                                    Eliminar
+                                </button>
+
+                                <button
+                                    className="secondary"
+                                    onClick={() =>
+                                        setDeletePartnerModal({
+                                            open: false,
+                                            id: null,
+                                            nombre: ""
+                                        })
+                                    }
                                 >
                                     Cancelar
                                 </button>

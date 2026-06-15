@@ -82,7 +82,7 @@ export default function EmpresaConfirmacion() {
 
             <div className="empresa-confirmacion__tokens-box">
               <h2 className="empresa-confirmacion__tokens-title">
-                🎁 Recibiste 30 créditos de Bienvenida
+                🎁 Recibiste 50 créditos de Bienvenida
               </h2>
 
               <p className="empresa-confirmacion__tokens-text">

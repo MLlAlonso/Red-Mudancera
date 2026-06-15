@@ -42,4 +42,19 @@ class LeadOperacionController extends Controller
             ]
         ]);
     }
+
+    public function ocultar($id)
+    {
+        $empresa = auth('empresa')->user();
+
+        $lead = LeadCompra::where('empresa_id', $empresa->id)
+            ->where('solicitud_id', $id)
+            ->firstOrFail();
+
+        $lead->update([ 'oculto' => true ]);
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
 }

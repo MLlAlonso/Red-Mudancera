@@ -128,3 +128,37 @@ export const deleteEmpresa = async (empresaId) => {
     }
     return data;
 };
+
+export async function getPartners() {
+    const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/superadmin/partners`
+    );
+
+    return handleResponse(res);
+}
+
+export async function updatePartner(id, data) {
+    const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/superadmin/partners/${id}`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        }
+    );
+
+    return handleResponse(res);
+}
+
+export async function deletePartnerById(id) {
+    const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/superadmin/partners/${id}`,
+        {
+            method: "DELETE",
+        }
+    );
+
+    return handleResponse(res);
+}

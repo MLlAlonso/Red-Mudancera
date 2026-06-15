@@ -189,13 +189,23 @@ class EmpresaController extends Controller
     public function misLeads()
     {
         $empresa = Auth::user();
+        $month = request('month');
+        $year = request('year');
 
-        $leads = LeadCompra::with('solicitud')
+        $leadsQuery = LeadCompra::with('solicitud')
             ->where('empresa_id', $empresa->id)
-            ->latest()
-            ->get()
-            ->map(function ($compra) {
+            ->where('oculto', false);
 
+        if ($month) {
+            $leadsQuery->whereMonth('lead_compras.created_at', $month);
+        }
+
+        if ($year) {
+            $leadsQuery->whereYear('lead_compras.created_at', $year);
+        }
+
+        $leads = $leadsQuery->latest()->get()
+            ->map(function ($compra) {
                 $sol = $compra->solicitud;
 
                 return [
@@ -227,17 +237,11 @@ class EmpresaController extends Controller
         $empresa = auth()->user();
         $inicioMes = now()->startOfMonth();
 
-        $referidosMes = \App\Modules\SolicitudMudanza\Models\SolicitudMudanza::where(
-            'referido_por_empresa_id',
-            $empresa->id
-        )
+        $referidosMes = \App\Modules\SolicitudMudanza\Models\SolicitudMudanza::where('referido_por_empresa_id', $empresa->id)
             ->where('created_at', '>=', $inicioMes)
             ->count();
 
-        $creditosMes = \App\Modules\SolicitudMudanza\Models\SolicitudMudanza::where(
-            'referido_por_empresa_id',
-            $empresa->id
-        )
+        $creditosMes = \App\Modules\SolicitudMudanza\Models\SolicitudMudanza::where('referido_por_empresa_id', $empresa->id)
             ->where('created_at', '>=', $inicioMes)
             ->sum('compras_count');
 

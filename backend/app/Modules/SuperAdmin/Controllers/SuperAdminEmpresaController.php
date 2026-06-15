@@ -176,6 +176,41 @@ class SuperAdminEmpresaController extends Controller
         ]);
     }
 
+    public function partners()
+    {
+        return response()->json([
+            'data' => PartnerReferral::latest()->get()
+        ]);
+    }
+
+    public function updatePartner(Request $request, $id)
+    {
+        $request->validate([
+            'nombre' => 'required|string|max:150'
+        ]);
+
+        $partner = PartnerReferral::findOrFail($id);
+        $partner->update([
+            'nombre' => $request->nombre,
+            'slug' => Str::slug($request->nombre),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'partner' => $partner
+        ]);
+    }
+
+    public function deletePartner($id)
+    {
+        $partner = PartnerReferral::findOrFail($id);
+        $partner->delete();
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
     public function destroyEmpresa($id)
     {
         $empresa = Empresa::findOrFail($id);

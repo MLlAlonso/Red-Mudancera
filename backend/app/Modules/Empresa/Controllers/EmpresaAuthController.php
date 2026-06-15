@@ -196,7 +196,7 @@ class EmpresaAuthController extends Controller
                 . rand(1000, 9999)
         );
 
-        $data['tokens'] = 30;
+        $data['tokens'] = 50;
         $empresa = Empresa::create($data);
 
         $empresa->update([

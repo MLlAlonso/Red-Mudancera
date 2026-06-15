@@ -26,6 +26,8 @@ export default function SolicitudMudanzaCard({
   tipoVivienda = "",
   empresaNombre = "",
   empresaId = null,
+  showDelete = false,
+  onDelete = null,
 }) {
 
   const router = useRouter();
@@ -55,6 +57,13 @@ export default function SolicitudMudanzaCard({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.25 }}
       >
+        
+        {showDelete && (
+          <button className="lead-delete-btn" onClick={onDelete}>
+            <img src="/icons/delete.png" alt="Eliminar"/>
+          </button>
+        )}
+
         <div className="service-card__title">
           <span className="service-card__tag">
             Contacto

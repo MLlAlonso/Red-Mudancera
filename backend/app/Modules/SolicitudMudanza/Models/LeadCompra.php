@@ -13,6 +13,7 @@ class LeadCompra extends Model
         'exclusivo',
         'tokens_pagados',
         'estado_operacion',
+        'oculto',
         'ganancia',
         'finalizado_at',
     ];

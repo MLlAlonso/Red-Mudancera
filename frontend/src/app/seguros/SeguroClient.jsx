@@ -53,7 +53,6 @@ export default function SeguroClient() {
     ========================= */
     const handleSeguro = async () => {
         if (!solicitud || sent) return;
-
         setLoading(true);
 
         try {
@@ -65,17 +64,13 @@ export default function SeguroClient() {
                 },
                 body: JSON.stringify({ id: solicitud.id })
             });
-
             const data = await res.json();
             if (!res.ok) throw new Error(data.message);
-
             setModalMsg("Un asesor se pondrá en contacto contigo en breve.");
             setSent(true);
-
         } catch (error) {
             setModalError(error.message || "Ocurrió un error.");
         }
-
         setLoading(false);
     };
 
@@ -84,7 +79,6 @@ export default function SeguroClient() {
     ========================= */
     const handleExterno = async () => {
         if (sent) return;
-
         setLoading(true);
 
         try {
@@ -99,10 +93,8 @@ export default function SeguroClient() {
 
             const data = await res.json();
             if (!res.ok) throw new Error(data.message);
-
             setModalMsg("Un asesor se pondrá en contacto contigo en breve.");
             setSent(true);
-
         } catch (error) {
             setModalError(error.message || "Ocurrió un error.");
         }
@@ -113,7 +105,6 @@ export default function SeguroClient() {
     /* =========================
        RENDER
     ========================= */
-
     // FLUJO NORMAL
     if (id) {
         return (
@@ -186,10 +177,7 @@ export default function SeguroClient() {
     return (
         <>
             {!showForm && (
-                <button
-                    className="btnSeguro"
-                    onClick={() => setShowForm(true)}
-                >
+                <button className="btnSeguro" onClick={() => setShowForm(true)}>
                     Solicitar información de protección
                 </button>
             )}

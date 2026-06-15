@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import SuperAdminLayout from "@/components/layout/SuperAdminLayout";
 import { getDashboardMetrics } from "@/services/superAdmin";
 import BaseModal from "@/components/modals/BaseModal";
 
 export default function SuperAdminDashboardPage() {
+    const router = useRouter();
     const [metrics, setMetrics] = useState(null);
 
     const [announcement, setAnnouncement] =
@@ -266,7 +268,11 @@ export default function SuperAdminDashboardPage() {
                 <div className="recent-companies">
                     {
                         metrics.ultimas_empresas.map((empresa) => (
-                            <article className="recent-company-card" key={empresa.id} >
+                            <article
+                                className="recent-company-card clickable-company"
+                                key={empresa.id}
+                                onClick={() => router.push(`/empresa/${empresa.id}`)}
+                            >
                                 <div className="recent-company-card__left">
                                     <div className="recent-company-card__logo">
                                         {

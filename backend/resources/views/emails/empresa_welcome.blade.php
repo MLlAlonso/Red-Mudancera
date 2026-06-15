@@ -56,7 +56,7 @@
                                 text-align:center;
                                 color:#4A5E71;">
                                 <h3 style="margin:0 0 10px 0; color:#F1A43F;">
-                                    🎁 Has recibido 30 créditos de bienvenida
+                                    🎁 Has recibido 50 créditos de bienvenida
                                 </h3>
 
                                 <p style="margin:0;">

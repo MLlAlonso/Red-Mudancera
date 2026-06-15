@@ -180,12 +180,12 @@ export default function DetalleSolicitudPage() {
                             </span>
                         </div>
 
-                        {!fueExclusivo && (
+                        {/* {!fueExclusivo && (
                             <div>
                                 <label>Compras realizadas:</label>
                                 <span>{solicitud.compras_count} / 3</span>
                             </div>
-                        )}
+                        )} */}
                     </div>
 
                     {/* INVENTARIO */}

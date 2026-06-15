@@ -113,7 +113,6 @@ class ServicioController extends Controller
         StoreServicioRequest $request,
         ServicioImagenService $imagenService
     ): JsonResponse {
-
         $empresa = auth('empresa')->user();
 
         /**
@@ -308,6 +307,8 @@ class ServicioController extends Controller
     public function misServicios(Request $request)
     {
         $empresa = auth()->user();
+        $month = request('month');
+        $year = request('year');
 
         $query = Servicio::with('empresa')
             ->where('empresa_id', $empresa->id)
@@ -321,29 +322,31 @@ class ServicioController extends Controller
             });
         }
 
+        if ($month && $year) {
+            $query
+                ->whereMonth('created_at', $month)
+                ->whereYear('created_at', $year);
+        }
+
         // filtros avanzados
         $query->when(
             $request->origen,
-            fn($q, $v) =>
-            $q->where('origen', 'like', "%{$v}%")
+            fn($q, $v) => $q->where('origen', 'like', "%{$v}%")
         );
 
         $query->when(
             $request->destino,
-            fn($q, $v) =>
-            $q->where('destino', 'like', "%{$v}%")
+            fn($q, $v) => $q->where('destino', 'like', "%{$v}%")
         );
 
         $query->when(
             $request->volumen,
-            fn($q, $v) =>
-            $q->where('volumen', '>=', $v)
+            fn($q, $v) => $q->where('volumen', '>=', $v)
         );
 
         $query->when(
             $request->tipoCarga,
-            fn($q, $v) =>
-            $q->where('tipo_carga', $v)
+            fn($q, $v) => $q->where('tipo_carga', $v)
         );
 
         if ($request->fechaInicio && $request->fechaFin) {
@@ -453,9 +456,7 @@ class ServicioController extends Controller
                 $response = Http::timeout(5)->get($logoUrl);
 
                 if ($response->successful()) {
-                    $logoPath = storage_path(
-                        'app/temp_logo_' . $empresa->id . '.png'
-                    );
+                    $logoPath = storage_path( 'app/temp_logo_' . $empresa->id . '.png');
                     file_put_contents($logoPath, $response->body());
                 }
             } catch (\Throwable $e) {

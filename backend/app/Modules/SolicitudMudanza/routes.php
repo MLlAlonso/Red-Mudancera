@@ -18,5 +18,6 @@ Route::prefix('solicitudes-mudanza')->group(function () {
 
     Route::post('/solicitar-seguro', [SolicitudMudanzaController::class, 'solicitarSeguro']);
     Route::post('/solicitar-seguro-externo', [SolicitudMudanzaController::class, 'solicitarSeguroExterno']);
-    Route::delete( '/reportar/{token}', [SolicitudMudanzaController::class, 'reportar']);
+    Route::delete('/reportar/{token}', [SolicitudMudanzaController::class, 'reportar']);
+    Route::patch('/leads/{id}/ocultar', [LeadOperacionController::class, 'ocultar'] )->middleware('auth:empresa');
 });

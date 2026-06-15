@@ -12,6 +12,7 @@ import ServiceCardSkeleton from "@/components/skeletons/ServiceCardSkeleton";
 import ConfirmFinalizarServicioModal from "@/components/modals/ConfirmFinalizarServicioModal";
 import FinalizarServicioGananciaModal from "@/components/modals/FinalizarServicioGananciaModal";
 import ReporteMensualModal from "@/components/modals/ReporteMensualModal";
+import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { useSearch } from "@/store/searchContext";
 import ShareClienteReviewLinkModal from "@/components/modals/ShareClienteReviewLinkModal";
 
@@ -28,6 +29,12 @@ export default function MisServiciosEmpresa() {
   const { search, city } = useSearch(); const [empresa, setEmpresa] = useState(null);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewLink, setReviewLink] = useState("");
+  const now = new Date();
+
+  const [selectedMonth, setSelectedMonth] = useState( now.getMonth() + 1);
+  const [selectedYear, setSelectedYear] = useState( now.getFullYear());
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedLeadId, setSelectedLeadId] = useState(null);
 
   const cambiarEstadoDirecto = async (id, estado, tipo) => {
     const token = getEmpresaToken();
@@ -63,6 +70,30 @@ export default function MisServiciosEmpresa() {
     );
   };
 
+  const ocultarLead = async () => {
+    const token = getEmpresaToken();
+
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/solicitudes-mudanza/leads/${selectedLeadId}/ocultar`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    setServices((prev) =>
+      prev.filter(
+        (s) =>
+          !(s.tipo_item === "lead" && s.id === selectedLeadId)
+      )
+    );
+
+    setShowDeleteModal(false);
+    setSelectedLeadId(null);
+  };
+
   useEffect(() => {
     const token = getEmpresaToken();
     if (!token) return;
@@ -70,14 +101,14 @@ export default function MisServiciosEmpresa() {
     setLoading(true);
 
     Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/servicios`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/servicios?month=${selectedMonth}&year=${selectedYear}`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
         },
       }).then(r => r.json()),
 
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/mis-leads`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/mis-leads?month=${selectedMonth}&year=${selectedYear}`, {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
@@ -131,7 +162,7 @@ export default function MisServiciosEmpresa() {
       })
       .finally(() => setLoading(false));
 
-  }, []);
+  }, [selectedMonth, selectedYear]);
 
   const visible = services
     .filter((s) => {
@@ -152,7 +183,6 @@ export default function MisServiciosEmpresa() {
     })
     .filter((s) => {
       if (!search) return true;
-
       const q = search.toLowerCase();
 
       return (
@@ -177,6 +207,41 @@ export default function MisServiciosEmpresa() {
         <div className="empresa-dashboard__controls" id="publicaciones">
           <ServiceFilters onChange={setFilter} />
 
+          <div className="actividad-filter">
+            <select
+              value={selectedMonth}
+              onChange={(e) =>
+                setSelectedMonth(Number(e.target.value))
+              }
+            >
+              <option value={1}>Enero</option>
+              <option value={2}>Febrero</option>
+              <option value={3}>Marzo</option>
+              <option value={4}>Abril</option>
+              <option value={5}>Mayo</option>
+              <option value={6}>Junio</option>
+              <option value={7}>Julio</option>
+              <option value={8}>Agosto</option>
+              <option value={9}>Septiembre</option>
+              <option value={10}>Octubre</option>
+              <option value={11}>Noviembre</option>
+              <option value={12}>Diciembre</option>
+            </select>
+
+            <select
+              value={selectedYear}
+              onChange={(e) =>
+                setSelectedYear(Number(e.target.value))
+              }
+            >
+              {[2025, 2026, 2027, 2028].map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <button className="btn-outline" id="reporte" onClick={() => setShowReporte(true)} >
             Crear reporte
           </button>
@@ -193,7 +258,6 @@ export default function MisServiciosEmpresa() {
 
           {!loading &&
             visible.map((s) => {
-
               if (s.tipo_item === "lead") {
                 const estadoLead = s.estado_operacion || "activo";
 
@@ -214,11 +278,13 @@ export default function MisServiciosEmpresa() {
                     nombreCliente={s.nombre}
                     tipoVivienda={s.tipo_vivienda}
                     empresaNombre={empresa?.empresa}
+                    showDelete={true}
+                    onDelete={() => {
+                      setSelectedLeadId(s.id);
+                      setShowDeleteModal(true);
+                    }}
                     onChangeEstado={(id, nuevoEstado) => {
-                      setSelectedService({
-                        ...s,
-                        tipo_item: "lead"
-                      });
+                      setSelectedService({ ...s, tipo_item: "lead"});
 
                       if (nuevoEstado === "finalizado") {
                         setShowConfirmFinalizar(true);
@@ -241,21 +307,17 @@ export default function MisServiciosEmpresa() {
                   origen={s.origen}
                   destino={s.destino}
                   volumen={s.volumen ? `${s.volumen} m³` : "No especificado"}
-
                   tipoCarga={s.tipo_carga}
                   tipoVehiculo={s.tipo_vehiculo}
-
                   empresa={s.empresa?.empresa ?? "Empresa"}
                   fecha={new Date(s.created_at).toLocaleDateString()}
                   showContact={false}
                   onChangeEstado={(id, nuevoEstado) => {
                     setSelectedService(s);
-
                     if (nuevoEstado === "finalizado") {
                       setShowConfirmFinalizar(true);
                       return;
                     }
-
                     cambiarEstadoDirecto(id, nuevoEstado, "servicio");
                     setSelectedService(null);
                   }}
@@ -287,7 +349,6 @@ export default function MisServiciosEmpresa() {
           setSelectedService(null);
         }}
         onSuccess={async (updated) => {
-
           setServices((prev) =>
             prev.map((s) =>
               s.id === updated.id
@@ -321,10 +382,7 @@ export default function MisServiciosEmpresa() {
         }}
       />
 
-      <ReporteMensualModal
-        open={showReporte}
-        onClose={() => setShowReporte(false)}
-      />
+      <ReporteMensualModal open={showReporte} onClose={() => setShowReporte(false)}/>
 
       <ShareClienteReviewLinkModal
         open={showReviewModal}
@@ -333,6 +391,19 @@ export default function MisServiciosEmpresa() {
           setShowReviewModal(false);
           setReviewLink("");
         }}
+      />
+
+      <ConfirmDeleteModal
+        open={showDeleteModal}
+        title="Eliminar solicitud"
+        message="Esta solicitud dejará de mostrarse en Mi Actividad."
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+        onCancel={() => {
+          setShowDeleteModal(false);
+          setSelectedLeadId(null);
+        }}
+        onConfirm={ocultarLead}
       />
 
       <Footer />
