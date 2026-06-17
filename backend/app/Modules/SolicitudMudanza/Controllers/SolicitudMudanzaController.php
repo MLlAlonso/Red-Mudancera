@@ -41,7 +41,7 @@ class SolicitudMudanzaController extends Controller
         ], 201);
     }
 
-    public function verificar(VerifySolicitudMudanzaRequest $request): JsonResponse
+/*     public function verificar(VerifySolicitudMudanzaRequest $request): JsonResponse
     {
         $solicitud = $this->service->verificar(
             $request->id,
@@ -63,7 +63,7 @@ class SolicitudMudanzaController extends Controller
         return response()->json([
             'message' => 'Nuevo código enviado correctamente.'
         ]);
-    }
+    } */
 
     public function index(): JsonResponse
     {

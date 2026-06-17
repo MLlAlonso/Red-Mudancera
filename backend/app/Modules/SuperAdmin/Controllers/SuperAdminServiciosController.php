@@ -16,66 +16,67 @@ class SuperAdminServiciosController extends Controller
         $inicioMes = Carbon::now()->startOfMonth();
 
         // SERVICIOS
-        $serviciosMes = Servicio::where( 'created_at', '>=', $inicioMes);
-        $serviciosActivos = Servicio::where( 'estado', 'activo' )->count();
-        $serviciosAsignados = Servicio::where( 'estado', 'asignado' )->count();
-        $serviciosFinalizados = Servicio::where( 'estado', 'finalizado' )->count();
+        $serviciosMes = Servicio::where('created_at', '>=', $inicioMes);
+        $serviciosActivos = Servicio::where('estado', 'activo')->count();
+        $serviciosAsignados = Servicio::where('estado', 'asignado')->count();
+        $serviciosFinalizados = Servicio::where('estado', 'finalizado')->count();
 
         // RUTA MÁS REPETIDA
-        $rutaTop = Servicio::selectRaw( 'CONCAT(origen, " → ", destino) as ruta, COUNT(*) as total' )
+        $rutaTop = Servicio::selectRaw('CONCAT(origen, " → ", destino) as ruta, COUNT(*) as total')
             ->groupBy('ruta')
             ->orderByDesc('total')
             ->first();
 
         // ORIGEN MÁS FRECUENTE
-        $origenTop = Servicio::selectRaw( 'origen, COUNT(*) as total' )
+        $origenTop = Servicio::selectRaw('origen, COUNT(*) as total')
             ->groupBy('origen')
             ->orderByDesc('total')
             ->first();
 
         // LOCALES VS FORÁNEOS
-        $locales = Servicio::whereColumn( 'origen', 'destino' )->count();
-        $foraneos = Servicio::whereColumn( 'origen', '!=', 'destino' )->count();
+        $locales = Servicio::whereColumn('origen', 'destino')->count();
+        $foraneos = Servicio::whereColumn('origen', '!=', 'destino')->count();
 
         // TIPO CARGA
-        $tipoCargaTop = Servicio::selectRaw( 'tipo_carga, COUNT(*) as total' )
+        $tipoCargaTop = Servicio::selectRaw('tipo_carga, COUNT(*) as total')
             ->groupBy('tipo_carga')
             ->orderByDesc('total')
             ->first();
 
         // HORARIO MÁS ACTIVO
-        $horaTop = Servicio::selectRaw( 'HOUR(created_at) as hora, COUNT(*) as total' )
+        $horaTop = Servicio::selectRaw('HOUR(created_at) as hora, COUNT(*) as total')
             ->groupBy('hora')
             ->orderByDesc('total')
             ->first();
 
         // DÍA MÁS ACTIVO
-        $diaTop = Servicio::selectRaw( 'DAYNAME(created_at) as dia, COUNT(*) as total' )
+        $diaTop = Servicio::selectRaw('DAYNAME(created_at) as dia, COUNT(*) as total')
             ->groupBy('dia')
             ->orderByDesc('total')
             ->first();
 
         // CONTACTOS
-        $contactosMes = SolicitudMudanza::where( 'created_at', '>=', $inicioMes );
-        $solicitudesReportadas = SolicitudMudanza::where( 'reportada', true )->count();
-        $comprasMes = LeadCompra::where( 'created_at', '>=', $inicioMes );
+        $contactosMes = SolicitudMudanza::where('created_at', '>=', $inicioMes);
+        $solicitudesReportadas = SolicitudMudanza::where('reportada', true)->count();
+        $solicitudesExpiradas = SolicitudMudanza::where('estado', 'expirado')->count();
+        $comprasMes = LeadCompra::where('created_at', '>=', $inicioMes);
 
         // CRÉDITOS CONSUMIDOS
-        $creditosConsumidosMes = LeadCompra::where( 'created_at', '>=', $inicioMes )->sum('tokens_pagados');
+        $creditosConsumidosMes = LeadCompra::where('created_at', '>=', $inicioMes)->sum('tokens_pagados');
 
         // GANANCIA GENERADA
-        $gananciaMes = LeadCompra::where( 'created_at', '>=', $inicioMes )->sum('ganancia');
+        $gananciaMes = LeadCompra::where('created_at', '>=', $inicioMes)->sum('ganancia');
 
         // OPERACIONES FINALIZADAS
-        $operacionesFinalizadas = LeadCompra::whereNotNull( 'finalizado_at' )->count();
+        $operacionesFinalizadas = LeadCompra::whereNotNull('finalizado_at')->count();
 
         // LEADS EXCLUSIVOS MES
-        $leadsExclusivosMes = LeadCompra::where( 'exclusivo', true )
-            ->where( 'created_at', '>=', $inicioMes)
+        $leadsExclusivosMes = LeadCompra::where('exclusivo', true)
+            ->where('created_at', '>=', $inicioMes)
             ->count();
 
         // LEADS EXCLUSIVOS
-        $leadsExclusivos = LeadCompra::where( 'exclusivo', true )->count();
+        $leadsExclusivos = LeadCompra::where('exclusivo', true)->count();
         $leadsTotales = LeadCompra::count();
 
         $porcentajeExclusivos =
@@ -86,22 +87,22 @@ class SuperAdminServiciosController extends Controller
             : 0;
 
         // CONTACTOS LOCALES/FORÁNEOS
-        $contactosLocales = SolicitudMudanza::whereColumn( 'origen', 'destino' )->count();
-        $contactosForaneos = SolicitudMudanza::whereColumn( 'origen', '!=', 'destino' )->count();
+        $contactosLocales = SolicitudMudanza::whereColumn('origen', 'destino')->count();
+        $contactosForaneos = SolicitudMudanza::whereColumn('origen', '!=', 'destino')->count();
 
         // TIPO MUDANZA
-        $tipoMudanzaTop = SolicitudMudanza::selectRaw( 'tipo_mudanza, COUNT(*) as total' )
+        $tipoMudanzaTop = SolicitudMudanza::selectRaw('tipo_mudanza, COUNT(*) as total')
             ->groupBy('tipo_mudanza')
             ->orderByDesc('total')
             ->first();
 
         // OPERACIÓN
-        $creditosMes = LeadCompra::where( 'created_at', '>=', $inicioMes )->sum('tokens_pagados');
-        $partnersActivos = PartnerReferral::where( 'activo',  true )->count();
+        $creditosMes = LeadCompra::where('created_at', '>=', $inicioMes)->sum('tokens_pagados');
+        $partnersActivos = PartnerReferral::where('activo',  true)->count();
 
         // MATCHINGS
-        $matchingsMes = Servicio::where( 'estado', 'asignado' )
-            ->where( 'updated_at', '>=', $inicioMes )
+        $matchingsMes = Servicio::where('estado', 'asignado')
+            ->where('updated_at', '>=', $inicioMes)
             ->count();
 
         return response()->json([
@@ -131,6 +132,7 @@ class SuperAdminServiciosController extends Controller
                     'leads_exclusivos' => $leadsExclusivos,
                     'porcentaje_exclusivos' => $porcentajeExclusivos,
                     'solicitudes_reportadas' => $solicitudesReportadas,
+                    'solicitudes_expiradas' => $solicitudesExpiradas,
                 ],
 
                 'negocio' => [

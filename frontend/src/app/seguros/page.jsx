@@ -170,20 +170,6 @@ export default function SegurosPage() {
                         </p>
                     </div>
                 </div>
-
-                <div className="seguroFinalCta seguroFinalCta--secondary">
-                    <div className="seguroFinalCta__icon">
-                        <img src="/icons/tel.png" alt="Sin compromiso" />
-                    </div>
-
-                    <div className="seguroFinalCta__content">
-                        <h3>Sin compromiso</h3>
-
-                        <p>
-                            Solo información clara para que decidas mejor.
-                        </p>
-                    </div>
-                </div>
             </section>
 
             {/* <section className="faq">

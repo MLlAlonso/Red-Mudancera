@@ -25,8 +25,7 @@ class SolicitudMudanzaService
         $this->whatsAppService = $whatsAppService;
     }
 
-    public function crear(array $data): SolicitudMudanza
-    {
+    public function crear(array $data): SolicitudMudanza {
         return DB::transaction(function () use ($data) {
             $this->limpiarPendientesAntiguos($data['email']);
             // Anti-duplicación estricta
@@ -66,10 +65,10 @@ class SolicitudMudanzaService
             if ($slug) {
 
                 /*
-    |--------------------------------------------------------------------------
-    | Buscar partner
-    |--------------------------------------------------------------------------
-    */
+                |--------------------------------------------------------------------------
+                | Buscar partner
+                |--------------------------------------------------------------------------
+                */
                 $partner = \App\Modules\PartnerReferral\Models\PartnerReferral::where(
                     'slug',
                     $slug
@@ -83,10 +82,10 @@ class SolicitudMudanzaService
                 } else {
 
                     /*
-        |--------------------------------------------------------------------------
-        | Compatibilidad con sistema viejo
-        |--------------------------------------------------------------------------
-        */
+                    |--------------------------------------------------------------------------
+                    | Compatibilidad con sistema viejo
+                    |--------------------------------------------------------------------------
+                    */
                     $empresa = \App\Modules\Empresa\Models\Empresa::all()
                         ->first(function ($empresa) use ($slug) {
 

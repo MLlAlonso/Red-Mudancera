@@ -187,6 +187,16 @@ export default function SuperAdminServiciosPage() {
                             {data.metrics.contactos.solicitudes_reportadas}
                         </strong>
                     </article>
+
+                    <article className="metric-card warning">
+                        <span>
+                            Solicitudes expiradas
+                        </span>
+
+                        <strong>
+                            {data.metrics.contactos.solicitudes_expiradas}
+                        </strong>
+                    </article>
                 </div>
             </section>
 

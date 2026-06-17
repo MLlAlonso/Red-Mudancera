@@ -40,9 +40,7 @@ class EmpresaFeedService
         /* ==============================
             SOLICITUDES ACTIVAS DISPONIBLES
           ============================== */
-        $comprasEmpresa = LeadCompra::where('empresa_id', $empresaId)
-            ->pluck('solicitud_id')
-            ->toArray();
+        $comprasEmpresa = LeadCompra::where('empresa_id', $empresaId) ->pluck('solicitud_id') ->toArray();
 
         $solicitudes = SolicitudMudanza::where('estado', 'activo')
             ->whereDate('fecha_limite_visible', '>=', now())
@@ -77,7 +75,6 @@ class EmpresaFeedService
         /* ==============================
            MERGE + ORDEN CRONOLÓGICO
         ============================== */
-
         return collect($servicios)
             ->merge($solicitudes)
             ->sortByDesc('created_at')

@@ -10,7 +10,7 @@ class Kernel extends ConsoleKernel
 {
     protected function schedule(Schedule $schedule): void
     {
-        Log::info('KERNEL SCHEDULE EJECUTADO');      
+        Log::info('KERNEL SCHEDULE EJECUTADO');
 
         // Limpieza de verificaciones de email cada 24 horas
         $schedule->command('email:clean')->daily();
@@ -18,17 +18,9 @@ class Kernel extends ConsoleKernel
         // Limpieza futura de notificaciones
         // $schedule->command('notificaciones:cleanup')->daily();
 
-        $schedule->command('notificaciones:daily-views-summary')
-            ->dailyAt('23:59');
-
-        $schedule->command('notificaciones:check-expiring')
-            ->hourly();
-
-        //Agrupar matches
-
-        // Aquí luego pondremos:
-        // - resumen diario de vistas
-        // - servicios por vencer
+        $schedule->command('notificaciones:daily-views-summary')->dailyAt('23:59');
+        $schedule->command('notificaciones:check-expiring')->hourly();
+        $schedule->command('leads:expire')->daily();
     }
 
     protected function commands(): void
