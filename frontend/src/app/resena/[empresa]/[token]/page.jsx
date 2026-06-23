@@ -21,7 +21,7 @@ const getCookie = (name) => {
 };
 
 export default function ResenaPage() {
-  const { token } = useParams();
+  const { empresa: empresaSlug, token } = useParams();
   const router = useRouter();
   const [empresa, setEmpresa] = useState(null);
   const [comentario, setComentario] = useState("");

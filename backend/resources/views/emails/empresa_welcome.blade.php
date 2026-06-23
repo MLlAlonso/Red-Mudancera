@@ -45,7 +45,7 @@
                                 utilizando el mismo correo y contraseña con los que te registraste.
                             </p>
 
-                    <!-- Gift créditos Box -->
+                            <!-- Gift créditos Box -->
                     <tr>
                         <td style="padding:0 24px 24px 24px;">
                             <div

@@ -92,7 +92,7 @@
                             </p>
 
                             <div style="text-align:center;">
-                                <a href="https://app.mudanzafacil.com.mx/empresa/dashboard"
+                                <a href="https://app.mudanzafacil.com.mx/superadmin/login"
                                     style="display:inline-block;margin-top:10px;padding:12px 20px;background:#28A745;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:600;">
                                     Ir al dashboard
                                 </a>

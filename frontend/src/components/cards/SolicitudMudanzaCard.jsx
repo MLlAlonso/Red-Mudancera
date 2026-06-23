@@ -57,10 +57,10 @@ export default function SolicitudMudanzaCard({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.25 }}
       >
-        
+
         {showDelete && (
           <button className="lead-delete-btn" onClick={onDelete}>
-            <img src="/icons/delete.png" alt="Eliminar"/>
+            <img src="/icons/delete.png" alt="Eliminar" />
           </button>
         )}
 
@@ -112,6 +112,9 @@ export default function SolicitudMudanzaCard({
 
             <ServiceStatusDropdown
               estado={estadoLocal}
+              labels={{
+                asignado: "Contactado",
+              }}
               onSelect={(nuevoEstado) => {
                 setEstadoLocal(nuevoEstado);
                 onChangeEstado(id, nuevoEstado);

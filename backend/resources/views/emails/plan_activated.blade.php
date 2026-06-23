@@ -139,7 +139,7 @@
                     <!-- CTA -->
                     <tr>
                         <td align="center" style="padding:24px;">
-                            <a href="https://app.mudanzafacil.com.mx/empresa/dashboard" target="_blank"
+                            <a href="https://app.mudanzafacil.com.mx/empresa/login" target="_blank"
                                 style="display:inline-block;padding:12px 32px;background:#09233E;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold;font-size:16px;">
                                 Ir a la plataforma
                             </a>

@@ -2,9 +2,10 @@
 
 namespace App\Modules\Empresa\Models;
 
+use Illuminate\Support\Str;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laravel\Sanctum\HasApiTokens;
 use App\Modules\Empresa\Models\EmpresaImagen;
 use App\Modules\Usuario\Models\Usuario;
 use App\Modules\Servicio\Models\Servicio;
@@ -37,6 +38,7 @@ class Empresa extends Authenticatable
         'subInicio',
         'subFin',
         'tokens',
+        'slug',
         'plan',
         'recurrente',
         'freeSince',
@@ -120,5 +122,27 @@ class Empresa extends Authenticatable
     public function leadCompras()
     {
         return $this->hasMany(LeadCompra::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($empresa) {
+
+            if (!$empresa->slug) {
+
+                $baseSlug = Str::slug($empresa->empresa);
+                $slug = $baseSlug;
+                $counter = 1;
+
+                while (self::where('slug', $slug)->exists()) {
+                    $slug = $baseSlug . '-' . $counter;
+                    $counter++;
+                }
+
+                $empresa->slug = $slug;
+            }
+        });
     }
 }

@@ -1,13 +1,17 @@
 "use client";
 import { useState } from "react";
 
-export default function ServiceStatusDropdown({ estado, onSelect }) {
+export default function ServiceStatusDropdown({
+  estado,
+  onSelect,
+  labels = {},
+}) {
   const [open, setOpen] = useState(false);
 
   const labelMap = {
-    activo: "Activo",
-    asignado: "Asignado",
-    finalizado: "Finalizado",
+    activo: labels.activo || "Activo",
+    asignado: labels.asignado || "Asignado",
+    finalizado: labels.finalizado || "Finalizado",
   };
 
   return (
@@ -31,7 +35,7 @@ export default function ServiceStatusDropdown({ estado, onSelect }) {
                 onSelect("asignado");
               }}
             >
-              Asignado
+              {labelMap.asignado}
             </div>
           )}
 
@@ -43,7 +47,7 @@ export default function ServiceStatusDropdown({ estado, onSelect }) {
                 onSelect("finalizado");
               }}
             >
-              Finalizado
+              {labelMap.finalizado}
             </div>
           )}
         </div>

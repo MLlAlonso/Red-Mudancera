@@ -16,6 +16,8 @@
     border-top: 1px solid variables.$text-muted;
     border-bottom: 1px solid variables.$text-muted;
     border-right: none;
+    position: relative;
+
 
     &__title {
         display: flex;
@@ -23,6 +25,8 @@
         gap: 0px;
         align-items: start;
         margin-bottom: 10px;
+        padding-right: 50px;
+
     }
 
     &__tag {
@@ -125,6 +129,28 @@
             }
         }
 
+    }
+
+    .service-delete-btn {
+        position: absolute;
+        top: -8px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        border: none;
+        border-radius: 10px;
+        background: variables.$secondary;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 2;
+
+        img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
     }
 }
 

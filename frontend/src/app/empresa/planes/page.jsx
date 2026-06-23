@@ -108,8 +108,6 @@ export default function PlanesPage() {
         config.tipo === "mensual" && config.recurrente === false;
 
       if (esManualMensual) {
-        console.log("👉 FLOW: BACKEND DIRECTO");
-
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/empresa/plan/cambiar`,
           {
@@ -391,6 +389,7 @@ export default function PlanesPage() {
           </div>
 
           {/* CHECKBOX */}
+          {/*           
           {config.tipo === "mensual" && (
             <div className="auto-option">
               <label>
@@ -408,6 +407,7 @@ export default function PlanesPage() {
               </label>
             </div>
           )}
+ */}
 
           {/* BOTONES */}
           <div className="modal-actions">
@@ -424,8 +424,9 @@ export default function PlanesPage() {
             {config.tipo === "anual"
               ? "Pago anual único. La suscripción dura 12 meses desde la fecha de compra."
               : config.recurrente
-                ? "Se cobrará automáticamente cada mes, puedes cancelar en cualquier momento"
-                : "Pago manual cada mes"}
+                  ? "Pago manual cada mes"
+                  // ? "Se cobrará automáticamente cada mes, puedes cancelar en cualquier momento"
+                  : "Pago manual cada mes"}
           </p>
         </BaseModal>
       )}

@@ -23,6 +23,8 @@ export default function ServiceCard({
   importe = null,
   tipoCarga = null,
   tipoVehiculo = null,
+  showDelete = false,
+  onDelete = null,
 }) {
 
   const router = useRouter();
@@ -56,6 +58,12 @@ export default function ServiceCard({
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 0.25 }}
     >
+      {showDelete && (
+        <button className="service-delete-btn" onClick={onDelete}>
+          <img src="/icons/delete.png" alt="Finalizar"/>
+        </button>
+      )}
+
       <div className="service-card__title">
         <span className="service-card__tag">
           {isOffer ? "Ofrezco" : "Busco"}

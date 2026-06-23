@@ -31,10 +31,12 @@ export default function MisServiciosEmpresa() {
   const [reviewLink, setReviewLink] = useState("");
   const now = new Date();
 
-  const [selectedMonth, setSelectedMonth] = useState( now.getMonth() + 1);
-  const [selectedYear, setSelectedYear] = useState( now.getFullYear());
+  const [selectedMonth, setSelectedMonth] = useState(now.getMonth() + 1);
+  const [selectedYear, setSelectedYear] = useState(now.getFullYear());
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDeleteServiceModal, setShowDeleteServiceModal] = useState(false);
   const [selectedLeadId, setSelectedLeadId] = useState(null);
+  const [selectedServiceId, setSelectedServiceId] = useState(null);
 
   const cambiarEstadoDirecto = async (id, estado, tipo) => {
     const token = getEmpresaToken();
@@ -92,6 +94,42 @@ export default function MisServiciosEmpresa() {
 
     setShowDeleteModal(false);
     setSelectedLeadId(null);
+  };
+
+  const ocultarServicio = async () => {
+    const token = getEmpresaToken();
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/servicios/${selectedServiceId}/estado`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          estado: "finalizado",
+        }),
+      }
+    );
+
+    if (!res.ok) {
+      alert("No se pudo finalizar el servicio");
+      return;
+    }
+
+    setServices((prev) =>
+      prev.filter(
+        (s) =>
+          !(
+            s.tipo_item === "servicio" &&
+            s.id === selectedServiceId
+          )
+      )
+    );
+
+    setShowDeleteServiceModal(false);
+    setSelectedServiceId(null);
   };
 
   useEffect(() => {
@@ -284,7 +322,7 @@ export default function MisServiciosEmpresa() {
                       setShowDeleteModal(true);
                     }}
                     onChangeEstado={(id, nuevoEstado) => {
-                      setSelectedService({ ...s, tipo_item: "lead"});
+                      setSelectedService({ ...s, tipo_item: "lead" });
 
                       if (nuevoEstado === "finalizado") {
                         setShowConfirmFinalizar(true);
@@ -312,6 +350,11 @@ export default function MisServiciosEmpresa() {
                   empresa={s.empresa?.empresa ?? "Empresa"}
                   fecha={new Date(s.created_at).toLocaleDateString()}
                   showContact={false}
+                  showDelete={true}
+                  onDelete={() => {
+                    setSelectedServiceId(s.id);
+                    setShowDeleteServiceModal(true);
+                  }}
                   onChangeEstado={(id, nuevoEstado) => {
                     setSelectedService(s);
                     if (nuevoEstado === "finalizado") {
@@ -382,7 +425,7 @@ export default function MisServiciosEmpresa() {
         }}
       />
 
-      <ReporteMensualModal open={showReporte} onClose={() => setShowReporte(false)}/>
+      <ReporteMensualModal open={showReporte} onClose={() => setShowReporte(false)} />
 
       <ShareClienteReviewLinkModal
         open={showReviewModal}
@@ -404,6 +447,19 @@ export default function MisServiciosEmpresa() {
           setSelectedLeadId(null);
         }}
         onConfirm={ocultarLead}
+      />
+
+      <ConfirmDeleteModal
+        open={showDeleteServiceModal}
+        title="Finalizar servicio"
+        message="El servicio será marcado como finalizado y dejará de mostrarse en Mi Actividad."
+        confirmText="Finalizar"
+        cancelText="Cancelar"
+        onCancel={() => {
+          setShowDeleteServiceModal(false);
+          setSelectedServiceId(null);
+        }}
+        onConfirm={ocultarServicio}
       />
 
       <Footer />

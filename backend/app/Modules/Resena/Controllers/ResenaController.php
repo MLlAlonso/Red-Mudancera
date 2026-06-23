@@ -24,7 +24,10 @@ class ResenaController extends Controller
         ]);
 
         return response()->json([
-            'url' => env('FRONTEND_URL') . 'app.mudanzafacil.com.mx/resena/' . $link->token
+            'url' => 'https://app.mudanzafacil.com.mx/resena/'
+                . $empresaDestino->slug
+                . '/'
+                . $link->token
         ]);
     }
 
@@ -57,6 +60,7 @@ class ResenaController extends Controller
     public function store(Request $request, $token)
     {
         $link = ResenaLink::where('token', $token)->first();
+
         if (!$link) {
             return response()->json(['message' => 'Link inválido'], 404);
         }
@@ -67,7 +71,7 @@ class ResenaController extends Controller
         }
         $autor = $request->user();
 
-    /*
+        /*
     =================================
     CASO 1 — EMPRESA LOGUEADA
     =================================
@@ -131,7 +135,7 @@ class ResenaController extends Controller
     =================================
     */
         $this->recalcularReputacion($empresaDestino->id);
-    /*
+        /*
     =================================
     ENVIAR CORREO
     =================================
@@ -140,7 +144,7 @@ class ResenaController extends Controller
             ?? optional(Empresa::find($resena->empresa_origen_id))->empresa
             ?? 'Cliente';
         $esCliente = $resena->empresa_origen_id === null;
-        
+
         $linkRespuesta = null;
         if ($autor) {
             $respuesta = ResenaLink::create([
@@ -150,7 +154,13 @@ class ResenaController extends Controller
                 'token' => Str::uuid(),
                 'tipo' => 'response',
             ]);
-            $linkRespuesta = 'https://app.mudanzafacil.com.mx/resena/' . $respuesta->token;
+            $empresaOrigen = Empresa::find($resena->empresa_origen_id);
+
+            $linkRespuesta =
+                'https://app.mudanzafacil.com.mx/resena/'
+                . $empresaOrigen->slug
+                . '/'
+                . $respuesta->token;
         }
 
         Mail::to($empresaDestino->email)->send(
