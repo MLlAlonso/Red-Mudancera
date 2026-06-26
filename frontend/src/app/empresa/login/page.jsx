@@ -219,7 +219,6 @@ export default function EmpresaLogin() {
           onClose={() => setMessageModal(null)}
         />
       )}
-
     </>
   );
 }

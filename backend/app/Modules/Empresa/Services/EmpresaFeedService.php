@@ -6,6 +6,7 @@ use App\Modules\Servicio\Models\Servicio;
 use App\Modules\SolicitudMudanza\Models\SolicitudMudanza;
 use App\Modules\SolicitudMudanza\Models\LeadCompra;
 use Illuminate\Support\Collection;
+use Carbon\Carbon;
 
 class EmpresaFeedService
 {
@@ -40,14 +41,15 @@ class EmpresaFeedService
         /* ==============================
             SOLICITUDES ACTIVAS DISPONIBLES
           ============================== */
-        $comprasEmpresa = LeadCompra::where('empresa_id', $empresaId) ->pluck('solicitud_id') ->toArray();
+        $comprasEmpresa = LeadCompra::where('empresa_id', $empresaId)->pluck('solicitud_id')->toArray();
+        $limiteAntiguedad = Carbon::now()->subDays(10);
 
         $solicitudes = SolicitudMudanza::where('estado', 'activo')
+            ->where('reportada', false)
             ->whereDate('fecha_limite_visible', '>=', now())
             ->where('compras_count', '<', 3)
-            ->whereDoesntHave('compras', function ($q) {
-                $q->where('exclusivo', true);
-            })
+            ->where('created_at', '>=', $limiteAntiguedad)
+            ->whereDoesntHave('compras', function ($q) {$q->where('exclusivo', true);})
             ->latest()
             ->get()
             ->map(function ($s) use ($comprasEmpresa) {
@@ -71,6 +73,7 @@ class EmpresaFeedService
                     'tipo_vivienda' => $yaComprado ? $s->tipo_vivienda : null,
                 ];
             });
+
 
         /* ==============================
            MERGE + ORDEN CRONOLÓGICO

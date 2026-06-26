@@ -34,10 +34,7 @@ class EmpresaController extends Controller
     /**
      * Actualizar datos de la empresa
      */
-    public function update(
-        EmpresaUpdateRequest $request,
-        EmpresaImagenService $imagenService
-    ) {
+    public function update( EmpresaUpdateRequest $request, EmpresaImagenService $imagenService) {
         $empresa = $request->user();
         $data = $request->validated();
         $imagenes = $request->input('imagenes', []);

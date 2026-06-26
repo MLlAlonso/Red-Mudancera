@@ -1,0 +1,200 @@
+@use "../utils/variables";
+
+body {
+    background: linear-gradient(135deg, #111827, #1f2937);
+}
+
+.crm-login {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+
+    &__card {
+        width: 100%;
+        max-width: 550px;
+        background: white;
+        border-radius: 24px;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        box-shadow: 0 4px 15px rgba(255, 255, 255, 0.25);
+    }
+
+    &__brand {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        &__head {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        h1 {
+            font-family: variables.$font-title;
+            font-size: 40px;
+            font-weight: bold;
+            color: variables.$primary;
+            margin: 0;
+            line-height: 1;
+        }
+
+        p {
+            font-size: 18px;
+            color: variables.$text-muted;
+            text-align: center;
+            margin: 0;
+            line-height: 1.5;
+        }
+    }
+
+    &__heading {
+        text-align: center;
+        margin-bottom: 10px;
+
+        h2 {
+            font-size: 30px;
+            font-weight: 700;
+            color: variables.$title;
+            margin-bottom: 8px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+            color: variables.$text-muted;
+            margin: 0;
+        }
+    }
+
+    &__field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        input {
+            width: 100%;
+            height: 55px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding-left: 50px;
+            padding-right: 50px;
+            outline: none;
+            transition: .2s;
+
+            &:focus {
+                border-color: variables.$primary;
+            }
+        }
+    }
+
+    &__input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    &__input-icon {
+        position: absolute;
+        left: 16px;
+        width: 25px;
+        height: 25px;
+        z-index: 2;
+        pointer-events: none;
+        opacity: .65;
+    }
+
+    &__password-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        input {
+            width: 100%;
+            padding-right: 55px;
+        }
+    }
+
+    &__showpass {
+        position: absolute;
+        right: 15px;
+        cursor: pointer;
+        font-size: 20px;
+        user-select: none;
+        transition: .2s;
+
+        &:hover {
+            opacity: .7;
+        }
+    }
+
+    &__error {
+        color: red;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    &__divider {
+        width: 100%;
+        height: 1px;
+        background: #e5e7eb;
+        margin: 0px 0px 10px;
+    }
+
+    &__footer-divider {
+        width: 100%;
+        height: 1px;
+        background: #e5e7eb;
+        margin-top: 10px;
+    }
+
+    &__footer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        padding-top: 10px;
+
+        a {
+            color: variables.$text-muted;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: .2s;
+
+            span {
+                color: variables.$primary;
+                font-size: 16px;
+                font-weight: 700;
+            }
+        }
+
+        a:hover {
+            opacity: .8;
+        }
+    }
+}
+
+.crm-login .crm-login .crm-login__forgot {
+    text-align: center;
+    font-size: 14px;
+    color: variables.$text-muted;
+    cursor: pointer;
+    transition: .2s;
+    font-weight: 600;
+}
+
+.crm-login__forgot:hover {
+    opacity: .8;
+}

@@ -1,0 +1,87 @@
+@use "../utils/variables" as *;
+
+.crm-sidebar {
+  position: fixed;
+  top: 72px;
+  left: 0;
+  width: 260px;
+  height: calc(100vh - 72px);
+  background: $primary;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: .3s;
+  z-index: 400;
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+
+    img {
+      width: 42px;
+    }
+  }
+
+  nav {
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+    gap: 18px;
+
+    a {
+      color: white;
+      text-decoration: none;
+      font-size: 24px;
+    }
+  }
+
+  &__bottom {
+    display: flex;
+    flex-direction: column;
+  }
+
+  button {
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-bottom: 0px;
+    font-size: 18px;
+    background: $tertiary;
+  }
+
+  button.danger {
+    background: #D92D20;
+    color: white;
+  }
+
+  &__overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .4);
+    z-index: 350;
+  }
+}
+
+@media(max-width:900px) {
+  .crm-sidebar {
+    top: 0;
+    left: -280px;
+    height: 100vh;
+  }
+
+  .crm-sidebar.open {
+    left: 0;
+  }
+}
+
+@media(min-width:901px) {
+  .crm-sidebar__overlay {
+    display: none;
+  }
+}

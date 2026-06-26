@@ -1,0 +1,85 @@
+@use "../utils/variables" as *;
+
+.crm-header {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 72px;
+  background: $primary;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  z-index: 500;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, .05);
+
+  &__left {
+    width: 180px;
+  }
+
+  &__center {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    img {
+      width: 180px;
+    }
+  }
+
+  &__right {
+    width: 180px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__menu {
+    display: none;
+    border: none;
+    background: none;
+    font-size: 28px;
+    cursor: pointer;
+  }
+
+  &__avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  &__desktop {
+    border: none;
+    background: #0F5FA8;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+}
+
+.crm-header__desktop.danger {
+  background: #d92d20;
+}
+
+@media(max-width:900px) {
+  .crm-header__menu {
+    display: block;
+  }
+
+  .crm-header__desktop {
+    display: none;
+  }
+
+  .crm-header__left {
+    width: 60px;
+  }
+
+  .crm-header__right {
+    width: 60px;
+  }
+}

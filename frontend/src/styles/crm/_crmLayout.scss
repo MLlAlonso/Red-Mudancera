@@ -1,0 +1,14 @@
+.crm-layout{
+    min-height:100vh;
+    background:#F4F7FA;
+}
+
+.crm-layout__page{
+    padding:100px 30px 30px 250px;
+}
+
+@media(max-width:900px){
+    .crm-layout__page{
+        padding: 95px 20px 20px 20px;
+    }
+}
