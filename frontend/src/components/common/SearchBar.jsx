@@ -58,7 +58,6 @@ const SearchBar = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder={placeholder}
-          autocomplete
           disabled={!isEnabled}
           className="searchbar__input"
         />

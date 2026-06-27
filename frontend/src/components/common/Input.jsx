@@ -10,9 +10,14 @@ export default function Input({
   value,
   onChange,
   autocomplete = false,
+  onAutocompleteSelect,
 }) {
   const [showPassword, setShowPassword] = useState(false);
+
   const inputRef = useRef(null);
+  const autocompleteRef = useRef(null);
+  const listenerRef = useRef(null);
+
   const isPasswordField = type === "password";
   const inputType = isPasswordField && showPassword ? "text" : type;
 
@@ -43,25 +48,40 @@ export default function Input({
   useEffect(() => {
     if (!autocomplete || !window.google || !inputRef.current) return;
 
-    const autocompleteInstance =
-      new window.google.maps.places.Autocomplete(inputRef.current, {
+    autocompleteRef.current = new window.google.maps.places.Autocomplete(
+      inputRef.current,
+      {
         types: ["(cities)"],
         componentRestrictions: { country: "mx" },
         fields: ["address_components"],
-      });
+      }
+    );
 
-    autocompleteInstance.addListener("place_changed", () => {
-      const place = autocompleteInstance.getPlace();
-      const formatted = formatPlace(place);
+    listenerRef.current = autocompleteRef.current.addListener(
+      "place_changed",
+      () => {
+        const place = autocompleteRef.current.getPlace();
+        const formatted = formatPlace(place);
 
-      onChange({
-        target: {
-          name,
-          value: formatted,
-        },
-      });
-    });
-  }, [autocomplete, name, onChange]);
+        onChange({
+          target: {
+            name,
+            value: formatted,
+          },
+        });
+
+        if (onAutocompleteSelect) {
+          onAutocompleteSelect(name, true);
+        }
+      }
+    );
+
+    return () => {
+      if (listenerRef.current) {
+        window.google.maps.event.removeListener(listenerRef.current);
+      }
+    };
+  }, [autocomplete, name, onChange, onAutocompleteSelect]);
 
   return (
     <div className="input-group">
@@ -78,13 +98,27 @@ export default function Input({
           type={inputType}
           placeholder={placeholder}
           value={value ?? ""}
-          onChange={onChange}
+          onChange={(e) => {
+            onChange(e);
+
+            if (!autocomplete || !onAutocompleteSelect) return;
+            const selected = autocompleteRef.current?.getPlace?.();
+
+            if (!selected?.address_components) {
+              onAutocompleteSelect(name, false);
+            }
+          }}
           readOnly={!onChange}
           autoComplete="off"
         />
-        
+
         {isPasswordField && (
-          <img src={showPassword ? "/icons/eye_off.png" : "/icons/eye.png"} alt="toggle password" className="input-group__icon" onClick={() => setShowPassword(!showPassword)} />
+          <img
+            src={showPassword ? "/icons/eye_off.png" : "/icons/eye.png"}
+            alt="toggle password"
+            className="input-group__icon"
+            onClick={() => setShowPassword(!showPassword)}
+          />
         )}
       </div>
     </div>

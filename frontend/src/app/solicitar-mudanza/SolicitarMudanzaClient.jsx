@@ -33,6 +33,7 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
     });
 
     const [errors, setErrors] = useState({});
+    const [autocompleteValid, setAutocompleteValid] = useState({ origen: false, destino: false, });
     const [loading, setLoading] = useState(false);
     const [solicitudId, setSolicitudId] = useState(null);
     const [resumeModal, setResumeModal] = useState(false);
@@ -41,13 +42,23 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
         setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
+    const handleAutocompleteSelect = (field, valid) => {
+        setAutocompleteValid(prev => ({
+            ...prev,
+            [field]: valid
+        }));
+    };
+
     /* =========================
        VALIDACIÓN
     ========================= */
     const validate = () => {
         const newErrors = {};
         if (!form.origen) newErrors.origen = "El origen es obligatorio.";
+        else if (!autocompleteValid.origen) newErrors.origen = "Selecciona una ciudad del listado.";
         if (!form.destino) newErrors.destino = "El destino es obligatorio.";
+        else if (!autocompleteValid.destino) newErrors.destino = "Selecciona una ciudad del listado.";
+
         if (!form.inventario || form.inventario.replace(/<[^>]*>/g, "").length < 10) {
             newErrors.inventario = "Describe al menos 10 caracteres.";
         }
@@ -158,7 +169,7 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
                     <div className="form-section">
                         <h2 className="form-section__title">Datos de Origen</h2>
 
-                        <Input label="Origen *" placeholder="Ciudad o zona donde se recoge la mudanza" name="origen" autocomplete value={form.origen} onChange={handleChange} />
+                        <Input label="Origen *" placeholder="Ciudad o zona donde se recoge la mudanza" name="origen" autocomplete value={form.origen} onChange={handleChange} onAutocompleteSelect={handleAutocompleteSelect}/>
                         {errors.origen && <p className="form-error">{errors.origen}</p>}
 
                         <label className="input-group__label input-group__label--tooltip">
@@ -220,7 +231,7 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
                     <div className="form-section">
                         <h2 className="form-section__title">Datos de Destino</h2>
 
-                        <Input label="Destino *" placeholder="Ciudad donde se entrega la mudanza" name="destino" autocomplete value={form.destino} onChange={handleChange} />
+                        <Input label="Destino *" placeholder="Ciudad donde se entrega la mudanza" name="destino" autocomplete value={form.destino} onChange={handleChange}     onAutocompleteSelect={handleAutocompleteSelect}/>
                         {errors.destino && <p className="form-error">{errors.destino}</p>}
 
                         <label className="input-group__label input-group__label--tooltip">
