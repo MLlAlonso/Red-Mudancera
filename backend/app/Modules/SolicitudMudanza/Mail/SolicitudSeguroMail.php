@@ -33,9 +33,13 @@ class SolicitudSeguroMail extends Mailable
         }
 
         $mensaje = "Hola, apreciable {$this->solicitud->nombre}.\n"
-            . "Te contacto del área de seguros de carga en seguimiento a tu solicitud para proteger tu mudanza de {$this->solicitud->origen} a {$this->solicitud->destino}.\n"
-            . "Con gusto puedo explicarte brevemente en una llamada cómo funcionan las coberturas de la póliza, qué incluye y resolver cualquier duda que tengas.\n"
-            . "¿Tienes unos minutos ahora o prefieres que agendemos en un horario específico para más tarde?";
+            . "Solo quería presentarme, soy David Ibarra\n"
+            . "Vi que estás organizando una mudanza de {$this->solicitud->origen} a {$this->solicitud->destino} y que solicitaste información.\n"
+            . "Sé que en este momento seguramente estás enfocado en elegir la empresa que realizará tu mudanza. Por experiencia, la mayoría de las personas contrata el seguro hasta después de tomar esa decisión. \n"
+            . "Cuando llegue ese momento, aquí estaré para asesorarte, resolver tus dudas y ayudarte a asegurar tu mudanza. Además, conocerás los beneficios que muchas personas desconocen hasta que ya es demasiado tarde. \n"
+            . "Más información:\n"
+            . "https://www.chubb.com/mx-es/ \n"
+            . "Y un último favor...¡No olvides guardar mi número! Así, cuando llegue el momento del seguro, aquí me encuentras. Estaré al pendiente.";
 
         $whatsappUrl = "https://wa.me/{$telefono}?text=" . urlencode($mensaje);
 

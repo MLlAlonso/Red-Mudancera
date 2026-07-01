@@ -5,38 +5,50 @@
   display: inline-block;
 
   &__btn {
-    width: 130px;
+    min-width: 150px;
     height: 50px;
+    padding: 0 16px;
     border-radius: 10px;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
+    gap: 10px;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 18px;
     cursor: pointer;
     border: none;
     font-family: variables.$font-title;
     color: #fff;
+    transition: background 0.2s ease;
   }
 
-  /* BACKGROUNDS Status */
+  /* ===== Estados ===== */
   &__btn.is-activo {
     background: variables.$success;
   }
 
   &__btn.is-asignado {
-    background: variables.$primary; 
+    background: variables.$primary;
+  }
+
+  &__btn.is-en_proceso {
+    background: variables.$tertiary;
+  }
+
+  &__btn.is-perdido {
+    background: variables.$error;
   }
 
   &__btn.is-finalizado {
-    background: variables.$error-hover;
+    background: variables.$azul_002;
   }
 
+  /* ===== Menú ===== */
   &__menu {
     position: absolute;
-    top: calc(100%);
+    top: calc(100% + 6px);
     left: 0;
-    width: 130px;
+    min-width: 150px;
     background: variables.$cards;
     border-radius: 10px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
@@ -51,21 +63,37 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    padding: 0 12px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    background: #ffffff;
+    background: #fff;
     color: variables.$text;
     font-family: variables.$font-text;
     transition: background 0.2s ease, color 0.2s ease;
+
+    &.activo:hover {
+      background: variables.$success;
+      color: #fff;
+    }
 
     &.asignado:hover {
       background: variables.$primary;
       color: #fff;
     }
 
-    &.finalizado:hover {
+    &.en_proceso:hover {
+      background: variables.$tertiary-hover;
+      color: #fff;
+    }
+
+    &.perdido:hover {
       background: variables.$error-hover;
+      color: #fff;
+    }
+
+    &.finalizado:hover {
+      background: variables.$azul_002;
       color: #fff;
     }
   }
@@ -74,7 +102,7 @@
 /* Flecha */
 .arrow {
   transition: transform 0.2s ease;
-  font-size: 20px;
+  font-size: 18px;
 
   &.open {
     transform: rotate(180deg);

@@ -137,14 +137,15 @@ export default function BienvenidaPage() {
 
                     {/* RIGHT */}
                     <div className="step-card__video">
-                        <div className="step-card__video-wrapper">
+                        <img src="/images/dashboard.png" alt="" />
+                        {/* <div className="step-card__video-wrapper">
                             <iframe
                                 src="https://app.mudanzafacil.com.mx/logo/logo_A.png"
                                 title="Cómo funciona Mudanza Fácil"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen
                             ></iframe>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 

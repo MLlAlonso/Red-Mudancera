@@ -148,62 +148,11 @@ Nuevo módulo agregado al sistema.
 
 ---
 
-## 3. Funcionalidades Pendientes por Milestone
-
-### 📦 Milestone 2 (cerrada)
-
-- ✅ Arquitectura base
-- ✅ Autenticación
-- ✅ Dashboard inicial
-- ✅ Perfil usuario
-- ✅ Perfil empresa básico
-- ✅ Verificación por correo
-
-### 🚚 Milestone 3 (en progreso)
-
-Esta milestone corresponde al núcleo funcional del sistema.
-
-**Implementado:**
-
-- ✅ CRUD completo de servicios
-- ✅ Sistema Busco / Ofrezco
-- ✅ Filtros de servicios
-- ✅ Estados del servicio
-- ✅ Registro de visualizaciones
-- ✅ Reporte mensual
-- ✅ Sistema de reseñas
-- ✅ Módulo de solicitudes de mudanza
-- ✅ Sistema de leads
-
-**Pendiente para cerrar milestone:**
-
-- ⏳ Anti-spam avanzado de servicios
-- ⏳ Búsqueda global optimizada
-- ⏳ Migración Mailtrap → proveedor real
-
-### 🤝 Milestone 4 (futuro)
-
-- ⏳ Radar de coincidencias entre servicios
-- ⏳ Directorio completo de empresas
-- ⏳ Sistema de reputación ampliado
-- ⏳ Notificaciones push reales
-- ⏳ PWA completa
-
-### 💳 Milestone 5 (futuro)
-
-- ⏳ Sistema de suscripciones
-- ⏳ Integración Stripe
-- ⏳ Plan Free / Base / Pro
-- ⏳ Limitaciones por plan
-- ⏳ Dashboard administrativo
-
----
-
-## 4. Avances Técnicos, Decisiones y Estado Actual del Proyecto
+## 3. Avances Técnicos, Decisiones y Estado Actual del Proyecto
 
 **Proyecto:** Mudanza Facil
 
-### 4.1 Resumen General
+### 3.1 Resumen General
 
 Hasta la milestone actual se construyó un MVP funcional robusto que incluye:
 
@@ -220,7 +169,7 @@ La base ya permite operar una plataforma funcional de logística para mudanzas.
 
 ---
 
-## 5. Backend – Laravel (Estado Actual)
+## 4. Backend – Laravel (Estado Actual)
 
 ### ✔️ Arquitectura modular
 
@@ -291,7 +240,7 @@ La estructura está preparada para soportar:
 
 ---
 
-## 6. Frontend – Next.js (Estado Actual)
+## 5. Frontend – Next.js (Estado Actual)
 
 ### ✔️ App Router
 
@@ -325,7 +274,7 @@ Esto permite reutilización y escalabilidad del frontend.
 
 ---
 
-## 7. UI / UX Implementado
+## 6. UI / UX Implementado
 
 - ✅ Skeleton loaders
 - ✅ Modales reutilizables
@@ -337,7 +286,7 @@ Esto permite reutilización y escalabilidad del frontend.
 
 ---
 
-## 8. Qué está listo para producción futura
+## 7. Qué está listo para producción futura
 
 El sistema ya cuenta con:
 
@@ -358,7 +307,7 @@ El sistema ya cuenta con:
 
 ---
 
-## 9. Recomendaciones para la Siguiente Milestone
+## 8. Recomendaciones para la Siguiente Milestone
 
 - Finalizar Notification Engine
 - Implementar Radar de coincidencias entre servicios
@@ -368,7 +317,7 @@ El sistema ya cuenta con:
 
 ---
 
-## 10. Objetivo de este documento
+## 9. Objetivo de este documento
 
 Este documento sirve como:
 
@@ -390,6 +339,8 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   │   ├── 🐘 CheckServiciosPorVencer.php
 │   │   │   │   ├── 🐘 CheckSubscriptions.php
 │   │   │   │   ├── 🐘 CleanEmailVerifications.php
+│   │   │   │   ├── 🐘 ExpireSolicitudMudanzaLeads.php
+│   │   │   │   ├── 🐘 GenerateEmpresaSlugs.php
 │   │   │   │   ├── 🐘 ProcessRadarMatches.php
 │   │   │   │   └── 🐘 SendDailyServiceViewsSummary.php
 │   │   │   └── 🐘 Kernel.php
@@ -419,11 +370,18 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   ├── 🐘 EmailVerification.php
 │   │   │   └── 🐘 User.php
 │   │   ├── 📁 Modules
+│   │   │   ├── 📁 Analytics
+│   │   │   │   ├── 📁 Controllers
+│   │   │   │   │   └── 🐘 LiveViewerController.php
+│   │   │   │   ├── 📁 Models
+│   │   │   │   │   └── 🐘 LiveViewer.php
+│   │   │   │   └── 🐘 routes.php
 │   │   │   ├── 📁 Auth
 │   │   │   ├── 📁 Empresa
 │   │   │   │   ├── 📁 Controllers
 │   │   │   │   │   ├── 🐘 CreditosController.php
 │   │   │   │   │   ├── 🐘 EmpresaAuthController.php
+│   │   │   │   │   ├── 🐘 EmpresaCRMController.php
 │   │   │   │   │   ├── 🐘 EmpresaController.php
 │   │   │   │   │   ├── 🐘 EmpresaFeedController.php
 │   │   │   │   │   ├── 🐘 EmpresaPublicController.php
@@ -437,6 +395,9 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   │   │   ├── 🐘 EmpresaVerificationCode.php
 │   │   │   │   │   ├── 🐘 EmpresaWelcomeMail.php
 │   │   │   │   │   ├── 🐘 PlanActivatedMail.php
+│   │   │   │   │   ├── 🐘 ServicioFinalizadoMail.php
+│   │   │   │   │   ├── 🐘 ServicioPorVencerMail.php
+│   │   │   │   │   ├── 🐘 TrialApprovedMail.php
 │   │   │   │   │   ├── 🐘 TrialEndingMail.php
 │   │   │   │   │   ├── 🐘 TrialExpiredMail.php
 │   │   │   │   │   └── 🐘 TrialRequestMail.php
@@ -451,6 +412,7 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   │   │   ├── 🐘 LoginEmpresaRequest.php
 │   │   │   │   │   └── 🐘 RegisterEmpresaRequest.php
 │   │   │   │   ├── 📁 Services
+│   │   │   │   │   ├── 🐘 EmpresaCRMService.php
 │   │   │   │   │   ├── 🐘 EmpresaFeedService.php
 │   │   │   │   │   ├── 🐘 EmpresaImagenService.php
 │   │   │   │   │   ├── 🐘 EmpresaService.php
@@ -465,7 +427,9 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   │   │   ├── 🐘 NotificationChannelInterface.php
 │   │   │   │   │   └── 🐘 PushChannel.php
 │   │   │   │   ├── 📁 Controllers
-│   │   │   │   │   └── 🐘 NotificacionController.php
+│   │   │   │   │   ├── 🐘 NotificacionController.php
+│   │   │   │   │   ├── 🐘 RealtimeToastController.php
+│   │   │   │   │   └── 🐘 TestPushController.php
 │   │   │   │   ├── 📁 Events
 │   │   │   │   │   ├── 🐘 BaseNotificationEvent.php
 │   │   │   │   │   ├── 🐘 CreditosAgregadosEvent.php
@@ -491,7 +455,16 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   │   │   └── 🐘 NotificationPreference.php
 │   │   │   │   ├── 📁 Services
 │   │   │   │   │   ├── 🐘 NotificacionService.php
-│   │   │   │   │   └── 🐘 NotificationDispatcher.php
+│   │   │   │   │   ├── 🐘 NotificationDispatcher.php
+│   │   │   │   │   └── 🐘 OneSignalService.php
+│   │   │   │   └── 🐘 routes.php
+│   │   │   ├── 📁 PartnerReferral
+│   │   │   │   ├── 📁 Controllers
+│   │   │   │   │   └── 🐘 PartnerReferralController.php
+│   │   │   │   ├── 📁 Models
+│   │   │   │   │   └── 🐘 PartnerReferral.php
+│   │   │   │   ├── 📁 Requests
+│   │   │   │   ├── 📁 Services
 │   │   │   │   └── 🐘 routes.php
 │   │   │   ├── 📁 Resena
 │   │   │   │   ├── 📁 Controllers
@@ -499,8 +472,8 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   │   ├── 📁 Mail
 │   │   │   │   │   └── 🐘 NuevaResenaMail.php
 │   │   │   │   ├── 📁 Models
-│   │   │   │   │   ├── 🐘 ResenaLink.php
-│   │   │   │   │   └── 🐘 resena.php
+│   │   │   │   │   ├── 🐘 Resena.php
+│   │   │   │   │   └── 🐘 ResenaLink.php
 │   │   │   │   ├── 📁 Repositories
 │   │   │   │   ├── 📁 Request
 │   │   │   │   ├── 📁 Services
@@ -541,12 +514,23 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   │   │   │   ├── 🐘 LeadCompra.php
 │   │   │   │   │   └── 🐘 SolicitudMudanza.php
 │   │   │   │   ├── 📁 Requests
-│   │   │   │   │   ├── 🐘 ReenviarCodigoSolicitudRequest.php
-│   │   │   │   │   ├── 🐘 StoreSolicitudMudanzaRequest.php
-│   │   │   │   │   └── 🐘 VerifySolicitudMudanzaRequest.php
+│   │   │   │   │   └── 🐘 StoreSolicitudMudanzaRequest.php
 │   │   │   │   ├── 📁 Services
 │   │   │   │   │   ├── 🐘 ReferralService.php
 │   │   │   │   │   └── 🐘 SolicitudMudanzaService.php
+│   │   │   │   └── 🐘 routes.php
+│   │   │   ├── 📁 SuperAdmin
+│   │   │   │   ├── 📁 Controllers
+│   │   │   │   │   ├── 🐘 SuperAdminAnalyticsController.php
+│   │   │   │   │   ├── 🐘 SuperAdminController.php
+│   │   │   │   │   ├── 🐘 SuperAdminEmpresaController.php
+│   │   │   │   │   └── 🐘 SuperAdminServiciosController.php
+│   │   │   │   └── 🐘 routes.php
+│   │   │   ├── 📁 SystemAnnouncement
+│   │   │   │   ├── 📁 Controllers
+│   │   │   │   │   └── 🐘 SystemAnnouncementController.php
+│   │   │   │   ├── 📁 Models
+│   │   │   │   │   └── 🐘 SystemAnnouncement.php
 │   │   │   │   └── 🐘 routes.php
 │   │   │   └── 📁 Usuario
 │   │   │       ├── 📁 Controllers
@@ -574,7 +558,9 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │       │   └── 🐘 GoogleDistanceService.php
 │   │       ├── 🐘 CloudinaryService.php
 │   │       ├── 🐘 MailtrapService.php
-│   │       └── 🐘 StripeService.php
+│   │       ├── 🐘 OneSignalService.php
+│   │       ├── 🐘 StripeService.php
+│   │       └── 🐘 WhatsAppService.php
 │   ├── 📁 bootstrap
 │   │   ├── 🐘 app.php
 │   │   └── 🐘 providers.php
@@ -597,56 +583,6 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │   ├── 📁 factories
 │   │   │   └── 🐘 UserFactory.php
 │   │   ├── 📁 migrations
-│   │   │   ├── 🐘 0001_01_01_000001_create_cache_table.php
-│   │   │   ├── 🐘 2025_11_26_072955_create_personal_access_tokens_table.php
-│   │   │   ├── 🐘 2025_11_26_074631_create_empresas_table.php
-│   │   │   ├── 🐘 2025_11_26_074711_create_usuarios_table.php
-│   │   │   ├── 🐘 2025_12_07_052204_create_email_verifications_table.php
-│   │   │   ├── 🐘 2025_12_16_064630_create_servicios_table.php
-│   │   │   ├── 🐘 2026_01_06_051311_create_resenas_table.php
-│   │   │   ├── 🐘 2026_01_06_051525_create_resena_links_table.php
-│   │   │   ├── 🐘 2026_01_18_082815_add_response_fields_to_resena_links.php
-│   │   │   ├── 🐘 2026_01_20_042024_add_distancia_km_to_servicios_table.php
-│   │   │   ├── 🐘 2026_01_25_075637_add_ganancia_to_servicios_table.php
-│   │   │   ├── 🐘 2026_01_28_062726_add_estado_carga_to_servicios.php
-│   │   │   ├── 🐘 2026_02_01_064840_create_servicio_imagenes_table.php
-│   │   │   ├── 🐘 2026_02_08_075259_create_notificaciones_table.php
-│   │   │   ├── 🐘 2026_02_08_075522_create_notificacion_usuario_table.php
-│   │   │   ├── 🐘 2026_02_08_100224_add_leida_empresa_to_notificaciones_table.php
-│   │   │   ├── 🐘 2026_02_13_052004_create_jobs_table.php
-│   │   │   ├── 🐘 2026_02_13_054109_create_service_views_table.php
-│   │   │   ├── 🐘 2026_02_14_054657_add_expiration_notified_to_servicios_table.php
-│   │   │   ├── 🐘 2026_02_15_194227_create_notification_preferences_table.php
-│   │   │   ├── 🐘 2026_02_16_230425_create_notification_metrics_table.php
-│   │   │   ├── 🐘 2026_02_21_234742_create_solicitudes_mudanza_table.php
-│   │   │   ├── 🐘 2026_02_25_014514_add_vivienda_destino_to_solicitudes_mudanza_table.php
-│   │   │   ├── 🐘 2026_02_25_222623_add_tokens_to_empresas_table.php
-│   │   │   ├── 🐘 2026_02_25_222805_create_lead_compras_table.php
-│   │   │   ├── 🐘 2026_02_26_214026_update_solicitudes_mudanza_add_new_fields.php
-│   │   │   ├── 🐘 2026_02_26_224140_update_fecha_recoleccion_enum_in_solicitudes_mudanza_table.php
-│   │   │   ├── 🐘 2026_02_27_225816_update_elevador_enum_in_solicitudes_mudanza_table.php
-│   │   │   ├── 🐘 2026_03_04_125113_update_add_estado_operacion_to_lead_compras.php
-│   │   │   ├── 🐘 2026_03_06_000117_add_referido_to_solicitudes_mudanza.php
-│   │   │   ├── 🐘 2026_03_10_121625_add_cliente_fields_to_resenas_table.php
-│   │   │   ├── 🐘 2026_03_10_134607_fix_empresa_origen_nullable_in_resenas.php
-│   │   │   ├── 🐘 2026_03_17_001536_create_service_matches_table.php
-│   │   │   ├── 🐘 2026_03_19_120823_create_radar_matches_table.php
-│   │   │   ├── 🐘 2026_03_19_145939_add_last_radar_run_at_to_servicios_table.php
-│   │   │   ├── 🐘 2026_03_19_150640_add_radar_stage_to_servicios_table.php
-│   │   │   ├── 🐘 2026_03_26_220249_add_plan_to_empresas_table.php
-│   │   │   ├── 🐘 2026_03_26_235431_add_free_since_to_empresas_table.php
-│   │   │   ├── 🐘 2026_03_27_155329_add_trial_fields_to_empresas_table.php
-│   │   │   ├── 🐘 2026_03_30_110001_create_empresa_radar_configs_table.php
-│   │   │   ├── 🐘 2026_03_31_184643_add_tipo_vehiculo_to_servicios_table.php
-│   │   │   ├── 🐘 2026_03_31_190104_make_volumen_nullable_on_servicios_table.php
-│   │   │   ├── 🐘 2026_04_02_214130_add_verificado_to_empresas_table.php
-│   │   │   ├── 🐘 2026_04_05_144601_create_trial_requests_table.php
-│   │   │   ├── 🐘 2026_04_06_214823_add_docs_to_trial_requests_table.php
-│   │   │   ├── 🐘 2026_04_06_223008_update_trial_urls_columns.php
-│   │   │   ├── 🐘 2026_04_10_222542_add_recurrente_to_empresas_table.php
-│   │   │   ├── 🐘 2026_04_11_124451_create_empresa_imagens_table.php
-│   │   │   ├── 🐘 2026_04_14_225538_add_stripe_fields_to_empresas.php
-│   │   │   └── 🐘 2026_04_24_000457_add_cancel_flag_to_empresas.php
 │   │   ├── 📁 seeders
 │   │   │   └── 🐘 DatabaseSeeder.php
 │   │   └── ⚙️ .gitignore
@@ -673,9 +609,12 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │       │   ├── 🐘 plan_activated.blade.php
 │   │       │   ├── 🐘 radar_matches.blade.php
 │   │       │   ├── 🐘 recover_password.blade.php
+│   │       │   ├── 🐘 servicio_finalizado.blade.php
+│   │       │   ├── 🐘 servicio_por_vencer.blade.php
 │   │       │   ├── 🐘 solicitud_mudanza_resumen.blade.php
 │   │       │   ├── 🐘 solicitud_mudanza_verification_code.blade.php
 │   │       │   ├── 🐘 solicitud_seguro.blade.php
+│   │       │   ├── 🐘 trial_approved.blade.php
 │   │       │   ├── 🐘 trial_ending.blade.php
 │   │       │   ├── 🐘 trial_expired.blade.php
 │   │       │   ├── 🐘 trial_request.blade.php
@@ -684,6 +623,7 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   │       │   ├── 🐘 usuario_welcome.blade.php
 │   │       │   └── 🐘 verification_code.blade.php
 │   │       ├── 📁 pdf
+│   │       │   ├── 🐘 partner-dashboard.blade.php
 │   │       │   └── 🐘 reporte-mensual.blade.php
 │   │       └── 🐘 welcome.blade.php
 │   ├── 📁 routes
@@ -710,6 +650,7 @@ Permite retomar el desarrollo sin pérdida de contexto ni decisiones técnicas.
 │   ├── 📝 ENDPOINTS.md
 │   ├── 📄 artisan
 │   ├── ⚙️ composer.json
+│   ├── 🐘 generate-vapid.php
 │   ├── ⚙️ phpunit.xml
 │   ├── 📄 red_mudancera_dev
 │   └── 📄 vite.config.js
@@ -730,84 +671,15 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 ├── 📁 frontend
 │   ├── 📁 public
 │   │   ├── 📁 icons
-│   │   │   ├── 🖼️ ajustes.png
-│   │   │   ├── 🖼️ arrow_down.png
-│   │   │   ├── 🖼️ borrar.png
-│   │   │   ├── 🖼️ busco.png
-│   │   │   ├── 🖼️ busco_btn.png
-│   │   │   ├── 🖼️ cambios.png
-│   │   │   ├── 🖼️ campana.png
-│   │   │   ├── 🖼️ candado-cerrado.png
-│   │   │   ├── 🖼️ candado.png
-│   │   │   ├── 🖼️ check.png
-│   │   │   ├── 🖼️ check_success.png
-│   │   │   ├── 🖼️ cliente.png
-│   │   │   ├── 🖼️ clientew.png
-│   │   │   ├── 🖼️ comprobado.png
-│   │   │   ├── 🖼️ conectar.png
-│   │   │   ├── 🖼️ conector.png
-│   │   │   ├── 🖼️ cookies.png
-│   │   │   ├── 🖼️ copy.png
-│   │   │   ├── 🖼️ copyw.png
-│   │   │   ├── 🖼️ correo_verificado.png
-│   │   │   ├── 🖼️ credito.png
-│   │   │   ├── 🖼️ cuenta.png
-│   │   │   ├── 🖼️ datos.png
-│   │   │   ├── 🖼️ default-user.png
-│   │   │   ├── 🖼️ delete.png
-│   │   │   ├── 🖼️ derechos.png
-│   │   │   ├── 🖼️ destino.png
-│   │   │   ├── 🖼️ docs.png
-│   │   │   ├── 🖼️ eraser.png
-│   │   │   ├── 🖼️ explorar.png
-│   │   │   ├── 🖼️ eye.png
-│   │   │   ├── 🖼️ eye_off.png
-│   │   │   ├── 🖼️ filtrar.png
-│   │   │   ├── 🖼️ help.png
-│   │   │   ├── 🖼️ hogar.png
-│   │   │   ├── 🖼️ hogar_2.png
-│   │   │   ├── 🖼️ icon.svg
-│   │   │   ├── 🖼️ logout.png
-│   │   │   ├── 🖼️ lupa.png
-│   │   │   ├── 🖼️ mensaje.png
-│   │   │   ├── 🖼️ menu.png
-│   │   │   ├── 🖼️ ofrezco.png
-│   │   │   ├── 🖼️ ofrezco_btn.png
-│   │   │   ├── 🖼️ ojo.png
-│   │   │   ├── 🖼️ pause.png
-│   │   │   ├── 🖼️ place-marker.png
-│   │   │   ├── 🖼️ planes.png
-│   │   │   ├── 🖼️ play.png
-│   │   │   ├── 🖼️ prohibicion.png
-│   │   │   ├── 🖼️ radar.png
-│   │   │   ├── 🖼️ reloj_de_arena.png
-│   │   │   ├── 🖼️ share.png
-│   │   │   ├── 🖼️ shareW.png
-│   │   │   ├── 🖼️ suscripcion.png
-│   │   │   ├── 🖼️ suspendido.png
-│   │   │   ├── 🖼️ team.png
-│   │   │   ├── 🖼️ tel.png
-│   │   │   ├── 🖼️ telefono.png
-│   │   │   ├── 🖼️ todo.png
-│   │   │   ├── 🖼️ todos.png
-│   │   │   ├── 🖼️ token.png
-│   │   │   ├── 🖼️ token_blue.png
-│   │   │   ├── 🖼️ token_color.png
-│   │   │   ├── 🖼️ truck.png
-│   │   │   ├── 🖼️ user-placeholder.png
-│   │   │   ├── 🖼️ verificado.png
-│   │   │   └── 🖼️ whatsapp.png
 │   │   ├── 📁 images
-│   │   │   └── 🖼️ hero_seguro.png
 │   │   ├── 📁 logo
-│   │   │   ├── 🖼️ Logo2.png
-│   │   │   ├── 🖼️ icon.png
-│   │   │   ├── 🖼️ logo.png
-│   │   │   ├── 🖼️ logo3.png
-│   │   │   └── 🖼️ logo_A.png
+│   │   ├── 📁 screenshots
+│   │   ├── 📄 OneSignalSDKUpdaterWorker.js
+│   │   ├── 📄 OneSignalSDKWorker.js
 │   │   ├── 🖼️ file.svg
 │   │   ├── 🖼️ globe.svg
 │   │   ├── 🖼️ icon.svg
+│   │   ├── ⚙️ manifest.json
 │   │   ├── 🖼️ next.svg
 │   │   ├── 🖼️ vercel.svg
 │   │   └── 🖼️ window.svg
@@ -815,13 +687,24 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   ├── 📁 app
 │   │   │   ├── 📁 ayuda
 │   │   │   │   └── 📄 page.jsx
+│   │   │   ├── 📁 bienvenida
+│   │   │   │   └── 📄 page.jsx
 │   │   │   ├── 📁 cotizar-mudanza
 │   │   │   │   ├── 📄 CotizadorMudanzaClient.jsx
 │   │   │   │   └── 📄 page.jsx
+│   │   │   ├── 📁 crm
+│   │   │   │   ├── 📁 dashboard
+│   │   │   │   │   ├── 📄 layout.jsx
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 login
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   └── 📄 layout.jsx
 │   │   │   ├── 📁 empresa
 │   │   │   │   ├── 📁 [id]
 │   │   │   │   │   └── 📄 page.jsx
 │   │   │   │   ├── 📁 ayuda
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 bienvenida
 │   │   │   │   │   └── 📄 page.jsx
 │   │   │   │   ├── 📁 cargas
 │   │   │   │   │   ├── 📁 busco
@@ -857,14 +740,26 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │   │   └── 📄 page.jsx
 │   │   │   │   ├── 📁 register
 │   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 reglas
+│   │   │   │   │   └── 📄 page.jsx
 │   │   │   │   ├── 📁 solicitudes
 │   │   │   │   │   └── 📁 [id]
 │   │   │   │   │       └── 📄 page.jsx
 │   │   │   │   └── 📁 usuarios
 │   │   │   │       └── 📄 page.jsx
-│   │   │   ├── 📁 resena
+│   │   │   ├── 📁 partners
+│   │   │   │   └── 📁 [slug]
+│   │   │   │       ├── 📄 PartnerDashboardClient.jsx
+│   │   │   │       └── 📄 page.jsx
+│   │   │   ├── 📁 reglas
+│   │   │   │   └── 📄 page.jsx
+│   │   │   ├── 📁 reportar-solicitud
 │   │   │   │   └── 📁 [token]
 │   │   │   │       └── 📄 page.jsx
+│   │   │   ├── 📁 resena
+│   │   │   │   └── 📁 [empresa]
+│   │   │   │       └── 📁 [token]
+│   │   │   │           └── 📄 page.jsx
 │   │   │   ├── 📁 seguros
 │   │   │   │   ├── 📄 FAQItem.jsx
 │   │   │   │   ├── 📄 SeguroClient.jsx
@@ -880,8 +775,27 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   ├── 📁 solicitar-mudanza
 │   │   │   │   ├── 📁 [empresa]
 │   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 mudanzas-cancun-playa-del-carmen
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 mudanzas-cdmx-estado-de-mexico
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 mudanzas-monterrey
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 mudanzas-tijuana-ensenada
+│   │   │   │   │   └── 📄 page.jsx
 │   │   │   │   ├── 📄 SolicitarMudanzaClient.jsx
 │   │   │   │   └── 📄 page.jsx
+│   │   │   ├── 📁 superadmin
+│   │   │   │   ├── 📁 dashboard
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 empresas
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 login
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   ├── 📁 servicios
+│   │   │   │   │   └── 📄 page.jsx
+│   │   │   │   └── 📁 trial-requests
+│   │   │   │       └── 📄 page.jsx
 │   │   │   ├── 📁 usuario
 │   │   │   │   ├── 📁 dashboard
 │   │   │   │   │   └── 📄 page.jsx
@@ -920,10 +834,17 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │   ├── 📄 ConfirmDeleteModal.jsx
 │   │   │   │   ├── 📄 ErrorModal.jsx
 │   │   │   │   ├── 📄 Input.jsx
+│   │   │   │   ├── 📄 LiveViewToast.jsx
 │   │   │   │   ├── 📄 NotificationBadge.jsx
+│   │   │   │   ├── 📄 RealtimeNotificationToast.jsx
 │   │   │   │   ├── 📄 SearchBar.jsx
 │   │   │   │   ├── 📄 ServiceStatusDropdown.jsx
-│   │   │   │   └── 📄 SimpleEditor.jsx
+│   │   │   │   ├── 📄 SimpleEditor.jsx
+│   │   │   │   └── 📄 SystemToast.jsx
+│   │   │   ├── 📁 crm
+│   │   │   │   ├── 📄 CRMHeader.jsx
+│   │   │   │   ├── 📄 CRMLayout.jsx
+│   │   │   │   └── 📄 CRMSidebar.jsx
 │   │   │   ├── 📁 filters
 │   │   │   │   ├── 📄 ServiceAdvancedFilters.jsx
 │   │   │   │   └── 📄 ServiceFilters.jsx
@@ -931,39 +852,50 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │   ├── 📄 Footer.jsx
 │   │   │   │   ├── 📄 Header.jsx
 │   │   │   │   ├── 📄 SideMenu.jsx
-│   │   │   │   └── 📄 SideMenuUsuario.jsx
+│   │   │   │   ├── 📄 SideMenuUsuario.jsx
+│   │   │   │   ├── 📄 SuperAdminLayout.jsx
+│   │   │   │   └── 📄 SuperAdminSidebar.jsx
 │   │   │   ├── 📁 modals
 │   │   │   │   ├── 📄 BaseModal.jsx
 │   │   │   │   ├── 📄 CancelSubscriptionModal.jsx
 │   │   │   │   ├── 📄 CompraCreditosModal.jsx
 │   │   │   │   ├── 📄 ComprarLeadModal.jsx
+│   │   │   │   ├── 📄 ConfirmDeleteModal.jsx
 │   │   │   │   ├── 📄 ConfirmDeleteNotificationModal.jsx
 │   │   │   │   ├── 📄 ConfirmFinalizarServicioModal.jsx
 │   │   │   │   ├── 📄 ConfirmRecoverModal.jsx
 │   │   │   │   ├── 📄 FinalizarServicioGananciaModal.jsx
 │   │   │   │   ├── 📄 MessageModal.jsx
+│   │   │   │   ├── 📄 PlanRequiredModal.jsx
 │   │   │   │   ├── 📄 RecoverPasswordModal.jsx
 │   │   │   │   ├── 📄 ReporteMensualModal.jsx
 │   │   │   │   ├── 📄 ShareClienteReviewLinkModal.jsx
 │   │   │   │   ├── 📄 ShareReviewLinkModal.jsx
-│   │   │   │   └── 📄 TrialRequestModal.jsx
+│   │   │   │   ├── 📄 TrialRequestModal.jsx
+│   │   │   │   └── 📄 TrialSuccessModal.jsx
 │   │   │   ├── 📁 skeletons
 │   │   │   │   ├── 📄 ProfileSkeleton.jsx
 │   │   │   │   ├── 📄 ServiceCardSkeleton.jsx
 │   │   │   │   └── 📄 UserCardSkeleton.jsx
 │   │   │   ├── 📁 system
 │   │   │   │   ├── 📄 AyudaContent.jsx
-│   │   │   │   └── 📄 PlanWatcher.jsx
+│   │   │   │   ├── 📄 OneSignalInit.jsx
+│   │   │   │   ├── 📄 PWARegister.jsx
+│   │   │   │   ├── 📄 PlanWatcher.jsx
+│   │   │   │   └── 📄 ReglasContent.jsx
 │   │   │   └── 📁 ui
 │   │   │       ├── 📄 FeedbackModal.jsx
 │   │   │       └── 📄 LoadingOverlay.jsx
 │   │   ├── 📁 hooks
 │   │   │   ├── 📄 useClickOutside.js
 │   │   │   ├── 📄 useGooglePlaces.js
+│   │   │   ├── 📄 usePWAInstall.js
 │   │   │   └── 📄 useServicios.js
 │   │   ├── 📁 modules
 │   │   ├── 📁 services
-│   │   │   └── 📄 api.js
+│   │   │   ├── 📄 api.js
+│   │   │   ├── 📄 crmAuth.js
+│   │   │   └── 📄 superAdmin.js
 │   │   ├── 📁 store
 │   │   │   └── 📄 searchContext.js
 │   │   ├── 📁 styles
@@ -979,24 +911,37 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │   ├── 🎨 _empresaCard.scss
 │   │   │   │   ├── 🎨 _feedbackModal.scss
 │   │   │   │   ├── 🎨 _inputs.scss
+│   │   │   │   ├── 🎨 _liveViewToast.scss
 │   │   │   │   ├── 🎨 _loadingOverlay.scss
 │   │   │   │   ├── 🎨 _modal.scss
 │   │   │   │   ├── 🎨 _notificationCard.scss
+│   │   │   │   ├── 🎨 _planRequiredModal.scss
 │   │   │   │   ├── 🎨 _reviewCard.scss
 │   │   │   │   ├── 🎨 _searchBar.scss
 │   │   │   │   ├── 🎨 _serviceAdvancedFilters.scss
 │   │   │   │   ├── 🎨 _serviceCard.scss
 │   │   │   │   ├── 🎨 _serviceFilters.scss
 │   │   │   │   ├── 🎨 _serviceStatusDropdown.scss
+│   │   │   │   ├── 🎨 _systemToast.scss
 │   │   │   │   ├── 🎨 _trialRequestModal.scss
+│   │   │   │   ├── 🎨 _trialSuccessModal.scss
 │   │   │   │   └── 🎨 _userCard.scss
+│   │   │   ├── 📁 crm
+│   │   │   │   ├── 🎨 _crmDashboard.scss
+│   │   │   │   ├── 🎨 _crmHeader.scss
+│   │   │   │   ├── 🎨 _crmLayout.scss
+│   │   │   │   ├── 🎨 _crmLogin.scss
+│   │   │   │   └── 🎨 _crmSidebar.scss
 │   │   │   ├── 📁 layout
 │   │   │   │   ├── 🎨 _footer.scss
 │   │   │   │   ├── 🎨 _header.scss
-│   │   │   │   └── 🎨 _sideMenu.scss
+│   │   │   │   ├── 🎨 _sideMenu.scss
+│   │   │   │   ├── 🎨 _superAdminLayout.scss
+│   │   │   │   └── 🎨 _superAdminSidebar.scss
 │   │   │   ├── 📁 pages
 │   │   │   │   ├── 📁 empresa
 │   │   │   │   │   ├── 🎨 __empresaNotificaciones.scss
+│   │   │   │   │   ├── 🎨 _empresaBienvenida.scss
 │   │   │   │   │   ├── 🎨 _empresaBusco.scss
 │   │   │   │   │   ├── 🎨 _empresaCargas.scss
 │   │   │   │   │   ├── 🎨 _empresaConfiguracion.scss
@@ -1006,12 +951,15 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │   │   ├── 🎨 _empresaEditar.scss
 │   │   │   │   │   ├── 🎨 _empresaEmpresas.scss
 │   │   │   │   │   ├── 🎨 _empresaLogin.scss
+│   │   │   │   │   ├── 🎨 _empresaLogout.scss
 │   │   │   │   │   ├── 🎨 _empresaOfrezco.scss
 │   │   │   │   │   ├── 🎨 _empresaPerfil.scss
 │   │   │   │   │   ├── 🎨 _empresaPlanes.scss
 │   │   │   │   │   ├── 🎨 _empresaReferir.scss
 │   │   │   │   │   ├── 🎨 _empresaRegister.scss
 │   │   │   │   │   └── 🎨 _empresaUsuarios.scss
+│   │   │   │   ├── 📁 partner
+│   │   │   │   │   └── 🎨 _partnerDashboard.scss
 │   │   │   │   ├── 📁 resena
 │   │   │   │   │   └── 🎨 _resena.scss
 │   │   │   │   ├── 📁 servicios
@@ -1019,6 +967,12 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │   │   └── 🎨 _eliminarServicio.scss
 │   │   │   │   ├── 📁 solicitudes
 │   │   │   │   │   └── 🎨 _detalleSolicitud.scss
+│   │   │   │   ├── 📁 superadmin
+│   │   │   │   │   ├── 🎨 _superAdminDashboard.scss
+│   │   │   │   │   ├── 🎨 _superAdminEmpresas.scss
+│   │   │   │   │   ├── 🎨 _superAdminLogin.scss
+│   │   │   │   │   ├── 🎨 _superAdminServicios.scss
+│   │   │   │   │   └── 🎨 _trialRequests.scss
 │   │   │   │   ├── 📁 usuario
 │   │   │   │   │   ├── 🎨 _usuarioEditar.scss
 │   │   │   │   │   ├── 🎨 _usuarioLogin.scss
@@ -1026,8 +980,10 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   │   │   │   └── 🎨 _usuarioPerfil.scss
 │   │   │   │   ├── 🎨 _ayuda.scss
 │   │   │   │   ├── 🎨 _ayudaPublic.scss
+│   │   │   │   ├── 🎨 _bienvenida.scss
 │   │   │   │   ├── 🎨 _cotizadorMudanza.scss
 │   │   │   │   ├── 🎨 _error.scss
+│   │   │   │   ├── 🎨 _reportarSolicitud.scss
 │   │   │   │   ├── 🎨 _seguros.scss
 │   │   │   │   └── 🎨 _solicitarMudanza.scss
 │   │   │   ├── 📁 utils
@@ -1038,7 +994,9 @@ Recomendación rápida: mantener en cada módulo las carpetas Requests, Services
 │   │   └── 📁 utils
 │   │       ├── 📄 auth.js
 │   │       ├── 📄 cloudinaryUpload.js
+│   │       ├── 📄 crmAuth.js
 │   │       ├── 📄 plan.js
+│   │       ├── 📄 superAdmin.js
 │   │       └── 📄 whatsapp.js
 │   ├── 📄 eslint.config.mjs
 │   ├── ⚙️ jsconfig.json

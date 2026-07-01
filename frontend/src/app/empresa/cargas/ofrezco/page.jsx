@@ -42,6 +42,13 @@ export default function OfrezcoServicioPage() {
 
   const [usuarios, setUsuarios] = useState([]);
 
+  const [errors, setErrors] = useState({});
+
+  const [autocompleteValid, setAutocompleteValid] = useState({
+    origen: false,
+    destino: false,
+  });
+
   /* =========================
      AUTH
   ========================= */
@@ -114,6 +121,13 @@ export default function OfrezcoServicioPage() {
     if (name === "volumen" && Number(value) > 120) return;
 
     setForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleAutocompleteSelect = (field, valid) => {
+    setAutocompleteValid(prev => ({
+      ...prev,
+      [field]: valid,
+    }));
   };
 
   const handleResponsableChange = (e) => {
@@ -195,13 +209,33 @@ export default function OfrezcoServicioPage() {
     setImagenes(prev => prev.filter((_, i) => i !== index));
   };
 
+  const validate = () => {
+    const newErrors = {};
+
+    if (!form.origen) {
+      newErrors.origen = "El origen es obligatorio.";
+    } else if (!autocompleteValid.origen) {
+      newErrors.origen = "Selecciona una ciudad del listado.";
+    }
+
+    if (!form.destino) {
+      newErrors.destino = "El destino es obligatorio.";
+    } else if (!autocompleteValid.destino) {
+      newErrors.destino = "Selecciona una ciudad del listado.";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
   /* =========================
      SUBMIT
   ========================= */
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (loading) return; // evita doble click
+    if (loading) return;
+    if (!validate()) return;
     setLoading(true);
 
     const token = document.cookie
@@ -279,8 +313,15 @@ export default function OfrezcoServicioPage() {
               <h2 className="subtitle">Colóca tu fracción con un colega de confianza</h2>
             </div>
 
-            <Input label="Origen *" name="origen" value={form.origen} placeholder={"Ciudad o zona donde se recoge la carga"} onChange={handleChange} autocomplete />
-            <Input label="Destino *" name="destino" value={form.destino} placeholder={"Ciudad donde se entrega la carga"} onChange={handleChange} autocomplete />
+            <Input label="Origen *" name="origen" value={form.origen} placeholder="Ciudad o zona donde se recoge la carga" onChange={handleChange} autocomplete onAutocompleteSelect={handleAutocompleteSelect} />
+            {errors.origen && (
+              <p className="form-error">{errors.origen}</p>
+            )}
+
+            <Input label="Destino *" name="destino" value={form.destino} placeholder="Ciudad donde se entrega la carga" onChange={handleChange} autocomplete onAutocompleteSelect={handleAutocompleteSelect} />
+            {errors.destino && (
+              <p className="form-error">{errors.destino}</p>
+            )}
 
             <div className="input-group">
               <label className="input-group__label">Tipo de carga *</label>
@@ -308,15 +349,15 @@ export default function OfrezcoServicioPage() {
             )}
 
             {form.tipoCarga && form.tipoCarga !== "vehiculo" && (
-                <Input
-                  label="Volumen estimado (m³)*"
-                  name="volumen"
-                  type="number"
-                  value={form.volumen}
-                  placeholder="Espacio que ocupa la carga (m³)"
-                  onChange={handleChange}
-                />
-              )}
+              <Input
+                label="Volumen estimado (m³)*"
+                name="volumen"
+                type="number"
+                value={form.volumen}
+                placeholder="Espacio que ocupa la carga (m³)"
+                onChange={handleChange}
+              />
+            )}
 
             <div className="input-group">
               <label>Descripción de carga</label>

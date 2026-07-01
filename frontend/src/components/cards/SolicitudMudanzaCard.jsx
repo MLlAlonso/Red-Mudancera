@@ -99,28 +99,25 @@ export default function SolicitudMudanzaCard({
         </p>
 
         <div className="service-card__actions">
-
-          <button
-            className="btn-outline"
-            onClick={() => router.push(`/empresa/solicitudes/${id}`)}
-          >
+          <button className="btn-outline" onClick={() => router.push(`/empresa/solicitudes/${id}`)} >
             Ver detalles
           </button>
 
-          {/* SI EXISTE onChangeEstado → ESTAMOS EN PUBLICACIONES */}
           {onChangeEstado ? (
-
             <ServiceStatusDropdown
               estado={estadoLocal}
               labels={{
-                asignado: "Contactado",
+                activo: "Por asignar",
+                asignado: "Asignado",
+                en_proceso: "En proceso",
+                perdido: "Perdido",
+                finalizado: "Vendido",
               }}
               onSelect={(nuevoEstado) => {
                 setEstadoLocal(nuevoEstado);
                 onChangeEstado(id, nuevoEstado);
               }}
             />
-
           ) : (
 
             <>
@@ -137,8 +134,7 @@ export default function SolicitudMudanzaCard({
                       window.dispatchEvent(
                         new CustomEvent("plan-limit", {
                           detail: {
-                            message:
-                              "Necesitas un plan activo para contactar clientes.",
+                            message: "Necesitas un plan activo para contactar clientes.",
                             required_plan: "conector",
                           },
                         })
@@ -158,10 +154,7 @@ export default function SolicitudMudanzaCard({
                   }}
                 />
               ) : (
-                <button
-                  className="btn-solid btn-contact"
-                  onClick={() => setShowModal(true)}
-                >
+                <button className="btn-solid btn-contact" onClick={() => setShowModal(true)}>
                   <img src="/icons/token.png" alt="Comprar" className="btn-contact__icon" />
                   <span>Comprar</span>
                 </button>

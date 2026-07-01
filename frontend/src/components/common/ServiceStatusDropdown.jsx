@@ -1,16 +1,17 @@
 "use client";
+
 import { useState } from "react";
 
-export default function ServiceStatusDropdown({
-  estado,
-  onSelect,
-  labels = {},
-}) {
+export default function ServiceStatusDropdown({ estado, onSelect, labels = {},}) {
   const [open, setOpen] = useState(false);
+
+  const estados = [ "activo", "asignado", "en_proceso", "perdido", "finalizado",];
 
   const labelMap = {
     activo: labels.activo || "Activo",
     asignado: labels.asignado || "Asignado",
+    en_proceso: labels.en_proceso || "En proceso",
+    perdido: labels.perdido || "Perdido",
     finalizado: labels.finalizado || "Finalizado",
   };
 
@@ -19,7 +20,7 @@ export default function ServiceStatusDropdown({
       <button
         type="button"
         className={`service-status__btn is-${estado}`}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => setOpen(!open)}
       >
         {labelMap[estado]}
         <span className={`arrow ${open ? "open" : ""}`}>▾</span>
@@ -27,29 +28,17 @@ export default function ServiceStatusDropdown({
 
       {open && (
         <div className="service-status__menu">
-          {estado !== "asignado" && (
-            <div
-              className="service-status__item asignado"
-              onClick={() => {
-                setOpen(false);
-                onSelect("asignado");
-              }}
-            >
-              {labelMap.asignado}
-            </div>
-          )}
-
-          {estado !== "finalizado" && (
-            <div
-              className="service-status__item finalizado"
-              onClick={() => {
-                setOpen(false);
-                onSelect("finalizado");
-              }}
-            >
-              {labelMap.finalizado}
-            </div>
-          )}
+          {estados
+            .filter((item) => item !== estado)
+            .map((item) => (
+              <div
+                key={item}
+                className={`service-status__item ${item}`}
+                onClick={() => { setOpen(false); onSelect(item); }}
+              >
+                {labelMap[item]}
+              </div>
+            ))}
         </div>
       )}
     </div>

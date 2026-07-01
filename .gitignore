@@ -5,6 +5,7 @@
 Thumbs.db
 *.log
 *.pem
+Milestones_Avance.md
 
 # Env files
 .env

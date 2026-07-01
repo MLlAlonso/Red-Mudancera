@@ -38,6 +38,13 @@ export default function BuscoServicioPage() {
 
   const [usuarios, setUsuarios] = useState([]);
 
+  const [errors, setErrors] = useState({});
+
+  const [autocompleteValid, setAutocompleteValid] = useState({
+    origen: false,
+    destino: false,
+  });
+
   const [range, setRange] = useState([{
     startDate: new Date(),
     endDate: addDays(new Date(), 1),
@@ -96,6 +103,13 @@ export default function BuscoServicioPage() {
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleAutocompleteSelect = (field, valid) => {
+    setAutocompleteValid(prev => ({
+      ...prev,
+      [field]: valid,
+    }));
+  };
+
   const handleResponsableChange = (e) => {
     const id = e.target.value;
 
@@ -120,9 +134,30 @@ export default function BuscoServicioPage() {
     }));
   };
 
+  const validate = () => {
+    const newErrors = {};
+
+    if (!form.origen) {
+      newErrors.origen = "El origen es obligatorio.";
+    } else if (!autocompleteValid.origen) {
+      newErrors.origen = "Selecciona una ciudad del listado.";
+    }
+
+    if (!form.destino) {
+      newErrors.destino = "El destino es obligatorio.";
+    } else if (!autocompleteValid.destino) {
+      newErrors.destino = "Selecciona una ciudad del listado.";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
+    if (!validate()) return;
     setLoading(true);
 
     const token = document.cookie
@@ -185,8 +220,15 @@ export default function BuscoServicioPage() {
               <h2 className="subtitle">Menciona tu ruta, encuentra cargas  y evita viajar vacio.</h2>
             </div>
 
-            <Input label="Origen *" name="origen" value={form.origen} placeholder={"Ciudad o zona desde donde sale la unidad"} onChange={handleChange} autocomplete />
-            <Input label="Destino *" name="destino" value={form.destino} placeholder={"Ciudad donde termina el viaje"} onChange={handleChange} autocomplete />
+            <Input label="Origen *" name="origen" value={form.origen} placeholder="Ciudad o zona desde donde sale la unidad" onChange={handleChange} autocomplete onAutocompleteSelect={handleAutocompleteSelect} />
+            {errors.origen && (
+              <p className="form-error">{errors.origen}</p>
+            )}
+
+            <Input label="Destino *" name="destino" value={form.destino} placeholder="Ciudad donde termina el viaje" onChange={handleChange} autocomplete onAutocompleteSelect={handleAutocompleteSelect} />
+            {errors.destino && (
+              <p className="form-error">{errors.destino}</p>
+            )}
 
             <label className="input-group__label input-group__label--tooltip">
               <span className="tooltip">

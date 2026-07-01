@@ -270,8 +270,13 @@
         ========================= */
         &__video {
             width: 100%;
+
+            img{
+                width: 100%;
+            }
         }
 
+/* 
         &__video-wrapper {
             position: relative;
             width: 100%;
@@ -289,6 +294,7 @@
                 border: none;
             }
         }
+ */
 
         /* =========================
         LOCKED PANEL

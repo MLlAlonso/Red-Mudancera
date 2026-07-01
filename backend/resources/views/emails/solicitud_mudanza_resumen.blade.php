@@ -78,7 +78,7 @@
                             </h4>
 
                             <!-- Botón -->
-                            <a href="https://mudanzafacil.com.mx/seguro-para-mudanzas/"
+                            <a href="https://app.mudanzafacil.com.mx/seguros"
                                 style="display:inline-block;background:#1C8F6A;color:#ffffff;
                   padding:12px 20px;border-radius:8px;text-decoration:none;
                   font-weight:bold;font-size:14px;">
@@ -216,10 +216,7 @@
                                         <td style="color:#6F7F8D;">Distancia estimada:</td>
                                         <td align="right">
                                             <strong>
-                                                {{ $solicitud->distancia_km
-                                                    ? $solicitud->distancia_km . ' km'
-                                                    : 'No
-                                                                                                                                                                                                                                                disponible' }}
+                                                {{ $solicitud->distancia_km ? $solicitud->distancia_km . ' km' : 'No disponible' }}
                                             </strong>
                                         </td>
                                     </tr>
@@ -234,7 +231,6 @@
                                 </div>
 
                                 <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;">
-
                                     <tr>
                                         <td style="color:#6F7F8D;">Nombre:</td>
                                         <td align="right"><strong>{{ $solicitud->nombre }}</strong></td>
@@ -260,7 +256,21 @@
 
                                 <a href="{{ env('FRONTEND_URL') }}/reportar-solicitud/{{ $solicitud->report_token }}"
                                     style=" color:#D93025; font-size:13px; font-weight:bold; ">
-                                    Eliminar solicitud 
+                                    Eliminar solicitud
+                                </a>
+                            </div>
+
+                            <div
+                                style=" border-top:1px solid #EAEAEA; margin-top:30px; padding-top:20px; text-align:center; ">
+                                <p style=" color:#6F7F8D; font-size:12px; ">
+                                    No olvides proteger tu mudanza.
+                                </p>
+
+                                <a href="https://app.mudanzafacil.com.mx/seguros"
+                                    style="display:inline-block;background:#1C8F6A;color:#ffffff;
+                  padding:12px 20px;border-radius:8px;text-decoration:none;
+                  font-weight:bold;font-size:14px;">
+                                    Recibir información
                                 </a>
                             </div>
 

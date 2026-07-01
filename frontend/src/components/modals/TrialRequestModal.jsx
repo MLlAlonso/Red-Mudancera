@@ -21,10 +21,10 @@ export default function TrialRequestModal({ onClose }) {
         rfc: "",
         base: "",
         tel: "",
-        google_url: "",
+        //  google_url: "",
         web: "",
 
-        referencias: [
+        /* referencias: [
             {
                 nombre: "",
                 encargado: "",
@@ -35,9 +35,9 @@ export default function TrialRequestModal({ onClose }) {
                 nombre: "",
                 encargado: "",
                 telefono: "",
-                /*                 correo: "", */
+                correo: "",
             },
-        ],
+        ], */
     });
 
     const [files, setFiles] = useState({
@@ -79,18 +79,18 @@ export default function TrialRequestModal({ onClose }) {
         });
     };
 
-    const handleReferenciaChange = (i, field, value) => {
+    /* const handleReferenciaChange = (i, field, value) => {
         const updated = [...form.referencias];
         updated[i][field] = value;
         setForm({ ...form, referencias: updated });
-    };
+    }; */
 
     const handleFile = (e) => {
         setFiles({ ...files, [e.target.name]: e.target.files[0] });
     };
 
-    const next = () => setStep((s) => s + 1);
-    const back = () => setStep((s) => s - 1);
+    const next = () => setStep((s) => s + 2);
+    const back = () => setStep((s) => s - 2);
 
     const validateForm = () => {
 
@@ -143,13 +143,13 @@ export default function TrialRequestModal({ onClose }) {
         }
 
         // GOOGLE URL
-        if (hasGoogle && form.google_url.trim()) {
+        /* if (hasGoogle && form.google_url.trim()) {
             try {
                 new URL(form.google_url);
             } catch {
                 return "La URL de Google My Business no es válida";
             }
-        }
+        } */
 
         // WEB URL
         if (form.web.trim()) {
@@ -264,7 +264,7 @@ export default function TrialRequestModal({ onClose }) {
                     },
                     body: JSON.stringify({
                         ...form,
-                        referencias: form.referencias,
+                        // referencias: form.referencias,
                         ine_url: ineUploaded.url,
                         csf_url: csfUploaded.url,
                         domicilio_url: domicilioUploaded.url,
@@ -313,8 +313,8 @@ export default function TrialRequestModal({ onClose }) {
 
                     <div className="steps">
                         <span className={step === 1 ? "active" : ""}>1</span>
-                        <span className={step === 2 ? "active" : ""}>2</span>
-                        <span className={step === 3 ? "active" : ""}>3</span>
+                        {/* <span className={step === 2 ? "active" : ""}>2</span> */}
+                        <span className={step === 3 ? "active" : ""}>2</span>
                     </div>
 
                     <h2>Solicitud de prueba gratuita</h2>
@@ -325,77 +325,45 @@ export default function TrialRequestModal({ onClose }) {
 
                     {/* STEP 1 */}
                     {step === 1 && (
+
+
+
                         <>
-                            <div className="body_input">
-                                <label htmlFor="empresa">Nombre de empresa <span>*</span></label>
-                                <input className="trial_input" name="empresa" value={form.empresa} onChange={handleChange} placeholder="Nombre de empresa" />
-                            </div>
+                            <p className="legend">Seleccione archivos correspondientes</p>
 
                             <div className="body_input">
-                                <label htmlFor="representante">Representante legal <span>*</span></label>
-                                <input className="trial_input" name="representante" value={form.representante} onChange={handleChange} placeholder="Nombre del representante legal o responsable" />
+                                <label>INE <span>*</span></label>
+                                <input
+                                    className="file_input"
+                                    type="file"
+                                    name="ine"
+                                    onChange={handleFile}
+                                    accept=".pdf,image/*"
+                                    capture="environment"
+                                />
                             </div>
 
                             <div className="body_input">
-                                <label htmlFor="rfc">RFC <span>*</span></label>
-                                <input className="trial_input" name="rfc" value={form.rfc} onChange={handleChange} placeholder="RFC de empresa o representante legal" maxLength={13} />
+                                <label>Constancia fiscal <span>*</span></label>
+                                <input className="file_input" type="file" name="csf" onChange={handleFile} accept=".pdf" />
                             </div>
-
-                            <label htmlFor="base">Sede <span>*</span></label>
-                            <Input
-                                name="base"
-                                value={form.base}
-                                onChange={handleChange}
-                                placeholder="Selecciona ciudad"
-                                autocomplete={true}
-                            />
 
                             <div className="body_input">
-                                <label htmlFor="tel">Teléfono<span>*</span></label>
-                                <input className="trial_input" name="tel" value={form.tel} onChange={handleChange} placeholder="Número de teléfono de contacto" />
+                                <label>Comprobante domicilio <span>*</span></label>
+                                <input
+                                    className="file_input"
+                                    type="file"
+                                    name="domicilio"
+                                    onChange={handleFile}
+                                    accept=".pdf,image/*"
+                                    capture="environment"
+                                />
                             </div>
-
-                            <div className="toggle">
-                                <label>¿Cuenta con Google My Business?</label>
-                                <div>
-                                    <button
-                                        className={hasGoogle ? "active" : ""}
-                                        onClick={() => setHasGoogle(true)}
-                                    >
-                                        Sí
-                                    </button>
-
-                                    <button
-                                        className={!hasGoogle ? "active" : ""}
-                                        onClick={() => setHasGoogle(false)}
-                                    >
-                                        No
-                                    </button>
-                                </div>
-                            </div>
-
-                            {hasGoogle && (
-                                <div className="body_input">
-                                    <label>URL Google My Business</label>
-                                    <input
-                                        className="trial_input"
-                                        name="google_url"
-                                        value={form.google_url}
-                                        onChange={handleChange}
-                                        placeholder="https://..."
-                                    />
-                                </div>
-                            )}
-
-                            <div className="body_input">
-                                <label htmlFor="tel">Página web</label>
-                                <input className="trial_input" name="web" value={form.web} onChange={handleChange} placeholder="Página web" />
-                            </div>
-
                         </>
                     )}
 
                     {/* STEP 2 */}
+                    {/* 
                     {step === 2 && (
                         <>
                             <h4>Referencias <span className="legend" >(opcional)</span></h4>
@@ -432,51 +400,90 @@ export default function TrialRequestModal({ onClose }) {
                                         />
                                     </div>
 
-                                    {/*                                     <div className="body_input">
+                                    <div className="body_input">
                                         <label htmlFor="tel">Correo de contacto</label>
 
                                         <input placeholder="Correo" className="trial_input" value={ref.correo}
                                             onChange={(e) => handleReferenciaChange(i, "correo", e.target.value)}
                                         />
-                                    </div> */}
+                                    </div>
                                 </div>
                             ))}
                         </>
                     )}
+ */}
 
                     {/* STEP 3 */}
                     {step === 3 && (
                         <>
-                            <p className="legend">Solo seleccione archivos PDF</p>
-
                             <div className="body_input">
-                                <label>INE <span>*</span></label>
-                                <input
-                                    className="file_input"
-                                    type="file"
-                                    name="ine"
-                                    onChange={handleFile}
-                                    accept=".pdf,image/*"
-                                    capture="environment"
-                                />
+                                <label htmlFor="empresa">Nombre de empresa <span>*</span></label>
+                                <input className="trial_input" name="empresa" value={form.empresa} onChange={handleChange} placeholder="Nombre de empresa" />
                             </div>
 
                             <div className="body_input">
-                                <label>Constancia fiscal <span>*</span></label>
-                                <input className="file_input" type="file" name="csf" onChange={handleFile} accept=".pdf" />
+                                <label htmlFor="representante">Representante legal <span>*</span></label>
+                                <input className="trial_input" name="representante" value={form.representante} onChange={handleChange} placeholder="Nombre del representante legal o responsable" />
                             </div>
 
                             <div className="body_input">
-                                <label>Comprobante domicilio <span>*</span></label>
-                                <input
-                                    className="file_input"
-                                    type="file"
-                                    name="domicilio"
-                                    onChange={handleFile}
-                                    accept=".pdf,image/*"
-                                    capture="environment"
-                                />
+                                <label htmlFor="rfc">RFC <span>*</span></label>
+                                <input className="trial_input" name="rfc" value={form.rfc} onChange={handleChange} placeholder="RFC de empresa o representante legal" maxLength={13} />
                             </div>
+
+                            <label htmlFor="base">Sede <span>*</span></label>
+                            <Input
+                                name="base"
+                                value={form.base}
+                                onChange={handleChange}
+                                placeholder="Selecciona ciudad"
+                                autocomplete={true}
+                            />
+
+                            <div className="body_input">
+                                <label htmlFor="tel">Teléfono<span>*</span></label>
+                                <input className="trial_input" name="tel" value={form.tel} onChange={handleChange} placeholder="Número de teléfono de contacto" />
+                            </div>
+
+                            {/* 
+                            <div className="toggle">
+                                <label>¿Cuenta con Google My Business?</label>
+                                <div>
+                                    <button
+                                        className={hasGoogle ? "active" : ""}
+                                        onClick={() => setHasGoogle(true)}
+                                    >
+                                        Sí
+                                    </button>
+
+                                    <button
+                                        className={!hasGoogle ? "active" : ""}
+                                        onClick={() => setHasGoogle(false)}
+                                    >
+                                        No
+                                    </button>
+                                </div>
+                            </div>
+
+                            {hasGoogle && (
+                                <div className="body_input">
+                                    <label>URL Google My Business</label>
+                                    <input
+                                        className="trial_input"
+                                        name="google_url"
+                                        value={form.google_url}
+                                        onChange={handleChange}
+                                        placeholder="https://..."
+                                    />
+                                </div>
+                            )}
+ */}
+
+                            <div className="body_input">
+                                <label htmlFor="tel">Página web</label>
+                                <input className="trial_input" name="web" value={form.web} onChange={handleChange} placeholder="Página web" />
+                            </div>
+
                         </>
                     )}
                 </div>
@@ -485,7 +492,7 @@ export default function TrialRequestModal({ onClose }) {
                 <div className="footer">
                     {step > 1 && <button id="atras" onClick={back}>Atrás</button>}
                     {step < 3 && <button onClick={next}>Siguiente</button>}
-                    {step === 3 && <button className="primary" onClick={handleSubmit}>Enviar</button>}
+                    {step === 3 && <button className="primary" onClick={handleSubmit}>Verificar</button>}
                 </div>
             </div>
 

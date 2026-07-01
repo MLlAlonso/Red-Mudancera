@@ -11,13 +11,10 @@ class LeadOperacionController extends Controller
     public function changeEstado(Request $request, $id)
     {
         $empresa = auth('empresa')->user();
-
-        $lead = LeadCompra::where('empresa_id', $empresa->id)
-            ->where('solicitud_id', $id)
-            ->firstOrFail();
+        $lead = LeadCompra::where('empresa_id', $empresa->id) ->where('solicitud_id', $id) ->firstOrFail();
 
         $validated = $request->validate([
-            'estado' => 'required|in:activo,asignado,finalizado',
+            'estado' => 'required|in:activo,asignado,en_proceso,perdido,finalizado',
             'ganancia' => 'required_if:estado,finalizado|numeric|min:0'
         ]);
 
