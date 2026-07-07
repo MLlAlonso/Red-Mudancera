@@ -315,11 +315,11 @@ export default function PlanesPage() {
             <p className="plan_microCopy">Ideal para conocer cómo funciona la red</p>
 
             <p className="price">Gratis</p>
-
+{/* 
             <button onClick={() => abrirModal("trial")} id="prueba_btn">
               Solicitar prueba gratuita
             </button>
-
+ */}
             <div className="divider"></div>
 
             <ul>

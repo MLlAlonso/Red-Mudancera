@@ -14,7 +14,7 @@ class LeadOperacionController extends Controller
         $lead = LeadCompra::where('empresa_id', $empresa->id) ->where('solicitud_id', $id) ->firstOrFail();
 
         $validated = $request->validate([
-            'estado' => 'required|in:activo,asignado,en_proceso,perdido,finalizado',
+            'estado' => 'required|in:activo,asignado,en_proceso,sin_respuesta,perdido,finalizado',
             'ganancia' => 'required_if:estado,finalizado|numeric|min:0'
         ]);
 

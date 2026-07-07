@@ -106,12 +106,14 @@ export default function SolicitudMudanzaCard({
           {onChangeEstado ? (
             <ServiceStatusDropdown
               estado={estadoLocal}
+              options={[ "activo", "asignado", "en_proceso", "finalizado", "sin_respuesta", "perdido",]}
               labels={{
-                activo: "Por asignar",
-                asignado: "Asignado",
-                en_proceso: "En proceso",
-                perdido: "Perdido",
+                activo: "Pendiente",
+                sin_respuesta: "Sin respuesta",
+                asignado: "En proceso",
+                en_proceso: "Cotizado",
                 finalizado: "Vendido",
+                perdido: "Perdido",
               }}
               onSelect={(nuevoEstado) => {
                 setEstadoLocal(nuevoEstado);

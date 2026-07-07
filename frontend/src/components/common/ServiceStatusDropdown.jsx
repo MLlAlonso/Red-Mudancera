@@ -2,15 +2,19 @@
 
 import { useState } from "react";
 
-export default function ServiceStatusDropdown({ estado, onSelect, labels = {},}) {
+export default function ServiceStatusDropdown({ estado, onSelect, labels = {}, options = [], }) {
   const [open, setOpen] = useState(false);
 
-  const estados = [ "activo", "asignado", "en_proceso", "perdido", "finalizado",];
+  const estados =
+    options.length > 0
+      ? options
+      : ["activo", "asignado", "finalizado"];
 
   const labelMap = {
     activo: labels.activo || "Activo",
     asignado: labels.asignado || "Asignado",
     en_proceso: labels.en_proceso || "En proceso",
+    sin_respuesta: labels.sin_respuesta || "Sin respuesta",
     perdido: labels.perdido || "Perdido",
     finalizado: labels.finalizado || "Finalizado",
   };

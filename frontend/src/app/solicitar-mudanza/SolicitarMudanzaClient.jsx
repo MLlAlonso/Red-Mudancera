@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Input from "@/components/common/Input";
+import PlacesInput from "@/components/common/PlacesInput";
 import SimpleEditor from "@/components/common/SimpleEditor";
 import Button_success from "@/components/common/Button_success";
 import BaseModal from "@/components/modals/BaseModal";
@@ -39,13 +40,24 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
     const [resumeModal, setResumeModal] = useState(false);
     const [successModal, setSuccessModal] = useState(false);
     const handleChange = (e) => {
-        setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+
+        const { name, value } = e.target;
+
+        setForm(prev => ({
+            ...prev, [name]: value
+        }));
+
+        // Si el usuario vuelve a escribir, la ciudad deja de ser válida
+        if (name === "origen" || name === "destino") {
+            setAutocompleteValid(prev => ({
+                ...prev, [name]: false
+            }));
+        }
     };
 
     const handleAutocompleteSelect = (field, valid) => {
         setAutocompleteValid(prev => ({
-            ...prev,
-            [field]: valid
+            ...prev, [field]: valid
         }));
     };
 
@@ -93,7 +105,6 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
         e.preventDefault();
         if (loading) return;
         if (!validate()) return;
-
         setResumeModal(true);
     };
 
@@ -139,16 +150,12 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
             .trim();
     };
 
-    const heroTitle =
-        landingConfig.heroTitle || "Comencemos con tu Mudanza";
+    const heroTitle = landingConfig.heroTitle || "Comencemos con tu Mudanza";
 
-    const heroSubtitle =
-        landingConfig.heroSubtitle ||
+    const heroSubtitle = landingConfig.heroSubtitle ||
         "Solicita tu presupuesto  en menos de 2 minutos y recibe  las mejores propuestas.";
 
-    const buttonText =
-        landingConfig.buttonText ||
-        "Solicitar Mudanza";
+    const buttonText = landingConfig.buttonText || "Solicitar Mudanza";
 
     return (
         <div className="solicitar-mudanza">
@@ -169,7 +176,14 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
                     <div className="form-section">
                         <h2 className="form-section__title">Datos de Origen</h2>
 
-                        <Input label="Origen *" placeholder="Ciudad o zona donde se recoge la mudanza" name="origen" autocomplete value={form.origen} onChange={handleChange} onAutocompleteSelect={handleAutocompleteSelect}/>
+                        <PlacesInput
+                            label="Origen *"
+                            placeholder="Ciudad o zona donde se recoge la mudanza"
+                            name="origen"
+                            value={form.origen}
+                            onChange={handleChange}
+                            onAutocompleteSelect={handleAutocompleteSelect}
+                        />
                         {errors.origen && <p className="form-error">{errors.origen}</p>}
 
                         <label className="input-group__label input-group__label--tooltip">
@@ -231,7 +245,14 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
                     <div className="form-section">
                         <h2 className="form-section__title">Datos de Destino</h2>
 
-                        <Input label="Destino *" placeholder="Ciudad donde se entrega la mudanza" name="destino" autocomplete value={form.destino} onChange={handleChange}     onAutocompleteSelect={handleAutocompleteSelect}/>
+                        <PlacesInput
+                            label="Destino *"
+                            placeholder="Ciudad donde se entrega la mudanza"
+                            name="destino"
+                            value={form.destino}
+                            onChange={handleChange}
+                            onAutocompleteSelect={handleAutocompleteSelect}
+                        />
                         {errors.destino && <p className="form-error">{errors.destino}</p>}
 
                         <label className="input-group__label input-group__label--tooltip">
@@ -244,11 +265,7 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
                             Tipo de vivienda de destino *
                         </label>
 
-                        <select
-                            name="vivienda_destino"
-                            value={form.vivienda_destino}
-                            onChange={handleChange}
-                        >
+                        <select name="vivienda_destino" value={form.vivienda_destino} onChange={handleChange} >
                             <option value="">Selecciona una opción</option>
                             <option value="casa">Casa</option>
                             <option value="departamento">Departamento</option>
@@ -288,11 +305,7 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
                             ¿Considera que hay acarreo mayor a 20 metros en el destino? *
                         </label>
 
-                        <select
-                            name="destino_acarreo"
-                            value={form.destino_acarreo}
-                            onChange={handleChange}
-                        >
+                        <select name="destino_acarreo" value={form.destino_acarreo} onChange={handleChange} >
                             <option value="">Selecciona una opción</option>
                             <option value="si">Sí</option>
                             <option value="no">No</option>
@@ -404,19 +417,10 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
             )}
 
             {successModal && (
-                <BaseModal
-                    onClose={() => {
-                        setSuccessModal(false);
-                        router.push(`/seguros?id=${solicitudId}`);
-                    }}
-                >
+                <BaseModal onClose={() => { setSuccessModal(false); router.push(`/seguros?id=${solicitudId}`); }} >
                     <div className="success-modal">
 
-                        <img
-                            src="/icons/check_success.png"
-                            alt="Solicitud publicada"
-                            className="success-modal__icon"
-                        />
+                        <img src="/icons/check_success.png" alt="Solicitud publicada" className="success-modal__icon" />
 
                         <h2 className="success-modal__title">
                             ¡Tu solicitud está publicada!
@@ -427,26 +431,16 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
                         </p>
 
                         <div className="success-modal__info">
-
-                            <img
-                                src="/icons/check.png"
-                                alt="Información"
-                            />
+                            <img src="/icons/check.png" alt="Información" />
 
                             <span>
                                 En breve podrás recibir cotizaciones de empresas interesadas.
                             </span>
-
                         </div>
 
                         <div className="success-modal__steps">
-
                             <h3>
-                                <img
-                                    src="/icons/help.png"
-                                    alt="¿Qué sigue?"
-                                />
-
+                                <img src="/icons/help.png" alt="¿Qué sigue?" />
                                 ¿Qué sigue?
                             </h3>
 
@@ -463,7 +457,6 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
                                     Eliges la mejor opción para tu mudanza.
                                 </li>
                             </ul>
-
                         </div>
 
                         <Button_success
@@ -484,10 +477,7 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
                     <div className="error-modal">
                         <h3>Error</h3>
                         <p>{errorModal}</p>
-                        <Button_success
-                            value="Cerrar"
-                            onClick={() => setErrorModal("")}
-                        />
+                        <Button_success value="Cerrar" onClick={() => setErrorModal("")} />
                     </div>
                 </BaseModal>
             )}

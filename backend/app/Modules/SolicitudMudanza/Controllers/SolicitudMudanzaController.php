@@ -165,7 +165,7 @@ class SolicitudMudanzaController extends Controller
 
         $tokensNecesarios = match (true) {
             $tipo === 'local' && !$esExclusivo => 6,
-            $tipo === 'local' && $esExclusivo => 30,
+            $tipo === 'local' && $esExclusivo => 16,
             $tipo === 'foranea' && !$esExclusivo => 15,
             $tipo === 'foranea' && $esExclusivo => 35,
             default => 15

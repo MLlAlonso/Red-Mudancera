@@ -42,7 +42,7 @@ class EmpresaFeedService
             SOLICITUDES ACTIVAS DISPONIBLES
           ============================== */
         $comprasEmpresa = LeadCompra::where('empresa_id', $empresaId)->pluck('solicitud_id')->toArray();
-        $limiteAntiguedad = Carbon::now()->subDays(10);
+        $limiteAntiguedad = Carbon::now()->subDays(7);
 
         $solicitudes = SolicitudMudanza::where('estado', 'activo')
             ->where('reportada', false)

@@ -19,6 +19,7 @@
 @use "./components/_simpleEditor";
 @use "./components/loadingOverlay";
 @use "./components/_notificationBadge";
+@use "./components/_placesInput";
 
 //Pages Empresas
 @use "./pages/empresa/empresaRegister";

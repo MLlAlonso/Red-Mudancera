@@ -24,23 +24,28 @@
 
   /* ===== Estados ===== */
   &__btn.is-activo {
-    background: variables.$success;
-  }
-
-  &__btn.is-asignado {
-    background: variables.$primary;
-  }
-
-  &__btn.is-en_proceso {
-    background: variables.$tertiary;
-  }
-
-  &__btn.is-perdido {
     background: variables.$error;
   }
 
-  &__btn.is-finalizado {
+  &__btn.is-asignado {
+    background: variables.$tertiary;
+  }
+
+  &__btn.is-en_proceso {
     background: variables.$azul_002;
+  }
+
+  &__btn.is-sin_respuesta {
+    background: #757575;
+    color: #fff;
+  }
+
+  &__btn.is-perdido {
+    background: variables.$error-hover;
+  }
+
+  &__btn.is-finalizado {
+    background: variables.$success;
   }
 
   /* ===== Menú ===== */
@@ -73,17 +78,22 @@
     transition: background 0.2s ease, color 0.2s ease;
 
     &.activo:hover {
-      background: variables.$success;
+      background: variables.$error;
       color: #fff;
     }
 
     &.asignado:hover {
-      background: variables.$primary;
+      background: variables.$tertiary-hover;
       color: #fff;
     }
 
     &.en_proceso:hover {
-      background: variables.$tertiary-hover;
+      background: variables.$azul_002;
+      color: #fff;
+    }
+
+    &.sin_respuesta:hover {
+      background: #696969;
       color: #fff;
     }
 
@@ -93,7 +103,7 @@
     }
 
     &.finalizado:hover {
-      background: variables.$azul_002;
+      background: variables.$success;
       color: #fff;
     }
   }

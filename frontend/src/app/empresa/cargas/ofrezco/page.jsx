@@ -3,6 +3,7 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Input from "@/components/common/Input";
+import PlacesInput from "@/components/common/PlacesInput";
 import Button_success from "@/components/common/Button_success";
 import Button_error from "@/components/common/Button_error";
 import ErrorModal from "@/components/common/ErrorModal";
@@ -35,19 +36,11 @@ export default function OfrezcoServicioPage() {
    * imagenes = [{ file: File, preview: string }]
    */
   const [imagenes, setImagenes] = useState([]);
-  const [errorModal, setErrorModal] = useState({
-    show: false,
-    message: "",
-  });
+  const [errorModal, setErrorModal] = useState({ show: false, message: "", });
 
   const [usuarios, setUsuarios] = useState([]);
-
   const [errors, setErrors] = useState({});
-
-  const [autocompleteValid, setAutocompleteValid] = useState({
-    origen: false,
-    destino: false,
-  });
+  const [autocompleteValid, setAutocompleteValid] = useState({ origen: false, destino: false, });
 
   /* =========================
      AUTH
@@ -120,7 +113,17 @@ export default function OfrezcoServicioPage() {
 
     if (name === "volumen" && Number(value) > 120) return;
 
-    setForm(prev => ({ ...prev, [name]: value }));
+    setForm(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    if (name === "origen" || name === "destino") {
+      setAutocompleteValid(prev => ({
+        ...prev,
+        [name]: false,
+      }));
+    }
   };
 
   const handleAutocompleteSelect = (field, valid) => {
@@ -225,7 +228,6 @@ export default function OfrezcoServicioPage() {
     }
 
     setErrors(newErrors);
-
     return Object.keys(newErrors).length === 0;
   };
 
@@ -313,12 +315,26 @@ export default function OfrezcoServicioPage() {
               <h2 className="subtitle">Colóca tu fracción con un colega de confianza</h2>
             </div>
 
-            <Input label="Origen *" name="origen" value={form.origen} placeholder="Ciudad o zona donde se recoge la carga" onChange={handleChange} autocomplete onAutocompleteSelect={handleAutocompleteSelect} />
+            <PlacesInput
+              label="Origen *"
+              name="origen"
+              value={form.origen}
+              placeholder="Ciudad o zona donde se recoge la carga"
+              onChange={handleChange}
+              onAutocompleteSelect={handleAutocompleteSelect}
+            />
             {errors.origen && (
               <p className="form-error">{errors.origen}</p>
             )}
 
-            <Input label="Destino *" name="destino" value={form.destino} placeholder="Ciudad donde se entrega la carga" onChange={handleChange} autocomplete onAutocompleteSelect={handleAutocompleteSelect} />
+            <PlacesInput
+              label="Destino *"
+              name="destino"
+              value={form.destino}
+              placeholder="Ciudad donde se entrega la carga"
+              onChange={handleChange}
+              onAutocompleteSelect={handleAutocompleteSelect}
+            />
             {errors.destino && (
               <p className="form-error">{errors.destino}</p>
             )}
@@ -483,14 +499,11 @@ export default function OfrezcoServicioPage() {
         show={errorModal.show}
         title="Revisa datos ingresados"
         message={errorModal.message}
-        onClose={() =>
-          setErrorModal({ show: false, message: "" })
-        }
+        onClose={() => setErrorModal({ show: false, message: "" })}
       />
 
       <Footer />
       <LoadingOverlay show={loading} message="Subiendo imágenes..." />
-
     </>
   );
 }

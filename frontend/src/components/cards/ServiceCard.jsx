@@ -60,7 +60,7 @@ export default function ServiceCard({
     >
       {showDelete && (
         <button className="service-delete-btn" onClick={onDelete}>
-          <img src="/icons/delete.png" alt="Finalizar"/>
+          <img src="/icons/delete.png" alt="Finalizar" />
         </button>
       )}
 
@@ -166,10 +166,8 @@ export default function ServiceCard({
         {!showContact && onChangeEstado && (
           <ServiceStatusDropdown
             estado={estadoLocal}
-            onSelect={(nuevoEstado) => {
-              setEstadoLocal(nuevoEstado);
-              onChangeEstado(id, nuevoEstado);
-            }}
+            options={["activo", "asignado", "finalizado",]}
+            onSelect={(nuevoEstado) => { setEstadoLocal(nuevoEstado); onChangeEstado(id, nuevoEstado); }}
           />
         )}
       </div>

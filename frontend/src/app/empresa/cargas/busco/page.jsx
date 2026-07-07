@@ -3,6 +3,7 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Input from "@/components/common/Input";
+import PlacesInput from "@/components/common/PlacesInput";
 import Button_success from "@/components/common/Button_success";
 import Button_error from "@/components/common/Button_error";
 import ErrorModal from "@/components/common/ErrorModal";
@@ -18,10 +19,7 @@ export default function BuscoServicioPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  const [errorModal, setErrorModal] = useState({
-    show: false,
-    message: "",
-  });
+  const [errorModal, setErrorModal] = useState({ show: false, message: "", });
 
   const [form, setForm] = useState({
     volumen: "",
@@ -37,13 +35,8 @@ export default function BuscoServicioPage() {
   });
 
   const [usuarios, setUsuarios] = useState([]);
-
   const [errors, setErrors] = useState({});
-
-  const [autocompleteValid, setAutocompleteValid] = useState({
-    origen: false,
-    destino: false,
-  });
+  const [autocompleteValid, setAutocompleteValid] = useState({ origen: false, destino: false, });
 
   const [range, setRange] = useState([{
     startDate: new Date(),
@@ -99,8 +92,20 @@ export default function BuscoServicioPage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     if (name === "volumen" && Number(value) > 120) return;
-    setForm(prev => ({ ...prev, [name]: value }));
+
+    setForm(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    if (name === "origen" || name === "destino") {
+      setAutocompleteValid(prev => ({
+        ...prev,
+        [name]: false,
+      }));
+    }
   };
 
   const handleAutocompleteSelect = (field, valid) => {
@@ -150,7 +155,6 @@ export default function BuscoServicioPage() {
     }
 
     setErrors(newErrors);
-
     return Object.keys(newErrors).length === 0;
   };
 
@@ -220,12 +224,26 @@ export default function BuscoServicioPage() {
               <h2 className="subtitle">Menciona tu ruta, encuentra cargas  y evita viajar vacio.</h2>
             </div>
 
-            <Input label="Origen *" name="origen" value={form.origen} placeholder="Ciudad o zona desde donde sale la unidad" onChange={handleChange} autocomplete onAutocompleteSelect={handleAutocompleteSelect} />
+            <PlacesInput
+              label="Origen *"
+              name="origen"
+              value={form.origen}
+              placeholder="Ciudad o zona desde donde sale la unidad"
+              onChange={handleChange}
+              onAutocompleteSelect={handleAutocompleteSelect}
+            />
             {errors.origen && (
               <p className="form-error">{errors.origen}</p>
             )}
 
-            <Input label="Destino *" name="destino" value={form.destino} placeholder="Ciudad donde termina el viaje" onChange={handleChange} autocomplete onAutocompleteSelect={handleAutocompleteSelect} />
+            <PlacesInput
+              label="Destino *"
+              name="destino"
+              value={form.destino}
+              placeholder="Ciudad donde termina el viaje"
+              onChange={handleChange}
+              onAutocompleteSelect={handleAutocompleteSelect}
+            />
             {errors.destino && (
               <p className="form-error">{errors.destino}</p>
             )}
@@ -281,9 +299,7 @@ export default function BuscoServicioPage() {
         show={errorModal.show}
         title="Publicación duplicada"
         message={errorModal.message}
-        onClose={() =>
-          setErrorModal({ show: false, message: "" })
-        }
+        onClose={() => setErrorModal({ show: false, message: "" }) }
       />
 
       <Footer />
