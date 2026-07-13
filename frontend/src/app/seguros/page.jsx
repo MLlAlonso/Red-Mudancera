@@ -139,38 +139,46 @@ export default function SegurosPage() {
                 </ul>
 
                 <div className="seguroInfo">
-                    <div className="seguroInfo__icon">
-                        <img src="/icons/verificado.png" alt="Protección" />
+                    <div className="seguroInfo__header">
+                        <div className="seguroInfo__icon">
+                            <img src="/icons/verificado.png" alt="Protección" />
+                        </div>
+
+                        <div className="seguroInfo__content">
+                            <h3>
+                                Tu mudanza representa años de esfuerzo
+                            </h3>
+
+                            <p>
+                                Tomarte unos minutos para conocer esta alternativa puede ayudarte
+                                a tomar decisiones más informadas y proteger lo que más te importa.
+                            </p>
+                        </div>
                     </div>
 
-                    <div className="seguroInfo__content">
-                        <h3>
-                            Tu mudanza representa años de esfuerzo
-                        </h3>
+                    <div className="seguroFinalCtas">
+                        <div className="seguroFinalCta seguroFinalCta--primary">
+                            <div className="seguroFinalCta__icon">
+                                <img src="/icons/help.png" alt="Información" />
+                            </div>
 
-                        <p>
-                            Tomarte unos minutos para conocer esta alternativa puede ayudarte
-                            a tomar decisiones más informadas y proteger lo que más te importa.
-                        </p>
+                            <div className="seguroFinalCta__content">
+                                <h3>
+                                    Resuelve tus dudas con un especialista
+                                </h3>
+
+                                <p>
+                                    Te explicamos la cobertura, costos y funcionamiento del seguro para que tomes la mejor decisión, sin compromiso.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+
             </section>
 
-            <section className="seguroFinalCtas">
-                <div className="seguroFinalCta seguroFinalCta--primary">
-                    <div className="seguroFinalCta__icon">
-                        <img src="/icons/dialogo.png" alt="Información" />
-                    </div>
 
-                    <div className="seguroFinalCta__content">
-                        <h3>Quiero más información sin compromiso</h3>
-
-                        <p>
-                            Un especialista podrá resolver tus dudas y explicarte cómo funciona.
-                        </p>
-                    </div>
-                </div>
-            </section>
 
             {/* <section className="faq">
                 <div className="faq__container">

@@ -21,6 +21,15 @@ class SolicitudSeguroMail extends Mailable
         $clean = trim(preg_replace('/\s+/', ' ', $clean), ', ');
 
         $this->solicitud->inventario = $clean;
+
+        $this->solicitud->fecha_recoleccion = match ($solicitud->fecha_recoleccion ?? '') {
+            '1-7' => '1 a 7 días',
+            '8-15' => '8 a 15 días',
+            '15-30' => '15 a 30 días',
+            '30+' => 'Más de 30 días',
+            'lo_antes_posible' => 'Lo antes posible',
+            default => 'No especificado',
+        };
     }
 
     public function build()

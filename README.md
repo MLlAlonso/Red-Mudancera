@@ -306,14 +306,12 @@ project-root
 │   │   │   ├── Resena
 │   │   │   └── SolicitudMudanza
 │   │   └── Services
-│   │
 │   ├── database
 │   │   ├── migrations
 │   │   └── seeders
 │   │
 │   └── routes
 │       └── api.php
-│
 └── frontend
    ├── src
    │   ├── app
@@ -332,13 +330,9 @@ cd backend
 
 composer install
 npm install
-
 cp .env.example .env
-
 php artisan key:generate
-
 php artisan migrate --seed
-
 php artisan serve
 ```
 
@@ -346,11 +340,8 @@ php artisan serve
 
 ```bash
 cd frontend
-
 npm install
-
 cp .env.local.example .env.local
-
 npm run dev
 ```
 ## 👨‍💻 Autor

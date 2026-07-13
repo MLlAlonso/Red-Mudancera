@@ -85,6 +85,128 @@
   }
 }
 
+
+
+
+
+/* ======================================================
+   ACTIVATION BANNER
+====================================================== */
+.footer_activation {
+  width: 100%;
+  background: linear-gradient(135deg, #0D355B 0%, #09233E 100%);
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  border-top: 1px solid rgba(255, 255, 255, .08);
+
+  .footer_activation__content {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+  }
+
+  .footer_activation__text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    h3 {
+      margin: 0;
+      color: #fff;
+      font-size: 26px;
+      font-weight: 800;
+    }
+
+    p {
+      margin: 0;
+      color: rgba(255,255,255,.92);
+      font-size: 18px;
+      line-height: 1.5;
+
+      strong {
+        color: $success;
+      }
+    }
+  }
+
+  .footer_activation__button {
+    background: $success;
+    color: #fff;
+    text-decoration: none;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 24px;
+    transition: .25s ease;
+    white-space: nowrap;
+
+    &:hover {
+      transform: translateY(-2px);
+      background: #f6f6f6;
+    }
+  }
+}
+
+/* ===========================
+   TABLET
+=========================== */
+@media (max-width: 768px) {
+  .footer_activation {
+    padding: 22px 18px;
+
+    .footer_activation__content {
+      flex-direction: column;
+      text-align: center;
+      gap: 20px;
+    }
+
+    .footer_activation__text {
+      h3 {
+        font-size: 22px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+    }
+
+    .footer_activation__button {
+      width: 100%;
+      max-width: 320px;
+      text-align: center;
+    }
+  }
+}
+
+/* ===========================
+   MÓVIL
+=========================== */
+@media (max-width: 480px) {
+  .footer_activation {
+    padding: 20px 15px;
+
+    .footer_activation__text {
+      h3 {
+        font-size: 24px;
+      }
+
+      p {
+        font-size: 20px;
+      }
+    }
+
+    .footer_activation__button {
+      width: 100%;
+      font-size: 24px;
+      padding: 14px 18px;
+    }
+  }
+}
+
 /* 480px */
 @media (max-width: 480px) {
   .footer {

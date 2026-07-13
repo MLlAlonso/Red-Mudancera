@@ -41,7 +41,7 @@ class SolicitudMudanzaController extends Controller
         ], 201);
     }
 
-/*     public function verificar(VerifySolicitudMudanzaRequest $request): JsonResponse
+    /*     public function verificar(VerifySolicitudMudanzaRequest $request): JsonResponse
     {
         $solicitud = $this->service->verificar(
             $request->id,
@@ -232,6 +232,10 @@ class SolicitudMudanzaController extends Controller
             'origen' => 'required|string',
             'destino' => 'required|string',
             'inventario' => 'required|string|min:10',
+            'fecha_recoleccion' => [
+                'required',
+                'in:1-7,8-15,15-30,30+,lo_antes_posible'
+            ],
         ]);
 
         $fakeSolicitud = (object) $data;

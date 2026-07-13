@@ -22,7 +22,8 @@ export default function SeguroClient() {
         telefono: "",
         origen: "",
         destino: "",
-        inventario: ""
+        inventario: "",
+        fecha_recoleccion: ""
     });
 
     const handleChange = (e) => {
@@ -79,6 +80,10 @@ export default function SeguroClient() {
     ========================= */
     const handleExterno = async () => {
         if (sent) return;
+        if (!form.fecha_recoleccion) {
+            setModalError("Selecciona cuándo necesitas la mudanza.");
+            return;
+        }
         setLoading(true);
 
         try {
@@ -178,7 +183,7 @@ export default function SeguroClient() {
         <>
             {!showForm && (
                 <button className="btnSeguro" onClick={() => setShowForm(true)}>
-                    Solicitar información de protección
+                    Quiero proteger mi Mudanza
                 </button>
             )}
 
@@ -216,6 +221,25 @@ export default function SeguroClient() {
                             placeholder="Ej: sala, comedor, refrigerador, cajas, etc."
                             onChange={handleChange}
                         />
+                    </div>
+
+                    <div className="form-group">
+                        <label>¿Cuándo necesitas la mudanza?</label>
+
+                        <select
+                            name="fecha_recoleccion"
+                            value={form.fecha_recoleccion}
+                            onChange={handleChange}
+                        >
+                            <option value="">Selecciona una opción</option>
+                            <option value="1-7">1-7 días</option>
+                            <option value="8-15">8-15 días</option>
+                            <option value="15-30">15-30 días</option>
+                            <option value="30+">Más de 30 días</option>
+                            <option value="lo_antes_posible">
+                                Lo antes posible
+                            </option>
+                        </select>
                     </div>
 
                     <button

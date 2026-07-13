@@ -127,11 +127,9 @@ class Empresa extends Authenticatable
     protected static function boot()
     {
         parent::boot();
-
         static::creating(function ($empresa) {
 
             if (!$empresa->slug) {
-
                 $baseSlug = Str::slug($empresa->empresa);
                 $slug = $baseSlug;
                 $counter = 1;
@@ -140,7 +138,6 @@ class Empresa extends Authenticatable
                     $slug = $baseSlug . '-' . $counter;
                     $counter++;
                 }
-
                 $empresa->slug = $slug;
             }
         });

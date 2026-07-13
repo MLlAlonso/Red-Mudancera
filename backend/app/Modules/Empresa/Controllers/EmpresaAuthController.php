@@ -73,7 +73,7 @@ class EmpresaAuthController extends Controller
         // ============================================
         // ENVIAR CORREO
         // ============================================
-        Mail::to($data['email']) ->send(new EmpresaVerificationCode($code));
+        Mail::to($data['email'])->send(new EmpresaVerificationCode($code));
 
         // ============================================
         // RESPONSE
@@ -196,17 +196,17 @@ class EmpresaAuthController extends Controller
                 . rand(1000, 9999)
         );
 
-        $data['tokens'] = 50;
+        $data['tokens'] = 15;
         $empresa = Empresa::create($data);
 
         $empresa->update([
-            'plan' => 'free',
+            'plan' => 'radar',
             'subActiva' => false,
             'subInicio' => null,
             'subFin' => null,
-            'isTrial' => false,
-            'trialEndsAt' => null,
-            'freeSince' => now(),
+            'isTrial' => true,
+            'trialEndsAt' => now()->addDays(90),
+            'freeSince' => null,
             'email_verified_at' => now(),
         ]);
 

@@ -3,23 +3,19 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Bienvenido</title>
+    <title>Bienvenido a Mudanza Fácil</title>
 </head>
 
 <body style="margin:0;padding:0;background:#F4F7F6;font-family:Arial,Helvetica,sans-serif;">
-
     <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
             <td align="center" style="padding:40px 16px;">
-
                 <table width="100%" cellpadding="0" cellspacing="0"
-                    style="max-width:500px;background:#ffffff;border-radius:14px;overflow:hidden;">
-
-                    <!-- Header -->
+                    style="max-width:560px;background:#ffffff;border-radius:16px;overflow:hidden;">
                     <tr>
-                        <td style="background:#09233E;padding:24px;text-align:center;">
-                            <h2 style="margin:0;color:#ffffff;font-size:22px;">
-                                ¡Bienvenido a Mudanza Fácil!
+                        <td style="background:#09233E;padding:28px;text-align:center;">
+                            <h2 style="margin:0;color:#ffffff;">
+                                🚚 ¡Bienvenido a Mudanza Fácil!
                             </h2>
                         </td>
                     </tr>
@@ -34,74 +30,93 @@
                         </td>
                     </tr>
 
-                    <!-- Body -->
                     <tr>
-                        <td style="padding:24px;text-align:center;color:#4A5E71;">
-                            <p>Tu cuenta ha sido verificada correctamente.</p>
-
+                        <td style="padding:0 30px;color:#4A5E71;line-height:1.7;">
                             <p>
-                                Se creó automáticamente un usuario administrador para
-                                <strong>{{ $empresa->empresa }}</strong>
-                                utilizando el mismo correo y contraseña con los que te registraste.
+                                Tu empresa <strong>{{ $empresa->empresa }}</strong> ya forma parte de nuestra red de
+                                empresas de mudanzas.
                             </p>
 
-                            <!-- Gift créditos Box -->
+                            <p> Desde este momento ya puedes: </p>
+
+                            <p>
+                                ✅ Buscar cargas para tus unidades.<br><br>
+                                ✅ Ofrecer cargas a empresas de confianza.<br><br>
+                                ✅ Comprar contactos de clientes.<br><br>
+                                ✅ Recibir coincidencias de rutas.
+                            </p>
+                        </td>
+                    </tr>
+
                     <tr>
-                        <td style="padding:0 24px 24px 24px;">
+                        <td style="padding:0 30px 25px;">
                             <div
-                                style=" background:#FFF4E6;
-                                border:2px solid #F1A43F;
-                                border-radius:12px;
-                                padding:16px;
-                                text-align:center;
-                                color:#4A5E71;">
-                                <h3 style="margin:0 0 10px 0; color:#F1A43F;">
-                                    🎁 Has recibido 50 créditos de bienvenida
+                                style=" background:#FFF8E8; border:2px solid #F1A43F; border-radius:14px; padding:22px; text-align:center;">
+                                <h3 style="margin-top:0;color:#F1A43F;">
+                                    🎁 Activa tu empresa hoy y recibe 100 créditos GRATIS
                                 </h3>
 
-                                <p style="margin:0;">
-                                    Estos créditos te permiten desbloquear
-                                    <strong style="color:#F1A43F;">Contactos de Clientes</strong>
-                                    dentro del inicio.
+                                <p style="color:#4A5E71;">
+                                    Con ellos podrás comprar más de <strong>6 contactos de clientes
+                                        potenciales.</strong>
                                 </p>
 
-                                <p style="margin-top:10px;font-size:14px;">
-                                    Los contactos están identificadas con el color
-                                    <strong style="color:#F1A43F;">Naranja</strong>
-                                    dentro de la plataforma.
+                                <p style="margin-top:20px;color:#4A5E71;">
+                                    Solo envía la palabra:
                                 </p>
 
-                                <p style="margin-top:10px;font-size:13px;color:#777;">
-                                    ⚠️ Los créditos NO se utilizan para publicar servicios
-                                    de "Busco" u "Ofrezco".
-                                    Solo se utilizan para adquirir datos de contacto de clientes.
+                                <h2 style=" margin:10px 0; color:#25D366; letter-spacing:2px;">
+                                    ACTIVA
+                                </h2>
+
+                                <a href="https://wa.me/4421896433?text=ACTIVA"
+                                    style=" display:inline-block; background:#25D366; color:#ffffff; text-decoration:none; padding:14px 30px; border-radius:8px; font-weight:bold; margin-top:15px;">
+                                    📲 Activar mi empresa
+                                </a>
+
+                                <p style="margin-top:25px;color:#4A5E71;">
+                                    En cuanto recibamos tu mensaje:
+                                </p>
+
+                                <p>
+                                    ✅ Activaremos tu empresa.<br><br>
+                                    ✅ Acreditaremos tus <strong>100 créditos.</strong><br><br>
+                                    ✅ Resolveremos cualquier duda sobre la plataforma.
                                 </p>
                             </div>
                         </td>
                     </tr>
 
-                    <p style="margin-top:20px;">
-                        Ya puedes navegar y conocer la plataforma.
-                    </p>
+                    <tr>
+                        <td style="padding:0 30px;">
+                            <p style=" font-size:12px; color:#7A7A7A; text-align:center; line-height:1.6;">
+                                <strong>¿Por qué activarme?</strong><br>
+                                Porque queremos asegurarnos de que todas las empresas de la red sean reales y ofrecer un
+                                entorno confiable para todos.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding:30px;color:#4A5E71; text-align:center; line-height:1.7;">
+                            <p>
+                                Nos da mucho gusto darte la bienvenida. <br>
+                                <strong>Equipo Mudanza Fácil</strong>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding:18px;text-align:center;border-top:1px solid #ECECEC;">
+                            <p style="font-size:12px;color:#999;">
+                                soporte@mudanzafacil.com.mx
+                            </p>
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
-
-        <!-- Footer -->
-        <tr>
-            <td style="padding:20px;text-align:center;">
-                <p style="font-size:12px;color:#999;">
-                    Gracias por confiar en nosotros.<br>
-                    soporte@mudanzafacil.com.mx
-                </p>
-            </td>
-        </tr>
-
     </table>
-
-    </td>
-    </tr>
-    </table>
-
 </body>
 
 </html>

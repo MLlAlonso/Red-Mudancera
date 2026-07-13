@@ -61,7 +61,7 @@
 
                             <p><strong>Origen:</strong> {{ $solicitud->origen }}</p>
                             <p><strong>Destino:</strong> {{ $solicitud->destino }}</p>
-                            <p><strong>Dias:</strong> {{ $solicitud->fecha_recoleccion }}</p>
+                            <p><strong>¿Cuándo necesita la mudanza?:</strong> {{ $solicitud->fecha_recoleccion }}</p>
 
                             <hr style="margin:20px 0;">
 

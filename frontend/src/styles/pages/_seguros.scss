@@ -56,11 +56,11 @@ section {
     }
 
     .btnSeguro {
-        background-color: $success-hover;
+        background-color: $success;
         color: #fff;
         border: none;
         padding: 14px 30px;
-        border-radius: 10px;
+        border-radius: 20px;
         cursor: pointer;
         font-size: 24px;
         display: inline-flex;
@@ -197,6 +197,10 @@ section {
         margin: 35px auto 0 auto;
         padding: 0 20px;
 
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+
         &__list {
             list-style: none;
             padding: 0;
@@ -228,6 +232,7 @@ section {
 
     .seguroInfo {
         display: flex;
+        flex-direction: column;
         align-items: center;
         gap: 24px;
         padding: 28px;
@@ -236,6 +241,12 @@ section {
         background: linear-gradient(90deg,
                 rgba(101, 200, 133, 0.25) 10%,
                 #FFFFFF 100%);
+
+        &__header {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+        }
 
         &__icon {
             flex-shrink: 0;
@@ -248,7 +259,6 @@ section {
         }
 
         &__content {
-
             h3 {
                 margin: 0 0 10px 0;
                 font-size: 32px;
@@ -268,12 +278,14 @@ section {
     }
 
     .seguroFinalCtas {
-        max-width: 1200px;
-        margin: 30px auto 0 auto;
-        padding: 0 20px;
+        width: 100%;
+        margin-top: 0;
+        padding: 0;
         display: flex;
         flex-direction: column;
+        border-radius: 30px;
         gap: 20px;
+        background: #fff;
     }
 
     .seguroFinalCta {
@@ -310,11 +322,10 @@ section {
         }
 
         &--primary {
-            background: #034436;
 
             h3,
             p {
-                color: #fff;
+                color: #034436;
             }
         }
 
@@ -551,17 +562,36 @@ section {
         }
 
         input,
-        textarea {
+        textarea,
+        select {
+            width: 100%;
             padding: 12px;
             border-radius: 8px;
             border: 1px solid #ddd;
             font-size: 16px;
-            transition: border 0.2s ease;
+            font-family: inherit;
+            background: #fff;
+            color: $text;
+            transition: border-color .2s ease, box-shadow .2s ease;
 
             &:focus {
                 outline: none;
-                border-color: #2ea3f2;
+                border-color: $primary;
+                box-shadow: 0 0 0 3px rgba(46, 163, 242, .12);
             }
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='4 6 8 10 12 6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 16px;
+            padding-right: 42px;
         }
 
         textarea {
@@ -572,7 +602,8 @@ section {
 }
 
 input:disabled,
-textarea:disabled {
+textarea:disabled,
+select:disabled {
     background: #f5f5f5;
     cursor: not-allowed;
 }
@@ -677,7 +708,8 @@ textarea:disabled {
             }
 
             input,
-            textarea {
+            textarea,
+            select {
                 font-size: 15px;
             }
         }
@@ -688,6 +720,7 @@ textarea:disabled {
    MOBILE
 ========================= */
 @media (max-width: 768px) {
+
     .success-modal,
     .error-modal {
         padding: 18px;
@@ -887,6 +920,7 @@ textarea:disabled {
    MOBILE PEQUEÑO
 ========================= */
 @media (max-width: 480px) {
+
     .success-modal,
     .error-modal {
         padding: 16px;

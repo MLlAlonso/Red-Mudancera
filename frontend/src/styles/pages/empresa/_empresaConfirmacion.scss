@@ -13,7 +13,7 @@
     background: #ffffff;
     border-radius: 16px;
     padding: 40px 32px;
-    max-width: 520px;
+    max-width: 620px;
     width: 100%;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
@@ -74,6 +74,429 @@
   }
 }
 
+/*   if (verified) { */
+.empresa-confirmacion {
+  flex-direction: column;
+
+  &__badge {
+    width: 280px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    border: 2px solid rgba($primary, .15);
+    border-radius: 100px;
+    padding: 10px 22px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .8px;
+    color: $primary;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+  }
+
+  &__badge-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: $success;
+    box-shadow: 0 0 10px rgba($success, .5);
+    flex-shrink: 0;
+  }
+
+  &__title {
+    text-align: left;
+
+    span {
+      color: $success;
+      font-weight: 800;
+    }
+  }
+
+  &__subtitle {
+    text-align: left;
+    color: $text-muted;
+    margin-bottom: 20px;
+  }
+
+  &__activation {
+    background: $primary;
+    border-radius: 18px;
+    color: white;
+    padding: 26px;
+    margin-bottom: 10px;
+  }
+
+  &__activation-header {
+    margin-bottom: 5px;
+  }
+
+  &__activation-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+
+    h2 {
+      color: white;
+      font-size: 22px;
+      font-family: $font-title;
+      margin: 0;
+    }
+  }
+
+  &__reward {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  &__reward-info {
+    width: 70%;
+  }
+
+  &__reward-image {
+    width: 30%;
+    display: flex;
+    justify-content: center;
+
+    img {
+      width: 100%;
+      max-width: 140px;
+      height: 120px;
+    }
+  }
+
+  &__reward-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      color: white;
+      font-family: $font-title;
+      text-align: left;
+
+      span {
+        color: $success;
+        font-size: 70px;
+        font-weight: bold;
+      }
+    }
+
+    p {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      margin: 0;
+      text-align: left;
+      color: rgba(255, 255, 255, .85);
+      line-height: 1.5;
+
+      img {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  &__divider {
+    height: 1px;
+    background: rgba(255, 255, 255, .15);
+    margin: 15px 0;
+  }
+
+  &__whatsapp {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+    }
+
+    p {
+      margin: 0;
+      color: white;
+      line-height: 1.5;
+    }
+
+    strong {
+      padding: 5px;
+      border-radius: 5px;
+      margin: 0px 5px;
+      background-color: $tertiary;
+    }
+  }
+
+  &__whatsapp-btn {
+    margin-top: 22px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 15px;
+    background: #25D366;
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 20px;
+    transition: all .25s ease;
+    border: 2px solid transparent;
+
+    img {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+    }
+
+    &:hover {
+      background: #1ebe5d;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(37, 211, 102, .30);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  &__info {
+    background: white;
+    border-radius: 18px;
+    padding: 15px;
+    margin-top: 15px;
+    border: 1px solid rgba($primary, .08);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .05);
+  }
+
+  &__info-header {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    text-align: left;
+
+    span {
+      color: $azul_002;
+      font-weight: bold;
+    }
+
+    strong {
+      color: $success_hover;
+      font-weight: bold;
+    }
+  }
+
+  &__info-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 99px;
+    background: rgba($primary, .08);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+
+    img {
+      width: 40px;
+    }
+  }
+
+  &__info-divider {
+    height: 1px;
+    background: #ececec;
+    margin: 20px 0;
+  }
+
+  &__section-title {
+    font-size: 24px;
+    font-family: $font-title;
+    color: $primary;
+    margin-bottom: 22px;
+  }
+
+  &__feature {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+
+  &__feature:last-child {
+    margin-bottom: 0;
+  }
+
+  &__feature-icon {
+    width: 52px;
+    height: 52px;
+    background: rgba($success, .10);
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+
+    img {
+      width: 40px;
+    }
+
+  }
+
+  &__feature h4 {
+    color: $primary;
+    font-size: 18px;
+  }
+
+  &__feature p {
+    margin: 0;
+    color: $text-muted;
+    line-height: 1.4;
+  }
+
+  &__contact {
+    margin-top: 30px;
+    background: white;
+    border-radius: 18px;
+    padding: 15px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .05);
+  }
+
+  &__contact-left {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex: 1;
+
+    img {
+      width: 40px;
+    }
+
+    h4 {
+      margin: 0;
+      color: $primary;
+    }
+
+    p {
+      margin: 6px 0 0;
+      color: $text-muted;
+    }
+
+  }
+
+  &__contact-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 10px;
+    border-radius: 15px;
+    background: #25D366;
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    transition: .25s;
+    white-space: nowrap;
+
+    img {
+      width: 20px;
+    }
+
+    &:hover {
+      background: #1ebe5d;
+      transform: translateY(-2px);
+    }
+
+  }
+
+  &__footer-card {
+    margin-top: 20px;
+    width: 100%;
+    background: $primary;
+    border-radius: 18px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    color: white;
+  }
+
+  &__balance {
+    width: 40%;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+
+    span {
+      display: block;
+      color: rgba(255, 255, 255, .75);
+      margin-bottom: 4px;
+      font-size: 18px;
+    }
+
+    h3 {
+      margin: 0;
+      font-family: $font-title;
+      font-size: 24px;
+      color: white;
+    }
+  }
+
+  &__footer-divider {
+    width: 1px;
+    align-self: stretch;
+    background: rgba(255, 255, 255, .18);
+  }
+
+  &__footer-action {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__footer-action .button_cta {
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .btn_cta {
+    width: 100%;
+    max-width: 340px;
+    height: 50px;
+    background: $azul_002 !important;
+    border-color: $azul_002 !important;
+
+    &:hover {
+      background: darken($azul_002, 8%) !important;
+      border-color: darken($azul_002, 8%) !important;
+    }
+
+  }
+}
 
 @media (max-width: 480px) {
   .empresa-confirmacion {
@@ -98,6 +521,51 @@
 
     &__tokens-text {
       font-size: 18px;
+    }
+
+    &__activation {
+      padding: 15px;
+    }
+
+    &__activation-title h2 {
+      font-size: 20px;
+    }
+
+    &__reward-info {
+      width: 80%;
+    }
+
+    &__reward-image {
+      width: 20%;
+
+      img {
+        max-width: 120px;
+        height: 80px;
+      }
+    }
+
+    &__reward-item {
+      h3 {
+        margin: 0px;
+        font-size: 20px;
+
+        span {
+          font-size: 60px;
+        }
+      }
+
+      p {
+        display: flex;
+        font-size: 14px;
+
+        img {
+          margin-right: 6px;
+        }
+      }
+    }
+
+    &__whatsapp {
+      align-items: flex-start;
     }
   }
 }

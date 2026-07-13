@@ -49,6 +49,7 @@ class CheckSubscriptions extends Command
                         'subActiva' => false,
                         'freeSince' => now(),
                         'isTrial' => false,
+                        'trialEndsAt' => null,
                     ]);
 
                     app(NotificationDispatcher::class)->dispatch(
