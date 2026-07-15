@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import SolicitudMudanzaCard from "@/components/cards/SolicitudMudanzaCard";
+import CRMContactCard from "@/components/cards/CRMContactCard";
 import { getCRMDashboard } from "@/services/crmAuth";
 import { getCRMToken } from "@/utils/crmAuth";
 import "@/styles/crm/_crmDashboard.scss";
@@ -13,9 +13,7 @@ export default function CRMDashboardPage() {
   const [selectedMonth, setSelectedMonth] = useState(now.getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(now.getFullYear());
 
-  useEffect(() => {
-    loadDashboard();
-  }, [selectedMonth, selectedYear]);
+  useEffect(() => { loadDashboard(); }, [selectedMonth, selectedYear]);
 
   async function loadDashboard() {
     setLoading(true);
@@ -175,36 +173,56 @@ export default function CRMDashboardPage() {
         <div className="crm-section__header">
           <div>
             <h2> Contactos de Mudanza Fácil </h2>
-
             <p> Administra los clientes adquiridos desde la plataforma. </p>
           </div>
-
         </div>
 
         <div className="crm-dashboard__cards">
           {
-            dashboard.contactos.map(
-              contacto => (
-                <SolicitudMudanzaCard
-                  key={contacto.id}
-                  id={contacto.id}
-                  origen={contacto.origen}
-                  destino={contacto.destino}
-                  telefono={contacto.telefono}
-                  nombreCliente={contacto.nombre}
-                  tipoVivienda={contacto.tipo_vivienda}
-                  inventario={contacto.inventario}
-                  tipoMudanza={contacto.tipo_mudanza}
-                  fechaRecoleccion={contacto.fecha_recoleccion}
-                  fecha={new Date(contacto.created_at).toLocaleDateString()}
-                  estado={contacto.estado_operacion}
-                  isLead
-                  showContact={false}
-                  onChangeEstado={cambiarEstado}
-                />
+            dashboard.contactos.length === 0 ? (
+              <div className="crm-dashboard__empty">
+                <img src="/icons/search.png" alt="" />
+                
+                <h3>
+                  No hay contactos para este período
+                </h3>
+
+                <p>
+                  Cambia el mes o el año para visualizar otros contactos comprados.
+                </p>
+              </div>
+            ) : (
+
+              dashboard.contactos.map(
+                contacto => (
+                  <CRMContactCard
+                    key={contacto.id}
+                    id={contacto.id}
+                    nombre={contacto.nombre}
+                    telefono={contacto.telefono}
+                    origen={contacto.origen}
+                    destino={contacto.destino}
+                    distanciaKm={contacto.distancia_km}
+                    tipoServicio={contacto.tipo_servicio}
+                    tipoMudanza={contacto.tipo_mudanza}
+                    tipoVivienda={contacto.tipo_vivienda}
+                    viviendaDestino={contacto.vivienda_destino}
+                    inventario={contacto.inventario}
+                    fechaRecoleccion={contacto.fecha_recoleccion}
+                    fecha={contacto.created_at}
+                    estado={contacto.estado_operacion}
+                    exclusivo={contacto.exclusivo}
+                    tokensPagados={contacto.tokens_pagados}
+                    compradoAt={contacto.comprado_at}
+                    ganancia={contacto.ganancia}
+                    onChangeEstado={cambiarEstado}
+                  />
+                )
               )
+
             )
           }
+
         </div>
       </section>
     </div>

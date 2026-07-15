@@ -20,6 +20,13 @@
     gap: 16px;
     border: 1px solid rgba(255,255,255,.08);
 
+    &__close{
+        background: rgba(9, 35, 62, 0.96);
+        color: #fff;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
     &__icon {
         width: 60px;
         height: 60px;

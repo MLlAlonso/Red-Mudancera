@@ -8,34 +8,52 @@ use App\Modules\SystemAnnouncement\Models\SystemAnnouncement;
 use App\Modules\Empresa\Models\Empresa;
 use App\Modules\Usuario\Models\Usuario;
 use App\Modules\Notificacion\Services\NotificacionService;
+use App\Modules\SystemAnnouncement\Models\SystemAnnouncementRead;
 
 class SystemAnnouncementController extends Controller
 {
     public function latest()
     {
-        $announcement = SystemAnnouncement::where( 'activo', true )
-        ->latest()
-        ->first();
+        $empresa = auth("empresa")->user();
+        $announcement = SystemAnnouncement::where("activo", true)->where(function ($query) {
+            $query->whereNull("expires_at")->orWhere(
+                "expires_at",
+                ">",
+                now()
+            );
+        })
+
+            ->whereDoesntHave("reads", function ($query) use ($empresa) {
+                $query->where(
+                    "empresa_id",
+                    $empresa->id
+                );
+            })
+
+            ->orderByDesc("id")
+            ->first();
 
         return response()->json([
-            'data' => $announcement
+            "data" => $announcement
         ]);
     }
 
-    public function store(
-        Request $request,
-        NotificacionService $notificacionService
-    ) {
-
+    public function store(Request $request, NotificacionService $notificacionService)
+    {
         $request->validate([
             'titulo' => 'required|string|max:120',
             'mensaje' => 'required|string|max:500',
+        ]);
+
+        SystemAnnouncement::where("activo", true)->update([
+            "activo" => false
         ]);
 
         $announcement = SystemAnnouncement::create([
             'titulo' => $request->titulo,
             'mensaje' => $request->mensaje,
             'activo' => true,
+            'expires_at' => now()->addDay(),
         ]);
 
         /*
@@ -58,6 +76,21 @@ class SystemAnnouncementController extends Controller
         return response()->json([
             'success' => true,
             'data' => $announcement
+        ]);
+    }
+
+    public function markAsRead($id)
+    {
+        $empresa = auth("empresa")->user();
+        $announcement = SystemAnnouncement::findOrFail($id);
+
+        SystemAnnouncementRead::firstOrCreate([
+            "announcement_id" => $announcement->id,
+            "empresa_id"      => $empresa->id,
+        ]);
+
+        return response()->json([
+            "success" => true
         ]);
     }
 }

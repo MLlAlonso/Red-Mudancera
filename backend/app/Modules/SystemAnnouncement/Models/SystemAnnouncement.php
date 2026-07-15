@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Modules\SystemAnnouncement\Models;
+
 use Illuminate\Database\Eloquent\Model;
 
 class SystemAnnouncement extends Model
@@ -13,4 +14,12 @@ class SystemAnnouncement extends Model
         'activo',
         'expires_at',
     ];
+
+    public function reads()
+    {
+        return $this->hasMany(
+            SystemAnnouncementRead::class,
+            "announcement_id"
+        );
+    }
 }

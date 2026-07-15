@@ -5,9 +5,82 @@ import FAQItem from "./FAQItem";
 import "@/styles/pages/_seguros.scss";
 
 export const metadata = {
-    title: "Seguro para Mudanza | Protege tus pertenencias",
+    title: "Seguro para Mudanza | Protege tus pertenencias con tarifa preferencial",
     description:
-        "Protege tu mudanza con tarifa preferencial. Obtén cobertura para tus pertenencias y evita pérdidas económicas durante tu traslado.",
+        "Obtén acceso a una tarifa preferencial para asegurar tu mudanza. Protege tus pertenencias durante el traslado con el respaldo de una aseguradora especializada.",
+
+    keywords: [
+        "seguro para mudanza",
+        "seguro de mudanza",
+        "protección para mudanza",
+        "seguro de carga",
+        "mudanza segura",
+        "seguro de transporte",
+        "Mudanza Fácil",
+        "mudanzas México",
+        "asegurar mudanza",
+        "Chubb seguros",
+        "seguro para muebles",
+        "seguro de pertenencias",
+        "seguros",
+        "mudanzas",
+    ],
+
+    authors: [
+        {
+            name: "Mudanza Fácil",
+            url: "https://app.mudanzafacil.com.mx",
+        },
+    ],
+
+    creator: "Mudanza Fácil",
+    publisher: "Mudanza Fácil",
+
+    robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+            index: true,
+            follow: true,
+            "max-image-preview": "large",
+            "max-snippet": -1,
+            "max-video-preview": -1,
+        },
+    },
+
+    alternates: {
+        canonical: "https://app.mudanzafacil.com.mx/seguros",
+    },
+
+    openGraph: {
+        title: "Protege tu mudanza con una tarifa preferencial exclusiva",
+
+        description:
+            "Conoce una alternativa para proteger tus pertenencias durante tu mudanza con una tarifa preferencial. Infórmate sin compromiso.",
+
+        url: "https://app.mudanzafacil.com.mx/seguros",
+        siteName: "Mudanza Fácil",
+        locale: "es_MX",
+        type: "website",
+
+        images: [
+            {
+                url: "https://app.mudanzafacil.com.mx/images/hero_02.png",
+                width: 1200,
+                height: 630,
+                alt: "Seguro para Mudanza - Mudanza Fácil",
+            },
+        ],
+    },
+
+    twitter: {
+        card: "summary_large_image",
+        title: "Protege tu mudanza con una tarifa preferencial",
+        description: "Conoce una alternativa para proteger tus pertenencias durante el traslado.",
+        images: [
+            "https://app.mudanzafacil.com.mx/images/hero_02.png",
+        ],
+    },
 };
 
 export default function SegurosPage() {
