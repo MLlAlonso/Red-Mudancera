@@ -13,7 +13,21 @@ export default function CRMDashboardPage() {
   const [selectedMonth, setSelectedMonth] = useState(now.getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(now.getFullYear());
 
-  useEffect(() => { loadDashboard(); }, [selectedMonth, selectedYear]);
+  /*
+  |--------------------------------------------------------------------------
+  | LINK PRIVADO
+  |--------------------------------------------------------------------------
+  */
+  const privateLink = dashboard?.empresa?.slug ? `${window.location.origin}/${dashboard.empresa.slug}/solicitar-mudanza` : "";
+
+  /*
+  |--------------------------------------------------------------------------
+  | CARGAR DASHBOARD
+  |--------------------------------------------------------------------------
+  */
+  useEffect(() => {
+    loadDashboard();
+  }, [selectedMonth, selectedYear]);
 
   async function loadDashboard() {
     setLoading(true);
@@ -24,20 +38,28 @@ export default function CRMDashboardPage() {
     } catch (e) {
       console.error(e);
     }
-    setLoading(false);
+    finally {
+      setLoading(false);
+    }
   }
 
+  /*
+  |--------------------------------------------------------------------------
+  | CAMBIAR ESTADO
+  |--------------------------------------------------------------------------
+  */
   async function cambiarEstado(id, estado) {
     const token = getCRMToken();
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/solicitudes-mudanza/leads/${id}/estado`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ estado, }),
-    }
+      `${process.env.NEXT_PUBLIC_API_URL}/solicitudes-mudanza/leads/${id}/estado`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ estado, }),
+      }
     );
 
     if (!res.ok) {
@@ -46,18 +68,87 @@ export default function CRMDashboardPage() {
     }
 
     const json = await res.json();
+    setDashboard(prev => ({
+      ...prev,
+      contactos:
+        prev.contactos.map(contacto =>
+          contacto.id === id
+            ? {
+              ...contacto,
+              ...json.data,
+            }
+            : contacto
+        ),
+    }));
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | DESCARTAR CONTACTO
+  |--------------------------------------------------------------------------
+  */
+  async function ocultarContacto(id) {
+    const token = getCRMToken();
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/solicitudes-mudanza/leads/${id}/ocultar`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!res.ok) {
+      alert("No se pudo ocultar.");
+      return;
+    }
 
     setDashboard(prev => ({
       ...prev,
       contactos:
-        prev.contactos.map(contacto => contacto.id === id
-          ? { ...contacto, ...json.data, }
-          : contacto
-        )
+        prev.contactos.filter(
+          contacto => contacto.id !== id
+        ),
     }));
   }
 
-  if (loading) {
+  /*
+  |--------------------------------------------------------------------------
+  | PONER A LA VENTA
+  |--------------------------------------------------------------------------
+  */
+  async function ponerEnVenta(id) {
+    const token = getCRMToken();
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/solicitudes-mudanza/leads/${id}/poner-en-venta`,
+      {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}`, },
+      }
+    );
+
+    const json = await res.json();
+    if (!res.ok) {
+      alert(json.message);
+      return;
+    }
+
+    setDashboard(prev => ({
+      ...prev,
+      contactos:
+        prev.contactos.filter(
+          contacto => contacto.id !== id
+        ),
+    }));
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | LOADING
+  |--------------------------------------------------------------------------
+  */
+  if (loading || !dashboard) {
     return <h2>Cargando...</h2>;
   }
 
@@ -169,6 +260,90 @@ export default function CRMDashboardPage() {
         </div>
       </div>
 
+      <div className="crm-private-link">
+        <div className="crm-private-link__left">
+          <div className="crm-private-link__badge">
+            Formulario Exclusivo
+          </div>
+
+          <h2> Recibe clientes directamente </h2>
+
+          <p>
+            Comparte este formulario con tus clientes mediante WhatsApp,
+            Facebook, Instagram o desde tu sitio web.
+            Los contactos llegarán directamente a tu CRM sin pasar por el Marketplace.
+          </p>
+
+          <div className="crm-private-link__preview">
+            <img src="/logo/logo.png" alt="Mudanza Fácil" />
+
+            <div>
+              <strong>
+                Mudanza Fácil
+              </strong>
+
+              <span>
+                {privateLink}
+              </span>
+            </div>
+
+          </div>
+
+          <input readOnly value={privateLink} onClick={(e) => e.target.select()} />
+
+          <p className="crm-private-link__slug">
+            URL personalizada:
+            <strong>
+              {dashboard.empresa.slug}
+            </strong>
+          </p>
+        </div>
+
+        <div className="crm-private-link__actions">
+          <button onClick={() => window.open(privateLink, "_blank")} >
+            Abrir formulario
+          </button>
+
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(privateLink);
+              alert("Enlace copiado.");
+            }}
+          >
+            Copiar enlace
+          </button>
+
+          <button
+            onClick={() =>
+              window.open(
+                `https://wa.me/?text=${encodeURIComponent(
+                  `Solicita tu mudanza aquí:\n${privateLink}`
+                )}`,
+                "_blank"
+              )
+            }
+          >
+            Compartir WhatsApp
+          </button>
+
+          {
+            navigator.share && (
+              <button
+                onClick={() =>
+                  navigator.share({
+                    title: "Mudanza Fácil",
+                    text: "Solicita tu mudanza",
+                    url: privateLink
+                  })
+                }
+              >
+                Compartir
+              </button>
+            )
+          }
+        </div>
+      </div>
+
       <section className="crm-section">
         <div className="crm-section__header">
           <div>
@@ -182,7 +357,7 @@ export default function CRMDashboardPage() {
             dashboard.contactos.length === 0 ? (
               <div className="crm-dashboard__empty">
                 <img src="/icons/search.png" alt="" />
-                
+
                 <h3>
                   No hay contactos para este período
                 </h3>
@@ -197,6 +372,7 @@ export default function CRMDashboardPage() {
                 contacto => (
                   <CRMContactCard
                     key={contacto.id}
+                    tipoLead={contacto.tipo_lead}
                     id={contacto.id}
                     nombre={contacto.nombre}
                     telefono={contacto.telefono}
@@ -216,6 +392,8 @@ export default function CRMDashboardPage() {
                     compradoAt={contacto.comprado_at}
                     ganancia={contacto.ganancia}
                     onChangeEstado={cambiarEstado}
+                    onDelete={ocultarContacto}
+                    onSell={ponerEnVenta}
                   />
                 )
               )

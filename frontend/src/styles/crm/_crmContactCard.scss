@@ -189,6 +189,81 @@ ACCIONES
     max-width: none;
 }
 
+.crm-contact-card__delete {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #FFEAEA;
+
+    color: #D92D20;
+
+    padding: 12px;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+}
+
+.crm-contact-card__delete:hover {
+
+    background: #FFD7D7;
+
+}
+
+.crm-contact-card__delete img {
+
+    width: 18px;
+
+}
+
+.crm-contact-card__sell{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:10px;
+
+    border:none;
+
+    cursor:pointer;
+
+    border-radius:12px;
+
+    padding:12px;
+
+    background:#EEF7FF;
+
+    color:#0F5FA8;
+
+    transition:.25s;
+
+}
+
+.crm-contact-card__sell:hover{
+
+    background:#DCEEFF;
+
+}
+
+.crm-contact-card__sell img{
+
+    width:18px;
+
+}
+
 /* =======================================================
 LAPTOP
 ======================================================= */

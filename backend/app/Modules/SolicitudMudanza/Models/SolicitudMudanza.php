@@ -39,10 +39,15 @@ class SolicitudMudanza extends Model
         'partner_referral_id',
         'report_token',
         'reportada',
+        'es_privado',
+        'empresa_privada_id',
+        'puesto_venta_at',
     ];
 
     protected $casts = [
         'codigo_expira_en' => 'datetime',
+        'puesto_venta_at' => 'datetime',
+        'es_privado' => 'boolean',
     ];
 
     public function compras()
@@ -66,6 +71,14 @@ class SolicitudMudanza extends Model
         return $this->belongsTo(
             \App\Modules\PartnerReferral\Models\PartnerReferral::class,
             'partner_referral_id'
+        );
+    }
+
+    public function empresaPrivada()
+    {
+        return $this->belongsTo(
+            \App\Modules\Empresa\Models\Empresa::class,
+            'empresa_privada_id'
         );
     }
 }

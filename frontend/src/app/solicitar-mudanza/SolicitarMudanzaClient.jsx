@@ -40,7 +40,6 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
     const [resumeModal, setResumeModal] = useState(false);
     const [successModal, setSuccessModal] = useState(false);
     const handleChange = (e) => {
-
         const { name, value } = e.target;
 
         setForm(prev => ({
@@ -151,10 +150,7 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
     };
 
     const heroTitle = landingConfig.heroTitle || "Comencemos con tu Mudanza";
-
-    const heroSubtitle = landingConfig.heroSubtitle ||
-        "Solicita tu presupuesto  en menos de 2 minutos y recibe  las mejores propuestas.";
-
+    const heroSubtitle = landingConfig.heroSubtitle || "Solicita tu presupuesto  en menos de 2 minutos y recibe  las mejores propuestas.";
     const buttonText = landingConfig.buttonText || "Solicitar Mudanza";
 
     return (
@@ -445,17 +441,9 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
                             </h3>
 
                             <ul>
-                                <li>
-                                    Empresas verificadas verán tu solicitud.
-                                </li>
-
-                                <li>
-                                    Podrás comparar cotizaciones.
-                                </li>
-
-                                <li>
-                                    Eliges la mejor opción para tu mudanza.
-                                </li>
+                                <li> Empresas verificadas verán tu solicitud. </li>
+                                <li> Podrás comparar cotizaciones. </li>
+                                <li> Eliges la mejor opción para tu mudanza. </li>
                             </ul>
                         </div>
 
@@ -466,7 +454,6 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
                                 router.push(`/seguros?id=${solicitudId}`);
                             }}
                         />
-
                     </div>
                 </BaseModal>
             )}

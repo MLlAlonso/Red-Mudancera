@@ -67,7 +67,7 @@ class SolicitudMudanzaController extends Controller
 
     public function index(): JsonResponse
     {
-        $solicitudes = SolicitudMudanza::where('estado', 'activo')->where('reportada', false)
+        $solicitudes = SolicitudMudanza::where('estado', 'activo')->where('reportada', false)->where("es_privado", false)
             ->whereDoesntHave('compras', function ($q) {
                 $q->where('exclusivo', true);
             })
@@ -83,6 +83,7 @@ class SolicitudMudanzaController extends Controller
     {
         $solicitud = SolicitudMudanza::where('estado', 'activo')
             ->where('reportada', false)
+            ->where("es_privado", false)
             ->findOrFail($id);
 
         $empresa = Auth::guard('empresa')->user();
@@ -90,9 +91,7 @@ class SolicitudMudanzaController extends Controller
         $fueExclusivo = false;
 
         if ($empresa) {
-            $compra = LeadCompra::where('empresa_id', $empresa->id)
-                ->where('solicitud_id', $id)
-                ->first();
+            $compra = LeadCompra::where('empresa_id', $empresa->id)->where('solicitud_id', $id)->first();
 
             if ($compra) {
                 $haComprado = true;
@@ -101,11 +100,7 @@ class SolicitudMudanzaController extends Controller
         }
 
         if (!$haComprado) {
-            $solicitud->makeHidden([
-                'telefono',
-                'email',
-                'nombre',
-            ]);
+            $solicitud->makeHidden(['telefono', 'email', 'nombre',]);
         }
 
         return response()->json([
@@ -232,10 +227,7 @@ class SolicitudMudanzaController extends Controller
             'origen' => 'required|string',
             'destino' => 'required|string',
             'inventario' => 'required|string|min:10',
-            'fecha_recoleccion' => [
-                'required',
-                'in:1-7,8-15,15-30,30+,lo_antes_posible'
-            ],
+            'fecha_recoleccion' => ['required', 'in:1-7,8-15,15-30,30+,lo_antes_posible'],
         ]);
 
         $fakeSolicitud = (object) $data;

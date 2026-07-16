@@ -7,28 +7,16 @@ import ServiceStatusDropdown from "@/components/common/ServiceStatusDropdown";
 import "@/styles/crm/_crmContactCard.scss";
 
 export default function CRMContactCard({
-    id,
-    nombre,
-    telefono,
-    origen,
-    destino,
-    distanciaKm,
-    tipoServicio,
-    tipoMudanza,
-    tipoVivienda,
-    viviendaDestino,
-    inventario,
-    fechaRecoleccion,
-    fecha,
-    estado,
-    exclusivo,
-    tokensPagados,
-    compradoAt,
-    ganancia,
-    onChangeEstado,
+    id, tipoLead, nombre, telefono,
+    origen, destino, distanciaKm,
+    tipoServicio, tipoMudanza, tipoVivienda,
+    viviendaDestino, inventario, fechaRecoleccion,
+    fecha, estado, exclusivo,
+    tokensPagados, compradoAt, ganancia,
+    onChangeEstado, onDelete, onSell,
 }) {
-
     const [estadoLocal, setEstadoLocal] = useState(estado);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         setEstadoLocal(estado);
@@ -85,6 +73,22 @@ export default function CRMContactCard({
                         )
                     }
 
+                    {
+                        tipoLead === "privado" && (
+                            <span className="crm-contact-card__badge crm-contact-card__badge--private">
+                                Lead privado
+                            </span>
+                        )
+                    }
+
+                    {
+                        tipoLead === "comprado" && (
+                            <span className="crm-contact-card__badge crm-contact-card__badge--marketplace">
+                                Marketplace
+                            </span>
+                        )
+                    }
+
                     <h2>
                         {nombre}
                     </h2>
@@ -133,7 +137,7 @@ export default function CRMContactCard({
             <div className="crm-contact-card__actions">
                 <ServiceStatusDropdown
                     estado={estadoLocal}
-                    options={[ "activo", "asignado", "en_proceso", "finalizado", "sin_respuesta", "perdido",]}
+                    options={["activo", "asignado", "en_proceso", "finalizado", "sin_respuesta", "perdido",]}
                     labels={{
                         activo: "Pendiente",
                         sin_respuesta: "Sin respuesta",
@@ -144,8 +148,11 @@ export default function CRMContactCard({
                     }}
                     onSelect={(nuevoEstado) => {
                         setEstadoLocal(nuevoEstado);
+                        setLoading(true);
                         onChangeEstado(id, nuevoEstado);
+                        setLoading(false);
                     }}
+                    disabled={loading}
                 />
 
                 <Button_cta
@@ -154,6 +161,52 @@ export default function CRMContactCard({
                     iconAlt="WhatsApp"
                     onClick={() => window.open(`https://wa.me/52${telefono}`, "_blank")}
                 />
+
+                <button
+                    className="crm-contact-card__delete"
+                    onClick={() => {
+                        if (
+                            confirm("¿Ocultar este contacto permanentemente?")
+                        ) {
+                            setLoading(true);
+                            onDelete(id);
+                            setLoading(false);
+                        }
+                    }}
+                    disabled={loading}
+                >
+
+                    <img src="/icons/delete.png" alt="" />
+                    Descartar
+                </button>
+
+                {
+                    tipoLead === "privado" &&
+                    (
+                        estadoLocal === "activo" ||
+                        estadoLocal === "sin_respuesta"
+                    ) &&
+                    (
+                        <button
+                            className="crm-contact-card__sell"
+                            onClick={() => {
+                                if (
+                                    confirm(
+                                        "¿Deseas poner este contacto a la venta? Perderás la propiedad del contacto."
+                                    )
+                                ) {
+                                    setLoading(true);
+                                    onSell(id);
+                                    setLoading(false);
+                                }
+                            }}
+                            disabled={loading}
+                        >
+                            <img src="/icons/ofrezco.png" alt="" />
+                            Poner a la venta
+                        </button>
+                    )
+                }
 
                 <button className="crm-contact-card__detail" >
                     Ver detalle

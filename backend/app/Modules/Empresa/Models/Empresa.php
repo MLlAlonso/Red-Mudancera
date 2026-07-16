@@ -124,6 +124,13 @@ class Empresa extends Authenticatable
         return $this->hasMany(LeadCompra::class);
     }
 
+    public function leadsPrivados()
+    {
+        return $this->hasMany(
+            \App\Modules\SolicitudMudanza\Models\SolicitudMudanza::class, 'empresa_privada_id'
+        );
+    }
+
     protected static function boot()
     {
         parent::boot();

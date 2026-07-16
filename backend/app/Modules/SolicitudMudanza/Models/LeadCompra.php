@@ -21,6 +21,8 @@ class LeadCompra extends Model
     protected $casts = [
         'finalizado_at' => 'datetime',
         'ganancia' => 'decimal:2',
+        'oculto' => 'boolean',
+        'exclusivo' => 'boolean',
     ];
 
     public function solicitud()

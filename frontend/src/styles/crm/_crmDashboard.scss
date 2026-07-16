@@ -112,6 +112,218 @@
     }
 }
 
+
+
+.crm-private-link {
+
+    background: white;
+
+    border-radius: 18px;
+
+    padding: 28px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 30px;
+
+    border: 1px solid #ECECEC;
+
+}
+
+.crm-private-link__left {
+
+    flex: 1;
+
+}
+
+.crm-private-link__left h2 {
+
+    font-size: 24px;
+
+    margin-bottom: 10px;
+
+    color: #111827;
+
+}
+
+.crm-private-link__left p {
+
+    color: #6B7280;
+
+    margin-bottom: 18px;
+
+}
+
+.crm-private-link__left input {
+
+    width: 100%;
+
+    padding: 14px 16px;
+
+    border-radius: 12px;
+
+    border: 1px solid #DADADA;
+
+    background: #F8F9FA;
+
+    font-size: 15px;
+
+}
+
+.crm-private-link__actions {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+}
+
+.crm-private-link__actions button {
+
+    cursor: pointer;
+
+    border: none;
+
+    border-radius: 12px;
+
+    padding: 14px 22px;
+
+    background: #0F5FA8;
+
+    color: white;
+
+    transition: .25s;
+
+}
+
+.crm-private-link__actions button:hover {
+
+    opacity: .9;
+
+}
+
+.crm-private-link__badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 6px 14px;
+
+    border-radius: 50px;
+
+    background: #DFF5E9;
+
+    color: #0F8A4B;
+
+    font-weight: 700;
+
+    margin-bottom: 18px;
+
+}
+
+.crm-private-link__preview {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    background: #F8F9FB;
+
+    border-radius: 14px;
+
+    padding: 16px;
+
+    margin: 22px 0;
+
+}
+
+.crm-private-link__preview img {
+
+    width: 54px;
+
+    height: 54px;
+
+    object-fit: contain;
+
+}
+
+.crm-private-link__preview strong {
+
+    display: block;
+
+    font-size: 16px;
+
+    color: #111827;
+
+}
+
+.crm-private-link__preview span {
+
+    display: block;
+
+    margin-top: 5px;
+
+    color: #6B7280;
+
+    font-size: 13px;
+
+    word-break: break-word;
+
+}
+
+.crm-private-link__slug{
+
+    margin-top:10px;
+
+    color:#6B7280;
+
+}
+
+.crm-private-link__slug strong{
+
+    color:#0F5FA8;
+
+}
+
+@media(max-width:900px) {
+
+    .crm-private-link {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+    .crm-private-link__actions {
+
+        flex-direction: row;
+
+    }
+
+}
+
+@media(max-width:600px) {
+
+    .crm-private-link__actions {
+
+        flex-direction: column;
+
+    }
+
+}
+
+
+
 @media(max-width:1200px) {
     .crm-dashboard__stats {
         grid-template-columns: repeat(2, 1fr);

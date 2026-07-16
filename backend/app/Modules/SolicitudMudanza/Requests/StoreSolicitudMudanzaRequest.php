@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Modules\SolicitudMudanza\Requests;
-
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreSolicitudMudanzaRequest extends FormRequest

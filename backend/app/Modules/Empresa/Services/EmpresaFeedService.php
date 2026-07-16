@@ -15,9 +15,12 @@ class EmpresaFeedService
         /* ==============================
            SERVICIOS ACTIVOS Y VIGENTES
         ============================== */
+        $limiteServicios = Carbon::now()->subDays(20);
+
         $servicios = Servicio::with('empresa')
             ->where('estado', 'activo')
             ->whereDate('fin', '>=', now())
+            ->where('created_at', '>=', $limiteServicios)
             ->latest()
             ->get()
             ->map(function ($s) {
@@ -46,14 +49,16 @@ class EmpresaFeedService
 
         $solicitudes = SolicitudMudanza::where('estado', 'activo')
             ->where('reportada', false)
+            ->where('es_privado', false)
             ->whereDate('fecha_limite_visible', '>=', now())
             ->where('compras_count', '<', 3)
             ->where('created_at', '>=', $limiteAntiguedad)
-            ->whereDoesntHave('compras', function ($q) {$q->where('exclusivo', true);})
+            ->whereDoesntHave('compras', function ($q) {
+                $q->where('exclusivo', true);
+            })
             ->latest()
             ->get()
             ->map(function ($s) use ($comprasEmpresa) {
-
                 $yaComprado = in_array($s->id, $comprasEmpresa);
 
                 return [

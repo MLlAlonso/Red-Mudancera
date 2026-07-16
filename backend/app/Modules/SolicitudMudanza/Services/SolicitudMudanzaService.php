@@ -17,130 +17,158 @@ class SolicitudMudanzaService
     protected GoogleDistanceService $distanceService;
     protected WhatsAppService $whatsAppService;
 
-    public function __construct(
-        GoogleDistanceService $distanceService,
-        WhatsAppService $whatsAppService
-    ) {
+    public function __construct(GoogleDistanceService $distanceService, WhatsAppService $whatsAppService)
+    {
         $this->distanceService = $distanceService;
         $this->whatsAppService = $whatsAppService;
     }
 
-    public function crear(array $data): SolicitudMudanza {
+    public function crear(array $data): SolicitudMudanza
+    {
         return DB::transaction(function () use ($data) {
             $this->limpiarPendientesAntiguos($data['email']);
             // Anti-duplicación estricta
             $this->validarDuplicado($data);
             // Anti spam 24 horas
             $this->validarAntiSpam($data);
-            // Calcular distancia
-            $distanciaKm = $this->calcularDistancia($data['origen'], $data['destino']);
 
-            $tipoServicio = ( $distanciaKm !== null &&  $distanciaKm <= 50)
-                ? 'local'
-                : 'foranea';
+            $distanciaKm = $this->calcularDistancia($data['origen'], $data['destino']);
+            $tipoServicio = ($distanciaKm !== null && $distanciaKm <= 50) ? 'local' : 'foranea';
             $fechaLimite = $this->calcularFechaLimite($data['fecha_recoleccion']);
+
             $empresaReferenteId = null;
             $partnerReferralId = null;
-
+            $empresaPrivadaId = null;
+            $esPrivado = false;
             $slug = $data['empresa_referente_slug'] ?? null;
 
             /*
-            |---------------------------------------------------
-            | Si el frontend no envía slug, lo sacamos del URL
-            |---------------------------------------------------
+            |--------------------------------------------------------------------------
+            | Si el frontend no envía slug, intentar obtenerlo del Referer
+            |--------------------------------------------------------------------------
             */
             if (!$slug) {
                 $referer = request()->headers->get('referer');
-                if ($referer) {
-                    if (preg_match('/solicitar-mudanza\/([^\/]+)/', $referer, $matches)) {
-                        $slug = $matches[1];
-                    }
+                if ($referer && preg_match('#/([^/]+)/solicitar-mudanza#',  $referer, $matches)) {
+                    $slug = $matches[1];
                 }
             }
+            // Log::info('Slug final usado', ['slug' => $slug]);
 
-            Log::info('Slug final usado', [
-                'slug' => $slug
-            ]);
-
+            /*
+            |--------------------------------------------------------------------------
+            | RESOLVER DESTINO DEL LEAD
+            |--------------------------------------------------------------------------
+            */
             if ($slug) {
-
                 /*
                 |--------------------------------------------------------------------------
-                | Buscar partner
+                | EMPRESA PRIVADA
                 |--------------------------------------------------------------------------
                 */
-                $partner = \App\Modules\PartnerReferral\Models\PartnerReferral::where(
-                    'slug',
-                    $slug
-                )
-                    ->where('activo', true)
-                    ->first();
+                $empresaPrivada = \App\Modules\Empresa\Models\Empresa::where('slug',  $slug)->first();
 
-                if ($partner) {
-
-                    $partnerReferralId = $partner->id;
+                if ($empresaPrivada) {
+                    $empresaPrivadaId = $empresaPrivada->id;
+                    $esPrivado = true;
                 } else {
 
                     /*
                     |--------------------------------------------------------------------------
-                    | Compatibilidad con sistema viejo
+                    | PARTNER REFERRAL
                     |--------------------------------------------------------------------------
                     */
-                    $empresa = \App\Modules\Empresa\Models\Empresa::all()
-                        ->first(function ($empresa) use ($slug) {
+                    $partner = \App\Modules\PartnerReferral\Models\PartnerReferral::where('slug', $slug)->where('activo', true)->first();
+                    if ($partner) {
+                        $partnerReferralId = $partner->id;
+                    } else {
 
-                            return \Illuminate\Support\Str::slug(
-                                $empresa->empresa
-                            ) === $slug;
-                        });
+                        /*
+                        |--------------------------------------------------------------------------
+                        | COMPATIBILIDAD CON SISTEMA VIEJO
+                        |--------------------------------------------------------------------------
+                        */
+                        $empresa = \App\Modules\Empresa\Models\Empresa::all()
+                            ->first(function ($empresa) use ($slug) {
+                                return \Illuminate\Support\Str::slug($empresa->empresa) === $slug;
+                            });
 
-                    if ($empresa) {
-                        $empresaReferenteId = $empresa->id;
+                        if ($empresa) {
+                            $empresaReferenteId = $empresa->id;
+                        }
                     }
                 }
             }
 
-            $inventarioLimpio = $this->limpiarInventario(
-                $data['inventario']
-            );
+            $inventarioLimpio = $this->limpiarInventario($data['inventario']);
 
-            // Crear registro
+           /*  Log::info("LEAD PRIVADO", [
+                "slug" => $slug,
+                "empresa_privada_id" => $empresaPrivadaId,
+                "es_privado" => $esPrivado,
+            ]); */
+
+            /*
+            |--------------------------------------------------------------------------
+            | CREAR SOLICITUD
+            |--------------------------------------------------------------------------
+            */
             $solicitud = SolicitudMudanza::create([
                 'origen' => $data['origen'],
                 'destino' => $data['destino'],
                 'distancia_km' => $distanciaKm,
                 'tipo_vivienda' => $data['tipo_vivienda'],
-                'inventario' => $inventarioLimpio,
-                'fecha_recoleccion' => $data['fecha_recoleccion'],
-                'tipo_mudanza' => $data['tipo_mudanza'],
-                'nombre' => $data['nombre'],
-                'email' => $data['email'],
-                'telefono' => $data['telefono'],
-                'codigo_verificacion' => null,
-                'codigo_expira_en' => null,
-                'estado' => 'activo',
-                'telefono_verificado' => true,
-                'tipo_servicio' => $tipoServicio,
-                'fecha_limite_visible' => $fechaLimite,
+                'vivienda_destino' => $data['vivienda_destino'],
                 'origen_pisos' => $data['origen_pisos'] ?? null,
                 'origen_elevador' => $data['origen_elevador'] ?? null,
                 'origen_acarreo' => $data['origen_acarreo'] ?? null,
                 'destino_pisos' => $data['destino_pisos'] ?? null,
                 'destino_elevador' => $data['destino_elevador'] ?? null,
                 'destino_acarreo' => $data['destino_acarreo'] ?? null,
-                'vivienda_destino' => $data['vivienda_destino'],
+                'inventario' => $inventarioLimpio,
+                'fecha_recoleccion' => $data['fecha_recoleccion'],
+                'fecha_limite_visible' => $fechaLimite,
+                'tipo_servicio' => $tipoServicio,
+                'tipo_mudanza' => $data['tipo_mudanza'],
+                'nombre' => $data['nombre'],
+                'email' => $data['email'],
+                'telefono' => $data['telefono'],
+                'codigo_verificacion' => null,
+                'codigo_expira_en' => null,
+                'telefono_verificado' => true,
+                'estado' => 'activo',
                 'referido_por_empresa_id' => $empresaReferenteId,
-                'ip_address' => request()->ip(),
                 'partner_referral_id' => $partnerReferralId,
+                'es_privado' => $esPrivado,
+                'empresa_privada_id' => $empresaPrivadaId,
+                'ip_address' => request()->ip(),
                 'report_token' => Str::uuid(),
             ]);
 
-            Mail::to($solicitud->email)
-                ->later(
-                    now()->addSeconds(15),
-                    new SolicitudMudanzaResumen($solicitud)
-                );
+            /*
+            |--------------------------------------------------------------------------
+            | SI ES LEAD PRIVADO CREARLO DIRECTAMENTE EN EL CRM
+            |--------------------------------------------------------------------------
+            */
 
+            if ($solicitud->es_privado &&  $solicitud->empresa_privada_id) {
+                \App\Modules\SolicitudMudanza\Models\LeadCompra::create([
+                    'empresa_id' => $solicitud->empresa_privada_id,
+                    'solicitud_id' => $solicitud->id,
+                    'tokens_pagados' => 0,
+                    'estado_operacion' => 'activo',
+                    'ganancia' => null,
+                    'oculto' => false,
+                    'exclusivo' => true,
+                ]);
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | EMAIL
+            |--------------------------------------------------------------------------
+            */
+            Mail::to($solicitud->email)->later(now()->addSeconds(15),   new SolicitudMudanzaResumen($solicitud));
             return $solicitud;
         });
     }
