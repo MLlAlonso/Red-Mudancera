@@ -1,38 +1,57 @@
 @use "../utils/variables" as *;
 
 .crm-contact-card {
-    background: #FFF;
-    border: 1px solid #E7EAF0;
-    border-radius: 18px;
-    padding: 10px;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 180px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     gap: 10px;
-    align-items: center;
+    background: #FFF;
+    border: 1px solid #E8ECF3;
+    border-left: 8px solid transparent;
+    border-radius: 18px;
+    padding: 22px;
     transition: .25s;
+
+    position: relative;
     overflow: visible;
+    z-index: 1;
 
     &:hover {
         transform: translateY(-3px);
-        box-shadow: 0 15px 35px rgba(0, 0, 0, .08);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, .08);
+        z-index: 500;
     }
 
-    &__content {
+    &--privado {
+        border-left-color: #2BB673;
+    }
+
+    &--comprado {
+        border-left-color: #2F80ED;
+    }
+
+    /*======================================================
+    HEADER
+    ======================================================*/
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    &__headerLeft {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 6px;
         min-width: 0;
-    }
-
-    &__title {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex-wrap: wrap;
 
         h2 {
             margin: 0;
-            font-size: 22px;
+            font-size: 24px;
             color: $title;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -41,402 +60,310 @@
     }
 
     &__new {
-        background: $tertiary;
-        color: white;
-        padding: 6px 12px;
+        width: max-content;
+        padding: 5px 10px;
         border-radius: 999px;
+        background: $tertiary;
+        color: #FFF;
         font-size: 14px;
         font-weight: 700;
-        flex-shrink: 0;
     }
 
+    &__source {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        img {
+            width: 20px;
+            height: 20px;
+        }
+
+        span {
+            font-size: 14px;
+            color: $text-muted;
+        }
+    }
+
+    &__deleteIcon {
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: .25s;
+
+        img {
+            width: 20px;
+        }
+    }
+
+    /*======================================================
+    RUTA
+    ======================================================*/
     &__route {
         display: flex;
         align-items: center;
         gap: 6px;
-        color: $text;
+        padding: 12px 0;
         min-width: 0;
-        overflow: hidden;
 
         strong {
+            flex: 1;
+            min-width: 0;
+            font-size: 18px;
+            color: $title;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            font-weight: 600;
         }
 
         span {
             flex-shrink: 0;
-            font-size: 16px;
+            color: $primary;
+            font-weight: 700;
         }
     }
 
+    /*======================================================
+    DETALLES
+    ======================================================*/
     &__details {
         display: grid;
-        grid-template-columns: 1fr;
-        gap: 8px;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 10px;
 
         div {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         img {
-            width: 18px;
-            height: 18px;
-            opacity: .7;
-            flex-shrink: 0;
+            width: 20px;
+            opacity: .6;
         }
 
         span {
-            color: $text-muted;
-            font-size: 15px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            color: $text;
+            font-size: 16px;
         }
     }
 
-    &__actions {
+    /*======================================================
+    FOOTER
+    ======================================================*/
+    &__footer {
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
+        gap: 0px;
+        align-items: flex-start;
+    }
+
+    &__status {
+        width: 50%;
+        flex-shrink: 0;
+    }
+
+    &__buttons {
+        display: flex;
+        width: 100%;
+        flex-direction: row;
         gap: 10px;
+        flex: 1;
+    }
+
+    &__secondaryActions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        width: 100%;
+    }
+
+    /*======================================================
+    BOTONES
+    ======================================================*/
+    &__buttons {
+        .btn_cta {
+            width: 100%;
+            max-width: none;
+        }
 
         button {
             width: 100%;
-            max-width: none;
+        }
+    }
 
-            img {
-                width: 24px;
-            }
+    &__sell {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: none;
+        border-radius: 12px;
+        background: #EEF7FF;
+        color: #0F5FA8;
+        padding: 12px 18px;
+        cursor: pointer;
+        transition: .25s;
+        font-weight: 600;
+        font-size: 22px;
+
+        &:hover {
+            background: #DCEEFF;
         }
     }
 
     &__detail {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         border: none;
-        background: transparent;
-        color: $title;
+        background: #F3F5F8;
         border-radius: 12px;
-        padding: 12px;
+        padding: 12px 18px;
         cursor: pointer;
-        font-weight: 600;
         transition: .25s;
+        font-weight: 600;
+        color: $title;
 
         &:hover {
-            background: #DCEBFF;
+            background: #E6EBF2;
+        }
+
+        &--full {
+            grid-column: 1 / -1;
         }
     }
 
     .service-status {
         width: 100%;
         position: relative;
-        z-index: 9999;
+        z-index: 100;
 
         &__btn {
             width: 100%;
-            min-width: 100%;
-            height: 46px;
-            font-size: 15px;
-            border-radius: 10px;
             justify-content: space-between;
         }
 
         &__menu {
-            width: 100%;
-            min-width: 100%;
-            top: calc(100% + 8px);
+            position: absolute;
             left: 0;
-            z-index: 999999;
-            border-radius: 12px;
-            overflow-y: auto;
-            overflow-x: hidden;
-            max-height: 180px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, .18);
-            scrollbar-width: thin;
-        }
-
-        &__menu::-webkit-scrollbar {
-            width: 7px;
-        }
-
-        &__menu::-webkit-scrollbar-thumb {
-            background: #BFC8D5;
-            border-radius: 10px;
-        }
-
-        &__menu::-webkit-scrollbar-track {
-            background: #F4F5F7;
+            top: calc(100% + 8px);
+            width: 100%;
+            z-index: 99999;
         }
 
         &__item {
-            min-height: 46px;
-            padding: 12px;
-            font-size: 14px;
-            justify-content: center;
-            text-align: center;
-            white-space: nowrap;
-            flex-shrink: 0;
+            width: 100%;
         }
     }
 }
 
-/* =======================================================
-ACCIONES
-======================================================= */
-.crm-contact-card__actions .service-status-dropdown {
-    width: 100%;
-    max-width: none;
-}
-
-.crm-contact-card__delete {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 10px;
-
-    border: none;
-
-    border-radius: 12px;
-
-    background: #FFEAEA;
-
-    color: #D92D20;
-
-    padding: 12px;
-
-    cursor: pointer;
-
-    transition: .25s;
-
-}
-
-.crm-contact-card__delete:hover {
-
-    background: #FFD7D7;
-
-}
-
-.crm-contact-card__delete img {
-
-    width: 18px;
-
-}
-
-.crm-contact-card__sell{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:10px;
-
-    border:none;
-
-    cursor:pointer;
-
-    border-radius:12px;
-
-    padding:12px;
-
-    background:#EEF7FF;
-
-    color:#0F5FA8;
-
-    transition:.25s;
-
-}
-
-.crm-contact-card__sell:hover{
-
-    background:#DCEEFF;
-
-}
-
-.crm-contact-card__sell img{
-
-    width:18px;
-
-}
-
-/* =======================================================
-LAPTOP
-======================================================= */
-@media(max-width:1200px) {
-    .crm-contact-card {
-        grid-template-columns: minmax(0, 1fr) 170px;
-    }
-}
-
-/* =======================================================
+/*======================================================
 TABLET
-======================================================= */
+======================================================*/
 @media(max-width:900px) {
     .crm-contact-card {
-        grid-template-columns: minmax(0, 1fr) 150px;
-    }
+        padding: 18px;
 
-    .crm-contact-card__title h2 {
-        font-size: 19px;
-    }
-
-    .service-status {
-        &__btn {
-            height: 42px;
-            font-size: 14px;
+        &__footer {
+            flex-direction: column;
         }
 
-        &__item {
-            min-height: 42px;
-            font-size: 13px;
+        &__buttons {
+            width: 100%;
+        }
+
+        &__secondaryActions {
+            grid-template-columns: 1fr 1fr;
         }
     }
 }
 
-/* =======================================================
-MOVIL
-======================================================= */
-@media (max-width: 640px) {
+/*======================================================
+MÓVIL
+======================================================*/
+@media(max-width:640px) {
     .crm-contact-card {
-        grid-template-columns: minmax(0, 1fr) 120px;
-        gap: 8px;
-        z-index: 99;
-        padding: 10px;
+        max-width: 600px;
+        padding: 16px;
         border-radius: 14px;
+        gap: 14px;
 
-        &__content {
-            gap: 6px;
-            min-width: 0;
+        &__header {
+            gap: 10px;
         }
 
-        &__title {
-            gap: 6px;
-            align-items: center;
-            flex-wrap: nowrap;
-            min-width: 0;
-
+        &__headerLeft {
             h2 {
-                font-size: 16px;
-                line-height: 1.2;
-                flex: 1;
-                min-width: 0;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
+                font-size: 18px;
+            }
+        }
+
+        &__source {
+            span {
+                font-size: 13px;
+            }
+        }
+
+        &__route {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+
+            strong {
+                width: 100%;
+                white-space: normal;
+                overflow: visible;
+                text-overflow: initial;
+                word-break: break-word;
             }
 
-            &__new {
-                padding: 3px 7px;
-                font-size: 8px;
-                flex-shrink: 0;
-            }
+        }
 
-            &__route {
-                gap: 5px;
-                font-size: 12px;
+        &__buttons {
+            gap: 8px;
+            flex-direction: column;
+        }
 
-                strong {
-                    min-width: 0;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                }
+        &__status {
+            width: 100%;
+        }
 
-                span {
-                    font-size: 12px;
-                    flex-shrink: 0;
-                }
+        &__secondaryActions {
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        &__detail {
+            &--full {
+                grid-column: auto;
             }
         }
 
         &__details {
-            gap: 5px;
+            grid-template-columns: 1fr;
 
             div {
-                gap: 6px;
-            }
-
-            img {
-                width: 14px;
-                height: 14px;
+                min-width: 0;
             }
 
             span {
-                font-size: 14px;
-                line-height: 1.2;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
         }
 
-        &__actions {
-            gap: 2px;
-            width: 100%;
-
-            button {
-                min-height: 30px;
-                padding: 7px 6px;
-                font-size: 14px;
-                border-radius: 8px;
-
-                img {
-                    width: 16px;
-                    height: 16px;
-                }
-            }
-
-            .btn_cta {
-                gap: 6px;
-
-                span {
-                    font-size: 14px !important;
-                }
-            }
+        &__deleteIcon {
+            width: 38px;
+            height: 38px;
         }
-
-        &__detail {
-            padding: 8px 6px;
-            font-size: 14px;
-            border-radius: 8px;
-        }
-
-        .service-status {
-            width: 100%;
-            z-index: 999999;
-
-            &__btn {
-                height: 38px;
-                min-width: 100%;
-                padding: 0 10px;
-                font-size: 14px;
-                border-radius: 8px;
-            }
-
-            &__menu {
-                width: 100%;
-                min-width: 100%;
-                top: calc(100% + 5px);
-                border-radius: 8px;
-                max-height: 160px;
-                overflow-y: auto;
-                overflow-x: hidden;
-                z-index: 999999;
-            }
-
-            &__item {
-                min-height: 38px;
-                padding: 8px;
-                font-size: 14px;
-            }
-
-        }
-    }
-
-    .crm-contact-card__actions button,
-    .crm-contact-card__actions .service-status-dropdown {
-        width: 100%;
     }
 }

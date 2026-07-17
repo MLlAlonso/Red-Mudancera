@@ -70,6 +70,7 @@ class EmpresaCRMService
                 "empresa" => $empresa->empresa,
                 "plan" => $empresa->plan,
                 "slug" => $empresa->slug,
+                "logo_url" => $empresa->logo_url,
             ],
 
             "stats" => $stats,

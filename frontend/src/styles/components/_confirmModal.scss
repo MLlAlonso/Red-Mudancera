@@ -1,0 +1,114 @@
+@use "../utils/variables" as *;
+
+.confirm-modal {
+    width: 420px;
+    max-width: 90vw;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.confirm-modal__icon {
+    width: 70px;
+    height: 70px;
+    margin: auto;
+    background: $background;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.confirm-modal__icon img {
+    width: 34px;
+}
+
+.confirm-modal h2 {
+    margin: 0;
+    color: $title;
+    font-family: $font-title;
+}
+
+.confirm-modal p {
+    margin: 0;
+    color: $text;
+    line-height: 1.6;
+}
+
+.confirm-modal__actions {
+    display: flex;
+    max-width: 400px;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.confirm-modal__cancel {
+    flex: 1;
+    border: none;
+    background: $cards;
+    color: $text;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.confirm-modal__actions button {
+    flex: 1;
+}
+
+@media screen and (max-width: 720px) {
+    .confirm-modal {
+        width: calc(100% - 32px);
+        max-width: 100%;
+        gap: 14px;
+        padding: 18px 16px;
+    }
+
+    .confirm-modal__icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .confirm-modal__icon img {
+        width: 30px;
+    }
+
+    .confirm-modal h2 {
+        font-size: 1.3rem;
+    }
+
+    .confirm-modal p {
+        font-size: 0.95rem;
+    }
+
+    .confirm-modal__actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .confirm-modal {
+        width: 100%;
+        gap: 12px;
+        padding: 16px 12px;
+    }
+
+    .confirm-modal__icon {
+        width: 52px;
+        height: 52px;
+    }
+
+    .confirm-modal__icon img {
+        width: 26px;
+    }
+
+    .confirm-modal h2 {
+        font-size: 1.1rem;
+    }
+
+    .confirm-modal p {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+}

@@ -11,6 +11,7 @@ use App\Modules\Empresa\Controllers\PlanController;
 use App\Modules\Empresa\Controllers\EmpresaRadarConfigController;
 use App\Modules\Empresa\Controllers\TrialController;
 use App\Modules\Empresa\Controllers\EmpresaCRMController;
+use App\Modules\Empresa\Controllers\EmpresaNotaController;
 
 Route::prefix('empresa')->group(function () {
     Route::post('/register', [EmpresaAuthController::class, 'register']);
@@ -23,6 +24,9 @@ Route::prefix('empresa')->group(function () {
         Route::put('/update', [EmpresaController::class, 'update']);
         Route::delete('/delete', [EmpresaController::class, 'destroy']);
         Route::post('/logout', [EmpresaAuthController::class, 'logout']);
+
+        Route::get('/nota', [EmpresaNotaController::class, 'show']);
+        Route::post('/nota', [EmpresaNotaController::class, 'store']);
 
         // RUTAS PARA CRUD DE USUARIOS
         Route::get('/usuarios', [EmpresaController::class, 'usuariosEmpresa']);
@@ -47,7 +51,7 @@ Route::prefix('empresa')->group(function () {
         Route::post('/trial-request', [TrialController::class, 'store']);
 
         //Rutas para CRM
-        Route::get('/crm/dashboard',[EmpresaCRMController::class, 'dashboard'] );
+        Route::get('/crm/dashboard', [EmpresaCRMController::class, 'dashboard']);
     });
 
     Route::get('/empresas/{id}', [EmpresaPublicController::class, 'show']);

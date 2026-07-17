@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import CRMContactCard from "@/components/cards/CRMContactCard";
+import MessageModal from "@/components/modals/MessageModal";
 import { getCRMDashboard } from "@/services/crmAuth";
 import { getCRMToken } from "@/utils/crmAuth";
 import "@/styles/crm/_crmDashboard.scss";
@@ -12,6 +13,7 @@ export default function CRMDashboardPage() {
   const [dashboard, setDashboard] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(now.getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(now.getFullYear());
+  const [messageModal, setMessageModal] = useState({ open: false, title: "", message: "", });
 
   /*
   |--------------------------------------------------------------------------
@@ -43,6 +45,10 @@ export default function CRMDashboardPage() {
     }
   }
 
+  function showMessage(title, message) {
+    setMessageModal({ open: true, title, message, });
+  }
+
   /*
   |--------------------------------------------------------------------------
   | CAMBIAR ESTADO
@@ -63,7 +69,7 @@ export default function CRMDashboardPage() {
     );
 
     if (!res.ok) {
-      alert("No se pudo actualizar.");
+      showMessage("Error", "No se pudo actualizar el estado del contacto.");
       return;
     }
 
@@ -100,7 +106,7 @@ export default function CRMDashboardPage() {
     );
 
     if (!res.ok) {
-      alert("No se pudo ocultar.");
+      showMessage("Error", "No fue posible ocultar el contacto.");
       return;
     }
 
@@ -130,7 +136,7 @@ export default function CRMDashboardPage() {
 
     const json = await res.json();
     if (!res.ok) {
-      alert(json.message);
+      showMessage("No se pudo completar la acción", json.message);
       return;
     }
 
@@ -269,34 +275,24 @@ export default function CRMDashboardPage() {
           <h2> Recibe clientes directamente </h2>
 
           <p>
-            Comparte este formulario con tus clientes mediante WhatsApp,
-            Facebook, Instagram o desde tu sitio web.
-            Los contactos llegarán directamente a tu CRM sin pasar por el Marketplace.
+            Comparte este formulario con tus clientes, los contactos llegarán directamente a tu CRM sin pasar por el Marketplace.
           </p>
 
           <div className="crm-private-link__preview">
-            <img src="/logo/logo.png" alt="Mudanza Fácil" />
+            <img src={dashboard.empresa.logo_url || "/images/hero_1.png"} alt={dashboard.empresa.empresa} />
 
             <div>
               <strong>
-                Mudanza Fácil
+                {dashboard.empresa.empresa}
               </strong>
 
               <span>
                 {privateLink}
               </span>
             </div>
-
           </div>
 
           <input readOnly value={privateLink} onClick={(e) => e.target.select()} />
-
-          <p className="crm-private-link__slug">
-            URL personalizada:
-            <strong>
-              {dashboard.empresa.slug}
-            </strong>
-          </p>
         </div>
 
         <div className="crm-private-link__actions">
@@ -304,26 +300,11 @@ export default function CRMDashboardPage() {
             Abrir formulario
           </button>
 
-          <button
-            onClick={() => {
-              navigator.clipboard.writeText(privateLink);
-              alert("Enlace copiado.");
-            }}
-          >
+          <button onClick={() => {
+            navigator.clipboard.writeText(privateLink);
+            showMessage("Enlace copiado", "El enlace privado fue copiado al portapapeles.");
+          }} >
             Copiar enlace
-          </button>
-
-          <button
-            onClick={() =>
-              window.open(
-                `https://wa.me/?text=${encodeURIComponent(
-                  `Solicita tu mudanza aquí:\n${privateLink}`
-                )}`,
-                "_blank"
-              )
-            }
-          >
-            Compartir WhatsApp
           </button>
 
           {
@@ -403,6 +384,17 @@ export default function CRMDashboardPage() {
 
         </div>
       </section>
+
+      {
+        messageModal.open && (
+          <MessageModal
+            title={messageModal.title}
+            message={messageModal.message}
+            onClose={() => setMessageModal({ open: false, title: "", message: "", })
+            }
+          />
+        )
+      }
     </div>
   );
 }

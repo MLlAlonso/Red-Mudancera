@@ -12,6 +12,7 @@ use App\Modules\Servicio\Models\Servicio;
 use App\Modules\Notificacion\Models\Notificacion;
 use App\Modules\SolicitudMudanza\Models\LeadCompra;
 use App\Modules\SolicitudMudanza\Models\SolicitudMudanza;
+use App\Modules\Empresa\Models\EmpresaNota;
 
 class Empresa extends Authenticatable
 {
@@ -127,7 +128,8 @@ class Empresa extends Authenticatable
     public function leadsPrivados()
     {
         return $this->hasMany(
-            \App\Modules\SolicitudMudanza\Models\SolicitudMudanza::class, 'empresa_privada_id'
+            \App\Modules\SolicitudMudanza\Models\SolicitudMudanza::class,
+            'empresa_privada_id'
         );
     }
 
@@ -148,5 +150,10 @@ class Empresa extends Authenticatable
                 $empresa->slug = $slug;
             }
         });
+    }
+
+    public function nota()
+    {
+        return $this->hasOne(EmpresaNota::class);
     }
 }

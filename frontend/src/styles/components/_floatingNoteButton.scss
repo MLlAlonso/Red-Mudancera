@@ -1,0 +1,20 @@
+.floating-note-button {
+    position: fixed;
+    right: 10px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 26px;
+    background: rgba(0,158,102,0.8);
+    color: white;
+    box-shadow: 0 10px 25px rgba(0,0,0,.25);
+    transition: .25s;
+    z-index: 200;
+}
+
+.floating-note-button:hover{
+    transform: translateY(-3px);
+    background: rgba(0,158,102,0.9);
+}

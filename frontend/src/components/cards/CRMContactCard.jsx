@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Button_cta from "@/components/common/Button_cta";
+import ConfirmModal from "@/components/modals/ConfirmModal";
 import ServiceStatusDropdown from "@/components/common/ServiceStatusDropdown";
 
 import "@/styles/crm/_crmContactCard.scss";
@@ -17,6 +18,8 @@ export default function CRMContactCard({
 }) {
     const [estadoLocal, setEstadoLocal] = useState(estado);
     const [loading, setLoading] = useState(false);
+    const [confirmDelete, setConfirmDelete] = useState(false);
+    const [confirmSell, setConfirmSell] = useState(false);
 
     useEffect(() => {
         setEstadoLocal(estado);
@@ -62,9 +65,10 @@ export default function CRMContactCard({
     };
 
     return (
-        <article className="crm-contact-card">
-            <div className="crm-contact-card__content">
-                <div className="crm-contact-card__title">
+        <article className={`crm-contact-card crm-contact-card--${tipoLead}`} >
+
+            <div className="crm-contact-card__header">
+                <div className="crm-contact-card__headerLeft">
                     {
                         mostrarNuevo && (
                             <span className="crm-contact-card__new">
@@ -73,145 +77,158 @@ export default function CRMContactCard({
                         )
                     }
 
-                    {
-                        tipoLead === "privado" && (
-                            <span className="crm-contact-card__badge crm-contact-card__badge--private">
-                                Lead privado
-                            </span>
-                        )
-                    }
+                    <h2>{nombre}</h2>
 
-                    {
-                        tipoLead === "comprado" && (
-                            <span className="crm-contact-card__badge crm-contact-card__badge--marketplace">
-                                Marketplace
-                            </span>
-                        )
-                    }
+                    <div className="crm-contact-card__source">
+                        <img src={tipoLead === "privado" ? "/icons/doc-verificado.png" : "/icons/icon-192.png"} />
 
-                    <h2>
-                        {nombre}
-                    </h2>
-                </div>
-
-                <div className="crm-contact-card__route">
-                    <strong>{origen}</strong>
-                    <span>→</span>
-                    <strong>{destino}</strong>
-                </div>
-
-                <div className="crm-contact-card__details">
-                    <div>
-                        <img src="/icons/telefono.png" alt="" />
-                        <span>{telefono}</span>
-                    </div>
-
-                    <div>
-                        <img src="/icons/destino.png" alt="" />
-                        <span>{tipoServicio}</span>
-                    </div>
-
-                    <div>
-                        <img src="/icons/truck.png" alt="" />
-                        <span>{tipoMudanza}</span>
-                    </div>
-
-                    <div>
-                        <img src="/icons/calendario.png" alt="" />
                         <span>
-                            {formatFechaRecoleccion(
-                                fechaRecoleccion
-                            )}
+                            {
+                                tipoLead === "privado" ? "Formulario privado" : "Marketplace"
+                            }
                         </span>
                     </div>
+                </div>
 
-                    <div>
-                        <img src="/icons/reloj.png" alt="" />
-                        <span>
-                            Publicado {fechaPublicacion}
-                        </span>
-                    </div>
+                <button className="crm-contact-card__deleteIcon" onClick={() => setConfirmDelete(true)} disabled={loading} >
+                    <img src="/icons/delete.png" />
+                </button>
+            </div>
+
+            <div className="crm-contact-card__route">
+                <strong>{origen}</strong>
+                <span>→</span>
+                <strong>{destino}</strong>
+            </div>
+
+            <div className="crm-contact-card__details">
+                <div>
+                    <img src="/icons/telefono.png" alt="" />
+                    <span>{telefono}</span>
+                </div>
+
+                <div>
+                    <img src="/icons/destino.png" alt="" />
+                    <span>{tipoServicio}</span>
+                </div>
+
+                <div>
+                    <img src="/icons/truck.png" alt="" />
+                    <span>{tipoMudanza}</span>
+                </div>
+
+                <div>
+                    <img src="/icons/calendario.png" alt="" />
+                    <span> {formatFechaRecoleccion(fechaRecoleccion)} </span>
+                </div>
+
+                <div>
+                    <img src="/icons/reloj.png" alt="" />
+                    <span> Publicado {fechaPublicacion} </span>
                 </div>
             </div>
 
-            <div className="crm-contact-card__actions">
-                <ServiceStatusDropdown
-                    estado={estadoLocal}
-                    options={["activo", "asignado", "en_proceso", "finalizado", "sin_respuesta", "perdido",]}
-                    labels={{
-                        activo: "Pendiente",
-                        sin_respuesta: "Sin respuesta",
-                        asignado: "En proceso",
-                        en_proceso: "Cotizado",
-                        finalizado: "Vendido",
-                        perdido: "Perdido",
-                    }}
-                    onSelect={(nuevoEstado) => {
-                        setEstadoLocal(nuevoEstado);
-                        setLoading(true);
-                        onChangeEstado(id, nuevoEstado);
-                        setLoading(false);
-                    }}
-                    disabled={loading}
-                />
+            <div className="crm-contact-card__footer">
+                <div className="crm-contact-card__buttons">
+                    <div className="crm-contact-card__status">
+                        <ServiceStatusDropdown
+                            estado={estadoLocal}
+                            options={[
+                                "activo",
+                                "asignado",
+                                "en_proceso",
+                                "finalizado",
+                                "sin_respuesta",
+                                "perdido",
+                            ]}
+                            labels={{
+                                activo: "Pendiente",
+                                sin_respuesta: "Sin respuesta",
+                                asignado: "En proceso",
+                                en_proceso: "Cotizado",
+                                finalizado: "Vendido",
+                                perdido: "Perdido",
+                            }}
+                            onSelect={(nuevoEstado) => {
+                                setEstadoLocal(nuevoEstado);
+                                setLoading(true);
+                                onChangeEstado(id, nuevoEstado);
+                                setLoading(false);
+                            }}
+                            disabled={loading}
+                        />
+                    </div>
 
-                <Button_cta
-                    value="Contactar"
-                    icon="/icons/whatsapp.png"
-                    iconAlt="WhatsApp"
-                    onClick={() => window.open(`https://wa.me/52${telefono}`, "_blank")}
-                />
+                    <Button_cta
+                        value="Contactar"
+                        icon="/icons/whatsapp.png"
+                        iconAlt="WhatsApp"
+                        onClick={() => window.open(`https://wa.me/52${telefono}`, "_blank")
+                        }
+                    />
 
-                <button
-                    className="crm-contact-card__delete"
-                    onClick={() => {
-                        if (
-                            confirm("¿Ocultar este contacto permanentemente?")
-                        ) {
+
+                </div>
+
+                <div className="crm-contact-card__secondaryActions">
+                    <button
+                        className={`crm-contact-card__detail ${tipoLead !== "privado" ||
+                            (estadoLocal !== "activo" && estadoLocal !== "sin_respuesta")
+                            ? "crm-contact-card__detail--full" : ""
+                            }`}
+                    >
+                        Ver detalle
+                    </button>
+
+                    {
+                        tipoLead === "privado" && (estadoLocal === "activo" || estadoLocal === "sin_respuesta") && (
+                            <button
+                                className="crm-contact-card__sell"
+                                onClick={() => setConfirmSell(true)}
+                                disabled={loading}
+                            >
+                                Poner a la venta
+                            </button>
+                        )
+                    }
+                </div>
+            </div>
+
+            {
+                confirmDelete && (
+
+                    <ConfirmModal
+                        title="Ocultar contacto"
+                        message="El contacto dejará de mostrarse en tu CRM. Esta acción no elimina el registro."
+                        confirmText="Ocultar"
+                        danger
+                        onClose={() => setConfirmDelete(false)}
+                        onConfirm={() => {
+                            setConfirmDelete(false);
                             setLoading(true);
                             onDelete(id);
                             setLoading(false);
-                        }
-                    }}
-                    disabled={loading}
-                >
+                        }}
+                    />
+                )
+            }
 
-                    <img src="/icons/delete.png" alt="" />
-                    Descartar
-                </button>
-
-                {
-                    tipoLead === "privado" &&
-                    (
-                        estadoLocal === "activo" ||
-                        estadoLocal === "sin_respuesta"
-                    ) &&
-                    (
-                        <button
-                            className="crm-contact-card__sell"
-                            onClick={() => {
-                                if (
-                                    confirm(
-                                        "¿Deseas poner este contacto a la venta? Perderás la propiedad del contacto."
-                                    )
-                                ) {
-                                    setLoading(true);
-                                    onSell(id);
-                                    setLoading(false);
-                                }
-                            }}
-                            disabled={loading}
-                        >
-                            <img src="/icons/ofrezco.png" alt="" />
-                            Poner a la venta
-                        </button>
-                    )
-                }
-
-                <button className="crm-contact-card__detail" >
-                    Ver detalle
-                </button>
-            </div>
+            {
+                confirmSell && (
+                    <ConfirmModal
+                        title="Poner contacto a la venta"
+                        message="Perderás la propiedad de este contacto y volverá a estar disponible en el Marketplace."
+                        confirmText="Poner a la venta"
+                        onClose={() => setConfirmSell(false)}
+                        onConfirm={() => {
+                            setConfirmSell(false);
+                            setLoading(true);
+                            onSell(id);
+                            setLoading(false);
+                        }}
+                    />
+                )
+            }
         </article>
     );
 }

@@ -1,0 +1,286 @@
+@use "../utils/variables" as *;
+
+.notes-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba($primary, .45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    z-index: 9999;
+    backdrop-filter: blur(6px);
+    animation: fadeIn .25s ease;
+}
+
+.notes-modal {
+    width: 600px;
+    max-width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, .12);
+    animation: scaleIn .25s ease;
+}
+
+/* ===========================
+   Header
+=========================== */
+.notes-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 24px 30px;
+    border-bottom: 1px solid rgba($secondary, .25);
+}
+
+.notes-logo {
+    width: 80px;
+    height: 58px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.notes-header h2 {
+    margin: 0;
+    color: $title;
+    font-family: $font-title;
+    font-size: 1.45rem;
+    font-weight: 800;
+}
+
+.notes-header p {
+    margin-top: 4px;
+    color: $text-muted;
+    font-family: $font-text;
+    font-size: .9rem;
+    line-height: 1.5;
+}
+
+/* ===========================
+   Editor
+=========================== */
+.notes-editor {
+    padding: 26px 30px;
+    background: white;
+}
+
+.notes-editor textarea {
+    width: 100%;
+    height: 360px;
+    resize: none;
+    padding: 20px;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    background: $background;
+    color: $text;
+    font-family: $font-text;
+    font-size: .95rem;
+    line-height: 1.8;
+    outline: none;
+    transition: .25s;
+}
+
+.notes-editor textarea::placeholder {
+    color: $text-muted;
+}
+
+.notes-editor textarea:focus {
+    background: white;
+    border-color: rgba($primary, .25);
+    box-shadow:
+        0 0 0 4px rgba($primary, .08);
+}
+
+/* ===========================
+   Footer
+=========================== */
+.notes-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 18px 30px;
+    border-top: 1px solid rgba($secondary, .25);
+    background: #FCFCFC;
+}
+
+.notes-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.contador {
+    color: $text-muted;
+    font-size: .82rem;
+    font-family: $font-text;
+}
+
+.notes-status {
+    min-height: 20px;
+    color: $success;
+    font-size: .84rem;
+    font-weight: 600;
+    font-family: $font-text;
+}
+
+.last-save {
+    color: $secondary;
+    font-size: .8rem;
+    font-family: $font-text;
+}
+
+/* ===========================
+   Buttons
+=========================== */
+.notes-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.notes-actions button {
+    min-width: 120px;
+    padding: 11px 20px;
+    border: none;
+    border-radius: 10px;
+    font-family: $font-text;
+    font-size: .92rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.cancel {
+    background: $cards;
+    color: $text;
+}
+
+.cancel:hover {
+    background: darken($cards, 5%);
+}
+
+.save {
+    background: $primary;
+    color: white;
+}
+
+.save:hover {
+    background: $primary-hover;
+    transform: translateY(-1px);
+}
+
+.save:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ===========================
+   Animations
+=========================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ===========================
+   Tablet
+=========================== */
+@media (max-width: 768px) {
+    .notes-modal {
+        width: 100%;
+        max-height: 92vh;
+    }
+
+    .notes-header,
+    .notes-editor,
+    .notes-footer {
+        padding-left: 22px;
+        padding-right: 22px;
+    }
+
+    .notes-editor textarea {
+        height: 300px;
+    }
+
+    .notes-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .notes-info {
+        order: 2;
+    }
+
+    .notes-actions {
+        width: 100%;
+        order: 1;
+    }
+
+    .notes-actions button {
+        flex: 1;
+    }
+}
+
+/* ===========================
+   Mobile
+=========================== */
+@media (max-width: 480px) {
+    .notes-overlay {
+        padding: 12px;
+    }
+
+    .notes-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .notes-logo {
+        width: 64px;
+        height: 64px;
+    }
+
+    .notes-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .notes-header p {
+        font-size: .85rem;
+    }
+
+    .notes-editor {
+        padding: 18px;
+    }
+
+    .notes-editor textarea {
+        height: 230px;
+        padding: 16px;
+        font-size: .9rem;
+    }
+
+    .notes-footer {
+        padding: 18px;
+    }
+}
