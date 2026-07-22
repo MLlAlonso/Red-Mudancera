@@ -489,12 +489,6 @@
     height: 50px;
     background: $azul_002 !important;
     border-color: $azul_002 !important;
-
-    &:hover {
-      background: darken($azul_002, 8%) !important;
-      border-color: darken($azul_002, 8%) !important;
-    }
-
   }
 }
 

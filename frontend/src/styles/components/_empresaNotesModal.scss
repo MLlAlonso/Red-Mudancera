@@ -160,10 +160,6 @@
     color: $text;
 }
 
-.cancel:hover {
-    background: darken($cards, 5%);
-}
-
 .save {
     background: $primary;
     color: white;

@@ -13,8 +13,6 @@ import ConfirmFinalizarServicioModal from "@/components/modals/ConfirmFinalizarS
 import FinalizarServicioGananciaModal from "@/components/modals/FinalizarServicioGananciaModal";
 import ReporteMensualModal from "@/components/modals/ReporteMensualModal";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
-import FloatingNoteButton from "@/components/common/FloatingNoteButton";
-import EmpresaNotesModal from "@/components/modals/EmpresaNotesModal";
 import { useSearch } from "@/store/searchContext";
 import ShareClienteReviewLinkModal from "@/components/modals/ShareClienteReviewLinkModal";
 
@@ -31,7 +29,6 @@ export default function MisServiciosEmpresa() {
   const { search, city } = useSearch(); const [empresa, setEmpresa] = useState(null);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewLink, setReviewLink] = useState("");
-  const [showNotes, setShowNotes] = useState(false);
   const now = new Date();
 
   const [selectedMonth, setSelectedMonth] = useState(now.getMonth() + 1);
@@ -290,7 +287,6 @@ export default function MisServiciosEmpresa() {
 
         {/* BOTÓN CREAR */}
         <Button_crud value="+" onClick={() => (window.location.href = "/empresa/cargas")} />
-        <FloatingNoteButton onClick={() => setShowNotes(true)} />
 
         <div className="empresa-dashboard__cards">
           {loading &&
@@ -321,6 +317,7 @@ export default function MisServiciosEmpresa() {
                     tipoVivienda={s.tipo_vivienda}
                     empresaNombre={empresa?.empresa}
                     showDelete={true}
+                    showNotes={true}
                     onDelete={() => {
                       setSelectedLeadId(s.id);
                       setShowDeleteModal(true);
@@ -377,24 +374,15 @@ export default function MisServiciosEmpresa() {
       {/* CONFIRMAR FINALIZAR */}
       <ConfirmFinalizarServicioModal
         open={showConfirmFinalizar}
-        onCancel={() => {
-          setShowConfirmFinalizar(false);
-          setSelectedService(null);
-        }}
-        onConfirm={() => {
-          setShowConfirmFinalizar(false);
-          setShowGananciaModal(true);
-        }}
+        onCancel={() => { setShowConfirmFinalizar(false); setSelectedService(null); }}
+        onConfirm={() => { setShowConfirmFinalizar(false); setShowGananciaModal(true); }}
       />
 
       {/* GANANCIA */}
       <FinalizarServicioGananciaModal
         open={showGananciaModal}
         servicio={selectedService}
-        onClose={() => {
-          setShowGananciaModal(false);
-          setSelectedService(null);
-        }}
+        onClose={() => { setShowGananciaModal(false); setSelectedService(null); }}
         onSuccess={async (updated) => {
           setServices((prev) =>
             prev.map((s) =>
@@ -434,10 +422,7 @@ export default function MisServiciosEmpresa() {
       <ShareClienteReviewLinkModal
         open={showReviewModal}
         link={reviewLink}
-        onClose={() => {
-          setShowReviewModal(false);
-          setReviewLink("");
-        }}
+        onClose={() => { setShowReviewModal(false); setReviewLink(""); }}
       />
 
       <ConfirmDeleteModal
@@ -446,10 +431,7 @@ export default function MisServiciosEmpresa() {
         message="Esta solicitud dejará de mostrarse en Mi Actividad."
         confirmText="Eliminar"
         cancelText="Cancelar"
-        onCancel={() => {
-          setShowDeleteModal(false);
-          setSelectedLeadId(null);
-        }}
+        onCancel={() => { setShowDeleteModal(false); setSelectedLeadId(null); }}
         onConfirm={ocultarLead}
       />
 
@@ -459,14 +441,9 @@ export default function MisServiciosEmpresa() {
         message="El servicio será marcado como finalizado y dejará de mostrarse en Mi Actividad."
         confirmText="Finalizar"
         cancelText="Cancelar"
-        onCancel={() => {
-          setShowDeleteServiceModal(false);
-          setSelectedServiceId(null);
-        }}
+        onCancel={() => { setShowDeleteServiceModal(false); setSelectedServiceId(null); }}
         onConfirm={ocultarServicio}
       />
-
-      <EmpresaNotesModal open={showNotes} onClose={() => setShowNotes(false)} />
 
       <Footer />
     </>

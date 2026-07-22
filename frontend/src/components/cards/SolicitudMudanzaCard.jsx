@@ -5,34 +5,25 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ServiceStatusDropdown from "@/components/common/ServiceStatusDropdown";
 import ComprarLeadModal from "@/components/modals/ComprarLeadModal";
+import EmpresaNotesModal from "@/components/modals/EmpresaNotesModal";
 import Button_cta from "@/components/common/Button_cta";
 import { openLeadWhatsappMessage } from "@/utils/whatsapp";
 
 export default function SolicitudMudanzaCard({
-  id,
-  origen = "",
-  destino = "",
-  fechaRecoleccion = "",
-  distanciaKm = null,
-  tipoMudanza = "",
-  inventario = "",
-  fecha = "",
-  telefono = "",
-  estado = "activo",
-  showContact = true,
-  onChangeEstado = null,
-  isLead = false,
-  nombreCliente = "",
-  tipoVivienda = "",
-  empresaNombre = "",
-  empresaId = null,
-  showDelete = false,
+  id, origen = "", destino = "",
+  fechaRecoleccion = "", distanciaKm = null, tipoMudanza = "",
+  inventario = "", fecha = "", telefono = "",
+  estado = "activo", showContact = true, onChangeEstado = null,
+  isLead = false, nombreCliente = "", tipoVivienda = "",
+  empresaNombre = "", empresaId = null, showDelete = false,
   onDelete = null,
+  showNotes = false,
 }) {
 
   const router = useRouter();
   const [estadoLocal, setEstadoLocal] = useState(estado);
   const [showModal, setShowModal] = useState(false);
+  const [showNotesModal, setShowNotesModal] = useState(false);
 
   useEffect(() => {
     setEstadoLocal(estado);
@@ -63,6 +54,18 @@ export default function SolicitudMudanzaCard({
             <img src="/icons/delete.png" alt="Eliminar" />
           </button>
         )}
+
+
+
+        {showNotes && (
+          <button className="lead-notes-btn" onClick={() => setShowNotesModal(true)} title="Notas" >
+            <p>📝</p>
+          </button>
+        )}
+
+
+
+
 
         <div className="service-card__title">
           <span className="service-card__tag">
@@ -106,7 +109,7 @@ export default function SolicitudMudanzaCard({
           {onChangeEstado ? (
             <ServiceStatusDropdown
               estado={estadoLocal}
-              options={[ "activo", "asignado", "en_proceso", "finalizado", "sin_respuesta", "perdido",]}
+              options={["activo", "asignado", "en_proceso", "finalizado", "sin_respuesta", "perdido",]}
               labels={{
                 activo: "Pendiente",
                 sin_respuesta: "Sin respuesta",
@@ -174,6 +177,12 @@ export default function SolicitudMudanzaCard({
           onSuccess={() => window.location.reload()}
         />
       )}
+
+      <EmpresaNotesModal
+        open={showNotesModal}
+        leadId={id}
+        onClose={() => setShowNotesModal(false)}
+      />
     </>
   );
 }

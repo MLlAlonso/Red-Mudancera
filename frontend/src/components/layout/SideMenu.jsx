@@ -9,9 +9,7 @@ export default function SideMenu({ open }) {
   const [count, setCount] = useState(0);
   const [tokens, setTokens] = useState(null);
   const [plan, setPlan] = useState(null);
-
-  const getToken = () =>
-    document.cookie.match(/token_empresa=([^;]+)/)?.[1];
+  const getToken = () => document.cookie.match(/token_empresa=([^;]+)/)?.[1];
 
   // ===============================
   // OBTENER DATOS EMPRESA
@@ -160,34 +158,14 @@ export default function SideMenu({ open }) {
           </Link>
         </li>
 
-        {/* 
-         <li>
-          <Link href="/empresa/usuarios">
-            <div className="side-item">
-              <img src="/icons/team.png" />
-              <span>Mi organización</span>
-            </div>
-          </Link>
-        </li>
- 
         <li>
-          <Link href="/empresa/ayuda">
+          <Link href="/empresa/tutoriales">
             <div className="side-item">
               <img src="/icons/help.png" />
-              <span>Ayuda y soporte</span>
+              <span>Tutoriales</span>
             </div>
           </Link>
         </li>
-
-        <li>
-          <Link href="/empresa/configuracion">
-            <div className="side-item">
-              <img src="/icons/ajustes.png" />
-              <span>Ajustes</span>
-            </div>
-          </Link>
-        </li>
- */}
 
         <li>
           <Link href="/empresa/logout">
@@ -197,7 +175,7 @@ export default function SideMenu({ open }) {
             </div>
           </Link>
         </li>
-
+        
       </ul>
 
     </motion.div>

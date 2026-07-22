@@ -12,6 +12,7 @@ use App\Modules\Empresa\Controllers\EmpresaRadarConfigController;
 use App\Modules\Empresa\Controllers\TrialController;
 use App\Modules\Empresa\Controllers\EmpresaCRMController;
 use App\Modules\Empresa\Controllers\EmpresaNotaController;
+use App\Modules\Tutorial\Controllers\TutorialController;
 
 Route::prefix('empresa')->group(function () {
     Route::post('/register', [EmpresaAuthController::class, 'register']);
@@ -40,6 +41,10 @@ Route::prefix('empresa')->group(function () {
         Route::get('/feed', [EmpresaFeedController::class, 'index']);
 
         Route::get('/referidos/stats', [EmpresaController::class, 'referidosStats']);
+
+        //Rutas para tutoriales
+        Route::get('/tutoriales', [TutorialController::class, 'index']);
+        Route::post('/tutoriales/{tutorial}/visto', [TutorialController::class, 'marcarComoVisto']);
 
         /* Route::post('/creditos/comprar', [CreditosController::class, 'comprar'])
             ->middleware('plan.permission:buy_credits'); */

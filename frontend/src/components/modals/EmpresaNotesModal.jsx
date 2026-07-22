@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getEmpresaNota, saveEmpresaNota, } from "@/services/empresaNotas";
+import { getLeadNota, saveLeadNota, } from "@/services/leadNotas";
 import "@/styles/components/_empresaNotesModal.scss";
 
-export default function EmpresaNotesModal({ open, onClose, }) {
+export default function EmpresaNotesModal({ open, onClose, leadId, }) {
     const [contenido, setContenido] = useState("");
     const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
@@ -54,7 +54,7 @@ export default function EmpresaNotesModal({ open, onClose, }) {
     const cargarNota = async () => {
         try {
             setLoading(true);
-            const response = await getEmpresaNota();
+            const response = await getLeadNota(leadId);
             setContenido(response.contenido ?? "");
             setDirty(false);
             setSaved(false);
@@ -69,7 +69,7 @@ export default function EmpresaNotesModal({ open, onClose, }) {
         if (saving) return;
         try {
             setSaving(true);
-            await saveEmpresaNota(contenido);
+            await saveLeadNota(leadId, contenido);
             setDirty(false);
             setSaved(true);
             setLastSaved(new Date());
@@ -101,7 +101,7 @@ export default function EmpresaNotesModal({ open, onClose, }) {
                     <div>
                         <h2>Bloc de notas</h2>
                         <p>
-                            Guarda recordatorios rápidos para tu empresa.
+                            Guarda recordatorios rápidos para este contacto.
                         </p>
                     </div>
                 </div>

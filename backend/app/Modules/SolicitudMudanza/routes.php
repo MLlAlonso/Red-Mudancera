@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Modules\SolicitudMudanza\Controllers\SolicitudMudanzaController;
+use App\Modules\SolicitudMudanza\Controllers\LeadNotaController;
 use App\Modules\SolicitudMudanza\Controllers\LeadOperacionController;
+use App\Modules\SolicitudMudanza\Controllers\SolicitudMudanzaController;
 
 Route::prefix('solicitudes-mudanza')->group(function () {
     Route::post('/', [SolicitudMudanzaController::class, 'store']);
@@ -17,7 +18,10 @@ Route::prefix('solicitudes-mudanza')->group(function () {
     Route::post('/solicitar-seguro', [SolicitudMudanzaController::class, 'solicitarSeguro']);
     Route::post('/solicitar-seguro-externo', [SolicitudMudanzaController::class, 'solicitarSeguroExterno']);
     Route::delete('/reportar/{token}', [SolicitudMudanzaController::class, 'reportar']);
-    
+
     Route::patch('/leads/{id}/ocultar', [LeadOperacionController::class, 'ocultar'])->middleware('auth:empresa');
     Route::delete('/leads/{id}/poner-en-venta',  [LeadOperacionController::class, 'ponerEnVenta'])->middleware('auth:empresa');
+
+    Route::get( '/leads/{id}/nota', [LeadNotaController::class, 'show'] );
+    Route::post( '/leads/{id}/nota', [LeadNotaController::class, 'store'] );
 });

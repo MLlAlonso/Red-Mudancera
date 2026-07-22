@@ -13,6 +13,7 @@ use App\Modules\Notificacion\Models\Notificacion;
 use App\Modules\SolicitudMudanza\Models\LeadCompra;
 use App\Modules\SolicitudMudanza\Models\SolicitudMudanza;
 use App\Modules\Empresa\Models\EmpresaNota;
+use App\Modules\Tutorial\Models\EmpresaTutorialVisto;
 
 class Empresa extends Authenticatable
 {
@@ -155,5 +156,10 @@ class Empresa extends Authenticatable
     public function nota()
     {
         return $this->hasOne(EmpresaNota::class);
+    }
+
+    public function tutorialesVistos()
+    {
+        return $this->hasMany(EmpresaTutorialVisto::class);
     }
 }

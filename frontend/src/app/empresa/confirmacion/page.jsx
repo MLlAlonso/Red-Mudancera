@@ -124,12 +124,6 @@ export default function EmpresaConfirmacion() {
                   Envía la palabra <strong>ACTIVA</strong> al WhatsApp de Mudanza Fácil.
                 </p>
               </div>
-
-              <a href="https://wa.me/524421896433?text=ACTIVA" target="_blank" rel="noopener noreferrer" className="empresa-confirmacion__whatsapp-btn" >
-                <img src="/icons/whatsapp.png" alt="" />
-
-                <span>Enviar ACTIVA por WhatsApp</span>
-              </a>
             </div>
 
             <div className="empresa-confirmacion__info">

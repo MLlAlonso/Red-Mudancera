@@ -248,6 +248,25 @@
         }
     }
 
+    .lead-notes-btn {
+        position: absolute;
+        top: 0;
+        right: 56px;
+        width: 36px;
+        height: 36px;
+        border: none;
+        border-radius: 10px;
+        background: variables.$primary;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        cursor: pointer;
+
+        &:hover {
+            background: variables.$primary-hover;
+        }
+    }
 }
 
 /* =========================

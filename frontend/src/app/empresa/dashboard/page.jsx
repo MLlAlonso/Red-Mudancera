@@ -10,6 +10,9 @@ import SolicitudMudanzaCard from "@/components/cards/SolicitudMudanzaCard";
 import ServiceCardSkeleton from "@/components/skeletons/ServiceCardSkeleton";
 import { useSearch } from "@/store/searchContext";
 import { getEmpresaToken } from "@/utils/auth";
+import { getTutoriales } from "@/services/tutorialAuth";
+import { marcarTutorialComoVisto } from "@/services/tutorialAuth";
+import TutorialVideoModal from "@/components/modals/TutorialVideoModal";
 
 import "@/styles/pages/empresa/_empresaDashboard.scss";
 
@@ -19,6 +22,7 @@ export default function EmpresaDashboard() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("todos");
   const [empresa, setEmpresa] = useState(null);
+  const [tutorialAutomatico, setTutorialAutomatico] = useState(null);
 
   const [filters, setFilters] = useState({
     origen: "",
@@ -61,9 +65,7 @@ export default function EmpresaDashboard() {
   /* =========================
      Helpers
   ========================= */
-  const hasActiveFilters =
-    search.trim() !== "" ||
-    Object.values(filters).some((value) => value !== "");
+  const hasActiveFilters = search.trim() !== "" || Object.values(filters).some((value) => value !== "");
 
   const clearAllFilters = () => {
     setFilters({
@@ -84,6 +86,7 @@ export default function EmpresaDashboard() {
     Fetch solicitudes
  ========================= */
   useEffect(() => {
+    obtenerTutorialAutomatico();
     const token = getEmpresaToken();
     if (!token) return;
 
@@ -110,6 +113,37 @@ export default function EmpresaDashboard() {
       })
       .finally(() => setLoading(false));
   }, []);
+
+  async function obtenerTutorialAutomatico() {
+    try {
+      const tutoriales = await getTutoriales();
+
+      const tutorial = tutoriales.find(
+        (item) => item.mostrar_automaticamente
+      );
+
+      if (tutorial) {
+        setTutorialAutomatico(tutorial);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function confirmarTutorial() {
+    try {
+      await marcarTutorialComoVisto(
+        tutorialAutomatico.id
+      );
+    } catch (error) {
+      console.error(error);
+    }
+    setTutorialAutomatico(null);
+  }
+
+  function cerrarTutorial() {
+    setTutorialAutomatico(null);
+  }
 
   const visibleServicios = services
     .filter((s) => {
@@ -162,58 +196,12 @@ export default function EmpresaDashboard() {
         ========================= */}
         <div className="empresa-dashboard__controls">
           <ServiceFilters onChange={setFilter} />
-
-          {/* Botón filtros avanzados / borrar */}
-          {/*           <button
-            className={`btn-advanced-filters ${hasActiveFilters ? "active" : ""
-              }`}
-            onClick={() => {
-              if (hasActiveFilters) {
-                clearAllFilters();
-              } else {
-                setShowFilters(true);
-              }
-            }}
-            aria-label={
-              hasActiveFilters ? "Borrar filtros" : "Filtros avanzados"
-            }
-          >
-            <img
-              src={
-                hasActiveFilters
-                  ? "/icons/borrar.png"
-                  : "/icons/filtrar.png"
-              }
-              alt={
-                hasActiveFilters
-                  ? "Borrar filtros"
-                  : "Filtros avanzados"
-              }
-            />
-          </button> */}
         </div>
 
         {/* =========================
             Floating CRUD button
         ========================= */}
-        <Button_crud
-          value="+"
-          onClick={() => (window.location.href = "/empresa/cargas")}
-        />
-
-        {/* =========================
-            Advanced filters overlay
-        ========================= */}
-        {/* {showFilters && (
-          <div className="filters-overlay">
-            <ServiceAdvancedFilters
-              values={filters}
-              onChange={setFilters}
-              onApply={() => setShowFilters(false)}
-              onClose={() => setShowFilters(false)}
-            />
-          </div>
-        )} */}
+        <Button_crud value="+" onClick={() => (window.location.href = "/empresa/cargas")} />
 
         {/* =========================
             Cards
@@ -275,9 +263,14 @@ export default function EmpresaDashboard() {
 
         </div>
 
+        <TutorialVideoModal
+          tutorial={tutorialAutomatico}
+          automatico={true}
+          onClose={cerrarTutorial}
+          onConfirm={confirmarTutorial}
+        />
 
       </main>
-
       <Footer />
     </>
   );

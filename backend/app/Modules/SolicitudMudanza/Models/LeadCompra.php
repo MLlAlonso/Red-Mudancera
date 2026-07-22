@@ -15,6 +15,7 @@ class LeadCompra extends Model
         'estado_operacion',
         'oculto',
         'ganancia',
+        'nota',
         'finalizado_at',
     ];
 
