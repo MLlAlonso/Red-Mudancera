@@ -21,6 +21,7 @@ use App\Modules\Usuario\Models\Usuario;
 use App\Modules\Notificacion\Services\NotificationDispatcher;
 use App\Modules\Notificacion\Events\LoginEmpresaEvent;
 use App\Modules\Notificacion\Models\NotificationPreference;
+use App\Modules\Empresa\Mail\NuevaEmpresaRegistradaMail;
 
 class EmpresaAuthController extends Controller
 {
@@ -156,9 +157,7 @@ class EmpresaAuthController extends Controller
         // ============================================
         // VALIDAR CÓDIGO
         // ============================================
-        $record = EmailVerification::where('email', $request->email)
-            ->where('code', $request->code)
-            ->first();
+        $record = EmailVerification::where('email', $request->email) ->where('code', $request->code) ->first();
 
         if (!$record) {
             return response()->json([
@@ -175,9 +174,7 @@ class EmpresaAuthController extends Controller
         // ============================================
         // OBTENER DATOS TEMPORALES
         // ============================================
-        $data = Cache::get(
-            'empresa_register_' . $request->email
-        );
+        $data = Cache::get( 'empresa_register_' . $request->email );
 
         if (!$data) {
             return response()->json([
@@ -246,11 +243,14 @@ class EmpresaAuthController extends Controller
         Mail::to($empresa->email)->send(new EmpresaWelcomeMail($empresa));
 
         // ============================================
+        // NOTIFICAR NUEVO REGISTRO AL ADMIN
+        // ============================================
+        Mail::to('intermudanza@gmail.com')->send(new NuevaEmpresaRegistradaMail($empresa));
+
+        // ============================================
         // LIMPIAR CACHE + VERIFY
         // ============================================
-        Cache::forget(
-            'empresa_register_' . $request->email
-        );
+        Cache::forget('empresa_register_' . $request->email);
         $record->delete();
 
         // ============================================

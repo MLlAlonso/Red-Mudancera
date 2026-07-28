@@ -84,7 +84,7 @@ export default function CRMContactCard({
 
                         <span>
                             {
-                                tipoLead === "privado" ? "Formulario privado" : "Marketplace"
+                                tipoLead === "privado" ? "Directo" : "Mudanza Facil"
                             }
                         </span>
                     </div>
@@ -103,21 +103,6 @@ export default function CRMContactCard({
 
             <div className="crm-contact-card__details">
                 <div>
-                    <img src="/icons/telefono.png" alt="" />
-                    <span>{telefono}</span>
-                </div>
-
-                <div>
-                    <img src="/icons/destino.png" alt="" />
-                    <span>{tipoServicio}</span>
-                </div>
-
-                <div>
-                    <img src="/icons/truck.png" alt="" />
-                    <span>{tipoMudanza}</span>
-                </div>
-
-                <div>
                     <img src="/icons/calendario.png" alt="" />
                     <span> {formatFechaRecoleccion(fechaRecoleccion)} </span>
                 </div>
@@ -128,8 +113,34 @@ export default function CRMContactCard({
                 </div>
             </div>
 
-            <div className="crm-contact-card__footer">
-                <div className="crm-contact-card__buttons">
+            <div className="crm-contact-card__buttons">                
+                <button
+                    className={`crm-contact-card__detail ${tipoLead !== "privado" ||
+                        (estadoLocal !== "activo" && estadoLocal !== "sin_respuesta")
+                        ? "crm-contact-card__detail--full" : ""
+                        }`}
+                >
+                    Ver detalle
+                </button>
+
+                <button className="crm-contact-card__asign crm-contact-card__asign--icon">
+                    <img src="/icons/default-user.png" alt="Asigar" />
+                    <span>Asignar</span>
+                </button>
+
+                {
+                    tipoLead === "privado" && (estadoLocal === "activo" || estadoLocal === "sin_respuesta") && (
+                        <button
+                            className="crm-contact-card__sell"
+                            onClick={() => setConfirmSell(true)}
+                            disabled={loading}
+                        >
+                            Vender
+                        </button>
+                    )
+                }
+
+                {/* 
                     <div className="crm-contact-card__status">
                         <ServiceStatusDropdown
                             estado={estadoLocal}
@@ -166,33 +177,9 @@ export default function CRMContactCard({
                         onClick={() => window.open(`https://wa.me/52${telefono}`, "_blank")
                         }
                     />
-
-
-                </div>
-
-                <div className="crm-contact-card__secondaryActions">
-                    <button
-                        className={`crm-contact-card__detail ${tipoLead !== "privado" ||
-                            (estadoLocal !== "activo" && estadoLocal !== "sin_respuesta")
-                            ? "crm-contact-card__detail--full" : ""
-                            }`}
-                    >
-                        Ver detalle
-                    </button>
-
-                    {
-                        tipoLead === "privado" && (estadoLocal === "activo" || estadoLocal === "sin_respuesta") && (
-                            <button
-                                className="crm-contact-card__sell"
-                                onClick={() => setConfirmSell(true)}
-                                disabled={loading}
-                            >
-                                Poner a la venta
-                            </button>
-                        )
-                    }
-                </div>
+ */}
             </div>
+
 
             {
                 confirmDelete && (

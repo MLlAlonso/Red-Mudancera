@@ -98,11 +98,19 @@
                     </tr>
 
                     <tr>
-                        <td style="padding:30px;color:#4A5E71; text-align:center; line-height:1.7;">
-                            <p>
-                                Nos da mucho gusto darte la bienvenida. <br>
-                                <strong>Equipo Mudanza Fácil</strong>
+                        <td style="padding:30px;color:#4A5E71;text-align:center;line-height:1.7;">
+                            <p style="margin:0 0 10px;">
+                                Nos da mucho gusto darte la bienvenida.
                             </p>
+
+                            <p style="margin:0 0 10px;font-weight:bold;color:#1F2937;">
+                                Equipo Mudanza Fácil
+                            </p>
+
+                            <a href="https://app.mudanzafacil.com.mx/empresa/login" target="_blank"
+                                style=" display:inline-block; background:#09233e; color:#ffffff; padding:12px 40px; border-radius:8px; text-decoration:none; font-weight:bold; font-size:18px; font-family:Arial, Helvetica, sans-serif; ">
+                                Iniciar sesión
+                            </a>
                         </td>
                     </tr>
 

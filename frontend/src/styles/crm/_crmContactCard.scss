@@ -156,14 +156,6 @@
     /*======================================================
     FOOTER
     ======================================================*/
-    &__footer {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        gap: 0px;
-        align-items: flex-start;
-    }
-
     &__status {
         width: 50%;
         flex-shrink: 0;
@@ -171,23 +163,14 @@
 
     &__buttons {
         display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
         width: 100%;
         flex-direction: row;
-        gap: 10px;
+        gap: 15px;
         flex: 1;
-    }
 
-    &__secondaryActions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        width: 100%;
-    }
-
-    /*======================================================
-    BOTONES
-    ======================================================*/
-    &__buttons {
         .btn_cta {
             width: 100%;
             max-width: none;
@@ -198,46 +181,50 @@
         }
     }
 
+    &__detail,
+    &__asign,
     &__sell {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
-        border: none;
-        border-radius: 12px;
-        background: #EEF7FF;
-        color: #0F5FA8;
-        padding: 12px 18px;
-        cursor: pointer;
-        transition: .25s;
-        font-weight: 600;
-        font-size: 22px;
 
-        &:hover {
-            background: #DCEEFF;
-        }
-    }
+        min-height: 60px;
 
-    &__detail {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: none;
-        background: #F3F5F8;
-        border-radius: 12px;
-        padding: 12px 18px;
-        cursor: pointer;
-        transition: .25s;
-        font-weight: 600;
         color: $title;
+        font-weight: 400;
+        font-size: 22px;
+        
+        cursor: pointer;
+        background: #F3F5F8;
+        padding: 12px 18px;
+        border: none;
+        border-radius: 12px;
+        transition: .25s;
 
         &:hover {
             background: #E6EBF2;
         }
 
-        &--full {
-            grid-column: 1 / -1;
+    }
+
+    &__asign {
+        background: $primary;
+        color: white;
+
+        &:hover {
+            background: $primary-hover;
         }
+
+        img {
+            width: 40px;
+            margin-right: 10px;
+            filter: brightness(0) invert(1);
+        }
+    }
+
+    &__sell {
+        background: rgb(43, 182, 115);
+        color: white;
     }
 
     .service-status {

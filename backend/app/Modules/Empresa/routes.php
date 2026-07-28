@@ -61,4 +61,6 @@ Route::prefix('empresa')->group(function () {
 
     Route::get('/empresas/{id}', [EmpresaPublicController::class, 'show']);
     Route::get('/empresas', [EmpresaPublicController::class, 'index']);
+
+    Route::get('/slug/{slug}', [EmpresaPublicController::class, 'showBySlug']);
 });

@@ -55,17 +55,11 @@ export default function SolicitudMudanzaCard({
           </button>
         )}
 
-
-
         {showNotes && (
           <button className="lead-notes-btn" onClick={() => setShowNotesModal(true)} title="Notas" >
             <p>📝</p>
           </button>
         )}
-
-
-
-
 
         <div className="service-card__title">
           <span className="service-card__tag">
@@ -78,7 +72,7 @@ export default function SolicitudMudanzaCard({
         </div>
 
         <p className="service-card__info" id="solicitud">
-          <strong>Recolección:</strong> {formatFechaRecoleccion(fechaRecoleccion)}
+          <strong>Fecha deseada:</strong> {formatFechaRecoleccion(fechaRecoleccion)} días
         </p>
 
         <p className="service-card__info" id="solicitud">
@@ -178,11 +172,7 @@ export default function SolicitudMudanzaCard({
         />
       )}
 
-      <EmpresaNotesModal
-        open={showNotesModal}
-        leadId={id}
-        onClose={() => setShowNotesModal(false)}
-      />
+      <EmpresaNotesModal open={showNotesModal} leadId={id} onClose={() => setShowNotesModal(false)} />
     </>
   );
 }

@@ -209,13 +209,28 @@ export default function PlanesPage() {
       <Header />
 
       <main className="planes">
-        <h1 className="planes__title">
-          Elige cómo quieres participar en la red
-        </h1>
+        <section className="planes__hero">
+          <h1 className="planes__title">
+            Elige el plan que impulsará tu negocio de mudanzas
+          </h1>
 
-        <p className="planes__subtitle">
-          Empieza gratis o activa tu cuenta para recibir y aprovechar oportunidades reales de mudanza.
-        </p>
+          <p className="planes__subtitle">
+            Durante los primeros <strong>90 días no pagarás membresía</strong> para que
+            pruebes la plataforma y compruebes los resultados antes de comenzar a pagar.
+          </p>
+        </section>
+
+        <section className="planes__info">
+          <h2 className="planes__heading">
+            ¿Por qué existe una membresía mensual?
+          </h2>
+
+          <p className="planes__text">
+            La plataforma trabaja todos los días para generar nuevas oportunidades,
+            mantener la red activa, desarrollar nuevas funciones y ayudarte a conseguir
+            más clientes.
+          </p>
+        </section>
 
         <div className="planes__grid">
           {/* CONECTOR */}
@@ -315,7 +330,7 @@ export default function PlanesPage() {
             <p className="plan_microCopy">Ideal para conocer cómo funciona la red</p>
 
             <p className="price">Gratis</p>
-{/* 
+            {/* 
             <button onClick={() => abrirModal("trial")} id="prueba_btn">
               Solicitar prueba gratuita
             </button>
@@ -331,6 +346,28 @@ export default function PlanesPage() {
             <div className="divider"></div>
           </div>
         </div>
+
+        <section className="planes__confidence">
+          <span className="planes__confidence-badge">
+            🟢 Prueba con confianza
+          </span>
+
+          <h2 className="planes__confidence-title">
+            Queremos que nos elijas por los resultados, no por una promesa.
+          </h2>
+
+          <p className="planes__confidence-text">
+            Creemos que una plataforma debe demostrar su valor antes de cobrar, por
+            eso, durante tus primeros <strong>90 días la membresía es completamente
+              gratuita</strong>, para que conozcas la red, recibas oportunidades y
+            compruebes cómo Mudanza Fácil puede ayudar a hacer crecer tu empresa.
+          </p>
+
+          <p className="planes__confidence-text">
+            Estamos convencidos de que, cuando veas los resultados, entenderás por qué
+            la membresía vale la pena.
+          </p>
+        </section>
       </main>
 
       <Footer />
@@ -424,9 +461,9 @@ export default function PlanesPage() {
             {config.tipo === "anual"
               ? "Pago anual único. La suscripción dura 12 meses desde la fecha de compra."
               : config.recurrente
-                  ? "Pago manual cada mes"
-                  // ? "Se cobrará automáticamente cada mes, puedes cancelar en cualquier momento"
-                  : "Pago manual cada mes"}
+                ? "Pago manual cada mes"
+                // ? "Se cobrará automáticamente cada mes, puedes cancelar en cualquier momento"
+                : "Pago manual cada mes"}
           </p>
         </BaseModal>
       )}

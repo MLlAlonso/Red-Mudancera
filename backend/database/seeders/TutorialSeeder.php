@@ -38,13 +38,23 @@ class TutorialSeeder extends Seeder
                 'dias_maximos' => 7,
             ],
 
+            [
+                'slug' => 'Como-crear-un-acceso-directo-en-tu-celular',
+                'titulo' => 'Como crear un acceso directo en tu celular',
+                'descripcion' => 'Conoce acceder a nuestra plataforma desde la pantalla de inicio de tu celular.',
+                'video_url' => 'https://res.cloudinary.com/dt3jhwxfw/video/upload/v1785134474/Como_crear_un_acceso_directo_en_tu_celular_kilcja.mp4',
+                'thumbnail_url' => '',
+                'duracion' => '00:16',
+                'orden' => 3,
+                'activo' => true,
+                'mostrar' => true,
+                'mostrar_automaticamente' => false,
+                'dias_maximos' => 7,
+            ],
         ];
 
         foreach ($tutoriales as $tutorial) {
-            Tutorial::updateOrCreate(
-                ['slug' => $tutorial['slug']],
-                $tutorial
-            );
+            Tutorial::updateOrCreate(['slug' => $tutorial['slug']], $tutorial);
         }
     }
 }

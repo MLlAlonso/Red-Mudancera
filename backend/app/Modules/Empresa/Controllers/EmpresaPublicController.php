@@ -83,4 +83,26 @@ class EmpresaPublicController extends Controller
             ])
         );
     }
+
+    public function showBySlug($slug)
+    {
+        $empresa = \App\Modules\Empresa\Models\Empresa::where("slug", $slug)->first();
+
+        if (!$empresa) {
+            return response()->json([
+                "message" => "Empresa no encontrada."
+            ], 404);
+        }
+
+        $empresa->append("logo_url");
+
+        return response()->json([
+            "empresa" => [
+                "id" => $empresa->id,
+                "empresa" => $empresa->empresa,
+                "slug" => $empresa->slug,
+                "logo_url" => $empresa->logo_url,
+            ]
+        ]);
+    }
 }

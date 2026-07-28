@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { getEmpresaPublica } from "@/services/empresaPublic";
 import Input from "@/components/common/Input";
 import PlacesInput from "@/components/common/PlacesInput";
 import SimpleEditor from "@/components/common/SimpleEditor";
@@ -36,6 +37,7 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
     const [errors, setErrors] = useState({});
     const [autocompleteValid, setAutocompleteValid] = useState({ origen: false, destino: false, });
     const [loading, setLoading] = useState(false);
+    const [empresa, setEmpresa] = useState(null);
     const [solicitudId, setSolicitudId] = useState(null);
     const [resumeModal, setResumeModal] = useState(false);
     const [successModal, setSuccessModal] = useState(false);
@@ -153,16 +155,36 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
     const heroSubtitle = landingConfig.heroSubtitle || "Solicita tu presupuesto  en menos de 2 minutos y recibe  las mejores propuestas.";
     const buttonText = landingConfig.buttonText || "Solicitar Mudanza";
 
+    useEffect(() => {
+        if (!empresaSlug) return;
+
+        async function cargarEmpresa() {
+            try {
+                const data = await getEmpresaPublica(empresaSlug);
+                setEmpresa(data.empresa);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+        cargarEmpresa();
+    }, [empresaSlug]);
+
     return (
         <div className="solicitar-mudanza">
             {loading && <LoadingOverlay />}
 
             <div className="solicitar-mudanza__hero">
                 <div className="hero-logo">
-                    <img src="/logo/logo.png" alt="Mudanza Fácil" />
+                    <img src={empresa?.logo_url || "/logo/logo.png"} alt={empresa?.empresa || "Mudanza Fácil"} />
                 </div>
 
-                <h1 className="title">{heroTitle}</h1>
+                <h1 className="title">
+                    {
+                        empresa
+                            ? `Solicita tu mudanza con ${empresa.empresa}`
+                            : heroTitle
+                    }
+                </h1>
                 <p className="subtitle"> {heroSubtitle} </p>
             </div>
 
