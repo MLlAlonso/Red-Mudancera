@@ -41,14 +41,12 @@ class SolicitudSeguroMail extends Mailable
             $telefono = '52' . $telefono;
         }
 
-        $mensaje = "Hola, apreciable {$this->solicitud->nombre}.\n"
+        $mensaje = "Hola {$this->solicitud->nombre}, soy Víctor Alemán, asesor de seguros con Chubb.\n"
             . "Solo quería presentarme, soy David Ibarra\n"
             . "Vi que estás organizando una mudanza de {$this->solicitud->origen} a {$this->solicitud->destino} y que solicitaste información.\n"
-            . "Sé que en este momento seguramente estás enfocado en elegir la empresa que realizará tu mudanza. Por experiencia, la mayoría de las personas contrata el seguro hasta después de tomar esa decisión. \n"
-            . "Cuando llegue ese momento, aquí estaré para asesorarte, resolver tus dudas y ayudarte a asegurar tu mudanza. Además, conocerás los beneficios que muchas personas desconocen hasta que ya es demasiado tarde. \n"
-            . "Más información:\n"
-            . "https://www.chubb.com/mx-es/ \n"
-            . "Y un último favor...¡No olvides guardar mi número! Así, cuando llegue el momento del seguro, aquí me encuentras. Estaré al pendiente.";
+            . "Sé que ahorita tu prioridad es elegir la empresa, así que no te distraigo con eso. Cuando ya la tengas elegida, aquí estaré para asegurarla.\n"
+            . "Contratar directo tiene beneficios grandes que casi nadie conoce hasta que ya es tarde, y te acompaño en todo el proceso, no nada más en la venta. \n"
+            . "Guarda mi número, en su momento te contacto.";
 
         $whatsappUrl = "https://wa.me/{$telefono}?text=" . urlencode($mensaje);
 

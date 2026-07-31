@@ -41,30 +41,6 @@ class SolicitudMudanzaController extends Controller
         ], 201);
     }
 
-    /*     public function verificar(VerifySolicitudMudanzaRequest $request): JsonResponse
-    {
-        $solicitud = $this->service->verificar(
-            $request->id,
-            $request->codigo
-        );
-
-        return response()->json([
-            'message' => 'Solicitud publicada correctamente. Algún agente se pondrá en contacto con usted.',
-            'data' => [
-                'id' => $solicitud->id,
-                'estado' => $solicitud->estado
-            ]
-        ]);
-    }
-
-    public function reenviarCodigo(ReenviarCodigoSolicitudRequest $request): JsonResponse
-    {
-        $this->service->reenviarCodigo($request->id);
-        return response()->json([
-            'message' => 'Nuevo código enviado correctamente.'
-        ]);
-    } */
-
     public function index(): JsonResponse
     {
         $solicitudes = SolicitudMudanza::where('estado', 'activo')->where('reportada', false)->where("es_privado", false)
@@ -207,7 +183,7 @@ class SolicitudMudanzaController extends Controller
 
         Mail::to([
             'intermudanza@gmail.com',
-            'atnclientes@segurosdecarga.com',
+            'Segurosmudanzafacil@gmail.com',
             'ventas12@segurosdecarga.com'
         ])->send(
             new \App\Modules\SolicitudMudanza\Mail\SolicitudSeguroMail($solicitud)
@@ -234,7 +210,7 @@ class SolicitudMudanzaController extends Controller
 
         Mail::to([
             'intermudanza@gmail.com',
-            'atnclientes@segurosdecarga.com',
+            'Segurosmudanzafacil@gmail.com',
             'ventas12@segurosdecarga.com'
         ])->send(
             new \App\Modules\SolicitudMudanza\Mail\SolicitudSeguroMail($fakeSolicitud)
