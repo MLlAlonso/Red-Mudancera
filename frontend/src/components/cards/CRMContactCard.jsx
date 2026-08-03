@@ -69,15 +69,18 @@ export default function CRMContactCard({
 
             <div className="crm-contact-card__header">
                 <div className="crm-contact-card__headerLeft">
-                    {
-                        mostrarNuevo && (
+
+                    <div className="crm-contact-card__title">
+
+                        {mostrarNuevo && (
                             <span className="crm-contact-card__new">
                                 Nuevo
                             </span>
-                        )
-                    }
+                        )}
 
-                    <h2>{nombre}</h2>
+                        <h2>{nombre}</h2>
+
+                    </div>
 
                     <div className="crm-contact-card__source">
                         <img src={tipoLead === "privado" ? "/icons/doc-verificado.png" : "/icons/icon-192.png"} />
@@ -90,9 +93,20 @@ export default function CRMContactCard({
                     </div>
                 </div>
 
-                <button className="crm-contact-card__deleteIcon" onClick={() => setConfirmDelete(true)} disabled={loading} >
-                    <img src="/icons/delete.png" />
-                </button>
+                <div className="crm-contact-card__headerActions">
+                    {tipoLead === "privado" &&
+                        (estadoLocal === "activo" ||
+                            estadoLocal === "sin_respuesta") && (
+
+                            <button className="crm-contact-card__sellIcon" onClick={() => setConfirmSell(true)} disabled={loading} >
+                                <img src="/icons/token-verde.png" alt="Vender" />
+                            </button>
+                        )}
+
+                    <button className="crm-contact-card__deleteIcon" onClick={() => setConfirmDelete(true)} disabled={loading} >
+                        <img src="/icons/delete.png" />
+                    </button>
+                </div>
             </div>
 
             <div className="crm-contact-card__route">
@@ -104,16 +118,11 @@ export default function CRMContactCard({
             <div className="crm-contact-card__details">
                 <div>
                     <img src="/icons/calendario.png" alt="" />
-                    <span> {formatFechaRecoleccion(fechaRecoleccion)} </span>
-                </div>
-
-                <div>
-                    <img src="/icons/reloj.png" alt="" />
-                    <span> Publicado {fechaPublicacion} </span>
+                    <span><strong>Fecha deseada:</strong> {formatFechaRecoleccion(fechaRecoleccion)} </span>
                 </div>
             </div>
 
-            <div className="crm-contact-card__buttons">                
+            <div className="crm-contact-card__buttons">
                 <button
                     className={`crm-contact-card__detail ${tipoLead !== "privado" ||
                         (estadoLocal !== "activo" && estadoLocal !== "sin_respuesta")
@@ -127,18 +136,6 @@ export default function CRMContactCard({
                     <img src="/icons/default-user.png" alt="Asigar" />
                     <span>Asignar</span>
                 </button>
-
-                {
-                    tipoLead === "privado" && (estadoLocal === "activo" || estadoLocal === "sin_respuesta") && (
-                        <button
-                            className="crm-contact-card__sell"
-                            onClick={() => setConfirmSell(true)}
-                            disabled={loading}
-                        >
-                            Vender
-                        </button>
-                    )
-                }
 
                 {/* 
                     <div className="crm-contact-card__status">
@@ -170,6 +167,12 @@ export default function CRMContactCard({
                         />
                     </div>
 
+                    
+                    <div>
+                        <img src="/icons/reloj.png" alt="" />
+                        <span> Publicado {fechaPublicacion} </span>
+                    </div>
+
                     <Button_cta
                         value="Contactar"
                         icon="/icons/whatsapp.png"
@@ -179,7 +182,6 @@ export default function CRMContactCard({
                     />
  */}
             </div>
-
 
             {
                 confirmDelete && (

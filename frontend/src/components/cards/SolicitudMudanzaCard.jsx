@@ -35,6 +35,7 @@ export default function SolicitudMudanzaCard({
       "8-15": "8 a 15 días",
       "+15": "Más de 15 días",
       "lo_antes_posible": "Lo antes posible",
+      "30+": "Más de 30 días",
     };
 
     return map[value] || value;
@@ -72,7 +73,7 @@ export default function SolicitudMudanzaCard({
         </div>
 
         <p className="service-card__info" id="solicitud">
-          <strong>Fecha deseada:</strong> {formatFechaRecoleccion(fechaRecoleccion)} días
+          <strong>Fecha deseada:</strong> {formatFechaRecoleccion(fechaRecoleccion)}
         </p>
 
         <p className="service-card__info" id="solicitud">

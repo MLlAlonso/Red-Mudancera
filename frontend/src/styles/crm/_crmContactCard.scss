@@ -14,7 +14,6 @@
     border-radius: 18px;
     padding: 22px;
     transition: .25s;
-
     position: relative;
     overflow: visible;
     z-index: 1;
@@ -43,6 +42,13 @@
         gap: 10px;
     }
 
+    &__headerActions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+    }
+
     &__headerLeft {
         display: flex;
         flex-direction: column;
@@ -59,14 +65,33 @@
         }
     }
 
+    &__title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+
+        h2 {
+            margin: 0;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
     &__new {
-        width: max-content;
-        padding: 5px 10px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 10px;
         border-radius: 999px;
         background: $tertiary;
         color: #FFF;
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 700;
+        line-height: 1;
     }
 
     &__source {
@@ -85,6 +110,7 @@
         }
     }
 
+    &__sellIcon,
     &__deleteIcon {
         width: 42px;
         height: 42px;
@@ -98,6 +124,22 @@
 
         img {
             width: 20px;
+        }
+    }
+
+    &__sellIcon {
+        background: #2BB673;
+
+        &:hover {
+            background: #25A568;
+        }
+    }
+
+    &__deleteIcon {
+        background: #F3F5F8;
+
+        &:hover {
+            background: #E6EBF2;
         }
     }
 
@@ -182,8 +224,7 @@
     }
 
     &__detail,
-    &__asign,
-    &__sell {
+    &__asign {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -193,7 +234,7 @@
         color: $title;
         font-weight: 400;
         font-size: 22px;
-        
+
         cursor: pointer;
         background: #F3F5F8;
         padding: 12px 18px;
@@ -220,11 +261,6 @@
             margin-right: 10px;
             filter: brightness(0) invert(1);
         }
-    }
-
-    &__sell {
-        background: rgb(43, 182, 115);
-        color: white;
     }
 
     .service-status {
@@ -280,10 +316,12 @@ MÓVIL
         max-width: 600px;
         padding: 16px;
         border-radius: 14px;
-        gap: 14px;
+        gap: 8px;
 
         &__header {
             gap: 10px;
+            align-items: center;
+            padding: 0;
         }
 
         &__headerLeft {
@@ -293,6 +331,9 @@ MÓVIL
         }
 
         &__source {
+            padding-top: 4px;
+            gap: 10px;
+
             span {
                 font-size: 13px;
             }
@@ -302,7 +343,7 @@ MÓVIL
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            gap: 6px;
+            gap: 0px;
 
             strong {
                 width: 100%;
@@ -316,7 +357,32 @@ MÓVIL
 
         &__buttons {
             gap: 8px;
-            flex-direction: column;
+        }
+
+        &__sellIcon,
+        &__deleteIcon {
+            width: 34px;
+            height: 34px;
+
+            img {
+                width: 24px;
+            }
+        }
+
+        &__sellIcon {
+            background: #2BB673;
+
+            &:hover {
+                background: #25A568;
+            }
+        }
+
+        &__deleteIcon {
+            background: #F3F5F8;
+
+            &:hover {
+                background: #E6EBF2;
+            }
         }
 
         &__status {
@@ -348,9 +414,19 @@ MÓVIL
             }
         }
 
+        &__buttons {
+            gap: 10px;
+        }
+
+        &__detail,
+        &__asign {
+            font-size: 20px;
+            padding: 10px;
+        }
+
         &__deleteIcon {
-            width: 38px;
-            height: 38px;
+            width: 30px;
+            height: 30px;
         }
     }
 }
