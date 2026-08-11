@@ -114,11 +114,7 @@ export default function SeguroClient() {
     if (id) {
         return (
             <>
-                <button
-                    className="btnSeguro"
-                    onClick={handleSeguro}
-                    disabled={sent || loading}
-                >
+                <button className="btnSeguro" onClick={handleSeguro} disabled={sent || loading} >
                     <span className="text">
                         {sent ? "Solicitud enviada" : "Quiero proteger mi Mudanza"}
                     </span>
@@ -226,11 +222,7 @@ export default function SeguroClient() {
                     <div className="form-group">
                         <label>¿Cuándo necesitas la mudanza?</label>
 
-                        <select
-                            name="fecha_recoleccion"
-                            value={form.fecha_recoleccion}
-                            onChange={handleChange}
-                        >
+                        <select name="fecha_recoleccion" value={form.fecha_recoleccion} onChange={handleChange} >
                             <option value="">Selecciona una opción</option>
                             <option value="1-7">1-7 días</option>
                             <option value="8-15">8-15 días</option>
@@ -242,11 +234,7 @@ export default function SeguroClient() {
                         </select>
                     </div>
 
-                    <button
-                        className="btnSeguro"
-                        onClick={handleExterno}
-                        disabled={sent || loading}
-                    >
+                    <button className="btnSeguro" onClick={handleExterno} disabled={sent || loading} >
                         {sent ? "Solicitud enviada" : "Enviar solicitud"}
                     </button>
                 </div>

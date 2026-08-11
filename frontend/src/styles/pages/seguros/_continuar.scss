@@ -1,0 +1,785 @@
+@use "@/styles/utils/variables" as *;
+
+.seguro-publico {
+    min-height: 100vh;
+    background: $background;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 50px 20px;
+    font-family: $font-text;
+    color: $text;
+    box-sizing: border-box;
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Loading
+    |--------------------------------------------------------------------------
+    */
+    &__loading {
+        width: 100%;
+        max-width: 520px;
+        min-height: 60vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        color: $text-muted;
+
+        p {
+            margin: 0;
+            font-size: 15px;
+        }
+    }
+
+    .loading-spinner {
+        width: 42px;
+        height: 42px;
+        border: 4px solid $cards;
+        border-top-color: $tertiary;
+        border-radius: 50%;
+        animation: seguro-spinner 0.8s linear infinite;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Error inicial
+    |--------------------------------------------------------------------------
+    */
+    &__error {
+        width: 100%;
+        max-width: 560px;
+        margin-top: 10vh;
+        padding: 42px 35px;
+        background: white;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 12px 35px rgba(9, 35, 62, 0.08);
+
+        h1 {
+            margin: 20px 0 12px;
+            color: $title;
+            font-family: $font-title;
+            font-size: 27px;
+            font-weight: 800;
+        }
+
+        p {
+            margin: 7px 0;
+            color: $text;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+    }
+
+    &__icon {
+        width: 58px;
+        height: 58px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: $cards;
+        color: $error-hover;
+        font-size: 30px;
+        font-weight: 800;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Main Card
+    |--------------------------------------------------------------------------
+    */
+    &__card {
+        width: 100%;
+        max-width: 680px;
+        background: white;
+        border-radius: 24px;
+        padding: 30px;
+        box-shadow: 0 15px 45px rgba(9, 35, 62, 0.09);
+
+        &--form {
+            max-width: 760px;
+        }
+
+        h1 {
+            margin: 8px 0 15px;
+            color: $title;
+            font-family: $font-title;
+            font-size: 34px;
+            line-height: 1.15;
+            font-weight: 800;
+        }
+
+        > p {
+            font-size: 16px;
+            line-height: 1.65;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Brand
+    |--------------------------------------------------------------------------
+    */
+    &__brand {
+        margin-bottom: 25px;
+
+        img {
+            display: block;
+            width: auto;
+            max-width: 190px;
+            max-height: 55px;
+            object-fit: contain;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Eyebrow
+    |--------------------------------------------------------------------------
+    */
+    &__eyebrow {
+        display: inline-block;
+        margin-bottom: 4px;
+        color: $tertiary;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Intro
+    |--------------------------------------------------------------------------
+    */
+    &__intro {
+        margin-top: 0;
+        color: $title;
+        font-size: 17px;
+
+        strong {
+            color: $primary;
+            font-weight: 800;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Folio
+    |--------------------------------------------------------------------------
+    */
+    &__folio {
+        margin: 20px 0;
+        padding: 15px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        background: $background;
+        border: 1px solid $cards;
+        border-radius: 12px;
+
+        span {
+            color: $text-muted;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        strong {
+            color: $primary;
+            font-family: $font-text;
+            font-size: 16px;
+            letter-spacing: 0.03em;
+        }
+
+        &--small {
+            margin: 0;
+            min-width: 190px;
+            padding: 12px 15px;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Summary
+    |--------------------------------------------------------------------------
+    */
+    &__summary {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin: 20px 0;
+
+        > div {
+            padding: 17px;
+            background: $background;
+            border-radius: 12px;
+            border: 1px solid $cards;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+
+            span {
+                color: $text-muted;
+                font-size: 12px;
+                font-weight: 700;
+                text-transform: uppercase;
+            }
+
+            strong {
+                color: $title;
+                font-size: 15px;
+                line-height: 1.4;
+            }
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Inventory
+    |--------------------------------------------------------------------------
+    */
+    &__inventory {
+        margin: 20px 0;
+        padding: 18px;
+        background: $cards;
+        border-radius: 12px;
+
+        span {
+            display: block;
+            margin-bottom: 7px;
+            color: $title;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        p {
+            margin: 0;
+            color: $text;
+            font-size: 14px;
+            line-height: 1.55;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Notice
+    |--------------------------------------------------------------------------
+    */
+    &__notice {
+        margin: 25px 0;
+        padding: 18px 20px;
+        border-left: 4px solid $tertiary;
+        background: $background;
+        border-radius: 0 12px 12px 0;
+
+        strong {
+            display: block;
+            margin-bottom: 5px;
+            color: $title;
+            font-size: 15px;
+        }
+
+        p {
+            margin: 0;
+            color: $text;
+            font-size: 14px;
+            line-height: 1.55;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Top del formulario
+    |--------------------------------------------------------------------------
+    */
+    &__top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 25px;
+        margin-bottom: 20px;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Progress
+    |--------------------------------------------------------------------------
+    */
+    &__progress {
+        margin-bottom: 20px;
+    }
+
+    &__progress-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 5px;
+
+        span {
+            color: $text-muted;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        strong {
+            color: $primary;
+            font-size: 14px;
+        }
+    }
+
+    &__progress-bar {
+        width: 100%;
+        height: 8px;
+        overflow: hidden;
+        background: $cards;
+        border-radius: 20px;
+    }
+
+    &__progress-fill {
+        height: 100%;
+        background: $success;
+        border-radius: inherit;
+        transition: width 0.3s ease;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Step
+    |--------------------------------------------------------------------------
+    */
+    &__step-heading {
+        margin-bottom: 10px;
+
+        span {
+            display: inline-block;
+            margin-bottom: 7px;
+            color: $tertiary;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        h2 {
+            margin: 0 0 7px;
+            color: $title;
+            font-family: $font-title;
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        p {
+            margin: 0;
+            color: $text-muted;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Insurance Options
+    |--------------------------------------------------------------------------
+    */
+    &__insurance-options {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 20px;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Insurance Option
+    |--------------------------------------------------------------------------
+    */
+    .insurance-option {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 12px;
+        border: 1px solid $cards;
+        border-radius: 14px;
+        background: white;
+        color: $text;
+        text-align: left;
+        cursor: pointer;
+        margin-bottom: 5px;
+        margin-top: 5px;
+
+        transition:
+            border-color 0.2s ease,
+            background 0.2s ease,
+            transform 0.2s ease;
+
+        &:hover {
+            border-color: $azul_001;
+            transform: translateY(-1px);
+        }
+
+        &.is-selected {
+            border-color: $success;
+            background: $background;
+
+            .insurance-option__radio {
+                border-color: $success;
+
+                span {
+                    transform: scale(1);
+                }
+            }
+
+            .insurance-option__content {
+                strong {
+                    color: $primary;
+                }
+            }
+        }
+    }
+
+    .insurance-option__radio {
+        width: 24px;
+        height: 24px;
+        flex: 0 0 23px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid $success;
+        border-radius: 50%;
+        transition: border-color 0.2s ease;
+
+        span {
+            width: 12px;
+            height: 12px;
+            display: block;
+            background: $success;
+            border-radius: 50%;
+            transform: scale(0);
+            transition: transform 0.2s ease;
+        }
+    }
+
+    .insurance-option__content {
+        strong {
+            display: block;
+            margin-bottom: 2px;
+            color: $title;
+            font-family: $font-title;
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        p {
+            margin: 0;
+            color: $text-muted;
+            font-size: 13px;
+            line-height: 1.45;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Fields
+    |--------------------------------------------------------------------------
+    */
+    &__field {
+        margin-top: 20px;
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: $title;
+            font-size: 14px;
+            font-weight: 800;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Money Input
+    |--------------------------------------------------------------------------
+    */
+    .money-input {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        background: white;
+        border: 1px solid $secondary;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+        &:focus-within {
+            border-color: $azul_001;
+            box-shadow: 0 0 0 3px rgba(58, 110, 165, 0.12);
+        }
+
+        > span {
+            padding-left: 15px;
+            color: $text-muted;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        input {
+            width: 100%;
+            min-width: 0;
+            padding: 14px 10px;
+            border: 0;
+            outline: 0;
+            background: transparent;
+            color: $title;
+            font-family: $font-text;
+            font-size: 16px;
+            font-weight: 700;
+
+            &::placeholder {
+                color: $secondary;
+            }
+        }
+
+        small {
+            padding-right: 15px;
+            color: $text-muted;
+            font-size: 12px;
+            font-weight: 700;
+        }
+    }
+
+    .field-help {
+        margin: 7px 0 0;
+        color: $text-muted;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Error
+    |--------------------------------------------------------------------------
+    */
+    &__inline-error {
+        margin-top: 20px;
+        padding: 13px 15px;
+        background: rgba(171, 176, 180, 0.18);
+        border-left: 4px solid $error-hover;
+        border-radius: 0 8px 8px 0;
+        color: $error-hover;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Saved
+    |--------------------------------------------------------------------------
+    */
+    &__saved {
+        margin-top: 22px;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 15px;
+        background: rgba(28, 143, 106, 0.08);
+        border: 1px solid rgba(28, 143, 106, 0.2);
+        border-radius: 12px;
+
+        > span {
+            width: 27px;
+            height: 27px;
+            flex: 0 0 27px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: $success;
+            color: white;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        strong {
+            display: block;
+            margin-bottom: 3px;
+            color: $success;
+            font-size: 14px;
+        }
+
+        p {
+            margin: 0;
+            color: $text;
+            font-size: 13px;
+            line-height: 1.45;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Actions
+    |--------------------------------------------------------------------------
+    */
+    &__actions {
+        margin-top: 10px;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Main Button
+    |--------------------------------------------------------------------------
+    */
+    &__button {
+        width: 100%;
+        min-height: 50px;
+        padding: 13px 22px;
+        border: 0;
+        border-radius: 10px;
+        background: $primary;
+        color: white;
+        font-family: $font-text;
+        font-size: 15px;
+        font-weight: 800;
+        cursor: pointer;
+        transition:
+            background 0.2s ease,
+            transform 0.2s ease,
+            opacity 0.2s ease;
+
+        &:hover:not(:disabled) {
+            background: $primary-hover;
+            transform: translateY(-1px);
+        }
+
+        &:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Privacy
+    |--------------------------------------------------------------------------
+    */
+    &__privacy {
+        margin: 25px 0 0;
+        color: $text-muted;
+        font-size: 11px;
+        line-height: 1.5;
+        text-align: center;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Success / Error Icons
+    |--------------------------------------------------------------------------
+    */
+    &__success-icon,
+    &__error-icon {
+        width: 62px;
+        height: 62px;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 30px;
+        font-weight: 800;
+    }
+
+    &__success-icon {
+        background: rgba(28, 143, 106, 0.12);
+        color: $success;
+    }
+
+    &__error-icon {
+        background: rgba(171, 176, 180, 0.2);
+        color: $error-hover;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Responsive
+    |--------------------------------------------------------------------------
+    */
+    @media (max-width: 700px) {
+        padding: 25px 15px;
+
+        &__card {
+            padding: 28px 20px;
+            border-radius: 18px;
+
+            h1 {
+                font-size: 28px;
+            }
+        }
+
+        &__top {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        &__folio--small {
+            width: 100%;
+            min-width: 0;
+        }
+
+        &__summary {
+            grid-template-columns: 1fr;
+        }
+
+        &__brand {
+            img {
+                max-width: 155px;
+            }
+        }
+
+        &__step-heading {
+            h2 {
+                font-size: 22px;
+            }
+        }
+
+        .insurance-option {
+            padding: 15px;
+        }
+    }
+
+    @media (max-width: 420px) {
+        padding: 15px 10px;
+
+        &__card {
+            padding: 24px 16px;
+        }
+
+        .insurance-option__content {
+            strong {
+                font-size: 15px;
+            }
+
+            p {
+                font-size: 12px;
+            }
+        }
+    }
+}
+
+@keyframes seguro-spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}

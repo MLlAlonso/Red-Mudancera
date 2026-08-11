@@ -108,3 +108,10 @@ require base_path( 'app/Modules/SystemAnnouncement/routes.php' );
 |--------------------------------------------------------------------------
 */
 require base_path( 'app/Modules/Analytics/routes.php' );
+
+/*
+|--------------------------------------------------------------------------
+| Solicitud de Seguros
+|--------------------------------------------------------------------------
+*/
+require base_path('app/Modules/Seguro/routes.php');

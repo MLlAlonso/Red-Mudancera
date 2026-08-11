@@ -1,10 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 
-export default function useServicios({
-  search = "",
-  filters = {},
-  limit = "infinite",
-} = {}) {
+export default function useServicios({ search = "", filters = {}, limit = "infinite",} = {}) {
   const [servicios, setServicios] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Modules\SolicitudMudanza\Models\LeadCompra;
 use App\Modules\SolicitudMudanza\Mail\LeadCompradoMail;
+use App\Modules\Seguro\Services\ExpedienteSeguroService;
 use Laravel\Sanctum\PersonalAccessToken;
 use App\Modules\Empresa\Models\Empresa;
 
@@ -26,9 +27,6 @@ class SolicitudMudanzaController extends Controller
         $this->service = $service;
     }
 
-    /**
-     * Crear nueva solicitud (Busco Mudanza)
-     */
     public function store(StoreSolicitudMudanzaRequest $request): JsonResponse
     {
         $solicitud = $this->service->crear($request->validated());
@@ -181,16 +179,25 @@ class SolicitudMudanzaController extends Controller
     {
         $solicitud = SolicitudMudanza::findOrFail($request->id);
 
-        Mail::to([
-            'intermudanza@gmail.com',
-            'Segurosmudanzafacil@gmail.com',
-            'ventas12@segurosdecarga.com'
-        ])->send(
+        $expediente = app(ExpedienteSeguroService::class)->crear([
+            'solicitud_mudanza_id' => $solicitud->id,
+            'nombre' => $solicitud->nombre,
+            'email' => $solicitud->email,
+            'telefono' => $solicitud->telefono,
+            'origen' => $solicitud->origen,
+            'destino' => $solicitud->destino,
+            'inventario' => $solicitud->inventario,
+            'fecha_recoleccion' => $solicitud->fecha_recoleccion,
+            'es_externo' => false
+        ]);
+
+        Mail::to(['intermudanza@gmail.com', 'Segurosmudanzafacil@gmail.com', 'ventas12@segurosdecarga.com'])->send(
             new \App\Modules\SolicitudMudanza\Mail\SolicitudSeguroMail($solicitud)
         );
 
         return response()->json([
-            'message' => 'Solicitud de seguro enviada correctamente'
+            'message' => 'Solicitud enviada correctamente.',
+            'folio' => $expediente->folio
         ]);
     }
 
@@ -206,18 +213,27 @@ class SolicitudMudanzaController extends Controller
             'fecha_recoleccion' => ['required', 'in:1-7,8-15,15-30,30+,lo_antes_posible'],
         ]);
 
+        $expediente = app(ExpedienteSeguroService::class)->crear([
+            'solicitud_mudanza_id' => null,
+            'nombre' => $data['nombre'],
+            'email' => $data['email'],
+            'telefono' => $data['telefono'],
+            'origen' => $data['origen'],
+            'destino' => $data['destino'],
+            'inventario' => $data['inventario'],
+            'fecha_recoleccion' => $data['fecha_recoleccion'],
+            'es_externo' => true
+        ]);
+
         $fakeSolicitud = (object) $data;
 
-        Mail::to([
-            'intermudanza@gmail.com',
-            'Segurosmudanzafacil@gmail.com',
-            'ventas12@segurosdecarga.com'
-        ])->send(
+        Mail::to(['intermudanza@gmail.com', 'Segurosmudanzafacil@gmail.com', 'ventas12@segurosdecarga.com'])->send(
             new \App\Modules\SolicitudMudanza\Mail\SolicitudSeguroMail($fakeSolicitud)
         );
 
         return response()->json([
-            'message' => 'Solicitud enviada correctamente'
+            'message' => 'Solicitud enviada correctamente.',
+            'folio' => $expediente->folio
         ]);
     }
 

@@ -10,19 +10,14 @@ export default function SuperAdminDashboardPage() {
     const router = useRouter();
     const [metrics, setMetrics] = useState(null);
 
-    const [announcement, setAnnouncement] =
-        useState({
-            titulo: "",
-            mensaje: ""
-        });
+    const [announcement, setAnnouncement] = useState({ titulo: "", mensaje: "" });
 
-    const [feedbackModal, setFeedbackModal] =
-        useState({
-            open: false,
-            type: "success",
-            title: "",
-            message: ""
-        });
+    const [feedbackModal, setFeedbackModal] = useState({
+        open: false,
+        type: "success",
+        title: "",
+        message: ""
+    });
 
     useEffect(() => {
         loadData();
@@ -39,33 +34,22 @@ export default function SuperAdminDashboardPage() {
                 `${process.env.NEXT_PUBLIC_API_URL}/system-announcements`,
                 {
                     method: "POST",
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-                    body: JSON.stringify(
-                        announcement
-                    )
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(announcement)
                 }
             );
 
             if (!res.ok) {
-                throw new Error(
-                    "No se pudo publicar el anuncio"
-                );
+                throw new Error("No se pudo publicar el anuncio");
             }
 
-            setAnnouncement({
-                titulo: "",
-                mensaje: ""
-            });
+            setAnnouncement({ titulo: "", mensaje: "" });
 
             setFeedbackModal({
                 open: true,
                 type: "success",
                 title: "Anuncio publicado",
-                message:
-                    "El mensaje global fue enviado correctamente a todos los usuarios activos."
+                message: "El mensaje global fue enviado correctamente a todos los usuarios activos."
             });
 
         } catch (err) {
@@ -73,8 +57,7 @@ export default function SuperAdminDashboardPage() {
                 open: true,
                 type: "error",
                 title: "Error al publicar",
-                message:
-                    "Ocurrió un problema al intentar publicar el anuncio global."
+                message: "Ocurrió un problema al intentar publicar el anuncio global."
             });
         }
     };
@@ -276,13 +259,12 @@ export default function SuperAdminDashboardPage() {
                                 <div className="recent-company-card__left">
                                     <div className="recent-company-card__logo">
                                         {
-                                            empresa.logo ? (
-                                                <img src={empresa.logo} alt={empresa.empresa} />
-                                            ) : (
-                                                <span>
-                                                    {empresa.empresa?.charAt(0)}
-                                                </span>
-                                            )
+                                            empresa.logo ? (<img src={empresa.logo} alt={empresa.empresa} />)
+                                                : (
+                                                    <span>
+                                                        {empresa.empresa?.charAt(0)}
+                                                    </span>
+                                                )
                                         }
                                     </div>
 
@@ -328,8 +310,7 @@ export default function SuperAdminDashboardPage() {
                 <h2> Anuncio global </h2>
 
                 <p>
-                    Este mensaje aparecerá a todos
-                    los usuarios activos
+                    Este mensaje aparecerá a todos los usuarios activos
                 </p>
             </section>
 
@@ -338,23 +319,13 @@ export default function SuperAdminDashboardPage() {
                     type="text"
                     placeholder="Título"
                     value={announcement.titulo}
-                    onChange={(e) =>
-                        setAnnouncement({
-                            ...announcement,
-                            titulo: e.target.value
-                        })
-                    }
+                    onChange={(e) => setAnnouncement({ ...announcement, titulo: e.target.value })}
                 />
 
                 <textarea
                     placeholder="Mensaje"
                     value={announcement.mensaje}
-                    onChange={(e) =>
-                        setAnnouncement({
-                            ...announcement,
-                            mensaje: e.target.value
-                        })
-                    }
+                    onChange={(e) => setAnnouncement({ ...announcement, mensaje: e.target.value })}
                 />
 
                 <button onClick={createAnnouncement} >
@@ -365,30 +336,12 @@ export default function SuperAdminDashboardPage() {
 
             {
                 feedbackModal.open && (
-                    <BaseModal
-                        onClose={() =>
-                            setFeedbackModal({
-                                ...feedbackModal,
-                                open: false
-                            })
-                        }
-                    >
-
+                    <BaseModal onClose={() => setFeedbackModal({ ...feedbackModal, open: false })} >
                         <div className="feedback-modal">
-
-                            <div
-                                className={`
-                        feedback-modal__icon
-                        ${feedbackModal.type}
-                    `}
-                            >
-
+                            <div className={` feedback-modal__icon ${feedbackModal.type} `}>
                                 {
-                                    feedbackModal.type === "success"
-                                        ? "✓"
-                                        : "!"
+                                    feedbackModal.type === "success" ? "✓" : "!"
                                 }
-
                             </div>
 
                             <h2>
@@ -399,14 +352,7 @@ export default function SuperAdminDashboardPage() {
                                 {feedbackModal.message}
                             </p>
 
-                            <button
-                                onClick={() =>
-                                    setFeedbackModal({
-                                        ...feedbackModal,
-                                        open: false
-                                    })
-                                }
-                            >
+                            <button onClick={() => setFeedbackModal({ ...feedbackModal, open: false })} >
                                 Entendido
                             </button>
                         </div>

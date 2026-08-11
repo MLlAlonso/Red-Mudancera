@@ -5,6 +5,7 @@ use App\Modules\SuperAdmin\Controllers\SuperAdminController;
 use App\Modules\SuperAdmin\Controllers\SuperAdminEmpresaController;
 use App\Modules\SuperAdmin\Controllers\SuperAdminServiciosController;
 use App\Modules\SuperAdmin\Controllers\SuperAdminAnalyticsController;
+use App\Modules\SuperAdmin\Controllers\SuperAdminSegurosController;
 
 Route::prefix('superadmin')->group(function () {
     Route::get('/dashboard', [SuperAdminController::class, 'dashboard']);
@@ -23,9 +24,9 @@ Route::prefix('superadmin')->group(function () {
     Route::patch('/empresas/{id}/verify', [SuperAdminEmpresaController::class, 'verifyEmpresa']);
     Route::post('/partners', [SuperAdminEmpresaController::class, 'createPartner']);
     Route::delete('/empresas/{id}', [SuperAdminEmpresaController::class, 'destroyEmpresa']);
-    Route::get('/partners',[SuperAdminEmpresaController::class, 'partners']);
-    Route::put('/partners/{id}',[SuperAdminEmpresaController::class, 'updatePartner']);
-    Route::delete('/partners/{id}',[SuperAdminEmpresaController::class, 'deletePartner']);
+    Route::get('/partners', [SuperAdminEmpresaController::class, 'partners']);
+    Route::put('/partners/{id}', [SuperAdminEmpresaController::class, 'updatePartner']);
+    Route::delete('/partners/{id}', [SuperAdminEmpresaController::class, 'deletePartner']);
 
     /*
     |--------------------------------------------------------------------------
@@ -33,6 +34,15 @@ Route::prefix('superadmin')->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::get('/servicios-dashboard', [SuperAdminServiciosController::class, 'dashboard']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Seguros
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/seguros', [SuperAdminSegurosController::class, 'index']);
+    Route::get('/seguros/{id}', [SuperAdminSegurosController::class, 'show']);
+    Route::post('/seguros/{id}/enviar-correo', [SuperAdminSegurosController::class, 'enviarCorreo']);
 
     /*
     |--------------------------------------------------------------------------

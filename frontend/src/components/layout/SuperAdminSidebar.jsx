@@ -22,6 +22,11 @@ export default function SuperAdminSidebar({ isOpen, setIsOpen}) {
             icon: "/icons/ofrezco_btn.png"
         },
         {
+            label: "Seguros",
+            href: "/superadmin/seguros",
+            icon: "/icons/copyw.png"
+        },
+        {
             label: "Verificación",
             href: "/superadmin/trial-requests",
             icon: "/icons/comprobado.png"

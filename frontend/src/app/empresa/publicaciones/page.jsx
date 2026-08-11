@@ -30,8 +30,8 @@ export default function MisServiciosEmpresa() {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewLink, setReviewLink] = useState("");
   const now = new Date();
-
-  const [selectedMonth, setSelectedMonth] = useState(now.getMonth() + 1);
+  const DEFAULT_MONTH = "recentes";
+  const [selectedMonth, setSelectedMonth] = useState(DEFAULT_MONTH);
   const [selectedYear, setSelectedYear] = useState(now.getFullYear());
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showDeleteServiceModal, setShowDeleteServiceModal] = useState(false);
@@ -41,10 +41,9 @@ export default function MisServiciosEmpresa() {
   const cambiarEstadoDirecto = async (id, estado, tipo) => {
     const token = getEmpresaToken();
 
-    const endpoint =
-      tipo === "lead"
-        ? `/solicitudes-mudanza/leads/${id}/estado`
-        : `/servicios/${id}/estado`;
+    const endpoint = tipo === "lead"
+      ? `/solicitudes-mudanza/leads/${id}/estado`
+      : `/servicios/${id}/estado`;
 
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}${endpoint}`,
@@ -87,8 +86,7 @@ export default function MisServiciosEmpresa() {
 
     setServices((prev) =>
       prev.filter(
-        (s) =>
-          !(s.tipo_item === "lead" && s.id === selectedLeadId)
+        (s) => !(s.tipo_item === "lead" && s.id === selectedLeadId)
       )
     );
 
@@ -120,11 +118,7 @@ export default function MisServiciosEmpresa() {
 
     setServices((prev) =>
       prev.filter(
-        (s) =>
-          !(
-            s.tipo_item === "servicio" &&
-            s.id === selectedServiceId
-          )
+        (s) => !(s.tipo_item === "servicio" && s.id === selectedServiceId)
       )
     );
 
@@ -136,44 +130,90 @@ export default function MisServiciosEmpresa() {
     const token = getEmpresaToken();
     if (!token) return;
 
+    const fetchServicios = async (month) => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/empresa/servicios?month=${month}&year=${selectedYear}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return res.json();
+    };
+
+    const fetchLeads = async (month) => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/empresa/mis-leads?month=${month}&year=${selectedYear}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return res.json();
+    };
+
     setLoading(true);
 
-    Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/servicios?month=${selectedMonth}&year=${selectedYear}`, {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }).then(r => r.json()),
+    const cargar = async () => {
+      try {
+        let meses = [];
 
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/mis-leads?month=${selectedMonth}&year=${selectedYear}`, {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }).then(r => r.json()),
+        if (selectedMonth === DEFAULT_MONTH) {
+          const actual = now.getMonth() + 1;
+          let anterior = actual - 1;
 
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/me`, {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then(r => r.json())
-        .then(setEmpresa),
-    ])
+          if (anterior === 0) {
+            anterior = 12;
+          }
 
-      .then(([serviciosRes, leadsRes]) => {
+          meses = [actual, anterior];
+        } else {
+          meses = [selectedMonth];
+        }
 
-        const servicios = (serviciosRes?.data || []).map(s => ({
-          ...s,
-          tipo_item: 'servicio'
-        }));
+        const servicios = [];
+        const leads = [];
 
-        const leads = (leadsRes?.data || []).map(l => ({
-          ...l,
-          tipo_item: 'lead'
-        }));
+        for (const mes of meses) {
+          const [serviciosRes, leadsRes] = await Promise.all([
+            fetchServicios(mes),
+            fetchLeads(mes),
+          ]);
+
+          servicios.push(
+            ...(serviciosRes?.data || []).map((s) => ({
+              ...s,
+              tipo_item: "servicio",
+            }))
+          );
+
+          leads.push(
+            ...(leadsRes?.data || []).map((l) => ({
+              ...l,
+              tipo_item: "lead",
+            }))
+          );
+
+        }
+
+        const empresaRes = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/empresa/me`,
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const empresaData = await empresaRes.json();
+        setEmpresa(empresaData);
 
         const estadoOrder = {
           activo: 1,
@@ -186,20 +226,20 @@ export default function MisServiciosEmpresa() {
             const estadoA = estadoOrder[a.estado_operacion || a.estado] || 99;
             const estadoB = estadoOrder[b.estado_operacion || b.estado] || 99;
 
-            // primero por estado
             if (estadoA !== estadoB) {
               return estadoA - estadoB;
             }
 
-            // luego por fecha
-            return new Date(b.created_at) - new Date(a.created_at);
+            return (new Date(b.created_at) - new Date(a.created_at));
           });
 
-
         setServices(combinado);
-      })
-      .finally(() => setLoading(false));
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    cargar();
   }, [selectedMonth, selectedYear]);
 
   const visible = services
@@ -211,10 +251,7 @@ export default function MisServiciosEmpresa() {
       }
 
       if (filter === "busco" || filter === "ofrezco") {
-        return (
-          s.tipo_item === "servicio" &&
-          s.tipo === filter
-        );
+        return (s.tipo_item === "servicio" && s.tipo === filter);
       }
 
       return true;
@@ -248,10 +285,17 @@ export default function MisServiciosEmpresa() {
           <div className="actividad-filter">
             <select
               value={selectedMonth}
-              onChange={(e) =>
-                setSelectedMonth(Number(e.target.value))
-              }
+              onChange={(e) => {
+                const value = e.target.value;
+
+                if (value === DEFAULT_MONTH) {
+                  setSelectedMonth(DEFAULT_MONTH);
+                } else {
+                  setSelectedMonth(Number(value));
+                }
+              }}
             >
+              <option value={DEFAULT_MONTH}> Último bimestre </option>
               <option value={1}>Enero</option>
               <option value={2}>Febrero</option>
               <option value={3}>Marzo</option>
@@ -266,13 +310,8 @@ export default function MisServiciosEmpresa() {
               <option value={12}>Diciembre</option>
             </select>
 
-            <select
-              value={selectedYear}
-              onChange={(e) =>
-                setSelectedYear(Number(e.target.value))
-              }
-            >
-              {[2025, 2026, 2027, 2028].map((y) => (
+            <select value={selectedYear} onChange={(e) => setSelectedYear(Number(e.target.value))} >
+              {[2026, 2027, 2028, 2029, 2030].map((y) => (
                 <option key={y} value={y}>
                   {y}
                 </option>
@@ -289,85 +328,77 @@ export default function MisServiciosEmpresa() {
         <Button_crud value="+" onClick={() => (window.location.href = "/empresa/cargas")} />
 
         <div className="empresa-dashboard__cards">
-          {loading &&
-            Array.from({ length: 6 }).map((_, i) => (
-              <ServiceCardSkeleton key={i} />
-            ))}
+          {loading && Array.from({ length: 6 }).map((_, i) => (
+            <ServiceCardSkeleton key={i} />
+          ))}
 
-          {!loading &&
-            visible.map((s) => {
-              if (s.tipo_item === "lead") {
-                const estadoLead = s.estado_operacion || "activo";
-
-                return (
-                  <SolicitudMudanzaCard
-                    key={`lead-${s.id}`}
-                    id={s.id}
-                    origen={s.origen}
-                    destino={s.destino}
-                    fechaRecoleccion={s.fecha_recoleccion}
-                    inventario={s.inventario}
-                    tipoMudanza={s.tipo_mudanza}
-                    fecha={new Date(s.created_at).toLocaleDateString()}
-                    telefono={s.telefono}
-                    isLead={true}
-                    showContact={false}
-                    estado={estadoLead}
-                    nombreCliente={s.nombre}
-                    tipoVivienda={s.tipo_vivienda}
-                    empresaNombre={empresa?.empresa}
-                    showDelete={true}
-                    showNotes={true}
-                    onDelete={() => {
-                      setSelectedLeadId(s.id);
-                      setShowDeleteModal(true);
-                    }}
-                    onChangeEstado={(id, nuevoEstado) => {
-                      setSelectedService({ ...s, tipo_item: "lead" });
-
-                      if (nuevoEstado === "finalizado") {
-                        setShowConfirmFinalizar(true);
-                        return;
-                      }
-
-                      cambiarEstadoDirecto(id, nuevoEstado, "lead");
-                      setSelectedService(null);
-                    }}
-                  />
-                );
-              }
+          {!loading && visible.map((s) => {
+            if (s.tipo_item === "lead") {
+              const estadoLead = s.estado_operacion || "activo";
 
               return (
-                <ServiceCard
-                  key={`servicio-${s.id}`}
+                <SolicitudMudanzaCard
+                  key={`lead-${s.id}`}
                   id={s.id}
-                  estado={s.estado}
-                  type={s.tipo}
                   origen={s.origen}
                   destino={s.destino}
-                  volumen={s.volumen ? `${s.volumen} m³` : "No especificado"}
-                  tipoCarga={s.tipo_carga}
-                  tipoVehiculo={s.tipo_vehiculo}
-                  empresa={s.empresa?.empresa ?? "Empresa"}
+                  fechaRecoleccion={s.fecha_recoleccion}
+                  inventario={s.inventario}
+                  tipoMudanza={s.tipo_mudanza}
                   fecha={new Date(s.created_at).toLocaleDateString()}
+                  telefono={s.telefono}
+                  isLead={true}
                   showContact={false}
+                  estado={estadoLead}
+                  nombreCliente={s.nombre}
+                  tipoVivienda={s.tipo_vivienda}
+                  empresaNombre={empresa?.empresa}
                   showDelete={true}
-                  onDelete={() => {
-                    setSelectedServiceId(s.id);
-                    setShowDeleteServiceModal(true);
-                  }}
+                  showNotes={true}
+                  onDelete={() => { setSelectedLeadId(s.id); setShowDeleteModal(true); }}
                   onChangeEstado={(id, nuevoEstado) => {
-                    setSelectedService(s);
+                    setSelectedService({ ...s, tipo_item: "lead" });
+
                     if (nuevoEstado === "finalizado") {
                       setShowConfirmFinalizar(true);
                       return;
                     }
-                    cambiarEstadoDirecto(id, nuevoEstado, "servicio");
+
+                    cambiarEstadoDirecto(id, nuevoEstado, "lead");
                     setSelectedService(null);
                   }}
                 />
               );
-            })}
+            }
+
+            return (
+              <ServiceCard
+                key={`servicio-${s.id}`}
+                id={s.id}
+                estado={s.estado}
+                type={s.tipo}
+                origen={s.origen}
+                destino={s.destino}
+                volumen={s.volumen ? `${s.volumen} m³` : "No especificado"}
+                tipoCarga={s.tipo_carga}
+                tipoVehiculo={s.tipo_vehiculo}
+                empresa={s.empresa?.empresa ?? "Empresa"}
+                fecha={new Date(s.created_at).toLocaleDateString()}
+                showContact={false}
+                showDelete={true}
+                onDelete={() => { setSelectedServiceId(s.id); setShowDeleteServiceModal(true); }}
+                onChangeEstado={(id, nuevoEstado) => {
+                  setSelectedService(s);
+                  if (nuevoEstado === "finalizado") {
+                    setShowConfirmFinalizar(true);
+                    return;
+                  }
+                  cambiarEstadoDirecto(id, nuevoEstado, "servicio");
+                  setSelectedService(null);
+                }}
+              />
+            );
+          })}
         </div>
       </main>
 

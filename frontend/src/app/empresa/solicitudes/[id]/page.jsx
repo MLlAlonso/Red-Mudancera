@@ -9,6 +9,7 @@ import Footer from "@/components/layout/Footer";
 import Button_cta from "@/components/common/Button_cta";
 import ComprarLeadModal from "@/components/modals/ComprarLeadModal";
 import LiveViewToast from "@/components/common/LiveViewToast";
+import EmpresaNotesModal from "@/components/modals/EmpresaNotesModal";
 import "@/styles/pages/solicitudes/_detalleSolicitud.scss";
 
 export default function DetalleSolicitudPage() {
@@ -18,6 +19,7 @@ export default function DetalleSolicitudPage() {
     const [haComprado, setHaComprado] = useState(false);
     const [fueExclusivo, setFueExclusivo] = useState(false);
     const [empresa, setEmpresa] = useState(null);
+    const [showNotesModal, setShowNotesModal] = useState(false);
 
     useEffect(() => {
         const token = getEmpresaToken();
@@ -65,6 +67,12 @@ export default function DetalleSolicitudPage() {
             <Header />
 
             <main className="detalle-solicitud">
+                {haComprado && (
+                    <button className="lead-floating-notes" onClick={() => setShowNotesModal(true)} title="Notas" >
+                        📝
+                    </button>
+                )}
+
                 <div className="detalle-solicitud__header">
                     <h1 className="detalle-solicitud__title">
                         Detalle de Contacto
@@ -174,18 +182,9 @@ export default function DetalleSolicitudPage() {
                         <div>
                             <label>Distancia:</label>
                             <span>
-                                {solicitud.distancia_km
-                                    ? `${solicitud.distancia_km} km`
-                                    : "—"}
+                                {solicitud.distancia_km ? `${solicitud.distancia_km} km` : "—"}
                             </span>
                         </div>
-
-                        {/* {!fueExclusivo && (
-                            <div>
-                                <label>Compras realizadas:</label>
-                                <span>{solicitud.compras_count} / 3</span>
-                            </div>
-                        )} */}
                     </div>
 
                     {/* INVENTARIO */}
@@ -227,10 +226,7 @@ export default function DetalleSolicitudPage() {
 
                     <div className="detalle-solicitud__actions">
                         {!haComprado && (
-                            <Button_cta
-                                value="Comprar"
-                                onClick={() => setShowModal(true)}
-                            />
+                            <Button_cta value="Comprar" onClick={() => setShowModal(true)} />
                         )}
 
                         {haComprado && (
@@ -257,6 +253,8 @@ export default function DetalleSolicitudPage() {
             </main>
 
             <LiveViewToast tipo="contacto" registroId={solicitud.id} />
+
+            <EmpresaNotesModal open={showNotesModal} leadId={solicitud.id} onClose={() => setShowNotesModal(false)} />
 
             <Footer />
 
