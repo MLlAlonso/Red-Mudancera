@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import SuperAdminLayout from "@/components/layout/SuperAdminLayout";
+import LeadPurchasesSection from "@/components/superadmin/LeadPurchasesSection";
 import "@/styles/pages/superadmin/_superAdminServicios.scss";
 
 export default function SuperAdminServiciosPage() {
@@ -130,7 +131,6 @@ export default function SuperAdminServiciosPage() {
                 <div className="admin-block__header">
                     <div>
                         <span> Leads y demanda</span>
-
                         <h2> Contactos </h2>
                     </div>
                 </div>
@@ -179,9 +179,7 @@ export default function SuperAdminServiciosPage() {
                     </article>
 
                     <article className="metric-card danger">
-                        <span>
-                            Solicitudes reportadas
-                        </span>
+                        <span> Solicitudes reportadas </span>
 
                         <strong>
                             {data.metrics.contactos.solicitudes_reportadas}
@@ -189,9 +187,7 @@ export default function SuperAdminServiciosPage() {
                     </article>
 
                     <article className="metric-card warning">
-                        <span>
-                            Solicitudes expiradas
-                        </span>
+                        <span> Solicitudes expiradas </span>
 
                         <strong>
                             {data.metrics.contactos.solicitudes_expiradas}
@@ -203,9 +199,7 @@ export default function SuperAdminServiciosPage() {
             {/* NEGOCIO */}
             <section className="admin-block">
                 <div className="admin-block__header">
-                    <h2>
-                        Operación y negocio
-                    </h2>
+                    <h2> Operación y negocio </h2>
                 </div>
 
                 <div className="metrics-grid">
@@ -249,9 +243,7 @@ export default function SuperAdminServiciosPage() {
                             <article className="admin-item" key={servicio.id}  >
                                 <div>
                                     <h3>
-                                        {servicio.origen}
-                                        {" → "}
-                                        {servicio.destino}
+                                        {servicio.origen} {" → "} {servicio.destino}
                                     </h3>
 
                                     <p>
@@ -278,9 +270,7 @@ export default function SuperAdminServiciosPage() {
                             <article className="admin-item" key={item.id} >
                                 <div>
                                     <h3>
-                                        {item.origen}
-                                        {" → "}
-                                        {item.destino}
+                                        {item.origen} {" → "} {item.destino}
                                     </h3>
 
                                     <p>
@@ -298,6 +288,10 @@ export default function SuperAdminServiciosPage() {
                     }
                 </div>
             </section>
+
+            {/* COMPRAS DE CONTACTOS */}
+            <LeadPurchasesSection />
+
         </SuperAdminLayout>
     );
 }

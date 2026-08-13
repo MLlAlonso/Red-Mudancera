@@ -8,9 +8,14 @@ use App\Modules\Servicio\Models\Servicio;
 use App\Modules\SolicitudMudanza\Models\LeadCompra;
 use App\Modules\SolicitudMudanza\Models\SolicitudMudanza;
 use App\Modules\PartnerReferral\Models\PartnerReferral;
+use App\Modules\SuperAdmin\Services\SuperAdminServiciosService;
 
 class SuperAdminServiciosController extends Controller
 {
+    public function __construct(
+        protected SuperAdminServiciosService $serviciosService
+    ) {}
+
     public function dashboard()
     {
         $inicioMes = Carbon::now()->startOfMonth();
@@ -158,5 +163,22 @@ class SuperAdminServiciosController extends Controller
                 ->take(25)
                 ->get(),
         ]);
+    }
+
+    public function empresasCompradoras()
+    {
+        return response()->json(['data' => $this->serviciosService->empresasCompradorasDelMes(),]);
+    }
+
+    public function ultimasCompras()
+    {
+        return response()->json(['data' => $this->serviciosService->ultimasCompras(),]);
+    }
+
+    public function comprasPorEmpresa($empresaId)
+    {
+        return response()->json(
+            $this->serviciosService->comprasPorEmpresaDelMes((int) $empresaId)
+        );
     }
 }

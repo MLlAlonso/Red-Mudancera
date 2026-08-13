@@ -162,3 +162,18 @@ export async function deletePartnerById(id) {
 
     return handleResponse(res);
 }
+
+export async function getLeadPurchasingCompanies() {
+    const res = await fetch(`${API}/superadmin/servicios/compras/empresas`);
+    return handleResponse(res);
+}
+
+export async function getLatestLeadPurchases() {
+    const res = await fetch(`${API}/superadmin/servicios/compras/ultimas`);
+    return handleResponse(res);
+}
+
+export async function getLeadPurchasesByEmpresa(empresaId) {
+    const res = await fetch(`${API}/superadmin/servicios/compras/empresa/${empresaId}`);
+    return handleResponse(res);
+}

@@ -1,3 +1,5 @@
+@use "../../utils/variables" as *;
+
 .admin-block {
     margin-bottom: 28px;
 
@@ -93,8 +95,8 @@
             background: #FAF5FF;
         }
     }
-    
-    #rutaPopular{
+
+    #rutaPopular {
         font-size: 20px;
         text-align: justify;
     }
@@ -183,5 +185,584 @@
         strong {
             font-size: 24px;
         }
+    }
+}
+
+
+// ============================================================
+// COMPRAS DE CONTACTOS
+// ============================================================
+.admin-purchases {
+    margin-top: 2rem;
+}
+
+.purchases-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.25rem;
+}
+
+.purchases-panel {
+    min-width: 0;
+    background: $cards;
+    border: 1px solid rgba($primary, 0.08);
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+.purchases-panel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 1.35rem;
+    border-bottom: 1px solid rgba($primary, 0.08);
+
+    span {
+        display: block;
+        margin-bottom: 0.2rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: $secondary;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    h3 {
+        margin: 0;
+        color: $primary;
+        font-size: 1.05rem;
+    }
+
+    >strong {
+        display: grid;
+        place-items: center;
+        min-width: 38px;
+        height: 38px;
+        padding: 0 0.6rem;
+        border-radius: 10px;
+        background: $primary;
+        color: white;
+        font-size: 0.9rem;
+    }
+}
+
+// ============================================================
+// EMPRESAS COMPRADORAS
+// ============================================================
+.buyers-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.buyer-item {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border: 0;
+    border-bottom: 1px solid rgba($primary, 0.06);
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+
+    &:last-child {
+        border-bottom: 0;
+    }
+
+    &:hover {
+        background: rgba($primary, 0.04);
+    }
+
+    &:active {
+        transform: scale(0.99);
+    }
+}
+
+.buyer-item__identity {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.buyer-item__logo {
+    flex: 0 0 auto;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 12px;
+    background: $primary;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    span {
+        color: white;
+        font-weight: 700;
+        font-size: 0.95rem;
+    }
+}
+
+.buyer-item__identity h4 {
+    margin: 0 0 0.2rem;
+    color: $primary;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.buyer-item__identity p {
+    margin: 0;
+    color: $secondary;
+    font-size: 0.78rem;
+}
+
+.buyer-item__stats {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    strong {
+        color: $primary;
+        font-size: 0.9rem;
+    }
+
+    span {
+        color: $secondary;
+        font-size: 0.7rem;
+    }
+}
+
+.buyer-item__arrow {
+    color: $primary;
+    font-size: 1.2rem;
+    transition: transform 0.2s ease;
+}
+
+.buyer-item:hover .buyer-item__arrow {
+    transform: translateX(3px);
+}
+
+// ============================================================
+// ÚLTIMAS COMPRAS
+// ============================================================
+.latest-purchases {
+    display: flex;
+    flex-direction: column;
+}
+
+.latest-purchase {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba($primary, 0.06);
+
+    &:last-child {
+        border-bottom: 0;
+    }
+}
+
+.latest-purchase__main {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+
+    h4 {
+        margin: 0 0 0.25rem;
+        color: $primary;
+        font-size: 0.88rem;
+    }
+
+    p {
+        margin: 0;
+        color: $secondary;
+        font-size: 0.78rem;
+        line-height: 1.4;
+    }
+}
+
+.latest-purchase__footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem 1rem;
+    margin-top: 0.75rem;
+
+    span {
+        color: $secondary;
+        font-size: 0.7rem;
+    }
+
+    span:nth-child(2) {
+        color: $primary;
+        font-weight: 700;
+    }
+}
+
+// ============================================================
+// BADGES
+// ============================================================
+.purchase-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    padding: 0.3rem 0.55rem;
+    border-radius: 999px;
+    background: rgba($primary, 0.08);
+    color: $primary;
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+.purchase-badge.exclusive {
+    background: rgba($tertiary, 0.16);
+    color: $tertiary-hover;
+}
+
+// ============================================================
+// EMPTY / ERROR
+// ============================================================
+.purchases-empty {
+    padding: 2rem 1.25rem;
+    text-align: center;
+
+    p {
+        max-width: 360px;
+        margin: 0 auto;
+        color: $secondary;
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+}
+
+.purchases-error {
+    margin-bottom: 1rem;
+    padding: 0.9rem 1rem;
+    border-radius: 12px;
+    background: rgba(180, 50, 50, 0.08);
+    color: #a52b2b;
+    font-size: 0.85rem;
+}
+
+// ============================================================
+// LOADING
+// ============================================================
+.purchases-loading,
+.purchase-detail__loading {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 1.25rem;
+}
+
+.purchases-loading span,
+.purchase-detail__loading span {
+    display: block;
+    width: 100%;
+    height: 52px;
+    border-radius: 12px;
+    background: rgba($primary, 0.07);
+    animation: purchasePulse 1.4s ease-in-out infinite;
+}
+
+@keyframes purchasePulse {
+    0%,
+    100% {
+        opacity: 0.45;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+// ============================================================
+// MODAL / DETALLE
+// ============================================================
+.purchase-detail-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(9, 35, 62, 0.58);
+    backdrop-filter: blur(4px);
+}
+
+.purchase-detail {
+    width: min(920px, 100%);
+    max-height: min(90vh, 850px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 20px;
+    background: $background;
+    box-shadow: 0 24px 80px rgba(9, 35, 62, 0.22);
+}
+
+.purchase-detail__header {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.4rem 1.5rem;
+    background: white;
+    border-bottom: 1px solid rgba($primary, 0.08);
+
+    span {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: $secondary;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    h2 {
+        margin: 0;
+        color: $primary;
+        font-size: 1.25rem;
+    }
+}
+
+.purchase-detail__close {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    border: 0;
+    border-radius: 10px;
+    background: rgba($primary, 0.06);
+    color: $primary;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+
+    &:hover {
+        background: rgba($primary, 0.1);
+    }
+}
+
+.purchase-detail__summary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: white;
+    border-bottom: 1px solid rgba($primary, 0.08);
+
+    >div {
+        padding: 0.9rem 1rem;
+        border-radius: 12px;
+        background: $cards;
+    }
+
+    span {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: $secondary;
+        font-size: 0.72rem;
+    }
+
+    strong {
+        color: $primary;
+        font-size: 1.15rem;
+    }
+}
+
+.purchase-detail__list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1.5rem 1.5rem;
+}
+
+.company-purchase {
+    margin-bottom: 0.8rem;
+    padding: 1rem;
+    border: 1px solid rgba($primary, 0.07);
+    border-radius: 14px;
+    background: white;
+}
+
+.company-purchase__route {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    strong {
+        color: $primary;
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+
+    >span {
+        flex: 0 0 auto;
+        color: $secondary;
+        font-size: 0.72rem;
+    }
+}
+
+.company-purchase__data {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+
+    >div {
+        min-width: 0;
+    }
+
+    span {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: $secondary;
+        font-size: 0.68rem;
+    }
+
+    strong {
+        display: block;
+        color: $primary;
+        font-size: 0.78rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.company-purchase__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba($primary, 0.06);
+
+    >span:first-child {
+        color: $secondary;
+        font-size: 0.7rem;
+    }
+}
+
+// ============================================================
+// TABLET
+// ============================================================
+@media (max-width: 900px) {
+    .purchases-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .company-purchase__data {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+// ============================================================
+// MOBILE
+// ============================================================
+@media (max-width: 600px) {
+    .admin-purchases {
+        margin-top: 1.5rem;
+    }
+
+    .purchases-panel__header {
+        padding: 1rem;
+    }
+
+    .buyer-item {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.7rem;
+        padding: 0.9rem 1rem;
+    }
+
+    .buyer-item__stats {
+        display: none;
+    }
+
+    .buyer-item__arrow {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .buyer-item__identity h4 {
+        max-width: 180px;
+    }
+
+    .latest-purchase {
+        padding: 0.9rem 1rem;
+    }
+
+    .latest-purchase__main {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .purchase-detail-overlay {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .purchase-detail {
+        width: 100%;
+        max-height: 94vh;
+        border-radius: 20px 20px 0 0;
+    }
+
+    .purchase-detail__header {
+        padding: 1rem;
+    }
+
+    .purchase-detail__summary {
+        padding: 0.8rem 1rem;
+    }
+
+    .purchase-detail__list {
+        padding: 0.8rem 1rem 1rem;
+    }
+
+    .company-purchase {
+        padding: 0.9rem;
+    }
+
+    .company-purchase__route {
+        flex-direction: column;
+        gap: 0.35rem;
+    }
+
+    .company-purchase__data {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .company-purchase__footer {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .company-purchase__data {
+        grid-template-columns: 1fr;
+    }
+
+    .purchase-detail__summary {
+        grid-template-columns: 1fr;
     }
 }
