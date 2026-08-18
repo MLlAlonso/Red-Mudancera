@@ -2,30 +2,28 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import {
+    getExpedienteSeguroPublico,
+    iniciarExpedienteSeguro,
+    guardarPasoUnoSeguro,
+    guardarPasoDosSeguro,
+    guardarPasoTresSeguro,
+    generarEnlaceEmpresaSeguro,
+} from "@/services/seguro";
 
-import { getExpedienteSeguroPublico, iniciarExpedienteSeguro, guardarPasoUnoSeguro, } from "@/services/seguro";
+import SeguroStepUno from "../components/SeguroStepUno";
+import SeguroStepDos from "../components/SeguroStepDos";
+import SeguroStepTres from "../components/SeguroStepTres";
 import "@/styles/pages/seguros/_continuar.scss";
 
 export default function SeguroPublicoPage() {
     const params = useParams();
     const folio = params?.folio;
-
-    /*
-    |--------------------------------------------------------------------------
-    | Estado principal
-    |--------------------------------------------------------------------------
-    */
     const [expediente, setExpediente] = useState(null);
     const [loading, setLoading] = useState(true);
     const [starting, setStarting] = useState(false);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState("");
-
-    /*
-    |--------------------------------------------------------------------------
-    | Paso actual
-    |--------------------------------------------------------------------------
-    */
     const [paso, setPaso] = useState(1);
 
     /*
@@ -36,13 +34,59 @@ export default function SeguroPublicoPage() {
     const [tipoSeguro, setTipoSeguro] = useState("");
     const [valorMenaje, setValorMenaje] = useState("");
     const [valorAutomovil, setValorAutomovil] = useState("");
+    const [pasoUnoGuardado, setPasoUnoGuardado] = useState(false);
 
     /*
     |--------------------------------------------------------------------------
-    | Paso 1 completado
+    | Paso 2
     |--------------------------------------------------------------------------
     */
-    const [pasoUnoGuardado, setPasoUnoGuardado] = useState(false);
+    const [nombre, setNombre] = useState("");
+    const [email, setEmail] = useState("");
+    const [telefono, setTelefono] = useState("");
+    const [pasoDosGuardado, setPasoDosGuardado] = useState(false);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Paso 3
+    |--------------------------------------------------------------------------
+    */
+    const [empresaMudanza, setEmpresaMudanza] = useState("");
+    const [origen, setOrigen] = useState("");
+    const [destino, setDestino] = useState("");
+    const [fechaSalida, setFechaSalida] = useState("");
+    const [fechaLlegada, setFechaLlegada] = useState("");
+    const [propietarioUnidad, setPropietarioUnidad] = useState("");
+    const [marcaUnidad, setMarcaUnidad] = useState("");
+    const [modeloUnidad, setModeloUnidad] = useState("");
+    const [placas, setPlacas] = useState("");
+    const [chofer, setChofer] = useState("");
+    const [pasoTresGuardado, setPasoTresGuardado] = useState(false);
+    const [enlaceEmpresa, setEnlaceEmpresa] = useState("");
+    const [generandoEnlaceEmpresa, setGenerandoEnlaceEmpresa] = useState(false);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Generar enlace privado para empresa
+    |--------------------------------------------------------------------------
+    */
+    async function generarEnlaceEmpresa() {
+        if (generandoEnlaceEmpresa || !folio) {
+            return;
+        }
+
+        try {
+            setGenerandoEnlaceEmpresa(true);
+            setError("");
+            const response = await generarEnlaceEmpresaSeguro(folio);
+            setEnlaceEmpresa(response.data.url);
+        } catch (error) {
+            console.error(error);
+            setError(error.message || "No fue posible generar el enlace para la empresa.");
+        } finally {
+            setGenerandoEnlaceEmpresa(false);
+        }
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -72,7 +116,7 @@ export default function SeguroPublicoPage() {
 
             /*
             |--------------------------------------------------------------------------
-            | Si ya existe información del Paso 1, cargarla en el formulario.
+            | Cargar Paso 1
             |--------------------------------------------------------------------------
             */
             if (data.tipo_seguro) {
@@ -89,10 +133,81 @@ export default function SeguroPublicoPage() {
 
             /*
             |--------------------------------------------------------------------------
+            | Cargar Paso 2
+            |--------------------------------------------------------------------------
+            */
+            if (data.nombre) {
+                setNombre(data.nombre);
+            }
+
+            if (data.email) {
+                setEmail(data.email);
+            }
+
+            if (data.telefono) {
+                setTelefono(data.telefono);
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Cargar Paso 3
+            |--------------------------------------------------------------------------
+            */
+            if (data.empresa_mudanza) {
+                setEmpresaMudanza(data.empresa_mudanza);
+            }
+
+            if (data.origen) {
+                setOrigen(data.origen);
+            }
+
+            if (data.destino) {
+                setDestino(data.destino);
+            }
+
+            if (data.fecha_salida) {
+                setFechaSalida(String(data.fecha_salida).substring(0, 10));
+            }
+
+            if (data.fecha_llegada) {
+                setFechaLlegada(String(data.fecha_llegada).substring(0, 10));
+            }
+
+            if (data.propietario_unidad) {
+                setPropietarioUnidad(data.propietario_unidad);
+            }
+
+            if (data.marca_unidad) {
+                setMarcaUnidad(data.marca_unidad);
+            }
+
+            if (data.modelo_unidad) {
+                setModeloUnidad(data.modelo_unidad);
+            }
+
+            if (data.placas) {
+                setPlacas(data.placas);
+            }
+
+            if (data.chofer) {
+                setChofer(data.chofer);
+            }
+
+            /*
+            |--------------------------------------------------------------------------
             | Determinar paso actual
             |--------------------------------------------------------------------------
             */
-            if (data.progreso >= 33) {
+            if (data.progreso >= 100) {
+                setPasoUnoGuardado(true);
+                setPasoDosGuardado(true);
+                setPasoTresGuardado(true);
+                setPaso(3);
+            } else if (data.progreso >= 66) {
+                setPasoUnoGuardado(true);
+                setPasoDosGuardado(true);
+                setPaso(3);
+            } else if (data.progreso >= 33) {
                 setPasoUnoGuardado(true);
                 setPaso(2);
             } else {
@@ -101,8 +216,8 @@ export default function SeguroPublicoPage() {
 
         } catch (error) {
             console.error(error);
-
             setError(error.message || "No fue posible cargar tu expediente.");
+
         } finally {
             setLoading(false);
         }
@@ -146,11 +261,6 @@ export default function SeguroPublicoPage() {
     function handleTipoSeguro(tipo) {
         setTipoSeguro(tipo);
 
-        /*
-        |--------------------------------------------------------------------------
-        | Limpiar valores que ya no correspondan
-        |--------------------------------------------------------------------------
-        */
         if (tipo === "menaje") {
             setValorAutomovil("");
         }
@@ -158,28 +268,6 @@ export default function SeguroPublicoPage() {
         if (tipo === "automovil") {
             setValorMenaje("");
         }
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Formatear valor monetario para mostrar
-    |--------------------------------------------------------------------------
-    */
-    function formatearNumero(valor) {
-        if (!valor) {
-            return "";
-        }
-
-        const numero = Number(String(valor).replace(/,/g, ""));
-
-        if (Number.isNaN(numero)) {
-            return valor;
-        }
-
-        return numero.toLocaleString("es-MX", {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-        });
     }
 
     /*
@@ -194,52 +282,26 @@ export default function SeguroPublicoPage() {
 
         setError("");
 
-        /*
-        |--------------------------------------------------------------------------
-        | Validar tipo
-        |--------------------------------------------------------------------------
-        */
         if (!tipoSeguro) {
             setError("Selecciona qué tipo de seguro deseas solicitar.");
             return;
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Convertir valores
-        |--------------------------------------------------------------------------
-        */
         const menaje = valorMenaje === "" ? null : Number(String(valorMenaje).replace(/,/g, ""));
         const automovil = valorAutomovil === "" ? null : Number(String(valorAutomovil).replace(/,/g, ""));
 
-        /*
-        |--------------------------------------------------------------------------
-        | Validar valor del menaje
-        |--------------------------------------------------------------------------
-        */
         if ((tipoSeguro === "menaje" || tipoSeguro === "menaje_auto") && (!menaje || menaje <= 0)) {
             setError("Indica el valor aproximado del menaje.");
             return;
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Validar valor del automóvil
-        |--------------------------------------------------------------------------
-        */
         if ((tipoSeguro === "automovil" || tipoSeguro === "menaje_auto") && (!automovil || automovil <= 0)) {
             setError("Indica el valor aproximado del automóvil.");
             return;
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Guardar
-        |--------------------------------------------------------------------------
-        */
         try {
             setSaving(true);
-
             const response = await guardarPasoUnoSeguro(folio,
                 {
                     tipo_seguro: tipoSeguro,
@@ -248,11 +310,6 @@ export default function SeguroPublicoPage() {
                 }
             );
 
-            /*
-            |--------------------------------------------------------------------------
-            | Actualizar expediente
-            |--------------------------------------------------------------------------
-            */
             setExpediente((prev) => ({
                 ...prev,
                 estado: response.data.estado,
@@ -264,14 +321,7 @@ export default function SeguroPublicoPage() {
             }));
 
             setPasoUnoGuardado(true);
-
-            /*
-            |--------------------------------------------------------------------------
-            | Todavía no avanzamos automáticamente al Paso 2.
-            | El endpoint del Paso 2 todavía no existe. Por ahora dejamos registrado el Paso 1.
-            |--------------------------------------------------------------------------
-            */
-            setPaso(1);
+            setPaso(2);
 
         } catch (error) {
             console.error(error);
@@ -279,6 +329,213 @@ export default function SeguroPublicoPage() {
         } finally {
             setSaving(false);
         }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Guardar Paso 2
+    |--------------------------------------------------------------------------
+    */
+    async function guardarPasoDos() {
+        if (saving) {
+            return;
+        }
+
+        setError("");
+
+        if (!nombre.trim()) {
+            setError("Ingresa tu nombre completo.");
+            return;
+        }
+
+        if (!email.trim()) {
+            setError("Ingresa tu correo electrónico.");
+            return;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(email.trim())) {
+            setError("Ingresa un correo electrónico válido.");
+            return;
+        }
+
+        if (!telefono.trim()) {
+            setError("Ingresa tu teléfono de contacto.");
+            return;
+        }
+
+        try {
+            setSaving(true);
+
+            const response = await guardarPasoDosSeguro(
+                folio, {
+                nombre: nombre.trim(),
+                email: email.trim(),
+                telefono: telefono.trim(),
+            }
+            );
+
+            setExpediente((prev) => ({
+                ...prev,
+                estado: response.data.estado,
+                progreso: response.data.progreso,
+                nombre: response.data.nombre,
+                email: response.data.email,
+                telefono: response.data.telefono,
+            }));
+
+            setPasoDosGuardado(true);
+            setPaso(3);
+        } catch (error) {
+            console.error(error);
+            setError(error.message || "No fue posible guardar los datos del cliente.");
+        } finally {
+            setSaving(false);
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Guardar Paso 3
+    |--------------------------------------------------------------------------
+    */
+    async function guardarPasoTres() {
+        if (saving) {
+            return;
+        }
+
+        setError("");
+
+        if (!empresaMudanza.trim()) {
+            setError("Ingresa el nombre de la empresa de mudanza.");
+            return;
+        }
+
+        if (!origen.trim()) {
+            setError("Ingresa el origen de la mudanza.");
+            return;
+        }
+
+        if (!destino.trim()) {
+            setError("Ingresa el destino de la mudanza.");
+            return;
+        }
+
+        if (!fechaSalida) {
+            setError("Selecciona la fecha de salida.");
+            return;
+        }
+
+        if (!fechaLlegada) {
+            setError("Selecciona la fecha de llegada.");
+            return;
+        }
+
+        if (fechaLlegada < fechaSalida) {
+            setError("La fecha de llegada debe ser igual o posterior a la fecha de salida.");
+            return;
+        }
+
+        if (!propietarioUnidad.trim()) {
+            setError("Ingresa el propietario de la unidad.");
+            return;
+        }
+
+        if (!marcaUnidad.trim()) {
+            setError("Ingresa la marca de la unidad.");
+            return;
+        }
+
+        if (!modeloUnidad.trim()) {
+            setError("Ingresa el modelo de la unidad.");
+            return;
+        }
+
+        if (!placas.trim()) {
+            setError("Ingresa las placas de la unidad.");
+            return;
+        }
+
+        if (!chofer.trim()) {
+            setError("Ingresa el nombre del chofer.");
+            return;
+        }
+
+        try {
+            setSaving(true);
+
+            const response = await guardarPasoTresSeguro(
+                folio,
+                {
+                    empresa_mudanza: empresaMudanza.trim(),
+                    origen: origen.trim(),
+                    destino: destino.trim(),
+                    fecha_salida: fechaSalida,
+                    fecha_llegada: fechaLlegada,
+                    propietario_unidad: propietarioUnidad.trim(),
+                    marca_unidad: marcaUnidad.trim(),
+                    modelo_unidad: modeloUnidad.trim(),
+                    placas: placas.trim(),
+                    chofer: chofer.trim(),
+                }
+            );
+
+            setExpediente((prev) => ({
+                ...prev,
+                estado: response.data.estado,
+                progreso: response.data.progreso,
+                empresa_mudanza: response.data.empresa_mudanza,
+                origen: response.data.origen,
+                destino: response.data.destino,
+                fecha_salida: response.data.fecha_salida,
+                fecha_llegada: response.data.fecha_llegada,
+                propietario_unidad: response.data.propietario_unidad,
+                marca_unidad: response.data.marca_unidad,
+                modelo_unidad: response.data.modelo_unidad,
+                placas: response.data.placas,
+                chofer: response.data.chofer,
+            }));
+
+            setPasoTresGuardado(true);
+            setPaso(3);
+        } catch (error) {
+            console.error(error);
+
+            setError(
+                error.message || "No fue posible guardar la información de la mudanza."
+            );
+
+        } finally {
+            setSaving(false);
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Formatear moneda
+    |--------------------------------------------------------------------------
+    */
+    function formatearMoneda(valor) {
+        if (valor === null || valor === undefined || valor === "") {
+            return "$0.00";
+        }
+
+        const numero = Number(String(valor).replace(/,/g, ""));
+
+        if (Number.isNaN(numero)) {
+            return "$0.00";
+        }
+
+        return numero.toLocaleString(
+            "es-MX",
+            {
+                style: "currency",
+                currency: "MXN",
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            }
+        );
     }
 
     /*
@@ -332,7 +589,6 @@ export default function SeguroPublicoPage() {
                     </div>
 
                     <h1> Expediente cancelado </h1>
-
                     <p> Este expediente ya no está disponible. </p>
 
                     <div className="seguro-publico__folio">
@@ -358,7 +614,6 @@ export default function SeguroPublicoPage() {
                     </div>
 
                     <h1> Expediente completado </h1>
-
                     <p> Tu expediente de seguro ya fue completado. </p>
 
                     <div className="seguro-publico__folio">
@@ -393,9 +648,7 @@ export default function SeguroPublicoPage() {
                         Hola{" "} <strong> {expediente?.nombre} </strong>.
                     </p>
 
-                    <p>
-                        Hemos recibido tu solicitud de información   sobre seguro para tu mudanza.
-                    </p>
+                    <p> Hemos recibido tu solicitud de información sobre seguro para tu mudanza. </p>
 
                     <div className="seguro-publico__folio">
                         <span> Folio </span>
@@ -404,8 +657,13 @@ export default function SeguroPublicoPage() {
 
                     <div className="seguro-publico__summary">
                         <div>
-                            <span> Origen </span>
-                            <strong> {expediente?.origen || "Pendiente"} </strong>
+                            <span>
+                                Origen
+                            </span>
+
+                            <strong>
+                                {expediente?.origen || "Pendiente"}
+                            </strong>
                         </div>
 
                         <div>
@@ -425,17 +683,11 @@ export default function SeguroPublicoPage() {
 
                     <div className="seguro-publico__notice">
                         <strong> ¿Qué sigue? </strong>
-                        <p>
-                            Te haremos algunas preguntas para completar la información necesaria para tu solicitud de seguro.
-                        </p>
+                        <p> Te haremos algunas preguntas para completar la información necesaria para tu solicitud de seguro. </p>
                     </div>
 
                     {
-                        error && (
-                            <div className="seguro-publico__inline-error">
-                                {error}
-                            </div>
-                        )
+                        error && (<div className="seguro-publico__inline-error"> {error}  </div>)
                     }
 
                     <button className="seguro-publico__button" onClick={iniciar} disabled={starting} >
@@ -469,8 +721,7 @@ export default function SeguroPublicoPage() {
                         <span className="seguro-publico__eyebrow">
                             Expediente de seguro
                         </span>
-
-                        <h1> Completa tu expediente </h1>
+                        <h1>  Completa tu expediente </h1>
                     </div>
 
                     <div className="seguro-publico__folio seguro-publico__folio--small">
@@ -481,7 +732,7 @@ export default function SeguroPublicoPage() {
 
                 <div className="seguro-publico__progress">
                     <div className="seguro-publico__progress-header">
-                        <span> Paso {paso} de 3 </span>
+                        <span>  Paso {paso} de 4 </span>
                         <strong> {expediente?.progreso || 0}% </strong>
                     </div>
 
@@ -492,160 +743,94 @@ export default function SeguroPublicoPage() {
 
                 {
                     paso === 1 && (
-                        <section className="seguro-publico__step">
-                            <div className="seguro-publico__step-heading">
-                                <span> Paso 1 </span>
-                                <h2> ¿Qué deseas asegurar? </h2>
-                                <p> Selecciona el tipo de protección que necesitas para tu mudanza. </p>
-                            </div>
-
-                            <div className="seguro-publico__insurance-options">
-                                <button
-                                    type="button"
-                                    className={`insurance-option ${tipoSeguro === "menaje" ? "is-selected" : ""}`}
-                                    onClick={() => handleTipoSeguro("menaje")}
-                                >
-
-                                    <div className="insurance-option__radio">
-                                        <span />
-                                    </div>
-
-                                    <div className="insurance-option__content">
-                                        <strong> Menaje </strong>
-                                        <p> Protege los artículos y bienes de tu mudanza. </p>
-                                    </div>
-                                </button>
-
-                                <button
-                                    type="button"
-                                    className={`insurance-option ${tipoSeguro === "menaje_auto" ? "is-selected" : ""}`}
-                                    onClick={() => handleTipoSeguro("menaje_auto")}
-                                >
-
-                                    <div className="insurance-option__radio">
-                                        <span />
-                                    </div>
-
-                                    <div className="insurance-option__content">
-                                        <strong>  Menaje + Automóvil </strong>
-                                        <p>  Protege tus artículos y un automóvil. </p>
-                                    </div>
-                                </button>
-
-                                <button
-                                    type="button"
-                                    className={`insurance-option ${tipoSeguro === "automovil" ? "is-selected" : ""}`}
-                                    onClick={() => handleTipoSeguro("automovil")}
-                                >
-
-                                    <div className="insurance-option__radio">
-                                        <span />
-                                    </div>
-
-                                    <div className="insurance-option__content">
-                                        <strong> Automóvil </strong>
-                                        <p> Protección para el automóvil transportado. </p>
-                                    </div>
-                                </button>
-                            </div>
-
-                            {
-                                (tipoSeguro === "menaje" || tipoSeguro === "menaje_auto") && (
-                                    <div className="seguro-publico__field">
-                                        <label htmlFor="valor_menaje">
-                                            Valor aproximado del menaje
-                                        </label>
-
-                                        <div className="money-input">
-                                            <span> $ </span>
-
-                                            <input
-                                                id="valor_menaje"
-                                                type="number"
-                                                min="0"
-                                                step="0.01"
-                                                inputMode="decimal"
-                                                placeholder="Ej. 250000"
-                                                value={valorMenaje}
-                                                onChange={(e) => setValorMenaje(e.target.value)}
-                                            />
-
-                                            <small> MXN </small>
-                                        </div>
-
-                                        <p className="field-help">
-                                            Indica el valor aproximado de los artículos que deseas proteger.
-                                        </p>
-                                    </div>
-                                )
-                            }
-
-                            {
-                                (tipoSeguro === "automovil" || tipoSeguro === "menaje_auto") && (
-                                    <div className="seguro-publico__field">
-                                        <label htmlFor="valor_automovil">
-                                            Valor aproximado del automóvil
-                                        </label>
-
-                                        <div className="money-input">
-                                            <span> $ </span>
-
-                                            <input
-                                                id="valor_automovil"
-                                                type="number"
-                                                min="0"
-                                                step="0.01"
-                                                inputMode="decimal"
-                                                placeholder="Ej. 350000"
-                                                value={valorAutomovil}
-                                                onChange={(e) => setValorAutomovil(e.target.value)}
-                                            />
-
-                                            <small> MXN </small>
-                                        </div>
-
-                                        <p className="field-help">
-                                            Indica el valor aproximado del automóvil que deseas proteger.
-                                        </p>
-                                    </div>
-                                )
-                            }
-
-                            {
-                                error && (
-                                    <div className="seguro-publico__inline-error">
-                                        {error}
-                                    </div>
-                                )
-                            }
-
-                            {
-                                pasoUnoGuardado && (
-                                    <div className="seguro-publico__saved">
-                                        <span> ✓ </span>
-
-                                        <div>
-                                            <strong>Información guardada</strong>
-                                            <p>Los datos del Paso 1 fueron registrados correctamente.</p>
-                                        </div>
-                                    </div>
-                                )
-                            }
-
-                            <div className="seguro-publico__actions">
-                                <button type="button" className="seguro-publico__button" onClick={guardarPasoUno} disabled={saving} >
-                                    {
-                                        saving ? "Guardando..." : pasoUnoGuardado ? "Actualizar información" : "Continuar"
-                                    }
-                                </button>
-                            </div>
-
-                            <p className="seguro-publico__privacy">
-                                Tu información será utilizada únicamente para dar seguimiento a tu solicitud de seguro.
-                            </p>
-                        </section>
+                        <SeguroStepUno
+                            tipoSeguro={tipoSeguro}
+                            valorMenaje={valorMenaje}
+                            valorAutomovil={valorAutomovil}
+                            pasoUnoGuardado={pasoUnoGuardado}
+                            expediente={expediente}
+                            error={error}
+                            saving={saving}
+                            onTipoSeguroChange={handleTipoSeguro}
+                            onValorMenajeChange={setValorMenaje}
+                            onValorAutomovilChange={setValorAutomovil}
+                            onGuardar={guardarPasoUno}
+                            formatearMoneda={formatearMoneda}
+                        />
                     )
                 }
+
+                {
+                    paso === 2 && (
+                        <SeguroStepDos
+                            nombre={nombre}
+                            email={email}
+                            telefono={telefono}
+                            pasoDosGuardado={pasoDosGuardado}
+                            error={error}
+                            saving={saving}
+                            onNombreChange={setNombre}
+                            onEmailChange={setEmail}
+                            onTelefonoChange={setTelefono}
+                            onGuardar={guardarPasoDos}
+                            onAnterior={() => {
+                                setError("");
+                                setPaso(1);
+                            }}
+                        />
+                    )
+                }
+
+                {
+                    paso === 3 && (
+                        <SeguroStepTres
+                            empresaMudanza={empresaMudanza}
+                            origen={origen}
+                            destino={destino}
+                            fechaSalida={fechaSalida}
+                            fechaLlegada={fechaLlegada}
+                            propietarioUnidad={propietarioUnidad}
+                            marcaUnidad={marcaUnidad}
+                            modeloUnidad={modeloUnidad}
+                            placas={placas}
+                            chofer={chofer}
+                            error={error}
+                            saving={saving}
+                            pasoTresGuardado={pasoTresGuardado}
+                            onEmpresaMudanzaChange={setEmpresaMudanza}
+                            onOrigenChange={setOrigen}
+                            onDestinoChange={setDestino}
+                            onFechaSalidaChange={setFechaSalida}
+                            onFechaLlegadaChange={setFechaLlegada}
+                            onPropietarioUnidadChange={setPropietarioUnidad}
+                            onMarcaUnidadChange={setMarcaUnidad}
+                            onModeloUnidadChange={setModeloUnidad}
+                            onPlacasChange={setPlacas}
+                            onChoferChange={setChofer}
+                            onGenerarEnlaceEmpresa={generarEnlaceEmpresa}
+                            generandoEnlaceEmpresa={generandoEnlaceEmpresa}
+                            enlaceEmpresa={enlaceEmpresa}
+                            onGuardar={guardarPasoTres}
+                            onAnterior={() => { setError(""); setPaso(2); }}
+                        />
+                    )
+                }
+
+                <div className="seguro-publico__help">
+                    <div className="seguro-publico__help-icon">
+                        <img src="/icons/help.png" alt="Ayuda" />
+                    </div>
+
+                    <div className="seguro-publico__help-content">
+                        <h3> ¿Necesitas ayuda? </h3>
+
+                        <p> Contáctanos por Whatsapp y con gusto te ayudamos </p>
+
+                        <a href="https://wa.me/524421896433" target="_blank" rel="noopener noreferrer" >
+                            Contáctanos
+                        </a>
+                    </div>
+                </div>
             </section>
         </main>
     );

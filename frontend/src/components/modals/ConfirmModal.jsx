@@ -19,40 +19,19 @@ export default function ConfirmModal({
             <div className="confirm-modal">
 
                 <div className="confirm-modal__icon">
-                    <img
-                        src={
-                            danger
-                                ? "/icons/delete.png"
-                                : "/icons/advertencia.png"
-                        }
-                        alt=""
-                    />
+                    <img src={ danger ? "/icons/delete.png" : "/icons/check_success.png" } alt="" />
                 </div>
 
-                <h2>
-                    {title}
-                </h2>
-
-                <p>
-                    {message}
-                </p>
+                <h2> {title} </h2>
+                <p> {message} </p>
 
                 <div className="confirm-modal__actions">
-
-                    <button
-                        className="confirm-modal__cancel"
-                        onClick={onClose}
-                    >
+                    <button className="confirm-modal__cancel" onClick={onClose} >
                         {cancelText}
                     </button>
 
-                    <Button_cta
-                        value={confirmText}
-                        onClick={onConfirm}
-                    />
-
+                    <Button_cta value={confirmText} onClick={onConfirm} />
                 </div>
-
             </div>
         </BaseModal>
     );

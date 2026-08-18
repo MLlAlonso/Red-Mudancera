@@ -1,0 +1,400 @@
+@use "@/styles/utils/variables" as *;
+
+.seguro-empresa {
+    min-height: 100vh;
+    padding: 50px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background: $background;
+    color: $text;
+    font-family: $font-text;
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    &__card {
+        width: 100%;
+        max-width: 700px;
+        padding: 35px;
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 15px 45px rgba(9, 35, 62, 0.09);
+    }
+
+    &__brand {
+        margin-bottom: 25px;
+
+        img {
+            display: block;
+            width: auto;
+            max-width: 180px;
+            max-height: 55px;
+            object-fit: contain;
+        }
+    }
+
+    &__eyebrow {
+        display: inline-block;
+        margin-bottom: 5px;
+        color: $tertiary;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+    }
+
+    h1 {
+        margin: 5px 0 10px;
+        color: $title;
+        font-family: $font-title;
+        font-size: 32px;
+        font-weight: 800;
+    }
+
+    &__intro {
+        margin: 0 0 25px;
+        color: $text-muted;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    &__privacy {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 25px;
+        padding: 15px;
+        background: rgba(58, 110, 165, .08);
+        border: 1px solid rgba(58, 110, 165, .16);
+        border-radius: 12px;
+
+        p {
+            margin: 0;
+            color: $text;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+    }
+
+    &__privacy-icon {
+        width: 26px;
+        height: 26px;
+        flex: 0 0 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: $azul_001;
+        color: white;
+        border-radius: 50%;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    &__completed {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 25px;
+        padding: 15px;
+        background: rgba(28, 143, 106, .08);
+        border: 1px solid rgba(28, 143, 106, .18);
+        border-radius: 12px;
+
+        >span {
+            width: 28px;
+            height: 28px;
+            flex: 0 0 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: $success;
+            color: white;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        strong {
+            display: block;
+            margin-bottom: 3px;
+            color: $success;
+            font-size: 14px;
+        }
+
+        p {
+            margin: 0;
+            color: $text;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+    }
+
+    &__field {
+        margin-bottom: 18px;
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: $title;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        input {
+            width: 100%;
+            min-height: 48px;
+            padding: 12px 14px;
+            border: 1px solid $secondary;
+            border-radius: 10px;
+            outline: none;
+            background: white;
+            color: $title;
+            font-family: $font-text;
+            font-size: 14px;
+            transition:
+                border-color .2s ease,
+                box-shadow .2s ease;
+
+            &::placeholder {
+                color: $secondary;
+            }
+
+            &:focus {
+                border-color: $azul_001;
+                box-shadow: 0 0 0 3px rgba(58, 110, 165, .12);
+            }
+        }
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    &__error {
+        margin-top: 5px;
+        padding: 12px 14px;
+        border-left: 4px solid $error-hover;
+        border-radius: 0 8px 8px 0;
+        background: rgba(171, 176, 180, .18);
+        color: $error-hover;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    &__success {
+        margin-top: 5px;
+        padding: 12px 14px;
+        border-left: 4px solid $success;
+        border-radius: 0 8px 8px 0;
+        background: rgba(28, 143, 106, .08);
+        color: $success;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    &__actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 25px;
+    }
+
+    &__button {
+        min-height: 48px;
+        padding: 12px 20px;
+        border: 0;
+        border-radius: 10px;
+        background: $primary;
+        color: white;
+        font-family: $font-text;
+        font-size: 14px;
+        font-weight: 800;
+        cursor: pointer;
+        transition:
+            background .2s ease,
+            transform .2s ease,
+            opacity .2s ease;
+
+        &:hover:not(:disabled) {
+            background: $primary-hover;
+            transform: translateY(-1px);
+        }
+
+        &:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+        }
+
+        &--secondary {
+            background: $cards;
+            color: $primary;
+
+            &:hover:not(:disabled) {
+                background: $secondary;
+            }
+        }
+    }
+
+    &__footer {
+        margin: 22px 0 0;
+        color: $text-muted;
+        font-size: 11px;
+        line-height: 1.5;
+        text-align: center;
+    }
+
+    &__loading {
+        width: 100%;
+        max-width: 500px;
+        min-height: 60vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        color: $text-muted;
+
+        p {
+            margin: 0;
+            font-size: 14px;
+        }
+    }
+
+    .loading-spinner {
+        width: 42px;
+        height: 42px;
+        border: 4px solid $cards;
+        border-top-color: $tertiary;
+        border-radius: 50%;
+        animation: seguro-empresa-spinner .8s linear infinite;
+    }
+
+    &__error-icon {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(171, 176, 180, .2);
+        border-radius: 50%;
+        color: $error-hover;
+        font-size: 28px;
+        font-weight: 800;
+    }
+
+    &__card>h1 {
+        text-align: center;
+    }
+
+    &__card>p {
+        line-height: 1.6;
+    }
+
+    &__help {
+        display: grid;
+        grid-template-columns: 70px 1fr;
+        align-items: center;
+        gap: 18px;
+        margin-top: 28px;
+        padding: 20px;
+        background: rgba(58, 110, 165, 0.08);
+        border: 1px solid rgba(58, 110, 165, 0.15);
+        border-radius: 14px;
+    }
+
+    &__help-icon {
+        width: 58px;
+        height: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(58, 110, 165, 0.12);
+        border-radius: 12px;
+
+        img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+        }
+    }
+
+    &__help-content {
+        min-width: 0;
+
+        h3 {
+            margin: 0 0 5px;
+            color: $title;
+            font-family: $font-title;
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        p {
+            margin: 0 0 10px;
+            color: $text;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        a {
+            display: inline-block;
+            color: $azul_001;
+            font-size: 13px;
+            font-weight: 800;
+            text-decoration: none;
+            transition: color 0.2s ease;
+
+            &:hover {
+                color: $azul_002;
+                text-decoration: underline;
+            }
+        }
+    }
+
+    @media (max-width: 600px) {
+        padding: 25px 15px;
+
+        &__card {
+            padding: 28px 20px;
+            border-radius: 18px;
+        }
+
+        h1 {
+            font-size: 27px;
+        }
+
+        &__grid,
+        &__actions {
+            grid-template-columns: 1fr;
+        }
+
+        &__help {
+            grid-template-columns: 55px 1fr;
+            gap: 14px;
+            padding: 16px;
+        }
+
+        &__help-icon {
+            width: 50px;
+            height: 50px;
+
+            img {
+                width: 27px;
+                height: 27px;
+            }
+        }
+    }
+}
+
+@keyframes seguro-empresa-spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}

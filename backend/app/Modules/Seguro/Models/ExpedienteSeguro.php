@@ -39,7 +39,10 @@ class ExpedienteSeguro extends Model
         'correo_enviado_at',
         'cliente_inicio_at',
         'cliente_finalizo_at',
-        'ultimo_autoguardado_at'
+        'ultimo_autoguardado_at',
+        'empresa_access_token',
+        'empresa_access_created_at',
+        'empresa_datos_finalizados_at',
     ];
 
     protected $casts = [
@@ -50,10 +53,12 @@ class ExpedienteSeguro extends Model
         'ultimo_autoguardado_at' => 'datetime',
         'fecha_salida' => 'date',
         'fecha_llegada' => 'date',
-        'es_externo'=>'boolean',
+        'es_externo' => 'boolean',
         'valor_menaje' => 'decimal:2',
         'valor_automovil' => 'decimal:2',
         'prima_estimada' => 'decimal:2',
+        'empresa_access_created_at' => 'datetime',
+        'empresa_datos_finalizados_at' => 'datetime',
     ];
 
     public function solicitud()

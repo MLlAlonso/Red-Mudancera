@@ -78,8 +78,7 @@
                             </h4>
 
                             <!-- Botón -->
-                            <a href="https://app.mudanzafacil.com.mx/seguros"
-                                style="display:inline-block;background:#1C8F6A;color:#ffffff;
+                            <a href="https://app.mudanzafacil.com.mx/seguros" style="display:inline-block;background:#1C8F6A;color:#ffffff;
                   padding:12px 20px;border-radius:8px;text-decoration:none;
                   font-weight:bold;font-size:14px;">
                                 Recibir información
@@ -266,8 +265,7 @@
                                     No olvides proteger tu mudanza.
                                 </p>
 
-                                <a href="https://app.mudanzafacil.com.mx/seguros"
-                                    style="display:inline-block;background:#1C8F6A;color:#ffffff;
+                                <a href="https://app.mudanzafacil.com.mx/seguros" style="display:inline-block;background:#1C8F6A;color:#ffffff;
                   padding:12px 20px;border-radius:8px;text-decoration:none;
                   font-weight:bold;font-size:14px;">
                                     Recibir información
@@ -282,11 +280,22 @@
                                     Empresas compatibles con tu ruta podrán contactarte próximamente.
                                 </p>
 
-                                <p style="color:#1C8F6A;font-weight:bold;margin-top:16px;">
-                                    Gracias por confiar en Mudanza Fácil
+                                <p style="margin-top:20px;font-size:13px;color:#6F7F8D;line-height:1.6;">
+                                    Estamos incorporando constantemente nuevas empresas para ampliar nuestra
+                                    cobertura. Dependiendo de tu ruta, volumen y disponibilidad, en algunas
+                                    ocasiones es posible que ninguna empresa pueda contactarte.
+                                    Todos los días trabajamos para ampliar nuestra cobertura y ofrecerte
+                                    más opciones.
+                                </p>
+
+                                <p style="color:#1C8F6A;font-weight:bold;margin-top:20px;">
+                                    Gracias por confiar en Mudanza Fácil.
+                                </p>
+
+                                <p style="color:#6F7F8D;font-size:13px;margin-top:4px;">
+                                    Equipo Mudanza Fácil
                                 </p>
                             </div>
-
                         </td>
                     </tr>
 

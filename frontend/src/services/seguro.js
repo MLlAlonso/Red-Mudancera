@@ -69,6 +69,101 @@ export async function guardarPasoUnoSeguro(folio, data) {
     return handleResponse(res);
 }
 
+/*
+|--------------------------------------------------------------------------
+| Guardar Paso 2
+|--------------------------------------------------------------------------
+*/
+export async function guardarPasoDosSeguro(folio, data) {
+    const API = process.env.NEXT_PUBLIC_API_URL;
+
+    const res = await fetch(
+        `${API}/seguros/${encodeURIComponent(folio)}/paso-2`,
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json", },
+            body: JSON.stringify(data),
+        }
+    );
+
+    const responseData = await res.json();
+
+    if (!res.ok) {
+        throw new Error(responseData.message || "No fue posible guardar los datos del cliente.");
+    }
+
+    return responseData;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Paso 3
+|--------------------------------------------------------------------------
+*/
+export async function guardarPasoTresSeguro(folio, data) {
+    const res = await fetch(
+        `${API}/seguros/${folio}/paso-3`,
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json", },
+            body: JSON.stringify(data),
+        }
+    );
+
+    return handleResponse(res);
+}
+
+/*
+|--------------------------------------------------------------------------
+| Generar enlace privado para empresa
+|--------------------------------------------------------------------------
+*/
+export async function generarEnlaceEmpresaSeguro(folio) {
+    const res = await fetch(
+        `${API}/seguros/${folio}/empresa/enlace`,
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json", },
+        }
+    );
+
+    return handleResponse(res);
+}
+
+/*
+|--------------------------------------------------------------------------
+| Formulario privado de empresa
+|--------------------------------------------------------------------------
+*/
+export async function getFormularioEmpresaSeguro(token) {
+    const res = await fetch(`${API}/seguros/empresa/${token}`);
+    return handleResponse(res);
+}
+
+export async function guardarDatosEmpresaSeguro(token, data) {
+    const res = await fetch(
+        `${API}/seguros/empresa/${token}/guardar`,
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json", },
+            body: JSON.stringify(data),
+        }
+    );
+
+    return handleResponse(res);
+}
+
+export async function finalizarDatosEmpresaSeguro(token) {
+    const res = await fetch(
+        `${API}/seguros/empresa/${token}/finalizar`,
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json", },
+        }
+    );
+
+    return handleResponse(res);
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -79,4 +174,10 @@ export default {
     getExpedienteSeguroPublico,
     iniciarExpedienteSeguro,
     guardarPasoUnoSeguro,
+    guardarPasoDosSeguro,
+    guardarPasoTresSeguro,
+    generarEnlaceEmpresaSeguro,
+    getFormularioEmpresaSeguro,
+    guardarDatosEmpresaSeguro,
+    finalizarDatosEmpresaSeguro,
 };
