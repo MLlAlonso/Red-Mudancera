@@ -106,7 +106,7 @@ class SuperAdminSegurosController extends Controller
                 "destino" => $expediente->destino,
                 "es_externo" => $expediente->es_externo,
                 "tipo_seguro" => $expediente->tipo_seguro,
-                "created_at" => $expediente->created_at ->format("d/m/Y H:i"),
+                "created_at" => $expediente->created_at->format("d/m/Y H:i"),
             ];
         });
 
@@ -170,5 +170,27 @@ class SuperAdminSegurosController extends Controller
         return response()->json([
             'message' => 'Correo enviado correctamente.'
         ]);
+    }
+
+    public function pdf($id)
+    {
+        $expediente = ExpedienteSeguro::findOrFail($id);
+
+        if ($expediente->estado === 'cancelado') {
+            return response()->json([
+                'message' => 'Este expediente ha sido cancelado.'
+            ], 410);
+        }
+
+        if ($expediente->progreso < 100) {
+            return response()->json([
+                'message' => 'El expediente todavía no ha sido completado.'
+            ], 409);
+        }
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('pdf.seguro.expediente-finalizado', [ 'expediente' => $expediente, ]);
+
+        return $pdf->download( 'expediente-' . $expediente->folio . '.pdf' );
     }
 }

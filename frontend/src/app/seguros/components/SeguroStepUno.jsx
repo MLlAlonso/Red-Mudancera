@@ -14,6 +14,27 @@ export default function SeguroStepUno({
     onGuardar,
     formatearMoneda,
 }) {
+
+    const valorMenajeNumero = valorMenaje === "" ? 0 : Number(String(valorMenaje).replace(/,/g, ""));
+    const valorAutomovilNumero = valorAutomovil === "" ? 0 : Number(String(valorAutomovil).replace(/,/g, ""));
+    let basePrima = 0;
+
+    if (tipoSeguro === "menaje" || tipoSeguro === "menaje_auto") {
+        basePrima += valorMenajeNumero > 0 ? valorMenajeNumero : 0;
+    }
+
+    if (tipoSeguro === "automovil" || tipoSeguro === "menaje_auto") {
+        basePrima += valorAutomovilNumero > 0 ? valorAutomovilNumero : 0;
+    }
+
+    const primaEstimada = basePrima > 0 ? basePrima * 0.0135 : 0;
+
+    const mostrarPrima = tipoSeguro &&  (
+        (tipoSeguro === "menaje" && valorMenajeNumero > 0) ||
+        (tipoSeguro === "automovil" && valorAutomovilNumero > 0) ||
+        (tipoSeguro === "menaje_auto" && (valorMenajeNumero > 0 || valorAutomovilNumero > 0))
+    );
+
     return (
         <section className="seguro-publico__step">
             <div className="seguro-publico__step-heading">
@@ -133,12 +154,12 @@ export default function SeguroStepUno({
             }
 
             {
-                pasoUnoGuardado && expediente?.prima_estimada !== null && expediente?.prima_estimada !== undefined && (
+                mostrarPrima && (
                     <div className="seguro-publico__premium-box">
                         <div className="seguro-publico__premium-header">
                             <div>
                                 <span> Prima estimada </span>
-                                <strong> {formatearMoneda(expediente.prima_estimada)}  </strong>
+                                <strong> {formatearMoneda(primaEstimada)} </strong>
                             </div>
 
                             <div className="seguro-publico__tooltip">
@@ -152,7 +173,9 @@ export default function SeguroStepUno({
                             </div>
                         </div>
 
-                        <p> Esta es una estimación calculada con base en el valor declarado. </p>
+                        <p>
+                            Esta es una estimación calculada con base en el valor declarado.
+                        </p>
                     </div>
                 )
             }

@@ -33,11 +33,6 @@ export async function getExpedienteSeguroPublico(folio) {
     return handleResponse(res);
 }
 
-/*
-|--------------------------------------------------------------------------
-| Iniciar expediente
-|--------------------------------------------------------------------------
-*/
 export async function iniciarExpedienteSeguro(folio) {
     const res = await fetch(
         `${API}/seguros/${encodeURIComponent(folio)}/iniciar`,
@@ -51,11 +46,6 @@ export async function iniciarExpedienteSeguro(folio) {
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| Guardar Paso 1
-|--------------------------------------------------------------------------
-*/
 export async function guardarPasoUnoSeguro(folio, data) {
     const res = await fetch(
         `${API}/seguros/${encodeURIComponent(folio)}/paso-1`,
@@ -69,11 +59,6 @@ export async function guardarPasoUnoSeguro(folio, data) {
     return handleResponse(res);
 }
 
-/*
-|--------------------------------------------------------------------------
-| Guardar Paso 2
-|--------------------------------------------------------------------------
-*/
 export async function guardarPasoDosSeguro(folio, data) {
     const API = process.env.NEXT_PUBLIC_API_URL;
 
@@ -95,11 +80,6 @@ export async function guardarPasoDosSeguro(folio, data) {
     return responseData;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Paso 3
-|--------------------------------------------------------------------------
-*/
 export async function guardarPasoTresSeguro(folio, data) {
     const res = await fetch(
         `${API}/seguros/${folio}/paso-3`,
@@ -113,11 +93,6 @@ export async function guardarPasoTresSeguro(folio, data) {
     return handleResponse(res);
 }
 
-/*
-|--------------------------------------------------------------------------
-| Generar enlace privado para empresa
-|--------------------------------------------------------------------------
-*/
 export async function generarEnlaceEmpresaSeguro(folio) {
     const res = await fetch(
         `${API}/seguros/${folio}/empresa/enlace`,
@@ -165,6 +140,56 @@ export async function finalizarDatosEmpresaSeguro(token) {
     return handleResponse(res);
 }
 
+export async function finalizarExpedienteSeguro(folio) {
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/seguros/${folio}/finalizar`,
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json", },
+        }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.message || "No fue posible finalizar el expediente.");
+    }
+
+    return data;
+}
+
+export async function descargarPdfSeguro(folio) {
+    const res = await fetch(
+        `${API}/seguros/${encodeURIComponent(folio)}/pdf`,
+        {
+            method: "GET",
+            headers: { Accept: "application/pdf", },
+        }
+    );
+
+    if (!res.ok) {
+        let message = "No fue posible generar el PDF.";
+
+        try {
+            const data = await res.json();
+            message = data.message || message;
+        } catch {
+        }
+
+        throw new Error(message);
+    }
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `expediente-${folio}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+}
+
 /*
 |--------------------------------------------------------------------------
 | Exportar API
@@ -180,4 +205,6 @@ export default {
     getFormularioEmpresaSeguro,
     guardarDatosEmpresaSeguro,
     finalizarDatosEmpresaSeguro,
+    finalizarExpedienteSeguro,
+    descargarPdfSeguro,
 };

@@ -3,13 +3,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import SuperAdminLayout from "@/components/layout/SuperAdminLayout";
-import { getExpedienteSeguro } from "@/services/superAdminSeguros";
-import { enviarCorreoSeguro } from "@/services/superAdminSeguros";
+import { getExpedienteSeguro, enviarCorreoSeguro, descargarPdfSeguro, } from "@/services/superAdminSeguros";
 
 export default function SuperAdminSeguroDetallePage() {
     const { id } = useParams();
     const [expediente, setExpediente] = useState(null);
     const [sending, setSending] = useState(false);
+    const [downloading, setDownloading] = useState(false);
 
     useEffect(() => {
         if (id) {
@@ -32,6 +32,21 @@ export default function SuperAdminSeguroDetallePage() {
         setSending(false);
     }
 
+    async function descargarPdf() {
+        if (downloading)
+            return;
+
+        try {
+            setDownloading(true);
+            await descargarPdfSeguro(id);
+        } catch (error) {
+            console.error(error);
+            alert(error.message);
+        } finally {
+            setDownloading(false);
+        }
+    }
+
     if (!expediente)
         return null;
 
@@ -44,64 +59,238 @@ export default function SuperAdminSeguroDetallePage() {
                             Información del cliente
                         </h2>
 
-                        <button className="btn-primary" onClick={enviarCorreo} >
-                            {sending ? "Enviando..." : "Enviar correo"}
-                        </button>
+                        <div className="cardHeader__actions">
+                            <button type="button" className="btn-secondary" onClick={descargarPdf} disabled={downloading}  >
+                                {downloading ? "Generando PDF..." : "Descargar PDF"}
+                            </button>
+
+                            <button type="button" className="btn-primary" onClick={enviarCorreo} disabled={sending}  >
+                                {sending ? "Enviando..." : "Enviar correo"}
+                            </button>
+                        </div>
                     </div>
 
-                    <p>
-                        <strong>Nombre:</strong>
-                        {expediente.nombre}
-                    </p>
+                    <div className="detailGrid">
+                        <div>
+                            <span>Nombre</span>
+                            <strong>{expediente.nombre || "No registrado"}</strong>
+                        </div>
 
-                    <p>
-                        <strong>Correo:</strong>
-                        {expediente.email}
-                    </p>
+                        <div>
+                            <span>Correo</span>
+                            <strong>{expediente.email || "No registrado"}</strong>
+                        </div>
 
-                    <p>
-                        <strong>Teléfono:</strong>
-                        {expediente.telefono}
-                    </p>
-
+                        <div>
+                            <span>Teléfono</span>
+                            <strong>{expediente.telefono || "No registrado"}</strong>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="detailCard">
-                    <h2> Mudanza </h2>
+                    <h2>Información del seguro</h2>
 
-                    <p>
-                        <strong>Origen:</strong>
-                        {expediente.origen}
-                    </p>
+                    <div className="detailGrid">
+                        <div>
+                            <span>Tipo de seguro</span>
+                            <strong>
+                                {expediente.tipo_seguro === "menaje"
+                                    ? "Menaje"
+                                    : expediente.tipo_seguro === "automovil"
+                                        ? "Automóvil"
+                                        : expediente.tipo_seguro === "menaje_auto"
+                                            ? "Menaje + Automóvil"
+                                            : "Sin capturar"}
+                            </strong>
+                        </div>
 
-                    <p>
-                        <strong>Destino:</strong>
-                        {expediente.destino}
-                    </p>
+                        <div>
+                            <span>Valor del menaje</span>
+                            <strong>
+                                {expediente.valor_menaje ? `$${Number(expediente.valor_menaje).toLocaleString("es-MX", {
+                                    minimumFractionDigits: 2
+                                })} MXN` : "No registrado"}
+                            </strong>
+                        </div>
 
-                    <p>
-                        <strong>Inventario:</strong>
-                        {expediente.inventario}
-                    </p>
+                        <div>
+                            <span>Valor del automóvil</span>
+                            <strong>
+                                {expediente.valor_automovil ? `$${Number(expediente.valor_automovil).toLocaleString("es-MX", {
+                                    minimumFractionDigits: 2
+                                })} MXN` : "No registrado"}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Prima estimada</span>
+                            <strong>
+                                {expediente.prima_estimada ? `$${Number(expediente.prima_estimada).toLocaleString("es-MX", {
+                                    minimumFractionDigits: 2
+                                })} MXN` : "No calculada"}
+                            </strong>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="detailCard">
-                    <h2> Seguro </h2>
+                    <h2>Información de la mudanza</h2>
 
-                    <p>
-                        <strong>Estado:</strong>
-                        {expediente.estado}
-                    </p>
+                    <div className="detailGrid">
 
-                    <p>
-                        <strong>Progreso:</strong>
-                        {expediente.progreso}%
-                    </p>
+                        <div>
+                            <span>Origen</span>
+                            <strong>{expediente.origen || "No registrado"}</strong>
+                        </div>
 
-                    <p>
-                        <strong>Tipo:</strong>
-                        {expediente.tipo_seguro ?? "Sin capturar"}
-                    </p>
+                        <div>
+                            <span>Destino</span>
+                            <strong>{expediente.destino || "No registrado"}</strong>
+                        </div>
+
+                        <div>
+                            <span>Fecha de recolección</span>
+                            <strong>
+                                {expediente.fecha_recoleccion || "No registrada"}
+                            </strong>
+                        </div>
+
+                        <div className="detailGrid__full">
+                            <span>Inventario</span>
+                            <strong>
+                                {expediente.inventario || "No registrado"}
+                            </strong>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div className="detailCard">
+                    <h2>Datos de la unidad</h2>
+
+                    <div className="detailGrid">
+
+                        <div>
+                            <span>Empresa de mudanza</span>
+                            <strong>
+                                {expediente.empresa_mudanza || "No registrada"}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Propietario</span>
+                            <strong>
+                                {expediente.propietario_unidad || "No registrado"}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Marca</span>
+                            <strong>
+                                {expediente.marca_unidad || "No registrada"}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Modelo</span>
+                            <strong>
+                                {expediente.modelo_unidad || "No registrado"}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Placas</span>
+                            <strong>
+                                {expediente.placas || "No registradas"}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Chofer</span>
+                            <strong>
+                                {expediente.chofer || "No registrado"}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Fecha de salida</span>
+                            <strong>
+                                {expediente.fecha_salida || "No registrada"}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Fecha de llegada</span>
+                            <strong>
+                                {expediente.fecha_llegada || "No registrada"}
+                            </strong>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div className="detailCard">
+                    <h2>Estado del expediente</h2>
+
+                    <div className="detailGrid">
+                        <div>
+                            <span>Estado</span>
+                            <strong>
+                                {expediente.estado}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Progreso</span>
+                            <strong>
+                                {expediente.progreso}%
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Expediente externo</span>
+                            <strong>
+                                {expediente.es_externo ? "Sí" : "No"}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Creado</span>
+                            <strong>
+                                {expediente.created_at ? new Date(expediente.created_at).toLocaleString("es-MX") : "No disponible"}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Inicio del cliente</span>
+                            <strong>
+                                {expediente.cliente_inicio_at ? new Date(expediente.cliente_inicio_at).toLocaleString("es-MX") : "No iniciado"}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Finalización del cliente</span>
+                            <strong>
+                                {expediente.cliente_finalizo_at ? new Date(expediente.cliente_finalizo_at).toLocaleString("es-MX") : "No finalizado"}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Datos empresa finalizados</span>
+                            <strong>
+                                {expediente.empresa_datos_finalizados_at ? new Date(expediente.empresa_datos_finalizados_at).toLocaleString("es-MX") : "No finalizados"}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Último autoguardado</span>
+                            <strong>
+                                {expediente.ultimo_autoguardado_at ? new Date(expediente.ultimo_autoguardado_at).toLocaleString("es-MX") : "Sin registro"}
+                            </strong>
+                        </div>
+
+                    </div>
                 </div>
             </section>
         </SuperAdminLayout>

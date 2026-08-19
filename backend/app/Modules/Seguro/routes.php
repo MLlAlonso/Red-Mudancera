@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Modules\Seguro\Controllers\SeguroController;
 
 Route::prefix('seguros')->group(function () {
+    Route::get('/{folio}/pdf', [SeguroController::class, 'descargarPdf']);
     /*
     |--------------------------------------------------------------------------
     | Acceso público al expediente
@@ -26,6 +27,7 @@ Route::prefix('seguros')->group(function () {
     Route::post('/{folio}/paso-1', [SeguroController::class, 'guardarPasoUno']);
     Route::post('/{folio}/paso-2', [SeguroController::class, 'guardarPasoDos']);
     Route::post('/{folio}/paso-3', [SeguroController::class, 'guardarPasoTres']);
+    Route::post('/{folio}/finalizar', [SeguroController::class, 'finalizarExpediente']);
 
     /*
     |--------------------------------------------------------------------------

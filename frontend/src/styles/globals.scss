@@ -47,6 +47,9 @@
 @use "./pages/superadmin/trialRequests";
 @use "./pages/superadmin/seguros";
 
+
+@use "./pages/seguros/seguro-pdf";
+
 @use "./components/systemToast";
 
 * {

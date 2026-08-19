@@ -46,6 +46,7 @@ Route::prefix('superadmin')->group(function () {
     Route::get('/seguros', [SuperAdminSegurosController::class, 'index']);
     Route::get('/seguros/{id}', [SuperAdminSegurosController::class, 'show']);
     Route::post('/seguros/{id}/enviar-correo', [SuperAdminSegurosController::class, 'enviarCorreo']);
+    Route::get('/seguros/{id}/pdf', [SuperAdminSegurosController::class, 'pdf']);
 
     /*
     |--------------------------------------------------------------------------

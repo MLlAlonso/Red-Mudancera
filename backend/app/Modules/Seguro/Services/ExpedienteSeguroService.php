@@ -66,7 +66,7 @@ class ExpedienteSeguroService
 
     public function iniciarCaptura(ExpedienteSeguro $expediente): ExpedienteSeguro
     {
-        if (in_array($expediente->estado, ['nuevo', 'esperando_cliente'], true)) {
+        if (in_array($expediente->estado, ['nuevo', 'correo_programado', 'esperando_cliente'], true)) {
             $expediente->update([
                 'estado' => 'capturando',
                 'cliente_inicio_at' => $expediente->cliente_inicio_at ?? now(),
@@ -161,7 +161,6 @@ class ExpedienteSeguroService
             return $expediente->fresh();
         });
     }
-
     public function generarAccesoEmpresa(ExpedienteSeguro $expediente): ExpedienteSeguro
     {
         if (!$expediente->empresa_access_token) {
@@ -201,5 +200,18 @@ class ExpedienteSeguroService
         ]);
 
         return $expediente->fresh();
+    }
+
+    public function finalizarExpediente(ExpedienteSeguro $expediente): ExpedienteSeguro
+    {
+        return DB::transaction(function () use ($expediente) {
+            $expediente->update([
+                'cliente_finalizo_at' => now(),
+                'estado' => 'completado',
+                'progreso' => 100,
+            ]);
+
+            return $expediente->fresh();
+        });
     }
 }

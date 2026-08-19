@@ -9,11 +9,15 @@ import {
     guardarPasoDosSeguro,
     guardarPasoTresSeguro,
     generarEnlaceEmpresaSeguro,
+    finalizarExpedienteSeguro,
 } from "@/services/seguro";
 
 import SeguroStepUno from "../components/SeguroStepUno";
 import SeguroStepDos from "../components/SeguroStepDos";
 import SeguroStepTres from "../components/SeguroStepTres";
+import SeguroStep4 from "../components/SeguroStep4";
+import SeguroExpedienteCompletado from "../components/SeguroExpedienteCompletado";
+import ConfirmModal from "@/components/modals/ConfirmModal";
 import "@/styles/pages/seguros/_continuar.scss";
 
 export default function SeguroPublicoPage() {
@@ -64,6 +68,14 @@ export default function SeguroPublicoPage() {
     const [pasoTresGuardado, setPasoTresGuardado] = useState(false);
     const [enlaceEmpresa, setEnlaceEmpresa] = useState("");
     const [generandoEnlaceEmpresa, setGenerandoEnlaceEmpresa] = useState(false);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Paso 4
+    |--------------------------------------------------------------------------
+    */
+    const [finalizando, setFinalizando] = useState(false);
+    const [showFinalizarModal, setShowFinalizarModal] = useState(false);
 
     /*
     |--------------------------------------------------------------------------
@@ -198,11 +210,16 @@ export default function SeguroPublicoPage() {
             | Determinar paso actual
             |--------------------------------------------------------------------------
             */
-            if (data.progreso >= 100) {
+            if (data.estado === "completado") {
                 setPasoUnoGuardado(true);
                 setPasoDosGuardado(true);
                 setPasoTresGuardado(true);
-                setPaso(3);
+                setPaso(4);
+            } else if (data.progreso >= 100) {
+                setPasoUnoGuardado(true);
+                setPasoDosGuardado(true);
+                setPasoTresGuardado(true);
+                setPaso(4);
             } else if (data.progreso >= 66) {
                 setPasoUnoGuardado(true);
                 setPasoDosGuardado(true);
@@ -213,11 +230,9 @@ export default function SeguroPublicoPage() {
             } else {
                 setPaso(1);
             }
-
         } catch (error) {
             console.error(error);
             setError(error.message || "No fue posible cargar tu expediente.");
-
         } finally {
             setLoading(false);
         }
@@ -499,15 +514,50 @@ export default function SeguroPublicoPage() {
 
             setPasoTresGuardado(true);
             setPaso(3);
+            return true;
         } catch (error) {
             console.error(error);
-
-            setError(
-                error.message || "No fue posible guardar la información de la mudanza."
-            );
-
+            setError(error.message || "No fue posible guardar la información de la mudanza.");
+            return false;
         } finally {
             setSaving(false);
+        }
+    }
+
+    async function guardarPasoTresYContinuar() {
+        const guardado = await guardarPasoTres();
+
+        if (guardado) {
+            setPaso(4);
+        }
+    }
+
+    function solicitarFinalizacion() {
+        if (finalizando) {
+            return;
+        }
+
+        setError("");
+        setShowFinalizarModal(true);
+    }
+
+    async function finalizarExpediente() {
+        if (finalizando) {
+            return;
+        }
+
+        try {
+            setFinalizando(true);
+            setShowFinalizarModal(false);
+            setError("");
+            const response = await finalizarExpedienteSeguro(folio);
+            const data = response.data;
+            setExpediente((prev) => ({ ...prev, ...data, }));
+        } catch (error) {
+            console.error(error);
+            setError(error.message || "No fue posible finalizar tu expediente.");
+        } finally {
+            setFinalizando(false);
         }
     }
 
@@ -602,31 +652,6 @@ export default function SeguroPublicoPage() {
 
     /*
     |--------------------------------------------------------------------------
-    | Expediente completado
-    |--------------------------------------------------------------------------
-    */
-    if (expediente?.estado === "completado") {
-        return (
-            <main className="seguro-publico">
-                <section className="seguro-publico__card">
-                    <div className="seguro-publico__success-icon">
-                        ✓
-                    </div>
-
-                    <h1> Expediente completado </h1>
-                    <p> Tu expediente de seguro ya fue completado. </p>
-
-                    <div className="seguro-publico__folio">
-                        <span> Folio </span>
-                        <strong> {expediente.folio} </strong>
-                    </div>
-                </section>
-            </main>
-        );
-    }
-
-    /*
-    |--------------------------------------------------------------------------
     | Expediente todavía no iniciado
     |--------------------------------------------------------------------------
     */
@@ -703,6 +728,39 @@ export default function SeguroPublicoPage() {
             </main>
         );
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Expediente completado
+    |--------------------------------------------------------------------------
+    */
+    if (expediente?.estado === "completado") {
+        return (
+            <SeguroExpedienteCompletado
+                expediente={expediente}
+                formatearMoneda={formatearMoneda}
+            />
+        );
+    }
+
+    const datosRevision = {
+        nombre,
+        email,
+        telefono,
+        tipoSeguro,
+        valorMenaje,
+        valorAutomovil,
+        origen,
+        destino,
+        fechaSalida,
+        fechaLlegada,
+        empresaMudanza,
+        propietarioUnidad,
+        marcaUnidad,
+        modeloUnidad,
+        placas,
+        chofer,
+    };
 
     /*
     |--------------------------------------------------------------------------
@@ -811,7 +869,23 @@ export default function SeguroPublicoPage() {
                             generandoEnlaceEmpresa={generandoEnlaceEmpresa}
                             enlaceEmpresa={enlaceEmpresa}
                             onGuardar={guardarPasoTres}
+                            onContinuar={guardarPasoTresYContinuar}
                             onAnterior={() => { setError(""); setPaso(2); }}
+                        />
+                    )
+                }
+
+                {
+                    paso === 4 && (
+                        <SeguroStep4
+                            expediente={expediente}
+                            formData={datosRevision}
+                            onAnterior={(pasoAnterior) => {
+                                setError("");
+                                setPaso(pasoAnterior);
+                            }}
+                            onFinalizar={solicitarFinalizacion}
+                            finalizando={finalizando}
                         />
                     )
                 }
@@ -832,6 +906,19 @@ export default function SeguroPublicoPage() {
                     </div>
                 </div>
             </section>
+
+            {
+                showFinalizarModal && (
+                    <ConfirmModal
+                        title="Finalizar expediente"
+                        message="¿Confirmas que deseas finalizar tu expediente? Una vez confirmado, enviaremos la información completa para revisión y ya no podrás modificar los datos."
+                        confirmText={finalizando ? "Finalizando..." : "Finalizar expediente"}
+                        cancelText="Revisar información"
+                        onConfirm={finalizarExpediente}
+                        onClose={() => setShowFinalizarModal(false)}
+                    />
+                )
+            }
         </main>
     );
 }

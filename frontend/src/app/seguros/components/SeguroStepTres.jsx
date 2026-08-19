@@ -24,7 +24,7 @@ export default function SeguroStepTres({
     onModeloUnidadChange,
     onPlacasChange,
     onChoferChange,
-    onGuardar,
+    onContinuar,
     onAnterior,
     onGenerarEnlaceEmpresa,
     generandoEnlaceEmpresa,
@@ -287,7 +287,7 @@ export default function SeguroStepTres({
                     ← Anterior
                 </button>
 
-                <button type="button" className="seguro-publico__button" onClick={onGuardar} disabled={saving} >
+                <button type="button" className="seguro-publico__button" onClick={onContinuar} disabled={saving} >
                     {saving ? "Guardando..." : pasoTresGuardado ? "Actualizar información" : "Continuar"}
                 </button>
 

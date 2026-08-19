@@ -11,7 +11,9 @@ use App\Modules\Seguro\Requests\GuardarPasoTresSeguroRequest;
 use Illuminate\Http\JsonResponse;
 use App\Modules\Seguro\Requests\GuardarDatosEmpresaSeguroRequest;
 use App\Modules\Seguro\Mail\EmpresaSeguroDatosCompletadosMail;
+use App\Modules\Seguro\Mail\SeguroExpedienteFinalizadoMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class SeguroController extends Controller
 {
@@ -40,58 +42,51 @@ class SeguroController extends Controller
             ], 410);
         }
 
-        if ($expediente->estado === 'completado') {
-            return response()->json([
-                'message' => 'Este expediente ya fue completado.',
-
-                'data' => [
-                    'folio' => $expediente->folio,
-                    'estado' => $expediente->estado,
-                    'progreso' => $expediente->progreso,
-                ]
-            ], 409);
-        }
-
         return response()->json([
             'data' => [
+                /*
+            |--------------------------------------------------------------------------
+            | Identificación
+            |--------------------------------------------------------------------------
+            */
                 'folio' => $expediente->folio,
                 'estado' => $expediente->estado,
                 'progreso' => $expediente->progreso,
 
                 /*
-                |--------------------------------------------------------------------------
-                | Cliente
-                |--------------------------------------------------------------------------
-                */
+            |--------------------------------------------------------------------------
+            | Cliente
+            |--------------------------------------------------------------------------
+            */
                 'nombre' => $expediente->nombre,
                 'email' => $expediente->email,
                 'telefono' => $expediente->telefono,
 
                 /*
-                |--------------------------------------------------------------------------
-                | Mudanza
-                |--------------------------------------------------------------------------
-                */
+            |--------------------------------------------------------------------------
+            | Mudanza
+            |--------------------------------------------------------------------------
+            */
                 'origen' => $expediente->origen,
                 'destino' => $expediente->destino,
                 'inventario' => $expediente->inventario,
                 'fecha_recoleccion' => $expediente->fecha_recoleccion,
 
                 /*
-                |--------------------------------------------------------------------------
-                | Seguro
-                |--------------------------------------------------------------------------
-                */
+            |--------------------------------------------------------------------------
+            | Seguro
+            |--------------------------------------------------------------------------
+            */
                 'tipo_seguro' => $expediente->tipo_seguro,
                 'valor_menaje' => $expediente->valor_menaje,
                 'valor_automovil' => $expediente->valor_automovil,
                 'prima_estimada' => $expediente->prima_estimada,
 
                 /*
-                |--------------------------------------------------------------------------
-                | Datos de la empresa / unidad
-                |--------------------------------------------------------------------------
-                */
+            |--------------------------------------------------------------------------
+            | Empresa / Unidad
+            |--------------------------------------------------------------------------
+            */
                 'empresa_mudanza' => $expediente->empresa_mudanza,
                 'fecha_salida' => $expediente->fecha_salida,
                 'fecha_llegada' => $expediente->fecha_llegada,
@@ -102,13 +97,14 @@ class SeguroController extends Controller
                 'chofer' => $expediente->chofer,
 
                 /*
-                |--------------------------------------------------------------------------
-                | Control
-                |--------------------------------------------------------------------------
-                */
+            |--------------------------------------------------------------------------
+            | Control
+            |--------------------------------------------------------------------------
+            */
                 'es_externo' => $expediente->es_externo,
                 'cliente_inicio_at' => $expediente->cliente_inicio_at,
                 'cliente_finalizo_at' => $expediente->cliente_finalizo_at,
+                'empresa_datos_finalizados_at' => $expediente->empresa_datos_finalizados_at,
                 'ultimo_autoguardado_at' => $expediente->ultimo_autoguardado_at,
             ]
         ]);
@@ -172,27 +168,32 @@ class SeguroController extends Controller
             ], 409);
         }
 
+        if (in_array($expediente->estado, ['nuevo', 'correo_programado', 'esperando_cliente'], true)) {
+            $expediente = $this->expedienteService->iniciarCaptura($expediente);
+        }
+
         if (!in_array($expediente->estado, ['capturando', 'revision'], true)) {
             return response()->json([
-                'message' => 'El expediente todavía no está disponible para captura.'
+                'message' => 'El expediente todavía no está disponible para captura.',
+                'estado_actual' => $expediente->estado,
             ], 409);
         }
 
         $data = $request->validated();
 
-        if (in_array($data['tipo_seguro'], ['menaje', 'menaje_auto'], true)  &&  empty($data['valor_menaje'])) {
+        if (in_array($data['tipo_seguro'], ['menaje', 'menaje_auto'], true) && empty($data['valor_menaje'])) {
             return response()->json([
                 'message' => 'Debes indicar el valor del menaje.'
             ], 422);
         }
 
-        if (in_array($data['tipo_seguro'], ['automovil', 'menaje_auto'], true)  &&  empty($data['valor_automovil'])) {
+        if (in_array($data['tipo_seguro'], ['automovil', 'menaje_auto'], true)  && empty($data['valor_automovil'])) {
             return response()->json([
                 'message' => 'Debes indicar el valor del automóvil.'
             ], 422);
         }
 
-        $expediente =  $this->expedienteService->guardarPasoUno($expediente, $data);
+        $expediente = $this->expedienteService->guardarPasoUno($expediente,  $data);
 
         return response()->json([
             'message' => 'La información del seguro fue guardada correctamente.',
@@ -447,5 +448,170 @@ class SeguroController extends Controller
                 'empresa_datos_finalizados_at' => $expediente->empresa_datos_finalizados_at,
             ],
         ]);
+    }
+
+    public function finalizarExpediente(string $folio): JsonResponse
+    {
+        $expediente = $this->expedienteService->obtenerPorFolio($folio);
+
+        if (!$expediente) {
+            return response()->json([
+                'message' => 'El expediente solicitado no existe.'
+            ], 404);
+        }
+
+        if ($expediente->estado === 'cancelado') {
+            return response()->json([
+                'message' => 'Este expediente ha sido cancelado.'
+            ], 410);
+        }
+
+        if ($expediente->estado === 'completado') {
+            return response()->json([
+                'message' => 'Este expediente ya fue completado.',
+
+                'data' => [
+                    'folio' => $expediente->folio,
+                    'estado' => $expediente->estado,
+                    'progreso' => $expediente->progreso,
+
+                    /*
+            |--------------------------------------------------------------------------
+            | Cliente
+            |--------------------------------------------------------------------------
+            */
+                    'nombre' => $expediente->nombre,
+                    'email' => $expediente->email,
+                    'telefono' => $expediente->telefono,
+
+                    /*
+            |--------------------------------------------------------------------------
+            | Mudanza
+            |--------------------------------------------------------------------------
+            */
+                    'origen' => $expediente->origen,
+                    'destino' => $expediente->destino,
+                    'inventario' => $expediente->inventario,
+                    'fecha_recoleccion' => $expediente->fecha_recoleccion,
+                    'fecha_salida' => $expediente->fecha_salida,
+                    'fecha_llegada' => $expediente->fecha_llegada,
+
+                    /*
+            |--------------------------------------------------------------------------
+            | Seguro
+            |--------------------------------------------------------------------------
+            */
+                    'tipo_seguro' => $expediente->tipo_seguro,
+                    'valor_menaje' => $expediente->valor_menaje,
+                    'valor_automovil' => $expediente->valor_automovil,
+                    'prima_estimada' => $expediente->prima_estimada,
+
+                    /*
+            |--------------------------------------------------------------------------
+            | Unidad
+            |--------------------------------------------------------------------------
+            */
+                    'empresa_mudanza' => $expediente->empresa_mudanza,
+                    'propietario_unidad' => $expediente->propietario_unidad,
+                    'marca_unidad' => $expediente->marca_unidad,
+                    'modelo_unidad' => $expediente->modelo_unidad,
+                    'placas' => $expediente->placas,
+                    'chofer' => $expediente->chofer,
+
+                    /*
+            |--------------------------------------------------------------------------
+            | Control
+            |--------------------------------------------------------------------------
+            */
+                    'es_externo' => $expediente->es_externo,
+                    'cliente_inicio_at' => $expediente->cliente_inicio_at,
+                    'cliente_finalizo_at' => $expediente->cliente_finalizo_at,
+                    'empresa_datos_finalizados_at' => $expediente->empresa_datos_finalizados_at,
+                    'ultimo_autoguardado_at' => $expediente->ultimo_autoguardado_at,
+                ],
+            ]);
+        }
+
+        if ($expediente->progreso < 100) {
+            return response()->json([
+                'message' => 'Debes completar toda la información del expediente antes de finalizarlo.'
+            ], 422);
+        }
+
+        $camposEmpresa = ['empresa_mudanza', 'propietario_unidad', 'marca_unidad', 'modelo_unidad', 'placas', 'chofer',];
+
+        foreach ($camposEmpresa as $campo) {
+            if (empty($expediente->{$campo})) {
+                return response()->json([
+                    'message' => 'La información de la unidad todavía está incompleta.'
+                ], 422);
+            }
+        }
+
+        $expediente = $this->expedienteService->finalizarExpediente($expediente);
+
+        $destinatarios = [
+            'intermudanza@gmail.com',
+            'Segurosmudanzafacil@gmail.com',
+            'ventas12@segurosdecarga.com',
+        ];
+
+        Mail::to($destinatarios)->send(new SeguroExpedienteFinalizadoMail($expediente));
+
+        return response()->json([
+            'message' =>
+            'Tu expediente fue finalizado correctamente.',
+            'data' => [
+                'folio' => $expediente->folio,
+                'estado' => $expediente->estado,
+                'progreso' => $expediente->progreso,
+                'nombre' => $expediente->nombre,
+                'email' => $expediente->email,
+                'telefono' => $expediente->telefono,
+                'origen' => $expediente->origen,
+                'destino' => $expediente->destino,
+                'inventario' => $expediente->inventario,
+                'fecha_recoleccion' => $expediente->fecha_recoleccion,
+                'tipo_seguro' => $expediente->tipo_seguro,
+                'valor_menaje' => $expediente->valor_menaje,
+                'valor_automovil' => $expediente->valor_automovil,
+                'prima_estimada' => $expediente->prima_estimada,
+                'empresa_mudanza' => $expediente->empresa_mudanza,
+                'propietario_unidad' => $expediente->propietario_unidad,
+                'marca_unidad' => $expediente->marca_unidad,
+                'modelo_unidad' => $expediente->modelo_unidad,
+                'placas' => $expediente->placas,
+                'chofer' => $expediente->chofer,
+                'cliente_finalizo_at' => $expediente->cliente_finalizo_at,
+            ],
+        ]);
+    }
+
+    public function descargarPdf(string $folio)
+    {
+        $expediente = $this->expedienteService->obtenerPorFolio($folio);
+
+        if (!$expediente) {
+            return response()->json([
+                'message' => 'El expediente solicitado no existe.'
+            ], 404);
+        }
+
+        if ($expediente->estado === 'cancelado') {
+            return response()->json([
+                'message' => 'Este expediente ha sido cancelado.'
+            ], 410);
+        }
+
+        if ($expediente->progreso < 100) {
+            return response()->json([
+                'message' => 'El expediente todavía no ha sido completado.'
+            ], 409);
+        }
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('pdf.seguro.expediente-finalizado', ['expediente' => $expediente,]);
+
+        return $pdf->download('expediente-' . $expediente->folio . '.pdf');
     }
 }
