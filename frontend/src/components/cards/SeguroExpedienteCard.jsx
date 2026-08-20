@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import "@/styles/components/_seguroExpedienteCard.scss";
 
-export default function SeguroExpedienteCard({ id, folio, nombre, email, telefono, origen, destino, estado, progreso, tipoSeguro, esExterno, fecha, }) {
+export default function SeguroExpedienteCard({ id, folio, nombre, email, telefono, origen, destino, modalidadDatos, estado, progreso, tipoSeguro, esExterno, fecha, }) {
     const router = useRouter();
 
     const estadoTexto = {
@@ -46,9 +46,7 @@ export default function SeguroExpedienteCard({ id, folio, nombre, email, telefon
                     <strong> {nombre} </strong>
                     <span> {email} </span>
 
-                    {
-                        telefono && <small> {telefono} </small>
-                    }
+                    {telefono && <small> {telefono} </small>}
                 </div>
 
                 <div className="ruta">
@@ -65,9 +63,11 @@ export default function SeguroExpedienteCard({ id, folio, nombre, email, telefon
                     </span>
 
                     <span>
-                        {
-                            esExterno ? "Solicitud externa" : "Mudanza Fácil"
-                        }
+                        {esExterno ? "Solicitud externa" : "Mudanza Fácil"}
+                    </span>
+
+                    <span>
+                        {modalidadDatos === "asistida" ? "Póliza asistida" : "Póliza estándar"}
                     </span>
                 </div>
             </div>

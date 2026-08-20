@@ -15,6 +15,10 @@ export default function SeguroEmpresaPage() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [empresaMudanza, setEmpresaMudanza] = useState("");
+    const [origen, setOrigen] = useState("");
+    const [destino, setDestino] = useState("");
+    const [fechaSalida, setFechaSalida] = useState("");
+    const [fechaLlegada, setFechaLlegada] = useState("");
     const [propietarioUnidad, setPropietarioUnidad] = useState("");
     const [marcaUnidad, setMarcaUnidad] = useState("");
     const [modeloUnidad, setModeloUnidad] = useState("");
@@ -38,6 +42,10 @@ export default function SeguroEmpresaPage() {
             const response = await getFormularioEmpresaSeguro(token);
             const data = response.data;
             setEmpresaMudanza(data.empresa_mudanza || "");
+            setOrigen(data.origen || "");
+            setDestino(data.destino || "");
+            setFechaSalida(data.fecha_salida || "");
+            setFechaLlegada(data.fecha_llegada || "");
             setPropietarioUnidad(data.propietario_unidad || "");
             setMarcaUnidad(data.marca_unidad || "");
             setModeloUnidad(data.modelo_unidad || "");
@@ -53,6 +61,22 @@ export default function SeguroEmpresaPage() {
     }
 
     function validar() {
+        if (!origen.trim()) {
+            return "Ingresa el origen de la mudanza.";
+        }
+
+        if (!destino.trim()) {
+            return "Ingresa el destino de la mudanza.";
+        }
+
+        if (!fechaSalida) {
+            return "Selecciona la fecha de salida.";
+        }
+
+        if (!fechaLlegada) {
+            return "Selecciona la fecha de llegada.";
+        }
+
         if (!empresaMudanza.trim()) {
             return "Ingresa el nombre de la empresa de mudanza.";
         }
@@ -95,6 +119,10 @@ export default function SeguroEmpresaPage() {
                 token,
                 {
                     empresa_mudanza: empresaMudanza.trim(),
+                    origen: origen.trim(),
+                    destino: destino.trim(),
+                    fecha_salida: fechaSalida,
+                    fecha_llegada: fechaLlegada,
                     propietario_unidad: propietarioUnidad.trim(),
                     marca_unidad: marcaUnidad.trim(),
                     modelo_unidad: modeloUnidad.trim(),
@@ -104,6 +132,10 @@ export default function SeguroEmpresaPage() {
             );
 
             const data = response.data;
+            setOrigen(data.origen || "");
+            setDestino(data.destino || "");
+            setFechaSalida(data.fecha_salida || "");
+            setFechaLlegada(data.fecha_llegada || "");
             setEmpresaMudanza(data.empresa_mudanza || "");
             setPropietarioUnidad(data.propietario_unidad || "");
             setMarcaUnidad(data.marca_unidad || "");
@@ -148,15 +180,14 @@ export default function SeguroEmpresaPage() {
         try {
             setFinishing(true);
 
-            /*
-            |--------------------------------------------------------------------------
-            | 1. Guardar los cambios actuales
-            |--------------------------------------------------------------------------
-            */
             const guardarResponse = await guardarDatosEmpresaSeguro(
                 token,
                 {
                     empresa_mudanza: empresaMudanza.trim(),
+                    origen: origen.trim(),
+                    destino: destino.trim(),
+                    fecha_salida: fechaSalida,
+                    fecha_llegada: fechaLlegada,
                     propietario_unidad: propietarioUnidad.trim(),
                     marca_unidad: marcaUnidad.trim(),
                     modelo_unidad: modeloUnidad.trim(),
@@ -166,21 +197,20 @@ export default function SeguroEmpresaPage() {
             );
 
             const datosGuardados = guardarResponse.data;
+
             setEmpresaMudanza(datosGuardados.empresa_mudanza || "");
+            setOrigen(datosGuardados.origen || "");
+            setDestino(datosGuardados.destino || "");
+            setFechaSalida(datosGuardados.fecha_salida || "");
+            setFechaLlegada(datosGuardados.fecha_llegada || "");
             setPropietarioUnidad(datosGuardados.propietario_unidad || "");
             setMarcaUnidad(datosGuardados.marca_unidad || "");
             setModeloUnidad(datosGuardados.modelo_unidad || "");
             setPlacas(datosGuardados.placas || "");
             setChofer(datosGuardados.chofer || "");
 
-            /*
-            |--------------------------------------------------------------------------
-            | 2. Finalizar
-            |--------------------------------------------------------------------------
-            */
             const response = await finalizarDatosEmpresaSeguro(token);
             setDatosFinalizados(true);
-
             setSuccess(response.message || (
                 datosFinalizados
                     ? "Los datos fueron actualizados correctamente."
@@ -280,6 +310,52 @@ export default function SeguroEmpresaPage() {
                             value={empresaMudanza}
                             onChange={(e) => setEmpresaMudanza(e.target.value)}
                         />
+                    </div>
+
+                    <div className="seguro-empresa__grid">
+                        <div className="seguro-empresa__field">
+                            <label htmlFor="origen">
+                                Origen
+                            </label>
+
+                            <input id="origen" type="text" maxLength={150} placeholder="Ej. Veracruz, Veracruz" value={origen} onChange={(e) => setOrigen(e.target.value)} />
+                        </div>
+
+                        <div className="seguro-empresa__field">
+                            <label htmlFor="destino">
+                                Destino
+                            </label>
+
+                            <input id="destino" type="text" maxLength={150} placeholder="Ej. Querétaro, Querétaro" value={destino} onChange={(e) => setDestino(e.target.value)} />
+                        </div>
+                    </div>
+
+                    <div className="seguro-empresa__grid">
+                        <div className="seguro-empresa__field">
+                            <label htmlFor="fecha_salida">
+                                Fecha de salida
+                            </label>
+
+                            <input
+                                id="fecha_salida"
+                                type="date"
+                                value={fechaSalida}
+                                onChange={(e) => {
+                                    setFechaSalida(e.target.value);
+                                    if (fechaLlegada && e.target.value > fechaLlegada) {
+                                        setFechaLlegada("");
+                                    }
+                                }}
+                            />
+                        </div>
+
+                        <div className="seguro-empresa__field">
+                            <label htmlFor="fecha_llegada">
+                                Fecha de llegada
+                            </label>
+
+                            <input id="fecha_llegada" type="date" min={fechaSalida || undefined} value={fechaLlegada} onChange={(e) => setFechaLlegada(e.target.value)} />
+                        </div>
                     </div>
 
                     <div className="seguro-empresa__field">

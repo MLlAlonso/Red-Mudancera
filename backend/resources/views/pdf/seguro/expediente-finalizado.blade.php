@@ -195,9 +195,7 @@
                 </td>
 
                 <td>
-                    $
-                    {{ number_format((float) ($expediente->valor_menaje ?? 0), 2) }}
-                    MXN
+                    $ {{ number_format((float) ($expediente->valor_menaje ?? 0), 2) }} MXN
                 </td>
             </tr>
 
@@ -207,9 +205,7 @@
                 </td>
 
                 <td>
-                    $
-                    {{ number_format((float) ($expediente->valor_automovil ?? 0), 2) }}
-                    MXN
+                    $ {{ number_format((float) ($expediente->valor_automovil ?? 0), 2) }} MXN
                 </td>
             </tr>
         </table>
@@ -226,9 +222,18 @@
             </div>
 
             <div>
-                Cálculo: valor declarado por el cliente × 1.35%
+                Cálculo:
+                valor declarado por el cliente ×
+                {{ $expediente->modalidad_datos === 'asistida' ? '1.75%' : '1.35%' }}
             </div>
+        </div>
 
+        <div style="margin-top:10px;">
+            <strong>
+                Modalidad:
+            </strong>
+
+            {{ $expediente->modalidad_datos === 'asistida' ? 'Póliza asistida' : 'Póliza estándar' }}
         </div>
 
     </div>
@@ -273,6 +278,58 @@
             @endif
         </table>
     </div>
+
+    @if($expediente->modalidad_datos === 'asistida')
+        <div class="section">
+            <div class="section-title">
+                Datos para póliza asistida
+            </div>
+
+            <table class="data">
+                <tr>
+                    <td class="label">
+                        Empresa de mudanza
+                    </td>
+
+                    <td>
+                        {{ $expediente->asistencia_empresa_mudanza ?? 'No registrada' }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="label">
+                        Contacto
+                    </td>
+
+                    <td>
+                        {{ $expediente->asistencia_contacto ?? 'No registrado' }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="label">
+                        Teléfono / WhatsApp
+                    </td>
+
+                    <td>
+                        {{ $expediente->asistencia_telefono ?? 'No registrado' }}
+                    </td>
+                </tr>
+            </table>
+
+            <div class="premium">
+                <strong>
+                    Póliza asistida
+                </strong>
+
+                <div>
+                    Nuestro equipo se encargará de solicitar,
+                    revisar y dar seguimiento a la información
+                    necesaria para la emisión de la póliza.
+                </div>
+            </div>
+        </div>
+    @endif
 
     <!-- Unidad -->
     <div class="section">

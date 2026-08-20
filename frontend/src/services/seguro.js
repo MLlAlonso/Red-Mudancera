@@ -1,25 +1,41 @@
 const API = process.env.NEXT_PUBLIC_API_URL;
 
-/*
-|--------------------------------------------------------------------------
-| Manejo general de respuestas
-|--------------------------------------------------------------------------
-*/
 async function handleResponse(res) {
-    const data = await res.json().catch(() => ({}));
+    const contentType = res.headers.get("content-type") || "";
+
+    let data = {};
+
+    if (contentType.includes("application/json")) {
+        data = await res.json().catch(() => ({}));
+    } else {
+        const text = await res.text().catch(() => "");
+
+        if (text) {
+            data = {
+                message: text,
+            };
+        }
+    }
 
     if (!res.ok) {
-        throw new Error(data.message || "Ocurrió un error al consultar el expediente.");
+        console.error("ERROR API SEGURO:", { status: res.status, statusText: res.statusText, data, });
+
+        if (data.errors) {
+            const validationMessages = Object.values(data.errors)
+                .flat()
+                .filter(Boolean);
+
+            if (validationMessages.length > 0) {
+                throw new Error(validationMessages.join(" "));
+            }
+        }
+
+        throw new Error(data.message || data.error || `Error HTTP ${res.status}: ${res.statusText || "Error en la API"}`);
     }
 
     return data;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Obtener expediente mediante folio
-|--------------------------------------------------------------------------
-*/
 export async function getExpedienteSeguroPublico(folio) {
     const res = await fetch(
         `${API}/seguros/${encodeURIComponent(folio)}`,
@@ -44,7 +60,6 @@ export async function iniciarExpedienteSeguro(folio) {
 
     return handleResponse(res);
 }
-
 
 export async function guardarPasoUnoSeguro(folio, data) {
     const res = await fetch(
@@ -82,10 +97,13 @@ export async function guardarPasoDosSeguro(folio, data) {
 
 export async function guardarPasoTresSeguro(folio, data) {
     const res = await fetch(
-        `${API}/seguros/${folio}/paso-3`,
+        `${API}/seguros/${encodeURIComponent(folio)}/paso-3`,
         {
             method: "POST",
-            headers: { "Content-Type": "application/json", },
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
             body: JSON.stringify(data),
         }
     );
@@ -105,11 +123,6 @@ export async function generarEnlaceEmpresaSeguro(folio) {
     return handleResponse(res);
 }
 
-/*
-|--------------------------------------------------------------------------
-| Formulario privado de empresa
-|--------------------------------------------------------------------------
-*/
 export async function getFormularioEmpresaSeguro(token) {
     const res = await fetch(`${API}/seguros/empresa/${token}`);
     return handleResponse(res);

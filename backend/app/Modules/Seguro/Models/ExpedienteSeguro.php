@@ -19,22 +19,27 @@ class ExpedienteSeguro extends Model
         'valor_menaje',
         'valor_automovil',
         'prima_estimada',
+        'modalidad_datos',
+        'forma_proporcion_datos',
+        'asistencia_empresa_mudanza',
+        'asistencia_contacto',
+        'asistencia_telefono',
         'nombre',
         'email',
         'telefono',
         'empresa_mudanza',
         'origen',
         'destino',
-        'fecha_salida',
-        'fecha_llegada',
         'inventario',
         'fecha_recoleccion',
-        'es_externo',
+        'fecha_salida',
+        'fecha_llegada',
         'propietario_unidad',
         'marca_unidad',
         'modelo_unidad',
         'placas',
         'chofer',
+        'es_externo',
         'correo_programado_at',
         'correo_enviado_at',
         'cliente_inicio_at',
@@ -60,6 +65,20 @@ class ExpedienteSeguro extends Model
         'empresa_access_created_at' => 'datetime',
         'empresa_datos_finalizados_at' => 'datetime',
     ];
+
+    protected $appends = [
+        'enlace_empresa',
+    ];
+
+    public function getEnlaceEmpresaAttribute(): ?string
+    {
+        if (!$this->empresa_access_token) {
+            return null;
+        }
+
+        $frontendUrl = rtrim(config('app.frontend_url'), '/');
+        return $frontendUrl  . '/seguros/empresa/' . $this->empresa_access_token;
+    }
 
     public function solicitud()
     {

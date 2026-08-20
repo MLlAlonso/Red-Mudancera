@@ -159,6 +159,45 @@ RESPONSIVE
     gap: 20px;
 }
 
+.seguroDetail__companyLink {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.seguroDetail__companyLink input {
+    flex: 1;
+    min-width: 0;
+    height: 42px;
+    padding: 0 12px;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    background: #f7f7f7;
+    color: #333;
+    font-size: 14px;
+}
+
+.seguroDetail__companyLink input:focus {
+    outline: none;
+    border-color: #999;
+}
+
+.seguroDetail__companyLink button {
+    flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+    .seguroDetail__companyLink {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .seguroDetail__companyLink button {
+        width: 100%;
+    }
+}
+
 /*==================================================
 = Cards
 ==================================================*/

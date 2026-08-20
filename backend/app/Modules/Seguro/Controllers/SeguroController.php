@@ -81,6 +81,11 @@ class SeguroController extends Controller
                 'valor_menaje' => $expediente->valor_menaje,
                 'valor_automovil' => $expediente->valor_automovil,
                 'prima_estimada' => $expediente->prima_estimada,
+                'modalidad_datos' => $expediente->modalidad_datos ?? 'autogestion',
+                'forma_proporcion_datos' => $expediente->forma_proporcion_datos ?? 'cliente',
+                'asistencia_empresa_mudanza' => $expediente->asistencia_empresa_mudanza,
+                'asistencia_contacto' => $expediente->asistencia_contacto,
+                'asistencia_telefono' => $expediente->asistencia_telefono,
 
                 /*
             |--------------------------------------------------------------------------
@@ -279,12 +284,37 @@ class SeguroController extends Controller
 
         if ($expediente->progreso < 66) {
             return response()->json([
-                'message' =>
-                'Debes completar los pasos anteriores antes de continuar.'
+                'message' => 'Debes completar los pasos anteriores antes de continuar.'
             ], 409);
         }
 
         $data = $request->validated();
+        $modalidadDatos = $data['modalidad_datos'] ?? 'autogestion';
+
+        if ($modalidadDatos === 'autogestion') {
+            $data['asistencia_empresa_mudanza'] = null;
+            $data['asistencia_contacto'] = null;
+            $data['asistencia_telefono'] = null;
+
+            if (($data['forma_proporcion_datos'] ?? null) === 'empresa') {
+                $data['empresa_mudanza'] = $data['empresa_mudanza'] ?? null;
+                $data['propietario_unidad'] = null;
+                $data['marca_unidad'] = null;
+                $data['modelo_unidad'] = null;
+                $data['placas'] = null;
+                $data['chofer'] = null;
+            }
+        }
+
+        if ($modalidadDatos === 'asistida') {
+            $data['forma_proporcion_datos'] = null;
+            $data['propietario_unidad'] = null;
+            $data['marca_unidad'] = null;
+            $data['modelo_unidad'] = null;
+            $data['placas'] = null;
+            $data['chofer'] = null;
+        }
+
         $expediente = $this->expedienteService->guardarPasoTres($expediente, $data);
 
         return response()->json([
@@ -304,6 +334,12 @@ class SeguroController extends Controller
                 'modelo_unidad' => $expediente->modelo_unidad,
                 'placas' => $expediente->placas,
                 'chofer' => $expediente->chofer,
+                'modalidad_datos' => $expediente->modalidad_datos ?? 'autogestion',
+                'forma_proporcion_datos' => $expediente->forma_proporcion_datos ?? 'cliente',
+                'asistencia_empresa_mudanza' => $expediente->asistencia_empresa_mudanza,
+                'asistencia_contacto' => $expediente->asistencia_contacto,
+                'asistencia_telefono' => $expediente->asistencia_telefono,
+                'prima_estimada' => $expediente->prima_estimada,
             ]
         ]);
     }
@@ -361,6 +397,10 @@ class SeguroController extends Controller
         return response()->json([
             'data' => [
                 'empresa_mudanza' => $expediente->empresa_mudanza,
+                'origen' => $expediente->origen,
+                'destino' => $expediente->destino,
+                'fecha_salida' => $expediente->fecha_salida,
+                'fecha_llegada' => $expediente->fecha_llegada,
                 'propietario_unidad' => $expediente->propietario_unidad,
                 'marca_unidad' => $expediente->marca_unidad,
                 'modelo_unidad' => $expediente->modelo_unidad,
@@ -387,12 +427,16 @@ class SeguroController extends Controller
             ], 410);
         }
 
-        $expediente = $this->expedienteService->guardarDatosEmpresa($expediente,  $request->validated());
+        $expediente = $this->expedienteService->guardarDatosEmpresa($expediente, $request->validated());
 
         return response()->json([
             'message' => 'Información guardada correctamente.',
             'data' => [
                 'empresa_mudanza' => $expediente->empresa_mudanza,
+                'origen' => $expediente->origen,
+                'destino' => $expediente->destino,
+                'fecha_salida' => $expediente->fecha_salida,
+                'fecha_llegada' => $expediente->fecha_llegada,
                 'propietario_unidad' => $expediente->propietario_unidad,
                 'marca_unidad' => $expediente->marca_unidad,
                 'modelo_unidad' => $expediente->modelo_unidad,
@@ -418,7 +462,18 @@ class SeguroController extends Controller
             ], 410);
         }
 
-        $campos = ['empresa_mudanza', 'propietario_unidad', 'marca_unidad', 'modelo_unidad', 'placas', 'chofer',];
+        $campos = [
+            'empresa_mudanza',
+            'origen',
+            'destino',
+            'fecha_salida',
+            'fecha_llegada',
+            'propietario_unidad',
+            'marca_unidad',
+            'modelo_unidad',
+            'placas',
+            'chofer',
+        ];
 
         foreach ($campos as $campo) {
             if (empty($expediente->{$campo})) {
@@ -474,55 +529,25 @@ class SeguroController extends Controller
                     'folio' => $expediente->folio,
                     'estado' => $expediente->estado,
                     'progreso' => $expediente->progreso,
-
-                    /*
-            |--------------------------------------------------------------------------
-            | Cliente
-            |--------------------------------------------------------------------------
-            */
                     'nombre' => $expediente->nombre,
                     'email' => $expediente->email,
                     'telefono' => $expediente->telefono,
-
-                    /*
-            |--------------------------------------------------------------------------
-            | Mudanza
-            |--------------------------------------------------------------------------
-            */
                     'origen' => $expediente->origen,
                     'destino' => $expediente->destino,
                     'inventario' => $expediente->inventario,
                     'fecha_recoleccion' => $expediente->fecha_recoleccion,
                     'fecha_salida' => $expediente->fecha_salida,
                     'fecha_llegada' => $expediente->fecha_llegada,
-
-                    /*
-            |--------------------------------------------------------------------------
-            | Seguro
-            |--------------------------------------------------------------------------
-            */
                     'tipo_seguro' => $expediente->tipo_seguro,
                     'valor_menaje' => $expediente->valor_menaje,
                     'valor_automovil' => $expediente->valor_automovil,
                     'prima_estimada' => $expediente->prima_estimada,
-
-                    /*
-            |--------------------------------------------------------------------------
-            | Unidad
-            |--------------------------------------------------------------------------
-            */
                     'empresa_mudanza' => $expediente->empresa_mudanza,
                     'propietario_unidad' => $expediente->propietario_unidad,
                     'marca_unidad' => $expediente->marca_unidad,
                     'modelo_unidad' => $expediente->modelo_unidad,
                     'placas' => $expediente->placas,
                     'chofer' => $expediente->chofer,
-
-                    /*
-            |--------------------------------------------------------------------------
-            | Control
-            |--------------------------------------------------------------------------
-            */
                     'es_externo' => $expediente->es_externo,
                     'cliente_inicio_at' => $expediente->cliente_inicio_at,
                     'cliente_finalizo_at' => $expediente->cliente_finalizo_at,
@@ -538,13 +563,40 @@ class SeguroController extends Controller
             ], 422);
         }
 
-        $camposEmpresa = ['empresa_mudanza', 'propietario_unidad', 'marca_unidad', 'modelo_unidad', 'placas', 'chofer',];
+        if ($expediente->modalidad_datos === 'asistida') {
+            $camposAsistencia = [
+                'asistencia_empresa_mudanza',
+                'asistencia_contacto',
+                'asistencia_telefono',
+            ];
 
-        foreach ($camposEmpresa as $campo) {
-            if (empty($expediente->{$campo})) {
-                return response()->json([
-                    'message' => 'La información de la unidad todavía está incompleta.'
-                ], 422);
+            foreach ($camposAsistencia as $campo) {
+                if (empty($expediente->{$campo})) {
+                    return response()->json([
+                        'message' => 'La información de contacto para la póliza asistida está incompleta.'
+                    ], 422);
+                }
+            }
+        } else {
+            $camposEmpresa = [
+                'empresa_mudanza',
+                'origen',
+                'destino',
+                'fecha_salida',
+                'fecha_llegada',
+                'propietario_unidad',
+                'marca_unidad',
+                'modelo_unidad',
+                'placas',
+                'chofer',
+            ];
+
+            foreach ($camposEmpresa as $campo) {
+                if (empty($expediente->{$campo})) {
+                    return response()->json([
+                        'message' => 'La información de la mudanza y de la unidad todavía está incompleta.'
+                    ], 422);
+                }
             }
         }
 

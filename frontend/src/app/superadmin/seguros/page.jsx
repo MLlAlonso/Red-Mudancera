@@ -94,7 +94,7 @@ export default function SuperAdminSegurosPage() {
                 {
                     expedientes.length === 0 && (
                         <div className="empty-state">
-                            <img src="/icons/empty.png" alt=""  />
+                            <img src="/icons/empty.png" alt="" />
 
                             <h3> No hay expedientes </h3>
 
@@ -120,6 +120,7 @@ export default function SuperAdminSegurosPage() {
                             tipoSeguro={exp.tipo_seguro}
                             esExterno={exp.es_externo}
                             fecha={exp.created_at}
+                            modalidadDatos={exp.modalidad_datos}
                         />
                     ))
                 }

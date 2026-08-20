@@ -28,31 +28,15 @@ class ExpedienteSeguroService
                 'access_token' => Str::random(80),
                 'estado' => 'nuevo',
                 'progreso' => 0,
-
-                /*
-                |--------------------------------------------------------------------------
-                | Datos del cliente
-                |--------------------------------------------------------------------------
-                */
+                'empresa_access_token' => Str::random(80),
+                'empresa_access_created_at' => now(),
                 'nombre' => $data['nombre'] ?? null,
                 'email' => $data['email'] ?? null,
                 'telefono' => $data['telefono'] ?? null,
-
-                /*
-                |--------------------------------------------------------------------------
-                | Información de la mudanza
-                |--------------------------------------------------------------------------
-                */
                 'origen' => $data['origen'] ?? null,
                 'destino' => $data['destino'] ?? null,
                 'inventario' => $data['inventario'] ?? null,
                 'fecha_recoleccion' => $data['fecha_recoleccion'] ?? null,
-
-                /*
-                |--------------------------------------------------------------------------
-                | Origen y control
-                |--------------------------------------------------------------------------
-                */
                 'es_externo' => $data['es_externo'] ?? false,
                 'correo_programado_at' => now()->addHours(24),
             ]);
@@ -110,7 +94,11 @@ class ExpedienteSeguroService
                 $basePrima += (float) $valorAutomovil;
             }
 
-            $primaEstimada = round($basePrima * 0.0135, 2);
+            $primaEstimada = $this->calcularPrima(
+                $valorMenaje !== null ? (float) $valorMenaje : null,
+                $valorAutomovil !== null ? (float) $valorAutomovil : null,
+                'autogestion'
+            );
 
             $expediente->update([
                 'tipo_seguro' => $tipoSeguro,
@@ -140,20 +128,34 @@ class ExpedienteSeguroService
         });
     }
 
-    public function guardarPasoTres(ExpedienteSeguro $expediente, array $data): ExpedienteSeguro
-    {
+    public function guardarPasoTres( ExpedienteSeguro $expediente, array $data ): ExpedienteSeguro {
         return DB::transaction(function () use ($expediente, $data) {
+            $modalidadDatos = $data['modalidad_datos'];
+            $formaProporcionDatos = $modalidadDatos === 'autogestion'  ? ($data['forma_proporcion_datos'] ?? 'cliente') : null;
+
+            $primaEstimada = $this->calcularPrima(
+                $expediente->valor_menaje !== null ? (float) $expediente->valor_menaje : null,
+                $expediente->valor_automovil !== null ? (float) $expediente->valor_automovil : null,
+                $modalidadDatos
+            );
+
             $expediente->update([
-                'empresa_mudanza' => $data['empresa_mudanza'],
-                'origen' => $data['origen'],
-                'destino' => $data['destino'],
-                'fecha_salida' => $data['fecha_salida'],
-                'fecha_llegada' => $data['fecha_llegada'],
-                'propietario_unidad' => $data['propietario_unidad'],
-                'marca_unidad' => $data['marca_unidad'],
-                'modelo_unidad' => $data['modelo_unidad'],
-                'placas' => $data['placas'],
-                'chofer' => $data['chofer'],
+                'empresa_mudanza' => $data['empresa_mudanza'] ?? null,
+                'origen' => $data['origen'] ?? null,
+                'destino' => $data['destino'] ?? null,
+                'fecha_salida' => $data['fecha_salida'] ?? null,
+                'fecha_llegada' => $data['fecha_llegada'] ?? null,
+                'propietario_unidad' => $data['propietario_unidad'] ?? null,
+                'marca_unidad' => $data['marca_unidad'] ?? null,
+                'modelo_unidad' => $data['modelo_unidad'] ?? null,
+                'placas' => $data['placas'] ?? null,
+                'chofer' => $data['chofer'] ?? null,
+                'modalidad_datos' => $modalidadDatos,
+                'forma_proporcion_datos' => $formaProporcionDatos,
+                'asistencia_empresa_mudanza' => $modalidadDatos === 'asistida' ? ($data['asistencia_empresa_mudanza'] ?? null) : null,
+                'asistencia_contacto' => $modalidadDatos === 'asistida' ? ($data['asistencia_contacto'] ?? null) : null,
+                'asistencia_telefono' => $modalidadDatos === 'asistida' ? ($data['asistencia_telefono'] ?? null) : null,
+                'prima_estimada' => $primaEstimada,
                 'progreso' => max($expediente->progreso, 100),
                 'estado' => 'revision',
             ]);
@@ -161,6 +163,7 @@ class ExpedienteSeguroService
             return $expediente->fresh();
         });
     }
+
     public function generarAccesoEmpresa(ExpedienteSeguro $expediente): ExpedienteSeguro
     {
         if (!$expediente->empresa_access_token) {
@@ -178,10 +181,13 @@ class ExpedienteSeguroService
         return ExpedienteSeguro::where('empresa_access_token', $token)->first();
     }
 
-    public function guardarDatosEmpresa(ExpedienteSeguro $expediente, array $data): ExpedienteSeguro
-    {
+    public function guardarDatosEmpresa( ExpedienteSeguro $expediente, array $data ): ExpedienteSeguro {
         $expediente->update([
             'empresa_mudanza' => $data['empresa_mudanza'] ?? null,
+            'origen' => $data['origen'] ?? null,
+            'destino' => $data['destino'] ?? null,
+            'fecha_salida' => $data['fecha_salida'] ?? null,
+            'fecha_llegada' => $data['fecha_llegada'] ?? null,
             'propietario_unidad' => $data['propietario_unidad'] ?? null,
             'marca_unidad' => $data['marca_unidad'] ?? null,
             'modelo_unidad' => $data['modelo_unidad'] ?? null,
@@ -213,5 +219,22 @@ class ExpedienteSeguroService
 
             return $expediente->fresh();
         });
+    }
+
+    private function calcularPrima(?float $valorMenaje, ?float $valorAutomovil, string $modalidadDatos = 'autogestion'): float
+    {
+        $basePrima = 0;
+
+        if ($valorMenaje !== null) {
+            $basePrima += $valorMenaje;
+        }
+
+        if ($valorAutomovil !== null) {
+            $basePrima += $valorAutomovil;
+        }
+
+        $porcentaje = $modalidadDatos === 'asistida' ? 0.0175  : 0.0135;
+
+        return round($basePrima * $porcentaje, 2);
     }
 }
