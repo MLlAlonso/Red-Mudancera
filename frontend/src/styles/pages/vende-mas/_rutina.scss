@@ -1,0 +1,198 @@
+@use "../../utils/variables" as *;
+
+.rutina-tres-por-tres {
+    padding: 40px 0;
+    background: #ffffff;
+
+    &__container {
+        width: min(1100px, calc(100% - 48px));
+        margin: 0 auto;
+    }
+
+    &__header {
+        max-width: 750px;
+        margin: 0 auto 55px;
+        text-align: center;
+    }
+
+    &__eyebrow {
+        display: inline-block;
+        margin-bottom: 12px;
+        color: $tertiary-hover;
+        font-family: $font-text;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    &__title {
+        margin: 0;
+        color: $title;
+        font-family: $font-title;
+        font-size: clamp(36px, 5vw, 54px);
+        font-weight: 900;
+        line-height: 1.08;
+        letter-spacing: -0.035em;
+    }
+
+    &__text {
+        margin: 20px 0 0;
+        color: $text;
+        font-family: $font-text;
+        font-size: 18px;
+        line-height: 1.6;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    &__result {
+        width: min(850px, 100%);
+        margin: 35px auto 0;
+        padding: 24px 30px;
+        border-radius: 16px;
+        background: $primary;
+        box-shadow: 0 18px 40px rgba($primary, 0.15);
+        text-align: center;
+
+        p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.88);
+            font-family: $font-text;
+            font-size: 16px;
+            line-height: 1.55;
+        }
+
+        strong {
+            color: $tertiary;
+            font-weight: 800;
+        }
+    }
+}
+
+.routine-card {
+    min-height: 280px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba($primary, 0.08);
+    border-radius: 18px;
+    background: $background;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+        border-color: rgba($tertiary, 0.35);
+        box-shadow: 0 15px 35px rgba($primary, 0.09);
+    }
+
+    &__header {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba($primary, 0.08);
+    }
+
+    &__title {
+        margin: 0;
+        color: $title;
+        font-family: $font-title;
+        font-size: 22px;
+        font-weight: 900;
+        letter-spacing: 0.02em;
+    }
+
+    &__badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 7px 11px;
+        border-radius: 999px;
+        background: rgba($success, 0.64);
+        color: #fff;
+        font-family: $font-text;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+    }
+
+    &__body {
+        padding-top: 20px;
+
+        p {
+            margin: 0;
+            color: $text;
+            font-family: $font-text;
+            font-size: 14px;
+            line-height: 1.65;
+
+            strong{
+                font-size: 16px;
+                color: $title;
+            }
+        }
+    }
+}
+
+@media (max-width: 900px) {
+    .rutina-tres-por-tres {
+        padding: 30px 0;
+
+        &__grid {
+            grid-template-columns: 1fr;
+            max-width: 620px;
+            margin: 0 auto;
+        }
+    }
+
+    .routine-card {
+        min-height: auto;
+    }
+}
+
+@media (max-width: 600px) {
+    .rutina-tres-por-tres {
+        padding: 20px 0;
+
+        &__container {
+            width: min(100% - 32px, 500px);
+        }
+
+        &__header {
+            margin-bottom: 40px;
+        }
+
+        &__title {
+            font-size: 36px;
+        }
+
+        &__text {
+            font-size: 16px;
+        }
+
+        &__result {
+            padding: 20px;
+
+            p {
+                font-size: 14px;
+            }
+        }
+    }
+
+    .routine-card {
+        padding: 21px;
+
+        &__title {
+            font-size: 20px;
+        }
+    }
+}

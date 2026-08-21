@@ -1,0 +1,278 @@
+@use "../../utils/variables" as *;
+
+.frescura-contacto {
+    padding: 40px 0;
+    background: $background;
+
+    &__container {
+        width: min(1120px, calc(100% - 48px));
+        margin: 0 auto;
+    }
+
+    &__header {
+        max-width: 700px;
+        margin: 0 auto 55px;
+        text-align: center;
+    }
+
+    &__eyebrow {
+        display: inline-block;
+        margin-bottom: 2px;
+        color: $tertiary-hover;
+        font-family: $font-text;
+        font-size: 14px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    &__title {
+        margin: 0;
+        color: $title;
+        font-family: $font-title;
+        font-size: clamp(38px, 5vw, 56px);
+        font-weight: 900;
+        line-height: 1.05;
+        letter-spacing: -0.035em;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    &__message {
+        width: min(850px, 100%);
+        margin: 20px auto 0;
+        padding: 20px 30px;
+        display: flex;
+        align-items: flex-start;
+        gap: 18px;
+        border-radius: 16px;
+        background: $primary;
+        box-shadow: 0 18px 40px rgba($primary, 0.15);
+        color: #ffffff;
+
+        &-icon {
+            flex: 0 0 auto;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.10);
+            font-size: 18px;
+        }
+
+        h3 {
+            margin: 0 0 7px;
+            color: #ffffff;
+            font-family: $font-title;
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.82);
+            font-family: $font-text;
+            font-size: 16px;
+            line-height: 1.65;
+        }
+    }
+}
+
+.freshness-card {
+    position: relative;
+    min-height: 140px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 8px 25px rgba($primary, 0.06);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba($primary, 0.10);
+    }
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: currentColor;
+    }
+
+    &__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    &__title {
+        color: $title;
+        font-family: $font-title;
+        font-size: 18px;
+        font-weight: 900;
+        letter-spacing: 0.04em;
+    }
+
+    &__indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    &__strong {
+        display: block;
+        margin-bottom: 10px;
+        color: currentColor;
+        font-family: $font-title;
+        font-size: 16px;
+        font-weight: 900;
+        line-height: 1.25;
+    }
+
+    &__text {
+        margin: auto 0 0;
+        color: $text;
+        font-family: $font-text;
+        font-size: 14px;
+        line-height: 1.55;
+    }
+}
+
+.freshness--hot {
+    color: $success;
+    background: rgba($success, 0.08);
+    border-color: rgba($success, 0.28);
+
+    &::before {
+        background: $success;
+    }
+
+    .freshness-card__indicator {
+        background: $success;
+    }
+}
+
+.freshness--good {
+    color: #8BAA24;
+    background: rgba(#8BAA24, 0.08);
+    border-color: rgba(#8BAA24, 0.30);
+
+    &::before {
+        background: #8BAA24;
+    }
+
+    .freshness-card__indicator {
+        background: #8BAA24;
+    }
+}
+
+.freshness--cool {
+    color: $tertiary-hover;
+    background: rgba($tertiary, 0.10);
+    border-color: rgba($tertiary, 0.32);
+
+    &::before {
+        background: $tertiary-hover;
+    }
+
+    .freshness-card__indicator {
+        background: $tertiary-hover;
+    }
+}
+
+.freshness--late {
+    color: #D85C52;
+    background: rgba(#D85C52, 0.08);
+    border-color: rgba(#D85C52, 0.30);
+
+    &::before {
+        background: #D85C52;
+    }
+
+    .freshness-card__indicator {
+        background: #D85C52;
+    }
+}
+
+@media (max-width: 900px) {
+    .frescura-contacto {
+        padding: 30px 0;
+
+        &__grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    .frescura-contacto {
+        padding: 20px 0;
+
+        &__container {
+            width: min(100% - 32px, 500px);
+        }
+
+        &__header {
+            margin-bottom: 38px;
+        }
+
+        &__grid {
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        &__message {
+            padding: 20px;
+            gap: 14px;
+
+            &-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 16px;
+            }
+
+            h3 {
+                font-size: 16px;
+            }
+
+            p {
+                font-size: 13px;
+            }
+        }
+    }
+
+    .freshness-card {
+        min-height: 145px;
+        padding: 20px;
+
+        &__top {
+            margin-bottom: 13px;
+        }
+
+        &__strong {
+            font-size: 15px;
+        }
+
+        &__text {
+            font-size: 13px;
+        }
+    }
+}

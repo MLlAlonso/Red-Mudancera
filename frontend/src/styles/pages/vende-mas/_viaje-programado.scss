@@ -1,0 +1,212 @@
+@use "../../utils/variables" as *;
+
+.viaje-programado {
+    padding: 60px 0;
+
+    &__container {
+        width: min(1050px, calc(100% - 48px));
+        margin: 0 auto;
+    }
+
+    &__header {
+        max-width: 720px;
+        margin: 0 auto 55px;
+        text-align: center;
+    }
+
+    &__eyebrow {
+        display: inline-block;
+        margin-bottom: 10px;
+        color: $tertiary-hover;
+        font-family: $font-text;
+        font-size: 14px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    &__title {
+        margin: 0;
+        color: $title;
+        font-family: $font-title;
+        font-size: clamp(38px, 5vw, 56px);
+        font-weight: 900;
+        line-height: 1.05;
+        letter-spacing: -0.035em;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+}
+
+.ruta-card {
+    min-height: 300px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba($primary, 0.08);
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba($primary, 0.06);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+        border-color: rgba($tertiary, 0.35);
+        box-shadow: 0 18px 40px rgba($primary, 0.10);
+    }
+
+    &__header {
+        margin-bottom: 10px;
+    }
+
+    &__title {
+        margin: 0;
+        color: $title;
+        font-family: $font-title;
+        font-size: 27px;
+        font-weight: 900;
+        line-height: 1.1;
+    }
+
+    &__text {
+        margin: 0 0 10px;
+        color: $text-muted;
+        font-family: $font-text;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    &__description {
+        margin: 20px 0 0;
+        color: $text;
+        font-family: $font-text;
+        font-size: 15px;
+        line-height: 1.65;
+    }
+
+    &__highlight {
+        display: block;
+        margin-top: auto;
+        padding-top: 24px;
+        color: $primary;
+        font-family: $font-title;
+        font-size: 17px;
+        font-weight: 900;
+        line-height: 1.45;
+    }
+
+    &--radar {
+        background:
+            linear-gradient(145deg,
+                #ffffff 0%,
+                rgba($azul_001, 0.055) 100%);
+    }
+}
+
+.ruta-example {
+    position: relative;
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    border-radius: 15px;
+    background: $primary;
+    box-shadow: 0 12px 28px rgba($primary, 0.16);
+    overflow: hidden;
+
+    &::after {
+        content: "";
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        right: -55px;
+        bottom: -70px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.06);
+    }
+
+    strong {
+        position: relative;
+        z-index: 1;
+        color: #ffffff;
+        font-family: $font-title;
+        font-size: 22px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+    }
+
+    span {
+        position: relative;
+        z-index: 1;
+        color: rgba(255, 255, 255, 0.78);
+        font-family: $font-text;
+        font-size: 13px;
+        font-weight: 600;
+    }
+}
+
+@media (max-width: 800px) {
+    .viaje-programado {
+        padding: 30px 0;
+
+        &__grid {
+            grid-template-columns: 1fr;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    }
+
+    .ruta-card {
+        min-height: auto;
+    }
+}
+
+@media (max-width: 600px) {
+    .viaje-programado {
+        padding: 20px 0;
+
+        &__container {
+            width: min(100% - 32px, 500px);
+        }
+
+        &__header {
+            margin-bottom: 38px;
+        }
+
+        &__title {
+            font-size: 36px;
+        }
+    }
+
+    .ruta-card {
+        padding: 23px;
+
+        &__title {
+            font-size: 24px;
+        }
+
+        &__description {
+            font-size: 14px;
+        }
+
+        &__highlight {
+            font-size: 15px;
+        }
+    }
+
+    .ruta-example {
+        padding: 19px 20px;
+
+        strong {
+            font-size: 19px;
+        }
+    }
+}

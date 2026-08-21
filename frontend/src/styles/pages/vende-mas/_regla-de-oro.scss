@@ -1,0 +1,212 @@
+@use "../../utils/variables" as *;
+
+.regla-de-oro {
+    padding: 60px 0;
+    background: $primary;
+    color: #ffffff;
+
+    &__container {
+        width: min(900px, calc(100% - 48px));
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    &__eyebrow {
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 10px;
+        color: $tertiary;
+        font-family: $font-text;
+        font-size: 28px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+    }
+
+    &__title {
+        margin: 0;
+        color: #ffffff;
+        font-family: $font-title;
+        font-size: clamp(38px, 5vw, 58px);
+        font-weight: 900;
+        line-height: 1.08;
+        letter-spacing: -0.04em;
+
+        span {
+            color: $success;
+        }
+    }
+
+    &__text {
+        max-width: 700px;
+        margin: 28px auto 0;
+        color: rgba(255, 255, 255, 0.78);
+        font-family: $font-text;
+        font-size: 18px;
+        line-height: 1.65;
+
+        span {
+            color: $tertiary;
+            font-weight: 800;
+        }
+    }
+
+    &__divider {
+        width: 120px;
+        height: 3px;
+        margin: 30px auto;
+        border-radius: 999px;
+        background: $tertiary;
+    }
+
+    &__subtitle {
+        margin: 0;
+        color: #ffffff;
+        font-family: $font-title;
+        font-size: clamp(22px, 3vw, 30px);
+        font-weight: 900;
+        line-height: 1.25;
+        letter-spacing: -0.02em;
+
+        span{
+            color: $success;
+        }
+    }
+
+    &__actions {
+        width: min(550px, 100%);
+        margin: 40px auto;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        text-align: left;
+    }
+
+    &__cta {
+        margin-top: 40px;
+    }
+
+    &__button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 54px;
+        padding: 0 30px;
+        border-radius: 12px;
+        background: $success;
+        color: #fff;
+        font-family: $font-text;
+        font-size: 15px;
+        font-weight: 900;
+        text-decoration: none;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
+        transition:
+            background 0.2s ease,
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+
+        &:hover {
+            background: $tertiary-hover;
+            transform: translateY(-3px);
+            box-shadow: 0 16px 35px rgba(0, 0, 0, 0.20);
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+    }
+
+    &__closing {
+        margin: 38px 0 0;
+        color: rgba(255, 255, 255, 0.72);
+        font-family: $font-text;
+        font-size: 15px;
+        line-height: 1.7;
+
+        span{
+            color: #5ED2A9;
+            font-weight: bold;
+            font-size: 18px;
+        }
+    }
+}
+
+.action-item {
+    min-height: 58px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.055);
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.09);
+        transform: translateY(-2px);
+    }
+
+    &__check {
+        flex: 0 0 auto;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: rgba($success, 0.20);
+        color: #5ED2A9;
+        font-family: $font-title;
+        font-size: 16px;
+        font-weight: 900;
+    }
+
+    &__text {
+        color: rgba(255, 255, 255, 0.90);
+        font-family: $font-text;
+        font-size: 18px;
+        font-weight: 700;
+    }
+}
+
+@media (max-width: 600px) {
+    .regla-de-oro {
+        padding: 40px 0 80px;
+
+        &__container {
+            width: min(100% - 32px, 500px);
+        }
+
+        &__title {
+            font-size: 37px;
+        }
+
+        &__text {
+            font-size: 16px;
+        }
+
+        &__divider {
+            margin: 35px auto;
+        }
+
+        &__subtitle {
+            font-size: 22px;
+        }
+
+        &__actions {
+            grid-template-columns: 1fr;
+            margin: 30px auto;
+        }
+
+        &__button {
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        &__closing {
+            font-size: 14px;
+        }
+    }
+}

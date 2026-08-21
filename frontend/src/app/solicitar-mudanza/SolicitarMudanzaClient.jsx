@@ -180,9 +180,11 @@ export default function SolicitarMudanza({ empresaSlug = null, landingConfig = {
 
                 <h1 className="title">
                     {
-                        empresa
-                            ? `Solicita tu mudanza con ${empresa.empresa}`
-                            : heroTitle
+                        empresaSlug
+                            ? "Solicita tu mudanza con Mudanza Fácil"
+                            : empresa
+                                ? `Solicita tu mudanza con ${empresa.empresa}`
+                                : heroTitle
                     }
                 </h1>
                 <p className="subtitle"> {heroSubtitle} </p>

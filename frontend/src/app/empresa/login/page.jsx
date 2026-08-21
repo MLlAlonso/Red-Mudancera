@@ -97,7 +97,6 @@ export default function EmpresaLogin() {
 
       <main className="empresa-login">
         <div className="empresa-login__form">
-
           <div className="empresa-login__header">
             <h1 className="empresa-login__title">
               <img src="/logo/icon.png" alt="" />
@@ -117,13 +116,11 @@ export default function EmpresaLogin() {
 
           {error && <p className="empresa-login__error">{error}</p>}
 
-          {/* EMAIL */}
           <div className="empresa-login__input-wrapper">
             <Image src="/icons/mensaje.png" alt="email icon" width={24} height={24} className="empresa-login__icon" />
             <input type="email" placeholder="Correo empresa" className="empresa-login__input" value={formData.email} onChange={(e) => handleChange("email", e.target.value)} />
           </div>
 
-          {/* PASSWORD */}
           <div className="empresa-login__input-wrapper">
             <Image src="/icons/candado.png" alt="lock icon" width={24} height={24} className="empresa-login__icon" />
 
@@ -140,28 +137,25 @@ export default function EmpresaLogin() {
             </span>
           </div>
 
-          <Button_cta
-            value={loading ? "Entrando a cuenta..." : "Entrar a mi cuenta"}
-            onClick={handleSubmit}
-          />
+          <Button_cta value={loading ? "Entrando a cuenta..." : "Entrar a mi cuenta"} onClick={handleSubmit} />
 
           <p> <img src="/icons/candado-cerrado.png" alt="" /> Acceso seguro solo para empresas verificadas</p>
 
-
-
           <hr className="empresa-login__divider" />
 
-          {/* Registrarse */}
           <p className="empresa-login__register">
             <Link href="/empresa/register">¿No tienes cuenta? <strong>Crear cuenta</strong> </Link>
           </p>
 
-          {/* Olvidé contraseña */}
           <p className="empresa-login__forgot" onClick={() => setShowRecover(true)}>
             ¿Olvidaste tu contraseña?
           </p>
-
         </div>
+
+        <Link href="/vende-mas" className="empresa-login__landing-link" >
+          ¿Buscas más oportunidades de mudanza?
+          <strong> Descubre cómo vender más con Mudanza Fácil →</strong>
+        </Link>
       </main>
 
       <Footer />

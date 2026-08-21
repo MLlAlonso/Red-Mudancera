@@ -58,15 +58,7 @@ Quedo atento para coordinar`;
   window.open(url, "_blank");
 }
 
-export function openLeadWhatsappMessage({
-  telefono,
-  empresaNombre,
-  empresaId,
-  nombreCliente,
-  origen,
-  destino,
-  tipoVivienda,
-}) {
+export function openLeadWhatsappMessage({ telefono, empresaNombre, empresaId, nombreCliente, origen, destino, tipoVivienda, inventario, }) {
   if (!telefono) {
     alert("Este lead no tiene teléfono disponible");
     return;
@@ -74,20 +66,33 @@ export function openLeadWhatsappMessage({
 
   const perfilUrl = `https://app.mudanzafacil.com.mx/empresa/${empresaId}`;
 
-  const mensaje = `
-Hola ${nombreCliente}, buen día.
+  const inventarioLimpio = inventario
+    ? inventario
+      .replace(/<[^>]*>/g, "")
+      .replace(/&nbsp;/g, " ")
+      .replace(/&amp;/g, "&")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .trim()
+    : "No especificado";
+
+  const mensaje = `Hola ${nombreCliente}, buen día.
 
 Soy representante de ${empresaNombre} y vi tu solicitud de mudanza publicada en Mudanza Fácil:
 
 Origen: ${origen}
 Destino: ${destino}
+Tipo de vivienda: ${tipoVivienda || "No especificado"}
+
+Inventario registrado:
+${inventarioLimpio}
 
 Con gusto podemos ayudarte con tu mudanza.
 
-Antes de enviarte una cotización, me gustaría confirmar algunos detalles para asegurarme de cotizar correctamente. 
-¿Tienes unos minutos disponibles?.
-`;
+Antes de enviarte una cotización, me gustaría confirmar algunos detalles para asegurarme de cotizar correctamente.
+¿Tienes unos minutos disponibles?`;
 
-  const url = `https://wa.me/52${telefono}?text=${encodeURIComponent(mensaje)}`;
+  const telefonoLimpio = telefono.replace(/\D/g, "");
+  const url = `https://wa.me/52${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
   window.open(url, "_blank");
 }

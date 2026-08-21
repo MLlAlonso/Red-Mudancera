@@ -47,9 +47,19 @@
 @use "./pages/superadmin/trialRequests";
 @use "./pages/superadmin/seguros";
 
-
+//seguros
 @use "./pages/seguros/seguro-pdf";
 
+//Vende más contactos
+@use "./pages/vende-mas/vende-mas";
+@use "./pages/vende-mas/hero";
+@use "./pages/vende-mas/cliente";
+@use "./pages/vende-mas/rutina";
+@use "./pages/vende-mas/frescura-contacto";
+@use "./pages/vende-mas/viaje-programado";
+@use "./pages/vende-mas/regla-de-oro";
+
+//Componentes
 @use "./components/systemToast";
 
 * {

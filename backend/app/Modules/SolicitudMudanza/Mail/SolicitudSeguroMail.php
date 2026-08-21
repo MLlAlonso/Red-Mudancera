@@ -41,7 +41,7 @@ class SolicitudSeguroMail extends Mailable
             $telefono = '52' . $telefono;
         }
 
-        $mensaje = "Hola {$this->solicitud->nombre}, soy Víctor Alemán, asesor de seguros con Chubb.\n"
+        $mensaje = "Hola {$this->solicitud->nombre}, soy asesor de seguros con Chubb.\n"
             . "Vi que estás organizando una mudanza de {$this->solicitud->origen} a {$this->solicitud->destino} y que solicitaste información.\n"
             . "Sé que ahorita tu prioridad es elegir la empresa, así que no te distraigo con eso. Cuando ya la tengas elegida, aquí estaré para asegurarla.\n"
             . "Contratar directo tiene beneficios grandes que casi nadie conoce hasta que ya es tarde, y te acompaño en todo el proceso, no nada más en la venta. \n"

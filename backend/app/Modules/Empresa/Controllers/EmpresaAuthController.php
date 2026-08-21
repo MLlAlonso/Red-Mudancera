@@ -22,19 +22,13 @@ use App\Modules\Notificacion\Services\NotificationDispatcher;
 use App\Modules\Notificacion\Events\LoginEmpresaEvent;
 use App\Modules\Notificacion\Models\NotificationPreference;
 use App\Modules\Empresa\Mail\NuevaEmpresaRegistradaMail;
+use App\Modules\Empresa\Mail\EmpresaVentasMail;
 
 class EmpresaAuthController extends Controller
 {
-    /* ============================================================
-       REGISTRO DE EMPRESA
-    ============================================================ */
     public function register(RegisterEmpresaRequest $request)
     {
         $data = $request->validated();
-
-        // ============================================
-        // EVITAR DUPLICADOS SI YA EXISTE EMPRESA
-        // ============================================
         $exists = Empresa::where('email', $data['email'])->exists();
 
         if ($exists) {
@@ -43,23 +37,9 @@ class EmpresaAuthController extends Controller
             ], 422);
         }
 
-        // ============================================
-        // GENERAR CÓDIGO
-        // ============================================
         $code = rand(100000, 999999);
+        Cache::put('empresa_register_' . $data['email'], $data, now()->addMinutes(15));
 
-        // ============================================
-        // GUARDAR REGISTRO TEMPORAL
-        // ============================================
-        Cache::put(
-            'empresa_register_' . $data['email'],
-            $data,
-            now()->addMinutes(15)
-        );
-
-        // ============================================
-        // GUARDAR CÓDIGO
-        // ============================================
         EmailVerification::updateOrCreate(
             [
                 'email' => $data['email'],
@@ -71,22 +51,13 @@ class EmpresaAuthController extends Controller
             ]
         );
 
-        // ============================================
-        // ENVIAR CORREO
-        // ============================================
         Mail::to($data['email'])->send(new EmpresaVerificationCode($code));
 
-        // ============================================
-        // RESPONSE
-        // ============================================
         return response()->json([
             'message' => 'Código enviado correctamente'
         ], 200);
     }
 
-    /* ============================================================
-       LOGIN
-    ============================================================ */
     public function login(LoginEmpresaRequest $request)
     {
         $empresa = Empresa::where('email', $request->email)->first();
@@ -96,16 +67,9 @@ class EmpresaAuthController extends Controller
             ]);
         }
 
-        // Crear token nuevo
         $token = $empresa->createToken('api-token')->plainTextToken;
-        /*  Disparar evento de notificación
-        app(NotificationDispatcher::class)->dispatch(
-            new LoginEmpresaEvent([
-                'empresa_id' => $empresa->id,
-            ])
-        ); */
-        // Agregar logo_url SIEMPRE
         $empresa->append('logo_url');
+
         return response()->json([
             'message' => 'Inicio de sesión exitoso',
             'empresa' => $empresa,
@@ -121,10 +85,6 @@ class EmpresaAuthController extends Controller
             'message' => 'Sesión cerrada correctamente'
         ]);
     }
-
-    /* ============================================================
-       ENVIAR CÓDIGO DE VERIFICACIÓN
-    ============================================================ */
     public function sendVerificationCode(Request $request)
     {
         $request->validate(['email' => 'required|email']);
@@ -144,9 +104,6 @@ class EmpresaAuthController extends Controller
         return response()->json(['message' => 'Código enviado exitosamente']);
     }
 
-    /* ============================================================
-       VERIFICAR CÓDIGO DE CORREO
-    ============================================================ */
     public function verifyCode(Request $request)
     {
         $request->validate([
@@ -154,10 +111,7 @@ class EmpresaAuthController extends Controller
             'code'  => 'required|string',
         ]);
 
-        // ============================================
-        // VALIDAR CÓDIGO
-        // ============================================
-        $record = EmailVerification::where('email', $request->email) ->where('code', $request->code) ->first();
+        $record = EmailVerification::where('email', $request->email)->where('code', $request->code)->first();
 
         if (!$record) {
             return response()->json([
@@ -171,10 +125,7 @@ class EmpresaAuthController extends Controller
             ], 400);
         }
 
-        // ============================================
-        // OBTENER DATOS TEMPORALES
-        // ============================================
-        $data = Cache::get( 'empresa_register_' . $request->email );
+        $data = Cache::get('empresa_register_' . $request->email);
 
         if (!$data) {
             return response()->json([
@@ -182,17 +133,9 @@ class EmpresaAuthController extends Controller
             ], 400);
         }
 
-        // ============================================
-        // CREAR EMPRESA
-        // ============================================
         $plainPassword = $data['password'];
         $data['password'] = Hash::make($data['password']);
-
-        $data['codigoEmpresa'] = strtoupper(
-            substr(Str::slug($data['empresa'], ''), 0, 3)
-                . rand(1000, 9999)
-        );
-
+        $data['codigoEmpresa'] = strtoupper(substr(Str::slug($data['empresa'], ''), 0, 3)  . rand(1000, 9999));
         $data['tokens'] = 15;
         $empresa = Empresa::create($data);
 
@@ -207,9 +150,6 @@ class EmpresaAuthController extends Controller
             'email_verified_at' => now(),
         ]);
 
-        // ============================================
-        // CREAR USUARIO ADMIN
-        // ============================================
         $usuario = Usuario::create([
             'empresa_id' => $empresa->id,
             'nombre' => $empresa->representante,
@@ -220,9 +160,6 @@ class EmpresaAuthController extends Controller
             'activoEmpresa' => true,
         ]);
 
-        // ============================================
-        // PREFERENCIAS
-        // ============================================
         $tipos = ['info', 'alerta', 'sistema'];
         $canales = ['database', 'email', 'push'];
 
@@ -237,30 +174,13 @@ class EmpresaAuthController extends Controller
             }
         }
 
-        // ============================================
-        // MAIL BIENVENIDA
-        // ============================================
         Mail::to($empresa->email)->send(new EmpresaWelcomeMail($empresa));
-
-        // ============================================
-        // NOTIFICAR NUEVO REGISTRO AL ADMIN
-        // ============================================
         Mail::to('intermudanza@gmail.com')->send(new NuevaEmpresaRegistradaMail($empresa));
-
-        // ============================================
-        // LIMPIAR CACHE + VERIFY
-        // ============================================
+        Mail::to($empresa->email)->later(now()->addHours(24), new EmpresaVentasMail($empresa));
         Cache::forget('empresa_register_' . $request->email);
         $record->delete();
-
-        // ============================================
-        // TOKEN
-        // ============================================
         $token = $empresa->createToken('api-token')->plainTextToken;
 
-        // ============================================
-        // RESPONSE
-        // ============================================
         return response()->json([
             'message' => 'Correo verificado correctamente',
             'token' => $token,
