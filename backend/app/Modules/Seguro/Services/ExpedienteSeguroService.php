@@ -12,7 +12,7 @@ class ExpedienteSeguroService
     {
         return DB::transaction(function () use ($data) {
             if (!empty($data['solicitud_mudanza_id'])) {
-                $existente = ExpedienteSeguro::where('solicitud_mudanza_id', $data['solicitud_mudanza_id'])->first();
+                $existente = ExpedienteSeguro::where('solicitud_mudanza_id',  $data['solicitud_mudanza_id'])->first();
 
                 if ($existente) {
                     return $existente;
@@ -20,7 +20,8 @@ class ExpedienteSeguroService
             }
 
             $siguienteId = (ExpedienteSeguro::max('id') ?? 0) + 1;
-            $folio = 'SEG-' . now()->format('Ymd') . '-' . str_pad($siguienteId,  6,  '0',  STR_PAD_LEFT);
+            $folio = 'SEG-' . now()->format('Ymd') . '-' . str_pad($siguienteId, 6, '0', STR_PAD_LEFT);
+            $creadoEn = now();
 
             return ExpedienteSeguro::create([
                 'solicitud_mudanza_id' => $data['solicitud_mudanza_id'] ?? null,
@@ -29,7 +30,7 @@ class ExpedienteSeguroService
                 'estado' => 'nuevo',
                 'progreso' => 0,
                 'empresa_access_token' => Str::random(80),
-                'empresa_access_created_at' => now(),
+                'empresa_access_created_at' => $creadoEn,
                 'nombre' => $data['nombre'] ?? null,
                 'email' => $data['email'] ?? null,
                 'telefono' => $data['telefono'] ?? null,
@@ -38,9 +39,48 @@ class ExpedienteSeguroService
                 'inventario' => $data['inventario'] ?? null,
                 'fecha_recoleccion' => $data['fecha_recoleccion'] ?? null,
                 'es_externo' => $data['es_externo'] ?? false,
-                'correo_programado_at' => now()->addHours(24),
+                'correo_programado_at' => $creadoEn->copy()->addHours(24),
+                'recordatorio_programado_at' => $creadoEn->copy()->addDays(5),
             ]);
         });
+    }
+
+    public function obtenerExpedientesParaInvitacionInicial()
+    {
+        return ExpedienteSeguro::query()
+            ->whereNotNull('correo_programado_at')
+            ->whereNull('correo_enviado_at')
+            ->where('correo_programado_at', '<=', now())
+            ->whereNotIn('estado', ['completado', 'cancelado'])
+            ->whereNotNull('email')
+            ->get();
+    }
+
+    public function obtenerExpedientesParaRecordatorio()
+    {
+        return ExpedienteSeguro::query()
+            ->whereNotNull('recordatorio_programado_at')
+            ->whereNull('recordatorio_enviado_at')
+            ->where('recordatorio_programado_at', '<=', now())
+            ->whereNotIn('estado', ['completado', 'cancelado'])
+            ->whereNotNull('email')
+            ->get();
+    }
+
+    public function marcarInvitacionEnviada(ExpedienteSeguro $expediente): ExpedienteSeguro
+    {
+        $expediente->update([
+            'correo_enviado_at' => now(),
+            'estado' => $expediente->estado === 'nuevo' ? 'esperando_cliente' : $expediente->estado,
+        ]);
+
+        return $expediente->fresh();
+    }
+
+    public function marcarRecordatorioEnviado(ExpedienteSeguro $expediente): ExpedienteSeguro
+    {
+        $expediente->update(['recordatorio_enviado_at' => now(),]);
+        return $expediente->fresh();
     }
 
     public function obtenerPorFolio(string $folio): ?ExpedienteSeguro
@@ -128,7 +168,8 @@ class ExpedienteSeguroService
         });
     }
 
-    public function guardarPasoTres( ExpedienteSeguro $expediente, array $data ): ExpedienteSeguro {
+    public function guardarPasoTres(ExpedienteSeguro $expediente, array $data): ExpedienteSeguro
+    {
         return DB::transaction(function () use ($expediente, $data) {
             $modalidadDatos = $data['modalidad_datos'];
             $formaProporcionDatos = $modalidadDatos === 'autogestion'  ? ($data['forma_proporcion_datos'] ?? 'cliente') : null;
@@ -181,7 +222,8 @@ class ExpedienteSeguroService
         return ExpedienteSeguro::where('empresa_access_token', $token)->first();
     }
 
-    public function guardarDatosEmpresa( ExpedienteSeguro $expediente, array $data ): ExpedienteSeguro {
+    public function guardarDatosEmpresa(ExpedienteSeguro $expediente, array $data): ExpedienteSeguro
+    {
         $expediente->update([
             'empresa_mudanza' => $data['empresa_mudanza'] ?? null,
             'origen' => $data['origen'] ?? null,

@@ -27,26 +27,18 @@ class SolicitudMudanzaService
     {
         return DB::transaction(function () use ($data) {
             $this->limpiarPendientesAntiguos($data['email']);
-            // Anti-duplicación estricta
             $this->validarDuplicado($data);
-            // Anti spam 24 horas
             $this->validarAntiSpam($data);
 
             $distanciaKm = $this->calcularDistancia($data['origen'], $data['destino']);
             $tipoServicio = ($distanciaKm !== null && $distanciaKm <= 50) ? 'local' : 'foranea';
             $fechaLimite = $this->calcularFechaLimite($data['fecha_recoleccion']);
-
             $empresaReferenteId = null;
             $partnerReferralId = null;
             $empresaPrivadaId = null;
             $esPrivado = false;
             $slug = $data['empresa_referente_slug'] ?? null;
 
-            /*
-            |--------------------------------------------------------------------------
-            | Si el frontend no envía slug, intentar obtenerlo del Referer
-            |--------------------------------------------------------------------------
-            */
             if (!$slug) {
                 $referer = request()->headers->get('referer');
                 if ($referer && preg_match('#/([^/]+)/solicitar-mudanza#',  $referer, $matches)) {
@@ -55,43 +47,20 @@ class SolicitudMudanzaService
             }
             // Log::info('Slug final usado', ['slug' => $slug]);
 
-            /*
-            |--------------------------------------------------------------------------
-            | RESOLVER DESTINO DEL LEAD
-            |--------------------------------------------------------------------------
-            */
             if ($slug) {
-                /*
-                |--------------------------------------------------------------------------
-                | EMPRESA PRIVADA
-                |--------------------------------------------------------------------------
-                */
                 $empresaPrivada = \App\Modules\Empresa\Models\Empresa::where('slug',  $slug)->first();
 
                 if ($empresaPrivada) {
                     $empresaPrivadaId = $empresaPrivada->id;
                     $esPrivado = true;
                 } else {
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | PARTNER REFERRAL
-                    |--------------------------------------------------------------------------
-                    */
                     $partner = \App\Modules\PartnerReferral\Models\PartnerReferral::where('slug', $slug)->where('activo', true)->first();
                     if ($partner) {
                         $partnerReferralId = $partner->id;
                     } else {
-
-                        /*
-                        |--------------------------------------------------------------------------
-                        | COMPATIBILIDAD CON SISTEMA VIEJO
-                        |--------------------------------------------------------------------------
-                        */
-                        $empresa = \App\Modules\Empresa\Models\Empresa::all()
-                            ->first(function ($empresa) use ($slug) {
-                                return \Illuminate\Support\Str::slug($empresa->empresa) === $slug;
-                            });
+                        $empresa = \App\Modules\Empresa\Models\Empresa::all()->first(function ($empresa) use ($slug) {
+                            return \Illuminate\Support\Str::slug($empresa->empresa) === $slug;
+                        });
 
                         if ($empresa) {
                             $empresaReferenteId = $empresa->id;
@@ -102,17 +71,12 @@ class SolicitudMudanzaService
 
             $inventarioLimpio = $this->limpiarInventario($data['inventario']);
 
-           /*  Log::info("LEAD PRIVADO", [
+            /*  Log::info("LEAD PRIVADO", [
                 "slug" => $slug,
                 "empresa_privada_id" => $empresaPrivadaId,
                 "es_privado" => $esPrivado,
             ]); */
 
-            /*
-            |--------------------------------------------------------------------------
-            | CREAR SOLICITUD
-            |--------------------------------------------------------------------------
-            */
             $solicitud = SolicitudMudanza::create([
                 'origen' => $data['origen'],
                 'destino' => $data['destino'],
@@ -150,7 +114,6 @@ class SolicitudMudanzaService
             | SI ES LEAD PRIVADO CREARLO DIRECTAMENTE EN EL CRM
             |--------------------------------------------------------------------------
             */
-
             if ($solicitud->es_privado &&  $solicitud->empresa_privada_id) {
                 \App\Modules\SolicitudMudanza\Models\LeadCompra::create([
                     'empresa_id' => $solicitud->empresa_privada_id,
@@ -163,11 +126,6 @@ class SolicitudMudanzaService
                 ]);
             }
 
-            /*
-            |--------------------------------------------------------------------------
-            | EMAIL
-            |--------------------------------------------------------------------------
-            */
             Mail::to($solicitud->email)->later(now()->addSeconds(15),   new SolicitudMudanzaResumen($solicitud));
             return $solicitud;
         });
@@ -175,13 +133,9 @@ class SolicitudMudanzaService
 
     private function limpiarInventario(string $text): string
     {
-        // Convertir div, p, br en separadores
         $text = preg_replace('/<(\/)?(div|p|br)[^>]*>/i', ', ', $text);
-        // Eliminar cualquier HTML restante
         $text = strip_tags($text);
-        // Normalizar espacios y comas
         $text = preg_replace('/\s*,\s*/', ', ', $text);
-
         return trim($text, ', ');
     }
 
@@ -204,13 +158,10 @@ class SolicitudMudanzaService
 
     private function validarAntiSpam(array $data): void
     {
-        // EXCEPCIÓN ADMIN
         if (strtolower($data['email']) === 'intermudanza@gmail.com') {
             return;
         }
         $hace24Horas = now()->subHours(24);
-
-        // SOLO solicitudes ACTIVAS (verificadas)
         $queryBase = SolicitudMudanza::where('email', $data['email'])
             ->where('estado', 'activo')
             ->where('created_at', '>=', $hace24Horas);

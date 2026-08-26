@@ -203,8 +203,7 @@
                                     desde el siguiente enlace.
                                 </p>
 
-                                <a href="{{ config('app.api_url') }}/api/seguros/{{ $expediente->folio }}/pdf"
-                                    target="_blank"
+                                <a href="{{ config('app.frontend_url') }}/seguros/{{ $expediente->folio }}/pdf" target="_blank"
                                     style=" display:inline-block; padding:12px 20px; background:#09233E; 
                                     color:#ffffff; text-decoration:none; border-radius:8px; font-weight:bold; font-size:14px;  ">
                                     Ver / descargar expediente PDF

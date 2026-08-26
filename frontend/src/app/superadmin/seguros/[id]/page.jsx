@@ -123,6 +123,50 @@ export default function SuperAdminSeguroDetallePage() {
                 </div>
 
                 <div className="detailCard">
+                    <h2> Accesos del expediente </h2>
+
+                    <div className="detailGrid">
+                        <div>
+                            <span> Estado datos empresa </span>
+
+                            <strong>
+                                {expediente.empresa_datos_finalizados_at ? new Date(expediente.empresa_datos_finalizados_at).toLocaleString("es-MX") : "Pendientes"}
+                            </strong>
+                        </div>
+                        <div className="detailGrid__full">
+                            <span> Enlace para la empresa de mudanza </span>
+
+                            {expediente.enlace_empresa ? (
+                                <div className="seguroDetail__companyLink">
+                                    <input type="text" value={expediente.enlace_empresa} readOnly onFocus={(event) => { event.target.select(); }} />
+
+                                    <button type="button" className="btn-secondary" onClick={copiarEnlaceEmpresa}  >
+                                        {copied ? "Copiado" : "Copiar enlace"}
+                                    </button>
+                                </div>
+                            ) : (
+                                <strong>
+                                    No fue posible generar el enlace privado.
+                                </strong>
+                            )}
+                        </div>
+
+                        <div className="detailGrid__full">
+                            <span> Acceso al expediente digital </span>
+
+                            <div className="seguroDetail__companyLink">
+                                <input type="text" value={`/seguros/${expediente.folio}`} readOnly onFocus={(event) => { event.target.select(); }} />
+
+                                <button type="button" className="btn-primary" onClick={() => { window.open(`/seguros/${expediente.folio}`, "_blank"); }}  >
+                                    Abrir expediente
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div className="detailCard">
                     <h2> Información del seguro  </h2>
 
                     <div className="detailGrid">
@@ -169,6 +213,32 @@ export default function SuperAdminSeguroDetallePage() {
                                 {expediente.prima_estimada ? `$${Number(expediente.prima_estimada).toLocaleString("es-MX", { minimumFractionDigits: 2, })} 
                                 MXN` : "No calculada"}
                             </strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="detailCard">
+                    <h2> Información de la mudanza </h2>
+
+                    <div className="detailGrid">
+                        <div>
+                            <span>  Origen </span>
+                            <strong> {expediente.origen || "No registrado"} </strong>
+                        </div>
+
+                        <div>
+                            <span>  Destino  </span>
+                            <strong> {expediente.destino || "No registrado"} </strong>
+                        </div>
+
+                        <div>
+                            <span> Fecha de recolección </span>
+                            <strong> {expediente.fecha_recoleccion || "No registrada"} </strong>
+                        </div>
+
+                        <div className="detailGrid__full">
+                            <span> Inventario </span>
+                            <strong>  {expediente.inventario || "No registrado"} </strong>
                         </div>
                     </div>
                 </div>
@@ -222,78 +292,6 @@ export default function SuperAdminSeguroDetallePage() {
                                 </div>
                             </>
                         )}
-                    </div>
-                </div>
-
-                <div className="detailCard">
-                    <h2> Enlace privado de empresa </h2>
-
-                    <div className="detailGrid">
-                        <div className="detailGrid__full">
-                            <span> Estado del enlace </span>
-
-                            <strong>
-                                {expediente.enlace_empresa ? "Enlace disponible" : "Enlace no disponible"}
-                            </strong>
-                        </div>
-
-                        <div className="detailGrid__full">
-                            <span> Enlace para la empresa de mudanza </span>
-
-                            {expediente.enlace_empresa ? (
-                                <div className="seguroDetail__companyLink">
-                                    <input type="text" value={expediente.enlace_empresa} readOnly onFocus={(event) => { event.target.select(); }} />
-
-                                    <button type="button" className="btn-secondary" onClick={copiarEnlaceEmpresa} >
-                                        {copied ? "Copiado" : "Copiar enlace"}
-                                    </button>
-                                </div>
-                            ) : (
-                                <strong> No fue posible generar el enlace privado. </strong>
-                            )}
-                        </div>
-
-                        <div>
-                            <span> Enlace generado </span>
-
-                            <strong>
-                                {expediente.empresa_access_created_at ? new Date(expediente.empresa_access_created_at).toLocaleString("es-MX") : "No generado"}
-                            </strong>
-                        </div>
-
-                        <div>
-                            <span> Datos empresa finalizados </span>
-
-                            <strong>
-                                {expediente.empresa_datos_finalizados_at ? new Date(expediente.empresa_datos_finalizados_at).toLocaleString("es-MX") : "Pendientes"}
-                            </strong>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="detailCard">
-                    <h2> Información de la mudanza </h2>
-
-                    <div className="detailGrid">
-                        <div>
-                            <span>  Origen </span>
-                            <strong> {expediente.origen || "No registrado"} </strong>
-                        </div>
-
-                        <div>
-                            <span>  Destino  </span>
-                            <strong> {expediente.destino || "No registrado"} </strong>
-                        </div>
-
-                        <div>
-                            <span> Fecha de recolección </span>
-                            <strong> {expediente.fecha_recoleccion || "No registrada"} </strong>
-                        </div>
-
-                        <div className="detailGrid__full">
-                            <span> Inventario </span>
-                            <strong>  {expediente.inventario || "No registrado"} </strong>
-                        </div>
                     </div>
                 </div>
 

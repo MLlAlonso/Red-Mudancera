@@ -83,8 +83,6 @@ export default function DetalleSolicitudPage() {
                 </div>
 
                 <div className="detalle-solicitud__card">
-
-                    {/* RUTA */}
                     <div className="detalle-solicitud__route">
                         <div className="detalle-solicitud__head">
                             <span className="detalle-solicitud__tag">
@@ -103,7 +101,6 @@ export default function DetalleSolicitudPage() {
                         </h2>
                     </div>
 
-                    {/* ================= ORIGEN ================= */}
                     <h3 className="detalle-solicitud__section-title">Origen</h3>
                     <div className="detalle-solicitud__grid">
                         <div>
@@ -127,12 +124,10 @@ export default function DetalleSolicitudPage() {
                         </div>
                     </div>
 
-                    {/* DIVIDER */}
                     <div className="detalle-solicitud__divider">
                         <img src="/icons/truck.png" alt="divider" />
                     </div>
 
-                    {/* ================= DESTINO ================= */}
                     <h3 className="detalle-solicitud__section-title">Destino</h3>
                     <div className="detalle-solicitud__grid">
                         <div>
@@ -156,7 +151,6 @@ export default function DetalleSolicitudPage() {
                         </div>
                     </div>
 
-                    {/* ================= INFORMACIÓN GENERAL ================= */}
                     <div className="detalle-solicitud__divider">
                         <img src="/icons/docs.png" alt="divider" />
                     </div>
@@ -187,14 +181,8 @@ export default function DetalleSolicitudPage() {
                         </div>
                     </div>
 
-                    {/* INVENTARIO */}
                     <label>Inventario:</label>
-                    <div
-                        className="nota-html"
-                        dangerouslySetInnerHTML={{
-                            __html: solicitud.inventario || "<p>Sin detalle</p>",
-                        }}
-                    />
+                    <div className="nota-html" dangerouslySetInnerHTML={{ __html: solicitud.inventario || "<p>Sin detalle</p>", }} />
 
                     {haComprado && (
                         <div className="detalle-solicitud__contacto">
@@ -242,13 +230,12 @@ export default function DetalleSolicitudPage() {
                                         origen: solicitud.origen,
                                         destino: solicitud.destino,
                                         tipoVivienda: solicitud.tipo_vivienda,
+                                        inventario: solicitud.inventario,
                                     })
                                 }
                             />
                         )}
-
                     </div>
-
                 </div>
             </main>
 
@@ -265,7 +252,6 @@ export default function DetalleSolicitudPage() {
                     onSuccess={() => window.location.reload()}
                 />
             )}
-
         </>
     );
 }

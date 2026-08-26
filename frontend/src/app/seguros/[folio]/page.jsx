@@ -82,6 +82,18 @@ export default function SeguroPublicoPage() {
     const [finalizando, setFinalizando] = useState(false);
     const [showFinalizarModal, setShowFinalizarModal] = useState(false);
 
+    const datosEmpresaCompletos =
+        Boolean(expediente?.empresa_mudanza?.trim()) &&
+        Boolean(expediente?.origen?.trim()) &&
+        Boolean(expediente?.destino?.trim()) &&
+        Boolean(expediente?.fecha_salida) &&
+        Boolean(expediente?.fecha_llegada) &&
+        Boolean(expediente?.propietario_unidad?.trim()) &&
+        Boolean(expediente?.marca_unidad?.trim()) &&
+        Boolean(expediente?.modelo_unidad?.trim()) &&
+        Boolean(expediente?.placas?.trim()) &&
+        Boolean(expediente?.chofer?.trim());
+
     /*
     |--------------------------------------------------------------------------
     | Generar enlace privado para empresa
@@ -117,6 +129,14 @@ export default function SeguroPublicoPage() {
 
         cargarExpediente();
     }, [folio]);
+
+    useEffect(() => {
+        if (!folio || paso !== 4) {
+            return;
+        }
+
+        cargarExpediente();
+    }, [folio, paso]);
 
     /*
     |--------------------------------------------------------------------------
@@ -262,6 +282,91 @@ export default function SeguroPublicoPage() {
             setLoading(false);
         }
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Refrescar expediente
+    |--------------------------------------------------------------------------
+    */
+    async function refrescarExpediente() {
+        if (!folio) {
+            return;
+        }
+
+        try {
+            const response = await getExpedienteSeguroPublico(folio);
+            const data = response.data;
+            setExpediente(data);
+
+            if (data.empresa_mudanza !== undefined) {
+                setEmpresaMudanza(data.empresa_mudanza || "");
+            }
+
+            if (data.origen !== undefined) {
+                setOrigen(data.origen || "");
+            }
+
+            if (data.destino !== undefined) {
+                setDestino(data.destino || "");
+            }
+
+            if (data.fecha_salida !== undefined) {
+                setFechaSalida(data.fecha_salida ? String(data.fecha_salida).substring(0, 10) : "");
+            }
+
+            if (data.fecha_llegada !== undefined) {
+                setFechaLlegada(data.fecha_llegada ? String(data.fecha_llegada).substring(0, 10) : "");
+            }
+
+            if (data.propietario_unidad !== undefined) {
+                setPropietarioUnidad(data.propietario_unidad || "");
+            }
+
+            if (data.marca_unidad !== undefined) {
+                setMarcaUnidad(data.marca_unidad || "");
+            }
+
+            if (data.modelo_unidad !== undefined) {
+                setModeloUnidad(data.modelo_unidad || "");
+            }
+
+            if (data.placas !== undefined) {
+                setPlacas(data.placas || "");
+            }
+
+            if (data.chofer !== undefined) {
+                setChofer(data.chofer || "");
+            }
+        } catch (error) {
+            console.error("No fue posible refrescar el expediente:", error);
+        }
+    }
+
+    useEffect(() => {
+        if (!folio || paso !== 4) {
+            return;
+        }
+
+        refrescarExpediente();
+    }, [folio, paso]);
+
+    useEffect(() => {
+        if (!folio) {
+            return;
+        }
+
+        function handleVisibilityChange() {
+            if (document.visibilityState === "visible" && paso === 4) {
+                refrescarExpediente();
+            }
+        }
+
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+        };
+    }, [folio, paso]);
 
     /*
     |--------------------------------------------------------------------------
@@ -644,6 +749,11 @@ export default function SeguroPublicoPage() {
             return;
         }
 
+        if (!datosEmpresaCompletos) {
+            setError("No puedes finalizar el expediente hasta que la empresa de mudanza complete todos los datos requeridos.");
+            return;
+        }
+
         setError("");
         setShowFinalizarModal(true);
     }
@@ -1005,6 +1115,7 @@ export default function SeguroPublicoPage() {
                         <SeguroStep4
                             expediente={expediente}
                             formData={datosRevision}
+                            datosEmpresaCompletos={datosEmpresaCompletos}
                             onAnterior={(pasoAnterior) => { setError(""); setPaso(pasoAnterior); }}
                             onFinalizar={solicitarFinalizacion}
                             finalizando={finalizando}

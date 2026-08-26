@@ -79,10 +79,14 @@
                                 </p>
 
                                 <p>
-                                    ✅ Activaremos tu empresa.<br><br>
-                                    ✅ Acreditaremos tus <strong>100 créditos.</strong><br><br>
-                                    ✅ Resolveremos cualquier duda sobre la plataforma.
+                                    ✅ Activaremos tu empresa en Red Mudancera.<br><br>
+                                    🎁 Recibirás <strong>250 créditos completamente GRATIS</strong>, con un valor de
+                                    <strong>$2,190 MXN</strong>.<br><br>
+                                    ⭐ Es nuestro <strong>paquete de créditos más solicitado</strong><br><br>
+                                    🤝 Además, resolveremos cualquier duda que tengas sobre el funcionamiento de la
+                                    plataforma.
                                 </p>
+
                             </div>
                         </td>
                     </tr>

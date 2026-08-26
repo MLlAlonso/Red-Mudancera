@@ -1,6 +1,6 @@
 "use client";
 
-export default function SeguroStep4({ expediente, formData, onAnterior, onFinalizar, finalizando, }) {
+export default function SeguroStep4({ expediente, formData, onAnterior, onFinalizar, finalizando, datosEmpresaCompletos, }) {
     const {
         nombre,
         email,
@@ -56,6 +56,55 @@ export default function SeguroStep4({ expediente, formData, onAnterior, onFinali
             default:
                 return "No especificado";
         }
+    }
+
+    function obtenerDatosEmpresaFaltantes() {
+        const campos = [
+            {
+                valor: expediente?.empresa_mudanza,
+                nombre: "Empresa de mudanza",
+            },
+            {
+                valor: expediente?.origen,
+                nombre: "Origen",
+            },
+            {
+                valor: expediente?.destino,
+                nombre: "Destino",
+            },
+            {
+                valor: expediente?.fecha_salida,
+                nombre: "Fecha de salida",
+            },
+            {
+                valor: expediente?.fecha_llegada,
+                nombre: "Fecha de llegada",
+            },
+            {
+                valor: expediente?.propietario_unidad,
+                nombre: "Propietario de la unidad",
+            },
+            {
+                valor: expediente?.marca_unidad,
+                nombre: "Marca",
+            },
+            {
+                valor: expediente?.modelo_unidad,
+                nombre: "Modelo",
+            },
+            {
+                valor: expediente?.placas,
+                nombre: "Placas",
+            },
+            {
+                valor: expediente?.chofer,
+                nombre: "Chofer",
+            },
+        ];
+
+        return campos
+            .filter((campo) => campo.valor === null || campo.valor === undefined || String(campo.valor).trim() === "")
+            .map((campo) => campo.nombre);
     }
 
     return (
@@ -215,7 +264,7 @@ export default function SeguroStep4({ expediente, formData, onAnterior, onFinali
                         </div>
                     </div>
 
-                    <button type="button"  onClick={() => onAnterior(3)}  disabled={finalizando} >
+                    <button type="button" onClick={() => onAnterior(3)} disabled={finalizando} >
                         Editar
                     </button>
                 </div>
@@ -253,6 +302,37 @@ export default function SeguroStep4({ expediente, formData, onAnterior, onFinali
                 </div>
             </div>
 
+            {
+                !datosEmpresaCompletos && (
+                    <div className="seguro-publico__review-notice">
+                        <div className="seguro-publico__review-notice-icon">
+                            !
+                        </div>
+
+                        <div>
+                            <strong>
+                                La información de la empresa está incompleta
+                            </strong>
+
+                            <p>
+                                No puedes finalizar el expediente todavía.
+                                La empresa de mudanza debe completar todos los datos
+                                correspondientes a la unidad y a la mudanza.
+                            </p>
+
+                            {
+                                obtenerDatosEmpresaFaltantes().length > 0 && (
+                                    <p>
+                                        <strong>Datos pendientes:</strong>{" "}
+                                        {obtenerDatosEmpresaFaltantes().join(", ")}.
+                                    </p>
+                                )
+                            }
+                        </div>
+                    </div>
+                )
+            }
+
             <div className="seguro-publico__review-confirmation">
                 <div className="seguro-publico__review-confirmation-icon">
                     ✓
@@ -264,7 +344,7 @@ export default function SeguroStep4({ expediente, formData, onAnterior, onFinali
                     </strong>
 
                     <p>
-                        Al finalizar enviaremos tu expediente para revisión. 
+                        Al finalizar enviaremos tu expediente para revisión.
                         También se generará el documento correspondiente con toda la información capturada.
                     </p>
                 </div>
@@ -280,8 +360,11 @@ export default function SeguroStep4({ expediente, formData, onAnterior, onFinali
                     ← Anterior
                 </button>
 
-                <button type="button"  className="seguro-publico__button"  onClick={onFinalizar}  disabled={finalizando} >
-                    { finalizando ? "Finalizando..." : "Finalizar expediente" }
+                <button type="button" className="seguro-publico__button" onClick={onFinalizar} disabled={finalizando || !datosEmpresaCompletos} >
+                    {
+                        finalizando ? "Finalizando..."
+                            : !datosEmpresaCompletos ? "Completa los datos de la empresa" : "Finalizar expediente"
+                    }
                 </button>
             </div>
 

@@ -20,7 +20,7 @@ class EmpresaVentasMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Vende más con Mudanza Fácil')
+        return $this->subject('Aprovecha mejor cada contacto')
             ->view('emails.empresa_ventas')
             ->with(['empresa' => $this->empresa,]);
     }
