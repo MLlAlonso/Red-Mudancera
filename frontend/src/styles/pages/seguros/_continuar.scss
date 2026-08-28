@@ -309,7 +309,12 @@
         align-items: flex-start;
         justify-content: space-between;
         gap: 25px;
-        margin-bottom: 20px;
+        margin-bottom: 0px;
+    }
+
+    &__subtitle {
+        margin-top: 0px;
+        margin-bottom: 15px;
     }
 
     /*
@@ -328,9 +333,9 @@
         margin-bottom: 5px;
 
         span {
-            color: $text-muted;
-            font-size: 13px;
-            font-weight: 700;
+            color: $tertiary;
+            font-size: 16px;
+            font-weight: bold;
         }
 
         strong {
@@ -504,6 +509,19 @@
             color: $title;
             font-size: 14px;
             font-weight: 800;
+        }
+
+        p {
+            margin-top: 5px;
+            font-size: 12px;
+        }
+
+        input {
+            color: $primary;
+
+            &::placeholder {
+                color: $text-muted;
+            }
         }
     }
 
@@ -1883,6 +1901,12 @@
         &__top {
             flex-direction: column;
             gap: 15px;
+        }
+
+        &__subtitle {
+            margin-top: 20px;
+            margin-bottom: 15px;
+            text-align: justify;
         }
 
         &__folio--small {

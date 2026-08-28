@@ -1002,7 +1002,7 @@ export default function SeguroPublicoPage() {
                         <span className="seguro-publico__eyebrow">
                             Expediente de seguro
                         </span>
-                        <h1>  Completa tu expediente </h1>
+                        <h1>Así se ve tu expediente</h1>
                     </div>
 
                     <div className="seguro-publico__folio seguro-publico__folio--small">
@@ -1011,14 +1011,15 @@ export default function SeguroPublicoPage() {
                     </div>
                 </div>
 
+                <div className="seguro-publico__subtitle">
+                    <p>Aquí podrás dejar todo listo para tu seguro, cuando tú decidas contratarlo.
+                        No necesitas terminarlo hoy, solo estamos enseñándote cómo funciona.
+                    </p>
+                </div>
+
                 <div className="seguro-publico__progress">
                     <div className="seguro-publico__progress-header">
                         <span>  Paso {paso} de 4 </span>
-                        <strong> {expediente?.progreso || 0}% </strong>
-                    </div>
-
-                    <div className="seguro-publico__progress-bar">
-                        <div className="seguro-publico__progress-fill" style={{ width: `${expediente?.progreso || 0}%`, }} />
                     </div>
                 </div>
 

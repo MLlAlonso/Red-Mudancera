@@ -7,9 +7,10 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use App\Modules\Seguro\Models\ExpedienteSeguro;
 
-class InvitacionExpedienteSeguroMail extends Mailable
+class SolicitudAsistenciaSeguroMail extends Mailable
 {
     use Queueable, SerializesModels;
+
     public ExpedienteSeguro $expediente;
 
     public function __construct(ExpedienteSeguro $expediente)
@@ -20,7 +21,10 @@ class InvitacionExpedienteSeguroMail extends Mailable
     public function build()
     {
         return $this
-            ->subject('Mudanza Fácil: así se ve tu expediente digital de seguro - ' . $this->expediente->folio)
-            ->view('emails.seguro.invitacion');
+            ->subject(
+                'Mudanza Fácil: solicitud de póliza asistida - '
+                    . $this->expediente->folio
+            )
+            ->view('emails.seguro.solicitud-asistencia');
     }
 }

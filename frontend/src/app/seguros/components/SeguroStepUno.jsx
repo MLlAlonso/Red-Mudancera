@@ -1,19 +1,8 @@
 "use client";
 
-export default function SeguroStepUno({
-    tipoSeguro,
-    valorMenaje,
-    valorAutomovil,
-    pasoUnoGuardado,
-    expediente,
-    error,
-    saving,
-    onTipoSeguroChange,
-    onValorMenajeChange,
-    onValorAutomovilChange,
-    onGuardar,
-    formatearMoneda,
-}) {
+export default function SeguroStepUno({ tipoSeguro, valorMenaje, valorAutomovil, pasoUnoGuardado,
+    expediente, error, saving, onTipoSeguroChange, onValorMenajeChange, onValorAutomovilChange,
+    onGuardar, formatearMoneda, }) {
 
     const valorMenajeNumero = valorMenaje === "" ? 0 : Number(String(valorMenaje).replace(/,/g, ""));
     const valorAutomovilNumero = valorAutomovil === "" ? 0 : Number(String(valorAutomovil).replace(/,/g, ""));
@@ -29,7 +18,7 @@ export default function SeguroStepUno({
 
     const primaEstimada = basePrima > 0 ? basePrima * 0.0135 : 0;
 
-    const mostrarPrima = tipoSeguro &&  (
+    const mostrarPrima = tipoSeguro && (
         (tipoSeguro === "menaje" && valorMenajeNumero > 0) ||
         (tipoSeguro === "automovil" && valorAutomovilNumero > 0) ||
         (tipoSeguro === "menaje_auto" && (valorMenajeNumero > 0 || valorAutomovilNumero > 0))
@@ -38,7 +27,6 @@ export default function SeguroStepUno({
     return (
         <section className="seguro-publico__step">
             <div className="seguro-publico__step-heading">
-                <span> Paso 1 </span>
                 <h2> ¿Qué deseas asegurar? </h2>
                 <p> Selecciona el tipo de protección que necesitas para tu mudanza. </p>
             </div>
@@ -158,7 +146,7 @@ export default function SeguroStepUno({
                     <div className="seguro-publico__premium-box">
                         <div className="seguro-publico__premium-header">
                             <div>
-                                <span> Prima estimada </span>
+                                <span> PRIMA ESTIMADA </span>
                                 <strong> {formatearMoneda(primaEstimada)} </strong>
                             </div>
 
@@ -168,13 +156,14 @@ export default function SeguroStepUno({
                                 </button>
 
                                 <div className="seguro-publico__tooltip-content">
-                                    Valor declarado por el cliente × 1.35%
+                                    Valor declarado × 1.35%
                                 </div>
                             </div>
                         </div>
 
                         <p>
-                            Esta es una estimación calculada con base en el valor declarado.
+                            Esta es una estimación basada en el valor que declaraste se recalcula al momento si ajustas la cifra. 
+                            El valor final se confirma antes de contratar.
                         </p>
                     </div>
                 )

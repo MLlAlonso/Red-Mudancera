@@ -16,14 +16,13 @@ export default function SeguroStepDos({
     return (
         <section className="seguro-publico__step">
             <div className="seguro-publico__step-heading">
-                <span> Paso 2 </span>
                 <h2>  Datos del cliente </h2>
                 <p>  Confirma tus datos de contacto para poder dar seguimiento a tu solicitud. </p>
             </div>
 
             <div className="seguro-publico__field">
                 <label htmlFor="nombre">
-                    Nombre completo
+                    Nombre completo y apellidos
                 </label>
 
                 <input
@@ -36,6 +35,9 @@ export default function SeguroStepDos({
                     onChange={(e) => onNombreChange(e.target.value)}
                 />
 
+                <p>
+                    Escribe tu nombre completo, incluyendo ambos apellidos, tal como deberá aparecer en el seguro
+                </p>
             </div>
 
             <div className="seguro-publico__field">

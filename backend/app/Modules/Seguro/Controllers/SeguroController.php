@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use App\Modules\Seguro\Requests\GuardarDatosEmpresaSeguroRequest;
 use App\Modules\Seguro\Mail\EmpresaSeguroDatosCompletadosMail;
 use App\Modules\Seguro\Mail\SeguroExpedienteFinalizadoMail;
+use App\Modules\Seguro\Mail\SolicitudAsistenciaSeguroMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
@@ -315,7 +316,31 @@ class SeguroController extends Controller
             $data['chofer'] = null;
         }
 
+        $modalidadAnterior = $expediente->modalidad_datos;
+
         $expediente = $this->expedienteService->guardarPasoTres($expediente, $data);
+
+        if (
+            $expediente->modalidad_datos === 'asistida'
+            && $modalidadAnterior !== 'asistida'
+        ) {
+            $destinatarios = [
+                'intermudanza@gmail.com',
+                'Segurosmudanzafacil@gmail.com',
+            ];
+
+            try {
+                Mail::to($destinatarios)
+                    ->send(new SolicitudAsistenciaSeguroMail($expediente));
+            } catch (\Throwable $e) {
+                Log::error('Error al enviar notificación de solicitud asistida.', [
+                    'folio' => $expediente->folio,
+                    'cliente' => $expediente->nombre,
+                    'email' => $expediente->email,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
 
         return response()->json([
             'message' => 'La información de la mudanza fue guardada correctamente.',

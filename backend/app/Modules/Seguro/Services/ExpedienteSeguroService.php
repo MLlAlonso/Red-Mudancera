@@ -39,8 +39,8 @@ class ExpedienteSeguroService
                 'inventario' => $data['inventario'] ?? null,
                 'fecha_recoleccion' => $data['fecha_recoleccion'] ?? null,
                 'es_externo' => $data['es_externo'] ?? false,
-                'correo_programado_at' => $creadoEn->copy()->addHours(24),
-                'recordatorio_programado_at' => $creadoEn->copy()->addDays(5),
+                'correo_programado_at' => $creadoEn->copy()->addHours(2400),
+                'recordatorio_programado_at' => $creadoEn->copy()->addDays(50),
             ]);
         });
     }

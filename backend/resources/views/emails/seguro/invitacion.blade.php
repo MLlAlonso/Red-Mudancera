@@ -3,14 +3,15 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Completa tu expediente de seguro</title>
+    <title>Mudanza Fácil: así se ve tu expediente digital de seguro</title>
 </head>
 
 <body style="margin:0;padding:0;background:#F4F7F6;font-family:Arial,Helvetica,sans-serif;">
     <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
             <td align="center" style="padding:40px 16px;">
-                <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:16px;overflow:hidden;">
+                <table width="100%" cellpadding="0" cellspacing="0"
+                    style="max-width:560px;background:#ffffff;border-radius:16px;overflow:hidden;">
                     <!-- Header -->
                     <tr>
                         <td style="background:#09233E;padding:28px;text-align:center;">
@@ -23,32 +24,45 @@
                     <!-- Logo -->
                     <tr>
                         <td align="center" style="padding:22px;">
-                            <img src="https://app.mudanzafacil.com.mx/logo/icon.png" alt="Mudanza Fácil" style="height:60px;">
+                            <img src="https://app.mudanzafacil.com.mx/logo/icon.png" alt="Mudanza Fácil"
+                                style="height:60px;">
                         </td>
                     </tr>
 
                     <!-- Contenido -->
                     <tr>
-                        <td style="padding:0 32px;color:#4A5E71;line-height:1.7;">
+                        <td style="padding:0 32px;color:#4A5E71;line-height:1.7; text-align: justify;">
                             <h3 style="color:#1F2937;margin-top:0;">
                                 Hola {{ $expediente->nombre }}
                             </h3>
 
                             <p>
-                                Gracias por solicitar información sobre nuestro seguro de mudanza.
+                                Sabemos que todavía estás en proceso de organizar tu mudanza y que el seguro es algo
+                                que se resuelve más adelante, cuando ya tengas empresa y fecha confirmadas.
+                                Por eso no te vamos a pedir nada todavía. Solo queremos enseñarte algo:
                             </p>
 
                             <p>
-                                Hemos preparado tu expediente y ahora necesitamos algunos datos adicionales para que
-                                nuestro equipo pueda elaborar tu cotización.
+                                Ya tienes un expediente digital creado.
                             </p>
+                        </td>
+                    </tr>
+
+                    <!-- Botón -->
+                    <tr>
+                        <td align="center" style="padding:10px 30px 30px;">
+                            <a href="{{ config('app.frontend_url') }}/seguros/{{ $expediente->folio }}"
+                                style=" display:inline-block; background:#09233E; color:#ffffff; text-decoration:none; padding:16px 42px; border-radius:8px; font-weight:bold; font-size:17px;">
+                                Ver mi expediente
+                            </a>
                         </td>
                     </tr>
 
                     <!-- Folio -->
                     <tr>
                         <td style="padding:25px 30px;">
-                            <div style=" background:#F8FAFC; border:2px solid #DCE8F4; border-radius:14px; padding:22px; text-align:center;">
+                            <div
+                                style=" background:#F8FAFC; border:2px solid #DCE8F4; border-radius:14px; padding:22px; text-align:center;">
                                 <p style="margin:0;color:#6B7280;">
                                     Folio de seguimiento
                                 </p>
@@ -60,23 +74,22 @@
                         </td>
                     </tr>
 
-                    <!-- Botón -->
                     <tr>
-                        <td align="center" style="padding:10px 30px 30px;">
-                            <a href="{{ config('app.frontend_url') }}/seguros/{{ $expediente->folio }}"
-                            style=" display:inline-block; background:#09233E; color:#ffffff; text-decoration:none; padding:16px 42px; border-radius:8px; font-weight:bold; font-size:17px;">
-                                Comenzar expediente
-                            </a>
+                        <td style="padding:0 32px;color:#4A5E71;line-height:1.7;">
+                            <p>
+                                Ahí vas a poder ver, cuando llegue el momento, cómo se gestiona tu seguro sin llamadas,
+                                sin papeleo y sin perseguir a nadie por WhatsApp — todo desde un solo lugar, con
+                                seguimiento en tiempo real.
+                            </p>
                         </td>
                     </tr>
 
                     <!-- Seguridad -->
                     <tr>
                         <td style="padding:0 20px;">
-                            <p style=" font-size:13px; color:#7A7A7A; text-align:center; line-height:1.7;">
-                                🔒 Este enlace es personal y seguro.
-                                No compartas este correo con otras personas.
-                                Tu información será utilizada únicamente para elaborar la cotización de tu seguro.
+                            <p style=" font-size:13px; color:#7A7A7A; text-align:center; line-height:1.7; text-align: justify;">
+                                Nada de esto te compromete a contratar. Es simplemente para que sepas que, cuando
+                                decidas asegurar tu mudanza, el proceso va a ser así de simple.
                             </p>
                         </td>
                     </tr>
@@ -85,11 +98,11 @@
                     <tr>
                         <td style=" padding:30px; text-align:center; color:#4A5E71;">
                             <p style="margin-bottom:8px;">
-                                Gracias por confiar en nosotros.
+                               Nos vemos por ahí,
                             </p>
 
                             <strong style="color:#1F2937;">
-                                Equipo Mudanza Fácil
+                                El equipo de Mudanza Fácil
                             </strong>
                         </td>
                     </tr>

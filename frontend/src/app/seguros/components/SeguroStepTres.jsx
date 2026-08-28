@@ -68,8 +68,6 @@ export default function SeguroStepTres({
     return (
         <section className="seguro-publico__step">
             <div className="seguro-publico__step-heading">
-                <span> Paso 3 </span>
-
                 <h2> Información de la mudanza </h2>
 
                 <p>
