@@ -110,8 +110,6 @@ export default function SeguroStep4({ expediente, formData, onAnterior, onFinali
     return (
         <section className="seguro-publico__step seguro-publico__step--review">
             <div className="seguro-publico__step-heading">
-                <span> Paso 4 </span>
-
                 <h2> Revisa tu expediente </h2>
 
                 <p>
@@ -363,7 +361,7 @@ export default function SeguroStep4({ expediente, formData, onAnterior, onFinali
                 <button type="button" className="seguro-publico__button" onClick={onFinalizar} disabled={finalizando || !datosEmpresaCompletos} >
                     {
                         finalizando ? "Finalizando..."
-                            : !datosEmpresaCompletos ? "Completa los datos de la empresa" : "Finalizar expediente"
+                            : !datosEmpresaCompletos ? "Datos incompletos" : "Finalizar expediente"
                     }
                 </button>
             </div>

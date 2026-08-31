@@ -32,18 +32,19 @@ export default function SeguroStepUno({ tipoSeguro, valorMenaje, valorAutomovil,
             </div>
 
             <div className="seguro-publico__insurance-options">
-                <button
-                    type="button"
-                    className={`insurance-option ${tipoSeguro === "menaje" ? "is-selected" : ""}`}
-                    onClick={() => onTipoSeguroChange("menaje")}
-                >
-                    <div className="insurance-option__radio">
-                        <span />
+                <button type="button"
+                    className={`insurance-option ${tipoSeguro === "menaje" ? "is-selected" : ""}`} onClick={() => onTipoSeguroChange("menaje")} >
+                    <div className="insurance-option__icon">
+                        <img src="/icons/truck.png" alt="" aria-hidden="true" />
                     </div>
 
                     <div className="insurance-option__content">
-                        <strong> Menaje </strong>
+                        <strong>Menaje</strong>
                         <p> Protege los artículos y bienes de tu mudanza. </p>
+                    </div>
+
+                    <div className="insurance-option__radio">
+                        <span />
                     </div>
                 </button>
 
@@ -52,13 +53,17 @@ export default function SeguroStepUno({ tipoSeguro, valorMenaje, valorAutomovil,
                     className={`insurance-option ${tipoSeguro === "menaje_auto" ? "is-selected" : ""}`}
                     onClick={() => onTipoSeguroChange("menaje_auto")}
                 >
-                    <div className="insurance-option__radio">
-                        <span />
+                    <div className="insurance-option__icon">
+                        <img src="/icons/seguro.png" alt="" aria-hidden="true"/>
                     </div>
 
                     <div className="insurance-option__content">
-                        <strong> Menaje + Automóvil </strong>
+                        <strong>Menaje + Automóvil</strong>
                         <p> Protege tus artículos y un automóvil. </p>
+                    </div>
+
+                    <div className="insurance-option__radio">
+                        <span />
                     </div>
                 </button>
 
@@ -67,16 +72,19 @@ export default function SeguroStepUno({ tipoSeguro, valorMenaje, valorAutomovil,
                     className={`insurance-option ${tipoSeguro === "automovil" ? "is-selected" : ""}`}
                     onClick={() => onTipoSeguroChange("automovil")}
                 >
-                    <div className="insurance-option__radio">
-                        <span />
+                    <div className="insurance-option__icon">
+                        <img src="/icons/auto.png" alt="" aria-hidden="true" />
                     </div>
 
                     <div className="insurance-option__content">
-                        <strong> Automóvil </strong>
+                        <strong>Automóvil</strong>
                         <p> Protección para el automóvil transportado. </p>
                     </div>
-                </button>
 
+                    <div className="insurance-option__radio">
+                        <span />
+                    </div>
+                </button>
             </div>
 
             {
@@ -161,9 +169,15 @@ export default function SeguroStepUno({ tipoSeguro, valorMenaje, valorAutomovil,
                             </div>
                         </div>
 
-                        <p>
+                        {/* <p>
                             Esta es una estimación basada en el valor que declaraste se recalcula al momento si ajustas la cifra. 
                             El valor final se confirma antes de contratar.
+                        </p> */}
+
+                        <p>
+                            Esta prima se calcula con el valor que indicaste.
+                            Puedes cambiarlo cuando quieras y la prima se actualizará automáticamente.
+                            Antes de contratar verás y confirmarás el importe final.
                         </p>
                     </div>
                 )
@@ -192,7 +206,7 @@ export default function SeguroStepUno({ tipoSeguro, valorMenaje, valorAutomovil,
 
             <div className="seguro-publico__actions">
                 <button type="button" className="seguro-publico__button" onClick={onGuardar} disabled={saving} >
-                    {saving ? "Guardando..." : pasoUnoGuardado ? "Actualizar información" : "Continuar"}
+                    {saving ? "Guardando..." : pasoUnoGuardado ? "Guardar y continuar" : "Continuar"}
                 </button>
 
             </div>

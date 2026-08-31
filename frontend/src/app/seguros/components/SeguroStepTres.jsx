@@ -68,7 +68,7 @@ export default function SeguroStepTres({
     return (
         <section className="seguro-publico__step">
             <div className="seguro-publico__step-heading">
-                <h2> Información de la mudanza </h2>
+                <h2> Datos necesarios para poder asegurar </h2>
 
                 <p>
                     Confirma los datos de la mudanza y selecciona cómo quieres completar la información necesaria para tu póliza.
@@ -478,7 +478,7 @@ export default function SeguroStepTres({
                 </button>
 
                 <button type="button" className="seguro-publico__button" onClick={onContinuar} disabled={saving} >
-                    {saving ? "Guardando..." : pasoTresGuardado ? "Actualizar información" : "Continuar"}
+                    {saving ? "Guardando..." : pasoTresGuardado ? "Guardar y continuar" : "Continuar"}
                 </button>
             </div>
 

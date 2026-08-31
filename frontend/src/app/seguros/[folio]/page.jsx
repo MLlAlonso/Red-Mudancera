@@ -489,7 +489,7 @@ export default function SeguroPublicoPage() {
         setError("");
 
         if (!nombre.trim()) {
-            setError("Ingresa tu nombre completo.");
+            setError("Ingresa tu nombre completo y apellidos para continuar.");
             return;
         }
 
@@ -1012,8 +1012,9 @@ export default function SeguroPublicoPage() {
                 </div>
 
                 <div className="seguro-publico__subtitle">
-                    <p>Aquí podrás dejar todo listo para tu seguro, cuando tú decidas contratarlo.
-                        No necesitas terminarlo hoy, solo estamos enseñándote cómo funciona.
+                    <p>
+                        Conoce paso a paso la información necesaria para preparar tu seguro.
+                        Puedes avanzar y ver cómo funciona sin compromiso y sin necesidad de terminarlo hoy.
                     </p>
                 </div>
 

@@ -35,7 +35,7 @@
 
         p {
             margin: 0;
-            font-size: 15px;
+            font-size: 16px;
         }
     }
 
@@ -67,14 +67,14 @@
             margin: 20px 0 12px;
             color: $title;
             font-family: $font-title;
-            font-size: 27px;
+            font-size: 28px;
             font-weight: 800;
         }
 
         p {
             margin: 7px 0;
             color: $text;
-            font-size: 15px;
+            font-size: 16px;
             line-height: 1.6;
         }
     }
@@ -89,7 +89,7 @@
         border-radius: 50%;
         background: $cards;
         color: $error-hover;
-        font-size: 30px;
+        font-size: 32px;
         font-weight: 800;
     }
 
@@ -114,7 +114,7 @@
             margin: 8px 0 15px;
             color: $title;
             font-family: $font-title;
-            font-size: 34px;
+            font-size: 36px;
             line-height: 1.15;
             font-weight: 800;
         }
@@ -151,7 +151,7 @@
         display: inline-block;
         margin-bottom: 4px;
         color: $tertiary;
-        font-size: 13px;
+        font-size: 14px;
         font-weight: 800;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -165,7 +165,7 @@
     &__intro {
         margin-top: 0;
         color: $title;
-        font-size: 17px;
+        font-size: 18px;
 
         strong {
             color: $primary;
@@ -239,7 +239,7 @@
 
             strong {
                 color: $title;
-                font-size: 15px;
+                font-size: 16px;
                 line-height: 1.4;
             }
         }
@@ -260,7 +260,7 @@
             display: block;
             margin-bottom: 7px;
             color: $title;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 800;
         }
 
@@ -288,7 +288,7 @@
             display: block;
             margin-bottom: 5px;
             color: $title;
-            font-size: 15px;
+            font-size: 16px;
         }
 
         p {
@@ -371,7 +371,7 @@
             display: inline-block;
             margin-bottom: 7px;
             color: $tertiary;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.06em;
@@ -401,49 +401,54 @@
     &__insurance-options {
         display: flex;
         flex-direction: column;
-        gap: 5px;
-        margin-bottom: 20px;
+        gap: 10px;
+        margin: 22px 0 20px;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Insurance Option
-    |--------------------------------------------------------------------------
-    */
     .insurance-option {
+        position: relative;
         width: 100%;
+        min-height: 88px;
         display: flex;
         align-items: center;
         gap: 15px;
-        padding: 12px;
+        padding: 15px 17px;
         border: 1px solid $cards;
-        border-radius: 14px;
+        border-radius: 15px;
         background: white;
         color: $text;
         text-align: left;
         cursor: pointer;
-        margin-bottom: 5px;
-        margin-top: 5px;
 
         transition:
             border-color 0.2s ease,
             background 0.2s ease,
+            box-shadow 0.2s ease,
             transform 0.2s ease;
 
         &:hover {
             border-color: $azul_001;
+            background: #fcfdfd;
+            box-shadow: 0 5px 16px rgba(9, 35, 62, 0.06);
             transform: translateY(-1px);
+        }
+
+        &:focus-visible {
+            outline: 3px solid rgba(58, 110, 165, 0.18);
+            outline-offset: 2px;
         }
 
         &.is-selected {
             border-color: $success;
-            background: $background;
+            background: rgba(28, 143, 106, 0.055);
+            box-shadow: 0 5px 18px rgba(28, 143, 106, 0.08);
 
-            .insurance-option__radio {
-                border-color: $success;
+            .insurance-option__icon {
+                border-color: rgba(28, 143, 106, 0.25);
+                background: rgba(28, 143, 106, 0.10);
 
-                span {
-                    transform: scale(1);
+                img {
+                    transform: scale(1.04);
                 }
             }
 
@@ -452,39 +457,55 @@
                     color: $primary;
                 }
             }
+
+            .insurance-option__radio {
+                border-color: $success;
+                background: white;
+
+                span {
+                    transform: scale(1);
+                }
+            }
         }
     }
 
-    .insurance-option__radio {
-        width: 24px;
-        height: 24px;
-        flex: 0 0 23px;
+    .insurance-option__icon {
+        width: 50px;
+        height: 50px;
+        flex: 0 0 50px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 2px solid $success;
-        border-radius: 50%;
-        transition: border-color 0.2s ease;
+        border: 1px solid $cards;
+        border-radius: 12px;
+        background: $background;
 
-        span {
-            width: 12px;
-            height: 12px;
+        transition:
+            background 0.2s ease,
+            border-color 0.2s ease;
+
+        img {
+            width: 28px;
+            height: 28px;
             display: block;
-            background: $success;
-            border-radius: 50%;
-            transform: scale(0);
+            object-fit: contain;
             transition: transform 0.2s ease;
         }
     }
 
     .insurance-option__content {
+        flex: 1;
+        min-width: 0;
+
         strong {
             display: block;
-            margin-bottom: 2px;
+            margin-bottom: 3px;
             color: $title;
             font-family: $font-title;
             font-size: 17px;
             font-weight: 800;
+            line-height: 1.3;
+            transition: color 0.2s ease;
         }
 
         p {
@@ -492,6 +513,32 @@
             color: $text-muted;
             font-size: 13px;
             line-height: 1.45;
+        }
+    }
+
+    .insurance-option__radio {
+        width: 23px;
+        height: 23px;
+        flex: 0 0 23px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid $secondary;
+        border-radius: 50%;
+        background: white;
+
+        transition:
+            border-color 0.2s ease,
+            background 0.2s ease;
+
+        span {
+            width: 11px;
+            height: 11px;
+            display: block;
+            border-radius: 50%;
+            background: $success;
+            transform: scale(0);
+            transition: transform 0.2s ease;
         }
     }
 
@@ -596,7 +643,7 @@
         border-left: 4px solid $error-hover;
         border-radius: 0 8px 8px 0;
         color: $error-hover;
-        font-size: 13px;
+        font-size: 14px;
         line-height: 1.5;
     }
 
@@ -639,7 +686,7 @@
         p {
             margin: 0;
             color: $text;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.45;
 
             strong {
@@ -676,7 +723,7 @@
         background: $primary;
         color: white;
         font-family: $font-text;
-        font-size: 15px;
+        font-size: 16px;
         font-weight: 800;
         cursor: pointer;
         transition:
@@ -703,7 +750,7 @@
     &__privacy {
         margin: 25px 0 0;
         color: $text-muted;
-        font-size: 11px;
+        font-size: 12px;
         line-height: 1.5;
         text-align: center;
     }
@@ -793,7 +840,7 @@
             display: block;
             color: $success;
             font-family: $font-title;
-            font-size: 27px;
+            font-size: 28px;
             line-height: 1.15;
             font-weight: 900;
         }
@@ -901,17 +948,39 @@
     | Text Inputs
     |--------------------------------------------------------------------------
     */
+    &__input-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    &__input-icon {
+        position: absolute;
+        left: 6px;
+        top: 50%;
+        width: 20px;
+        height: 20px;
+        transform: translateY(-50%);
+        object-fit: contain;
+        pointer-events: none;
+    }
+
     &__text-input {
+        display: block;
         width: 100%;
         min-height: 50px;
-        padding: 13px 15px;
+
+        padding-top: 13px;
+        padding-right: 15px;
+        padding-bottom: 13px;
+        padding-left: 30px;
+
         border: 1px solid $secondary;
         border-radius: 12px;
         outline: none;
         background: white;
         color: $title;
         font-family: $font-text;
-        font-size: 15px;
+        font-size: 16px;
         transition:
             border-color 0.2s ease,
             box-shadow 0.2s ease;
@@ -960,7 +1029,7 @@
             display: block;
             color: $success;
             font-family: $font-title;
-            font-size: 27px;
+            font-size: 28px;
             font-weight: 800;
             line-height: 1.2;
         }
@@ -968,7 +1037,7 @@
         >p {
             margin: 12px 0 0;
             color: $text-muted;
-            font-size: 12px;
+            font-size: 14px;
             line-height: 1.5;
         }
     }
@@ -994,7 +1063,7 @@
             background: white;
             color: $text-muted;
             font-family: $font-text;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 800;
             cursor: help;
             transition:
@@ -1121,7 +1190,7 @@
             display: block;
             margin-bottom: 8px;
             color: $primary;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 800;
             line-height: 1.45;
         }
@@ -1130,7 +1199,7 @@
             margin: 0;
             padding-left: 18px;
             color: $text;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.7;
         }
 
@@ -1163,14 +1232,14 @@
             margin: 0 0 5px;
             color: $title;
             font-family: $font-title;
-            font-size: 17px;
+            font-size: 18px;
             font-weight: 800;
         }
 
         p {
             margin: 0;
             color: $text-muted;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.5;
         }
     }
@@ -1184,14 +1253,13 @@
     &__text-input {
         width: 100%;
         min-height: 50px;
-        padding: 13px 14px;
         border: 1px solid $secondary;
         border-radius: 12px;
         outline: none;
         background: white;
         color: $title;
         font-family: $font-text;
-        font-size: 15px;
+        font-size: 16px;
         font-weight: 600;
         transition:
             border-color 0.2s ease,
@@ -1248,7 +1316,7 @@
         >p {
             margin: 0 0 10px;
             color: $text;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.5;
         }
     }
@@ -1259,7 +1327,7 @@
         background: transparent;
         color: $azul_002;
         font-family: $font-text;
-        font-size: 13px;
+        font-size: 14px;
         font-weight: 800;
         text-decoration: underline;
         cursor: pointer;
@@ -1341,7 +1409,7 @@
         p {
             margin: 0;
             color: $text;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.55;
         }
     }
@@ -1397,7 +1465,7 @@
             border: 0;
             background: transparent;
             color: $primary;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 800;
             cursor: pointer;
 
@@ -1429,7 +1497,7 @@
             display: block;
             margin-bottom: 5px;
             color: $text-muted;
-            font-size: 10px;
+            font-size: 12px;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.04em;
@@ -1487,7 +1555,7 @@
         p {
             margin: 0;
             color: $text;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.55;
         }
     }
@@ -1586,19 +1654,19 @@
             border-radius: 10px;
             background: #121212;
             color: #ffffff;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
         }
 
         h2 {
             margin: 0;
-            font-size: 19px;
+            font-size: 20px;
             line-height: 1.3;
         }
 
         p {
             margin: 4px 0 0;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.45;
             opacity: 0.7;
         }
@@ -1628,7 +1696,7 @@
         strong {
             display: block;
             overflow-wrap: anywhere;
-            font-size: 15px;
+            font-size: 16px;
             line-height: 1.45;
         }
 
@@ -1730,21 +1798,21 @@
             margin: 0 0 5px;
             color: $title;
             font-family: $font-title;
-            font-size: 17px;
+            font-size: 18px;
             font-weight: 800;
         }
 
         p {
             margin: 0 0 10px;
             color: $text;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.5;
         }
 
         a {
             display: inline-block;
             color: $azul_001;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 800;
             text-decoration: none;
             transition: color 0.2s ease;
@@ -1789,7 +1857,7 @@
 
     &__premium span {
         color: #6f7f8d;
-        font-size: 13px;
+        font-size: 14px;
     }
 
     &__premium strong {
@@ -1801,7 +1869,7 @@
         margin: 0;
         max-width: 340px;
         color: #4a5e71;
-        font-size: 13px;
+        font-size: 14px;
         line-height: 1.5;
     }
 
@@ -1931,7 +1999,37 @@
         }
 
         .insurance-option {
-            padding: 15px;
+            min-height: 82px;
+            padding: 14px;
+
+            gap: 12px;
+        }
+
+        .insurance-option__icon {
+            width: 46px;
+            height: 46px;
+            flex-basis: 46px;
+
+            img {
+                width: 26px;
+                height: 26px;
+            }
+        }
+
+        .insurance-option__content {
+            strong {
+                font-size: 16px;
+            }
+
+            p {
+                font-size: 13px;
+            }
+        }
+
+        .insurance-option__radio {
+            width: 22px;
+            height: 22px;
+            flex-basis: 22px;
         }
 
         &__card--completed {
@@ -1962,7 +2060,7 @@
         &__completed-section-heading {
 
             h2 {
-                font-size: 17px;
+                font-size: 18px;
             }
 
             p {
@@ -1988,6 +2086,10 @@
             flex-direction: column;
             align-items: stretch;
         }
+
+        &__actions--review {
+            gap: 10px;
+        }
     }
 
     @media (max-width: 420px) {
@@ -1997,6 +2099,26 @@
             padding: 24px 16px;
         }
 
+        .insurance-option {
+            min-height: 78px;
+            padding: 12px;
+
+            gap: 10px;
+        }
+
+        .insurance-option__icon {
+            width: 42px;
+            height: 42px;
+            flex-basis: 42px;
+
+            border-radius: 10px;
+
+            img {
+                width: 23px;
+                height: 23px;
+            }
+        }
+
         .insurance-option__content {
             strong {
                 font-size: 15px;
@@ -2004,6 +2126,18 @@
 
             p {
                 font-size: 12px;
+                line-height: 1.4;
+            }
+        }
+
+        .insurance-option__radio {
+            width: 21px;
+            height: 21px;
+            flex-basis: 21px;
+
+            span {
+                width: 10px;
+                height: 10px;
             }
         }
 
@@ -2025,6 +2159,13 @@
             gap: 10px;
         }
 
+        .seguro-publico__premium-box {
+            p {
+                font-size: 12px;
+                text-align: justify;
+            }
+        }
+
 
         .seguro-publico__help {
             grid-template-columns: 55px 1fr;
@@ -2044,6 +2185,13 @@
 
         .seguro-publico__review-grid {
             grid-template-columns: 1fr;
+        }
+
+        .seguro-publico__actions--review {
+            display: flex;
+            margin-top: 10px;
+            flex-direction: column;
+            gap: 2px;
         }
 
         .seguro-publico__review-section {
@@ -2102,7 +2250,7 @@
             padding: 18px;
 
             strong {
-                font-size: 21px;
+                font-size: 22px;
             }
         }
     }

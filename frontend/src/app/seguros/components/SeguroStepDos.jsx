@@ -1,17 +1,8 @@
 "use client";
 
 export default function SeguroStepDos({
-    nombre,
-    email,
-    telefono,
-    pasoDosGuardado,
-    error,
-    saving,
-    onNombreChange,
-    onEmailChange,
-    onTelefonoChange,
-    onGuardar,
-    onAnterior,
+    nombre, email, telefono, pasoDosGuardado, error, saving,
+    onNombreChange, onEmailChange, onTelefonoChange, onGuardar, onAnterior,
 }) {
     return (
         <section className="seguro-publico__step">
@@ -20,73 +11,68 @@ export default function SeguroStepDos({
                 <p>  Confirma tus datos de contacto para poder dar seguimiento a tu solicitud. </p>
             </div>
 
-            <div className="seguro-publico__field">
+            <div className="seguro-publico__field" id="icons_02">
                 <label htmlFor="nombre">
                     Nombre completo y apellidos
                 </label>
 
-                <input
-                    id="nombre"
-                    className="seguro-publico__text-input"
-                    type="text"
-                    maxLength={150}
-                    placeholder="Ej. Juan Pérez"
-                    value={nombre}
-                    onChange={(e) => onNombreChange(e.target.value)}
-                />
+                <div className="seguro-publico__input-wrapper">
+                    <img src="/icons/name.png" alt="" className="seguro-publico__input-icon" aria-hidden="true" />
+
+                    <input
+                        id="nombre"
+                        className="seguro-publico__text-input"
+                        type="text"
+                        maxLength={150}
+                        placeholder="Escribe tu nombre completo y apellidos"
+                        value={nombre}
+                        onChange={(e) => onNombreChange(e.target.value)}
+                    />
+                </div>
 
                 <p>
-                    Escribe tu nombre completo, incluyendo ambos apellidos, tal como deberá aparecer en el seguro
+                    Este nombre se utilizará para preparar tu seguro
                 </p>
             </div>
 
-            <div className="seguro-publico__field">
+            <div className="seguro-publico__field" id="icons_02">
                 <label htmlFor="email">
                     Correo electrónico
                 </label>
 
-                <input
-                    id="email"
-                    className="seguro-publico__text-input"
-                    type="email"
-                    maxLength={150}
-                    placeholder="Ej. correo@gmail.com"
-                    value={email}
-                    onChange={(e) => onEmailChange(e.target.value)}
-                />
+                <div className="seguro-publico__input-wrapper">
+                    <img src="/icons/email.png" alt="" className="seguro-publico__input-icon" aria-hidden="true" />
+
+                    <input
+                        id="email"
+                        className="seguro-publico__text-input"
+                        type="email"
+                        maxLength={150}
+                        placeholder="Ej. correo@mail.com"
+                        value={email}
+                        onChange={(e) => onEmailChange(e.target.value)}
+                    />
+                </div>
             </div>
 
-            <div className="seguro-publico__field">
+            <div className="seguro-publico__field" id="icons_02">
                 <label htmlFor="telefono">
                     Teléfono / WhatsApp
                 </label>
 
-                <input
-                    id="telefono"
-                    className="seguro-publico__text-input"
-                    type="tel"
-                    maxLength={20}
-                    inputMode="tel"
-                    placeholder="Ej. 9211234567"
-                    value={telefono}
-                    onChange={(e) => onTelefonoChange(e.target.value)}
-                />
-            </div>
+                <div className="seguro-publico__input-wrapper">
+                    <img src="/icons/tel.png" alt="" className="seguro-publico__input-icon" aria-hidden="true" />
 
-            <div className="seguro-publico__name-notice">
-                <div className="seguro-publico__name-notice-icon">
-                    <span> i </span>
-                </div>
-
-                <div className="seguro-publico__name-notice-content">
-                    <strong> Este nombre se utilizará automáticamente como: </strong>
-
-                    <ul>
-                        <li> Asegurado </li>
-                        <li> Beneficiario </li>
-                        <li> Remitente </li>
-                        <li> Consignado </li>
-                    </ul>
+                    <input
+                        id="telefono"
+                        className="seguro-publico__text-input"
+                        type="tel"
+                        maxLength={20}
+                        inputMode="tel"
+                        placeholder="Ej. 9211234567"
+                        value={telefono}
+                        onChange={(e) => onTelefonoChange(e.target.value)}
+                    />
                 </div>
             </div>
 
@@ -122,7 +108,7 @@ export default function SeguroStepDos({
                 </button>
 
                 <button type="button" className="seguro-publico__button" onClick={onGuardar} disabled={saving} >
-                    {saving ? "Guardando..." : pasoDosGuardado ? "Actualizar información" : "Continuar"}
+                    {saving ? "Guardando..." : pasoDosGuardado ? "Guardar y continuar" : "Continuar"}
                 </button>
 
             </div>

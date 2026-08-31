@@ -37,20 +37,20 @@
                             </h3>
 
                             <p>
-                                Sabemos que todavía estás en proceso de organizar tu mudanza y que el seguro es algo
-                                que se resuelve más adelante, cuando ya tengas empresa y fecha confirmadas.
-                                Por eso no te vamos a pedir nada todavía. Solo queremos enseñarte algo:
+                               Sabemos que todavía estás organizando tu mudanza y que el seguro normalmente se resuelve 
+                               más adelante, cuando ya tienes empresa y fecha confirmadas, por eso no te vamos a pedir ningún dato todavía.
                             </p>
 
-                            <p>
-                                Ya tienes un expediente digital creado.
+                            <p style="text-align: center;">
+                                Lo que sí hicimos fue dejar algo preparado para ti: </br> 
+                                <strong style="color:#15996f;margin-top:0; font-size: 18px;">Ya tienes un expediente digital creado.</strong> 
                             </p>
                         </td>
                     </tr>
 
                     <!-- Botón -->
                     <tr>
-                        <td align="center" style="padding:10px 30px 30px;">
+                        <td align="center" style="padding:10px 30px 5px;">
                             <a href="{{ config('app.frontend_url') }}/seguros/{{ $expediente->folio }}"
                                 style=" display:inline-block; background:#09233E; color:#ffffff; text-decoration:none; padding:16px 42px; border-radius:8px; font-weight:bold; font-size:17px;">
                                 Ver mi expediente
@@ -62,7 +62,7 @@
                     <tr>
                         <td style="padding:25px 30px;">
                             <div
-                                style=" background:#F8FAFC; border:2px solid #DCE8F4; border-radius:14px; padding:22px; text-align:center;">
+                                style=" background:#F8FAFC; border:2px solid #DCE8F4; border-radius:14px; padding:20px; text-align:center;">
                                 <p style="margin:0;color:#6B7280;">
                                     Folio de seguimiento
                                 </p>
@@ -75,11 +75,11 @@
                     </tr>
 
                     <tr>
-                        <td style="padding:0 32px;color:#4A5E71;line-height:1.7;">
+                        <td style="padding:0 32px;color:#4A5E71;line-height:1.7; text-align: justify;">
                             <p>
-                                Ahí vas a poder ver, cuando llegue el momento, cómo se gestiona tu seguro sin llamadas,
-                                sin papeleo y sin perseguir a nadie por WhatsApp — todo desde un solo lugar, con
-                                seguimiento en tiempo real.
+                                Cuando llegue el momento, desde ahí podrás completar la información necesaria, 
+                                dar seguimiento al proceso y gestionar tu seguro sin llamadas, sin papeleo y sin perseguir a nadie por WhatsApp. 
+                                Todo desde un solo lugar.
                             </p>
                         </td>
                     </tr>
@@ -87,9 +87,9 @@
                     <!-- Seguridad -->
                     <tr>
                         <td style="padding:0 20px;">
-                            <p style=" font-size:13px; color:#7A7A7A; text-align:center; line-height:1.7; text-align: justify;">
-                                Nada de esto te compromete a contratar. Es simplemente para que sepas que, cuando
-                                decidas asegurar tu mudanza, el proceso va a ser así de simple.
+                            <p style=" font-size:14px; color:#7A7A7A; text-align:center; line-height:1.7; text-align: center;">
+                                Nada de esto te compromete a contratar. Simplemente queremos que sepas que, si decides asegurar tu mudanza, 
+                                ya tienes listo el lugar desde donde podrás hacerlo de forma fácil y ordenada.
                             </p>
                         </td>
                     </tr>
