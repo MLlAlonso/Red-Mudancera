@@ -18,6 +18,11 @@ class ExpedienteSeguro extends Model
         'tipo_seguro',
         'valor_menaje',
         'valor_automovil',
+        'automovil_marca',
+        'automovil_modelo',
+        'automovil_numero_serie',
+        'automovil_foto_circulacion_url',
+        'automovil_foto_circulacion_public_id',
         'prima_estimada',
         'modalidad_datos',
         'forma_proporcion_datos',
@@ -77,11 +82,11 @@ class ExpedienteSeguro extends Model
         }
 
         $frontendUrl = rtrim(config('app.frontend_url'), '/');
-        return $frontendUrl  . '/seguros/empresa/' . $this->empresa_access_token;
+        return $frontendUrl . '/seguros/empresa/' . $this->empresa_access_token;
     }
 
     public function solicitud()
     {
-        return $this->belongsTo(SolicitudMudanza::class, 'solicitud_mudanza_id');
+        return $this->belongsTo( SolicitudMudanza::class, 'solicitud_mudanza_id' );
     }
 }

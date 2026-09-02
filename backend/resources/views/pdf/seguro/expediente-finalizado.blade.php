@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="es">
 
 <head>
@@ -103,6 +104,56 @@
             font-weight: bold;
         }
 
+        .info-box {
+            background: #F4F7F6;
+            border: 1px solid #E8ECEB;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .info-box strong {
+            color: #09233E;
+        }
+
+        .assisted-box {
+            background: #F4F7F6;
+            border-left: 4px solid #09233E;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .assisted-box-title {
+            color: #09233E;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .image-container {
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        .image-container img {
+            max-width: 420px;
+            max-height: 300px;
+            border: 1px solid #E8ECEB;
+        }
+
+        .image-caption {
+            margin-top: 6px;
+            color: #6F7F8D;
+            font-size: 9px;
+        }
+
+        .image-link {
+            margin-top: 8px;
+            font-size: 9px;
+        }
+
+        .image-link a {
+            color: #09233E;
+        }
+
         .footer {
             margin-top: 30px;
             padding-top: 12px;
@@ -117,10 +168,7 @@
 <body>
     <div class="header">
         <h1>Expediente de Seguro</h1>
-
-        <p>
-            Mudanza Fácil
-        </p>
+        <p> Mudanza Fácil </p>
     </div>
 
     <div class="folio">
@@ -133,7 +181,6 @@
         </div>
     </div>
 
-    <!-- Cliente -->
     <div class="section">
         <div class="section-title">
             Datos del cliente
@@ -172,7 +219,6 @@
         </table>
     </div>
 
-    <!-- Seguro -->
     <div class="section">
         <div class="section-title">
             Información del seguro
@@ -185,29 +231,41 @@
                 </td>
 
                 <td>
-                    {{ $expediente->tipo_seguro ?? 'No registrado' }}
+                    @if($expediente->tipo_seguro === 'menaje')
+                        Menaje
+                    @elseif($expediente->tipo_seguro === 'automovil')
+                        Automóvil
+                    @elseif($expediente->tipo_seguro === 'menaje_auto')
+                        Menaje + Automóvil
+                    @else
+                        No especificado
+                    @endif
                 </td>
             </tr>
 
-            <tr>
-                <td class="label">
-                    Valor declarado del menaje
-                </td>
+            @if( $expediente->tipo_seguro === 'menaje' || $expediente->tipo_seguro === 'menaje_auto' )
+                <tr>
+                    <td class="label">
+                        Valor declarado del menaje
+                    </td>
 
-                <td>
-                    $ {{ number_format((float) ($expediente->valor_menaje ?? 0), 2) }} MXN
-                </td>
-            </tr>
+                    <td>
+                        $ {{ number_format((float) ($expediente->valor_menaje ?? 0), 2) }} MXN
+                    </td>
+                </tr>
+            @endif
 
-            <tr>
-                <td class="label">
-                    Valor declarado del automóvil
-                </td>
+            @if( $expediente->tipo_seguro === 'automovil' || $expediente->tipo_seguro === 'menaje_auto' )
+                <tr>
+                    <td class="label">
+                        Valor declarado del automóvil
+                    </td>
 
-                <td>
-                    $ {{ number_format((float) ($expediente->valor_automovil ?? 0), 2) }} MXN
-                </td>
-            </tr>
+                    <td>
+                        $ {{ number_format((float) ($expediente->valor_automovil ?? 0), 2) }} MXN
+                    </td>
+                </tr>
+            @endif
         </table>
 
         <div class="premium">
@@ -216,35 +274,119 @@
             </div>
 
             <div class="premium-value">
-                $
-                {{ number_format((float) ($expediente->prima_estimada ?? 0), 2) }}
-                MXN
+                $ {{ number_format((float) ($expediente->prima_estimada ?? 0), 2) }} MXN
             </div>
 
-            <div>
+            <div style="margin-top:5px;">
                 Cálculo:
-                valor declarado por el cliente ×
-                {{ $expediente->modalidad_datos === 'asistida' ? '1.75%' : '1.35%' }}
+                valor declarado por el cliente × {{ $expediente->modalidad_datos === 'asistida' ? '1.75%' : '1.35%' }}
             </div>
         </div>
-
-        <div style="margin-top:10px;">
-            <strong>
-                Modalidad:
-            </strong>
-
-            {{ $expediente->modalidad_datos === 'asistida' ? 'Póliza asistida' : 'Póliza estándar' }}
-        </div>
-
     </div>
 
-    <!-- Mudanza -->
+    <div class="section">
+        <div class="section-title">
+            Modalidad de atención
+        </div>
+
+        <table class="data">
+            <tr>
+                <td class="label">
+                    Modalidad
+                </td>
+
+                <td>
+                    @if($expediente->modalidad_datos === 'asistida')
+                        Póliza asistida
+                    @elseif($expediente->modalidad_datos === 'autogestion')
+                        Autogestión
+                    @else
+                        No especificada
+                    @endif
+                </td>
+            </tr>
+
+            @if($expediente->modalidad_datos === 'autogestion')
+                <tr>
+                    <td class="label">
+                        Quién proporciona los datos
+                    </td>
+
+                    <td>
+                        @if($expediente->forma_proporcion_datos === 'cliente')
+                            Yo proporcionaré los datos
+                        @elseif($expediente->forma_proporcion_datos === 'empresa')
+                            La empresa de mudanza proporcionará los datos
+                        @else
+                            No especificado
+                        @endif
+                    </td>
+                </tr>
+            @endif
+        </table>
+
+        @if($expediente->modalidad_datos === 'asistida')
+            <div class="assisted-box">
+                <div class="assisted-box-title">
+                    Datos para póliza asistida
+                </div>
+
+                <table class="data">
+                    <tr>
+                        <td class="label">
+                            Empresa de mudanza
+                        </td>
+
+                        <td>
+                            {{ $expediente->asistencia_empresa_mudanza ?? 'No registrada' }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="label">
+                            Contacto
+                        </td>
+
+                        <td>
+                            {{ $expediente->asistencia_contacto ?? 'No registrado' }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="label">
+                            Teléfono / WhatsApp
+                        </td>
+
+                        <td>
+                            {{ $expediente->asistencia_telefono ?? 'No registrado' }}
+                        </td>
+                    </tr>
+                </table>
+
+                <div style="margin-top:10px;">
+                    El equipo de Mudanza Fácil dará seguimiento a la información
+                    necesaria con la empresa de mudanza para continuar con el proceso de emisión de la póliza.
+                </div>
+            </div>
+        @endif
+    </div>
+
     <div class="section">
         <div class="section-title">
             Datos de la mudanza
         </div>
 
         <table class="data">
+            <tr>
+                <td class="label">
+                    Empresa de mudanza
+                </td>
+
+                <td>
+                    {{ $expediente->empresa_mudanza ?? 'No registrada' }}
+                </td>
+            </tr>
+
             <tr>
                 <td class="label">
                     Origen
@@ -265,6 +407,26 @@
                 </td>
             </tr>
 
+            <tr>
+                <td class="label">
+                    Fecha de salida
+                </td>
+
+                <td>
+                    {{ $expediente->fecha_salida ?? 'No registrada' }}
+                </td>
+            </tr>
+
+            <tr>
+                <td class="label">
+                    Fecha de llegada
+                </td>
+
+                <td>
+                    {{ $expediente->fecha_llegada ?? 'No registrada' }}
+                </td>
+            </tr>
+
             @if($expediente->inventario)
                 <tr>
                     <td class="label">
@@ -279,59 +441,6 @@
         </table>
     </div>
 
-    @if($expediente->modalidad_datos === 'asistida')
-        <div class="section">
-            <div class="section-title">
-                Datos para póliza asistida
-            </div>
-
-            <table class="data">
-                <tr>
-                    <td class="label">
-                        Empresa de mudanza
-                    </td>
-
-                    <td>
-                        {{ $expediente->asistencia_empresa_mudanza ?? 'No registrada' }}
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="label">
-                        Contacto
-                    </td>
-
-                    <td>
-                        {{ $expediente->asistencia_contacto ?? 'No registrado' }}
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="label">
-                        Teléfono / WhatsApp
-                    </td>
-
-                    <td>
-                        {{ $expediente->asistencia_telefono ?? 'No registrado' }}
-                    </td>
-                </tr>
-            </table>
-
-            <div class="premium">
-                <strong>
-                    Póliza asistida
-                </strong>
-
-                <div>
-                    Nuestro equipo se encargará de solicitar,
-                    revisar y dar seguimiento a la información
-                    necesaria para la emisión de la póliza.
-                </div>
-            </div>
-        </div>
-    @endif
-
-    <!-- Unidad -->
     <div class="section">
         <div class="section-title">
             Datos de la unidad
@@ -397,28 +506,66 @@
                     {{ $expediente->chofer ?? 'No registrado' }}
                 </td>
             </tr>
-
-            <tr>
-                <td class="label">
-                    Fecha de salida
-                </td>
-
-                <td>
-                    {{ $expediente->fecha_salida ?? 'No registrada' }}
-                </td>
-            </tr>
-
-            <tr>
-                <td class="label">
-                    Fecha de llegada
-                </td>
-
-                <td>
-                    {{ $expediente->fecha_llegada ?? 'No registrada' }}
-                </td>
-            </tr>
         </table>
     </div>
+
+    @if( $expediente->tipo_seguro === 'automovil' || $expediente->tipo_seguro === 'menaje_auto' )
+        <div class="section">
+            <div class="section-title">
+                Datos del automóvil
+            </div>
+
+            <table class="data">
+                <tr>
+                    <td class="label">
+                        Marca
+                    </td>
+
+                    <td>
+                        {{ $expediente->automovil_marca ?? 'No registrada' }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="label">
+                        Modelo
+                    </td>
+
+                    <td>
+                        {{ $expediente->automovil_modelo ?? 'No registrado' }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="label">
+                        Número de serie
+                    </td>
+
+                    <td>
+                        {{ $expediente->automovil_numero_serie ?? 'No registrado' }}
+                    </td>
+                </tr>
+            </table>
+
+            @if($expediente->automovil_foto_circulacion_url)
+                <div class="image-container">
+                    <img src="{{ $expediente->automovil_foto_circulacion_url }}" alt="Foto de circulación del automóvil">
+
+                    <div class="image-caption">
+                        Foto de la tarjeta de circulación / documento de circulación proporcionado para el expediente.
+                    </div>
+
+                    <div class="image-link">
+                        Archivo original:
+
+                        <a href="{{ $expediente->automovil_foto_circulacion_url }}">
+                            Ver / descargar imagen
+                        </a>
+                    </div>
+                </div>
+            @endif
+        </div>
+    @endif
 
     <div class="section">
         <div class="section-title">
@@ -431,9 +578,7 @@
                     Estado
                 </td>
 
-                <td>
-                    Completado
-                </td>
+                <td> Completado </td>
             </tr>
 
             <tr>
@@ -451,9 +596,8 @@
     <div class="footer">
         Documento generado automáticamente por Mudanza Fácil.
         <br>
-        Folio:
-        {{ $expediente->folio }}
+
+        Folio: {{ $expediente->folio }}
     </div>
 </body>
-
 </html>

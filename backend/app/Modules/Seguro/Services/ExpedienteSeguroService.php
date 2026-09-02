@@ -115,15 +115,6 @@ class ExpedienteSeguroService
                 $valorAutomovil = $data['valor_automovil'] ?? null;
             }
 
-            /*
-            |--------------------------------------------------------------------------
-            | Calcular prima
-            |--------------------------------------------------------------------------
-            | La prima corresponde al 1.35% del valor declarado.
-            | Menaje: valor_menaje * 1.35%
-            | Automóvil: valor_automovil * 1.35%
-            | Menaje + Automóvil: (valor_menaje + valor_automovil) * 1.35%
-            */
             $basePrima = 0;
 
             if ($valorMenaje !== null) {
@@ -140,10 +131,17 @@ class ExpedienteSeguroService
                 'autogestion'
             );
 
+            $incluyeAutomovil = in_array($tipoSeguro, ['automovil', 'menaje_auto'], true);
+
             $expediente->update([
                 'tipo_seguro' => $tipoSeguro,
                 'valor_menaje' => $valorMenaje,
                 'valor_automovil' => $valorAutomovil,
+                'automovil_marca' => $incluyeAutomovil ? ($data['automovil_marca'] ?? null) : null,
+                'automovil_modelo' => $incluyeAutomovil ? ($data['automovil_modelo'] ?? null) : null,
+                'automovil_numero_serie' => $incluyeAutomovil ? ($data['automovil_numero_serie'] ?? null) : null,
+                'automovil_foto_circulacion_url' => $incluyeAutomovil ? ($data['automovil_foto_circulacion_url'] ?? null) : null,
+                'automovil_foto_circulacion_public_id' => $incluyeAutomovil ? ($data['automovil_foto_circulacion_public_id'] ?? null) : null,
                 'prima_estimada' => $primaEstimada,
                 'progreso' => max($expediente->progreso, 33),
                 'estado' => 'capturando',

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { getExpedienteSeguroPublico, descargarPdfSeguro } from "@/services/seguro";
+import { getExpedienteSeguroPublico, descargarPdfSeguro, } from "@/services/seguro";
 
 export default function SeguroPdfPage() {
     const { folio } = useParams();
@@ -23,6 +23,7 @@ export default function SeguroPdfPage() {
         try {
             setLoading(true);
             setError("");
+
             const response = await getExpedienteSeguroPublico(folio);
             const data = response?.data ?? response;
 
@@ -60,13 +61,34 @@ export default function SeguroPdfPage() {
             return "No registrado";
         }
 
-        return `$${Number(valor).toLocaleString("es-MX", {
+        const numero = Number(String(valor).replace(/,/g, ""));
+
+        if (Number.isNaN(numero)) {
+            return "No registrado";
+        }
+
+        return `$${numero.toLocaleString("es-MX", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
         })} MXN`;
     }
 
     function formatearFecha(fecha) {
+        if (!fecha) {
+            return "No registrada";
+        }
+
+        const fechaNormalizada = String(fecha).substring(0, 10);
+        const [year, month, day] = fechaNormalizada.split("-");
+
+        if (!year || !month || !day) {
+            return fechaNormalizada;
+        }
+
+        return `${day}/${month}/${year}`;
+    }
+
+    function formatearFechaHora(fecha) {
         if (!fecha) {
             return "No registrada";
         }
@@ -99,15 +121,45 @@ export default function SeguroPdfPage() {
         }
     }
 
+    function obtenerModalidad(modalidad) {
+        switch (modalidad) {
+            case "autogestion":
+                return "Autogestión";
+
+            case "asistida":
+                return "Póliza asistida";
+
+            default:
+                return "No especificada";
+        }
+    }
+
+    function obtenerFormaProporcionDatos(forma) {
+        switch (forma) {
+            case "cliente":
+                return "Yo proporcionaré los datos";
+
+            case "empresa":
+                return "La empresa de mudanza proporcionará los datos";
+
+            default:
+                return "No especificado";
+        }
+    }
+
+    function obtenerPorcentaje() {
+        return expediente?.modalidad_datos === "asistida" ? "1.75%" : "1.35%";
+    }
+
+    const muestraAutomovil = expediente?.tipo_seguro === "automovil" || expediente?.tipo_seguro === "menaje_auto";
+    const modalidadAsistida = expediente?.modalidad_datos === "asistida";
+
     if (loading) {
         return (
             <main className="seguroPdf">
                 <div className="seguroPdf__loading">
                     <div className="seguroPdf__spinner" />
-
-                    <p>
-                        Cargando expediente...
-                    </p>
+                    <p> Cargando expediente... </p>
                 </div>
             </main>
         );
@@ -121,14 +173,10 @@ export default function SeguroPdfPage() {
                         !
                     </div>
 
-                    <h1>
-                        No fue posible cargar el expediente
-                    </h1>
+                    <h1> No fue posible cargar el expediente </h1>
 
                     <p>
-                        {error ||
-                            "El expediente solicitado no está disponible."
-                        }
+                        {error || "El expediente solicitado no está disponible."}
                     </p>
                 </div>
             </main>
@@ -146,14 +194,13 @@ export default function SeguroPdfPage() {
 
                         <div>
                             <strong> Mudanza Fácil </strong>
-                            <span> Expediente de seguro  </span>
+                            <span> Expediente de seguro </span>
                         </div>
                     </div>
 
                     <div className="seguroPdf__actions">
                         <button type="button" className="seguroPdf__download" onClick={descargarPdf} disabled={downloading} >
-                            <span>  ↓ </span>
-
+                            <span> ↓  </span>
                             {downloading ? "Generando PDF..." : "Descargar PDF"}
                         </button>
                     </div>
@@ -166,8 +213,7 @@ export default function SeguroPdfPage() {
                         </span>
 
                         <h1> Expediente de Seguro </h1>
-
-                        <p> Información registrada y confirmada para la solicitud de seguro.  </p>
+                        <p> Información registrada y confirmada para la solicitud de seguro. </p>
 
                         <div className="seguroPdf__folio">
                             <span> Folio </span>
@@ -185,18 +231,17 @@ export default function SeguroPdfPage() {
                         </div>
 
                         <div>
-                            <span>  Progreso  </span>
-                            <strong> {expediente.progreso ?? 0}%  </strong>
+                            <span> Progreso </span>
+                            <strong> {expediente.progreso ?? 0}% </strong>
                         </div>
 
                         <div>
-                            <span>  Finalizado </span>
+                            <span> Finalizado </span>
 
                             <strong>
-                                {formatearFecha(expediente.cliente_finalizo_at)}
+                                {formatearFechaHora(expediente.cliente_finalizo_at)}
                             </strong>
                         </div>
-
                     </section>
 
                     <section className="seguroPdf__section">
@@ -211,34 +256,25 @@ export default function SeguroPdfPage() {
 
                         <div className="seguroPdf__grid">
                             <div className="seguroPdf__field">
-                                <span>  Nombre completo </span>
-
-                                <strong>
-                                    {expediente.nombre || "No registrado"}
-                                </strong>
+                                <span> Nombre completo </span>
+                                <strong> {expediente.nombre || "No registrado"} </strong>
                             </div>
 
                             <div className="seguroPdf__field">
                                 <span> Correo electrónico </span>
-
-                                <strong>
-                                    {expediente.email || "No registrado"}
-                                </strong>
+                                <strong> {expediente.email || "No registrado"} </strong>
                             </div>
 
                             <div className="seguroPdf__field">
                                 <span> Teléfono / WhatsApp </span>
-
-                                <strong>
-                                    {expediente.telefono || "No registrado"}
-                                </strong>
+                                <strong> {expediente.telefono || "No registrado"} </strong>
                             </div>
                         </div>
                     </section>
 
                     <section className="seguroPdf__section">
                         <div className="seguroPdf__section-heading">
-                            <span>  02 </span>
+                            <span> 02 </span>
 
                             <div>
                                 <h2> Información del seguro </h2>
@@ -248,40 +284,36 @@ export default function SeguroPdfPage() {
 
                         <div className="seguroPdf__grid">
                             <div className="seguroPdf__field">
-                                <span> Tipo de seguro  </span>
-
-                                <strong>
-                                    {obtenerTipoSeguro(expediente.tipo_seguro)}
-                                </strong>
+                                <span> Tipo de seguro </span>
+                                <strong> {obtenerTipoSeguro(expediente.tipo_seguro)} </strong>
                             </div>
 
-                            <div className="seguroPdf__field">
-                                <span>  Valor declarado del menaje  </span>
+                            {
+                                (expediente.tipo_seguro === "menaje" || expediente.tipo_seguro === "menaje_auto") && (
+                                    <div className="seguroPdf__field">
+                                        <span> Valor declarado del menaje </span>
+                                        <strong> {formatearMoneda(expediente.valor_menaje)} </strong>
+                                    </div>
+                                )
+                            }
 
-                                <strong>
-                                    {formatearMoneda(expediente.valor_menaje)}
-                                </strong>
-                            </div>
-
-                            <div className="seguroPdf__field">
-                                <span> Valor declarado del automóvil </span>
-
-                                <strong>
-                                    {formatearMoneda(expediente.valor_automovil)}
-                                </strong>
-                            </div>
+                            {
+                                (expediente.tipo_seguro === "automovil" || expediente.tipo_seguro === "menaje_auto") && (
+                                    <div className="seguroPdf__field">
+                                        <span> Valor declarado del automóvil </span>
+                                        <strong> {formatearMoneda(expediente.valor_automovil)} </strong>
+                                    </div>
+                                )
+                            }
                         </div>
 
                         <div className="seguroPdf__premium">
                             <div>
                                 <span> Prima estimada </span>
-
-                                <strong>
-                                    {formatearMoneda(expediente.prima_estimada)}
-                                </strong>
+                                <strong> {formatearMoneda(expediente.prima_estimada)} </strong>
                             </div>
 
-                            <p> Cálculo: valor declarado por el cliente × 1.35% </p>
+                            <p> Cálculo: valor declarado por el cliente ×{" "} {obtenerPorcentaje()} </p>
                         </div>
                     </section>
 
@@ -290,45 +322,47 @@ export default function SeguroPdfPage() {
                             <span> 03 </span>
 
                             <div>
-                                <h2>  Datos de la mudanza </h2>
-
-                                <p> Información relacionada con el traslado.  </p>
+                                <h2> Modalidad de atención  </h2>
+                                <p> Información sobre cómo se proporcionarán los datos necesarios para la póliza. </p>
                             </div>
                         </div>
 
                         <div className="seguroPdf__grid">
                             <div className="seguroPdf__field">
-                                <span> Origen </span>
-
-                                <strong>
-                                    {expediente.origen || "No registrado"}
-                                </strong>
+                                <span> Modalidad </span>
+                                <strong> {obtenerModalidad(expediente.modalidad_datos)} </strong>
                             </div>
 
-                            <div className="seguroPdf__field">
-                                <span> Destino </span>
-
-                                <strong>
-                                    {expediente.destino || "No registrado"}
-                                </strong>
-                            </div>
-
-                            <div className="seguroPdf__field">
-                                <span> Fecha de recolección </span>
-
-                                <strong>
-                                    {formatearFecha(expediente.fecha_recoleccion)}
-                                </strong>
-                            </div>
+                            {
+                                expediente.modalidad_datos === "autogestion" && (
+                                    <div className="seguroPdf__field">
+                                        <span> Quién proporciona los datos </span>
+                                        <strong> {obtenerFormaProporcionDatos(expediente.forma_proporcion_datos)} </strong>
+                                    </div>
+                                )
+                            }
                         </div>
 
-                        {expediente.inventario && (
-                            <div className="seguroPdf__inventory">
-                                <span> Inventario </span>
+                        {
+                            modalidadAsistida && (
+                                <div className="seguroPdf__inventory">
+                                    <span> Datos para póliza asistida </span>
 
-                                <p>  {expediente.inventario} </p>
-                            </div>
-                        )}
+                                    <p>
+                                        <strong> Empresa de mudanza: </strong>{" "}
+                                        {expediente.asistencia_empresa_mudanza || "No registrada"}
+                                        <br />
+
+                                        <strong> Contacto: </strong>{" "}
+                                        {expediente.asistencia_contacto || "No registrado"}
+                                        <br />
+
+                                        <strong> Teléfono / WhatsApp: </strong>{" "}
+                                        {expediente.asistencia_telefono || "No registrado"}
+                                    </p>
+                                </div>
+                            )
+                        }
                     </section>
 
                     <section className="seguroPdf__section">
@@ -336,7 +370,54 @@ export default function SeguroPdfPage() {
                             <span> 04 </span>
 
                             <div>
-                                <h2>  Datos de la unidad </h2>
+                                <h2> Datos de la mudanza </h2>
+                                <p> Información relacionada con el traslado. </p>
+                            </div>
+                        </div>
+
+                        <div className="seguroPdf__grid">
+                            <div className="seguroPdf__field">
+                                <span> Empresa de mudanza </span>
+                                <strong> {expediente.empresa_mudanza || "No registrada"} </strong>
+                            </div>
+
+                            <div className="seguroPdf__field">
+                                <span> Origen </span>
+                                <strong> {expediente.origen || "No registrado"} </strong>
+                            </div>
+
+                            <div className="seguroPdf__field">
+                                <span>  Destino </span>
+                                <strong> {expediente.destino || "No registrado"} </strong>
+                            </div>
+
+                            <div className="seguroPdf__field">
+                                <span> Fecha de salida </span>
+                                <strong> {formatearFecha(expediente.fecha_salida)} </strong>
+                            </div>
+
+                            <div className="seguroPdf__field">
+                                <span> Fecha de llegada </span>
+                                <strong> {formatearFecha(expediente.fecha_llegada)} </strong>
+                            </div>
+                        </div>
+
+                        {
+                            expediente.inventario && (
+                                <div className="seguroPdf__inventory">
+                                    <span> Inventario </span>
+                                    <p> {expediente.inventario} </p>
+                                </div>
+                            )
+                        }
+                    </section>
+
+                    <section className="seguroPdf__section">
+                        <div className="seguroPdf__section-heading">
+                            <span> 05 </span>
+
+                            <div>
+                                <h2> Datos de la unidad </h2>
                                 <p> Información de la empresa y vehículo involucrado en el traslado. </p>
                             </div>
                         </div>
@@ -344,79 +425,85 @@ export default function SeguroPdfPage() {
                         <div className="seguroPdf__grid">
                             <div className="seguroPdf__field">
                                 <span> Empresa de mudanza </span>
-
-                                <strong>
-                                    {expediente.empresa_mudanza || "No registrada"}
-                                </strong>
+                                <strong> {expediente.empresa_mudanza || "No registrada"} </strong>
                             </div>
 
                             <div className="seguroPdf__field">
-                                <span>  Propietario de la unidad </span>
-
-                                <strong>
-                                    {expediente.propietario_unidad || "No registrado"}
-                                </strong>
+                                <span> Propietario de la unidad </span>
+                                <strong> {expediente.propietario_unidad || "No registrado"} </strong>
                             </div>
 
                             <div className="seguroPdf__field">
-                                <span> Marca </span>
-
-                                <strong>
-                                    {expediente.marca_unidad || "No registrada"}
-                                </strong>
+                                <span>  Marca </span>
+                                <strong> {expediente.marca_unidad || "No registrada"} </strong>
                             </div>
 
                             <div className="seguroPdf__field">
                                 <span> Modelo </span>
-
-                                <strong>
-                                    {expediente.modelo_unidad || "No registrado"}
-                                </strong>
+                                <strong> {expediente.modelo_unidad || "No registrado"} </strong>
                             </div>
 
                             <div className="seguroPdf__field">
                                 <span> Placas </span>
-
-                                <strong>
-                                    {expediente.placas || "No registradas"}
-                                </strong>
+                                <strong> {expediente.placas || "No registradas"} </strong>
                             </div>
 
                             <div className="seguroPdf__field">
                                 <span> Chofer </span>
-
-                                <strong>
-                                    {expediente.chofer || "No registrado"}
-                                </strong>
-                            </div>
-
-                            <div className="seguroPdf__field">
-                                <span> Fecha de salida </span>
-
-                                <strong>
-                                    {formatearFecha(expediente.fecha_salida)}
-                                </strong>
-                            </div>
-
-                            <div className="seguroPdf__field">
-                                <span> Fecha de llegada </span>
-
-                                <strong>
-                                    {formatearFecha(expediente.fecha_llegada)}
-                                </strong>
+                                <strong> {expediente.chofer || "No registrado"} </strong>
                             </div>
                         </div>
                     </section>
 
+                    {
+                        muestraAutomovil && (
+                            <section className="seguroPdf__section">
+                                <div className="seguroPdf__section-heading">
+                                    <span> 06 </span>
+
+                                    <div>
+                                        <h2> Datos del automóvil </h2>
+                                        <p> Información específica del automóvil asegurado. </p>
+                                    </div>
+                                </div>
+
+                                <div className="seguroPdf__grid">
+                                    <div className="seguroPdf__field">
+                                        <span> Marca </span>
+                                        <strong> {expediente.automovil_marca || "No registrada"} </strong>
+                                    </div>
+
+                                    <div className="seguroPdf__field">
+                                        <span> Modelo </span>
+                                        <strong> {expediente.automovil_modelo || "No registrado"} </strong>
+                                    </div>
+
+                                    <div className="seguroPdf__field">
+                                        <span> Número de serie </span>
+                                        <strong>  {expediente.automovil_numero_serie || "No registrado"} </strong>
+                                    </div>
+                                </div>
+
+                                {
+                                    expediente.automovil_foto_circulacion_url && (
+                                        <div className="seguroPdf__inventory">
+                                            <span>  Foto de circulación </span>
+                                            <p> Se adjuntó una imagen de la documentación de circulación del automóvil. </p>
+
+                                            <a href={expediente.automovil_foto_circulacion_url} target="_blank" rel="noopener noreferrer" >
+                                                Ver / descargar imagen
+                                            </a>
+                                        </div>
+                                    )
+                                }
+                            </section>
+                        )
+                    }
+
                     <footer className="seguroPdf__footer">
                         <strong> Mudanza Fácil </strong>
-
-                        <span>  Documento correspondiente al expediente  {` ${expediente.folio}`}.
-                        </span>
-
-                        <span>
-                            Este documento se genera automáticamente a partir de la información registrada.
-                        </span>
+                        <span> Documento correspondiente al expediente{" "} {expediente.folio}. </span>
+                        <span>  Este documento se genera automáticamente  a partir de la información registrada.  </span>
                     </footer>
                 </article>
             </div>

@@ -45,54 +45,30 @@ class SeguroController extends Controller
 
         return response()->json([
             'data' => [
-                /*
-            |--------------------------------------------------------------------------
-            | Identificación
-            |--------------------------------------------------------------------------
-            */
                 'folio' => $expediente->folio,
                 'estado' => $expediente->estado,
                 'progreso' => $expediente->progreso,
-
-                /*
-            |--------------------------------------------------------------------------
-            | Cliente
-            |--------------------------------------------------------------------------
-            */
                 'nombre' => $expediente->nombre,
                 'email' => $expediente->email,
                 'telefono' => $expediente->telefono,
-
-                /*
-            |--------------------------------------------------------------------------
-            | Mudanza
-            |--------------------------------------------------------------------------
-            */
                 'origen' => $expediente->origen,
                 'destino' => $expediente->destino,
                 'inventario' => $expediente->inventario,
                 'fecha_recoleccion' => $expediente->fecha_recoleccion,
-
-                /*
-            |--------------------------------------------------------------------------
-            | Seguro
-            |--------------------------------------------------------------------------
-            */
                 'tipo_seguro' => $expediente->tipo_seguro,
                 'valor_menaje' => $expediente->valor_menaje,
                 'valor_automovil' => $expediente->valor_automovil,
+                'automovil_marca' => $expediente->automovil_marca,
+                'automovil_modelo' => $expediente->automovil_modelo,
+                'automovil_numero_serie' => $expediente->automovil_numero_serie,
+                'automovil_foto_circulacion_url' => $expediente->automovil_foto_circulacion_url,
+                'automovil_foto_circulacion_public_id' => $expediente->automovil_foto_circulacion_public_id,
                 'prima_estimada' => $expediente->prima_estimada,
                 'modalidad_datos' => $expediente->modalidad_datos ?? 'autogestion',
                 'forma_proporcion_datos' => $expediente->forma_proporcion_datos ?? 'cliente',
                 'asistencia_empresa_mudanza' => $expediente->asistencia_empresa_mudanza,
                 'asistencia_contacto' => $expediente->asistencia_contacto,
                 'asistencia_telefono' => $expediente->asistencia_telefono,
-
-                /*
-            |--------------------------------------------------------------------------
-            | Empresa / Unidad
-            |--------------------------------------------------------------------------
-            */
                 'empresa_mudanza' => $expediente->empresa_mudanza,
                 'fecha_salida' => $expediente->fecha_salida,
                 'fecha_llegada' => $expediente->fecha_llegada,
@@ -101,12 +77,6 @@ class SeguroController extends Controller
                 'modelo_unidad' => $expediente->modelo_unidad,
                 'placas' => $expediente->placas,
                 'chofer' => $expediente->chofer,
-
-                /*
-            |--------------------------------------------------------------------------
-            | Control
-            |--------------------------------------------------------------------------
-            */
                 'es_externo' => $expediente->es_externo,
                 'cliente_inicio_at' => $expediente->cliente_inicio_at,
                 'cliente_finalizo_at' => $expediente->cliente_finalizo_at,
@@ -157,21 +127,15 @@ class SeguroController extends Controller
         $expediente = $this->expedienteService->obtenerPorFolio($folio);
 
         if (!$expediente) {
-            return response()->json([
-                'message' => 'El expediente solicitado no existe.'
-            ], 404);
+            return response()->json([ 'message' => 'El expediente solicitado no existe.' ], 404);
         }
 
         if ($expediente->estado === 'cancelado') {
-            return response()->json([
-                'message' => 'Este expediente ha sido cancelado.'
-            ], 410);
+            return response()->json([ 'message' => 'Este expediente ha sido cancelado.'  ], 410);
         }
 
         if ($expediente->estado === 'completado') {
-            return response()->json([
-                'message' => 'Este expediente ya fue completado.'
-            ], 409);
+            return response()->json([ 'message' => 'Este expediente ya fue completado.' ], 409);
         }
 
         if (in_array($expediente->estado, ['nuevo', 'correo_programado', 'esperando_cliente'], true)) {
@@ -188,15 +152,11 @@ class SeguroController extends Controller
         $data = $request->validated();
 
         if (in_array($data['tipo_seguro'], ['menaje', 'menaje_auto'], true) && empty($data['valor_menaje'])) {
-            return response()->json([
-                'message' => 'Debes indicar el valor del menaje.'
-            ], 422);
+            return response()->json([ 'message' => 'Debes indicar el valor del menaje.' ], 422);
         }
 
         if (in_array($data['tipo_seguro'], ['automovil', 'menaje_auto'], true)  && empty($data['valor_automovil'])) {
-            return response()->json([
-                'message' => 'Debes indicar el valor del automóvil.'
-            ], 422);
+            return response()->json([ 'message' => 'Debes indicar el valor del automóvil.' ], 422);
         }
 
         $expediente = $this->expedienteService->guardarPasoUno($expediente,  $data);
@@ -211,6 +171,11 @@ class SeguroController extends Controller
                 'tipo_seguro' => $expediente->tipo_seguro,
                 'valor_menaje' => $expediente->valor_menaje,
                 'valor_automovil' => $expediente->valor_automovil,
+                'automovil_marca' => $expediente->automovil_marca,
+                'automovil_modelo' => $expediente->automovil_modelo,
+                'automovil_numero_serie' => $expediente->automovil_numero_serie,
+                'automovil_foto_circulacion_url' => $expediente->automovil_foto_circulacion_url,
+                'automovil_foto_circulacion_public_id' => $expediente->automovil_foto_circulacion_public_id,
                 'prima_estimada' => $expediente->prima_estimada,
             ]
         ]);
