@@ -13,15 +13,15 @@ class CreditosController extends Controller
 {
     private array $planes = [
         'impulso' => [
-            'creditos' => 100,
+            'creditos' => 120,
             'precio' => 790
         ],
         'profesional' => [
-            'creditos' => 250,
+            'creditos' => 330,
             'precio' => 1890
         ],
         'crecimiento' => [
-            'creditos' => 600,
+            'creditos' => 800,
             'precio' => 4290
         ]
     ];

@@ -33,7 +33,7 @@ export default function ComprarCreditos() {
             setPlanModal(true);
             return;
         }
-        
+
         setLoading(packagePlan);
 
         try {
@@ -96,13 +96,14 @@ export default function ComprarCreditos() {
                 </h1>
 
                 <p className="creditos__subtitle">
-                    Compra créditos y accede a contactos reales que ya estan buscando mover sus cosas.
+                    Eligue un paquete de créditos y úsalos para comprar contactos de clientes que están buscando una mudanza.
                 </p>
 
                 <div className="creditos__grid">
                     <CreditPackageCard
                         title="Impulso"
-                        credits={100}
+                        credits={120}
+                        maxContacts={8}
                         price="890 mxn"
                         description="Perfecto para empresas que comienzan a generar oportunidades."
                         onBuy={() => comprar("impulso")}
@@ -110,7 +111,8 @@ export default function ComprarCreditos() {
 
                     <CreditPackageCard
                         title="Profesional"
-                        credits={250}
+                        credits={330}
+                        maxContacts={22}
                         price="2,190 mxn"
                         description="La opción más popular para empresas con flujo constante."
                         badge="Más popular"
@@ -119,12 +121,16 @@ export default function ComprarCreditos() {
 
                     <CreditPackageCard
                         title="Crecimiento"
-                        credits={600}
+                        credits={800}
+                        maxContacts={53}
                         price="4,990 mxn"
                         description="Para empresas que quieren maximizar oportunidades."
                         onBuy={() => comprar("crecimiento")}
                     />
                 </div>
+                <p className="creditos__subtitle">
+                    Cálculo considerando contactos compartidos de 15 créditos. Los contactos exclusivos requieren más créditos.
+                </p>
 
                 <p className="creditos__help">
                     <a href="ayuda/">¿Cómo funcionan los créditos?</a>

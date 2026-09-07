@@ -2,18 +2,9 @@
 
 import "@/styles/components/_creditPackageCard.scss";
 
-export default function CreditPackageCard({
-    title,
-    credits,
-    price,
-    description,
-    onBuy,
-    badge
-}) {
-
+export default function CreditPackageCard({ title, credits, price, description, onBuy, badge, maxContacts}) {
     return (
         <div className="credit-card">
-
             {badge && (
                 <div className="credit-card__badge">
                     {badge}
@@ -30,6 +21,16 @@ export default function CreditPackageCard({
 
             <div className="credit-card__credits">
                 {credits} créditos
+            </div>
+
+            <div className="credit-card__contacts">
+                <div className="credit-card__contacts-icon">
+                    <img src="/icons/team.png" alt="Contactos" />
+                </div>
+
+                <span>
+                    Te alcanza para comprar hasta <strong> {maxContacts} contactos</strong>
+                </span>
             </div>
 
             <div className="credit-card__price">

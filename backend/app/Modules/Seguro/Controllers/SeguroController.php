@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use App\Modules\Seguro\Requests\GuardarDatosEmpresaSeguroRequest;
 use App\Modules\Seguro\Mail\EmpresaSeguroDatosCompletadosMail;
 use App\Modules\Seguro\Mail\SeguroExpedienteFinalizadoMail;
+use App\Modules\Seguro\Mail\SeguroExpedienteFinalizadoClienteMail;
 use App\Modules\Seguro\Mail\SolicitudAsistenciaSeguroMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
@@ -127,15 +128,15 @@ class SeguroController extends Controller
         $expediente = $this->expedienteService->obtenerPorFolio($folio);
 
         if (!$expediente) {
-            return response()->json([ 'message' => 'El expediente solicitado no existe.' ], 404);
+            return response()->json(['message' => 'El expediente solicitado no existe.'], 404);
         }
 
         if ($expediente->estado === 'cancelado') {
-            return response()->json([ 'message' => 'Este expediente ha sido cancelado.'  ], 410);
+            return response()->json(['message' => 'Este expediente ha sido cancelado.'], 410);
         }
 
         if ($expediente->estado === 'completado') {
-            return response()->json([ 'message' => 'Este expediente ya fue completado.' ], 409);
+            return response()->json(['message' => 'Este expediente ya fue completado.'], 409);
         }
 
         if (in_array($expediente->estado, ['nuevo', 'correo_programado', 'esperando_cliente'], true)) {
@@ -152,11 +153,11 @@ class SeguroController extends Controller
         $data = $request->validated();
 
         if (in_array($data['tipo_seguro'], ['menaje', 'menaje_auto'], true) && empty($data['valor_menaje'])) {
-            return response()->json([ 'message' => 'Debes indicar el valor del menaje.' ], 422);
+            return response()->json(['message' => 'Debes indicar el valor del menaje.'], 422);
         }
 
         if (in_array($data['tipo_seguro'], ['automovil', 'menaje_auto'], true)  && empty($data['valor_automovil'])) {
-            return response()->json([ 'message' => 'Debes indicar el valor del automóvil.' ], 422);
+            return response()->json(['message' => 'Debes indicar el valor del automóvil.'], 422);
         }
 
         $expediente = $this->expedienteService->guardarPasoUno($expediente,  $data);
@@ -231,84 +232,48 @@ class SeguroController extends Controller
         $expediente = $this->expedienteService->obtenerPorFolio($folio);
 
         if (!$expediente) {
-            return response()->json([
-                'message' => 'El expediente solicitado no existe.'
-            ], 404);
+            return response()->json(['message' => 'El expediente solicitado no existe.'], 404);
         }
 
         if ($expediente->estado === 'cancelado') {
-            return response()->json([
-                'message' => 'Este expediente ha sido cancelado.'
-            ], 410);
+            return response()->json(['message' => 'Este expediente ha sido cancelado.'], 410);
         }
 
         if ($expediente->estado === 'completado') {
-            return response()->json([
-                'message' => 'Este expediente ya fue completado.'
-            ], 409);
+            return response()->json(['message' => 'Este expediente ya fue completado.'], 409);
         }
 
         if ($expediente->progreso < 66) {
-            return response()->json([
-                'message' => 'Debes completar los pasos anteriores antes de continuar.'
-            ], 409);
+            return response()->json(['message' => 'Debes completar los pasos anteriores antes de continuar.'], 409);
         }
 
         $data = $request->validated();
-        $modalidadDatos = $data['modalidad_datos'] ?? 'autogestion';
-
-        if ($modalidadDatos === 'autogestion') {
-            $data['asistencia_empresa_mudanza'] = null;
-            $data['asistencia_contacto'] = null;
-            $data['asistencia_telefono'] = null;
-
-            if (($data['forma_proporcion_datos'] ?? null) === 'empresa') {
-                $data['empresa_mudanza'] = $data['empresa_mudanza'] ?? null;
-                $data['propietario_unidad'] = null;
-                $data['marca_unidad'] = null;
-                $data['modelo_unidad'] = null;
-                $data['placas'] = null;
-                $data['chofer'] = null;
-            }
-        }
-
-        if ($modalidadDatos === 'asistida') {
-            $data['forma_proporcion_datos'] = null;
-            $data['propietario_unidad'] = null;
-            $data['marca_unidad'] = null;
-            $data['modelo_unidad'] = null;
-            $data['placas'] = null;
-            $data['chofer'] = null;
-        }
-
         $modalidadAnterior = $expediente->modalidad_datos;
-
         $expediente = $this->expedienteService->guardarPasoTres($expediente, $data);
 
-        if (
-            $expediente->modalidad_datos === 'asistida'
-            && $modalidadAnterior !== 'asistida'
-        ) {
+        if ($expediente->modalidad_datos === 'asistida' && $modalidadAnterior !== 'asistida') {
             $destinatarios = [
                 'intermudanza@gmail.com',
                 'Segurosmudanzafacil@gmail.com',
             ];
 
             try {
-                Mail::to($destinatarios)
-                    ->send(new SolicitudAsistenciaSeguroMail($expediente));
+                Mail::to($destinatarios)->send(new SolicitudAsistenciaSeguroMail($expediente));
             } catch (\Throwable $e) {
-                Log::error('Error al enviar notificación de solicitud asistida.', [
-                    'folio' => $expediente->folio,
-                    'cliente' => $expediente->nombre,
-                    'email' => $expediente->email,
-                    'error' => $e->getMessage(),
-                ]);
+                Log::error(
+                    'Error al enviar notificación de solicitud asistida.',
+                    [
+                        'folio' => $expediente->folio,
+                        'cliente' => $expediente->nombre,
+                        'email' => $expediente->email,
+                        'error' => $e->getMessage(),
+                    ]
+                );
             }
         }
 
         return response()->json([
-            'message' => 'La información de la mudanza fue guardada correctamente.',
+            'message' => 'La modalidad del expediente fue guardada correctamente.',
 
             'data' => [
                 'folio' => $expediente->folio,
@@ -324,11 +289,12 @@ class SeguroController extends Controller
                 'modelo_unidad' => $expediente->modelo_unidad,
                 'placas' => $expediente->placas,
                 'chofer' => $expediente->chofer,
-                'modalidad_datos' => $expediente->modalidad_datos ?? 'autogestion',
-                'forma_proporcion_datos' => $expediente->forma_proporcion_datos ?? 'cliente',
+                'modalidad_datos' => $expediente->modalidad_datos,
+                'forma_proporcion_datos' => $expediente->forma_proporcion_datos,
                 'asistencia_empresa_mudanza' => $expediente->asistencia_empresa_mudanza,
                 'asistencia_contacto' => $expediente->asistencia_contacto,
                 'asistencia_telefono' => $expediente->asistencia_telefono,
+                'empresa_datos_finalizados_at' => $expediente->empresa_datos_finalizados_at,
                 'prima_estimada' => $expediente->prima_estimada,
             ]
         ]);
@@ -599,6 +565,10 @@ class SeguroController extends Controller
         ];
 
         Mail::to($destinatarios)->send(new SeguroExpedienteFinalizadoMail($expediente));
+
+        if ($expediente->email) {
+            Mail::to($expediente->email)->send(new SeguroExpedienteFinalizadoClienteMail($expediente));
+        }
 
         return response()->json([
             'message' =>

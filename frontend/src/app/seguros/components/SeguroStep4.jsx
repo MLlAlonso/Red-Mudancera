@@ -243,6 +243,61 @@ export default function SeguroStep4({ expediente, formData, onAnterior, onFinali
                 </div>
             </div>
 
+            {
+                muestraAutomovil && (
+                    <div className="seguro-publico__review-section">
+                        <div className="seguro-publico__review-section-heading">
+                            <div>
+                                <div>
+                                    <h3> Datos del automóvil </h3>
+                                    <p> Información del automóvil considerado para el seguro. </p>
+                                </div>
+                            </div>
+
+                            <button type="button" onClick={() => onAnterior(1)} disabled={finalizando} >
+                                Editar
+                            </button>
+                        </div>
+
+                        <div className="seguro-publico__review-grid">
+                            <div className="seguro-publico__review-item">
+                                <span> Marca </span>
+                                <strong> {automovilMarca || expediente?.automovil_marca || "No registrada"} </strong>
+                            </div>
+
+                            <div className="seguro-publico__review-item">
+                                <span> Modelo </span>
+                                <strong> {automovilModelo || expediente?.automovil_modelo || "No registrado"} </strong>
+                            </div>
+
+                            <div className="seguro-publico__review-item">
+                                <span> Número de serie </span>
+                                <strong> {automovilNumeroSerie || expediente?.automovil_numero_serie || "No registrado"} </strong>
+                            </div>
+                        </div>
+
+                        {
+                            (automovilFotoCirculacionUrl || expediente?.automovil_foto_circulacion_url) && (
+                                <div className="seguro-publico__review-notice">
+                                    <div className="seguro-publico__review-notice-icon">
+                                        ✓
+                                    </div>
+
+                                    <div>
+                                        <strong> Tarjeta de circulación adjunta </strong>
+                                        <p> Se ha registrado una fotografía de la tarjeta de circulación del automóvil. </p>
+
+                                        <a href={automovilFotoCirculacionUrl || expediente?.automovil_foto_circulacion_url} target="_blank" rel="noopener noreferrer" >
+                                            Ver / descargar imagen
+                                        </a>
+                                    </div>
+                                </div>
+                            )
+                        }
+                    </div>
+                )
+            }
+
             <div className="seguro-publico__review-section">
                 <div className="seguro-publico__review-section-heading">
                     <div>
@@ -391,62 +446,7 @@ export default function SeguroStep4({ expediente, formData, onAnterior, onFinali
                 </div>
             </div>
 
-            {
-                muestraAutomovil && (
-                    <div className="seguro-publico__review-section">
-                        <div className="seguro-publico__review-section-heading">
-                            <div>
-                                <span> 06 </span>
 
-                                <div>
-                                    <h3> Datos del automóvil </h3>
-                                    <p> Información del automóvil considerado para el seguro. </p>
-                                </div>
-                            </div>
-
-                            <button type="button" onClick={() => onAnterior(1)} disabled={finalizando} >
-                                Editar
-                            </button>
-                        </div>
-
-                        <div className="seguro-publico__review-grid">
-                            <div className="seguro-publico__review-item">
-                                <span> Marca </span>
-                                <strong> {automovilMarca || expediente?.automovil_marca || "No registrada"} </strong>
-                            </div>
-
-                            <div className="seguro-publico__review-item">
-                                <span> Modelo </span>
-                                <strong> {automovilModelo || expediente?.automovil_modelo || "No registrado"} </strong>
-                            </div>
-
-                            <div className="seguro-publico__review-item">
-                                <span> Número de serie </span>
-                                <strong> {automovilNumeroSerie || expediente?.automovil_numero_serie || "No registrado"} </strong>
-                            </div>
-                        </div>
-
-                        {
-                            (automovilFotoCirculacionUrl || expediente?.automovil_foto_circulacion_url) && (
-                                <div className="seguro-publico__review-notice">
-                                    <div className="seguro-publico__review-notice-icon">
-                                        ✓
-                                    </div>
-
-                                    <div>
-                                        <strong> Tarjeta de circulación adjunta </strong>
-                                        <p> Se ha registrado una fotografía de la tarjeta de circulación del automóvil. </p>
-
-                                        <a href={automovilFotoCirculacionUrl || expediente?.automovil_foto_circulacion_url} target="_blank" rel="noopener noreferrer" >
-                                            Ver / descargar imagen
-                                        </a>
-                                    </div>
-                                </div>
-                            )
-                        }
-                    </div>
-                )
-            }
 
             {
                 !datosEmpresaCompletos && (
@@ -467,7 +467,7 @@ export default function SeguroStep4({ expediente, formData, onAnterior, onFinali
                                 obtenerDatosEmpresaFaltantes().length > 0 && (
                                     <p>
                                         <strong> Datos pendientes: </strong>{" "}
-                                        { obtenerDatosEmpresaFaltantes().join(", ") }.
+                                        {obtenerDatosEmpresaFaltantes().join(", ")}.
                                     </p>
                                 )
                             }
@@ -496,8 +496,8 @@ export default function SeguroStep4({ expediente, formData, onAnterior, onFinali
                     ← Anterior
                 </button>
 
-                <button type="button" className="seguro-publico__button" onClick={onFinalizar} disabled={ finalizando || !datosEmpresaCompletos } >
-                    { finalizando ? "Finalizando..." : !datosEmpresaCompletos ? "Datos incompletos" : "Finalizar expediente" }
+                <button type="button" className="seguro-publico__button" onClick={onFinalizar} disabled={finalizando || !datosEmpresaCompletos} >
+                    {finalizando ? "Finalizando..." : !datosEmpresaCompletos ? "Datos incompletos" : "Finalizar expediente"}
                 </button>
             </div>
 

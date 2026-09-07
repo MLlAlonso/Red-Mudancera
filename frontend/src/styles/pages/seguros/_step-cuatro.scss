@@ -1,0 +1,240 @@
+@use "@/styles/utils/variables" as *;
+
+.seguro-publico {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Review
+    |--------------------------------------------------------------------------
+    */
+    &__step--review {
+        width: 100%;
+    }
+
+    &__review-notice {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin: 25px 0;
+        padding: 16px 18px;
+        background: rgba(33, 112, 181, 0.08);
+        border: 1px solid rgba(33, 112, 181, 0.16);
+        border-radius: 12px;
+
+        &-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 30px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #2170B5;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        strong {
+            display: block;
+            margin-bottom: 4px;
+            color: $title;
+            font-size: 14px;
+        }
+
+        p {
+            margin: 0;
+            color: $text;
+            font-size: 14px;
+            line-height: 1.55;
+        }
+    }
+
+    &__review-section {
+        margin-top: 20px;
+        padding: 20px;
+        background: #ffffff;
+        border: 1px solid $cards;
+        border-radius: 14px;
+    }
+
+    &__review-section-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        margin-bottom: 18px;
+
+        >div {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        >div>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 34px;
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            background: $background;
+            color: $primary;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        h3 {
+            margin: 0;
+            color: $title;
+            font-size: 16px;
+        }
+
+        p {
+            margin: 3px 0 0;
+            color: $text-muted;
+            font-size: 12px;
+        }
+
+        button {
+            border: 0;
+            background: transparent;
+            color: $primary;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+            }
+
+            &:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+        }
+    }
+
+    &__review-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    &__review-item {
+        min-width: 0;
+        padding: 13px 14px;
+        background: $background;
+        border: 1px solid $cards;
+        border-radius: 10px;
+
+        span {
+            display: block;
+            margin-bottom: 5px;
+            color: $text-muted;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        strong {
+            display: block;
+            overflow-wrap: anywhere;
+            color: $title;
+            font-size: 14px;
+            line-height: 1.45;
+        }
+
+        &--highlight {
+            background: rgba(28, 143, 106, 0.07);
+            border-color: rgba(28, 143, 106, 0.18);
+
+            strong {
+                color: $success;
+                font-weight: bold;
+                font-size: 18px;
+            }
+        }
+    }
+
+    &__review-confirmation {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-top: 20px;
+        padding: 16px 18px;
+        background: rgba(28, 143, 106, 0.07);
+        border: 1px solid rgba(28, 143, 106, 0.18);
+        border-radius: 12px;
+
+        &-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 30px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: $success;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        strong {
+            display: block;
+            margin-bottom: 4px;
+            color: $title;
+            font-size: 14px;
+        }
+
+        p {
+            margin: 0;
+            color: $text;
+            font-size: 14px;
+            line-height: 1.55;
+        }
+    }
+
+    &__actions--review {
+        margin-top: 25px;
+    }
+
+    @media (max-width: 700px) {
+        &__actions--review {
+            gap: 10px;
+        }
+    }
+
+    @media (max-width: 420px) {
+        .seguro-publico__review-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .seguro-publico__actions--review {
+            display: flex;
+            margin-top: 10px;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .seguro-publico__review-section {
+            padding: 16px;
+        }
+
+        .seguro-publico__review-section-heading {
+            align-items: flex-start;
+
+            >div {
+                align-items: flex-start;
+            }
+        }
+
+        .seguro-publico__review-notice,
+        .seguro-publico__review-confirmation {
+            padding: 14px;
+        }
+    }
+}

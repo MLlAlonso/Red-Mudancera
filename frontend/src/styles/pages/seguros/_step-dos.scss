@@ -1,0 +1,156 @@
+@use "@/styles/utils/variables" as *;
+
+.seguro-publico {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Text Inputs
+    |--------------------------------------------------------------------------
+    */
+    &__input-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    &__input-icon {
+        position: absolute;
+        left: 6px;
+        top: 50%;
+        width: 20px;
+        height: 20px;
+        transform: translateY(-50%);
+        object-fit: contain;
+        pointer-events: none;
+    }
+
+    &__text-input {
+        display: block;
+        width: 100%;
+        min-height: 50px;
+        padding-top: 13px;
+        padding-right: 15px;
+        padding-bottom: 13px;
+        padding-left: 30px;
+        border: 1px solid $secondary;
+        border-radius: 12px;
+        outline: none;
+        background: white;
+        color: $title;
+        font-family: $font-text;
+        font-size: 16px;
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease;
+
+        &::placeholder {
+            color: $secondary;
+        }
+
+        &:focus {
+            border-color: $azul_001;
+            box-shadow: 0 0 0 3px rgba(58, 110, 165, 0.12);
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Acciones Paso 2
+    |--------------------------------------------------------------------------
+    */
+    &__actions--step2 {
+        align-items: center;
+        gap: 12px;
+
+        .seguro-publico__button {
+            flex: 1;
+        }
+    }
+
+    &__button--secondary {
+        background: $background;
+        border: 1px solid $secondary;
+        color: $primary;
+
+        &:hover:not(:disabled) {
+            background: $cards;
+            border-color: $azul_001;
+            color: $primary;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Aviso nombre del cliente
+    |--------------------------------------------------------------------------
+    */
+    &__name-notice {
+        margin-top: 24px;
+        padding: 16px 18px;
+        display: flex;
+        align-items: flex-start;
+        gap: 13px;
+        background: rgba(58, 110, 165, 0.08);
+        border: 1px solid rgba(58, 110, 165, 0.18);
+        border-radius: 12px;
+    }
+
+    &__name-notice-icon {
+        width: 28px;
+        height: 28px;
+        flex: 0 0 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: $azul_001;
+        color: white;
+        font-family: $font-title;
+        font-size: 14px;
+        font-weight: 800;
+
+        span {
+            line-height: 1;
+        }
+    }
+
+    &__name-notice-content {
+        flex: 1;
+        min-width: 0;
+
+        strong {
+            display: block;
+            margin-bottom: 8px;
+            color: $primary;
+            font-size: 14px;
+            font-weight: 800;
+            line-height: 1.45;
+        }
+
+        ul {
+            margin: 0;
+            padding-left: 18px;
+            color: $text;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        li {
+            padding-left: 2px;
+        }
+    }
+
+    @media (max-width: 420px) {
+        .seguro-publico__actions--step2 {
+            flex-direction: column-reverse;
+
+            .seguro-publico__button {
+                width: 100%;
+            }
+        }
+
+        .seguro-publico__name-notice {
+            padding: 14px;
+            gap: 10px;
+        }
+    }
+}

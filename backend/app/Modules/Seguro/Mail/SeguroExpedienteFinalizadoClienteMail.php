@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Modules\Seguro\Mail;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Mailable;
+use Illuminate\Queue\SerializesModels;
+use App\Modules\Seguro\Models\ExpedienteSeguro;
+
+class SeguroExpedienteFinalizadoClienteMail extends Mailable
+{
+    use Queueable, SerializesModels;
+
+    public ExpedienteSeguro $expediente;
+
+    public function __construct(ExpedienteSeguro $expediente)
+    {
+        $this->expediente = $expediente;
+    }
+
+    public function build()
+    {
+        return $this
+            ->subject('Expediente de seguro finalizado - ' . $this->expediente->folio)
+            ->view('emails.seguro.expediente_finalizado_cliente')
+            ->with(['expediente' => $this->expediente,]);
+    }
+}

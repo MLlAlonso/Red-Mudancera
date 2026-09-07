@@ -170,7 +170,6 @@ class ExpedienteSeguroService
     {
         return DB::transaction(function () use ($expediente, $data) {
             $modalidadDatos = $data['modalidad_datos'];
-            $formaProporcionDatos = $modalidadDatos === 'autogestion'  ? ($data['forma_proporcion_datos'] ?? 'cliente') : null;
 
             $primaEstimada = $this->calcularPrima(
                 $expediente->valor_menaje !== null ? (float) $expediente->valor_menaje : null,
@@ -179,24 +178,14 @@ class ExpedienteSeguroService
             );
 
             $expediente->update([
-                'empresa_mudanza' => $data['empresa_mudanza'] ?? null,
-                'origen' => $data['origen'] ?? null,
-                'destino' => $data['destino'] ?? null,
-                'fecha_salida' => $data['fecha_salida'] ?? null,
-                'fecha_llegada' => $data['fecha_llegada'] ?? null,
-                'propietario_unidad' => $data['propietario_unidad'] ?? null,
-                'marca_unidad' => $data['marca_unidad'] ?? null,
-                'modelo_unidad' => $data['modelo_unidad'] ?? null,
-                'placas' => $data['placas'] ?? null,
-                'chofer' => $data['chofer'] ?? null,
                 'modalidad_datos' => $modalidadDatos,
-                'forma_proporcion_datos' => $formaProporcionDatos,
+                'forma_proporcion_datos' => null,
                 'asistencia_empresa_mudanza' => $modalidadDatos === 'asistida' ? ($data['asistencia_empresa_mudanza'] ?? null) : null,
                 'asistencia_contacto' => $modalidadDatos === 'asistida' ? ($data['asistencia_contacto'] ?? null) : null,
                 'asistencia_telefono' => $modalidadDatos === 'asistida' ? ($data['asistencia_telefono'] ?? null) : null,
                 'prima_estimada' => $primaEstimada,
-                'progreso' => max($expediente->progreso, 100),
-                'estado' => 'revision',
+                'progreso' => max($expediente->progreso, 66),
+                'estado' => 'capturando',
             ]);
 
             return $expediente->fresh();
@@ -243,6 +232,7 @@ class ExpedienteSeguroService
         $expediente->update([
             'empresa_datos_finalizados_at' => $expediente->empresa_datos_finalizados_at ?? now(),
             'estado' => 'revision',
+            'progreso' => 100,
         ]);
 
         return $expediente->fresh();

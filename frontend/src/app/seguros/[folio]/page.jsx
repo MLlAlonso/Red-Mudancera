@@ -64,23 +64,14 @@ export default function SeguroPublicoPage() {
     |--------------------------------------------------------------------------
     */
     const [empresaMudanza, setEmpresaMudanza] = useState("");
-    const [origen, setOrigen] = useState("");
-    const [destino, setDestino] = useState("");
-    const [fechaSalida, setFechaSalida] = useState("");
-    const [fechaLlegada, setFechaLlegada] = useState("");
-    const [propietarioUnidad, setPropietarioUnidad] = useState("");
-    const [marcaUnidad, setMarcaUnidad] = useState("");
-    const [modeloUnidad, setModeloUnidad] = useState("");
-    const [placas, setPlacas] = useState("");
-    const [chofer, setChofer] = useState("");
     const [modalidadDatos, setModalidadDatos] = useState("");
-    const [formaProporcionDatos, setFormaProporcionDatos] = useState("");
     const [asistenciaEmpresaMudanza, setAsistenciaEmpresaMudanza] = useState("");
     const [asistenciaContacto, setAsistenciaContacto] = useState("");
     const [asistenciaTelefono, setAsistenciaTelefono] = useState("");
     const [pasoTresGuardado, setPasoTresGuardado] = useState(false);
     const [enlaceEmpresa, setEnlaceEmpresa] = useState("");
     const [generandoEnlaceEmpresa, setGenerandoEnlaceEmpresa] = useState(false);
+    const [vistaPasoTres, setVistaPasoTres] = useState("seleccion");
 
     /*
     |--------------------------------------------------------------------------
@@ -218,48 +209,8 @@ export default function SeguroPublicoPage() {
                 setEmpresaMudanza(data.empresa_mudanza);
             }
 
-            if (data.origen) {
-                setOrigen(data.origen);
-            }
-
-            if (data.destino) {
-                setDestino(data.destino);
-            }
-
-            if (data.fecha_salida) {
-                setFechaSalida(String(data.fecha_salida).substring(0, 10));
-            }
-
-            if (data.fecha_llegada) {
-                setFechaLlegada(String(data.fecha_llegada).substring(0, 10));
-            }
-
-            if (data.propietario_unidad) {
-                setPropietarioUnidad(data.propietario_unidad);
-            }
-
-            if (data.marca_unidad) {
-                setMarcaUnidad(data.marca_unidad);
-            }
-
-            if (data.modelo_unidad) {
-                setModeloUnidad(data.modelo_unidad);
-            }
-
-            if (data.placas) {
-                setPlacas(data.placas);
-            }
-
-            if (data.chofer) {
-                setChofer(data.chofer);
-            }
-
             if (data.modalidad_datos) {
                 setModalidadDatos(data.modalidad_datos);
-            }
-
-            if (data.forma_proporcion_datos) {
-                setFormaProporcionDatos(data.forma_proporcion_datos);
             }
 
             if (data.asistencia_empresa_mudanza) {
@@ -274,6 +225,34 @@ export default function SeguroPublicoPage() {
                 setAsistenciaTelefono(data.asistencia_telefono);
             }
 
+            if (!data.modalidad_datos) {
+                setVistaPasoTres("seleccion");
+            }
+
+            if (data.modalidad_datos === "autogestion") {
+                if (data.empresa_datos_finalizados_at) {
+                    setVistaPasoTres("seleccion");
+                    setPaso(4);
+                } else {
+                    setVistaPasoTres("esperando_empresa");
+                }
+            }
+
+            if (data.modalidad_datos === "asistida") {
+                if (data.empresa_datos_finalizados_at) {
+                    setVistaPasoTres("seleccion");
+                    setPaso(4);
+                } else if (
+                    data.asistencia_empresa_mudanza &&
+                    data.asistencia_contacto &&
+                    data.asistencia_telefono
+                ) {
+                    setVistaPasoTres("esperando_asistida");
+                } else {
+                    setVistaPasoTres("asistida");
+                }
+            }
+
             /*
             |--------------------------------------------------------------------------
             | Determinar paso actual
@@ -284,7 +263,10 @@ export default function SeguroPublicoPage() {
                 setPasoDosGuardado(true);
                 setPasoTresGuardado(true);
                 setPaso(4);
-            } else if (data.progreso >= 100) {
+            } else if (
+                data.empresa_datos_finalizados_at &&
+                data.progreso >= 100
+            ) {
                 setPasoUnoGuardado(true);
                 setPasoDosGuardado(true);
                 setPasoTresGuardado(true);
@@ -320,69 +302,47 @@ export default function SeguroPublicoPage() {
         try {
             const response = await getExpedienteSeguroPublico(folio);
             const data = response.data;
+
             setExpediente(data);
 
             if (data.empresa_mudanza !== undefined) {
                 setEmpresaMudanza(data.empresa_mudanza || "");
             }
 
-            if (data.origen !== undefined) {
-                setOrigen(data.origen || "");
-            }
-
-            if (data.destino !== undefined) {
-                setDestino(data.destino || "");
-            }
-
-            if (data.fecha_salida !== undefined) {
-                setFechaSalida(data.fecha_salida ? String(data.fecha_salida).substring(0, 10) : "");
-            }
-
-            if (data.fecha_llegada !== undefined) {
-                setFechaLlegada(data.fecha_llegada ? String(data.fecha_llegada).substring(0, 10) : "");
-            }
-
-            if (data.propietario_unidad !== undefined) {
-                setPropietarioUnidad(data.propietario_unidad || "");
-            }
-
-            if (data.marca_unidad !== undefined) {
-                setMarcaUnidad(data.marca_unidad || "");
-            }
-
-            if (data.modelo_unidad !== undefined) {
-                setModeloUnidad(data.modelo_unidad || "");
-            }
-
-            if (data.placas !== undefined) {
-                setPlacas(data.placas || "");
-            }
-
-            if (data.chofer !== undefined) {
-                setChofer(data.chofer || "");
-            }
-
             if (data.modalidad_datos !== undefined) {
                 setModalidadDatos(data.modalidad_datos || "");
             }
 
-            if (data.forma_proporcion_datos !== undefined) {
-                setFormaProporcionDatos(data.forma_proporcion_datos || "");
-            }
-
             if (data.asistencia_empresa_mudanza !== undefined) {
-                setAsistenciaEmpresaMudanza(data.asistencia_empresa_mudanza || "");
+                setAsistenciaEmpresaMudanza(
+                    data.asistencia_empresa_mudanza || ""
+                );
             }
 
             if (data.asistencia_contacto !== undefined) {
-                setAsistenciaContacto(data.asistencia_contacto || "");
+                setAsistenciaContacto(
+                    data.asistencia_contacto || ""
+                );
             }
 
             if (data.asistencia_telefono !== undefined) {
-                setAsistenciaTelefono(data.asistencia_telefono || "");
+                setAsistenciaTelefono(
+                    data.asistencia_telefono || ""
+                );
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Verificar si la empresa ya finalizó los datos
+            |--------------------------------------------------------------------------
+            */
+            if (data.empresa_datos_finalizados_at) {
+                setPaso(4);
+                setVistaPasoTres("seleccion");
+                setPasoTresGuardado(true);
             }
         } catch (error) {
-            console.error("No fue posible refrescar el expediente:", error);
+            console.error( "No fue posible refrescar el expediente:", error );
         }
     }
 
@@ -681,211 +641,6 @@ export default function SeguroPublicoPage() {
     | Guardar Paso 3
     |--------------------------------------------------------------------------
     */
-    function handleModalidadDatosChange(valor) {
-        setModalidadDatos(valor);
-        setError("");
-
-        if (valor === "autogestion") {
-            setAsistenciaEmpresaMudanza("");
-            setAsistenciaContacto("");
-            setAsistenciaTelefono("");
-
-            if (!formaProporcionDatos) {
-                setFormaProporcionDatos("cliente");
-            }
-
-            return;
-        }
-
-        if (valor === "asistida") {
-            setFormaProporcionDatos("");
-            setEnlaceEmpresa("");
-        }
-    }
-
-    function handleFormaProporcionDatosChange(valor) {
-        setFormaProporcionDatos(valor);
-        setError("");
-
-        if (valor === "cliente") {
-            return;
-        }
-
-        if (valor === "empresa") {
-            return;
-        }
-    }
-
-    async function guardarPasoTres() {
-        if (saving) {
-            return;
-        }
-
-        setError("");
-
-        if (!modalidadDatos) {
-            setError("Selecciona cómo quieres completar la información.");
-            return;
-        }
-
-        if (modalidadDatos === "autogestion" && !formaProporcionDatos) {
-            setError("Selecciona cómo quieres proporcionar los datos.");
-            return;
-        }
-
-        if (modalidadDatos === "asistida") {
-            if (!asistenciaEmpresaMudanza.trim()) {
-                setError("Ingresa el nombre de la empresa de mudanza.");
-                return;
-            }
-
-            if (!asistenciaContacto.trim()) {
-                setError("Ingresa el nombre del vendedor o contacto.");
-                return;
-            }
-
-            if (!asistenciaTelefono.trim()) {
-                setError("Ingresa el teléfono o WhatsApp de contacto.");
-                return;
-            }
-        }
-
-        const esAutogestionCliente = modalidadDatos === "autogestion" && formaProporcionDatos === "cliente";
-        const esAutogestionEmpresa = modalidadDatos === "autogestion" && formaProporcionDatos === "empresa";
-        const esAsistida = modalidadDatos === "asistida";
-
-        if (esAutogestionCliente) {
-            if (!origen.trim()) {
-                setError("Ingresa el origen de la mudanza.");
-                return;
-            }
-
-            if (!destino.trim()) {
-                setError("Ingresa el destino de la mudanza.");
-                return;
-            }
-
-            if (!fechaSalida) {
-                setError("Selecciona la fecha de salida.");
-                return;
-            }
-
-            if (!fechaLlegada) {
-                setError("Selecciona la fecha de llegada.");
-                return;
-            }
-
-            if (fechaLlegada < fechaSalida) {
-                setError(
-                    "La fecha de llegada debe ser igual o posterior a la fecha de salida."
-                );
-                return;
-            }
-        }
-
-        if (esAutogestionCliente) {
-            if (!empresaMudanza.trim()) {
-                setError("Ingresa el nombre de la empresa de mudanza.");
-                return;
-            }
-
-            if (!propietarioUnidad.trim()) {
-                setError("Ingresa el propietario de la unidad.");
-                return;
-            }
-
-            if (!marcaUnidad.trim()) {
-                setError("Ingresa la marca de la unidad.");
-                return;
-            }
-
-            if (!modeloUnidad.trim()) {
-                setError("Ingresa el modelo de la unidad.");
-                return;
-            }
-
-            if (!placas.trim()) {
-                setError("Ingresa las placas de la unidad.");
-                return;
-            }
-
-            if (!chofer.trim()) {
-                setError("Ingresa el nombre del chofer.");
-                return;
-            }
-        }
-
-        try {
-            setSaving(true);
-
-            const response = await guardarPasoTresSeguro(
-                folio,
-                {
-                    modalidad_datos: modalidadDatos,
-                    forma_proporcion_datos: modalidadDatos === "autogestion" ? formaProporcionDatos : null,
-                    asistencia_empresa_mudanza: modalidadDatos === "asistida" ? asistenciaEmpresaMudanza.trim() : null,
-                    asistencia_contacto: modalidadDatos === "asistida" ? asistenciaContacto.trim() : null,
-                    asistencia_telefono: modalidadDatos === "asistida" ? asistenciaTelefono.trim() : null,
-                    empresa_mudanza: esAutogestionCliente ? empresaMudanza.trim() : modalidadDatos === "asistida" ? asistenciaEmpresaMudanza.trim() : null,
-                    origen: esAutogestionCliente ? origen.trim() : null,
-                    destino: esAutogestionCliente ? destino.trim() : null,
-                    fecha_salida: esAutogestionCliente ? fechaSalida : null,
-                    fecha_llegada: esAutogestionCliente ? fechaLlegada : null,
-                    propietario_unidad: esAutogestionCliente ? propietarioUnidad.trim() : null,
-                    marca_unidad: esAutogestionCliente ? marcaUnidad.trim() : null,
-                    modelo_unidad: esAutogestionCliente ? modeloUnidad.trim() : null,
-                    placas: esAutogestionCliente ? placas.trim() : null,
-                    chofer: esAutogestionCliente ? chofer.trim() : null,
-                }
-            );
-
-            setExpediente((prev) => ({
-                ...prev,
-                estado: response.data.estado,
-                progreso: response.data.progreso,
-                empresa_mudanza: response.data.empresa_mudanza,
-                origen: response.data.origen,
-                destino: response.data.destino,
-                fecha_salida: response.data.fecha_salida,
-                fecha_llegada: response.data.fecha_llegada,
-                propietario_unidad: response.data.propietario_unidad,
-                marca_unidad: response.data.marca_unidad,
-                modelo_unidad: response.data.modelo_unidad,
-                placas: response.data.placas,
-                chofer: response.data.chofer,
-                modalidad_datos: response.data.modalidad_datos,
-                forma_proporcion_datos: response.data.forma_proporcion_datos,
-                asistencia_empresa_mudanza: response.data.asistencia_empresa_mudanza,
-                asistencia_contacto: response.data.asistencia_contacto,
-                asistencia_telefono: response.data.asistencia_telefono,
-                prima_estimada: response.data.prima_estimada,
-            }));
-
-            setModalidadDatos(response.data.modalidad_datos);
-            setFormaProporcionDatos(response.data.forma_proporcion_datos || "");
-            setAsistenciaEmpresaMudanza(response.data.asistencia_empresa_mudanza || "");
-            setAsistenciaContacto(response.data.asistencia_contacto || "");
-            setAsistenciaTelefono(response.data.asistencia_telefono || "");
-            setPasoTresGuardado(true);
-            setPaso(3);
-            return true;
-        } catch (error) {
-            console.error(error);
-            setError(error.message || "No fue posible guardar la información de la mudanza.");
-            return false;
-        } finally {
-            setSaving(false);
-        }
-    }
-
-    async function guardarPasoTresYContinuar() {
-        const guardado = await guardarPasoTres();
-
-        if (guardado) {
-            setPaso(4);
-        }
-    }
-
     function solicitarFinalizacion() {
         if (finalizando) {
             return;
@@ -919,6 +674,175 @@ export default function SeguroPublicoPage() {
             setFinalizando(false);
         }
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Seleccionar modalidad de Paso 3
+    |--------------------------------------------------------------------------
+    */
+    async function seleccionarModalidad(valor) {
+        if (saving) {
+            return;
+        }
+
+        setError("");
+        setModalidadDatos(valor);
+
+        if (valor === "autogestion") {
+            setAsistenciaEmpresaMudanza("");
+            setAsistenciaContacto("");
+            setAsistenciaTelefono("");
+
+            try {
+                setSaving(true);
+
+                const response = await guardarPasoTresSeguro(
+                    folio,
+                    {
+                        modalidad_datos: "autogestion",
+                        asistencia_empresa_mudanza: null,
+                        asistencia_contacto: null,
+                        asistencia_telefono: null,
+                    }
+                );
+
+                setExpediente((prev) => ({
+                    ...prev,
+                    ...response.data,
+                }));
+
+                await generarEnlaceEmpresa();
+                setVistaPasoTres("empresa");
+            } catch (error) {
+                console.error(error);
+                setError(error.message || "No fue posible preparar el enlace para tu empresa.");
+            } finally {
+                setSaving(false);
+            }
+
+            return;
+        }
+
+        if (valor === "asistida") {
+            setVistaPasoTres("asistida");
+        }
+    }
+
+    async function continuarEmpresa() {
+        if (!enlaceEmpresa) {
+            setError("Primero genera el enlace privado para tu empresa.");
+            return;
+        }
+
+        setError("");
+        setVistaPasoTres("esperando_empresa");
+    }
+
+    function continuarAsistida() {
+        setError("");
+        setVistaPasoTres("asistida_contacto");
+    }
+
+    async function guardarAsistenciaYContinuar() {
+        if (saving) {
+            return;
+        }
+
+        setError("");
+
+        if (!asistenciaEmpresaMudanza.trim()) {
+            setError("Ingresa el nombre de la empresa de mudanza.");
+            return;
+        }
+
+        if (!asistenciaContacto.trim()) {
+            setError("Ingresa el nombre del contacto.");
+            return;
+        }
+
+        if (!asistenciaTelefono.trim()) {
+            setError("Ingresa el teléfono o WhatsApp de contacto.");
+            return;
+        }
+
+        try {
+            setSaving(true);
+
+            const response = await guardarPasoTresSeguro(
+                folio,
+                {
+                    modalidad_datos: "asistida",
+                    asistencia_empresa_mudanza: asistenciaEmpresaMudanza.trim(),
+                    asistencia_contacto: asistenciaContacto.trim(),
+                    asistencia_telefono: asistenciaTelefono.trim(),
+                }
+            );
+
+            setExpediente((prev) => ({
+                ...prev,
+                ...response.data,
+            }));
+
+            setModalidadDatos("asistida");
+            setAsistenciaEmpresaMudanza(response.data.asistencia_empresa_mudanza || "");
+            setAsistenciaContacto(response.data.asistencia_contacto || "");
+            setAsistenciaTelefono(response.data.asistencia_telefono || "");
+            setPasoTresGuardado(true);
+            setVistaPasoTres("esperando_asistida");
+        } catch (error) {
+            console.error(error);
+            setError(error.message || "No fue posible guardar los datos de contacto.");
+        } finally {
+            setSaving(false);
+        }
+    }
+
+    function volverSeleccionPasoTres() {
+        setError("");
+        setVistaPasoTres("seleccion");
+    }
+
+    function volverPasoDos() {
+        setError("");
+        setPaso(2);
+    }
+
+    useEffect(() => {
+        if (!folio || paso !== 3) {
+            return;
+        }
+
+        if (vistaPasoTres !== "esperando_empresa" && vistaPasoTres !== "esperando_asistida") {
+            return;
+        }
+
+        const intervalo = setInterval(async () => {
+            try {
+                const response = await getExpedienteSeguroPublico(folio);
+                const data = response.data;
+                setExpediente(data);
+
+                if (data.empresa_datos_finalizados_at) {
+                    setPaso(4);
+                    return;
+                }
+
+                if (data.modalidad_datos === "autogestion") {
+                    setVistaPasoTres("esperando_empresa");
+                }
+
+                if (data.modalidad_datos === "asistida") {
+                    setVistaPasoTres("esperando_asistida");
+                }
+            } catch (error) {
+                console.error("No fue posible verificar el estado del expediente:", error);
+            }
+        }, 5000);
+
+        return () => {
+            clearInterval(intervalo);
+        };
+    }, [folio, paso, vistaPasoTres]);
 
     /*
     |--------------------------------------------------------------------------
@@ -1115,20 +1039,19 @@ export default function SeguroPublicoPage() {
         automovilNumeroSerie,
         automovilFotoCirculacionUrl,
         modalidadDatos,
-        formaProporcionDatos,
         asistenciaEmpresaMudanza,
         asistenciaContacto,
         asistenciaTelefono,
-        origen,
-        destino,
-        fechaSalida,
-        fechaLlegada,
-        empresaMudanza,
-        propietarioUnidad,
-        marcaUnidad,
-        modeloUnidad,
-        placas,
-        chofer,
+        empresaMudanza: expediente?.empresa_mudanza,
+        origen: expediente?.origen,
+        destino: expediente?.destino,
+        fechaSalida: expediente?.fecha_salida,
+        fechaLlegada: expediente?.fecha_llegada,
+        propietarioUnidad: expediente?.propietario_unidad,
+        marcaUnidad: expediente?.marca_unidad,
+        modeloUnidad: expediente?.modelo_unidad,
+        placas: expediente?.placas,
+        chofer: expediente?.chofer,
     };
 
     /*
@@ -1222,47 +1145,28 @@ export default function SeguroPublicoPage() {
                 {
                     paso === 3 && (
                         <SeguroStepTres
-                            empresaMudanza={empresaMudanza}
-                            origen={origen}
-                            destino={destino}
-                            fechaSalida={fechaSalida}
-                            fechaLlegada={fechaLlegada}
-                            propietarioUnidad={propietarioUnidad}
-                            marcaUnidad={marcaUnidad}
-                            modeloUnidad={modeloUnidad}
-                            placas={placas}
-                            chofer={chofer}
                             modalidadDatos={modalidadDatos}
-                            formaProporcionDatos={formaProporcionDatos}
                             asistenciaEmpresaMudanza={asistenciaEmpresaMudanza}
                             asistenciaContacto={asistenciaContacto}
                             asistenciaTelefono={asistenciaTelefono}
+                            enlaceEmpresa={enlaceEmpresa}
+                            generandoEnlaceEmpresa={generandoEnlaceEmpresa}
+                            empresaDatosFinalizados={Boolean(expediente?.empresa_datos_finalizados_at)}
+                            error={error}
+                            saving={saving}
+                            vistaPasoTres={vistaPasoTres}
                             primaEstimada={expediente?.prima_estimada}
                             valorMenaje={valorMenaje}
                             valorAutomovil={valorAutomovil}
-                            error={error}
-                            saving={saving}
-                            pasoTresGuardado={pasoTresGuardado}
-                            onEmpresaMudanzaChange={setEmpresaMudanza}
-                            onOrigenChange={setOrigen}
-                            onDestinoChange={setDestino}
-                            onFechaSalidaChange={setFechaSalida}
-                            onFechaLlegadaChange={setFechaLlegada}
-                            onPropietarioUnidadChange={setPropietarioUnidad}
-                            onMarcaUnidadChange={setMarcaUnidad}
-                            onModeloUnidadChange={setModeloUnidad}
-                            onPlacasChange={setPlacas}
-                            onChoferChange={setChofer}
-                            onModalidadDatosChange={handleModalidadDatosChange}
-                            onFormaProporcionDatosChange={handleFormaProporcionDatosChange}
+                            onSeleccionarModalidad={seleccionarModalidad}
+                            onAnteriorSeleccion={volverSeleccionPasoTres}
+                            onContinuarEmpresa={continuarEmpresa}
+                            onContinuarAsistida={continuarAsistida}
+                            onAnterior={volverPasoDos}
                             onAsistenciaEmpresaMudanzaChange={setAsistenciaEmpresaMudanza}
                             onAsistenciaContactoChange={setAsistenciaContacto}
                             onAsistenciaTelefonoChange={setAsistenciaTelefono}
-                            onGenerarEnlaceEmpresa={generarEnlaceEmpresa}
-                            generandoEnlaceEmpresa={generandoEnlaceEmpresa}
-                            enlaceEmpresa={enlaceEmpresa}
-                            onContinuar={guardarPasoTresYContinuar}
-                            onAnterior={() => { setError(""); setPaso(2); }}
+                            onGuardarAsistencia={guardarAsistenciaYContinuar}
                         />
                     )
                 }
