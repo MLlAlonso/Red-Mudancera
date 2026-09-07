@@ -17,6 +17,7 @@ export default function SeguroStep4({ expediente, formData, onAnterior, onFinali
         destino,
         fechaSalida,
         fechaLlegada,
+        tipoServicio,
         empresaMudanza,
         propietarioUnidad,
         marcaUnidad,
@@ -385,8 +386,32 @@ export default function SeguroStep4({ expediente, formData, onAnterior, onFinali
                     </div>
 
                     <div className="seguro-publico__review-item">
-                        <span> Fecha de llegada </span>
-                        <strong> {fechaLlegada || "No registrada"} </strong>
+                        <span> Tiempo aproximado de llegada </span>
+                        <strong>
+                            {
+                                fechaLlegada === "1-7" ? "1-7 días"
+                                    : fechaLlegada === "8-12" ? "8-12 días"
+                                        : fechaLlegada === "13-18" ? "13-18 días"
+                                            : fechaLlegada === "18+" ? "+18 días"
+                                                : "No registrado"
+                            }
+                        </strong>
+                    </div>
+
+                    <div className="seguro-publico__review-item">
+                        <span> Tipo de servicio </span>
+
+                        <strong>
+                            {
+                                (tipoServicio || expediente?.tipo_servicio) === "contratado"
+                                    ? "Contratado"
+                                    : (tipoServicio || expediente?.tipo_servicio) === "compartido"
+                                        ? "Compartido"
+                                        : (tipoServicio || expediente?.tipo_servicio) === "exclusivo"
+                                            ? "Exclusivo"
+                                            : "No especificado"
+                            }
+                        </strong>
                     </div>
                 </div>
             </div>
@@ -445,8 +470,6 @@ export default function SeguroStep4({ expediente, formData, onAnterior, onFinali
                     </div>
                 </div>
             </div>
-
-
 
             {
                 !datosEmpresaCompletos && (

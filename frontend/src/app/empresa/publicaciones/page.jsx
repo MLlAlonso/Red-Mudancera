@@ -40,10 +40,7 @@ export default function MisServiciosEmpresa() {
 
   const cambiarEstadoDirecto = async (id, estado, tipo) => {
     const token = getEmpresaToken();
-
-    const endpoint = tipo === "lead"
-      ? `/solicitudes-mudanza/leads/${id}/estado`
-      : `/servicios/${id}/estado`;
+    const endpoint = tipo === "lead" ? `/solicitudes-mudanza/leads/${id}/estado` : `/servicios/${id}/estado`;
 
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}${endpoint}`,
@@ -65,9 +62,7 @@ export default function MisServiciosEmpresa() {
     const json = await res.json();
 
     setServices((prev) =>
-      prev.map((s) =>
-        s.id === json.data.id ? { ...s, ...json.data } : s
-      )
+      prev.map((s) => s.id === json.data.id ? { ...s, ...json.data } : s )
     );
   };
 
@@ -85,9 +80,7 @@ export default function MisServiciosEmpresa() {
     );
 
     setServices((prev) =>
-      prev.filter(
-        (s) => !(s.tipo_item === "lead" && s.id === selectedLeadId)
-      )
+      prev.filter( (s) => !(s.tipo_item === "lead" && s.id === selectedLeadId) )
     );
 
     setShowDeleteModal(false);
@@ -117,9 +110,7 @@ export default function MisServiciosEmpresa() {
     }
 
     setServices((prev) =>
-      prev.filter(
-        (s) => !(s.tipo_item === "servicio" && s.id === selectedServiceId)
-      )
+      prev.filter( (s) => !(s.tipo_item === "servicio" && s.id === selectedServiceId) )
     );
 
     setShowDeleteServiceModal(false);
@@ -199,7 +190,6 @@ export default function MisServiciosEmpresa() {
               tipo_item: "lead",
             }))
           );
-
         }
 
         const empresaRes = await fetch(
@@ -263,7 +253,9 @@ export default function MisServiciosEmpresa() {
       return (
         s.empresa?.empresa?.toLowerCase().includes(q) ||
         s.origen?.toLowerCase().includes(q) ||
-        s.destino?.toLowerCase().includes(q)
+        s.destino?.toLowerCase().includes(q) ||
+        s.nombre?.toLowerCase().includes(q) ||
+        s.telefono?.toLowerCase().includes(q)
       );
     });
 
@@ -324,7 +316,6 @@ export default function MisServiciosEmpresa() {
           </button>
         </div>
 
-        {/* BOTÓN CREAR */}
         <Button_crud value="+" onClick={() => (window.location.href = "/empresa/cargas")} />
 
         <div className="empresa-dashboard__cards">
@@ -402,26 +393,18 @@ export default function MisServiciosEmpresa() {
         </div>
       </main>
 
-      {/* CONFIRMAR FINALIZAR */}
       <ConfirmFinalizarServicioModal
         open={showConfirmFinalizar}
         onCancel={() => { setShowConfirmFinalizar(false); setSelectedService(null); }}
         onConfirm={() => { setShowConfirmFinalizar(false); setShowGananciaModal(true); }}
       />
 
-      {/* GANANCIA */}
       <FinalizarServicioGananciaModal
         open={showGananciaModal}
         servicio={selectedService}
         onClose={() => { setShowGananciaModal(false); setSelectedService(null); }}
         onSuccess={async (updated) => {
-          setServices((prev) =>
-            prev.map((s) =>
-              s.id === updated.id
-                ? { ...s, ...updated }
-                : s
-            )
-          );
+          setServices((prev) => prev.map((s) => s.id === updated.id ? { ...s, ...updated } : s ) );
 
           try {
             const token = getEmpresaToken();
@@ -444,7 +427,6 @@ export default function MisServiciosEmpresa() {
           } catch (err) {
             console.error("Error generando link de reseña");
           }
-
         }}
       />
 

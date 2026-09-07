@@ -32,14 +32,65 @@ export default function SeguroExpedienteCompletado({ expediente, formatearMoneda
         return `${day}/${month}/${year}`;
     }
 
+    function obtenerTiempoLlegada(valor) {
+        switch (valor) {
+            case "1-7":
+                return "1-7 días";
+
+            case "8-12":
+                return "8-12 días";
+
+            case "13-18":
+                return "13-18 días";
+
+            case "18+":
+                return "+18 días";
+
+            default:
+                return "No registrado";
+        }
+    }
+
+    function obtenerTipoServicio(valor) {
+        switch (valor) {
+            case "contratado":
+                return "Contratado";
+
+            case "compartido":
+                return "Compartido";
+
+            case "exclusivo":
+                return "Exclusivo";
+
+            default:
+                return "No especificado";
+        }
+    }
+
     function enviarWhatsApp() {
-        const mensaje = encodeURIComponent(`Hola, realicé el pago de mi seguro. Mi folio es ${expediente?.folio}. Quiero enviar mi comprobante de pago.`);
+        const mensaje = encodeURIComponent(
+            `Hola, buen día.\n\n` +
+            `Mi nombre es ${expediente?.nombre || ""} y he realizado el pago correspondiente a mi seguro.\n\n` +
+            `Nombre: ${expediente?.nombre || ""}\n` +
+            `Folio: ${expediente?.folio || ""}\n\n` +
+            `Quiero enviar mi comprobante de pago para continuar con el proceso.`
+        );
+
         window.open(`https://wa.me/524421896433?text=${mensaje}`, "_blank", "noopener,noreferrer");
     }
 
     function enviarCorreo() {
-        const asunto = encodeURIComponent(`Comprobante de pago - ${expediente?.folio}`);
-        const cuerpo = encodeURIComponent(`Hola,\n\nAdjunto mi comprobante de pago correspondiente al expediente ${expediente?.folio}.\n\nNombre: ${expediente?.nombre || ""}\nFolio: ${expediente?.folio || ""}`);
+        const asunto = encodeURIComponent(`Comprobante de pago - ${expediente?.nombre || ""} - Folio ${expediente?.folio || ""}`);
+
+        const cuerpo = encodeURIComponent(
+            `Hola, buen día.\n\n` +
+            `Mi nombre es ${expediente?.nombre || ""} y adjunto mi comprobante de pago correspondiente a mi seguro.\n\n` +
+            `Nombre: ${expediente?.nombre || ""}\n` +
+            `Folio: ${expediente?.folio || ""}\n\n` +
+            `Quedo atento(a) a la confirmación de la recepción de mi comprobante.\n\n` +
+            `Saludos.`
+        );
+
         window.location.href = `mailto:atnclientes@segurosdecarga.com?subject=${asunto}&body=${cuerpo}`;
     }
 
@@ -117,7 +168,7 @@ export default function SeguroExpedienteCompletado({ expediente, formatearMoneda
 
                         <div className="seguro-publico__payment-total">
                             <span> Importe a pagar </span>
-                            <strong> {formatearMoneda( expediente?.prima_estimada )} </strong>
+                            <strong> {formatearMoneda(expediente?.prima_estimada)} </strong>
                         </div>
                     </div>
 
@@ -195,37 +246,85 @@ export default function SeguroExpedienteCompletado({ expediente, formatearMoneda
                             </strong>
                         </div>
 
-                        {(expediente?.tipo_seguro === "menaje" ||
-                            expediente?.tipo_seguro === "menaje_auto") && (
-                                <div className="seguro-publico__completed-item">
-                                    <span> Valor declarado del menaje </span>
+                        {(expediente?.tipo_seguro === "menaje" || expediente?.tipo_seguro === "menaje_auto") && (
+                            <div className="seguro-publico__completed-item">
+                                <span> Valor declarado del menaje </span>
 
-                                    <strong> 
-                                        {formatearMoneda( expediente?.valor_menaje )}
-                                    </strong>
-                                </div>
-                            )}
+                                <strong>
+                                    {formatearMoneda(expediente?.valor_menaje)}
+                                </strong>
+                            </div>
+                        )}
 
-                        {(expediente?.tipo_seguro === "automovil" ||
-                            expediente?.tipo_seguro === "menaje_auto") && (
-                                <div className="seguro-publico__completed-item">
-                                    <span> Valor declarado del automóvil</span>
+                        {(expediente?.tipo_seguro === "automovil" || expediente?.tipo_seguro === "menaje_auto") && (
+                            <div className="seguro-publico__completed-item">
+                                <span> Valor declarado del automóvil</span>
 
-                                    <strong> 
-                                        {formatearMoneda( expediente?.valor_automovil )}
-                                    </strong>
-                                </div>
-                            )}
+                                <strong>
+                                    {formatearMoneda(expediente?.valor_automovil)}
+                                </strong>
+                            </div>
+                        )}
                     </div>
 
                     <div className="seguro-publico__completed-premium">
                         <span>Prima estimada</span>
 
                         <strong>
-                            {formatearMoneda( expediente?.prima_estimada )}
+                            {formatearMoneda(expediente?.prima_estimada)}
                         </strong>
                     </div>
                 </div>
+
+                {(expediente?.tipo_seguro === "automovil" || expediente?.tipo_seguro === "menaje_auto") && (
+                    <div className="seguro-publico__completed-section">
+                        <div className="seguro-publico__completed-section-heading">
+                            <div>
+                                <div>
+                                    <h2>Datos del automóvil</h2>
+                                    <p>
+                                        Información del vehículo declarado en el expediente.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="seguro-publico__completed-grid">
+                            <div className="seguro-publico__completed-item">
+                                <span>Marca</span>
+                                <strong>
+                                    {expediente?.automovil_marca || "No registrada"}
+                                </strong>
+                            </div>
+
+                            <div className="seguro-publico__completed-item">
+                                <span>Modelo</span>
+                                <strong>
+                                    {expediente?.automovil_modelo || "No registrado"}
+                                </strong>
+                            </div>
+
+                            <div className="seguro-publico__completed-item">
+                                <span>Número de serie</span>
+                                <strong>
+                                    {expediente?.automovil_numero_serie || "No registrado"}
+                                </strong>
+                            </div>
+
+                            {expediente?.automovil_foto_circulacion_url && (
+                                <div className="seguro-publico__completed-item seguro-publico__completed-item--full">
+                                    <span>Tarjeta de circulación</span>
+
+                                    <strong>
+                                        <a href={expediente.automovil_foto_circulacion_url} target="_blank" rel="noopener noreferrer" >
+                                            Ver documento
+                                        </a>
+                                    </strong>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
 
                 <div className="seguro-publico__completed-section">
                     <div className="seguro-publico__completed-section-heading">
@@ -244,8 +343,7 @@ export default function SeguroExpedienteCompletado({ expediente, formatearMoneda
                             <span>Modalidad</span>
 
                             <strong>
-                                {expediente?.modalidad_datos === "asistida" ? "Póliza asistida"
-                                    : expediente?.modalidad_datos === "autogestion" ? "Autogestión" : "No especificada"}
+                                {expediente?.modalidad_datos === "asistida" ? "Póliza asistida" : expediente?.modalidad_datos === "autogestion" ? "Autogestión" : "No especificada"}
                             </strong>
                         </div>
 
@@ -342,9 +440,16 @@ export default function SeguroExpedienteCompletado({ expediente, formatearMoneda
                         </div>
 
                         <div className="seguro-publico__completed-item">
-                            <span>Fecha de llegada</span>
+                            <span>Tiempo aproximado de llegada</span>
                             <strong>
-                                {formatearFecha( expediente?.fecha_llegada)}
+                                {obtenerTiempoLlegada(expediente?.fecha_llegada)}
+                            </strong>
+                        </div>
+
+                        <div className="seguro-publico__completed-item">
+                            <span>Tipo de servicio</span>
+                            <strong>
+                                {obtenerTipoServicio(expediente?.tipo_servicio)}
                             </strong>
                         </div>
 
@@ -427,8 +532,7 @@ export default function SeguroExpedienteCompletado({ expediente, formatearMoneda
                         <strong> Tu información ha sido enviada correctamente </strong>
 
                         <p>
-                            El expediente fue registrado y enviado para
-                            continuar con el proceso de revisión de tu solicitud de seguro.
+                            El expediente fue registrado y enviado para continuar con el proceso de revisión de tu solicitud de seguro.
                         </p>
                     </div>
                 </div>

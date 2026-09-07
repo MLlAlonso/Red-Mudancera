@@ -88,6 +88,41 @@ export default function SeguroPdfPage() {
         return `${day}/${month}/${year}`;
     }
 
+    function obtenerTiempoLlegada(valor) {
+        switch (valor) {
+            case "1-7":
+                return "1-7 días";
+
+            case "8-12":
+                return "8-12 días";
+
+            case "13-18":
+                return "13-18 días";
+
+            case "18+":
+                return "+18 días";
+
+            default:
+                return "No registrado";
+        }
+    }
+
+    function obtenerTipoServicio(tipo) {
+        switch (tipo) {
+            case "contratado":
+                return "Contratado";
+
+            case "compartido":
+                return "Compartido";
+
+            case "exclusivo":
+                return "Exclusivo";
+
+            default:
+                return "No registrado";
+        }
+    }
+
     function formatearFechaHora(fecha) {
         if (!fecha) {
             return "No registrada";
@@ -317,6 +352,49 @@ export default function SeguroPdfPage() {
                         </div>
                     </section>
 
+                    {
+                        muestraAutomovil && (
+                            <section className="seguroPdf__section">
+                                <div className="seguroPdf__section-heading">
+                                    <div>
+                                        <h2> Datos del automóvil </h2>
+                                        <p> Información específica del automóvil asegurado. </p>
+                                    </div>
+                                </div>
+
+                                <div className="seguroPdf__grid">
+                                    <div className="seguroPdf__field">
+                                        <span> Marca </span>
+                                        <strong> {expediente.automovil_marca || "No registrada"} </strong>
+                                    </div>
+
+                                    <div className="seguroPdf__field">
+                                        <span> Modelo </span>
+                                        <strong> {expediente.automovil_modelo || "No registrado"} </strong>
+                                    </div>
+
+                                    <div className="seguroPdf__field">
+                                        <span> Número de serie </span>
+                                        <strong>  {expediente.automovil_numero_serie || "No registrado"} </strong>
+                                    </div>
+                                </div>
+
+                                {
+                                    expediente.automovil_foto_circulacion_url && (
+                                        <div className="seguroPdf__inventory">
+                                            <span>  Foto de circulación </span>
+                                            <p> Se adjuntó una imagen de la documentación de circulación del automóvil. </p>
+
+                                            <a href={expediente.automovil_foto_circulacion_url} target="_blank" rel="noopener noreferrer" >
+                                                Ver / descargar imagen
+                                            </a>
+                                        </div>
+                                    )
+                                }
+                            </section>
+                        )
+                    }
+
                     <section className="seguroPdf__section">
                         <div className="seguroPdf__section-heading">
                             <span> 03 </span>
@@ -397,8 +475,13 @@ export default function SeguroPdfPage() {
                             </div>
 
                             <div className="seguroPdf__field">
-                                <span> Fecha de llegada </span>
-                                <strong> {formatearFecha(expediente.fecha_llegada)} </strong>
+                                <span> Tiempo aproximado de llegada </span>
+                                <strong> {obtenerTiempoLlegada(expediente.fecha_llegada)} </strong>
+                            </div>
+
+                            <div className="seguroPdf__field">
+                                <span> Tipo de servicio </span>
+                                <strong> {obtenerTipoServicio(expediente.tipo_servicio)} </strong>
                             </div>
                         </div>
 
@@ -454,51 +537,6 @@ export default function SeguroPdfPage() {
                             </div>
                         </div>
                     </section>
-
-                    {
-                        muestraAutomovil && (
-                            <section className="seguroPdf__section">
-                                <div className="seguroPdf__section-heading">
-                                    <span> 06 </span>
-
-                                    <div>
-                                        <h2> Datos del automóvil </h2>
-                                        <p> Información específica del automóvil asegurado. </p>
-                                    </div>
-                                </div>
-
-                                <div className="seguroPdf__grid">
-                                    <div className="seguroPdf__field">
-                                        <span> Marca </span>
-                                        <strong> {expediente.automovil_marca || "No registrada"} </strong>
-                                    </div>
-
-                                    <div className="seguroPdf__field">
-                                        <span> Modelo </span>
-                                        <strong> {expediente.automovil_modelo || "No registrado"} </strong>
-                                    </div>
-
-                                    <div className="seguroPdf__field">
-                                        <span> Número de serie </span>
-                                        <strong>  {expediente.automovil_numero_serie || "No registrado"} </strong>
-                                    </div>
-                                </div>
-
-                                {
-                                    expediente.automovil_foto_circulacion_url && (
-                                        <div className="seguroPdf__inventory">
-                                            <span>  Foto de circulación </span>
-                                            <p> Se adjuntó una imagen de la documentación de circulación del automóvil. </p>
-
-                                            <a href={expediente.automovil_foto_circulacion_url} target="_blank" rel="noopener noreferrer" >
-                                                Ver / descargar imagen
-                                            </a>
-                                        </div>
-                                    )
-                                }
-                            </section>
-                        )
-                    }
 
                     <footer className="seguroPdf__footer">
                         <strong> Mudanza Fácil </strong>

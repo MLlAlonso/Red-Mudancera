@@ -15,38 +15,29 @@ const ENABLED_ROUTES = [
 const SearchBar = () => {
   const pathname = usePathname();
   const { search, setSearch } = useSearch();
-
   const [mounted, setMounted] = useState(false);
 
-  // Evita mismatch SSR / Client
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // NO renderizar nada hasta estar montado
   if (!mounted) {
     return (
       <div className="searchbar searchbar--disabled">
         <div className="searchbar__input-wrapper">
           <img src="/icons/lupa.png" alt="Buscar" className="searchbar__icon" />
-          <Input
-            disabled
-            placeholder="Buscar..."
-            className="searchbar__input"
-          />
+
+          <Input disabled placeholder="Buscar..." className="searchbar__input" />
         </div>
       </div>
     );
   }
 
-  const isEnabled = ENABLED_ROUTES.some((route) =>
-    pathname.startsWith(route)
-  );
+  const isEnabled = ENABLED_ROUTES.some((route) => pathname.startsWith(route));
 
-  const placeholder =
-    pathname.startsWith("/empresa/empresas")
-      ? "Buscar por ciudad o nombre de empresa"
-      : "Buscar por origen, destino o empresa";
+  const placeholder = pathname.startsWith("/empresa/empresas")
+    ? "Buscar por ciudad o nombre de empresa" : pathname.startsWith("/empresa/publicaciones")
+      ? "Buscar por origen, destino, empresa, nombre o teléfono" : "Buscar por origen, destino o empresa";
 
   return (
     <div className={`searchbar ${!isEnabled ? "searchbar--disabled" : ""}`}>

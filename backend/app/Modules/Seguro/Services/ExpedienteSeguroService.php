@@ -217,6 +217,7 @@ class ExpedienteSeguroService
             'destino' => $data['destino'] ?? null,
             'fecha_salida' => $data['fecha_salida'] ?? null,
             'fecha_llegada' => $data['fecha_llegada'] ?? null,
+            'tipo_servicio' => $data['tipo_servicio'] ?? null,
             'propietario_unidad' => $data['propietario_unidad'] ?? null,
             'marca_unidad' => $data['marca_unidad'] ?? null,
             'modelo_unidad' => $data['modelo_unidad'] ?? null,

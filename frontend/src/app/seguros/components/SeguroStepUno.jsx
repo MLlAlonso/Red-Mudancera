@@ -179,7 +179,9 @@ export default function SeguroStepUno({
                         <div className="seguro-publico__form-section">
                             <div className="seguro-publico__form-section-heading">
                                 <h3> Datos del automóvil </h3>
-                                <p> Necesitamos estos datos para identificar correctamente el automóvil que deseas asegurar. </p>
+                                <p>Necesitamos estos datos para identificar correctamente el automóvil que deseas asegurar.
+                                    Si te falta algún dato, puedes guardar tu progreso y continuar más adelante cuando tengas la información necesaria.
+                                </p>
                             </div>
 
                             <div className="seguro-publico__field">
@@ -194,7 +196,7 @@ export default function SeguroStepUno({
                                     maxLength={100}
                                     placeholder="Ej. Toyota"
                                     value={automovilMarca}
-                                    onChange={(e) => onAutomovilMarcaChange(  e.target.value ) }
+                                    onChange={(e) => onAutomovilMarcaChange(e.target.value)}
                                     disabled={saving}
                                 />
                             </div>
@@ -211,7 +213,7 @@ export default function SeguroStepUno({
                                     maxLength={100}
                                     placeholder="Ej. Corolla"
                                     value={automovilModelo}
-                                    onChange={(e) => onAutomovilModeloChange( e.target.value ) }
+                                    onChange={(e) => onAutomovilModeloChange(e.target.value)}
                                     disabled={saving}
                                 />
                             </div>
@@ -228,7 +230,7 @@ export default function SeguroStepUno({
                                     maxLength={150}
                                     placeholder="Ej. 9BR..."
                                     value={automovilNumeroSerie}
-                                    onChange={(e) => onAutomovilNumeroSerieChange( e.target.value ) }
+                                    onChange={(e) => onAutomovilNumeroSerieChange(e.target.value)}
                                     disabled={saving}
                                 />
 
@@ -245,7 +247,7 @@ export default function SeguroStepUno({
                                 <div className="seguro-publico__upload">
                                     <label htmlFor="automovil_foto_circulacion" className="seguro-publico__upload-label" >
                                         <div className="seguro-publico__upload-icon">
-                                            <img src="/icons/docs.png" alt=""  aria-hidden="true" />
+                                            <img src="/icons/docs.png" alt="" aria-hidden="true" />
                                         </div>
 
                                         <div className="seguro-publico__upload-content">
@@ -266,7 +268,7 @@ export default function SeguroStepUno({
                                         type="file"
                                         accept="image/jpeg,image/jpg,image/png,image/webp"
                                         capture="environment"
-                                        onChange={(e) => onAutomovilFotoChange( e.target.files?.[0] || null ) }
+                                        onChange={(e) => onAutomovilFotoChange(e.target.files?.[0] || null)}
                                     />
                                 </div>
 
@@ -299,7 +301,7 @@ export default function SeguroStepUno({
                                 <span> PRIMA ESTIMADA </span>
 
                                 <strong>
-                                    { formatearMoneda( primaEstimada ) }
+                                    {formatearMoneda(primaEstimada)}
                                 </strong>
                             </div>
 
@@ -315,7 +317,7 @@ export default function SeguroStepUno({
                         </div>
 
                         <p>
-                            Esta prima se calcula con el valor que indicaste. 
+                            Esta prima se calcula con el valor que indicaste.
                             Puedes cambiarlo cuando quieras y la prima se actualizará automáticamente.
                             Antes de contratar verás y confirmarás el importe final.
                         </p>

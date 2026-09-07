@@ -243,7 +243,7 @@
                 </td>
             </tr>
 
-            @if( $expediente->tipo_seguro === 'menaje' || $expediente->tipo_seguro === 'menaje_auto' )
+            @if($expediente->tipo_seguro === 'menaje' || $expediente->tipo_seguro === 'menaje_auto')
                 <tr>
                     <td class="label">
                         Valor declarado del menaje
@@ -255,7 +255,7 @@
                 </tr>
             @endif
 
-            @if( $expediente->tipo_seguro === 'automovil' || $expediente->tipo_seguro === 'menaje_auto' )
+            @if($expediente->tipo_seguro === 'automovil' || $expediente->tipo_seguro === 'menaje_auto')
                 <tr>
                     <td class="label">
                         Valor declarado del automóvil
@@ -283,6 +283,66 @@
             </div>
         </div>
     </div>
+
+    @if($expediente->tipo_seguro === 'automovil' || $expediente->tipo_seguro === 'menaje_auto')
+        <div class="section">
+            <div class="section-title">
+                Datos del automóvil
+            </div>
+
+            <table class="data">
+                <tr>
+                    <td class="label">
+                        Marca
+                    </td>
+
+                    <td>
+                        {{ $expediente->automovil_marca ?? 'No registrada' }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="label">
+                        Modelo
+                    </td>
+
+                    <td>
+                        {{ $expediente->automovil_modelo ?? 'No registrado' }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="label">
+                        Número de serie
+                    </td>
+
+                    <td>
+                        {{ $expediente->automovil_numero_serie ?? 'No registrado' }}
+                    </td>
+                </tr>
+            </table>
+
+            @if($expediente->automovil_foto_circulacion_url)
+                <div class="image-container">
+                    <img src="{{ $expediente->automovil_foto_circulacion_url }}" alt="Foto de circulación del automóvil">
+
+                    <div class="image-caption">
+                        Foto de la tarjeta de circulación / documento de circulación proporcionado para el expediente.
+                    </div>
+
+                    <div class="image-link">
+                        Archivo original:
+
+                        <a href="{{ $expediente->automovil_foto_circulacion_url }}">
+                            Ver / descargar imagen
+                        </a>
+                    </div>
+                </div>
+            @endif
+        </div>
+    @endif
+
+    <br><br><br>
 
     <div class="section">
         <div class="section-title">
@@ -419,11 +479,39 @@
 
             <tr>
                 <td class="label">
-                    Fecha de llegada
+                    Tiempo aproximado de llegada
                 </td>
 
                 <td>
-                    {{ $expediente->fecha_llegada ?? 'No registrada' }}
+                    @if($expediente->fecha_llegada === '1-7')
+                        1-7 días
+                    @elseif($expediente->fecha_llegada === '8-12')
+                        8-12 días
+                    @elseif($expediente->fecha_llegada === '13-18')
+                        13-18 días
+                    @elseif($expediente->fecha_llegada === '18+')
+                        +18 días
+                    @else
+                        No especificado
+                    @endif
+                </td>
+            </tr>
+
+            <tr>
+                <td class="label">
+                    Tipo de servicio
+                </td>
+
+                <td>
+                    @if($expediente->tipo_servicio === 'contratado')
+                        Contratado
+                    @elseif($expediente->tipo_servicio === 'compartido')
+                        Compartido
+                    @elseif($expediente->tipo_servicio === 'exclusivo')
+                        Exclusivo
+                    @else
+                        No especificado
+                    @endif
                 </td>
             </tr>
 
@@ -509,64 +597,6 @@
         </table>
     </div>
 
-    @if( $expediente->tipo_seguro === 'automovil' || $expediente->tipo_seguro === 'menaje_auto' )
-        <div class="section">
-            <div class="section-title">
-                Datos del automóvil
-            </div>
-
-            <table class="data">
-                <tr>
-                    <td class="label">
-                        Marca
-                    </td>
-
-                    <td>
-                        {{ $expediente->automovil_marca ?? 'No registrada' }}
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="label">
-                        Modelo
-                    </td>
-
-                    <td>
-                        {{ $expediente->automovil_modelo ?? 'No registrado' }}
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="label">
-                        Número de serie
-                    </td>
-
-                    <td>
-                        {{ $expediente->automovil_numero_serie ?? 'No registrado' }}
-                    </td>
-                </tr>
-            </table>
-
-            @if($expediente->automovil_foto_circulacion_url)
-                <div class="image-container">
-                    <img src="{{ $expediente->automovil_foto_circulacion_url }}" alt="Foto de circulación del automóvil">
-
-                    <div class="image-caption">
-                        Foto de la tarjeta de circulación / documento de circulación proporcionado para el expediente.
-                    </div>
-
-                    <div class="image-link">
-                        Archivo original:
-
-                        <a href="{{ $expediente->automovil_foto_circulacion_url }}">
-                            Ver / descargar imagen
-                        </a>
-                    </div>
-                </div>
-            @endif
-        </div>
-    @endif
-
     <div class="section">
         <div class="section-title">
             Estado del expediente
@@ -600,4 +630,5 @@
         Folio: {{ $expediente->folio }}
     </div>
 </body>
+
 </html>

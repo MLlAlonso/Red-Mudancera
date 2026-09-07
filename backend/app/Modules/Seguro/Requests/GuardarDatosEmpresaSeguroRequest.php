@@ -3,6 +3,7 @@
 namespace App\Modules\Seguro\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class GuardarDatosEmpresaSeguroRequest extends FormRequest
 {
@@ -18,12 +19,19 @@ class GuardarDatosEmpresaSeguroRequest extends FormRequest
             'origen' => ['nullable', 'string', 'max:150',],
             'destino' => ['nullable', 'string', 'max:150',],
             'fecha_salida' => ['nullable', 'date',],
-            'fecha_llegada' => ['nullable', 'date', 'after_or_equal:fecha_salida',],
+            'fecha_llegada' => [
+                'nullable',
+                Rule::in(['1-7', '8-12', '13-18', '18+',]),
+            ],
+            'tipo_servicio' => [
+                'nullable',
+                Rule::in(['contratado', 'compartido', 'exclusivo',]),
+            ],
             'propietario_unidad' => ['nullable', 'string', 'max:150',],
-            'marca_unidad' => ['nullable', 'string', 'max:100',],
-            'modelo_unidad' => ['nullable', 'string', 'max:100',],
-            'placas' => ['nullable', 'string', 'max:30',],
-            'chofer' => ['nullable', 'string', 'max:150',],
+            'marca_unidad' => [ 'nullable', 'string', 'max:100', ],
+            'modelo_unidad' => [ 'nullable', 'string', 'max:100', ],
+            'placas' => [ 'nullable', 'string', 'max:30', ],
+            'chofer' => [ 'nullable', 'string', 'max:150', ],
         ];
     }
 
@@ -37,8 +45,8 @@ class GuardarDatosEmpresaSeguroRequest extends FormRequest
             'destino.string' => 'El destino debe ser texto.',
             'destino.max' => 'El destino no puede superar los 150 caracteres.',
             'fecha_salida.date' => 'La fecha de salida no es válida.',
-            'fecha_llegada.date' => 'La fecha de llegada no es válida.',
-            'fecha_llegada.after_or_equal' => 'La fecha de llegada debe ser igual o posterior a la fecha de salida.',
+            'fecha_llegada.in' => 'El rango de llegada seleccionado no es válido.',
+            'tipo_servicio.in' => 'El tipo de servicio seleccionado no es válido.',
             'propietario_unidad.string' => 'El propietario de la unidad debe ser texto.',
             'propietario_unidad.max' => 'El propietario de la unidad no puede superar los 150 caracteres.',
             'marca_unidad.string' => 'La marca de la unidad debe ser texto.',

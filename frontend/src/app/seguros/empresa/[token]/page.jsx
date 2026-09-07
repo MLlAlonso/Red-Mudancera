@@ -19,6 +19,7 @@ export default function SeguroEmpresaPage() {
     const [destino, setDestino] = useState("");
     const [fechaSalida, setFechaSalida] = useState("");
     const [fechaLlegada, setFechaLlegada] = useState("");
+    const [tipoServicio, setTipoServicio] = useState("");
     const [propietarioUnidad, setPropietarioUnidad] = useState("");
     const [marcaUnidad, setMarcaUnidad] = useState("");
     const [modeloUnidad, setModeloUnidad] = useState("");
@@ -39,13 +40,16 @@ export default function SeguroEmpresaPage() {
         try {
             setLoading(true);
             setError("");
+
             const response = await getFormularioEmpresaSeguro(token);
             const data = response.data;
+
             setEmpresaMudanza(data.empresa_mudanza || "");
             setOrigen(data.origen || "");
             setDestino(data.destino || "");
             setFechaSalida(data.fecha_salida || "");
             setFechaLlegada(data.fecha_llegada || "");
+            setTipoServicio(data.tipo_servicio || "");
             setPropietarioUnidad(data.propietario_unidad || "");
             setMarcaUnidad(data.marca_unidad || "");
             setModeloUnidad(data.modelo_unidad || "");
@@ -74,7 +78,11 @@ export default function SeguroEmpresaPage() {
         }
 
         if (!fechaLlegada) {
-            return "Selecciona la fecha de llegada.";
+            return "Selecciona el tiempo aproximado de llegada.";
+        }
+
+        if (!tipoServicio) {
+            return "Selecciona el tipo de servicio.";
         }
 
         if (!empresaMudanza.trim()) {
@@ -123,6 +131,7 @@ export default function SeguroEmpresaPage() {
                     destino: destino.trim(),
                     fecha_salida: fechaSalida,
                     fecha_llegada: fechaLlegada,
+                    tipo_servicio: tipoServicio,
                     propietario_unidad: propietarioUnidad.trim(),
                     marca_unidad: marcaUnidad.trim(),
                     modelo_unidad: modeloUnidad.trim(),
@@ -132,11 +141,13 @@ export default function SeguroEmpresaPage() {
             );
 
             const data = response.data;
+
+            setEmpresaMudanza(data.empresa_mudanza || "");
             setOrigen(data.origen || "");
             setDestino(data.destino || "");
             setFechaSalida(data.fecha_salida || "");
             setFechaLlegada(data.fecha_llegada || "");
-            setEmpresaMudanza(data.empresa_mudanza || "");
+            setTipoServicio(data.tipo_servicio || "");
             setPropietarioUnidad(data.propietario_unidad || "");
             setMarcaUnidad(data.marca_unidad || "");
             setModeloUnidad(data.modelo_unidad || "");
@@ -158,6 +169,7 @@ export default function SeguroEmpresaPage() {
 
         setError("");
         setSuccess("");
+
         const validationError = validar();
 
         if (validationError) {
@@ -188,6 +200,7 @@ export default function SeguroEmpresaPage() {
                     destino: destino.trim(),
                     fecha_salida: fechaSalida,
                     fecha_llegada: fechaLlegada,
+                    tipo_servicio: tipoServicio,
                     propietario_unidad: propietarioUnidad.trim(),
                     marca_unidad: marcaUnidad.trim(),
                     modelo_unidad: modeloUnidad.trim(),
@@ -197,12 +210,12 @@ export default function SeguroEmpresaPage() {
             );
 
             const datosGuardados = guardarResponse.data;
-
             setEmpresaMudanza(datosGuardados.empresa_mudanza || "");
             setOrigen(datosGuardados.origen || "");
             setDestino(datosGuardados.destino || "");
             setFechaSalida(datosGuardados.fecha_salida || "");
             setFechaLlegada(datosGuardados.fecha_llegada || "");
+            setTipoServicio(datosGuardados.tipo_servicio || "");
             setPropietarioUnidad(datosGuardados.propietario_unidad || "");
             setMarcaUnidad(datosGuardados.marca_unidad || "");
             setModeloUnidad(datosGuardados.modelo_unidad || "");
@@ -210,15 +223,17 @@ export default function SeguroEmpresaPage() {
             setChofer(datosGuardados.chofer || "");
 
             const response = await finalizarDatosEmpresaSeguro(token);
+
             setDatosFinalizados(true);
+
             setSuccess(response.message || (
                 datosFinalizados
                     ? "Los datos fueron actualizados correctamente."
                     : "Los datos fueron finalizados correctamente y el cliente fue notificado."
             ));
-
         } catch (error) {
             console.error(error);
+
             setError(error.message || "No fue posible finalizar la información.");
         } finally {
             setFinishing(false);
@@ -230,6 +245,7 @@ export default function SeguroEmpresaPage() {
             <main className="seguro-empresa">
                 <section className="seguro-empresa__loading">
                     <div className="loading-spinner" />
+
                     <p> Cargando formulario... </p>
                 </section>
             </main>
@@ -262,7 +278,9 @@ export default function SeguroEmpresaPage() {
                     Formulario para empresa de mudanza
                 </span>
 
-                <h1> Datos de la unidad </h1>
+                <h1>
+                    Datos de la unidad
+                </h1>
 
                 <p className="seguro-empresa__intro">
                     Completa la información de la unidad y del operador responsable de realizar la mudanza.
@@ -282,10 +300,14 @@ export default function SeguroEmpresaPage() {
                 {
                     datosFinalizados && (
                         <div className="seguro-empresa__completed">
-                            <span> ✓ </span>
+                            <span>
+                                ✓
+                            </span>
 
                             <div>
-                                <strong> Información enviada al cliente </strong>
+                                <strong>
+                                    Información enviada al cliente
+                                </strong>
 
                                 <p>
                                     Los datos ya fueron enviados al cliente para su revisión.
@@ -336,25 +358,60 @@ export default function SeguroEmpresaPage() {
                                 Fecha de salida
                             </label>
 
-                            <input
-                                id="fecha_salida"
-                                type="date"
-                                value={fechaSalida}
-                                onChange={(e) => {
-                                    setFechaSalida(e.target.value);
-                                    if (fechaLlegada && e.target.value > fechaLlegada) {
-                                        setFechaLlegada("");
-                                    }
-                                }}
-                            />
+                            <input id="fecha_salida" type="date" value={fechaSalida} onChange={(e) => setFechaSalida(e.target.value)} />
                         </div>
 
                         <div className="seguro-empresa__field">
                             <label htmlFor="fecha_llegada">
-                                Fecha de llegada
+                                Tiempo aproximado de llegada
                             </label>
 
-                            <input id="fecha_llegada" type="date" min={fechaSalida || undefined} value={fechaLlegada} onChange={(e) => setFechaLlegada(e.target.value)} />
+                            <select id="fecha_llegada" value={fechaLlegada} onChange={(e) => setFechaLlegada(e.target.value)} >
+                                <option value="">
+                                    Selecciona una opción
+                                </option>
+
+                                <option value="1-7">
+                                    1-7 días
+                                </option>
+
+                                <option value="8-12">
+                                    8-12 días
+                                </option>
+
+                                <option value="13-18">
+                                    13-18 días
+                                </option>
+
+                                <option value="18+">
+                                    +18 días
+                                </option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div className="seguro-empresa__field">
+                        <label>
+                            Tipo de servicio
+                        </label>
+
+                        <div className="seguro-empresa__radio-group">
+                            <label className="seguro-empresa__radio">
+                                <input type="radio" name="tipo_servicio" value="contratado" checked={tipoServicio === "contratado"} onChange={(e) => setTipoServicio(e.target.value)} />
+                                <span> Contratado </span>
+                            </label>
+
+                            <label className="seguro-empresa__radio">
+                                <input type="radio" name="tipo_servicio" value="compartido" checked={tipoServicio === "compartido"} onChange={(e) => setTipoServicio(e.target.value)} />
+                                <span> Compartido </span>
+                            </label>
+
+                            <label className="seguro-empresa__radio">
+                                <input type="radio" name="tipo_servicio" value="exclusivo" checked={tipoServicio === "exclusivo"} onChange={(e) => setTipoServicio(e.target.value)} />
+                                <span> Exclusivo </span>
+                            </label>
+
                         </div>
                     </div>
 
@@ -363,14 +420,7 @@ export default function SeguroEmpresaPage() {
                             Propietario de la unidad
                         </label>
 
-                        <input
-                            id="propietario_unidad"
-                            type="text"
-                            maxLength={150}
-                            placeholder="Ej. Nombre Apellido Paterno Apellido Materno"
-                            value={propietarioUnidad}
-                            onChange={(e) => setPropietarioUnidad(e.target.value)}
-                        />
+                        <input id="propietario_unidad" type="text" maxLength={150} placeholder="Ej. Nombre Apellido Paterno Apellido Materno" value={propietarioUnidad} onChange={(e) => setPropietarioUnidad(e.target.value)} />
                     </div>
 
                     <div className="seguro-empresa__grid">
@@ -379,37 +429,16 @@ export default function SeguroEmpresaPage() {
                                 Marca
                             </label>
 
-                            <input
-                                id="marca_unidad"
-                                type="text"
-                                maxLength={100}
-                                placeholder="Ej. Marca de camion de mudanza"
-                                value={marcaUnidad}
-                                onChange={(e) => setMarcaUnidad(e.target.value)}
-                            />
+                            <input id="marca_unidad" type="text" maxLength={100} placeholder="Ej. Marca de camion de mudanza" value={marcaUnidad} onChange={(e) => setMarcaUnidad(e.target.value)} />
                         </div>
 
                         <div className="seguro-empresa__field">
-
                             <label htmlFor="modelo_unidad">
                                 Modelo
                             </label>
 
-                            <input
-                                id="modelo_unidad"
-                                type="text"
-                                maxLength={100}
-                                placeholder="Ej. Cascadia"
-                                value={modeloUnidad}
-                                onChange={(e) =>
-                                    setModeloUnidad(
-                                        e.target.value
-                                    )
-                                }
-                            />
-
+                            <input id="modelo_unidad" type="text" maxLength={100} placeholder="Ej. Cascadia" value={modeloUnidad} onChange={(e) => setModeloUnidad(e.target.value)} />
                         </div>
-
                     </div>
 
                     <div className="seguro-empresa__grid">
@@ -418,14 +447,7 @@ export default function SeguroEmpresaPage() {
                                 Placas
                             </label>
 
-                            <input
-                                id="placas"
-                                type="text"
-                                maxLength={30}
-                                placeholder="Ej. ABC-123-D"
-                                value={placas}
-                                onChange={(e) => setPlacas(e.target.value)}
-                            />
+                            <input id="placas" type="text" maxLength={30} placeholder="Ej. ABC-123-D" value={placas} onChange={(e) => setPlacas(e.target.value)} />
                         </div>
 
                         <div className="seguro-empresa__field">
@@ -433,14 +455,7 @@ export default function SeguroEmpresaPage() {
                                 Chofer
                             </label>
 
-                            <input
-                                id="chofer"
-                                type="text"
-                                maxLength={150}
-                                placeholder="Ej. Nombre Apellido Paterno Apellido Materno"
-                                value={chofer}
-                                onChange={(e) => setChofer(e.target.value)}
-                            />
+                            <input id="chofer" type="text" maxLength={150} placeholder="Ej. Nombre Apellido Paterno Apellido Materno" value={chofer} onChange={(e) => setChofer(e.target.value)} />
                         </div>
                     </div>
                 </div>
@@ -462,17 +477,17 @@ export default function SeguroEmpresaPage() {
                 }
 
                 <div className="seguro-empresa__actions">
-                    <button
-                        type="button"
-                        className="seguro-empresa__button seguro-empresa__button--secondary"
-                        onClick={guardar}
-                        disabled={saving || finishing}
-                    >
-                        {saving ? "Guardando..." : "Guardar"}
+                    <button type="button" className="seguro-empresa__button seguro-empresa__button--secondary" onClick={guardar} disabled={saving || finishing} >
+                        {
+                            saving ? "Guardando..." : "Guardar"
+                        }
                     </button>
 
                     <button type="button" className="seguro-empresa__button" onClick={finalizar} disabled={saving || finishing} >
-                        {finishing ? "Procesando..." : datosFinalizados ? "Actualizar" : "Finalizar"}
+                        {
+                            finishing ? "Procesando..." : datosFinalizados
+                                ? "Actualizar" : "Finalizar"
+                        }
                     </button>
                 </div>
 
@@ -499,16 +514,21 @@ export default function SeguroEmpresaPage() {
                 {
                     showConfirmModal && (
                         <ConfirmModal
-                            title={datosFinalizados ? "Actualizar información" : "Finalizar información"}
+                            title={
+                                datosFinalizados ? "Actualizar información" : "Finalizar información"
+                            }
                             message={
                                 datosFinalizados
                                     ? "¿Deseas actualizar la información de la unidad? Los cambios se guardarán correctamente."
                                     : "¿Confirmas que la información de la unidad está completa? Al finalizar se notificará al cliente que los datos están listos para su revisión."
                             }
-                            confirmText={datosFinalizados ? "Actualizar" : "Finalizar"}
+                            confirmText={
+                                datosFinalizados ? "Actualizar" : "Finalizar"
+                            }
                             cancelText="Cancelar"
                             onConfirm={confirmarFinalizacion}
-                            onClose={() => setShowConfirmModal(false)}
+                            onClose={() => setShowConfirmModal(false)
+                            }
                         />
                     )
                 }

@@ -1012,11 +1012,6 @@ export default function SeguroPublicoPage() {
         );
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Expediente completado
-    |--------------------------------------------------------------------------
-    */
     if (expediente?.estado === "completado") {
         return (
             <SeguroExpedienteCompletado
@@ -1054,11 +1049,6 @@ export default function SeguroPublicoPage() {
         chofer: expediente?.chofer,
     };
 
-    /*
-    |--------------------------------------------------------------------------
-    | Expediente en captura
-    |--------------------------------------------------------------------------
-    */
     return (
         <main className="seguro-publico">
             <section className="seguro-publico__card seguro-publico__card--form">
@@ -1134,10 +1124,7 @@ export default function SeguroPublicoPage() {
                             onEmailChange={setEmail}
                             onTelefonoChange={setTelefono}
                             onGuardar={guardarPasoDos}
-                            onAnterior={() => {
-                                setError("");
-                                setPaso(1);
-                            }}
+                            onAnterior={() => { setError(""); setPaso(1); }}
                         />
                     )
                 }

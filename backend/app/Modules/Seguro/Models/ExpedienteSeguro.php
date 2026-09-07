@@ -42,6 +42,7 @@ class ExpedienteSeguro extends Model
         'propietario_unidad',
         'marca_unidad',
         'modelo_unidad',
+        'tipo_servicio',
         'placas',
         'chofer',
         'es_externo',
@@ -62,7 +63,6 @@ class ExpedienteSeguro extends Model
         'cliente_finalizo_at' => 'datetime',
         'ultimo_autoguardado_at' => 'datetime',
         'fecha_salida' => 'date',
-        'fecha_llegada' => 'date',
         'es_externo' => 'boolean',
         'valor_menaje' => 'decimal:2',
         'valor_automovil' => 'decimal:2',
@@ -71,9 +71,7 @@ class ExpedienteSeguro extends Model
         'empresa_datos_finalizados_at' => 'datetime',
     ];
 
-    protected $appends = [
-        'enlace_empresa',
-    ];
+    protected $appends = [ 'enlace_empresa', ];
 
     public function getEnlaceEmpresaAttribute(): ?string
     {

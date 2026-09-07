@@ -31,7 +31,7 @@ export default function SeguroStepDos({
                 </div>
 
                 <p>
-                    Este nombre se utilizará para preparar tu seguro
+                    Este nombre se utilizará para preparar tu seguro, asegurate de escribir tu nombre completo y apellidos
                 </p>
             </div>
 

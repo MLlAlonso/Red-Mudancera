@@ -12,7 +12,8 @@
         <tr>
             <td align="center" style="padding:40px 16px;">
 
-                <table width="100%" cellpadding="0" cellspacing="0" style="max-width:650px; background:#ffffff; border-radius:16px; overflow:hidden;">
+                <table width="100%" cellpadding="0" cellspacing="0"
+                    style="max-width:650px; background:#ffffff; border-radius:16px; overflow:hidden;">
                     <tr>
                         <td style=" background:#09233E; padding:28px 24px; text-align:center; ">
                             <h1 style=" margin:0; color:#ffffff; font-size:24px; ">
@@ -23,7 +24,8 @@
 
                     <tr>
                         <td align="center" style="padding:25px 20px 10px;">
-                            <img src="https://app.mudanzafacil.com.mx/logo/icon.png" alt="Mudanza Fácil" style="height:55px;">
+                            <img src="https://app.mudanzafacil.com.mx/logo/icon.png" alt="Mudanza Fácil"
+                                style="height:55px;">
                         </td>
                     </tr>
 
@@ -41,8 +43,10 @@
                                 A continuación encontrarás la información necesaria para realizar el pago de tu seguro.
                             </p>
 
-                            <div style=" background:#F4F7F6; border:1px solid #E8ECEB; border-radius:10px; padding:16px; margin:20px 0; ">
-                                <span style=" display:block; color:#6F7F8D; font-size:12px; text-transform:uppercase; font-weight:bold; margin-bottom:5px; ">
+                            <div
+                                style=" background:#F4F7F6; border:1px solid #E8ECEB; border-radius:10px; padding:16px; margin:20px 0; ">
+                                <span
+                                    style=" display:block; color:#6F7F8D; font-size:12px; text-transform:uppercase; font-weight:bold; margin-bottom:5px; ">
                                     Folio
                                 </span>
 
@@ -51,7 +55,8 @@
                                 </strong>
                             </div>
 
-                            <div style=" margin-top:30px; padding:22px; background:#F4F7F6; border:1px solid #E8ECEB; border-radius:12px; ">
+                            <div
+                                style=" margin-top:30px; padding:22px; background:#F4F7F6; border:1px solid #E8ECEB; border-radius:12px; ">
                                 <h2 style=" color:#09233E; font-size:20px; margin:0 0 18px; ">
                                     Datos para realizar el pago
                                 </h2>
@@ -70,7 +75,7 @@
                                     Prevención Global de Carga SA de CV
                                     <br>
 
-                                    <strong> R.F.C.: </strong>                          
+                                    <strong> R.F.C.: </strong>
                                     PGC140409TC5
                                     <br>
 
@@ -91,8 +96,10 @@
                                 </p>
                             </div>
 
-                            <div style=" margin-top:20px; padding:20px; background:#E8F4F0; border-left:4px solid #1C8F6A; border-radius:0 8px 8px 0; ">
-                                <span style=" display:block; color:#1C8F6A; font-size:12px; text-transform:uppercase; font-weight:bold; margin-bottom:6px; ">
+                            <div
+                                style=" margin-top:20px; padding:20px; background:#E8F4F0; border-left:4px solid #1C8F6A; border-radius:0 8px 8px 0; ">
+                                <span
+                                    style=" display:block; color:#1C8F6A; font-size:12px; text-transform:uppercase; font-weight:bold; margin-bottom:6px; ">
                                     Importe a pagar
                                 </span>
 
@@ -106,28 +113,42 @@
                             </h2>
 
                             <p style=" font-size:14px; line-height:1.6; ">
-                                Una vez realizado el pago, puedes enviar tu comprobante para continuar con el proceso de tu seguro.
+                                Una vez realizado el pago, puedes enviar tu comprobante para continuar con el proceso de
+                                tu seguro.
                             </p>
 
-                            <div style=" margin-top:20px; text-align:center; ">
-                                <a href="https://wa.me/?text={{ urlencode('Hola, realicé el pago de mi seguro. Mi folio es ' . $expediente->folio . '. Quiero enviar mi comprobante.') }}"
-                                    target="_blank" style="
-                                        display:inline-block; padding:12px 20px; background:#25D366; color:#ffffff; text-decoration:none;
-                                        border-radius:8px; font-weight:bold; font-size:14px; margin:5px;
-                                    ">
+                            <div style="margin-top:20px; text-align:center;">
+                                <a href="https://wa.me/524421896433?text={{ urlencode(
+                                        'Hola, buen día.' . "\n\n" .
+                                        'Mi nombre es ' . ($expediente->nombre ?? '') . ' y he realizado el pago correspondiente a mi seguro.' . "\n\n" .
+                                        'Nombre: ' . ($expediente->nombre ?? '') . "\n" .
+                                        'Folio: ' . ($expediente->folio ?? '') . "\n\n" .
+                                        'Quiero enviar mi comprobante de pago para continuar con el proceso.'
+                                    ) }}" target="_blank"
+                                    style=" display:inline-block; padding:12px 20px; background:#25D366; color:#ffffff; text-decoration:none; border-radius:8px; font-weight:bold; font-size:14px; margin:5px;"
+                                >
                                     Enviar por WhatsApp
                                 </a>
 
-                                <a href="mailto:atnclientes@segurosdecarga.com?subject={{ rawurlencode('Comprobante de pago - ' . $expediente->folio) }}&body={{ rawurlencode('Hola, adjunto mi comprobante de pago correspondiente al expediente ' . $expediente->folio . '.') }}"
-                                    style=" display:inline-block; padding:12px 20px; background:#09233E; color:#ffffff;
-                                        text-decoration:none; border-radius:8px; font-weight:bold; font-size:14px; margin:5px;
-                                    ">
+                                <a href="mailto:atnclientes@segurosdecarga.com?subject={{ rawurlencode(
+                                        'Comprobante de pago - ' . ($expediente->nombre ?? '') . ' - Folio ' . ($expediente->folio ?? '')
+                                    ) }}&body={{ rawurlencode(
+                                        'Hola, buen día.' . "\n\n" .
+                                        'Mi nombre es ' . ($expediente->nombre ?? '') . ' y adjunto mi comprobante de pago correspondiente a mi seguro.' . "\n\n" .
+                                        'Nombre: ' . ($expediente->nombre ?? '') . "\n" .
+                                        'Folio: ' . ($expediente->folio ?? '') . "\n\n" .
+                                        'Quedo atento(a) a la confirmación de la recepción de mi comprobante.' . "\n\n" .
+                                        'Saludos.'
+                                    ) }}" 
+                                    style=" display:inline-block; padding:12px 20px; background:#09233E; color:#ffffff; text-decoration:none; border-radius:8px; font-weight:bold; font-size:14px; margin:5px;
+                                ">
                                     Enviar por correo
                                 </a>
 
                             </div>
 
-                            <div style=" margin-top:25px; padding:18px; background:#FFF8E8; border-left:4px solid #D6A928; border-radius:0 8px 8px 0; ">
+                            <div
+                                style=" margin-top:25px; padding:18px; background:#FFF8E8; border-left:4px solid #D6A928; border-radius:0 8px 8px 0; ">
                                 <strong style="color:#09233E;">
                                     Importante
                                 </strong>
@@ -136,7 +157,8 @@
                                     Conserva tu comprobante de pago y envíalo por WhatsApp o correo electrónico.
                                     <br><br>
 
-                                    <a href="https://wa.me/5214421896433" target="_blank" style=" color:#4A5E71; text-decoration:underline; font-weight:bold; ">
+                                    <a href="https://wa.me/5214421896433" target="_blank"
+                                        style=" color:#4A5E71; text-decoration:underline; font-weight:bold; ">
                                         ¿Tienes alguna duda? Escríbenos por WhatsApp a Mudanza Fácil
                                     </a>
                                 </p>

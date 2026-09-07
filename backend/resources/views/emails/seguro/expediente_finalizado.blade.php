@@ -24,7 +24,8 @@
 
                     <tr>
                         <td align="center" style="padding:25px 20px 10px;">
-                            <img src="https://app.mudanzafacil.com.mx/logo/icon.png" alt="Mudanza Fácil" style="height:55px;">
+                            <img src="https://app.mudanzafacil.com.mx/logo/icon.png" alt="Mudanza Fácil"
+                                style="height:55px;">
                         </td>
                     </tr>
 
@@ -34,8 +35,10 @@
                                 Se ha finalizado un expediente de seguro correspondiente a una solicitud de mudanza.
                             </p>
 
-                            <div style=" background:#F4F7F6; border:1px solid #E8ECEB; border-radius:10px; padding:16px; margin:20px 0; ">
-                                <span style=" display:block; color:#6F7F8D; font-size:12px; text-transform:uppercase; font-weight:bold; margin-bottom:5px;  ">
+                            <div
+                                style=" background:#F4F7F6; border:1px solid #E8ECEB; border-radius:10px; padding:16px; margin:20px 0; ">
+                                <span
+                                    style=" display:block; color:#6F7F8D; font-size:12px; text-transform:uppercase; font-weight:bold; margin-bottom:5px;  ">
                                     Folio
                                 </span>
 
@@ -179,8 +182,30 @@
                                 {{ $expediente->fecha_salida ?? 'No registrada' }}
                                 <br>
 
-                                <strong>Fecha de llegada:</strong>
-                                {{ $expediente->fecha_llegada ?? 'No registrada' }}
+                                <strong>Tiempo aproximado de llegada:</strong>
+                                @if($expediente->fecha_llegada === '1-7')
+                                    1-7 días
+                                @elseif($expediente->fecha_llegada === '8-12')
+                                    8-12 días
+                                @elseif($expediente->fecha_llegada === '13-18')
+                                    13-18 días
+                                @elseif($expediente->fecha_llegada === '18+')
+                                    +18 días
+                                @else
+                                    No registrado
+                                @endif
+                                <br>
+
+                                <strong>Tipo de servicio:</strong>
+                                @if($expediente->tipo_servicio === 'contratado')
+                                    Contratado
+                                @elseif($expediente->tipo_servicio === 'compartido')
+                                    Compartido
+                                @elseif($expediente->tipo_servicio === 'exclusivo')
+                                    Exclusivo
+                                @else
+                                    No especificado
+                                @endif
                             </p>
 
                             @if($expediente->inventario)
@@ -274,8 +299,8 @@
                                     Puedes consultar y descargar el documento PDF completo desde el siguiente enlace.
                                 </p>
 
-                                <a href="{{ config('app.frontend_url') }}/seguros/{{ $expediente->folio }}/pdf" target="_blank" 
-                                    style=" display:inline-block; padding:12px 20px; background:#09233E; color:#ffffff;
+                                <a href="{{ config('app.frontend_url') }}/seguros/{{ $expediente->folio }}/pdf"
+                                    target="_blank" style=" display:inline-block; padding:12px 20px; background:#09233E; color:#ffffff;
                                     text-decoration:none; border-radius:8px; font-weight:bold; font-size:14px;
                                 ">
                                     Ver / descargar expediente PDF

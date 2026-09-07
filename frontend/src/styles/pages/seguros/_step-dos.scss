@@ -1,12 +1,10 @@
 @use "@/styles/utils/variables" as *;
 
 .seguro-publico {
+    #nombre {
+        color: $text-muted;
+    }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Text Inputs
-    |--------------------------------------------------------------------------
-    */
     &__input-wrapper {
         position: relative;
         width: 100%;
@@ -14,7 +12,7 @@
 
     &__input-icon {
         position: absolute;
-        left: 6px;
+        left: 7px;
         top: 50%;
         width: 20px;
         height: 20px;
@@ -49,6 +47,44 @@
         &:focus {
             border-color: $azul_001;
             box-shadow: 0 0 0 3px rgba(58, 110, 165, 0.12);
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Advertencia nombre completo
+    |--------------------------------------------------------------------------
+    */
+    #icons_02>p {
+        margin: 10px 2px 0;
+        padding: 10px 12px;
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        background: $background;
+        border: $background;
+        border-radius: 8px;
+        color: $text;
+        font-family: $font-text;
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1.5;
+
+        &::before {
+            content: "!";
+            width: 18px;
+            height: 18px;
+            flex: 0 0 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1px;
+            border-radius: 50%;
+            background: $tertiary;
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            line-height: 1;
         }
     }
 

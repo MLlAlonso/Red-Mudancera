@@ -73,6 +73,7 @@ class SeguroController extends Controller
                 'empresa_mudanza' => $expediente->empresa_mudanza,
                 'fecha_salida' => $expediente->fecha_salida,
                 'fecha_llegada' => $expediente->fecha_llegada,
+                'tipo_servicio' => $expediente->tipo_servicio,
                 'propietario_unidad' => $expediente->propietario_unidad,
                 'marca_unidad' => $expediente->marca_unidad,
                 'modelo_unidad' => $expediente->modelo_unidad,
@@ -357,6 +358,7 @@ class SeguroController extends Controller
                 'destino' => $expediente->destino,
                 'fecha_salida' => $expediente->fecha_salida,
                 'fecha_llegada' => $expediente->fecha_llegada,
+                'tipo_servicio' => $expediente->tipo_servicio,
                 'propietario_unidad' => $expediente->propietario_unidad,
                 'marca_unidad' => $expediente->marca_unidad,
                 'modelo_unidad' => $expediente->modelo_unidad,
@@ -393,12 +395,13 @@ class SeguroController extends Controller
                 'destino' => $expediente->destino,
                 'fecha_salida' => $expediente->fecha_salida,
                 'fecha_llegada' => $expediente->fecha_llegada,
+                'tipo_servicio' => $expediente->tipo_servicio,
                 'propietario_unidad' => $expediente->propietario_unidad,
                 'marca_unidad' => $expediente->marca_unidad,
                 'modelo_unidad' => $expediente->modelo_unidad,
                 'placas' => $expediente->placas,
                 'chofer' => $expediente->chofer,
-            ]
+            ],
         ]);
     }
 
@@ -424,6 +427,7 @@ class SeguroController extends Controller
             'destino',
             'fecha_salida',
             'fecha_llegada',
+            'tipo_servicio',
             'propietario_unidad',
             'marca_unidad',
             'modelo_unidad',
@@ -454,6 +458,7 @@ class SeguroController extends Controller
                 'propietario_unidad' => $expediente->propietario_unidad,
                 'marca_unidad' => $expediente->marca_unidad,
                 'modelo_unidad' => $expediente->modelo_unidad,
+                'tipo_servicio' => $expediente->tipo_servicio,
                 'placas' => $expediente->placas,
                 'chofer' => $expediente->chofer,
                 'empresa_datos_finalizados_at' => $expediente->empresa_datos_finalizados_at,
@@ -493,6 +498,7 @@ class SeguroController extends Controller
                     'inventario' => $expediente->inventario,
                     'fecha_recoleccion' => $expediente->fecha_recoleccion,
                     'fecha_salida' => $expediente->fecha_salida,
+                    'tipo_servicio' => $expediente->tipo_servicio,
                     'fecha_llegada' => $expediente->fecha_llegada,
                     'tipo_seguro' => $expediente->tipo_seguro,
                     'valor_menaje' => $expediente->valor_menaje,
@@ -514,23 +520,15 @@ class SeguroController extends Controller
         }
 
         if ($expediente->progreso < 100) {
-            return response()->json([
-                'message' => 'Debes completar toda la información del expediente antes de finalizarlo.'
-            ], 422);
+            return response()->json(['message' => 'Debes completar toda la información del expediente antes de finalizarlo.'], 422);
         }
 
         if ($expediente->modalidad_datos === 'asistida') {
-            $camposAsistencia = [
-                'asistencia_empresa_mudanza',
-                'asistencia_contacto',
-                'asistencia_telefono',
-            ];
+            $camposAsistencia = ['asistencia_empresa_mudanza', 'asistencia_contacto', 'asistencia_telefono',];
 
             foreach ($camposAsistencia as $campo) {
                 if (empty($expediente->{$campo})) {
-                    return response()->json([
-                        'message' => 'La información de contacto para la póliza asistida está incompleta.'
-                    ], 422);
+                    return response()->json(['message' => 'La información de contacto para la póliza asistida está incompleta.'], 422);
                 }
             }
         } else {
@@ -540,6 +538,7 @@ class SeguroController extends Controller
                 'destino',
                 'fecha_salida',
                 'fecha_llegada',
+                'tipo_servicio',
                 'propietario_unidad',
                 'marca_unidad',
                 'modelo_unidad',
@@ -549,9 +548,7 @@ class SeguroController extends Controller
 
             foreach ($camposEmpresa as $campo) {
                 if (empty($expediente->{$campo})) {
-                    return response()->json([
-                        'message' => 'La información de la mudanza y de la unidad todavía está incompleta.'
-                    ], 422);
+                    return response()->json(['message' => 'La información de la mudanza y de la unidad todavía está incompleta.'], 422);
                 }
             }
         }
