@@ -4,94 +4,29 @@ namespace App\Modules\SuperAdmin\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Seguro\Models\ExpedienteSeguro;
+use App\Modules\SuperAdmin\Services\SuperAdminSegurosService;
 use Illuminate\Support\Facades\Mail;
 use App\Modules\Seguro\Mail\InvitacionExpedienteSeguroMail;
 use Illuminate\Http\Request;
 
 class SuperAdminSegurosController extends Controller
 {
+    protected SuperAdminSegurosService $service;
+
+    public function __construct(SuperAdminSegurosService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index(Request $request)
     {
-        $search = trim($request->search ?? "");
-        $period = $request->period ?? "recent";
-        $query = ExpedienteSeguro::query();
+        $data = $this->service->obtenerExpedientes(
+            $request->input('search', ''),
+            $request->input('month'),
+            $request->input('modalidad', 'todas')
+        );
 
-        if ($search !== "") {
-            $query->where(function ($q) use ($search) {
-                $q->where("folio", "like", "%{$search}%")
-                    ->orWhere("nombre", "like", "%{$search}%")
-                    ->orWhere("email", "like", "%{$search}%");
-            });
-        }
-
-        switch ($period) {
-            case "recent":
-                $inicio = now()->subMonth()->startOfMonth();
-                $query->whereDate("created_at", ">=", $inicio);
-                break;
-
-            case "year":
-                $query->whereYear("created_at", now()->year);
-                break;
-
-            case "all":
-                break;
-
-            default:
-                if (is_numeric($period)) {
-                    $query->whereYear("created_at", $period);
-                }
-                break;
-        }
-
-        $baseMetrics = clone $query;
-
-        $metrics = [
-            "nuevos" => (clone $baseMetrics)
-                ->where("estado", "nuevo")
-                ->count(),
-
-            "esperando_cliente" => (clone $baseMetrics)
-                ->where("estado", "esperando_cliente")
-                ->count(),
-
-            "capturando" => (clone $baseMetrics)
-                ->where("estado", "capturando")
-                ->count(),
-
-            "revision" => (clone $baseMetrics)
-                ->where("estado", "revision")
-                ->count(),
-
-            "completados" => (clone $baseMetrics)
-                ->where("estado", "completado")
-                ->count(),
-        ];
-
-        $expedientes = $query->latest()->get()->map(function ($expediente) {
-            return [
-                "id" => $expediente->id,
-                "folio" => $expediente->folio,
-                "estado" => $expediente->estado,
-                "progreso" => $expediente->progreso,
-                "nombre" => $expediente->nombre,
-                "email" => $expediente->email,
-                "telefono" => $expediente->telefono,
-                "origen" => $expediente->origen,
-                "destino" => $expediente->destino,
-                "es_externo" => $expediente->es_externo,
-                "tipo_seguro" => $expediente->tipo_seguro,
-                "modalidad_datos" => $expediente->modalidad_datos,
-                "forma_proporcion_datos" => $expediente->forma_proporcion_datos,
-                "asistencia_empresa_mudanza" => $expediente->asistencia_empresa_mudanza,
-                "created_at" => $expediente->created_at->format("d/m/Y H:i"),
-            ];
-        });
-
-        return response()->json([
-            "metrics" => $metrics,
-            "data" => $expedientes,
-        ]);
+        return response()->json($data);
     }
 
     public function show($id)
@@ -163,9 +98,7 @@ class SuperAdminSegurosController extends Controller
             'correo_enviado_at' => now()
         ]);
 
-        return response()->json([
-            'message' => 'Correo enviado correctamente.'
-        ]);
+        return response()->json(['message' => 'Correo enviado correctamente.']);
     }
 
     public function pdf($id)
@@ -173,20 +106,16 @@ class SuperAdminSegurosController extends Controller
         $expediente = ExpedienteSeguro::findOrFail($id);
 
         if ($expediente->estado === 'cancelado') {
-            return response()->json([
-                'message' => 'Este expediente ha sido cancelado.'
-            ], 410);
+            return response()->json([ 'message' => 'Este expediente ha sido cancelado.' ], 410);
         }
 
         if ($expediente->progreso < 100) {
-            return response()->json([
-                'message' => 'El expediente todavía no ha sido completado.'
-            ], 409);
+            return response()->json([ 'message' => 'El expediente todavía no ha sido completado.' ], 409);
         }
 
         $pdf = app('dompdf.wrapper');
-        $pdf->loadView('pdf.seguro.expediente-finalizado', ['expediente' => $expediente,]);
+        $pdf->loadView( 'pdf.seguro.expediente-finalizado', ['expediente' => $expediente] );
 
-        return $pdf->download('expediente-' . $expediente->folio . '.pdf');
+        return $pdf->download( 'expediente-' . $expediente->folio . '.pdf' );
     }
 }

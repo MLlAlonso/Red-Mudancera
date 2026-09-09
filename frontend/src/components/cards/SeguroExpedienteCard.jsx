@@ -50,7 +50,7 @@ export default function SeguroExpedienteCard({ id, folio, nombre, email, telefon
                 </div>
 
                 <div className="ruta">
-                    <img src="/icons/location.png" alt="" />
+                    <img src="/icons/place-marker.png" alt="" />
 
                     <span>
                         {origen} {" → "} {destino}
@@ -66,7 +66,7 @@ export default function SeguroExpedienteCard({ id, folio, nombre, email, telefon
                         {esExterno ? "Solicitud externa" : "Mudanza Fácil"}
                     </span>
 
-                    <span>
+                    <span className={modalidadDatos === "asistida" ? "policy assisted" : "policy standard"} >
                         {modalidadDatos === "asistida" ? "Póliza asistida" : "Póliza estándar"}
                     </span>
                 </div>
@@ -75,7 +75,6 @@ export default function SeguroExpedienteCard({ id, folio, nombre, email, telefon
             <div className="seguro-card__progress">
                 <div className="progress-top">
                     <span> Progreso </span>
-
                     <strong> {progreso}% </strong>
                 </div>
 
@@ -86,7 +85,6 @@ export default function SeguroExpedienteCard({ id, folio, nombre, email, telefon
 
             <div className="seguro-card__footer">
                 <span> {fecha} </span>
-
                 <button>  Ver expediente </button>
             </div>
         </motion.article>

@@ -10,15 +10,25 @@ async function handleResponse(res) {
     return res.json();
 }
 
-export async function getExpedientesSeguro(search = "", period = "recent") {
+export async function getExpedientesSeguro( search = "", month = "", modalidad = "todas") {
     const params = new URLSearchParams();
 
     if (search) {
         params.append("search", search);
     }
 
-    params.append("period", period);
-    const res = await fetch(`${API}/superadmin/seguros?${params.toString()}`);
+    if (month) {
+        params.append("month", month);
+    }
+
+    if (modalidad) {
+        params.append("modalidad", modalidad);
+    }
+
+    const res = await fetch(
+        `${API}/superadmin/seguros?${params.toString()}`
+    );
+
     return handleResponse(res);
 }
 
@@ -42,7 +52,7 @@ export async function descargarPdfSeguro(id) {
         `${API}/superadmin/seguros/${id}/pdf`,
         {
             method: "GET",
-            headers: {Accept: "application/pdf",},
+            headers: { Accept: "application/pdf", },
         }
     );
 
