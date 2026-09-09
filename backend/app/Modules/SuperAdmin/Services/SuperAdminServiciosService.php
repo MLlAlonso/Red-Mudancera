@@ -14,86 +14,33 @@ class SuperAdminServiciosService
     public function obtenerDashboard(): array
     {
         $inicioMes = Carbon::now()->startOfMonth();
-
-        // SERVICIOS
         $serviciosMes = \App\Modules\Servicio\Models\Servicio::where('created_at', '>=', $inicioMes);
         $serviciosActivos = \App\Modules\Servicio\Models\Servicio::where('estado', 'activo')->count();
         $serviciosAsignados = \App\Modules\Servicio\Models\Servicio::where('estado', 'asignado')->count();
         $serviciosFinalizados = \App\Modules\Servicio\Models\Servicio::where('estado', 'finalizado')->count();
-
-        // RUTA MÁS REPETIDA
-        $rutaTop = \App\Modules\Servicio\Models\Servicio::selectRaw('CONCAT(origen, " → ", destino) as ruta, COUNT(*) as total')
-            ->groupBy('ruta')
-            ->orderByDesc('total')
-            ->first();
-
-        // ORIGEN MÁS FRECUENTE
-        $origenTop = \App\Modules\Servicio\Models\Servicio::selectRaw('origen, COUNT(*) as total')
-            ->groupBy('origen')
-            ->orderByDesc('total')
-            ->first();
-
-        // LOCALES VS FORÁNEOS
+        $rutaTop = \App\Modules\Servicio\Models\Servicio::selectRaw('CONCAT(origen, " → ", destino) as ruta, COUNT(*) as total')->groupBy('ruta')->orderByDesc('total')->first();
+        $origenTop = \App\Modules\Servicio\Models\Servicio::selectRaw('origen, COUNT(*) as total')->groupBy('origen')->orderByDesc('total')->first();
         $locales = \App\Modules\Servicio\Models\Servicio::whereColumn('origen', 'destino')->count();
-
         $foraneos = \App\Modules\Servicio\Models\Servicio::whereColumn('origen', '!=', 'destino')->count();
-
-        // TIPO CARGA
-        $tipoCargaTop = \App\Modules\Servicio\Models\Servicio::selectRaw('tipo_carga, COUNT(*) as total')
-            ->groupBy('tipo_carga')
-            ->orderByDesc('total')
-            ->first();
-
-        // HORARIO MÁS ACTIVO
-        $horaTop = \App\Modules\Servicio\Models\Servicio::selectRaw('HOUR(created_at) as hora, COUNT(*) as total')
-            ->groupBy('hora')
-            ->orderByDesc('total')
-            ->first();
-
-        // DÍA MÁS ACTIVO
-        $diaTop = \App\Modules\Servicio\Models\Servicio::selectRaw('DAYNAME(created_at) as dia, COUNT(*) as total')
-            ->groupBy('dia')
-            ->orderByDesc('total')
-            ->first();
-
-        // CONTACTOS
+        $tipoCargaTop = \App\Modules\Servicio\Models\Servicio::selectRaw('tipo_carga, COUNT(*) as total')->groupBy('tipo_carga')->orderByDesc('total')->first();
+        $horaTop = \App\Modules\Servicio\Models\Servicio::selectRaw('HOUR(created_at) as hora, COUNT(*) as total')->groupBy('hora')->orderByDesc('total')->first();
+        $diaTop = \App\Modules\Servicio\Models\Servicio::selectRaw('DAYNAME(created_at) as dia, COUNT(*) as total')->groupBy('dia')->orderByDesc('total')->first();
         $contactosMes = \App\Modules\SolicitudMudanza\Models\SolicitudMudanza::where('created_at', '>=', $inicioMes);
         $solicitudesReportadas = \App\Modules\SolicitudMudanza\Models\SolicitudMudanza::where('reportada', true)->count();
         $solicitudesExpiradas = \App\Modules\SolicitudMudanza\Models\SolicitudMudanza::where('estado', 'expirado')->count();
         $comprasMes = LeadCompra::where('created_at', '>=', $inicioMes);
-
-        // CRÉDITOS CONSUMIDOS
         $creditosConsumidosMes = LeadCompra::where('created_at',  '>=',  $inicioMes)->sum('tokens_pagados');
-
-        // GANANCIA GENERADA
         $gananciaMes = LeadCompra::where('created_at', '>=',  $inicioMes)->sum('ganancia');
-
-        // OPERACIONES FINALIZADAS
         $operacionesFinalizadas = LeadCompra::whereNotNull('finalizado_at')->count();
-
-        // LEADS EXCLUSIVOS MES
         $leadsExclusivosMes = LeadCompra::where('exclusivo', true)->where('created_at', '>=', $inicioMes)->count();
-
-        // LEADS EXCLUSIVOS
         $leadsExclusivos = LeadCompra::where('exclusivo',  true)->count();
         $leadsTotales = LeadCompra::count();
         $porcentajeExclusivos = $leadsTotales > 0 ? round(($leadsExclusivos / $leadsTotales) * 100)  : 0;
-
-        // CONTACTOS LOCALES/FORÁNEOS
         $contactosLocales = \App\Modules\SolicitudMudanza\Models\SolicitudMudanza::whereColumn('origen', 'destino')->count();
         $contactosForaneos = \App\Modules\SolicitudMudanza\Models\SolicitudMudanza::whereColumn('origen', '!=', 'destino')->count();
-
-        // TIPO MUDANZA
-        $tipoMudanzaTop = \App\Modules\SolicitudMudanza\Models\SolicitudMudanza::selectRaw('tipo_mudanza, COUNT(*) as total')
-            ->groupBy('tipo_mudanza')
-            ->orderByDesc('total')
-            ->first();
-
-        // OPERACIÓN
+        $tipoMudanzaTop = \App\Modules\SolicitudMudanza\Models\SolicitudMudanza::selectRaw('tipo_mudanza, COUNT(*) as total')->groupBy('tipo_mudanza')->orderByDesc('total')->first();
         $creditosMes = LeadCompra::where('created_at', '>=', $inicioMes)->sum('tokens_pagados');
         $partnersActivos = \App\Modules\PartnerReferral\Models\PartnerReferral::where('activo', true)->count();
-
-        // MATCHINGS
         $matchingsMes = \App\Modules\Servicio\Models\Servicio::where('estado', 'asignado')->where('updated_at', '>=', $inicioMes)->count();
 
         return [
@@ -145,9 +92,6 @@ class SuperAdminServiciosService
         ];
     }
 
-    /**
-     * Empresas que realizaron al menos una compra  de leads durante el mes actual.
-     */
     public function empresasCompradorasDelMes()
     {
         $inicioMes = Carbon::now()->startOfMonth();
@@ -176,9 +120,6 @@ class SuperAdminServiciosService
             ->values();
     }
 
-    /**
-     * Obtiene las últimas compras de leads realizadas.
-     */
     public function ultimasCompras(int $limit = 20)
     {
         return LeadCompra::query()
@@ -210,9 +151,6 @@ class SuperAdminServiciosService
             });
     }
 
-    /**
-     * Obtiene los leads comprados por una empresa  durante el mes actual.
-     */
     public function comprasPorEmpresaDelMes(int $empresaId)
     {
         $inicioMes = Carbon::now()->startOfMonth();
@@ -262,5 +200,105 @@ class SuperAdminServiciosService
 
             'compras' => $compras->values(),
         ];
+    }
+
+    public function exportarSolicitudesMudanzaPorMes(string $mes)
+    {
+        $fechaInicio = Carbon::createFromFormat('Y-m', $mes)->startOfMonth();
+        $fechaFin = $fechaInicio->copy()->endOfMonth();
+        $solicitudes = \App\Modules\SolicitudMudanza\Models\SolicitudMudanza::query()->whereBetween('created_at', [$fechaInicio, $fechaFin])->orderBy('created_at')->get();
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Solicitudes');
+
+        $headers = [
+            'ID',
+            'Origen',
+            'Destino',
+            'Distancia KM',
+            'Tipo de vivienda',
+            'Vivienda destino',
+            'Pisos origen',
+            'Elevador origen',
+            'Acarreo origen',
+            'Pisos destino',
+            'Elevador destino',
+            'Acarreo destino',
+            'Inventario',
+            'Fecha recolección',
+            'Fecha límite visible',
+            'Tipo de servicio',
+            'Tipo de mudanza',
+            'Nombre',
+            'Email',
+            'Teléfono',
+            'Estado',
+            'Empresa referente ID',
+            'Partner referral ID',
+            'Reportada',
+            'Es privado',
+            'Empresa privada ID',
+            'Compras',
+            'Puesto en venta',
+            'Creada',
+            'Actualizada',
+        ];
+
+        $sheet->fromArray($headers, null, 'A1');
+        $fila = 2;
+
+        foreach ($solicitudes as $solicitud) {
+            $sheet->fromArray([
+                $solicitud->id,
+                $solicitud->origen,
+                $solicitud->destino,
+                $solicitud->distancia_km,
+                $solicitud->tipo_vivienda,
+                $solicitud->vivienda_destino,
+                $solicitud->origen_pisos,
+                $solicitud->origen_elevador,
+                $solicitud->origen_acarreo,
+                $solicitud->destino_pisos,
+                $solicitud->destino_elevador,
+                $solicitud->destino_acarreo,
+                $solicitud->inventario,
+                $solicitud->fecha_recoleccion,
+                $solicitud->fecha_limite_visible,
+                $solicitud->tipo_servicio,
+                $solicitud->tipo_mudanza,
+                $solicitud->nombre,
+                $solicitud->email,
+                $solicitud->telefono,
+                $solicitud->estado,
+                $solicitud->referido_por_empresa_id,
+                $solicitud->partner_referral_id,
+                $solicitud->reportada ? 'Sí' : 'No',
+                $solicitud->es_privado ? 'Sí' : 'No',
+                $solicitud->empresa_privada_id,
+                $solicitud->compras_count,
+                $solicitud->puesto_venta_at,
+                $solicitud->created_at,
+                $solicitud->updated_at,
+            ], null, "A{$fila}");
+
+            $fila++;
+        }
+
+        foreach (range('A', $sheet->getHighestColumn()) as $columna) {
+            $sheet->getColumnDimension($columna)->setAutoSize(true);
+        }
+
+        $sheet->freezePane('A2');
+        $sheet->getStyle('A1:AD1')->getFont()->setBold(true);
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $nombreArchivo = "solicitudes-mudanza-{$mes}.xlsx";
+
+        return response()->streamDownload(
+            function () use ($writer) {
+                $writer->save('php://output');
+            },
+            $nombreArchivo,
+            ['Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',]
+        );
     }
 }

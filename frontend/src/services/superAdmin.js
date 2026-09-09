@@ -10,16 +10,12 @@ async function handleResponse(res) {
 }
 
 export async function getDashboardMetrics() {
-    const res = await fetch(
-        `${API}/superadmin/dashboard`
-    );
+    const res = await fetch( `${API}/superadmin/dashboard` );
     return handleResponse(res);
 }
 
 export async function getTrialRequests() {
-    const res = await fetch(
-        `${API}/superadmin/trial-requests`
-    );
+    const res = await fetch( `${API}/superadmin/trial-requests` );
     return handleResponse(res);
 }
 
@@ -44,9 +40,7 @@ export async function rejectTrial(id) {
 }
 
 export async function getEmpresas(search = "") {
-    const res = await fetch(
-        `${API}/superadmin/empresas?search=${search}`
-    );
+    const res = await fetch( `${API}/superadmin/empresas?search=${search}` );
     return handleResponse(res);
 }
 
@@ -59,9 +53,7 @@ export async function addCreditos(id, creditos) {
                 "Content-Type": "application/json"
             },
 
-            body: JSON.stringify({
-                creditos
-            })
+            body: JSON.stringify({ creditos })
         }
     );
     return handleResponse(res);
@@ -76,9 +68,7 @@ export async function changePlan(id, plan) {
                 "Content-Type": "application/json"
             },
 
-            body: JSON.stringify({
-                plan
-            })
+            body: JSON.stringify({ plan })
         }
     );
     return handleResponse(res);
@@ -130,10 +120,7 @@ export const deleteEmpresa = async (empresaId) => {
 };
 
 export async function getPartners() {
-    const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/superadmin/partners`
-    );
-
+    const res = await fetch( `${process.env.NEXT_PUBLIC_API_URL}/superadmin/partners` );
     return handleResponse(res);
 }
 
@@ -176,4 +163,16 @@ export async function getLatestLeadPurchases() {
 export async function getLeadPurchasesByEmpresa(empresaId) {
     const res = await fetch(`${API}/superadmin/servicios/compras/empresa/${empresaId}`);
     return handleResponse(res);
+}
+
+export async function exportarSolicitudesMudanza(mes) {
+    const res = await fetch(  `${API}/superadmin/solicitudes-mudanza/exportar?mes=${mes}` );
+
+    if (!res.ok) {
+        const text = await res.text();
+        console.error(text);
+        throw new Error("Error al exportar solicitudes");
+    }
+
+    return res.blob();
 }

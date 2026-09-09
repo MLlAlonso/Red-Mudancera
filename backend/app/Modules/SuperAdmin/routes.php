@@ -37,6 +37,7 @@ Route::prefix('superadmin')->group(function () {
     Route::get( '/servicios/compras/empresas', [SuperAdminServiciosController::class, 'empresasCompradoras'] );
     Route::get( '/servicios/compras/ultimas', [SuperAdminServiciosController::class, 'ultimasCompras'] );
     Route::get( '/servicios/compras/empresa/{empresaId}', [SuperAdminServiciosController::class, 'comprasPorEmpresa'] );
+    Route::get('/solicitudes-mudanza/exportar', [SuperAdminServiciosController::class, 'exportarSolicitudesMudanza']);
 
     /*
     |--------------------------------------------------------------------------

@@ -2,6 +2,7 @@
 
 .admin-block {
     margin-bottom: 28px;
+    margin-top: 20px;
 
     &__header {
         margin-bottom: 18px;
@@ -96,17 +97,17 @@
         }
     }
 
-    #rutaPopular {
-        font-size: 20px;
-        text-align: justify;
-    }
-
     &.partner {
         background: #EFF6FF;
 
         strong {
             color: #2563EB;
         }
+    }
+
+    #rutaPopular {
+        font-size: 20px;
+        text-align: justify;
     }
 }
 
@@ -173,25 +174,102 @@
     }
 }
 
-@media (max-width: 640px) {
-    .admin-item {
+.export-solicitudes {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.25rem;
+    border: 1px solid #e8eaf0;
+    border-radius: 16px;
+    background: #fafbfc;
+
+    &__field {
+        display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        gap: 0.45rem;
+        min-width: 220px;
+
+        label {
+            color: #374151;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+
+        input {
+            height: 46px;
+            min-width: 220px;
+            padding: 0 0.9rem;
+            border: 1px solid #dfe3e8;
+            border-radius: 10px;
+            outline: none;
+            background: #fff;
+            color: #111827;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
+
+            &:hover {
+                border-color: #c7ccd4;
+                background: #fcfcfd;
+            }
+
+            &:focus {
+                border-color: #111827;
+                box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+            }
+        }
     }
 
-    .metric-card {
-        min-height: auto;
+    &__button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        height: 46px;
+        padding: 0 1.25rem;
+        border: 0;
+        border-radius: 10px;
+        outline: none;
+        background: #111827;
+        color: #fff;
+        font-family: inherit;
+        font-size: 0.88rem;
+        font-weight: 600;
+        white-space: nowrap;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(17, 24, 39, 0.12);
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease,
+            background 0.2s ease,
+            opacity 0.2s ease;
 
-        strong {
-            font-size: 24px;
+        &:hover:not(:disabled) {
+            background: #1f2937;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(17, 24, 39, 0.16);
+        }
+
+        &:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 3px 8px rgba(17, 24, 39, 0.12);
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none;
         }
     }
 }
 
-
-// ============================================================
-// COMPRAS DE CONTACTOS
-// ============================================================
 .admin-purchases {
     margin-top: 2rem;
 }
@@ -247,9 +325,6 @@
     }
 }
 
-// ============================================================
-// EMPRESAS COMPRADORAS
-// ============================================================
 .buyers-list {
     display: flex;
     flex-direction: column;
@@ -356,9 +431,6 @@
     transform: translateX(3px);
 }
 
-// ============================================================
-// ÚLTIMAS COMPRAS
-// ============================================================
 .latest-purchases {
     display: flex;
     flex-direction: column;
@@ -410,9 +482,6 @@
     }
 }
 
-// ============================================================
-// BADGES
-// ============================================================
 .purchase-badge {
     display: inline-flex;
     align-items: center;
@@ -424,16 +493,13 @@
     color: $primary;
     font-size: 0.68rem;
     font-weight: 700;
+
+    &.exclusive {
+        background: rgba($tertiary, 0.16);
+        color: $tertiary-hover;
+    }
 }
 
-.purchase-badge.exclusive {
-    background: rgba($tertiary, 0.16);
-    color: $tertiary-hover;
-}
-
-// ============================================================
-// EMPTY / ERROR
-// ============================================================
 .purchases-empty {
     padding: 2rem 1.25rem;
     text-align: center;
@@ -456,9 +522,6 @@
     font-size: 0.85rem;
 }
 
-// ============================================================
-// LOADING
-// ============================================================
 .purchases-loading,
 .purchase-detail__loading {
     display: flex;
@@ -488,9 +551,6 @@
     }
 }
 
-// ============================================================
-// MODAL / DETALLE
-// ============================================================
 .purchase-detail-overlay {
     position: fixed;
     inset: 0;
@@ -661,9 +721,6 @@
     }
 }
 
-// ============================================================
-// TABLET
-// ============================================================
 @media (max-width: 900px) {
     .purchases-layout {
         grid-template-columns: 1fr;
@@ -674,10 +731,43 @@
     }
 }
 
-// ============================================================
-// MOBILE
-// ============================================================
+@media (max-width: 640px) {
+    .admin-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .metric-card {
+        min-height: auto;
+
+        strong {
+            font-size: 24px;
+        }
+    }
+}
+
 @media (max-width: 600px) {
+    .export-solicitudes {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+
+        &__field {
+            width: 100%;
+            min-width: 0;
+
+            input {
+                width: 100%;
+                min-width: 0;
+            }
+        }
+
+        &__button {
+            width: 100%;
+        }
+    }
+
     .admin-purchases {
         margin-top: 1.5rem;
     }

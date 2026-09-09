@@ -3,6 +3,7 @@
 namespace App\Modules\SuperAdmin\Controllers;
 
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Modules\Servicio\Models\Servicio;
 use App\Modules\SolicitudMudanza\Models\LeadCompra;
@@ -12,103 +13,39 @@ use App\Modules\SuperAdmin\Services\SuperAdminServiciosService;
 
 class SuperAdminServiciosController extends Controller
 {
-    public function __construct(
-        protected SuperAdminServiciosService $serviciosService
-    ) {}
+    public function __construct(protected SuperAdminServiciosService $serviciosService) {}
 
     public function dashboard()
     {
         $inicioMes = Carbon::now()->startOfMonth();
-
-        // SERVICIOS
         $serviciosMes = Servicio::where('created_at', '>=', $inicioMes);
         $serviciosActivos = Servicio::where('estado', 'activo')->count();
         $serviciosAsignados = Servicio::where('estado', 'asignado')->count();
         $serviciosFinalizados = Servicio::where('estado', 'finalizado')->count();
-
-        // RUTA MÁS REPETIDA
-        $rutaTop = Servicio::selectRaw('CONCAT(origen, " → ", destino) as ruta, COUNT(*) as total')
-            ->groupBy('ruta')
-            ->orderByDesc('total')
-            ->first();
-
-        // ORIGEN MÁS FRECUENTE
-        $origenTop = Servicio::selectRaw('origen, COUNT(*) as total')
-            ->groupBy('origen')
-            ->orderByDesc('total')
-            ->first();
-
-        // LOCALES VS FORÁNEOS
+        $rutaTop = Servicio::selectRaw('CONCAT(origen, " → ", destino) as ruta, COUNT(*) as total')->groupBy('ruta')->orderByDesc('total')->first();
+        $origenTop = Servicio::selectRaw('origen, COUNT(*) as total')->groupBy('origen')->orderByDesc('total')->first();
         $locales = Servicio::whereColumn('origen', 'destino')->count();
         $foraneos = Servicio::whereColumn('origen', '!=', 'destino')->count();
-
-        // TIPO CARGA
-        $tipoCargaTop = Servicio::selectRaw('tipo_carga, COUNT(*) as total')
-            ->groupBy('tipo_carga')
-            ->orderByDesc('total')
-            ->first();
-
-        // HORARIO MÁS ACTIVO
-        $horaTop = Servicio::selectRaw('HOUR(created_at) as hora, COUNT(*) as total')
-            ->groupBy('hora')
-            ->orderByDesc('total')
-            ->first();
-
-        // DÍA MÁS ACTIVO
-        $diaTop = Servicio::selectRaw('DAYNAME(created_at) as dia, COUNT(*) as total')
-            ->groupBy('dia')
-            ->orderByDesc('total')
-            ->first();
-
-        // CONTACTOS
+        $tipoCargaTop = Servicio::selectRaw('tipo_carga, COUNT(*) as total')->groupBy('tipo_carga')->orderByDesc('total')->first();
+        $horaTop = Servicio::selectRaw('HOUR(created_at) as hora, COUNT(*) as total')->groupBy('hora')->orderByDesc('total')->first();
+        $diaTop = Servicio::selectRaw('DAYNAME(created_at) as dia, COUNT(*) as total')->groupBy('dia')->orderByDesc('total')->first();
         $contactosMes = SolicitudMudanza::where('created_at', '>=', $inicioMes);
         $solicitudesReportadas = SolicitudMudanza::where('reportada', true)->count();
         $solicitudesExpiradas = SolicitudMudanza::where('estado', 'expirado')->count();
         $comprasMes = LeadCompra::where('created_at', '>=', $inicioMes);
-
-        // CRÉDITOS CONSUMIDOS
         $creditosConsumidosMes = LeadCompra::where('created_at', '>=', $inicioMes)->sum('tokens_pagados');
-
-        // GANANCIA GENERADA
         $gananciaMes = LeadCompra::where('created_at', '>=', $inicioMes)->sum('ganancia');
-
-        // OPERACIONES FINALIZADAS
         $operacionesFinalizadas = LeadCompra::whereNotNull('finalizado_at')->count();
-
-        // LEADS EXCLUSIVOS MES
-        $leadsExclusivosMes = LeadCompra::where('exclusivo', true)
-            ->where('created_at', '>=', $inicioMes)
-            ->count();
-
-        // LEADS EXCLUSIVOS
+        $leadsExclusivosMes = LeadCompra::where('exclusivo', true)->where('created_at', '>=', $inicioMes)->count();
         $leadsExclusivos = LeadCompra::where('exclusivo', true)->count();
         $leadsTotales = LeadCompra::count();
-
-        $porcentajeExclusivos =
-            $leadsTotales > 0
-            ? round(
-                ($leadsExclusivos / $leadsTotales) * 100
-            )
-            : 0;
-
-        // CONTACTOS LOCALES/FORÁNEOS
+        $porcentajeExclusivos = $leadsTotales > 0 ? round(($leadsExclusivos / $leadsTotales) * 100) : 0;
         $contactosLocales = SolicitudMudanza::whereColumn('origen', 'destino')->count();
         $contactosForaneos = SolicitudMudanza::whereColumn('origen', '!=', 'destino')->count();
-
-        // TIPO MUDANZA
-        $tipoMudanzaTop = SolicitudMudanza::selectRaw('tipo_mudanza, COUNT(*) as total')
-            ->groupBy('tipo_mudanza')
-            ->orderByDesc('total')
-            ->first();
-
-        // OPERACIÓN
+        $tipoMudanzaTop = SolicitudMudanza::selectRaw('tipo_mudanza, COUNT(*) as total')->groupBy('tipo_mudanza')->orderByDesc('total')->first();
         $creditosMes = LeadCompra::where('created_at', '>=', $inicioMes)->sum('tokens_pagados');
         $partnersActivos = PartnerReferral::where('activo',  true)->count();
-
-        // MATCHINGS
-        $matchingsMes = Servicio::where('estado', 'asignado')
-            ->where('updated_at', '>=', $inicioMes)
-            ->count();
+        $matchingsMes = Servicio::where('estado', 'asignado')->where('updated_at', '>=', $inicioMes)->count();
 
         return response()->json([
             'metrics' => [
@@ -154,14 +91,8 @@ class SuperAdminServiciosController extends Controller
                 ]
             ],
 
-            'ultimos_servicios' => Servicio::with('empresa')
-                ->latest()
-                ->take(20)
-                ->get(),
-
-            'ultimos_contactos' => SolicitudMudanza::latest()
-                ->take(25)
-                ->get(),
+            'ultimos_servicios' => Servicio::with('empresa')->latest()->take(20)->get(),
+            'ultimos_contactos' => SolicitudMudanza::latest()->take(25)->get(),
         ]);
     }
 
@@ -177,8 +108,15 @@ class SuperAdminServiciosController extends Controller
 
     public function comprasPorEmpresa($empresaId)
     {
-        return response()->json(
-            $this->serviciosService->comprasPorEmpresaDelMes((int) $empresaId)
-        );
+        return response()->json($this->serviciosService->comprasPorEmpresaDelMes((int) $empresaId));
+    }
+
+    public function exportarSolicitudesMudanza(Request $request)
+    {
+        $request->validate([
+            'mes' => ['required', 'date_format:Y-m',],
+        ]);
+
+        return $this->serviciosService ->exportarSolicitudesMudanzaPorMes($request->mes);
     }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { exportarSolicitudesMudanza } from "@/services/superAdmin";
 import SuperAdminLayout from "@/components/layout/SuperAdminLayout";
 import LeadPurchasesSection from "@/components/superadmin/LeadPurchasesSection";
 import "@/styles/pages/superadmin/_superAdminServicios.scss";
@@ -8,15 +9,20 @@ import "@/styles/pages/superadmin/_superAdminServicios.scss";
 export default function SuperAdminServiciosPage() {
     const [data, setData] = useState(null);
 
+    const [mesExportacion, setMesExportacion] = useState(() => {
+        const ahora = new Date();
+        return `${ahora.getFullYear()}-${String( ahora.getMonth() + 1 ).padStart(2, "0")}`;
+    });
+
+    const [exportando, setExportando] = useState(false);
+
     useEffect(() => {
         loadData();
 
     }, []);
 
     const loadData = async () => {
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/superadmin/servicios-dashboard`
-        );
+        const res = await fetch( `${process.env.NEXT_PUBLIC_API_URL}/superadmin/servicios-dashboard` );
 
         if (!res.ok) {
             const text = await res.text();
@@ -28,16 +34,68 @@ export default function SuperAdminServiciosPage() {
         setData(json);
     };
 
+    const handleExportarSolicitudes = async () => {
+        try {
+            setExportando(true);
+            const blob = await exportarSolicitudesMudanza(mesExportacion);
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `solicitudes-mudanza-${mesExportacion}.xlsx`;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error(error);
+            alert("No fue posible exportar las solicitudes de mudanza.");
+        } finally {
+            setExportando(false);
+        }
+    };
+
     if (!data) return null;
 
     return (
         <SuperAdminLayout title="Servicios y contactos" subtitle="Resumen operativo de la plataforma" >
+            {/* NEGOCIO */}
+            <section className="admin-block">
+                <div className="admin-block__header">
+                    <h2> Operación y negocio </h2>
+                </div>
+
+                <div className="metrics-grid">
+                    <article className="metric-card dark">
+                        <span> Créditos consumidos este mes </span>
+
+                        <strong>
+                            { data.metrics.negocio.creditos_consumidos_mes }
+                        </strong>
+                    </article>
+
+                    <article className="metric-card warning">
+                        <span> Leads exclusivos este mes </span>
+
+                        <strong>
+                            { data.metrics.negocio.leads_exclusivos_mes }
+                        </strong>
+                    </article>
+
+                    <article className="metric-card partner">
+                        <span> Partners activos </span>
+
+                        <strong>
+                            {data.metrics.operacion.partners_activos}
+                        </strong>
+                    </article>
+                </div>
+            </section>
+
             {/* SERVICIOS */}
             <section className="admin-block">
                 <div className="admin-block__header">
                     <div>
                         <span> Operación logística </span>
-
                         <h2> Servicios </h2>
                     </div>
                 </div>
@@ -125,6 +183,33 @@ export default function SuperAdminServiciosPage() {
                 </div>
             </section>
 
+            {/* ÚLTIMOS SERVICIOS */}
+            <section className="admin-list">
+                <h2> Últimos servicios publicados </h2>
+
+                <div className="admin-list__items">
+                    {
+                        data.ultimos_servicios.map((servicio) => (
+                            <article className="admin-item" key={servicio.id}  >
+                                <div>
+                                    <h3>
+                                        {servicio.origen} {" → "} {servicio.destino}
+                                    </h3>
+
+                                    <p>
+                                        {servicio.empresa?.empresa}
+                                    </p>
+                                </div>
+
+                                <span className={servicio.estado}>
+                                    {servicio.estado}
+                                </span>
+                            </article>
+                        ))
+                    }
+                </div>
+            </section>
+
             {/* CONTACTOS */}
             <section className="admin-block">
                 <div className="admin-block__header">
@@ -171,9 +256,7 @@ export default function SuperAdminServiciosPage() {
                         <span> Tipo de mudanza top </span>
 
                         <strong>
-                            {
-                                data.metrics.contactos.tipo_mudanza_top || "-"
-                            }
+                            { data.metrics.contactos.tipo_mudanza_top || "-" }
                         </strong>
                     </article>
 
@@ -195,67 +278,27 @@ export default function SuperAdminServiciosPage() {
                 </div>
             </section>
 
-            {/* NEGOCIO */}
+            {/* EXPORTACIÓN */}
             <section className="admin-block">
                 <div className="admin-block__header">
-                    <h2> Operación y negocio </h2>
+                    <div>
+                        <span>Reportes</span>
+                        <h2>Exportar solicitudes de mudanza</h2>
+                    </div>
                 </div>
 
-                <div className="metrics-grid">
-                    <article className="metric-card dark">
-                        <span> Créditos consumidos este mes </span>
+                <div className="export-solicitudes">
+                    <div className="export-solicitudes__field">
+                        <label htmlFor="mes-exportacion">
+                            Mes de las solicitudes
+                        </label>
 
-                        <strong>
-                            {
-                                data.metrics.negocio.creditos_consumidos_mes
-                            }
-                        </strong>
-                    </article>
+                        <input id="mes-exportacion" type="month" value={mesExportacion} onChange={(e) => setMesExportacion(e.target.value)} />
+                    </div>
 
-                    <article className="metric-card warning">
-                        <span> Leads exclusivos este mes </span>
-
-                        <strong>
-                            {
-                                data.metrics.negocio.leads_exclusivos_mes
-                            }
-                        </strong>
-                    </article>
-
-                    <article className="metric-card partner">
-                        <span> Partners activos </span>
-
-                        <strong>
-                            {data.metrics.operacion.partners_activos}
-                        </strong>
-                    </article>
-                </div>
-            </section>
-
-            {/* ÚLTIMOS SERVICIOS */}
-            <section className="admin-list">
-                <h2> Últimos servicios publicados </h2>
-
-                <div className="admin-list__items">
-                    {
-                        data.ultimos_servicios.map((servicio) => (
-                            <article className="admin-item" key={servicio.id}  >
-                                <div>
-                                    <h3>
-                                        {servicio.origen} {" → "} {servicio.destino}
-                                    </h3>
-
-                                    <p>
-                                        {servicio.empresa?.empresa}
-                                    </p>
-                                </div>
-
-                                <span className={servicio.estado}>
-                                    {servicio.estado}
-                                </span>
-                            </article>
-                        ))
-                    }
+                    <button type="button" className="export-solicitudes__button" onClick={handleExportarSolicitudes} disabled={exportando || !mesExportacion} >
+                        {exportando ? "Generando Excel..." : "Exportar solicitudes"}
+                    </button>
                 </div>
             </section>
 
@@ -278,9 +321,7 @@ export default function SuperAdminServiciosPage() {
                                 </div>
 
                                 <span>
-                                    {
-                                        item.compras_count
-                                    } compras
+                                    { item.compras_count } compras
                                 </span>
                             </article>
                         ))
