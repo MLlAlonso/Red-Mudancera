@@ -581,12 +581,6 @@ export default function SeguroStepTres({
                     </span>
                 </div>
 
-                <div className="seguro-publico__actions seguro-publico__actions--step2">
-                    <button type="button" className="seguro-publico__button seguro-publico__button--secondary" onClick={onAnteriorSeleccion} >
-                        ← Anterior
-                    </button>
-                </div>
-
                 <p className="seguro-publico__privacy">
                     Tu información será utilizada únicamente para dar seguimiento a tu solicitud de seguro.
                 </p>

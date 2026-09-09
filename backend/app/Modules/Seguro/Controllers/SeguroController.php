@@ -14,6 +14,7 @@ use App\Modules\Seguro\Mail\EmpresaSeguroDatosCompletadosMail;
 use App\Modules\Seguro\Mail\SeguroExpedienteFinalizadoMail;
 use App\Modules\Seguro\Mail\SeguroExpedienteFinalizadoClienteMail;
 use App\Modules\Seguro\Mail\SolicitudAsistenciaSeguroMail;
+use App\Modules\Seguro\Mail\SolicitudAsistenciaSeguroClienteMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
@@ -259,7 +260,7 @@ class SeguroController extends Controller
             ];
 
             try {
-                Mail::to($destinatarios)->send(new SolicitudAsistenciaSeguroMail($expediente));
+                Mail::to($destinatarios) ->send(new SolicitudAsistenciaSeguroMail($expediente));
             } catch (\Throwable $e) {
                 Log::error(
                     'Error al enviar notificación de solicitud asistida.',
@@ -270,6 +271,22 @@ class SeguroController extends Controller
                         'error' => $e->getMessage(),
                     ]
                 );
+            }
+
+            if ($expediente->email) {
+                try {
+                    Mail::to($expediente->email) ->send(new SolicitudAsistenciaSeguroClienteMail($expediente));
+                } catch (\Throwable $e) {
+                    Log::error(
+                        'Error al enviar confirmación de solicitud asistida al cliente.',
+                        [
+                            'folio' => $expediente->folio,
+                            'cliente' => $expediente->nombre,
+                            'email' => $expediente->email,
+                            'error' => $e->getMessage(),
+                        ]
+                    );
+                }
             }
         }
 

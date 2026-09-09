@@ -16,7 +16,7 @@
                     <tr>
                         <td style="background:#09233E;padding:28px;text-align:center;">
                             <h2 style="margin:0;color:#ffffff;">
-                                📦 Seguro para tu Mudanza
+                                📄 Conoce tu expediente digital de seguro
                             </h2>
                         </td>
                     </tr>
@@ -37,13 +37,15 @@
                             </h3>
 
                             <p>
-                               Sabemos que todavía estás organizando tu mudanza y que el seguro normalmente se resuelve 
-                               más adelante, cuando ya tienes empresa y fecha confirmadas, por eso no te vamos a pedir ningún dato todavía.
+                                Sabemos que todavía estás organizando tu mudanza y que el seguro normalmente se resuelve
+                                más adelante, cuando ya tienes la empresa que hará tu mudanza, por eso no te vamos a
+                                pedir ningún dato todavía.
                             </p>
 
                             <p style="text-align: center;">
-                                Lo que sí hicimos fue dejar algo preparado para ti: </br> 
-                                <strong style="color:#15996f;margin-top:0; font-size: 18px;">Ya tienes un expediente digital creado.</strong> 
+                                Lo que sí hicimos fue dejar algo preparado para ti: </br>
+                                <strong style="color:#15996f;margin-top:0; font-size: 18px;">Ya tienes un expediente
+                                    digital creado.</strong>
                             </p>
                         </td>
                     </tr>
@@ -52,7 +54,7 @@
                     <tr>
                         <td align="center" style="padding:10px 30px 5px;">
                             <a href="{{ config('app.frontend_url') }}/seguros/{{ $expediente->folio }}"
-                                style=" display:inline-block; background:#09233E; color:#ffffff; text-decoration:none; padding:16px 42px; border-radius:8px; font-weight:bold; font-size:17px;">
+                                style=" display:inline-block; background:#09233E; color:#ffffff; text-decoration:none; padding:16px 42px; border-radius:8px; font-weight:bold; font-size:20px;">
                                 Ver mi expediente
                             </a>
                         </td>
@@ -63,32 +65,34 @@
                         <td style="padding:25px 30px;">
                             <div
                                 style=" background:#F8FAFC; border:2px solid #DCE8F4; border-radius:14px; padding:20px; text-align:center;">
-                                <p style="margin:0;color:#6B7280;">
-                                    Folio de seguimiento
-                                </p>
-
-                                <h2 style=" margin:10px 0; color:#09233E; letter-spacing:2px;">
-                                    {{ $expediente->folio }}
+                                <h2 style=" margin:10px 0; color:#2F5C8C; letter-spacing:2px; font-size: 14px">
+                                    Puedes empezar a dejar algunos datos desde ahora
                                 </h2>
+
+                                <p style="margin:0;color:#6B7280; font-size: 14px;">
+                                    Se guardan automaticamente, así cuando confirmes tu mudanza solo te faltará lo
+                                    último.
+                                </p>
                             </div>
                         </td>
                     </tr>
 
                     <tr>
-                        <td style="padding:0 32px;color:#4A5E71;line-height:1.7; text-align: justify;">
+                        <td style="padding:0 32px;color:#4A5E71;line-height:1.7; text-align: justify; font-size: 14px;">
                             <p>
-                                Cuando llegue el momento, desde ahí podrás completar la información necesaria, 
-                                dar seguimiento al proceso y gestionar tu seguro sin llamadas, sin papeleo y sin perseguir a nadie por WhatsApp. 
+                                Cuando llegue el momento, desde ahí podrás completar la información necesaria,
+                                dar seguimiento al proceso y gestionar tu seguro sin llamadas, sin papeleo y sin
+                                perseguir a nadie por WhatsApp.
                                 Todo desde un solo lugar.
                             </p>
                         </td>
                     </tr>
 
-                    <!-- Seguridad -->
                     <tr>
-                        <td style="padding:0 20px;">
-                            <p style=" font-size:14px; color:#7A7A7A; text-align:center; line-height:1.7; text-align: center;">
-                                Nada de esto te compromete a contratar. Simplemente queremos que sepas que, si decides asegurar tu mudanza, 
+                        <td style="padding:0 32px;color:#4A5E71;line-height:1.7; text-align: justify; font-size: 14px;">
+                            <p>
+                                Nada de esto te compromete a contratar. Simplemente queremos que sepas que, si decides
+                                asegurar tu mudanza,
                                 ya tienes listo el lugar desde donde podrás hacerlo de forma fácil y ordenada.
                             </p>
                         </td>
@@ -98,7 +102,7 @@
                     <tr>
                         <td style=" padding:30px; text-align:center; color:#4A5E71;">
                             <p style="margin-bottom:8px;">
-                               Nos vemos por ahí,
+                                Nos vemos por ahí,
                             </p>
 
                             <strong style="color:#1F2937;">
@@ -109,8 +113,8 @@
 
                     <tr>
                         <td style=" padding:18px; text-align:center; border-top:1px solid #ECECEC;">
-                            <p style=" margin:0; font-size:12px; color:#999;">
-                                soporte@mudanzafacil.com.mx
+                            <p style=" margin:0; font-size:14px; color:#999;">
+                                Folio de seguimiento: {{ $expediente->nombre }}
                             </p>
                         </td>
                     </tr>

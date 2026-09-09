@@ -32,7 +32,6 @@ export default function SuperAdminServiciosPage() {
 
     return (
         <SuperAdminLayout title="Servicios y contactos" subtitle="Resumen operativo de la plataforma" >
-
             {/* SERVICIOS */}
             <section className="admin-block">
                 <div className="admin-block__header">
@@ -291,7 +290,6 @@ export default function SuperAdminServiciosPage() {
 
             {/* COMPRAS DE CONTACTOS */}
             <LeadPurchasesSection />
-
         </SuperAdminLayout>
     );
 }

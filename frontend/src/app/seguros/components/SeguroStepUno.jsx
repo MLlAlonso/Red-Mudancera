@@ -234,9 +234,14 @@ export default function SeguroStepUno({
                                     disabled={saving}
                                 />
 
-                                <p className="field-help">
-                                    Captura el número de serie que aparece en la documentación del vehículo.
-                                </p>
+                                <div className="seguro-publico__field-warning">
+                                    <span className="seguro-publico__field-warning-icon">!</span>
+
+                                    <span>
+                                        Captura el número de serie que aparece en la documentación del vehículo.
+                                        Puedes agregar el el número de serie más adelante cuando tengas la documentación de tu vehículo.
+                                    </span>
+                                </div>
                             </div>
 
                             <div className="seguro-publico__field">
@@ -245,7 +250,10 @@ export default function SeguroStepUno({
                                 </label>
 
                                 <div className="seguro-publico__upload">
-                                    <label htmlFor="automovil_foto_circulacion" className="seguro-publico__upload-label" >
+                                    <label
+                                        htmlFor="automovil_foto_circulacion"
+                                        className="seguro-publico__upload-label"
+                                    >
                                         <div className="seguro-publico__upload-icon">
                                             <img src="/icons/docs.png" alt="" aria-hidden="true" />
                                         </div>
@@ -255,7 +263,7 @@ export default function SeguroStepUno({
                                                 {automovilFotoCirculacionUrl ? "Fotografía cargada" : "Tomar o seleccionar fotografía"}
                                             </strong>
 
-                                            <span> JPG, PNG o WEBP </span>
+                                            <span>JPG, PNG o WEBP</span>
                                         </div>
 
                                         <div className="seguro-publico__upload-action">
@@ -272,10 +280,15 @@ export default function SeguroStepUno({
                                     />
                                 </div>
 
-                                <p className="field-help">
-                                    Toma una fotografía clara de la tarjeta de circulación.
-                                    Desde tu celular podrás utilizar directamente la cámara.
-                                </p>
+                                <div className="seguro-publico__field-warning">
+                                    <span className="seguro-publico__field-warning-icon">!</span>
+
+                                    <span>
+                                        Toma una fotografía clara de la tarjeta de circulación.
+                                        Desde tu celular podrás utilizar directamente la cámara.
+                                        Puedes agregar el contenido más adelante cuando tengas la documentación de tu vehículo.
+                                    </span>
+                                </div>
 
                                 {automovilFotoCirculacionUrl && (
                                     <div className="seguro-publico__file-preview">
@@ -283,7 +296,9 @@ export default function SeguroStepUno({
 
                                         <div>
                                             <strong>Fotografía cargada correctamente</strong>
-                                            <span> Puedes cambiarla si necesitas utilizar otra. </span>
+                                            <span>
+                                                Puedes cambiarla si necesitas utilizar otra.
+                                            </span>
                                         </div>
                                     </div>
                                 )}
