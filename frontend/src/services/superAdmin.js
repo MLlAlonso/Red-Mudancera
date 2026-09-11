@@ -10,12 +10,12 @@ async function handleResponse(res) {
 }
 
 export async function getDashboardMetrics() {
-    const res = await fetch( `${API}/superadmin/dashboard` );
+    const res = await fetch(`${API}/superadmin/dashboard`);
     return handleResponse(res);
 }
 
 export async function getTrialRequests() {
-    const res = await fetch( `${API}/superadmin/trial-requests` );
+    const res = await fetch(`${API}/superadmin/trial-requests`);
     return handleResponse(res);
 }
 
@@ -40,7 +40,7 @@ export async function rejectTrial(id) {
 }
 
 export async function getEmpresas(search = "") {
-    const res = await fetch( `${API}/superadmin/empresas?search=${search}` );
+    const res = await fetch(`${API}/superadmin/empresas?search=${search}`);
     return handleResponse(res);
 }
 
@@ -120,7 +120,7 @@ export const deleteEmpresa = async (empresaId) => {
 };
 
 export async function getPartners() {
-    const res = await fetch( `${process.env.NEXT_PUBLIC_API_URL}/superadmin/partners` );
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/superadmin/partners`);
     return handleResponse(res);
 }
 
@@ -165,8 +165,9 @@ export async function getLeadPurchasesByEmpresa(empresaId) {
     return handleResponse(res);
 }
 
-export async function exportarSolicitudesMudanza(mes) {
-    const res = await fetch(  `${API}/superadmin/solicitudes-mudanza/exportar?mes=${mes}` );
+export async function exportarSolicitudesMudanza(fechaInicio, fechaFin) {
+    const params = new URLSearchParams({ fecha_inicio: fechaInicio, fecha_fin: fechaFin, });
+    const res = await fetch(`${API}/superadmin/solicitudes-mudanza/exportar?${params.toString()}`);
 
     if (!res.ok) {
         const text = await res.text();

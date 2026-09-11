@@ -5,6 +5,9 @@ namespace App\Modules\SuperAdmin\Services;
 use Carbon\Carbon;
 use App\Modules\Empresa\Models\Empresa;
 use App\Modules\SolicitudMudanza\Models\LeadCompra;
+use App\Modules\SolicitudMudanza\Models\SolicitudMudanza;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class SuperAdminServiciosService
 {
@@ -202,12 +205,12 @@ class SuperAdminServiciosService
         ];
     }
 
-    public function exportarSolicitudesMudanzaPorMes(string $mes)
+    public function exportarSolicitudesMudanzaPorRango(string $fechaInicio, string $fechaFin)
     {
-        $fechaInicio = Carbon::createFromFormat('Y-m', $mes)->startOfMonth();
-        $fechaFin = $fechaInicio->copy()->endOfMonth();
-        $solicitudes = \App\Modules\SolicitudMudanza\Models\SolicitudMudanza::query()->whereBetween('created_at', [$fechaInicio, $fechaFin])->orderBy('created_at')->get();
-        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $fechaInicio = Carbon::createFromFormat('Y-m-d', $fechaInicio)->startOfDay();
+        $fechaFin = Carbon::createFromFormat('Y-m-d',  $fechaFin)->endOfDay();
+        $solicitudes = SolicitudMudanza::query()->whereBetween('created_at', [$fechaInicio, $fechaFin])->orderBy('created_at')->get();
+        $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Solicitudes');
 
@@ -224,7 +227,6 @@ class SuperAdminServiciosService
             'Pisos destino',
             'Elevador destino',
             'Acarreo destino',
-            'Inventario',
             'Fecha recolección',
             'Fecha límite visible',
             'Tipo de servicio',
@@ -233,15 +235,10 @@ class SuperAdminServiciosService
             'Email',
             'Teléfono',
             'Estado',
-            'Empresa referente ID',
             'Partner referral ID',
             'Reportada',
-            'Es privado',
-            'Empresa privada ID',
             'Compras',
-            'Puesto en venta',
             'Creada',
-            'Actualizada',
         ];
 
         $sheet->fromArray($headers, null, 'A1');
@@ -261,7 +258,6 @@ class SuperAdminServiciosService
                 $solicitud->destino_pisos,
                 $solicitud->destino_elevador,
                 $solicitud->destino_acarreo,
-                $solicitud->inventario,
                 $solicitud->fecha_recoleccion,
                 $solicitud->fecha_limite_visible,
                 $solicitud->tipo_servicio,
@@ -270,35 +266,37 @@ class SuperAdminServiciosService
                 $solicitud->email,
                 $solicitud->telefono,
                 $solicitud->estado,
-                $solicitud->referido_por_empresa_id,
                 $solicitud->partner_referral_id,
                 $solicitud->reportada ? 'Sí' : 'No',
-                $solicitud->es_privado ? 'Sí' : 'No',
-                $solicitud->empresa_privada_id,
                 $solicitud->compras_count,
-                $solicitud->puesto_venta_at,
                 $solicitud->created_at,
-                $solicitud->updated_at,
             ], null, "A{$fila}");
 
             $fila++;
         }
 
-        foreach (range('A', $sheet->getHighestColumn()) as $columna) {
-            $sheet->getColumnDimension($columna)->setAutoSize(true);
+        for ($column = 1; $column <= 24; $column++) {
+            $sheet->getColumnDimensionByColumn($column)->setAutoSize(true);
         }
 
         $sheet->freezePane('A2');
-        $sheet->getStyle('A1:AD1')->getFont()->setBold(true);
-        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-        $nombreArchivo = "solicitudes-mudanza-{$mes}.xlsx";
+        $sheet->getStyle('A1:X1')->getFont()->setBold(true);
+        $writer = new Xlsx($spreadsheet);
+
+        $nombreArchivo = sprintf(
+            'solicitudes-mudanza-%s-a-%s.xlsx',
+            $fechaInicio->format('Y-m-d'),
+            $fechaFin->format('Y-m-d')
+        );
 
         return response()->streamDownload(
             function () use ($writer) {
                 $writer->save('php://output');
             },
             $nombreArchivo,
-            ['Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',]
+            [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            ]
         );
     }
 }

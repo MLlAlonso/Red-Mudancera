@@ -114,9 +114,10 @@ class SuperAdminServiciosController extends Controller
     public function exportarSolicitudesMudanza(Request $request)
     {
         $request->validate([
-            'mes' => ['required', 'date_format:Y-m',],
+            'fecha_inicio' => ['required', 'date_format:Y-m-d',],
+            'fecha_fin' => ['required', 'date_format:Y-m-d', 'after_or_equal:fecha_inicio',],
         ]);
 
-        return $this->serviciosService ->exportarSolicitudesMudanzaPorMes($request->mes);
+        return $this->serviciosService->exportarSolicitudesMudanzaPorRango($request->fecha_inicio, $request->fecha_fin);
     }
 }

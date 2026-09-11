@@ -491,16 +491,6 @@ export default function SeguroPublicoPage() {
                 setError("Ingresa el modelo del automóvil.");
                 return;
             }
-
-            if (!automovilNumeroSerie.trim()) {
-                setError("Ingresa el número de serie del automóvil.");
-                return;
-            }
-
-            if (!automovilFotoCirculacionUrl && !automovilFotoFile) {
-                setError("Debes cargar una foto de la tarjeta de circulación.");
-                return;
-            }
         }
 
         try {

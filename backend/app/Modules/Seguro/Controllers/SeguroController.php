@@ -260,7 +260,7 @@ class SeguroController extends Controller
             ];
 
             try {
-                Mail::to($destinatarios) ->send(new SolicitudAsistenciaSeguroMail($expediente));
+                Mail::to($destinatarios)->send(new SolicitudAsistenciaSeguroMail($expediente));
             } catch (\Throwable $e) {
                 Log::error(
                     'Error al enviar notificación de solicitud asistida.',
@@ -275,7 +275,7 @@ class SeguroController extends Controller
 
             if ($expediente->email) {
                 try {
-                    Mail::to($expediente->email) ->send(new SolicitudAsistenciaSeguroClienteMail($expediente));
+                    Mail::to($expediente->email)->send(new SolicitudAsistenciaSeguroClienteMail($expediente));
                 } catch (\Throwable $e) {
                     Log::error(
                         'Error al enviar confirmación de solicitud asistida al cliente.',
@@ -538,6 +538,25 @@ class SeguroController extends Controller
 
         if ($expediente->progreso < 100) {
             return response()->json(['message' => 'Debes completar toda la información del expediente antes de finalizarlo.'], 422);
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Validar documentación del automóvil
+        |--------------------------------------------------------------------------
+        */
+        if (in_array($expediente->tipo_seguro, ['automovil', 'menaje_auto'], true)) {
+            if (empty($expediente->automovil_numero_serie)) {
+                return response()->json([
+                    'message' => 'Debes ingresar el número de serie del automóvil antes de finalizar el expediente.',
+                ], 422);
+            }
+
+            if (empty($expediente->automovil_foto_circulacion_url)) {
+                return response()->json([
+                    'message' => 'Debes cargar la foto de la tarjeta de circulación antes de finalizar el expediente.',
+                ], 422);
+            }
         }
 
         if ($expediente->modalidad_datos === 'asistida') {

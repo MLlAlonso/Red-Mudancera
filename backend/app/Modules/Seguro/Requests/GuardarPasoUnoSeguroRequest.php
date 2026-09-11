@@ -32,16 +32,14 @@ class GuardarPasoUnoSeguroRequest extends FormRequest
                 'string',
                 'max:100',
             ],
-
+            
             'automovil_numero_serie' => [
-                Rule::requiredIf(fn() => in_array($this->input('tipo_seguro'), ['automovil', 'menaje_auto'], true)),
                 'nullable',
                 'string',
                 'max:150',
             ],
 
             'automovil_foto_circulacion_url' => [
-                Rule::requiredIf(fn() => in_array($this->input('tipo_seguro'), ['automovil', 'menaje_auto'], true)),
                 'nullable',
                 'url',
                 'max:2048',

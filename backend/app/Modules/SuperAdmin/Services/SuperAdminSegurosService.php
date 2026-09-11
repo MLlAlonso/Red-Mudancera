@@ -35,18 +35,18 @@ class SuperAdminSegurosService
 
         if ($modalidad === 'estandar') {
             $query->where(function ($q) {
-                $q->where('modalidad_datos', 'autogestion') ->orWhereNull('modalidad_datos');
+                $q->where('modalidad_datos', 'autogestion')->orWhereNull('modalidad_datos');
             });
         }
 
         $baseMetrics = clone $query;
 
         $metrics = [
-            'nuevos' => (clone $baseMetrics) ->where('estado', 'nuevo') ->count(),
-            'esperando_cliente' => (clone $baseMetrics) ->where('estado', 'esperando_cliente') ->count(),
-            'capturando' => (clone $baseMetrics) ->where('estado', 'capturando') ->count(),
-            'revision' => (clone $baseMetrics) ->where('estado', 'revision') ->count(),
-            'completados' => (clone $baseMetrics) ->where('estado', 'completado') ->count(),
+            'nuevos' => (clone $baseMetrics)->where('estado', 'nuevo')->count(),
+            'esperando_cliente' => (clone $baseMetrics)->where('estado', 'esperando_cliente')->count(),
+            'capturando' => (clone $baseMetrics)->where('estado', 'capturando')->count(),
+            'revision' => (clone $baseMetrics)->where('estado', 'revision')->count(),
+            'completados' => (clone $baseMetrics)->where('estado', 'completado')->count(),
         ];
 
         $ordenEstados = [
@@ -58,9 +58,16 @@ class SuperAdminSegurosService
             'cancelado' => 6,
         ];
 
-        $expedientes = $query
-            ->get()
-            ->sortBy(function ($expediente) use ($ordenEstados) { return $ordenEstados[$expediente->estado] ?? 99; })
+        $expedientes = $query->get()->sort(function ($a, $b) use ($ordenEstados) {
+            $ordenA = $ordenEstados[$a->estado] ?? 99;
+            $ordenB = $ordenEstados[$b->estado] ?? 99;
+
+            if ($ordenA !== $ordenB) {
+                return $ordenA <=> $ordenB;
+            }
+
+            return $b->created_at <=> $a->created_at;
+        })
             ->values()
             ->map(function ($expediente) {
                 return [
