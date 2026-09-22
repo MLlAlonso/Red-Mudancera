@@ -2,21 +2,22 @@
 
 namespace App\Modules\Seguro\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use App\Modules\Seguro\Services\SeguroService;
 use App\Modules\Seguro\Services\ExpedienteSeguroService;
 use App\Modules\Seguro\Requests\GuardarPasoUnoSeguroRequest;
 use App\Modules\Seguro\Requests\GuardarPasoDosSeguroRequest;
 use App\Modules\Seguro\Requests\GuardarPasoTresSeguroRequest;
-use Illuminate\Http\JsonResponse;
 use App\Modules\Seguro\Requests\GuardarDatosEmpresaSeguroRequest;
+use App\Modules\Seguro\Mail\SolicitudSeguroRecibidaMail;
 use App\Modules\Seguro\Mail\EmpresaSeguroDatosCompletadosMail;
 use App\Modules\Seguro\Mail\SeguroExpedienteFinalizadoMail;
 use App\Modules\Seguro\Mail\SeguroExpedienteFinalizadoClienteMail;
 use App\Modules\Seguro\Mail\SolicitudAsistenciaSeguroMail;
 use App\Modules\Seguro\Mail\SolicitudAsistenciaSeguroClienteMail;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log;
 
 class SeguroController extends Controller
 {

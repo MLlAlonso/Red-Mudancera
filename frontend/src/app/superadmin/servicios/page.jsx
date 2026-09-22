@@ -9,14 +9,14 @@ import "@/styles/pages/superadmin/_superAdminServicios.scss";
 export default function SuperAdminServiciosPage() {
     const [data, setData] = useState(null);
 
-    const [mesInicioExportacion, setMesInicioExportacion] = useState(() => {
+    const [fechaInicioExportacion, setFechaInicioExportacion] = useState(() => {
         const ahora = new Date();
-        return `${ahora.getFullYear()}-${String(ahora.getMonth() + 1).padStart(2, "0")}`;
+        return `${ahora.getFullYear()}-${String(ahora.getMonth() + 1).padStart(2, "0")}-${String(ahora.getDate()).padStart(2, "0")}`;
     });
 
-    const [mesFinExportacion, setMesFinExportacion] = useState(() => {
+    const [fechaFinExportacion, setFechaFinExportacion] = useState(() => {
         const ahora = new Date();
-        return `${ahora.getFullYear()}-${String(ahora.getMonth() + 1).padStart(2, "0")}`;
+        return `${ahora.getFullYear()}-${String(ahora.getMonth() + 1).padStart(2, "0")}-${String(ahora.getDate()).padStart(2, "0")}`;
     });
 
     const [exportando, setExportando] = useState(false);
@@ -42,17 +42,11 @@ export default function SuperAdminServiciosPage() {
     const handleExportarSolicitudes = async () => {
         try {
             setExportando(true);
-            const [anioInicio, mesInicio] = mesInicioExportacion.split("-");
-            const [anioFin, mesFin] = mesFinExportacion.split("-");
-            const fechaInicio = `${anioInicio}-${mesInicio}-01`;
-            const ultimoDia = new Date(Number(anioFin), Number(mesFin), 0).getDate();
-            const fechaFin = `${anioFin}-${mesFin}-${String(ultimoDia).padStart(2, "0")}`;
-            const blob = await exportarSolicitudesMudanza(fechaInicio, fechaFin);
+            const blob = await exportarSolicitudesMudanza(fechaInicioExportacion, fechaFinExportacion);
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement("a");
-
             link.href = url;
-            link.download = `solicitudes-mudanza-${fechaInicio}-a-${fechaFin}.xlsx`;
+            link.download = `solicitudes-mudanza-${fechaInicioExportacion}-a-${fechaFinExportacion}.xlsx`;
             document.body.appendChild(link);
             link.click();
             link.remove();
@@ -299,25 +293,38 @@ export default function SuperAdminServiciosPage() {
                 </div>
 
                 <div className="export-solicitudes">
-                    <div className="export-solicitudes__field">
-                        <label htmlFor="mes-inicio-exportacion">
-                            Desde
-                        </label>
+                    <div className="export-solicitudes__range">
+                        <div className="export-solicitudes__date">
+                            <label htmlFor="fecha-inicio-exportacion">
+                                Desde
+                            </label>
 
-                        <input id="mes-inicio-exportacion" type="month" value={mesInicioExportacion} onChange={(e) => setMesInicioExportacion(e.target.value)} />
+                            <input id="fecha-inicio-exportacion" type="date" value={fechaInicioExportacion} max={fechaFinExportacion} onChange={(e) => setFechaInicioExportacion(e.target.value)} />
+                        </div>
+
+                        <span className="export-solicitudes__separator">
+                            →
+                        </span>
+
+                        <div className="export-solicitudes__date">
+                            <label htmlFor="fecha-fin-exportacion">
+                                Hasta
+                            </label>
+
+                            <input id="fecha-fin-exportacion" type="date" value={fechaFinExportacion} min={fechaInicioExportacion} onChange={(e) => setFechaFinExportacion(e.target.value)} />
+                        </div>
+
                     </div>
 
-                    <div className="export-solicitudes__field">
-                        <label htmlFor="mes-fin-exportacion">
-                            Hasta
-                        </label>
-
-                        <input id="mes-fin-exportacion" type="month" value={mesFinExportacion} min={mesInicioExportacion} onChange={(e) => setMesFinExportacion(e.target.value)} />
-                    </div>
-
-                    <button type="button" className="export-solicitudes__button" onClick={handleExportarSolicitudes} disabled={exportando || !mesInicioExportacion || !mesFinExportacion} >
+                    <button
+                        type="button"
+                        className="export-solicitudes__button"
+                        onClick={handleExportarSolicitudes}
+                        disabled={exportando || !fechaInicioExportacion || !fechaFinExportacion}
+                    >
                         {exportando ? "Generando Excel..." : "Exportar solicitudes"}
                     </button>
+
                 </div>
             </section>
 

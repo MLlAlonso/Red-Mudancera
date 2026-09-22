@@ -1,13 +1,4 @@
-export function openWhatsappMessage({
-  telefono,
-  tipo,
-  origen,
-  destino,
-  tipoCarga,
-  volumen,
-  tipoVehiculo,
-  servicioId,
-}) {
+export function openWhatsappMessage({ telefono, tipo, origen, destino, tipoCarga, volumen, tipoVehiculo, servicioId, }) {
   if (!telefono) {
     alert("Este servicio no tiene teléfono de contacto");
     return;
@@ -58,41 +49,100 @@ Quedo atento para coordinar`;
   window.open(url, "_blank");
 }
 
-export function openLeadWhatsappMessage({ telefono, empresaNombre, empresaId, nombreCliente, origen, destino, tipoVivienda, inventario, }) {
+export function openLeadWhatsappMessage({
+  telefono,
+  empresaNombre,
+  nombreCliente,
+  emailCliente,
+  origen,
+  destino,
+  tipoVivienda,
+  viviendaDestino,
+  origenPisos,
+  origenElevador,
+  origenAcarreo,
+  destinoPisos,
+  destinoElevador,
+  destinoAcarreo,
+  inventario,
+  fechaRecoleccion,
+  tipoServicio,
+  tipoMudanza,
+}) {
   if (!telefono) {
     alert("Este lead no tiene teléfono disponible");
     return;
   }
 
-  const perfilUrl = `https://app.mudanzafacil.com.mx/empresa/${empresaId}`;
+  const inventarioLimpio = inventario ? inventario
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/p>/gi, "\n")
+    .replace(/<\/li>/gi, "\n")
+    .replace(/<li[^>]*>/gi, "")
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .trim()
+    : "";
 
-  const inventarioLimpio = inventario
-    ? inventario
-      .replace(/<[^>]*>/g, "")
-      .replace(/&nbsp;/g, " ")
-      .replace(/&amp;/g, "&")
-      .replace(/&lt;/g, "<")
-      .replace(/&gt;/g, ">")
-      .trim()
-    : "No especificado";
+  const inventarioLista = inventarioLimpio ? inventarioLimpio
+    .split(/[,\r\n]+/)
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .map((item) => `- ${item}`)
+    .join("\n")
+    : "- No especificado";
 
-  const mensaje = `Hola ${nombreCliente}, buen día.
+  const mostrar = (valor) => {
+    if (valor === null || valor === undefined || String(valor).trim() === "") {
+      return "—";
+    }
 
-Soy representante de ${empresaNombre} y vi tu solicitud de mudanza publicada en Mudanza Fácil:
+    return valor;
+  };
 
-Origen: ${origen}
-Destino: ${destino}
-Tipo de vivienda: ${tipoVivienda || "No especificado"}
+  const mensaje = `Hola Soy representante de ${empresaNombre || "nuestra empresa"}.
 
-Inventario registrado:
-${inventarioLimpio}
+Vi tu solicitud de mudanza publicada en Mudanza Fácil y con gusto podemos ayudarte.
+Antes de prepararte una cotización, quisiera confirmar algunos detalles para asegurarme de que la información sea correcta.
 
-Con gusto podemos ayudarte con tu mudanza.
+¿Tienes unos minutos disponibles?
 
-Antes de enviarte una cotización, me gustaría confirmar algunos detalles para asegurarme de cotizar correctamente.
-¿Tienes unos minutos disponibles?`;
+Esta es la información que nos hiciste llegar:
+
+ORIGEN
+Ciudad: ${mostrar(origen)}
+Tipo de vivienda: ${mostrar(tipoVivienda)}
+Pisos: ${mostrar(origenPisos)}
+Elevador: ${mostrar(origenElevador)}
+Acarreo: ${mostrar(origenAcarreo)}
+
+DESTINO
+Ciudad: ${mostrar(destino)}
+Tipo de vivienda: ${mostrar(viviendaDestino)}
+Pisos: ${mostrar(destinoPisos)}
+Elevador: ${mostrar(destinoElevador)}
+Acarreo: ${mostrar(destinoAcarreo)}
+
+DATOS DE LA MUDANZA
+Tipo de servicio: ${mostrar(tipoServicio)}
+Fecha estimada: ${mostrar(fechaRecoleccion)}
+Modalidad: ${mostrar(tipoMudanza)}
+
+DATOS DE CONTACTO
+Nombre: ${mostrar(nombreCliente)}
+Teléfono: ${mostrar(telefono)}
+
+INVENTARIO
+${inventarioLista}`;
 
   const telefonoLimpio = telefono.replace(/\D/g, "");
-  const url = `https://wa.me/52${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
+
+  const url = `https://wa.me/52${telefonoLimpio}?text=${encodeURIComponent(
+    mensaje
+  )}`;
+
   window.open(url, "_blank");
 }

@@ -96,6 +96,16 @@ export default function Footer() {
 
               <span>|</span>
 
+              <a
+                href="https://wa.me/5214421896433?text=Hola%2C%20quiero%20obtener%20m%C3%A1s%20informaci%C3%B3n%20sobre%20MudanzaF%C3%A1cil."
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Contáctanos
+              </a>
+
+              <span>|</span>
+
               <a href="/ayuda" target="_blank">
                 Soporte
               </a>

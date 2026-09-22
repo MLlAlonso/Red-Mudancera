@@ -51,6 +51,20 @@ class TutorialSeeder extends Seeder
                 'mostrar_automaticamente' => false,
                 'dias_maximos' => 7,
             ],
+
+            [
+                'slug' => 'Optimiza tus creditos',
+                'titulo' => 'Optimiza tus creditos y obten mejores resultados',
+                'descripcion' => 'Conoce cómo funcionan los créditos y cómo puedes utilizarlos para acceder a contactos de clientes que están buscando una mudanza.',
+                'video_url' => 'https://res.cloudinary.com/dt3jhwxfw/video/upload/v1789622461/WhatsApp_Video_2026-09-09_at_6.28.13_PM_ocnavq.mp4',
+                'thumbnail_url' => '',
+                'duracion' => '',
+                'orden' => 4,
+                'activo' => true,
+                'mostrar' => true,
+                'mostrar_automaticamente' => false,
+                'dias_maximos' => 7,
+            ],
         ];
 
         foreach ($tutoriales as $tutorial) {

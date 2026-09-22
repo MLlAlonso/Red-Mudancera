@@ -7,6 +7,8 @@ import CreditPackageCard from "@/components/cards/CreditPackageCard";
 import CompraCreditosModal from "@/components/modals/CompraCreditosModal";
 import MessageModal from "@/components/modals/MessageModal";
 import PlanRequiredModal from "@/components/modals/PlanRequiredModal";
+import TutorialVideoModal from "@/components/modals/TutorialVideoModal";
+import { getTutoriales, marcarTutorialComoVisto } from "@/services/tutorialAuth";
 
 import "@/styles/pages/empresa/_empresaCreditos.scss";
 
@@ -20,6 +22,7 @@ export default function ComprarCreditos() {
     const [plan, setPlan] = useState(null);
     const [planModal, setPlanModal] = useState(false);
     const [verificado, setVerificado] = useState(false);
+    const [tutorial, setTutorial] = useState(null);
 
     const comprar = async (packagePlan) => {
         const token = document.cookie.match(/token_empresa=([^;]+)/)?.[1];
@@ -86,6 +89,33 @@ export default function ComprarCreditos() {
         fetchEmpresa();
     }, []);
 
+    async function obtenerTutorial() {
+        try {
+            const tutoriales = await getTutoriales();
+            const tutorialCreditos = tutoriales.find((item) => item.orden === 3);
+
+            if (tutorialCreditos && !tutorialCreditos.visto) {
+                setTutorial(tutorialCreditos);
+            }
+        } catch (error) {
+            console.error("Error obteniendo tutorial de créditos", error);
+        }
+    }
+
+    async function confirmarTutorial() {
+        try {
+            await marcarTutorialComoVisto(tutorial.id);
+        } catch (error) {
+            console.error("Error marcando tutorial como visto", error);
+        }
+
+        setTutorial(null);
+    }
+
+    function cerrarTutorial() {
+        setTutorial(null);
+    }
+
     return (
         <>
             <Header />
@@ -142,26 +172,17 @@ export default function ComprarCreditos() {
 
             <Footer />
 
-            <CompraCreditosModal
-                open={modalOpen}
-                onClose={() => setModalOpen(false)}
-                folio={folio}
-                creditos={creditos}
-            />
+            <CompraCreditosModal open={modalOpen} onClose={() => setModalOpen(false)} folio={folio} creditos={creditos} />
 
             {errorModal && (
-                <MessageModal
-                    title="Error en la compra"
-                    message={errorMessage}
-                    onClose={() => setErrorModal(false)}
-                />
+                <MessageModal title="Error en la compra" message={errorMessage} onClose={() => setErrorModal(false)} />
             )}
 
             {planModal && (
-                <PlanRequiredModal
-                    onClose={() => setPlanModal(false)}
-                />
+                <PlanRequiredModal onClose={() => setPlanModal(false)} />
             )}
+
+            <TutorialVideoModal tutorial={tutorial} automatico={true} onClose={cerrarTutorial} onConfirm={confirmarTutorial} />
         </>
     );
 }

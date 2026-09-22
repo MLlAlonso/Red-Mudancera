@@ -5,26 +5,8 @@ import FAQItem from "./FAQItem";
 import "@/styles/pages/_seguros.scss";
 
 export const metadata = {
-    title: "Seguro para Mudanza | Protege tus pertenencias con tarifa preferencial",
-    description:
-        "Obtén acceso a una tarifa preferencial para asegurar tu mudanza. Protege tus pertenencias durante el traslado con el respaldo de una aseguradora especializada.",
-
-    keywords: [
-        "seguro para mudanza",
-        "seguro de mudanza",
-        "protección para mudanza",
-        "seguro de carga",
-        "mudanza segura",
-        "seguro de transporte",
-        "Mudanza Fácil",
-        "mudanzas México",
-        "asegurar mudanza",
-        "Chubb seguros",
-        "seguro para muebles",
-        "seguro de pertenencias",
-        "seguros",
-        "mudanzas",
-    ],
+    title: "Seguro para Mudanza en México | Mudanza Fácil",
+    description: "Protege tu mudanza con una póliza formal y verificable, tarifa preferencial y expediente digital. Inicia hoy y completa los detalles después.",
 
     authors: [
         {
@@ -53,11 +35,8 @@ export const metadata = {
     },
 
     openGraph: {
-        title: "Protege tu mudanza con una tarifa preferencial exclusiva",
-
-        description:
-            "Conoce una alternativa para proteger tus pertenencias durante tu mudanza con una tarifa preferencial. Infórmate sin compromiso.",
-
+        title: "Seguro para Mudanza en México | Tarifa Preferencial",
+        description: "Obtén una póliza formal y verificable para tu mudanza, con tarifa preferencial y expediente digital. Empieza hoy y completa los detalles después.",
         url: "https://app.mudanzafacil.com.mx/seguros",
         siteName: "Mudanza Fácil",
         locale: "es_MX",
@@ -68,203 +47,280 @@ export const metadata = {
                 url: "https://app.mudanzafacil.com.mx/images/hero_02.png",
                 width: 1200,
                 height: 630,
-                alt: "Seguro para Mudanza - Mudanza Fácil",
+                alt: "Seguro para mudanza en México - Mudanza Fácil",
             },
         ],
     },
 
     twitter: {
         card: "summary_large_image",
-        title: "Protege tu mudanza con una tarifa preferencial",
-        description: "Conoce una alternativa para proteger tus pertenencias durante el traslado.",
-        images: [
-            "https://app.mudanzafacil.com.mx/images/hero_02.png",
-        ],
+        title: "Seguro para Mudanza en México | Tarifa Preferencial",
+        description: "Póliza formal y verificable, tarifa preferencial y expediente digital para proteger tu mudanza.",
+        images: ["https://app.mudanzafacil.com.mx/images/hero_02.png",],
     },
 };
 
 export default function SegurosPage() {
-    const faqs = [
-        {
-            q: "¿Estoy obligado a contratar esta protección?",
-            a: "No. Es una opción adicional para que conozcas una alternativa de protección.",
-        },
-        {
-            q: "¿El beneficio es sólo económico?",
-            a: "No, también te brinda tranquilidad y respaldo durante tu mudanza, permite a un experto que te lo explique, sin compromiso.",
-        },
-        {
-            q: "¿Mudanza Fácil ofrece el seguro?",
-            a: "No. El servicio es proporcionado directamente por la aseguradora. Mudanza Fácil solo facilita el acceso a condiciones preferenciales.",
-        },
-        {
-            q: "¿Cuál es el costo?",
-            a: "La tarifa preferencial es desde 1.25% del valor declarado, por debajo del promedio del mercado. Ejemplo si aseguras directo con la empresa que contrates puedes llegar a pagar por un valor declarado de 120,000 hasta $3,000.00 pesos Con la tarifa preferencial tendrías un ahorro directo de 1,500 pesos.",
-        },
-        {
-            q: "¿Qué pasa si solo quiero informarme?",
-            a: "Sin ningún problema, es simplememente una benefico que ponemos al alcance a nuestros clientes que nos contáctan, no existe ninguna obligación de contratar el seguro.",
-        },
-        {
-            q: "¿Puedo usar este beneficio aunque no contrate en la plataforma?",
-            a: "Por supuesto, el benefico ya es tuyo, tan solo por confiar en Mudanzafacil, puedes acceder a esta protección independientemente del proveedor que elijas.",
-        },
-    ];
-
     return (
         <div className="seguros">
             <section className="seguroHero">
                 <div className="seguroHero__container">
                     <div className="seguroHero__content">
-                        <h1>
-                            Protege tu mudanza con una tarifa preferencial exclusiva
+                        <span className="seguroHero__badge">
+                            MUDANZA <strong>FÁCIL</strong>  <strong id="seguros">SEGUROS</strong>
+                        </span>
+
+                        <h1 className="seguroHero__title">
+                            <span>Tu patrimonio va a viajar</span>
+                            <br />
+                            Ten la certeza de que está protegido.
                         </h1>
 
-                        <p>
-                            Si te adelantas a la información, tendrás más control, certeza y tranquilidad
+                        <p className="seguroHero__description">
+                            Obtén una póliza formal y verificable para tu mudanza,
+                            con tarifa preferencial y un expediente digital que puedes
+                            comenzar hoy, aunque todavía estés organizando los detalles.
+                        </p>
+
+                        <div className="seguroHero__action">
+                            <Suspense>
+                                <SeguroClient />
+                            </Suspense>
+                        </div>
+
+                        <p className="seguroHero__note">
+                            Sin compromiso, puedes empezar aunque todavía no tengas todos los datos.
                         </p>
                     </div>
 
-                    <div className="seguroHero__image">
-                        <img src="/images/hero_seguro.png" alt="Seguro para mudanza" />
+                    <div className="seguroHero__visual">
+                        <img src="/images/hero_seguro.png" alt="Protección para tu mudanza" />
                     </div>
                 </div>
             </section>
 
-            <section className="seguroComparativa">
-                <div className="seguroComparativa__container">
-                    <div className="seguroComparativa__table">
-                        <div className="seguroComparativa__header">
-                            Protección por $100,000
-                        </div>
-
-                        <div className="seguroComparativa__body">
-                            <div className="seguroComparativa__column seguroComparativa__column--preferencial">
-                                <span>
-                                    Tarifa preferencial Mudanza Fácil
-                                </span>
-
-                                <strong>
-                                    $1,250
-                                </strong>
+            <section className="seguroCaracteristicas">
+                <div className="seguroCaracteristicas__container">
+                    <article className="seguroCaracteristica seguroCaracteristica--dual">
+                        <div className="seguroCaracteristica__icons">
+                            <div className="seguroCaracteristica__icon">
+                                <img src="/icons/doc-verificado.png" alt="Póliza verificable" />
                             </div>
 
-                            <div className="seguroComparativa__column">
-                                <span>
-                                    Tarifas tradicionales
-                                </span>
+                            <div className="seguroCaracteristica__divider" />
 
-                                <strong>
-                                    $2,500 a $3,500
-                                </strong>
+                            <div className="seguroCaracteristica__icon" id="chubb">
+                                <img src="/logo/chubb.png" alt="Seguro verificado" />
                             </div>
                         </div>
-                    </div>
 
-                    <div className="seguroBeneficio">
-                        <div className="seguroBeneficio__icon">
-                            <img src="/icons/calendario.png" alt="Protección" />
+                        <div className="seguroCaracteristica__content">
+                            <h2>Póliza verificable</h2>
+                            <p>Consulta y valida tu póliza en todo momento.</p>
+                        </div>
+                    </article>
+
+                    <article className="seguroCaracteristica">
+                        <div className="seguroCaracteristica__icon">
+                            <img src="/icons/docs.png" alt="Expediente digital" />
                         </div>
 
-                        <div className="seguroBeneficio__content">
-                            Infórmate antes y viaja con{" "}
-                            <strong>
-                                más tranquilidad y confianza
-                            </strong>
+                        <div className="seguroCaracteristica__content">
+                            <h2>Expediente digital</h2>
+                            <p> Tu información segura, en un solo lugar. </p>
                         </div>
-                    </div>
+                    </article>
 
+                    <article className="seguroCaracteristica">
+                        <div className="seguroCaracteristica__icon">
+                            <img src="/icons/verificado.png" alt="Proceso sencillo" />
+                        </div>
+
+                        <div className="seguroCaracteristica__content">
+                            <h2>Proceso sencillo</h2>
+                            <p> Rápido, claro y sin complicaciones. </p>
+                        </div>
+                    </article>
                 </div>
             </section>
 
-            <section className="ctaBottom">
-                <Suspense fallback={<div></div>}>
-                    <SeguroClient />
-                </Suspense>
+            <section className="seguroProceso">
+                <div className="seguroProceso__container">
+                    <span className="seguroProceso__badge">
+                        ASÍ DE SENCILLO
+                    </span>
+
+                    <h2 className="seguroProceso__title">
+                        Empieza hoy. Completa después.
+                    </h2>
+
+                    <div className="seguroProceso__steps">
+                        <article className="seguroProceso__step">
+                            <span className="seguroProceso__number" id="stepUno">
+                                1
+                            </span>
+
+                            <div className="seguroProceso__content">
+                                <h3> Inicia tu expediente </h3>
+                                <p> Elige qué quieres proteger: Menaje, Menaje + Auto o Sólo Auto. </p>
+                            </div>
+                        </article>
+
+                        <article className="seguroProceso__step">
+                            <span className="seguroProceso__number">
+                                2
+                            </span>
+
+                            <div className="seguroProceso__content">
+                                <h3> Completa la información a tu ritmo </h3>
+                                <p> Tu empresa de mudanza puede completar la información operativa mediante un enlace privado. </p>
+                            </div>
+                        </article>
+
+                        <article className="seguroProceso__step">
+                            <span className="seguroProceso__number" id="stepTres">
+                                3
+                            </span>
+
+                            <div className="seguroProceso__content">
+                                <h3> Recibe tu póliza </h3>
+                                <p> Una vez confirmados los datos, recibes tu póliza formal para el traslado. </p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
             </section>
 
-            <section className="seguroVentajas">
-                <ul className="seguroVentajas__list">
-                    <li>
-                        <img src="/icons/credito.png" alt="" />
-                        <span>Tarifa preferencial exclusiva</span>
-                    </li>
+            <section className="seguroBeneficios">
+                <div className="seguroBeneficios__container">
+                    <div className="seguroBeneficios__heading">
+                        <span className="seguroBeneficios__badge">
+                            TU TRANQUILIDAD, PRIMERO
+                        </span>
 
-                    <li>
-                        <img src="/icons/verificado.png" alt="" />
-                        <span>Certeza de que la protección fue emitida</span>
-                    </li>
+                        <h2> Beneficios que te dan más tranquilidad </h2>
+                    </div>
 
-                    <li>
-                        <img src="/icons/truck.png" alt="" />
-                        <span>Mayor visibilidad sobre tu traslado</span>
-                    </li>
+                    <div className="seguroBeneficios__columns">
+                        <div className="seguroBeneficios__column">
+                            <article className="seguroBeneficioCard">
+                                <div className="seguroBeneficioCard__check">
+                                    ✓
+                                </div>
 
-                    <li>
-                        <img src="/icons/doc-verificado.png" alt="" />
-                        <span>Más transparencia durante el proceso</span>
-                    </li>
+                                <div className="seguroBeneficioCard__content">
+                                    <h3> Póliza formal y verificable </h3>
+                                    <p> Respaldo real para tu patrimonio. </p>
+                                </div>
+                            </article>
 
-                    <li>
-                        <img src="/icons/telefono.png" alt="" />
-                        <span>Atención directa con un especialista</span>
-                    </li>
-                </ul>
+                            <article className="seguroBeneficioCard">
+                                <div className="seguroBeneficioCard__check">
+                                    ✓
+                                </div>
 
-                <div className="seguroInfo">
-                    <div className="seguroInfo__header">
-                        <div className="seguroInfo__icon">
-                            <img src="/icons/verificado.png" alt="Protección" />
+                                <div className="seguroBeneficioCard__content">
+                                    <h3> Tarifa preferencial </h3>
+                                    <p> Por ser parte de Mudanza Fácil. </p>
+                                </div>
+                            </article>
                         </div>
 
-                        <div className="seguroInfo__content">
-                            <h3>
-                                Tu mudanza representa años de esfuerzo
-                            </h3>
+                        <div className="seguroBeneficios__column">
+                            <article className="seguroBeneficioCard">
+                                <div className="seguroBeneficioCard__check">
+                                    ✓
+                                </div>
 
-                            <p>
-                                Tomarte unos minutos para conocer esta alternativa puede ayudarte
-                                a tomar decisiones más informadas y proteger lo que más te importa.
+                                <div className="seguroBeneficioCard__content">
+                                    <h3> Pago directo a la aseguradora </h3>
+                                    <p> Sin intermediarios en el pago. </p>
+                                </div>
+                            </article>
+
+                            <article className="seguroBeneficioCard">
+                                <div className="seguroBeneficioCard__check">
+                                    ✓
+                                </div>
+
+                                <div className="seguroBeneficioCard__content">
+                                    <h3> Acompañamiento en el proceso </h3>
+                                    <p> Estamos contigo en cada etapa. </p>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section className="seguroPrecios">
+                <div className="seguroPrecios__container">
+                    <h2 className="seguroPrecios__title">
+                        Más certeza no significa pagar más
+                    </h2>
+
+                    <div className="seguroPrecios__comparison">
+                        <div className="seguroPrecio seguroPrecio--preferencial">
+                            <p className="seguroPrecio__label">
+                                Tarifa preferencial
                             </p>
+
+                            <span className="seguroPrecio__tag">
+                                Mudanza Fácil
+                            </span>
+
+                            <strong className="seguroPrecio__amount">
+                                desde $1,350 
+                            </strong>
+
+                            <span className="seguroPrecio__currency">
+                                por cada $100,000 asegurados
+                            </span>
                         </div>
+
+                        <div className="seguroPrecio seguroPrecio--referencia">
+                            <p className="seguroPrecio__label">
+                                Lo que cobran las empresas de mudanza
+                            </p>
+
+                            <span className="seguroPrecio__tag">
+                                de referencia
+                            </span>
+
+                            <strong className="seguroPrecio__amount" id="amountMuted">
+                                $2,500 – $3,500
+                            </strong>
+
+                            <span className="seguroPrecio__currency">
+                                por cada $100,000 asegurados
+                            </span>
+                        </div>
+
                     </div>
 
-                    <div className="seguroFinalCtas">
-                        <div className="seguroFinalCta seguroFinalCta--primary">
-                            <div className="seguroFinalCta__icon">
-                                <img src="/icons/help.png" alt="Información" />
-                            </div>
-
-                            <div className="seguroFinalCta__content">
-                                <h3>
-                                    Resuelve tus dudas con un especialista
-                                </h3>
-
-                                <p>
-                                    Te explicamos la cobertura, costos y funcionamiento del seguro para que tomes la mejor decisión, sin compromiso.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    <p className="seguroPrecios__disclaimer">
+                        Precios de referencia. El costo final y la protección dependen
+                        de la cotización, los bienes y las condiciones de la póliza.
+                    </p>
                 </div>
-
-
             </section>
 
+            <section className="seguroCtaFinal">
+                <div className="seguroCtaFinal__container">
+                    <div className="seguroCtaFinal__content">
+                        <h2>
+                            Tu próximo comienzo, <br /> con más tranquilidad.
+                        </h2>
 
+                        <p> Protege tu mudanza con un proceso claro, sencillo y verificable. </p>
+                    </div>
 
-            {/* <section className="faq">
-                <div className="faq__container">
-                    {faqs.map((item, index) => (
-                        <FAQItem key={index} item={item} />
-                    ))}
+                    <div className="seguroCtaFinal__action">
+                        <Suspense>
+                            <SeguroClient />
+                        </Suspense>
+                    </div>
                 </div>
-            </section> */}
-
-            <section className="ctaBottom">
-                <Suspense fallback={<div></div>}>
-                    <SeguroClient />
-                </Suspense>
             </section>
 
             <Footer />

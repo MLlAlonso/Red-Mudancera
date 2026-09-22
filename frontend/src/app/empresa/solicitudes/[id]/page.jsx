@@ -226,11 +226,23 @@ export default function DetalleSolicitudPage() {
                                     openLeadWhatsappMessage({
                                         telefono: solicitud.telefono,
                                         empresaNombre: empresa?.empresa || "Mi empresa",
+                                        empresaId: empresa?.id,
                                         nombreCliente: solicitud.nombre,
+                                        emailCliente: solicitud.email,
                                         origen: solicitud.origen,
                                         destino: solicitud.destino,
                                         tipoVivienda: solicitud.tipo_vivienda,
+                                        viviendaDestino: solicitud.vivienda_destino,
+                                        origenPisos: solicitud.origen_pisos,
+                                        origenElevador: solicitud.origen_elevador,
+                                        origenAcarreo: solicitud.origen_acarreo,
+                                        destinoPisos: solicitud.destino_pisos,
+                                        destinoElevador: solicitud.destino_elevador,
+                                        destinoAcarreo: solicitud.destino_acarreo,
                                         inventario: solicitud.inventario,
+                                        fechaRecoleccion: solicitud.fecha_recoleccion,
+                                        tipoServicio: solicitud.tipo_servicio,
+                                        tipoMudanza: solicitud.tipo_mudanza,
                                     })
                                 }
                             />

@@ -2,19 +2,20 @@
 
 namespace App\Modules\SolicitudMudanza\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Modules\SolicitudMudanza\Models\SolicitudMudanza;
-use App\Modules\SolicitudMudanza\Services\SolicitudMudanzaService;
-use App\Modules\SolicitudMudanza\Requests\StoreSolicitudMudanzaRequest;
-use App\Modules\SolicitudMudanza\Requests\VerifySolicitudMudanzaRequest;
-use App\Modules\SolicitudMudanza\Requests\ReenviarCodigoSolicitudRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\Controller;
 use App\Modules\SolicitudMudanza\Models\LeadCompra;
+use App\Modules\SolicitudMudanza\Models\SolicitudMudanza;
+use App\Modules\SolicitudMudanza\Services\SolicitudMudanzaService;
+use App\Modules\SolicitudMudanza\Requests\StoreSolicitudMudanzaRequest;
+use App\Modules\SolicitudMudanza\Requests\VerifySolicitudMudanzaRequest;
+use App\Modules\SolicitudMudanza\Requests\ReenviarCodigoSolicitudRequest;
 use App\Modules\SolicitudMudanza\Mail\LeadCompradoMail;
+use App\Modules\Seguro\Mail\SolicitudSeguroRecibidaMail;
 use App\Modules\Seguro\Services\ExpedienteSeguroService;
 use Laravel\Sanctum\PersonalAccessToken;
 use App\Modules\Empresa\Models\Empresa;
@@ -195,6 +196,10 @@ class SolicitudMudanzaController extends Controller
             new \App\Modules\SolicitudMudanza\Mail\SolicitudSeguroMail($solicitud)
         );
 
+        if ($expediente->email) {
+            Mail::to($expediente->email)->send(new SolicitudSeguroRecibidaMail($expediente));
+        }
+
         return response()->json([
             'message' => 'Solicitud enviada correctamente.',
             'folio' => $expediente->folio
@@ -230,6 +235,10 @@ class SolicitudMudanzaController extends Controller
         Mail::to(['intermudanza@gmail.com', 'Segurosmudanzafacil@gmail.com', 'ventas12@segurosdecarga.com'])->send(
             new \App\Modules\SolicitudMudanza\Mail\SolicitudSeguroMail($fakeSolicitud)
         );
+
+        if ($expediente->email) {
+            Mail::to($expediente->email)->send(new SolicitudSeguroRecibidaMail($expediente));
+        }
 
         return response()->json([
             'message' => 'Solicitud enviada correctamente.',

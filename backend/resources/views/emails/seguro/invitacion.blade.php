@@ -37,14 +37,14 @@
                             </h3>
 
                             <p>
-                                Sabemos que todavía estás organizando tu mudanza y que el seguro normalmente se resuelve
-                                más adelante, cuando ya tienes la empresa que hará tu mudanza, por eso no te vamos a
-                                pedir ningún dato todavía.
+                                Sabemos que todavía estás organizando tu mudanza y que el seguro normalmente se contrata
+                                más adelante, cuando ya tienes definida la empresa que realizará el servicio. Por eso,
+                                no necesitas completar ningún dato por ahora.
                             </p>
 
                             <p style="text-align: center;">
-                                Lo que sí hicimos fue dejar algo preparado para ti: </br>
-                                <strong style="color:#15996f;margin-top:0; font-size: 18px;">Ya tienes un expediente
+                                Lo que sí hicimos fue dejar todo preparado para cuando llegue el momento: </br>
+                                <strong style="color:#15996f;margin-top:0; font-size: 18px;"> Ya tienes tu expediente
                                     digital creado.</strong>
                             </p>
                         </td>
@@ -114,7 +114,7 @@
                     <tr>
                         <td style=" padding:18px; text-align:center; border-top:1px solid #ECECEC;">
                             <p style=" margin:0; font-size:14px; color:#999;">
-                                Folio de seguimiento: {{ $expediente->nombre }}
+                                Folio de seguimiento: {{ $expediente->folio }}
                             </p>
                         </td>
                     </tr>

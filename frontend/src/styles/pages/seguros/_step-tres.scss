@@ -665,5 +665,26 @@
         &__form-grid {
             grid-template-columns: 1fr;
         }
+
+        /*
+    |--------------------------------------------------------------------------
+    | Modalidades en móvil
+    |--------------------------------------------------------------------------
+    */
+
+        &__modality-options {
+            grid-template-columns: 1fr;
+        }
+
+        &__modality-card {
+            flex-direction: row;
+            align-items: flex-start;
+            min-height: auto;
+            padding: 16px;
+        }
+
+        &__modality-content {
+            padding-right: 28px;
+        }
     }
 }

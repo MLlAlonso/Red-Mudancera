@@ -1,730 +1,1527 @@
 @use "../utils/variables" as *;
 
-body {
-    background: #fff;
-}
-
-section {
-    background: #fff;
-}
-
 .seguros {
-    .seguroHero {
+    width: 100%;
+    background: #fff;
+    color: $font-title;
+}
+
+.seguroHero {
+    width: 100%;
+    padding: 20px 10px 40px;
+    background: #fff;
+
+    &__container {
         width: 100%;
-        background: #fff;
-
-        &__container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        &__content {
-            flex: 1;
-            max-width: 600px;
-
-            h1 {
-                font-size: 40px;
-                color: $error-hover;
-                font-weight: 900;
-                font-family: $font-title;
-                line-height: 1.2;
-                margin-bottom: 20px;
-            }
-
-            p {
-                font-size: 26px;
-                color: #0C71C3;
-                line-height: 1.1;
-            }
-        }
-
-        &__image {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-
-            img {
-                width: 100%;
-                max-width: 400px;
-                object-fit: contain;
-            }
-        }
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+        align-items: center;
+        gap: 60px;
     }
 
-    .btnSeguro {
-        background-color: $success;
-        color: #fff;
-        border: none;
-        padding: 14px 30px;
-        border-radius: 20px;
-        cursor: pointer;
-        font-size: 24px;
+    &__content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    &__badge {
         display: inline-flex;
         align-items: center;
-        box-shadow: 0 4px 0 $success;
-        transition: all 0.2s ease;
-
-        .arrow {
-            margin-left: 8px;
-            opacity: 0;
-            transform: translateX(-5px);
-            transition: all 0.2s ease;
-        }
-
-        &:hover {
-            background-color: $success;
-
-            .arrow {
-                opacity: 1;
-                transform: translateX(0);
-                font-size: 32px;
-                margin-top: 3px;
-            }
-        }
-
-        &:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 0 $success;
-        }
-    }
-
-    #btnLegend {
-        margin-top: 10px;
-
-        p {
-            font-size: 22px;
-            color: $text-muted;
-        }
-    }
-
-    .seguroComparativa {
-        background: #fff;
-
-        &__container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 10px 20px 40px;
-        }
-
-        &__table {
-            border-radius: 18px;
-            overflow: hidden;
-            border: 1px solid #D8EEDD;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, .05);
-        }
-
-        &__header {
-            background: $success-hover;
-            color: white;
-            text-align: center;
-            padding: 18px;
-            font-size: 28px;
-            font-weight: 800;
-            font-family: $font-title;
-        }
-
-        &__body {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-        }
-
-        &__column {
-            padding: 35px 20px;
-            text-align: center;
-
-            span {
-                display: block;
-                font-size: 22px;
-                color: $text;
-                margin-bottom: 16px;
-                line-height: 1.3;
-            }
-
-            strong {
-                display: block;
-                font-size: 42px;
-                color: #034436;
-                font-weight: 900;
-                font-family: $font-title;
-            }
-
-            &--preferencial {
-                background: #EAF8ED;
-                border-right: 1px solid #D8EEDD;
-            }
-        }
-    }
-
-    .seguroBeneficio {
-        margin-top: 25px;
-        background: #fff;
-        border: 2px solid #B8E3C3;
-        border-radius: 18px;
-        padding: 20px;
-        display: flex;
-        align-items: center;
-        gap: 18px;
-
-        &__icon {
-            flex-shrink: 0;
-
-            img {
-                width: 55px;
-                height: 55px;
-                object-fit: contain;
-            }
-        }
-
-        &__content {
-            font-size: 24px;
-            color: $text;
-            line-height: 1.4;
-
-            strong {
-                color: #16A34A;
-                font-weight: 800;
-            }
-        }
-    }
-
-    .seguroVentajas {
-        background: #fff;
-        max-width: 1200px;
-        margin: 35px auto 0 auto;
-        padding: 0 20px;
-
-        display: flex;
-        flex-direction: column;
-        gap: 30px;
-
-        &__list {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 30px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-
-            li {
-                display: flex;
-                align-items: center;
-                gap: 16px;
-
-                img {
-                    width: 34px;
-                    height: 34px;
-                    object-fit: contain;
-                    flex-shrink: 0;
-                }
-
-                span {
-                    font-size: 24px;
-                    color: $text;
-                    line-height: 1.3;
-                }
-            }
-        }
-    }
-
-    .seguroInfo {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 24px;
-        padding: 28px;
-        border-radius: 20px;
-
-        background: linear-gradient(90deg,
-                rgba(101, 200, 133, 0.25) 10%,
-                #FFFFFF 100%);
-
-        &__header {
-            display: flex;
-            flex-direction: row;
-            width: 100%;
-        }
-
-        &__icon {
-            flex-shrink: 0;
-
-            img {
-                width: 70px;
-                height: 70px;
-                object-fit: contain;
-            }
-        }
-
-        &__content {
-            h3 {
-                margin: 0 0 10px 0;
-                font-size: 32px;
-                font-weight: 900;
-                color: #034436;
-                font-family: $font-title;
-            }
-
-            p {
-                margin: 0;
-                font-size: 21px;
-                line-height: 1.5;
-                color: $text;
-                max-width: 850px;
-            }
-        }
-    }
-
-    .seguroFinalCtas {
-        width: 100%;
-        margin-top: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        border-radius: 30px;
-        gap: 20px;
-        background: #fff;
-    }
-
-    .seguroFinalCta {
-        display: flex;
-        align-items: center;
-        gap: 22px;
-        padding: 26px;
-        border-radius: 20px;
-
-        &__icon {
-            flex-shrink: 0;
-
-            img {
-                width: 60px;
-                height: 60px;
-                object-fit: contain;
-            }
-        }
-
-        &__content {
-            h3 {
-                margin: 0 0 8px 0;
-                font-size: 30px;
-                font-family: $font-title;
-                font-weight: 900;
-                line-height: 1.2;
-            }
-
-            p {
-                margin: 0;
-                font-size: 21px;
-                line-height: 1.5;
-            }
-        }
-
-        &--primary {
-
-            h3,
-            p {
-                color: #034436;
-            }
-        }
-
-        &--secondary {
-            background: #fff;
-            border: 2px solid #B7E4C7;
-
-            h3 {
-                color: #034436;
-            }
-
-            p {
-                color: $text;
-            }
-        }
-    }
-
-    /* .faq {
-        background: #fff;
-
-        &__container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 60px 20px;
-        }
-
-        &__item {
-            background: $background;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-
-            &.active {
-                background: #fff;
-                border: 2px solid #ddd;
-
-                .faq__question {
-                    color: #2ea3f2;
-                    font-weight: 600;
-                }
-
-                .faq__answer {
-                    max-height: 1000px;
-                    overflow-y: auto;
-                    -webkit-overflow-scrolling: touch;
-                    padding: 10px 20px;
-                }
-            }
-        }
-
-        &__question {
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 24px;
-            font-weight: 500;
-            color: $text;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: color 0.3s ease;
-        }
-
-        &__answer {
-            max-height: 0;
-            overflow: hidden;
-            padding: 0 20px;
-            transition: all 0.3s ease;
-
-            p {
-                margin: 0;
-                color: $text-muted;
-                font-size: 20px;
-                line-height: 1.6;
-            }
-        }
-
-        .icon {
-            font-size: 28px;
-            color: #aaa;
-        }
-
-        .active .icon {
-            color: #2ea3f2;
-        }
-    } */
-
-}
-
-/* =========================
-   MODALES
-========================= */
-.success-modal,
-.error-modal {
-    text-align: center;
-    padding: 24px;
-    max-width: 400px;
-
-    h3 {
-        font-size: 22px;
-        margin-bottom: 10px;
-    }
-
-    p {
-        font-size: 18px;
+        width: fit-content;
+        padding: 8px 10px;
         margin-bottom: 20px;
-        line-height: 1.5;
-    }
-
-    button {
-        border: none;
-        padding: 10px 20px;
-        border-radius: 8px;
-        cursor: pointer;
-        color: #fff;
-        font-size: 16px;
-    }
-}
-
-.success-modal {
-    .success-img {
-        width: 90px;
-    }
-
-    h3 {
         color: $title;
+        border-radius: 999px;
+        font-family: $font-title;
+        font-size: 14px;
         font-weight: bolder;
-        font-size: 26px;
-    }
+        letter-spacing: 0.18em;
+        line-height: 1;
 
-    .success-divider {
-        width: 70px;
-        height: 4px;
-        background: $success;
-        border-radius: 20px;
-        margin: 12px auto 20px auto;
-    }
-
-    p {
-        font-weight: 400;
-        font-size: 16px;
-    }
-
-    section {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        text-align: justify;
-        font-size: 16px;
-        gap: 15px;
-        padding: 10px;
-        background-color: #E9F3FC;
-        border-radius: 10px;
-        border: 1px solid #B3D4F2;
-        color: $text;
-
-        img {
-            width: 40px;
-            height: 40px;
+        strong {
+            color: $success;
         }
 
-        p {
-            margin-top: 10px;
+        #seguros {
+            color: $tertiary;
         }
+    }
+
+    &__title {
+        margin: 0 0 24px;
+        color: $success-hover;
+        font-family: $font-title;
+        font-size: 48px;
+        font-weight: 900;
+        line-height: 1.08;
+        letter-spacing: -0.025em;
 
         span {
-            color: $primary;
-            font-weight: bold;
+            color: $title;
         }
     }
 
-    button {
-        background: $primary-hover;
-        padding: 20px 30px;
-        width: 100%;
-        font-size: 20px;
-
-        &:hover {
-            background: $primary;
-        }
-    }
-
-    .privacy-note {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin-top: 10px;
-        font-size: 14px;
+    &__description {
+        max-width: 620px;
+        margin: 0 0 40px;
+        color: $text;
         text-align: justify;
-        color: $text-muted;
+        font-family: $font-title;
+        font-size: 20px;
+        font-weight: 400;
+        line-height: 1.3;
+    }
+
+    &__action {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+
+        .btnSeguro {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 56px;
+            padding: 16px 26px;
+            background: $success;
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            font-family: $font-title;
+            font-size: 20px;
+            font-weight: 800;
+            line-height: 1;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+
+            transition:
+                background-color 0.2s ease,
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+
+            &:hover {
+                background: $success-hover;
+                transform: translateY(-2px);
+                box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+
+                span {
+                    transform: translateX(4px);
+                }
+            }
+
+            &:active {
+                transform: translateY(0);
+                box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+            }
+
+            span {
+                display: inline-block;
+                transform: translateX(0);
+                transition: transform 0.2s ease;
+            }
+        }
+    }
+
+    &__note {
+        margin: 0;
+        color: $text;
+        font-family: $font-title;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.4;
+        opacity: 0.8;
+    }
+
+    &__visual {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
 
         img {
-            width: 40px;
-            margin-right: 10px;
-            opacity: 0.6;
+            display: block;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
         }
     }
 }
 
-.error-modal button {
-    background: #c0392b;
-}
-
-.ctaBottom {
+.seguroFormModal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
     display: flex;
-    padding: 20px;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    background: #fff;
+    justify-content: center;
+    width: 100%;
+    height: 100dvh;
+    padding: 30px 20px;
+    overflow: hidden;
+
+    &__backdrop {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(6, 35, 27, 0.48);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        cursor: pointer;
+        animation: seguroBackdropIn 0.2s ease-out;
+    }
+
+    &__content {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 560px;
+        max-height: calc(100dvh - 60px);
+        padding: 40px;
+        background: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        border-radius: 24px;
+        box-shadow:
+            0 25px 70px rgba(0, 0, 0, 0.22),
+            0 8px 25px rgba(0, 0, 0, 0.08);
+
+        overflow-y: auto;
+        scrollbar-width: thin;
+        animation: seguroModalIn 0.25s ease-out;
+    }
+
+    &__close {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        background: #f3f6f4;
+        color: $success-hover;
+        border: none;
+        border-radius: 50%;
+        font-family: Arial, sans-serif;
+        font-size: 26px;
+        font-weight: 400;
+        line-height: 1;
+        cursor: pointer;
+
+        transition:
+            background-color 0.2s ease,
+            color 0.2s ease,
+            transform 0.2s ease;
+
+        &:hover {
+            background: $success;
+            color: #fff;
+            transform: rotate(90deg);
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+
+    &__header {
+        padding-right: 34px;
+        margin-bottom: 28px;
+
+        h2 {
+            margin: 0 0 10px;
+            color: $success-hover;
+            font-family: $font-title;
+            font-size: 32px;
+            font-weight: 900;
+            line-height: 1.15;
+        }
+
+        p {
+            max-width: 470px;
+            margin: 0;
+            color: #53635c;
+            font-family: $font-title;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+    }
 }
 
-/* =========================
-   FORMULARIO EXTERNO
-========================= */
 .seguroForm {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    max-width: 500px;
     width: 100%;
-    margin: 30px auto;
+    max-width: none;
+    margin: 0;
 
     .form-group {
         display: flex;
         flex-direction: column;
+        gap: 6px;
+        width: 100%;
 
         label {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: #034436;
+            color: $primary;
+            font-family: $font-title;
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.3;
         }
 
         input,
         textarea,
         select {
             width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            font-size: 16px;
-            font-family: inherit;
+            padding: 12px 14px;
             background: #fff;
-            color: $text;
-            transition: border-color .2s ease, box-shadow .2s ease;
+            color: $font-title;
+            border: 1px solid #d5dfda;
+            border-radius: 10px;
+            outline: none;
+            font-family: $font-title;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.4;
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease,
+                background-color 0.2s ease;
 
             &:focus {
-                outline: none;
                 border-color: $primary;
-                box-shadow: 0 0 0 3px rgba(46, 163, 242, .12);
+                box-shadow: 0 0 0 4px rgba(0, 168, 107, 0.1);
             }
         }
 
-        select {
-            cursor: pointer;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='4 6 8 10 12 6'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 14px center;
-            background-size: 16px;
-            padding-right: 42px;
+        input {
+            min-height: 48px;
         }
 
         textarea {
-            min-height: 100px;
-            resize: none;
+            min-height: 104px;
+            resize: vertical;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #91a09a;
+        }
+
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            padding-right: 44px;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230C5B42' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 16px;
+        }
+    }
+
+    &__submit {
+        width: 100%;
+        margin-top: 4px;
+        min-height: 52px;
+        font-size: 18px !important;
+
+        &:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+    }
+
+    &__privacy {
+        margin: 0;
+        color: #7a8982;
+        font-family: $font-title;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 1.45;
+        text-align: center;
+    }
+}
+
+@keyframes seguroBackdropIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes seguroModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.success-modal,
+.error-modal {
+    width: 100%;
+    max-width: 460px;
+    padding: 32px;
+    text-align: center;
+    font-family: $font-title;
+
+    h3 {
+        margin: 0 0 12px;
+        font-size: 26px;
+        font-weight: 900;
+        line-height: 1.2;
+    }
+
+    p {
+        margin: 0 0 18px;
+        color: $text;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 1.5;
+    }
+
+    button {
+        width: 100%;
+        padding: 14px 20px;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-family: $font-title;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition:
+            background-color 0.2s ease,
+            transform 0.2s ease;
+    }
+}
+
+.success-modal {
+    .success-img {
+        display: block;
+        width: 86px;
+        height: 86px;
+        margin: 0 auto 14px;
+        object-fit: contain;
+    }
+
+    h3 {
+        color: $title;
+    }
+
+    .success-divider {
+        width: 66px;
+        height: 4px;
+        margin: 12px auto 20px;
+        background: $success;
+        border-radius: 999px;
+    }
+
+    >p {
+        color: $text;
+        font-size: 16px;
+        line-height: 1.5;
+        text-align: justify;
+    }
+
+    section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        width: 100%;
+        margin: 20px 0;
+        padding: 14px;
+        background: #e9f3fc;
+        border: 1px solid #b3d4f2;
+        border-radius: 12px;
+        text-align: left;
+
+        img {
+            flex: 0 0 auto;
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        p {
+            margin: 0;
+            color: $text;
+            font-size: 14px;
+            line-height: 1.45;
+            text-align: justify;
+        }
+
+        span {
+            color: $primary;
+            font-weight: 800;
+        }
+    }
+
+    button {
+        min-height: 54px;
+        background: $primary-hover;
+        font-size: 18px;
+
+        &:hover {
+            background: $primary;
+            transform: translateY(-1px);
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+    }
+
+    .privacy-note {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 16px 0 0;
+        color: $text-muted;
+        font-size: 14px;
+        line-height: 1.4;
+        text-align: left;
+
+        img {
+            flex: 0 0 auto;
+            width: 30px;
+            height: 30px;
+            margin: 0;
+            object-fit: contain;
+            opacity: 0.6;
         }
     }
 }
 
-input:disabled,
-textarea:disabled,
-select:disabled {
-    background: #f5f5f5;
-    cursor: not-allowed;
+.error-modal {
+    h3 {
+        color: #c0392b;
+    }
+
+    button {
+        min-height: 48px;
+        background: #c0392b;
+
+        &:hover {
+            background: #a93226;
+            transform: translateY(-1px);
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+    }
 }
 
-/* =========================
-   TABLET
-========================= */
+.seguroCaracteristicas {
+    width: 100%;
+    padding: 20px 20px 70px;
+    background: #fff;
+
+    &__container {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+}
+
+.seguroCaracteristica {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-height: 145px;
+    padding: 24px;
+    background: #f0f6fc;
+    border-radius: 18px;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+    }
+
+    &__icon {
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 60px;
+        height: 60px;
+
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        h2 {
+            margin: 0;
+            color: $success-hover;
+            font-family: $font-title;
+            font-size: 20px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        p {
+            margin: 0;
+            color: $font-title;
+            font-family: $font-title;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.45;
+        }
+    }
+
+    // Variante especial para cards con dos íconos
+    &--dual {
+        .seguroCaracteristica__icon {
+            width: 45px;
+            height: 45px;
+        }
+
+        #chubb {
+            width: 90px;
+            height: 70px;
+        }
+
+        .seguroCaracteristica__icons {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .seguroCaracteristica__divider {
+            width: 1px;
+            height: 55px;
+            background: rgba(0, 0, 0, 0.15);
+        }
+    }
+}
+
+.seguroProceso {
+    width: 100%;
+    padding: 20px;
+    background: #fff;
+
+    &__container {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px 60px 40px;
+        background: #f6f9fc;
+        border-radius: 24px;
+    }
+
+    &__badge {
+        display: inline-flex;
+        align-items: start;
+        justify-content: right;
+        width: fit-content;
+        padding: 8px 14px;
+        margin-bottom: 18px;
+        background: $success;
+        color: #fff;
+        border-radius: 999px;
+        font-family: $font-title;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        line-height: 1;
+    }
+
+    &__title {
+        margin: 0 auto 40px;
+        color: $title;
+        font-family: $font-title;
+        font-size: 40px;
+        font-weight: 900;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+    }
+
+    &__steps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 50px;
+        width: 100%;
+    }
+
+    &__step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    &__number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 60px;
+        height: 60px;
+        margin-bottom: 20px;
+        background: $success;
+        color: #fff;
+        border-radius: 50%;
+        font-family: $font-title;
+        font-size: 26px;
+        font-weight: 900;
+        line-height: 1;
+    }
+
+    &__content {
+        max-width: 300px;
+
+        h3 {
+            margin: 0 0 12px;
+            color: $title;
+            font-family: $font-title;
+            font-size: 20px;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
+        p {
+            margin: 0;
+            color: $font-title;
+            font-family: $font-title;
+            text-align: justify;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+    }
+
+    #stepUno {
+        background-color: $primary;
+    }
+
+    #stepTres {
+        background-color: $tertiary;
+    }
+}
+
+.seguroBeneficios {
+    width: 100%;
+    padding: 40px 20px;
+    background: #fff;
+
+    &__container {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    &__heading {
+        margin-bottom: 40px;
+    }
+
+    &__badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+        padding: 8px 14px;
+        margin-bottom: 18px;
+        background: $success;
+        color: #fff;
+        border-radius: 999px;
+        font-family: $font-title;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        line-height: 1;
+    }
+
+    &__heading h2 {
+        margin: 0;
+        color: $title;
+        font-family: $font-title;
+        font-size: 40px;
+        font-weight: 900;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+    }
+
+    &__columns {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        width: 100%;
+    }
+
+    &__column {
+        display: flex;
+        flex-direction: column;
+
+        gap: 20px;
+    }
+}
+
+.seguroBeneficioCard {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-height: 135px;
+    padding: 20px 28px;
+    background: #edf9f1;
+    border-radius: 18px;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+    }
+
+    &__check {
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        background: $success;
+        color: #fff;
+        border-radius: 50%;
+        font-family: Arial, sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        h3 {
+            margin: 0;
+            color: $title;
+            font-family: $font-title;
+            font-size: 20px;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
+        p {
+            margin: 0;
+            color: $font-title;
+            font-family: $font-title;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.45;
+        }
+    }
+}
+
+.seguroPrecios {
+    width: 100%;
+    padding: 40px 20px 80px;
+    background: #fff;
+
+    &__container {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    &__title {
+        margin: 0 0 40px;
+        color: $title;
+        font-family: $font-title;
+        font-size: 40px;
+        font-weight: 900;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+        text-align: center;
+    }
+
+    &__comparison {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        width: 100%;
+        overflow: hidden;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    }
+}
+
+.seguroPrecio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 270px;
+    padding: 40px 30px;
+    text-align: center;
+
+    &--preferencial {
+        background: #edf9f1;
+    }
+
+    &--referencia {
+        background: #f5f8fc;
+    }
+
+    &__label {
+        margin: 0 0 5px;
+        color: $text;
+        font-family: $font-title;
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 1.3;
+    }
+
+    &__tag {
+        margin-bottom: 20px;
+        color: $title;
+        font-family: $font-title;
+        font-size: 16px;
+        font-weight: 800;
+        line-height: 1.3;
+    }
+
+    &__amount {
+        display: block;
+        margin-bottom: 8px;
+        color: $success-hover;
+        font-family: $font-title;
+        font-size: 46px;
+        font-weight: 900;
+        line-height: 1;
+        letter-spacing: -0.025em;
+    }
+
+    #amountMuted {
+        color: $text-muted;
+        font-weight: 600;
+    }
+
+    &__currency {
+        color: #7d8985;
+        font-family: $font-title;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.3;
+    }
+
+    &__disclaimer {
+        max-width: 850px;
+        margin: 22px auto 0;
+        color: #7d8985;
+        font-family: $font-title;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.5;
+        text-align: center;
+    }
+}
+
+.seguroCtaFinal {
+    width: 100%;
+    padding: 70px 20px;
+    background: $primary;
+
+    &__container {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 60px;
+    }
+
+    &__content {
+        max-width: 700px;
+
+        h2 {
+            margin: 0 0 18px;
+            color: #fff;
+            font-family: $font-title;
+            font-size: 42px;
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -0.025em;
+        }
+
+        p {
+            max-width: 620px;
+            margin: 0;
+            color: #fff;
+            font-family: $font-title;
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+    }
+
+    &__action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+
+        .btnSeguro {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 58px;
+            padding: 16px 28px;
+            background: $success;
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            font-family: $font-title;
+            font-size: 18px;
+            font-weight: 800;
+            line-height: 1;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                background-color 0.2s ease;
+
+            &:hover {
+                background: $success-hover;
+                transform: translateY(-2px);
+                box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+
+                .arrow {
+                    transform: translateX(4px);
+                }
+            }
+
+            &:active {
+                transform: translateY(0);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            }
+
+            .arrow {
+                transition: transform 0.2s ease;
+            }
+        }
+    }
+}
+
 @media (max-width: 1024px) {
-    .seguros {
-        .seguroHero {
-            &__container {
-                flex-direction: column;
-                text-align: center;
-                gap: 20px;
-            }
+    .seguroHero {
+        padding: 65px 24px 75px;
+    }
 
-            &__content {
-                max-width: 100%;
-            }
+    .seguroHero__container {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+        gap: 40px;
+    }
 
-            &__image img {
-                max-width: 300px;
-            }
+    .seguroHero__title {
+        font-size: 40px;
+    }
+
+    .seguroHero__description {
+        font-size: 20px;
+    }
+
+    .seguroHero__visual img {
+        max-width: 400px;
+    }
+
+    .seguroCaracteristicas {
+        padding: 14px 24px 60px;
+    }
+
+    .seguroCaracteristicas__container {
+        gap: 14px;
+    }
+
+    .seguroCaracteristica {
+        gap: 14px;
+        min-height: 135px;
+        padding: 20px;
+    }
+
+    .seguroCaracteristica__icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .seguroCaracteristica__content {
+        h2 {
+            font-size: 18px;
         }
 
-        .seguroComparativa {
-            &__header {
-                font-size: 24px;
-            }
-
-            &__column {
-                span {
-                    font-size: 20px;
-                }
-
-                strong {
-                    font-size: 34px;
-                }
-            }
-        }
-
-        .seguroBeneficio {
-
-            &__content {
-                font-size: 22px;
-            }
-        }
-
-        .seguroVentajas {
-            &__list {
-                li span {
-                    font-size: 22px;
-                }
-            }
-        }
-
-        .seguroInfo {
-            &__content {
-                h3 {
-                    font-size: 28px;
-                }
-
-                p {
-                    font-size: 19px;
-                }
-            }
-        }
-
-        .seguroFinalCta {
-            &__content {
-                h3 {
-                    font-size: 26px;
-                }
-
-                p {
-                    font-size: 19px;
-                }
-            }
+        p {
+            font-size: 14px;
         }
     }
 
-    .success-modal,
-    .error-modal {
-        padding: 20px;
+    /*
+    |--------------------------------------------------------------------------
+    | Proceso
+    |--------------------------------------------------------------------------
+    */
+
+    .seguroProceso {
+        padding: 14px 24px;
+    }
+
+    .seguroProceso__container {
+        padding: 50px 34px 60px;
+    }
+
+    .seguroProceso__title {
+        margin-bottom: 40px;
+
+        font-size: 36px;
+    }
+
+    .seguroProceso__steps {
+        gap: 30px;
+    }
+
+    .seguroProceso__number {
+        width: 54px;
+        height: 54px;
+
+        font-size: 24px;
+    }
+
+    .seguroProceso__content {
 
         h3 {
             font-size: 20px;
         }
 
         p {
+            font-size: 16px;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Beneficios
+    |--------------------------------------------------------------------------
+    */
+
+    .seguroBeneficios {
+        padding: 70px 24px;
+    }
+
+    .seguroBeneficios__heading {
+        margin-bottom: 40px;
+    }
+
+    .seguroBeneficios__heading h2 {
+        font-size: 36px;
+    }
+
+    .seguroBeneficios__columns {
+        gap: 18px;
+    }
+
+    .seguroBeneficios__column {
+        gap: 16px;
+    }
+
+    .seguroBeneficioCard {
+        min-height: 126px;
+        padding: 22px;
+    }
+
+    .seguroBeneficioCard__check {
+        width: 40px;
+        height: 40px;
+        font-size: 22px;
+    }
+
+    .seguroBeneficioCard__content {
+        h3 {
+            font-size: 18px;
+        }
+
+        p {
+            font-size: 14px;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Precios
+    |--------------------------------------------------------------------------
+    */
+
+    .seguroPrecios {
+        padding: 50px 24px 70px;
+    }
+
+    .seguroPrecios__title {
+        font-size: 36px;
+    }
+
+    .seguroPrecio {
+        min-height: 250px;
+
+        padding: 30px 24px;
+    }
+
+    .seguroPrecio__amount {
+        font-size: 40px;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | CTA Final
+    |--------------------------------------------------------------------------
+    */
+    .seguroCtaFinal {
+        padding: 60px 24px;
+    }
+
+    .seguroCtaFinal__container {
+        gap: 40px;
+    }
+
+    .seguroCtaFinal__content {
+        h2 {
+            font-size: 36px;
+        }
+
+        p {
+            font-size: 18px;
+        }
+    }
+
+    .seguroCtaFinal__action .btnSeguro {
+        font-size: 18px;
+        padding: 14px 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .seguroHero {
+        padding: 50px 24px 60px;
+    }
+
+    .seguroHero__container {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        text-align: center;
+    }
+
+    .seguroHero__content {
+        align-items: center;
+        width: 100%;
+    }
+
+    .seguroHero__badge {
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+
+    .seguroHero__title {
+        max-width: 600px;
+        margin-bottom: 20px;
+        font-size: 36px;
+        line-height: 1.1;
+    }
+
+    .seguroHero__description {
+        max-width: 600px;
+        margin-bottom: 26px;
+        font-size: 18px;
+        line-height: 1.5;
+    }
+
+    .seguroHero__action {
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 14px;
+
+        .btnSeguro {
             font-size: 17px;
         }
     }
 
-    .seguroForm {
-        max-width: 90%;
-        margin: 20px auto;
+    .seguroHero__note {
+        max-width: 500px;
+        font-size: 12px;
+    }
 
-        .form-group {
-            label {
-                font-size: 15px;
+    .seguroHero__visual img {
+        max-width: 430px;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Modal - Formulario
+    |--------------------------------------------------------------------------
+    */
+    .seguroFormModal {
+        align-items: flex-end;
+        padding: 14px;
+    }
+
+    .seguroFormModal__content {
+        max-width: 600px;
+        max-height: calc(100dvh - 30px);
+        padding: 32px 25px 28px;
+        border-radius: 22px;
+    }
+
+    .seguroFormModal__header {
+        padding-right: 30px;
+        margin-bottom: 24px;
+
+        h2 {
+            font-size: 28px;
+        }
+
+        p {
+            font-size: 16px;
+        }
+    }
+
+    .seguroForm {
+        gap: 16px;
+
+        .form-group label {
+            text-align: left;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Modales de respuesta
+    |--------------------------------------------------------------------------
+    */
+    .success-modal,
+    .error-modal {
+        max-width: 420px;
+        padding: 26px 22px;
+
+        h3 {
+            font-size: 24px;
+        }
+    }
+
+    .success-modal {
+        .success-img {
+            width: 75px;
+            height: 75px;
+        }
+
+        >p {
+            font-size: 16px;
+        }
+
+        section {
+            gap: 12px;
+            padding: 12px;
+
+            img {
+                width: 36px;
+                height: 36px;
             }
 
-            input,
-            textarea,
-            select {
-                font-size: 15px;
+            p {
+                font-size: 14px;
+            }
+        }
+
+        button {
+            font-size: 16px;
+        }
+
+        .privacy-note {
+            font-size: 12px;
+
+            img {
+                width: 28px;
+                height: 28px;
             }
         }
     }
-}
 
-/* =========================
-   MOBILE
-========================= */
-@media (max-width: 768px) {
-
-    .success-modal,
     .error-modal {
-        padding: 18px;
+        h3 {
+            font-size: 22px;
+        }
 
+        p {
+            font-size: 14px;
+        }
+
+        button {
+            font-size: 16px;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Características
+    |--------------------------------------------------------------------------
+    */
+    .seguroCaracteristicas {
+        padding: 10px 24px 50px;
+    }
+
+    .seguroCaracteristicas__container {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        max-width: 600px;
+    }
+
+    .seguroCaracteristica {
+        min-height: 120px;
+        padding: 22px;
+    }
+
+    .seguroCaracteristica__icon {
+        width: 52px;
+        height: 52px;
+    }
+
+    .seguroCaracteristica__content {
+        h2 {
+            font-size: 20px;
+        }
+
+        p {
+            font-size: 16px;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Proceso
+    |--------------------------------------------------------------------------
+    */
+    .seguroProceso {
+        padding: 10px 24px;
+    }
+
+    .seguroProceso__container {
+        padding: 40px 24px 50px;
+        border-radius: 20px;
+    }
+
+    .seguroProceso__title {
+        max-width: 500px;
+        margin-bottom: 40px;
+        font-size: 32px;
+    }
+
+    .seguroProceso__steps {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .seguroProceso__step {
+        display: grid;
+        grid-template-columns: 58px minmax(0, 1fr);
+        align-items: start;
+        gap: 18px;
+        text-align: left;
+    }
+
+    .seguroProceso__number {
+        width: 58px;
+        height: 58px;
+        margin: 0;
+        font-size: 24px;
+    }
+
+    .seguroProceso__content {
+        max-width: none;
+        padding-top: 2px;
+
+        h3 {
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+
+        p {
+            font-size: 16px;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Beneficios
+    |--------------------------------------------------------------------------
+    */
+    .seguroBeneficios {
+        padding: 60px 24px;
+    }
+
+    .seguroBeneficios__heading {
+        margin-bottom: 36px;
+    }
+
+    .seguroBeneficios__heading h2 {
+        font-size: 32px;
+    }
+
+    .seguroBeneficios__columns {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .seguroBeneficios__column {
+        gap: 16px;
+    }
+
+    .seguroBeneficioCard {
+        min-height: 116px;
+        padding: 20px;
+    }
+
+    .seguroBeneficioCard__check {
+        width: 42px;
+        height: 42px;
+        font-size: 22px;
+    }
+
+    .seguroBeneficioCard__content {
         h3 {
             font-size: 18px;
         }
@@ -732,199 +1529,379 @@ select:disabled {
         p {
             font-size: 16px;
         }
+    }
 
-        button {
-            width: 100%;
-            padding: 12px;
+    /*
+    |--------------------------------------------------------------------------
+    | Precios
+    |--------------------------------------------------------------------------
+    */
+    .seguroPrecios {
+        padding: 50px 24px 60px;
+    }
+
+    .seguroPrecios__title {
+        margin-bottom: 32px;
+        font-size: 32px;
+    }
+
+    .seguroPrecios__comparison {
+        grid-template-columns: 1fr;
+    }
+
+    .seguroPrecio {
+        min-height: 210px;
+        padding: 32px 24px;
+    }
+
+    .seguroPrecio__amount {
+        font-size: 38px;
+    }
+
+    .seguroPrecios__disclaimer {
+        font-size: 14px;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | CTA Final
+    |--------------------------------------------------------------------------
+    */
+    .seguroCtaFinal {
+        padding: 50px 24px;
+    }
+
+    .seguroCtaFinal__container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        text-align: center;
+    }
+
+    .seguroCtaFinal__content {
+        max-width: 600px;
+
+        h2 {
+            font-size: 34px;
+        }
+
+        p {
+            font-size: 18px;
         }
     }
 
-    .seguroForm {
-        gap: 14px;
-        margin: 20px auto;
-        padding: 0 20px;
-
-        .form-group {
-            label {
-                font-size: 14px;
-            }
-
-            input,
-            textarea {
-                font-size: 14px;
-                padding: 10px;
-            }
-        }
-    }
-
-    .seguros {
-        .seguroHero {
-            &__container {
-                flex-direction: column;
-                padding: 60px 40px 20px 40px;
-            }
-
-            &__content {
-                h1 {
-                    text-align: left;
-                }
-
-                p {
-                    line-height: 1.3;
-                    text-align: left;
-                }
-            }
-
-            &__image {
-                flex: 1;
-                display: flex;
-                justify-content: center;
-
-                img {
-                    max-width: 600px;
-                }
-            }
-
-        }
+    .seguroCtaFinal__action {
+        width: 100%;
 
         .btnSeguro {
-            justify-content: center;
+            min-height: 56px;
+
+            padding: 14px 26px;
         }
-
-        #btnLegend {
-            margin-left: 30px;
-        }
-
-        .seguroComparativa {
-            &__container {
-                padding: 0 40px 30px;
-            }
-
-            &__header {
-                font-size: 22px;
-                padding: 16px;
-            }
-
-            &__body {
-                grid-template-columns: 1fr;
-            }
-
-            &__column {
-                padding: 24px 18px;
-
-                &:first-child {
-                    border-right: none;
-                    border-bottom: 1px solid #D8EEDD;
-                }
-
-                span {
-                    font-size: 18px;
-                }
-
-                strong {
-                    font-size: 32px;
-                }
-            }
-        }
-
-        .seguroBeneficio {
-            flex-direction: column;
-            text-align: center;
-
-            &__content {
-                font-size: 20px;
-            }
-        }
-
-        .seguroVentajas {
-            padding: 0 40px;
-
-            &__list {
-                li {
-                    align-items: flex-start;
-
-                    span {
-                        font-size: 18px;
-                    }
-
-                    img {
-                        width: 28px;
-                        height: 28px;
-                        margin-top: 2px;
-                    }
-                }
-            }
-        }
-
-        .seguroInfo {
-            flex-direction: column;
-            text-align: center;
-            padding: 24px 20px;
-
-            &__icon {
-                img {
-                    width: 60px;
-                    height: 60px;
-                }
-            }
-
-            &__content {
-                h3 {
-                    font-size: 24px;
-                }
-
-                p {
-                    font-size: 17px;
-                }
-            }
-        }
-
-        .seguroFinalCtas {
-            padding: 0 40px;
-        }
-
-        .seguroFinalCta {
-            align-items: flex-start;
-
-            &__icon {
-                img {
-                    width: 48px;
-                    height: 48px;
-                }
-            }
-
-            &__content {
-                h3 {
-                    font-size: 22px;
-                }
-
-                p {
-                    font-size: 16px;
-                }
-            }
-        }
-
-        /*         .faq {
-            &__container {
-                padding: 40px;
-            }
-
-            &__question {
-                padding: 12px 15px;
-            }
-        } */
     }
 }
 
-/* =========================
-   MOBILE PEQUEÑO
-========================= */
 @media (max-width: 480px) {
+    .seguroHero {
+        padding: 40px 20px 50px;
+    }
 
+    .seguroHero__container {
+        gap: 30px;
+    }
+
+    .seguroHero__badge {
+        padding: 8px 13px;
+        font-size: 11px;
+    }
+
+    .seguroHero__title {
+        font-size: 31px;
+    }
+
+    .seguroHero__description {
+        font-size: 17px;
+    }
+
+    .seguroHero__action .btnSeguro {
+        width: 100%;
+        max-width: 340px;
+        min-height: 54px;
+        padding: 14px 20px;
+        font-size: 16px;
+    }
+
+    .seguroHero__note {
+        font-size: 12px;
+    }
+
+    .seguroHero__visual img {
+        max-width: 340px;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Modal - Formulario
+    |--------------------------------------------------------------------------
+    */
+    .seguroFormModal {
+        padding: 10px;
+    }
+
+    .seguroFormModal__content {
+        max-height: calc(100dvh - 20px);
+        padding: 28px 18px 22px;
+        border-radius: 20px;
+    }
+
+    .seguroFormModal__close {
+        top: 12px;
+        right: 12px;
+        width: 34px;
+        height: 34px;
+        font-size: 24px;
+    }
+
+    .seguroFormModal__header {
+        padding-right: 34px;
+        margin-bottom: 22px;
+
+        .seguroFormModal__badge {
+            font-size: 12px;
+        }
+
+        h2 {
+            font-size: 25px;
+        }
+
+        p {
+            font-size: 14px;
+        }
+    }
+
+    .seguroForm .form-group {
+        label {
+            font-size: 14px;
+        }
+
+        input,
+        textarea,
+        select {
+            font-size: 14px;
+        }
+    }
+
+    .seguroForm__submit {
+        font-size: 16px !important;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Modales de respuesta
+    |--------------------------------------------------------------------------
+    */
     .success-modal,
     .error-modal {
-        padding: 16px;
+        padding: 22px 18px;
 
+        h3 {
+            font-size: 21px;
+        }
+    }
+
+    .success-modal {
+        .success-img {
+            width: 68px;
+            height: 68px;
+            margin-bottom: 12px;
+        }
+
+        .success-divider {
+            width: 56px;
+            height: 3px;
+            margin-bottom: 18px;
+        }
+
+        >p {
+            font-size: 14px;
+        }
+
+        section {
+            align-items: flex-start;
+            margin: 16px 0;
+            padding: 11px;
+
+            img {
+                width: 32px;
+                height: 32px;
+            }
+
+            p {
+                font-size: 12px;
+            }
+        }
+
+        button {
+            min-height: 50px;
+            padding: 12px 15px;
+            font-size: 16px;
+        }
+
+        .privacy-note {
+            align-items: flex-start;
+            font-size: 10px;
+
+            img {
+                width: 25px;
+                height: 25px;
+            }
+        }
+    }
+
+    .error-modal {
+        h3 {
+            font-size: 20px;
+        }
+
+        p {
+            font-size: 14px;
+        }
+
+        button {
+            min-height: 46px;
+            padding: 11px 15px;
+            font-size: 14px;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Características
+    |--------------------------------------------------------------------------
+    */
+    .seguroCaracteristicas {
+        padding: 5px 20px 40px;
+    }
+
+    .seguroCaracteristica {
+        gap: 16px;
+        min-height: 110px;
+        padding: 18px;
+
+
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+
+        &--dual {
+
+            #chubb {
+                width: 120px;
+                height: 70px;
+            }
+        }
+    }
+
+    .seguroCaracteristica__icon {
+        width: 46px;
+        height: 46px;
+    }
+
+    .seguroCaracteristica__content {
+        h2 {
+            font-size: 18px;
+        }
+
+        p {
+            font-size: 14px;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Proceso
+    |--------------------------------------------------------------------------
+    */
+    .seguroProceso {
+        padding: 5px 20px;
+    }
+
+    .seguroProceso__container {
+        padding: 40px 20px 40px;
+
+        border-radius: 18px;
+    }
+
+    .seguroProceso__badge {
+        font-size: 10px;
+    }
+
+    .seguroProceso__title {
+        margin-bottom: 30px;
+
+        font-size: 28px;
+    }
+
+    .seguroProceso__steps {
+        gap: 30px;
+    }
+
+    .seguroProceso__step {
+        grid-template-columns: 48px minmax(0, 1fr);
+        gap: 14px;
+    }
+
+    .seguroProceso__number {
+        width: 48px;
+        height: 48px;
+        font-size: 22px;
+    }
+
+    .seguroProceso__content {
+        h3 {
+            font-size: 18px;
+        }
+
+        p {
+            font-size: 14px;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Beneficios
+    |--------------------------------------------------------------------------
+    */
+    .seguroBeneficios {
+        padding: 50px 20px;
+    }
+
+    .seguroBeneficios__heading {
+        margin-bottom: 30px;
+    }
+
+    .seguroBeneficios__badge {
+        font-size: 10px;
+    }
+
+    .seguroBeneficios__heading h2 {
+        font-size: 28px;
+    }
+
+    .seguroBeneficioCard {
+        gap: 14px;
+        min-height: 105px;
+        padding: 18px;
+    }
+
+    .seguroBeneficioCard__check {
+        width: 38px;
+        height: 38px;
+        font-size: 20px;
+    }
+
+    .seguroBeneficioCard__content {
         h3 {
             font-size: 16px;
         }
@@ -934,267 +1911,87 @@ select:disabled {
         }
     }
 
-    .seguroForm {
-        gap: 12px;
+    /*
+    |--------------------------------------------------------------------------
+    | Precios
+    |--------------------------------------------------------------------------
+    */
+    .seguroPrecios {
+        padding: 45px 20px 50px;
+    }
 
-        .form-group {
-            label {
-                font-size: 13px;
-            }
+    .seguroPrecios__title {
+        margin-bottom: 28px;
+        font-size: 28px;
+    }
 
-            input,
-            textarea {
-                font-size: 13px;
-            }
+    .seguroPrecio {
+        min-height: 190px;
+        padding: 28px 20px;
+    }
+
+    .seguroPrecio__label {
+        font-size: 18px;
+    }
+
+    .seguroPrecio__tag {
+        margin-bottom: 16px;
+        font-size: 14px;
+    }
+
+    .seguroPrecio__amount {
+        font-size: 34px;
+    }
+
+    .seguroPrecio__currency {
+        font-size: 14px;
+    }
+
+    .seguroPrecios__disclaimer {
+        margin-top: 18px;
+        font-size: 12px;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | CTA Final
+    |--------------------------------------------------------------------------
+    */
+    .seguroCtaFinal {
+        padding: 40px 20px;
+    }
+
+    .seguroCtaFinal__container {
+        gap: 20px;
+    }
+
+    .seguroCtaFinal__content {
+        h2 {
+            font-size: 30px;
+        }
+
+        p {
+            font-size: 16px;
         }
     }
 
-    .seguros {
-        .seguroHero {
-            &__content {
-                h1 {
-                    font-size: 24px;
-                }
-
-                p {
-                    font-size: 20px;
-                }
-            }
-        }
-
-        .btnSeguro {
-            font-size: 22px;
-            padding: 12px 20px;
-        }
-
-        .seguroComparativa {
-            &__container {
-                padding: 0 20px 25px;
-            }
-
-            &__header {
-                font-size: 18px;
-            }
-
-            &__column {
-                span {
-                    font-size: 16px;
-                }
-
-                strong {
-                    font-size: 26px;
-                }
-            }
-        }
-
-        .seguroBeneficio {
-            padding: 16px;
-
-            &__icon {
-                img {
-                    width: 45px;
-                    height: 45px;
-                }
-            }
-
-            &__content {
-                font-size: 16px;
-            }
-        }
-
-        .seguroVentajas {
-            padding: 0 20px;
-
-            &__list {
-                gap: 14px;
-
-                li {
-                    span {
-                        font-size: 16px;
-                    }
-
-                    img {
-                        width: 24px;
-                        height: 24px;
-                    }
-                }
-            }
-        }
-
-        .seguroInfo {
-            &__content {
-                h3 {
-                    font-size: 20px;
-                }
-
-                p {
-                    font-size: 15px;
-                }
-            }
-        }
-
-        .seguroFinalCtas {
-            padding: 0 20px;
-        }
-
-        .seguroFinalCta {
-            padding: 20px;
-            gap: 15px;
-
-            &__icon {
-                img {
-                    width: 40px;
-                    height: 40px;
-                }
-            }
-
-            &__content {
-                h3 {
-                    font-size: 18px;
-                }
-
-                p {
-                    font-size: 14px;
-                    line-height: 1.4;
-                }
-            }
-        }
-
-        /* .faq {
-            &__question {
-                font-size: 22px;
-            }
-
-            &__answer p {
-                font-size: 18px;
-            }
-        } */
+    .seguroCtaFinal__action .btnSeguro {
+        width: 100%;
+        max-width: 340px;
+        font-size: 16px;
     }
 }
 
-/* =========================
-   MOBILE 360
-========================= */
 @media (max-width: 360px) {
-    .seguros {
-        .seguroHero__content h1 {
-            font-size: 24px;
-        }
-
-        .seguroHero__content p {
-            font-size: 18px;
-        }
-
-        .btnSeguro {
-            padding: 20px 10px;
-            font-size: 18px;
-        }
-
-        .seguroComparativa {
-            &__header {
-                font-size: 16px;
-            }
-
-            &__column {
-                span {
-                    font-size: 14px;
-                }
-
-                strong {
-                    font-size: 22px;
-                }
-            }
-        }
-
-        .seguroBeneficio {
-            &__content {
-                font-size: 14px;
-            }
-        }
-
-        .seguroInfo {
-            &__content {
-                h3 {
-                    font-size: 18px;
-                }
-
-                p {
-                    font-size: 14px;
-                }
-            }
-        }
-
-        .seguroFinalCta {
-            &__content {
-                h3 {
-                    font-size: 16px;
-                }
-
-                p {
-                    font-size: 13px;
-                }
-            }
-        }
-
-        /* .faq {
-            &__question {
-                font-size: 18px;
-            }
-
-            &__answer p {
-                font-size: 16px;
-            }
-        } */
+    .seguroFormModal__content {
+        padding: 24px 14px 20px;
     }
-}
 
-/* =========================
-   MOBILE 300
-========================= */
-@media (max-width: 300px) {
-    .seguros {
-        .seguroHero__content h1 {
-            font-size: 20px;
-        }
+    .seguroFormModal__header h2 {
+        font-size: 24px;
+    }
 
-        .seguroHero__content p {
-            font-size: 16px;
-        }
-
-        .btnSeguro {
-            font-size: 16px;
-            padding: 10px;
-        }
-
-        .seguroComparativa {
-            &__header {
-                font-size: 14px;
-            }
-
-            &__column {
-                padding: 18px 10px;
-
-                span {
-                    font-size: 13px;
-                }
-
-                strong {
-                    font-size: 18px;
-                }
-            }
-        }
-
-        .seguroBeneficio {
-            &__content {
-                font-size: 12px;
-            }
-
-            &__icon {
-                img {
-                    width: 38px;
-                    height: 38px;
-                }
-            }
-        }
+    .seguroForm {
+        gap: 14px;
     }
 }
