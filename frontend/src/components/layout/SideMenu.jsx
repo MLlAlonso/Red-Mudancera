@@ -123,15 +123,6 @@ export default function SideMenu({ open }) {
         </li>
 
         <li>
-          <Link href="/empresa/empresas">
-            <div className="side-item">
-              <img src="/icons/team.png" />
-              <span>Explorar empresas</span>
-            </div>
-          </Link>
-        </li>
-
-        <li>
           <Link href="/empresa/creditos">
             <div className="side-item">
               <img src="/icons/credito.png" />

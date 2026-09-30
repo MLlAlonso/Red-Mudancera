@@ -10,16 +10,18 @@ import Button_cta from "@/components/common/Button_cta";
 import ComprarLeadModal from "@/components/modals/ComprarLeadModal";
 import LiveViewToast from "@/components/common/LiveViewToast";
 import EmpresaNotesModal from "@/components/modals/EmpresaNotesModal";
+import LeadWhatsappMessageModal from "@/components/modals/LeadWhatsappMessageModal";
 import "@/styles/pages/solicitudes/_detalleSolicitud.scss";
 
 export default function DetalleSolicitudPage() {
     const { id } = useParams();
+    const [empresa, setEmpresa] = useState(null);
     const [solicitud, setSolicitud] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [haComprado, setHaComprado] = useState(false);
     const [fueExclusivo, setFueExclusivo] = useState(false);
-    const [empresa, setEmpresa] = useState(null);
     const [showNotesModal, setShowNotesModal] = useState(false);
+    const [showWhatsappMessageModal, setShowWhatsappMessageModal] = useState(false);
 
     useEffect(() => {
         const token = getEmpresaToken();
@@ -37,8 +39,7 @@ export default function DetalleSolicitudPage() {
 
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/solicitudes-mudanza/${id}`, {
             headers: {
-                Accept: "application/json",
-                ...(token && { Authorization: `Bearer ${token}` }),
+                Accept: "application/json", ...(token && { Authorization: `Bearer ${token}` }),
             }
         })
             .then(res => res.json())
@@ -68,9 +69,15 @@ export default function DetalleSolicitudPage() {
 
             <main className="detalle-solicitud">
                 {haComprado && (
-                    <button className="lead-floating-notes" onClick={() => setShowNotesModal(true)} title="Notas" >
-                        📝
-                    </button>
+                    <div className="lead-floating-actions">
+                        <button className="lead-floating-notes" onClick={() => setShowNotesModal(true)} title="Notas" aria-label="Abrir notas" >
+                            📝
+                        </button>
+
+                        <button className="lead-floating-whatsapp" onClick={() => setShowWhatsappMessageModal(true)} title="Ver mensaje de WhatsApp" aria-label="Ver mensaje de WhatsApp" >
+                            <img src="/icons/whatsapp.png" alt="" />
+                        </button>
+                    </div>
                 )}
 
                 <div className="detalle-solicitud__header">
@@ -258,12 +265,10 @@ export default function DetalleSolicitudPage() {
             <Footer />
 
             {!haComprado && showModal && (
-                <ComprarLeadModal
-                    solicitudId={id}
-                    onClose={() => setShowModal(false)}
-                    onSuccess={() => window.location.reload()}
-                />
+                <ComprarLeadModal solicitudId={id} onClose={() => setShowModal(false)} onSuccess={() => window.location.reload()} />
             )}
+
+            <LeadWhatsappMessageModal open={showWhatsappMessageModal} solicitud={solicitud} empresa={empresa} onClose={() => setShowWhatsappMessageModal(false)} />
         </>
     );
 }

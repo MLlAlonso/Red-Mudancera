@@ -49,7 +49,7 @@ Quedo atento para coordinar`;
   window.open(url, "_blank");
 }
 
-export function openLeadWhatsappMessage({
+export function buildLeadWhatsappMessage({
   telefono,
   empresaNombre,
   nombreCliente,
@@ -69,30 +69,27 @@ export function openLeadWhatsappMessage({
   tipoServicio,
   tipoMudanza,
 }) {
-  if (!telefono) {
-    alert("Este lead no tiene teléfono disponible");
-    return;
-  }
-
-  const inventarioLimpio = inventario ? inventario
-    .replace(/<br\s*\/?>/gi, "\n")
-    .replace(/<\/p>/gi, "\n")
-    .replace(/<\/li>/gi, "\n")
-    .replace(/<li[^>]*>/gi, "")
-    .replace(/<[^>]*>/g, "")
-    .replace(/&nbsp;/gi, " ")
-    .replace(/&amp;/gi, "&")
-    .replace(/&lt;/gi, "<")
-    .replace(/&gt;/gi, ">")
-    .trim()
+  const inventarioLimpio = inventario
+    ? inventario
+      .replace(/<br\s*\/?>/gi, "\n")
+      .replace(/<\/p>/gi, "\n")
+      .replace(/<\/li>/gi, "\n")
+      .replace(/<li[^>]*>/gi, "")
+      .replace(/<[^>]*>/g, "")
+      .replace(/&nbsp;/gi, " ")
+      .replace(/&amp;/gi, "&")
+      .replace(/&lt;/gi, "<")
+      .replace(/&gt;/gi, ">")
+      .trim()
     : "";
 
-  const inventarioLista = inventarioLimpio ? inventarioLimpio
-    .split(/[,\r\n]+/)
-    .map((item) => item.trim())
-    .filter(Boolean)
-    .map((item) => `- ${item}`)
-    .join("\n")
+  const inventarioLista = inventarioLimpio
+    ? inventarioLimpio
+      .split(/[,\r\n]+/)
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .map((item) => `- ${item}`)
+      .join("\n")
     : "- No especificado";
 
   const mostrar = (valor) => {
@@ -103,7 +100,7 @@ export function openLeadWhatsappMessage({
     return valor;
   };
 
-  const mensaje = `Hola Soy representante de ${empresaNombre || "nuestra empresa"}.
+  return `Hola Soy representante de ${empresaNombre || "nuestra empresa"}.
 
 Vi tu solicitud de mudanza publicada en Mudanza Fácil y con gusto podemos ayudarte.
 Antes de prepararte una cotización, quisiera confirmar algunos detalles para asegurarme de que la información sea correcta.
@@ -137,12 +134,58 @@ Teléfono: ${mostrar(telefono)}
 
 INVENTARIO
 ${inventarioLista}`;
+}
+
+export function openLeadWhatsappMessage({
+  telefono,
+  empresaNombre,
+  nombreCliente,
+  emailCliente,
+  origen,
+  destino,
+  tipoVivienda,
+  viviendaDestino,
+  origenPisos,
+  origenElevador,
+  origenAcarreo,
+  destinoPisos,
+  destinoElevador,
+  destinoAcarreo,
+  inventario,
+  fechaRecoleccion,
+  tipoServicio,
+  tipoMudanza,
+  mensajePersonalizado,
+}) {
+  if (!telefono) {
+    alert("Este lead no tiene teléfono disponible");
+    return;
+  }
+
+  const mensaje =
+    mensajePersonalizado ||
+    buildLeadWhatsappMessage({
+      telefono,
+      empresaNombre,
+      nombreCliente,
+      emailCliente,
+      origen,
+      destino,
+      tipoVivienda,
+      viviendaDestino,
+      origenPisos,
+      origenElevador,
+      origenAcarreo,
+      destinoPisos,
+      destinoElevador,
+      destinoAcarreo,
+      inventario,
+      fechaRecoleccion,
+      tipoServicio,
+      tipoMudanza,
+    });
 
   const telefonoLimpio = telefono.replace(/\D/g, "");
-
-  const url = `https://wa.me/52${telefonoLimpio}?text=${encodeURIComponent(
-    mensaje
-  )}`;
-
+  const url = `https://wa.me/52${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
   window.open(url, "_blank");
 }
