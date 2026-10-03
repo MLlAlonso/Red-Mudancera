@@ -299,4 +299,129 @@ class SuperAdminServiciosService
             ]
         );
     }
+
+    public function empresasCompradorasPorRango(string $fechaInicio, string $fechaFin)
+    {
+        $fechaInicio = Carbon::createFromFormat('Y-m-d', $fechaInicio)->startOfDay();
+        $fechaFin = Carbon::createFromFormat('Y-m-d', $fechaFin)->endOfDay();
+
+        return Empresa::query()->whereHas('leadCompras', function ($query) use ($fechaInicio, $fechaFin) {
+            $query->whereBetween('created_at', [$fechaInicio, $fechaFin]);
+        })
+            ->withCount([
+                'leadCompras as compras_rango' => function ($query) use ($fechaInicio, $fechaFin) {
+                    $query->whereBetween('created_at', [$fechaInicio, $fechaFin]);
+                }
+            ])
+            ->withSum([
+                'leadCompras as creditos_consumidos_rango' => function ($query) use ($fechaInicio, $fechaFin) {
+                    $query->whereBetween('created_at', [$fechaInicio, $fechaFin]);
+                }
+            ], 'tokens_pagados')
+            ->orderByDesc('compras_rango')
+            ->get()
+            ->map(function ($empresa) {
+                return [
+                    'id' => $empresa->id,
+                    'empresa' => $empresa->empresa,
+                    'logo' => $empresa->logo_url ?? $empresa->logo ?? null,
+                    'compras_rango' => (int) $empresa->compras_rango,
+                    'creditos_consumidos_rango' => (int) ($empresa->creditos_consumidos_rango ?? 0),
+                ];
+            })
+            ->values();
+    }
+
+    public function ultimasComprasPorRango(string $fechaInicio, string $fechaFin, int $limit = 20)
+    {
+        $fechaInicio = Carbon::createFromFormat('Y-m-d', $fechaInicio)->startOfDay();
+        $fechaFin = Carbon::createFromFormat('Y-m-d', $fechaFin)->endOfDay();
+
+        return LeadCompra::query()
+            ->whereBetween('created_at', [$fechaInicio, $fechaFin])
+            ->with(['empresa:id,empresa,logo', 'solicitud:id,nombre,origen,destino,tipo_mudanza'])
+            ->latest()
+            ->limit($limit)
+            ->get()
+            ->map(function ($compra) {
+                return [
+                    'id' => $compra->id,
+
+                    'empresa' => [
+                        'id' => $compra->empresa?->id,
+                        'nombre' => $compra->empresa?->empresa,
+                        'logo' => $compra->empresa?->logo_url ?? $compra->empresa?->logo ?? null,
+                    ],
+
+                    'lead' => [
+                        'id' => $compra->solicitud?->id,
+                        'nombre' => $compra->solicitud?->nombre,
+                        'origen' => $compra->solicitud?->origen,
+                        'destino' => $compra->solicitud?->destino,
+                        'tipo_mudanza' => $compra->solicitud?->tipo_mudanza,
+                    ],
+
+                    'tokens_pagados' => (int) $compra->tokens_pagados,
+                    'exclusivo' => (bool) $compra->exclusivo,
+                    'estado_operacion' => $compra->estado_operacion,
+                    'ganancia' => $compra->ganancia,
+                    'created_at' => $compra->created_at,
+                ];
+            });
+    }
+
+    public function comprasPorEmpresaPorRango(int $empresaId, string $fechaInicio, string $fechaFin)
+    {
+        $fechaInicio = Carbon::createFromFormat('Y-m-d', $fechaInicio)->startOfDay();
+        $fechaFin = Carbon::createFromFormat('Y-m-d', $fechaFin)->endOfDay();
+        $empresa = Empresa::query()->select('id', 'empresa', 'logo')->findOrFail($empresaId);
+
+        $compras = LeadCompra::query()
+            ->where('empresa_id', $empresaId)
+            ->whereBetween('created_at', [$fechaInicio, $fechaFin])
+            ->with(['solicitud:id,nombre,email,telefono,origen,destino,tipo_mudanza,fecha_recoleccion,estado'])
+            ->latest()
+            ->get()
+            ->map(function ($compra) {
+                return [
+                    'id' => $compra->id,
+
+                    'lead' => [
+                        'id' => $compra->solicitud?->id,
+                        'nombre' => $compra->solicitud?->nombre,
+                        'email' => $compra->solicitud?->email,
+                        'telefono' => $compra->solicitud?->telefono,
+                        'origen' => $compra->solicitud?->origen,
+                        'destino' => $compra->solicitud?->destino,
+                        'tipo_mudanza' => $compra->solicitud?->tipo_mudanza,
+                        'fecha_recoleccion' => $compra->solicitud?->fecha_recoleccion,
+                        'estado' => $compra->solicitud?->estado,
+                    ],
+
+                    'tokens_pagados' => (int) $compra->tokens_pagados,
+                    'exclusivo' => (bool) $compra->exclusivo,
+                    'estado_operacion' => $compra->estado_operacion,
+                    'ganancia' => $compra->ganancia,
+                    'created_at' => $compra->created_at,
+                ];
+            });
+
+        return [
+            'empresa' => [
+                'id' => $empresa->id,
+                'nombre' => $empresa->empresa,
+                'logo' => $empresa->logo_url ?? $empresa->logo ?? null,
+            ],
+
+            'fecha_inicio' => $fechaInicio->format('Y-m-d'),
+            'fecha_fin' => $fechaFin->format('Y-m-d'),
+
+            'resumen' => [
+                'compras' => $compras->count(),
+                'creditos_consumidos' => $compras->sum('tokens_pagados'),
+            ],
+
+            'compras' => $compras->values(),
+        ];
+    }
 }

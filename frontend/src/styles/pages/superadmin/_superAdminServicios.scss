@@ -215,7 +215,7 @@
         align-items: center;
         justify-content: center;
         min-height: 44px;
-        font-size: 1.1rem;
+        font-size: 1.4rem;
         font-weight: 600;
     }
 
@@ -275,11 +275,138 @@
     margin-top: 2rem;
 }
 
+
+
+
+
+.purchases-period {
+    margin-bottom: 1.25rem;
+    padding: 1.25rem 1.35rem;
+    background: $cards;
+    border: 1px solid rgba($primary, 0.08);
+    border-radius: 18px;
+
+    &__header {
+        margin-bottom: 1rem;
+
+        span {
+            display: block;
+            margin-bottom: 0.2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: $secondary;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        h3 {
+            margin: 0;
+            color: $primary;
+            font-size: 1.05rem;
+        }
+    }
+
+    &__controls {
+        display: flex;
+        align-items: flex-end;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    &__date {
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+
+        label {
+            color: $secondary;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        input {
+            min-width: 170px;
+            height: 44px;
+            padding: 0 0.85rem;
+            border: 1px solid rgba($primary, 0.12);
+            border-radius: 10px;
+            background: white;
+            color: $primary;
+            font-family: inherit;
+            font-size: 0.85rem;
+            outline: none;
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+
+            &:hover {
+                border-color: rgba($primary, 0.22);
+            }
+
+            &:focus {
+                border-color: $primary;
+                box-shadow: 0 0 0 3px rgba($primary, 0.08);
+            }
+        }
+    }
+
+    &__separator {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 44px;
+        padding: 0 0.1rem;
+        color: $secondary;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    &__button {
+        min-height: 44px;
+        padding: 0 1.2rem;
+        border: 0;
+        border-radius: 10px;
+        background: $primary;
+        color: white;
+        font-family: inherit;
+        font-size: 0.85rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition:
+            background 0.2s ease,
+            transform 0.2s ease,
+            opacity 0.2s ease;
+
+        &:hover:not(:disabled) {
+            background: darken($primary, 6%);
+            transform: translateY(-1px);
+        }
+
+        &:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+}
+
+
+
+
+
+
+
+
 .purchases-layout {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 1.25rem;
 }
+
+
 
 .purchases-panel {
     min-width: 0;
@@ -846,6 +973,39 @@
         align-items: flex-start;
         flex-direction: column;
         gap: 0.5rem;
+    }
+
+    .purchases-period {
+        padding: 1rem;
+
+        &__header {
+            margin-bottom: 0.9rem;
+        }
+
+        &__controls {
+            align-items: stretch;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        &__date {
+            width: 100%;
+
+            input {
+                width: 100%;
+                min-width: 0;
+            }
+        }
+
+        &__separator {
+            height: auto;
+            min-height: auto;
+            transform: rotate(90deg);
+        }
+
+        &__button {
+            width: 100%;
+        }
     }
 }
 

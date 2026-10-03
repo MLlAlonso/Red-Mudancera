@@ -96,19 +96,62 @@ class SuperAdminServiciosController extends Controller
         ]);
     }
 
-    public function empresasCompradoras()
+    public function empresasCompradoras(Request $request)
     {
-        return response()->json(['data' => $this->serviciosService->empresasCompradorasDelMes(),]);
+        $request->validate([
+            'fecha_inicio' => ['required', 'date_format:Y-m-d'],
+            'fecha_fin' => [
+                'required',
+                'date_format:Y-m-d',
+                'after_or_equal:fecha_inicio',
+            ],
+        ]);
+
+        return response()->json([
+            'data' => $this->serviciosService->empresasCompradorasPorRango(
+                $request->fecha_inicio,
+                $request->fecha_fin
+            ),
+        ]);
     }
 
-    public function ultimasCompras()
+    public function ultimasCompras(Request $request)
     {
-        return response()->json(['data' => $this->serviciosService->ultimasCompras(),]);
+        $request->validate([
+            'fecha_inicio' => ['required', 'date_format:Y-m-d'],
+            'fecha_fin' => [
+                'required',
+                'date_format:Y-m-d',
+                'after_or_equal:fecha_inicio',
+            ],
+        ]);
+
+        return response()->json([
+            'data' => $this->serviciosService->ultimasComprasPorRango(
+                $request->fecha_inicio,
+                $request->fecha_fin
+            ),
+        ]);
     }
 
-    public function comprasPorEmpresa($empresaId)
+    public function comprasPorEmpresa(Request $request, $empresaId)
     {
-        return response()->json($this->serviciosService->comprasPorEmpresaDelMes((int) $empresaId));
+        $request->validate([
+            'fecha_inicio' => ['required', 'date_format:Y-m-d'],
+            'fecha_fin' => [
+                'required',
+                'date_format:Y-m-d',
+                'after_or_equal:fecha_inicio',
+            ],
+        ]);
+
+        return response()->json(
+            $this->serviciosService->comprasPorEmpresaPorRango(
+                (int) $empresaId,
+                $request->fecha_inicio,
+                $request->fecha_fin
+            )
+        );
     }
 
     public function exportarSolicitudesMudanza(Request $request)

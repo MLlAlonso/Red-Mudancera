@@ -4,28 +4,40 @@ import { useEffect, useState } from "react";
 import { getLeadPurchasingCompanies, getLatestLeadPurchases, getLeadPurchasesByEmpresa, } from "@/services/superAdmin";
 
 export default function LeadPurchasesSection() {
+    const getToday = () => {
+        const ahora = new Date();
+        return `${ahora.getFullYear()}-${String(ahora.getMonth() + 1).padStart(2, "0")}-${String(ahora.getDate()).padStart(2, "0")}`;
+    };
+
+    const getFirstDayOfMonth = () => {
+        const ahora = new Date();
+        return `${ahora.getFullYear()}-${String(ahora.getMonth() + 1).padStart(2, "0")}-01`;
+    };
+
+    const [fechaInicio, setFechaInicio] = useState(getFirstDayOfMonth());
+    const [fechaFin, setFechaFin] = useState(getToday());
+    const [fechaInicioAplicada, setFechaInicioAplicada] = useState(getFirstDayOfMonth());
+    const [fechaFinAplicada, setFechaFinAplicada] = useState(getToday());
     const [companies, setCompanies] = useState([]);
     const [latestPurchases, setLatestPurchases] = useState([]);
     const [selectedCompany, setSelectedCompany] = useState(null);
     const [companyPurchases, setCompanyPurchases] = useState(null);
     const [loading, setLoading] = useState(true);
     const [loadingPurchases, setLoadingPurchases] = useState(false);
+    const [applyingPeriod, setApplyingPeriod] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        loadPurchases();
+        loadPurchases(fechaInicioAplicada, fechaFinAplicada);
     }, []);
 
-    const loadPurchases = async () => {
+    const loadPurchases = async (inicio, fin) => {
         try {
             setLoading(true);
             setError(null);
 
-            const [companiesResponse, latestResponse,] = await Promise.all([
-                getLeadPurchasingCompanies(),
-                getLatestLeadPurchases(),
-            ]);
-
+            const [companiesResponse, latestResponse,] =
+                await Promise.all([getLeadPurchasingCompanies(inicio, fin), getLatestLeadPurchases(inicio, fin),]);
             setCompanies(companiesResponse.data || []);
             setLatestPurchases(latestResponse.data || []);
         } catch (error) {
@@ -36,15 +48,39 @@ export default function LeadPurchasesSection() {
         }
     };
 
+    const handleApplyPeriod = async () => {
+        if (!fechaInicio || !fechaFin) {
+            return;
+        }
+
+        if (fechaInicio > fechaFin) {
+            setError("La fecha inicial no puede ser posterior a la fecha final.");
+            return;
+        }
+
+        try {
+            setApplyingPeriod(true);
+            setError(null);
+            setSelectedCompany(null);
+            setCompanyPurchases(null);
+            await loadPurchases(fechaInicio, fechaFin);
+            setFechaInicioAplicada(fechaInicio);
+            setFechaFinAplicada(fechaFin);
+        } finally {
+            setApplyingPeriod(false);
+        }
+    };
+
     const handleCompanyClick = async (company) => {
         try {
             setLoadingPurchases(true);
             setSelectedCompany(company);
             setCompanyPurchases(null);
-            const response = await getLeadPurchasesByEmpresa(company.id);
+            const response = await getLeadPurchasesByEmpresa(company.id, fechaInicioAplicada, fechaFinAplicada);
             setCompanyPurchases(response);
         } catch (error) {
             console.error(error);
+
             setCompanyPurchases({
                 empresa: company,
                 resumen: {
@@ -90,7 +126,7 @@ export default function LeadPurchasesSection() {
         );
     };
 
-    if (loading) {
+    if (loading && companies.length === 0) {
         return (
             <section className="admin-block admin-purchases">
                 <div className="admin-block__header">
@@ -125,13 +161,63 @@ export default function LeadPurchasesSection() {
                     </div>
                 )}
 
-                <div className="purchases-layout">
+                <div className="purchases-period">
+                    <div className="purchases-period__header">
+                        <div>
+                            <span> Filtrar actividad </span>
+                            <h3> Periodo de compras </h3>
+                        </div>
+                    </div>
 
-                    {/* EMPRESAS COMPRADORAS */}
+                    <div className="purchases-period__controls">
+                        <div className="purchases-period__date">
+                            <label htmlFor="compras-fecha-inicio">
+                                Desde
+                            </label>
+
+                            <input
+                                id="compras-fecha-inicio"
+                                type="date"
+                                value={fechaInicio}
+                                max={fechaFin}
+                                onChange={(event) => setFechaInicio(event.target.value)}
+                            />
+                        </div>
+
+                        <span className="purchases-period__separator">
+                            →
+                        </span>
+
+                        <div className="purchases-period__date">
+                            <label htmlFor="compras-fecha-fin">
+                                Hasta
+                            </label>
+
+                            <input
+                                id="compras-fecha-fin"
+                                type="date"
+                                value={fechaFin}
+                                min={fechaInicio}
+                                onChange={(event) => setFechaFin(event.target.value)}
+                            />
+                        </div>
+
+                        <button
+                            type="button"
+                            className="purchases-period__button"
+                            onClick={handleApplyPeriod}
+                            disabled={applyingPeriod || !fechaInicio || !fechaFin || fechaInicio > fechaFin}
+                        >
+                            {applyingPeriod ? "Actualizando..." : "Aplicar periodo"}
+                        </button>
+                    </div>
+                </div>
+
+                <div className="purchases-layout">
                     <div className="purchases-panel">
                         <div className="purchases-panel__header">
                             <div>
-                                <span> Este mes </span>
+                                <span> Este periodo </span>
                                 <h3> Empresas compradoras </h3>
                             </div>
 
@@ -142,29 +228,19 @@ export default function LeadPurchasesSection() {
 
                         {companies.length === 0 ? (
                             <div className="purchases-empty">
-                                <p>
-                                    Todavía no hay empresas que hayan comprado contactos este mes.
-                                </p>
+                                <p> No hay empresas que hayan comprado contactos durante este periodo. </p>
                             </div>
                         ) : (
                             <div className="buyers-list">
                                 {companies.map((company) => (
-                                    <button
-                                        type="button"
-                                        className="buyer-item"
-                                        key={company.id}
-                                        onClick={() => handleCompanyClick(company)}
-                                    >
+                                    <button type="button" className="buyer-item" key={company.id} onClick={() => handleCompanyClick(company)} >
                                         <div className="buyer-item__identity">
-
                                             <div className="buyer-item__logo">
                                                 {company.logo ? (
                                                     <img src={company.logo} alt="" />
                                                 ) : (
                                                     <span>
-                                                        {company.empresa
-                                                            ?.charAt(0)
-                                                            ?.toUpperCase()}
+                                                        {company.empresa?.charAt(0)?.toUpperCase()}
                                                     </span>
                                                 )}
                                             </div>
@@ -173,19 +249,16 @@ export default function LeadPurchasesSection() {
                                                 <h4> {company.empresa} </h4>
 
                                                 <p>
-                                                    {company.compras_mes}{" "}
-                                                    {
-                                                        company.compras_mes === 1 ? "contacto comprado" : "contactos comprados"
-                                                    }
+                                                    {company.compras_rango}{" "}
+
+                                                    {company.compras_rango === 1 ? "contacto comprado" : "contactos comprados"}
                                                 </p>
                                             </div>
                                         </div>
 
                                         <div className="buyer-item__stats">
                                             <strong>
-                                                {
-                                                    company.creditos_consumidos_mes
-                                                }
+                                                {company.creditos_consumidos_rango}
                                             </strong>
 
                                             <span> créditos </span>
@@ -200,7 +273,6 @@ export default function LeadPurchasesSection() {
                         )}
                     </div>
 
-                    {/* ÚLTIMAS COMPRAS */}
                     <div className="purchases-panel">
                         <div className="purchases-panel__header">
                             <div>
@@ -213,59 +285,53 @@ export default function LeadPurchasesSection() {
 
                         {latestPurchases.length === 0 ? (
                             <div className="purchases-empty">
-                                <p> Todavía no hay compras registradas. </p>
+                                <p> No hay compras registradas durante este periodo. </p>
                             </div>
                         ) : (
                             <div className="latest-purchases">
-                                {latestPurchases.map((purchase) => (
-                                    <article className="latest-purchase" key={purchase.id}  >
-                                        <div className="latest-purchase__main">
-                                            <div>
-                                                <h4>
-                                                    {purchase.empresa?.nombre}
-                                                </h4>
+                                {latestPurchases.map(
+                                    (purchase) => (
+                                        <article className="latest-purchase" key={purchase.id} >
+                                            <div className="latest-purchase__main">
+                                                <div>
+                                                    <h4>
+                                                        {purchase.empresa?.nombre}
+                                                    </h4>
 
-                                                <p>
-                                                    {purchase.lead?.origen}
-                                                    {" → "}
-                                                    {purchase.lead?.destino}
-                                                </p>
+                                                    <p>
+                                                        {purchase.lead?.origen}
+                                                        {" → "}
+                                                        {purchase.lead?.destino}
+                                                    </p>
+                                                </div>
+
+                                                <span className={purchase.exclusivo ? "purchase-badge exclusive" : "purchase-badge"} >
+                                                    {purchase.exclusivo ? "Exclusivo" : "Compra"}
+                                                </span>
                                             </div>
 
-                                            <span className={purchase.exclusivo ? "purchase-badge exclusive" : "purchase-badge"} >
-                                                {
-                                                    purchase.exclusivo
-                                                        ? "Exclusivo"
-                                                        : "Compra"
-                                                }
-                                            </span>
-                                        </div>
+                                            <div className="latest-purchase__footer">
+                                                <span>
+                                                    {purchase.lead?.nombre}
+                                                </span>
 
-                                        <div className="latest-purchase__footer">
-                                            <span>
-                                                {purchase.lead?.nombre}
-                                            </span>
+                                                <span>
+                                                    {purchase.tokens_pagados}{" "} créditos
+                                                </span>
 
-                                            <span>
-                                                {purchase.tokens_pagados}{" "}
-                                                créditos
-                                            </span>
-
-                                            <span>
-                                                {
-                                                    formatDateTime(purchase.created_at)
-                                                }
-                                            </span>
-                                        </div>
-                                    </article>
-                                ))}
+                                                <span>
+                                                    {formatDateTime(purchase.created_at)}
+                                                </span>
+                                            </div>
+                                        </article>
+                                    )
+                                )}
                             </div>
                         )}
                     </div>
                 </div>
             </section>
 
-            {/* DETALLE EMPRESA */}
             {selectedCompany && (
                 <div
                     className="purchase-detail-overlay"
@@ -278,11 +344,8 @@ export default function LeadPurchasesSection() {
                     <div className="purchase-detail">
                         <div className="purchase-detail__header">
                             <div>
-                                <span> Compras del mes </span>
-
-                                <h2>
-                                    {selectedCompany.empresa}
-                                </h2>
+                                <span> Compras del periodo </span>
+                                <h2> {selectedCompany.empresa} </h2>
                             </div>
 
                             <button type="button" onClick={closeCompanyDetail} aria-label="Cerrar" className="purchase-detail__close" >
@@ -303,9 +366,7 @@ export default function LeadPurchasesSection() {
                                         <span> Contactos comprados </span>
 
                                         <strong>
-                                            {
-                                                companyPurchases?.resumen?.compras ?? 0
-                                            }
+                                            {companyPurchases?.resumen?.compras ?? 0}
                                         </strong>
                                     </div>
 
@@ -313,23 +374,20 @@ export default function LeadPurchasesSection() {
                                         <span> Créditos consumidos </span>
 
                                         <strong>
-                                            {
-                                                companyPurchases?.resumen?.creditos_consumidos ?? 0
-                                            }
+                                            {companyPurchases?.resumen?.creditos_consumidos ?? 0}
                                         </strong>
                                     </div>
                                 </div>
 
                                 <div className="purchase-detail__list">
-
                                     {companyPurchases?.compras?.length === 0 ? (
                                         <div className="purchases-empty">
-                                            <p> No hay compras para mostrar este mes. </p>
+                                            <p> No hay compras para mostrar durante este periodo. </p>
                                         </div>
                                     ) : (
                                         companyPurchases?.compras?.map(
                                             (purchase) => (
-                                                <article className="company-purchase" key={purchase.id}  >
+                                                <article className="company-purchase" key={purchase.id} >
                                                     <div className="company-purchase__route">
                                                         <strong>
                                                             {purchase.lead?.origen}
@@ -338,9 +396,7 @@ export default function LeadPurchasesSection() {
                                                         </strong>
 
                                                         <span>
-                                                            {
-                                                                formatDate(purchase.lead?.fecha_recoleccion)
-                                                            }
+                                                            {formatDate(purchase.lead?.fecha_recoleccion)}
                                                         </span>
                                                     </div>
 
@@ -365,10 +421,7 @@ export default function LeadPurchasesSection() {
                                                             <span> Compra </span>
 
                                                             <strong>
-                                                                {
-                                                                    purchase.tokens_pagados
-                                                                }{" "}
-                                                                créditos
+                                                                {purchase.tokens_pagados}{" "} créditos
                                                             </strong>
                                                         </div>
 
@@ -384,9 +437,7 @@ export default function LeadPurchasesSection() {
                                                     <div className="company-purchase__footer">
                                                         <span>
                                                             Comprado el{" "}
-                                                            {
-                                                                formatDateTime(purchase.created_at)
-                                                            }
+                                                            {formatDateTime(purchase.created_at)}
                                                         </span>
 
                                                         {purchase.exclusivo && (

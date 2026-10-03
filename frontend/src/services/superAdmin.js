@@ -150,21 +150,6 @@ export async function deletePartnerById(id) {
     return handleResponse(res);
 }
 
-export async function getLeadPurchasingCompanies() {
-    const res = await fetch(`${API}/superadmin/servicios/compras/empresas`);
-    return handleResponse(res);
-}
-
-export async function getLatestLeadPurchases() {
-    const res = await fetch(`${API}/superadmin/servicios/compras/ultimas`);
-    return handleResponse(res);
-}
-
-export async function getLeadPurchasesByEmpresa(empresaId) {
-    const res = await fetch(`${API}/superadmin/servicios/compras/empresa/${empresaId}`);
-    return handleResponse(res);
-}
-
 export async function exportarSolicitudesMudanza(fechaInicio, fechaFin) {
     const params = new URLSearchParams({ fecha_inicio: fechaInicio, fecha_fin: fechaFin, });
     const res = await fetch(`${API}/superadmin/solicitudes-mudanza/exportar?${params.toString()}`);
@@ -176,4 +161,52 @@ export async function exportarSolicitudesMudanza(fechaInicio, fechaFin) {
     }
 
     return res.blob();
+}
+
+export async function getLeadPurchasingCompanies(fechaInicio = "", fechaFin = "") {
+    const params = new URLSearchParams();
+
+    if (fechaInicio) {
+        params.append("fecha_inicio", fechaInicio);
+    }
+
+    if (fechaFin) {
+        params.append("fecha_fin", fechaFin);
+    }
+
+    const query = params.toString();
+    const res = await fetch(`${API}/superadmin/servicios/compras/empresas${query ? `?${query}` : ""}`);
+    return handleResponse(res);
+}
+
+export async function getLatestLeadPurchases(fechaInicio = "", fechaFin = "") {
+    const params = new URLSearchParams();
+
+    if (fechaInicio) {
+        params.append("fecha_inicio", fechaInicio);
+    }
+
+    if (fechaFin) {
+        params.append("fecha_fin", fechaFin);
+    }
+
+    const query = params.toString();
+    const res = await fetch(`${API}/superadmin/servicios/compras/ultimas${query ? `?${query}` : ""}`);
+    return handleResponse(res);
+}
+
+export async function getLeadPurchasesByEmpresa(empresaId, fechaInicio = "", fechaFin = "") {
+    const params = new URLSearchParams();
+
+    if (fechaInicio) {
+        params.append("fecha_inicio", fechaInicio);
+    }
+
+    if (fechaFin) {
+        params.append("fecha_fin", fechaFin);
+    }
+
+    const query = params.toString();
+    const res = await fetch(`${API}/superadmin/servicios/compras/empresa/${empresaId}${query ? `?${query}` : ""}`);
+    return handleResponse(res);
 }
