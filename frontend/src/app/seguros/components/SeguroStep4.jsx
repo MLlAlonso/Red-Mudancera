@@ -260,23 +260,6 @@ export default function SeguroStep4({ expediente, formData, onAnterior, onFinali
                             </button>
                         </div>
 
-                        <div className="seguro-publico__review-grid">
-                            <div className="seguro-publico__review-item">
-                                <span> Marca </span>
-                                <strong> {automovilMarca || expediente?.automovil_marca || "No registrada"} </strong>
-                            </div>
-
-                            <div className="seguro-publico__review-item">
-                                <span> Modelo </span>
-                                <strong> {automovilModelo || expediente?.automovil_modelo || "No registrado"} </strong>
-                            </div>
-
-                            <div className="seguro-publico__review-item">
-                                <span> Número de serie </span>
-                                <strong> {automovilNumeroSerie || expediente?.automovil_numero_serie || "No registrado"} </strong>
-                            </div>
-                        </div>
-
                         {
                             (automovilFotoCirculacionUrl || expediente?.automovil_foto_circulacion_url) && (
                                 <div className="seguro-publico__review-notice">
@@ -325,29 +308,8 @@ export default function SeguroStep4({ expediente, formData, onAnterior, onFinali
                         modalidadDatos === "autogestion" && (
                             <div className="seguro-publico__review-item">
                                 <span> Quién proporciona los datos </span>
-                                <strong> {obtenerFormaProporcionDatos()}  </strong>
+                                <strong> {empresaMudanza}   </strong>
                             </div>
-                        )
-                    }
-
-                    {
-                        modalidadDatos === "asistida" && (
-                            <>
-                                <div className="seguro-publico__review-item">
-                                    <span> Empresa de mudanza </span>
-                                    <strong> {asistenciaEmpresaMudanza || "No registrada"} </strong>
-                                </div>
-
-                                <div className="seguro-publico__review-item">
-                                    <span> Contacto </span>
-                                    <strong> {asistenciaContacto || "No registrado"} </strong>
-                                </div>
-
-                                <div className="seguro-publico__review-item">
-                                    <span> Teléfono / WhatsApp </span>
-                                    <strong> {asistenciaTelefono || "No registrado"} </strong>
-                                </div>
-                            </>
                         )
                     }
                 </div>
@@ -523,10 +485,6 @@ export default function SeguroStep4({ expediente, formData, onAnterior, onFinali
                     {finalizando ? "Finalizando..." : !datosEmpresaCompletos ? "Datos incompletos" : "Finalizar expediente"}
                 </button>
             </div>
-
-            <p className="seguro-publico__privacy">
-                Al finalizar confirmas que revisaste la información proporcionada y que es correcta.
-            </p>
         </section>
     );
 }

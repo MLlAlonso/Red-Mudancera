@@ -290,38 +290,6 @@
                 Datos del automóvil
             </div>
 
-            <table class="data">
-                <tr>
-                    <td class="label">
-                        Marca
-                    </td>
-
-                    <td>
-                        {{ $expediente->automovil_marca ?? 'No registrada' }}
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="label">
-                        Modelo
-                    </td>
-
-                    <td>
-                        {{ $expediente->automovil_modelo ?? 'No registrado' }}
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="label">
-                        Número de serie
-                    </td>
-
-                    <td>
-                        {{ $expediente->automovil_numero_serie ?? 'No registrado' }}
-                    </td>
-                </tr>
-            </table>
-
             @if($expediente->automovil_foto_circulacion_url)
                 <div class="image-container">
                     <img src="{{ $expediente->automovil_foto_circulacion_url }}" alt="Foto de circulación del automóvil">
@@ -343,93 +311,6 @@
     @endif
 
     <br><br><br>
-
-    <div class="section">
-        <div class="section-title">
-            Modalidad de atención
-        </div>
-
-        <table class="data">
-            <tr>
-                <td class="label">
-                    Modalidad
-                </td>
-
-                <td>
-                    @if($expediente->modalidad_datos === 'asistida')
-                        Póliza asistida
-                    @elseif($expediente->modalidad_datos === 'autogestion')
-                        Autogestión
-                    @else
-                        No especificada
-                    @endif
-                </td>
-            </tr>
-
-            @if($expediente->modalidad_datos === 'autogestion')
-                <tr>
-                    <td class="label">
-                        Quién proporciona los datos
-                    </td>
-
-                    <td>
-                        @if($expediente->forma_proporcion_datos === 'cliente')
-                            Yo proporcionaré los datos
-                        @elseif($expediente->forma_proporcion_datos === 'empresa')
-                            La empresa de mudanza proporcionará los datos
-                        @else
-                            No especificado
-                        @endif
-                    </td>
-                </tr>
-            @endif
-        </table>
-
-        @if($expediente->modalidad_datos === 'asistida')
-            <div class="assisted-box">
-                <div class="assisted-box-title">
-                    Datos para póliza asistida
-                </div>
-
-                <table class="data">
-                    <tr>
-                        <td class="label">
-                            Empresa de mudanza
-                        </td>
-
-                        <td>
-                            {{ $expediente->asistencia_empresa_mudanza ?? 'No registrada' }}
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="label">
-                            Contacto
-                        </td>
-
-                        <td>
-                            {{ $expediente->asistencia_contacto ?? 'No registrado' }}
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="label">
-                            Teléfono / WhatsApp
-                        </td>
-
-                        <td>
-                            {{ $expediente->asistencia_telefono ?? 'No registrado' }}
-                        </td>
-                    </tr>
-                </table>
-
-                <div style="margin-top:10px;">
-                    El equipo de Mudanza Fácil dará seguimiento a la información
-                    necesaria con la empresa de mudanza para continuar con el proceso de emisión de la póliza.
-                </div>
-            </div>
-        @endif
-    </div>
 
     <div class="section">
         <div class="section-title">
@@ -503,9 +384,7 @@
                 </td>
 
                 <td>
-                    @if($expediente->tipo_servicio === 'contratado')
-                        Contratado
-                    @elseif($expediente->tipo_servicio === 'compartido')
+                    @if($expediente->tipo_servicio === 'compartido')
                         Compartido
                     @elseif($expediente->tipo_servicio === 'exclusivo')
                         Exclusivo

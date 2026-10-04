@@ -112,10 +112,6 @@ export default function SeguroStepDos({
                 </button>
 
             </div>
-
-            <p className="seguro-publico__privacy">
-                Tu información será utilizada únicamente para dar seguimiento a tu solicitud de seguro.
-            </p>
         </section>
     );
 }

@@ -54,23 +54,24 @@
         margin: 0 0 24px;
         color: $success-hover;
         font-family: $font-title;
-        font-size: 48px;
+        font-size: 60px;
         font-weight: 900;
         line-height: 1.08;
         letter-spacing: -0.025em;
 
         span {
             color: $title;
+            font-size: 50px;
         }
     }
 
     &__description {
-        max-width: 620px;
-        margin: 0 0 40px;
+        max-width: 650px;
+        margin: 20px 0 10px;
         color: $text;
         text-align: justify;
         font-family: $font-title;
-        font-size: 20px;
+        font-size: 26px;
         font-weight: 400;
         line-height: 1.3;
     }
@@ -540,10 +541,130 @@
     &__container {
         width: 100%;
         max-width: 1400px;
+
         margin: 0 auto;
+
         display: grid;
         grid-template-columns: repeat(3, 1fr);
+
         gap: 20px;
+    }
+
+    &__action {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: min(100%, 900px);
+        margin: 50px auto 0;
+        padding: 34px 40px 30px;
+        background: linear-gradient(135deg,
+                #f0f6fc 0%,
+                #ffffff 55%,
+                #f4fbf8 100%);
+        border: 1px solid rgba($success, 0.15);
+        border-radius: 24px;
+        box-shadow:
+            0 12px 35px rgba(9, 35, 62, 0.08),
+            0 2px 8px rgba(0, 0, 0, 0.03);
+        overflow: hidden;
+
+        // Detalle decorativo superior
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 180px;
+            height: 4px;
+            background: $success;
+            border-radius: 0 0 10px 10px;
+            transform: translateX(-50%);
+        }
+
+        // Halo decorativo
+        &::after {
+            content: "";
+            position: absolute;
+            top: -90px;
+            right: -70px;
+            width: 180px;
+            height: 180px;
+            background: rgba($success, 0.06);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .btnSeguro {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            min-height: 62px;
+            padding: 17px 32px;
+            background: $success;
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            font-family: $font-title;
+            font-size: 20px;
+            font-weight: 800;
+            line-height: 1;
+            cursor: pointer;
+            box-shadow:
+                0 10px 24px rgba($success, 0.25),
+                0 4px 10px rgba(0, 0, 0, 0.08);
+            transition:
+                background-color 0.2s ease,
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+
+            &:hover {
+                background: $success-hover;
+                transform: translateY(-3px);
+                box-shadow:
+                    0 14px 30px rgba($success, 0.3),
+                    0 6px 14px rgba(0, 0, 0, 0.1);
+
+                .arrow {
+                    transform: translateX(5px);
+                }
+            }
+
+            &:active {
+                transform: translateY(-1px);
+                box-shadow:
+                    0 8px 18px rgba($success, 0.2),
+                    0 3px 8px rgba(0, 0, 0, 0.08);
+            }
+
+            .text {
+                display: inline-block;
+            }
+
+            .arrow {
+                display: inline-block;
+                font-size: 24px;
+                line-height: 1;
+                transform: translateX(0);
+                transition: transform 0.2s ease;
+            }
+        }
+    }
+
+    &__note {
+        position: relative;
+        z-index: 1;
+        margin: 14px 0 0;
+        color: $text;
+        font-family: $font-title;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.4;
+        text-align: center;
+        opacity: 0.75;
     }
 }
 
@@ -628,6 +749,33 @@
             height: 55px;
             background: rgba(0, 0, 0, 0.15);
         }
+    }
+}
+
+.seguro-publico__insurance-company {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    margin: 26px auto 0;
+    padding-top: 20px;
+    color: $text;
+    border-top: 1px solid rgba(9, 35, 62, 0.08);
+    font-family: $font-title;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+
+    span {
+        line-height: 1.4;
+    }
+
+    img {
+        display: block;
+        width: auto;
+        height: 30px;
+        object-fit: contain;
     }
 }
 
@@ -1053,7 +1201,11 @@
     }
 
     .seguroHero__title {
-        font-size: 40px;
+        font-size: 50px;
+
+        span {
+            font-size: 40px;
+        }
     }
 
     .seguroHero__description {
@@ -1260,7 +1412,6 @@
     .seguroHero__title {
         max-width: 600px;
         margin-bottom: 20px;
-        font-size: 36px;
         line-height: 1.1;
     }
 
@@ -1598,6 +1749,32 @@
             min-height: 56px;
 
             padding: 14px 26px;
+        }
+    }
+
+    .seguroCaracteristicas {
+        &__action {
+            margin-top: 35px;
+            padding: 30px 25px 26px;
+
+            .btnSeguro {
+                font-size: 18px;
+            }
+        }
+
+        &__note {
+            max-width: 500px;
+            font-size: 12px;
+        }
+    }
+
+    .seguro-publico__insurance-company {
+        margin-top: 22px;
+        padding-top: 18px;
+        font-size: 12px;
+
+        img {
+            height: 27px;
         }
     }
 }
@@ -1979,6 +2156,39 @@
         width: 100%;
         max-width: 340px;
         font-size: 16px;
+    }
+
+    .seguroCaracteristicas {
+        &__action {
+            margin-top: 30px;
+            padding: 28px 18px 24px;
+            border-radius: 20px;
+
+            .btnSeguro {
+                width: 100%;
+                max-width: 340px;
+                min-height: 56px;
+                padding: 15px 20px;
+                font-size: 16px;
+            }
+        }
+
+        &__note {
+            max-width: 320px;
+            font-size: 11px;
+        }
+    }
+
+    .seguro-publico__insurance-company {
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 20px;
+        padding-top: 16px;
+        font-size: 11px;
+
+        img {
+            height: 25px;
+        }
     }
 }
 

@@ -81,16 +81,6 @@ export default function SegurosPage() {
                             con tarifa preferencial y un expediente digital que puedes
                             comenzar hoy, aunque todavía estés organizando los detalles.
                         </p>
-
-                        <div className="seguroHero__action">
-                            <Suspense>
-                                <SeguroClient />
-                            </Suspense>
-                        </div>
-
-                        <p className="seguroHero__note">
-                            Sin compromiso, puedes empezar aunque todavía no tengas todos los datos.
-                        </p>
                     </div>
 
                     <div className="seguroHero__visual">
@@ -141,6 +131,21 @@ export default function SegurosPage() {
                             <p> Rápido, claro y sin complicaciones. </p>
                         </div>
                     </article>
+                </div>
+
+                <div className="seguroCaracteristicas__action">
+                    <Suspense>
+                        <SeguroClient />
+                    </Suspense>
+
+                    <p className="seguroCaracteristicas__note">
+                        Sin compromiso, puedes empezar aunque todavía no tengas todos los datos.
+                    </p>
+
+                    <div className="seguro-publico__insurance-company">
+                        <span>La cobertura de seguro es respaldada por</span>
+                        <img src="/logo/chubb_logo.png" alt="Chubb" />
+                    </div>
                 </div>
             </section>
 
@@ -270,7 +275,7 @@ export default function SegurosPage() {
                             </span>
 
                             <strong className="seguroPrecio__amount">
-                                desde $1,350 
+                                desde $1,350
                             </strong>
 
                             <span className="seguroPrecio__currency">

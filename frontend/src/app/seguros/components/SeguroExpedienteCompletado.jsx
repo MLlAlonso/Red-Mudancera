@@ -290,27 +290,6 @@ export default function SeguroExpedienteCompletado({ expediente, formatearMoneda
                         </div>
 
                         <div className="seguro-publico__completed-grid">
-                            <div className="seguro-publico__completed-item">
-                                <span>Marca</span>
-                                <strong>
-                                    {expediente?.automovil_marca || "No registrada"}
-                                </strong>
-                            </div>
-
-                            <div className="seguro-publico__completed-item">
-                                <span>Modelo</span>
-                                <strong>
-                                    {expediente?.automovil_modelo || "No registrado"}
-                                </strong>
-                            </div>
-
-                            <div className="seguro-publico__completed-item">
-                                <span>Número de serie</span>
-                                <strong>
-                                    {expediente?.automovil_numero_serie || "No registrado"}
-                                </strong>
-                            </div>
-
                             {expediente?.automovil_foto_circulacion_url && (
                                 <div className="seguro-publico__completed-item seguro-publico__completed-item--full">
                                     <span>Tarjeta de circulación</span>
@@ -330,85 +309,6 @@ export default function SeguroExpedienteCompletado({ expediente, formatearMoneda
                     <div className="seguro-publico__completed-section-heading">
                         <div>
                             <span>03</span>
-
-                            <div>
-                                <h2>Modalidad de atención</h2>
-                                <p> Información sobre cómo se gestionó el expediente.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="seguro-publico__completed-grid">
-                        <div className="seguro-publico__completed-item">
-                            <span>Modalidad</span>
-
-                            <strong>
-                                {expediente?.modalidad_datos === "asistida" ? "Póliza asistida" : expediente?.modalidad_datos === "autogestion" ? "Autogestión" : "No especificada"}
-                            </strong>
-                        </div>
-
-                        {expediente?.modalidad_datos === "autogestion" && (
-                            <div className="seguro-publico__completed-item">
-                                <span> Quién proporciona los datos </span>
-
-                                <strong>
-                                    {expediente?.forma_proporcion_datos === "cliente" ? "Yo proporcionaré los datos"
-                                        : expediente?.forma_proporcion_datos === "empresa" ? "La empresa de mudanza proporcionará los datos" : "No especificado"}
-                                </strong>
-                            </div>
-                        )}
-
-                        {expediente?.modalidad_datos === "asistida" && (
-                            <>
-                                <div className="seguro-publico__completed-item">
-                                    <span>Empresa de mudanza</span>
-
-                                    <strong>
-                                        {expediente?.asistencia_empresa_mudanza || "No registrada"}
-                                    </strong>
-                                </div>
-
-                                <div className="seguro-publico__completed-item">
-                                    <span>Contacto</span>
-
-                                    <strong>
-                                        {expediente?.asistencia_contacto || "No registrado"}
-                                    </strong>
-                                </div>
-
-                                <div className="seguro-publico__completed-item">
-                                    <span>Teléfono / WhatsApp</span>
-
-                                    <strong>
-                                        {expediente?.asistencia_telefono || "No registrado"}
-                                    </strong>
-                                </div>
-                            </>
-                        )}
-                    </div>
-
-                    {expediente?.modalidad_datos === "asistida" && (
-                        <div className="seguro-publico__completed-notice">
-                            <div className="seguro-publico__completed-notice-icon">
-                                i
-                            </div>
-
-                            <div>
-                                <strong>Póliza asistida</strong>
-
-                                <p>
-                                    El equipo de Mudanza Fácil dará seguimiento a la información necesaria con la empresa
-                                    de mudanza para continuar con el proceso de emisión de la póliza.
-                                </p>
-                            </div>
-                        </div>
-                    )}
-                </div>
-
-                <div className="seguro-publico__completed-section">
-                    <div className="seguro-publico__completed-section-heading">
-                        <div>
-                            <span>04</span>
 
                             <div>
                                 <h2>Datos de la mudanza</h2>
@@ -467,7 +367,7 @@ export default function SeguroExpedienteCompletado({ expediente, formatearMoneda
                 <div className="seguro-publico__completed-section">
                     <div className="seguro-publico__completed-section-heading">
                         <div>
-                            <span>05</span>
+                            <span>04</span>
 
                             <div>
                                 <h2>Datos de la unidad</h2>

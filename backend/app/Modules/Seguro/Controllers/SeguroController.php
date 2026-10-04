@@ -547,12 +547,6 @@ class SeguroController extends Controller
         |--------------------------------------------------------------------------
         */
         if (in_array($expediente->tipo_seguro, ['automovil', 'menaje_auto'], true)) {
-            if (empty($expediente->automovil_numero_serie)) {
-                return response()->json([
-                    'message' => 'Debes ingresar el número de serie del automóvil antes de finalizar el expediente.',
-                ], 422);
-            }
-
             if (empty($expediente->automovil_foto_circulacion_url)) {
                 return response()->json([
                     'message' => 'Debes cargar la foto de la tarjeta de circulación antes de finalizar el expediente.',
@@ -598,10 +592,34 @@ class SeguroController extends Controller
             'ventas12@segurosdecarga.com',
         ];
 
-        Mail::to($destinatarios)->send(new SeguroExpedienteFinalizadoMail($expediente));
+        try {
+            Mail::to($destinatarios)->send( new SeguroExpedienteFinalizadoMail($expediente) );
+        } catch (\Throwable $e) {
+            Log::error(
+                'Error al enviar notificación de expediente finalizado.',
+                [
+                    'folio' => $expediente->folio,
+                    'cliente' => $expediente->nombre,
+                    'email' => $expediente->email,
+                    'error' => $e->getMessage(),
+                ]
+            );
+        }
 
         if ($expediente->email) {
-            Mail::to($expediente->email)->send(new SeguroExpedienteFinalizadoClienteMail($expediente));
+            try {
+                Mail::to($expediente->email)->send( new SeguroExpedienteFinalizadoClienteMail($expediente) );
+            } catch (\Throwable $e) {
+                Log::error(
+                    'Error al enviar confirmación de expediente finalizado al cliente.',
+                    [
+                        'folio' => $expediente->folio,
+                        'cliente' => $expediente->nombre,
+                        'email' => $expediente->email,
+                        'error' => $e->getMessage(),
+                    ]
+                );
+            }
         }
 
         return response()->json([

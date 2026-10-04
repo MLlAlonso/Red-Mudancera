@@ -39,8 +39,10 @@ class ExpedienteSeguroService
                 'inventario' => $data['inventario'] ?? null,
                 'fecha_recoleccion' => $data['fecha_recoleccion'] ?? null,
                 'es_externo' => $data['es_externo'] ?? false,
-                'correo_programado_at' => $creadoEn->copy()->addHours(2400),
-                'recordatorio_programado_at' => $creadoEn->copy()->addDays(50),
+                'correo_programado_at' => $creadoEn->copy()->addHours(24000),
+                'recordatorio_programado_at' => $creadoEn->copy()->addDays(5000),
+                /* 'correo_programado_at' => $creadoEn->copy()->addHours(24),
+                'recordatorio_programado_at' => $creadoEn->copy()->addDays(5), */
             ]);
         });
     }
@@ -137,9 +139,6 @@ class ExpedienteSeguroService
                 'tipo_seguro' => $tipoSeguro,
                 'valor_menaje' => $valorMenaje,
                 'valor_automovil' => $valorAutomovil,
-                'automovil_marca' => $incluyeAutomovil ? ($data['automovil_marca'] ?? null) : null,
-                'automovil_modelo' => $incluyeAutomovil ? ($data['automovil_modelo'] ?? null) : null,
-                'automovil_numero_serie' => $incluyeAutomovil ? ($data['automovil_numero_serie'] ?? null) : null,
                 'automovil_foto_circulacion_url' => $incluyeAutomovil ? ($data['automovil_foto_circulacion_url'] ?? null) : null,
                 'automovil_foto_circulacion_public_id' => $incluyeAutomovil ? ($data['automovil_foto_circulacion_public_id'] ?? null) : null,
                 'prima_estimada' => $primaEstimada,

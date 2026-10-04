@@ -55,4 +55,8 @@ Route::prefix('superadmin')->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::get('/analytics/servicios', [SuperAdminAnalyticsController::class, 'servicios']);
+
+
+
+    Route::post('/seguros/{id}/enviar-correo/{tipo}', [SuperAdminSegurosController::class, 'enviarCorreoPrueba']);
 });

@@ -1,7 +1,6 @@
 @use "@/styles/utils/variables" as *;
 
 .seguro-publico {
-
     &__field-warning {
         width: 100%;
         display: flex;
@@ -15,6 +14,11 @@
         color: $text-muted;
         font-size: 14px;
         line-height: 1.45;
+
+        strong {
+            color: $text;
+            font-size: 16px;
+        }
     }
 
     &__field-warning-icon {
@@ -40,14 +44,14 @@
     &__insurance-options {
         display: flex;
         flex-direction: column;
-        gap: 10px;
-        margin: 22px 0 20px;
+        gap: 5px;
+        margin: 2px 0 10px;
     }
 
     .insurance-option {
         position: relative;
         width: 100%;
-        min-height: 88px;
+        min-height: 80px;
         display: flex;
         align-items: center;
         gap: 15px;
@@ -150,7 +154,7 @@
         p {
             margin: 0;
             color: $text-muted;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.45;
         }
     }
@@ -341,41 +345,264 @@
     |--------------------------------------------------------------------------
     */
     &__file-preview {
+        width: 100%;
         display: flex;
         align-items: center;
-        gap: 12px;
-        margin-top: 12px;
-        padding: 10px;
-        border: 1px solid #e1e4e8;
-        border-radius: 10px;
+        gap: 14px;
+        margin-top: 14px;
+        padding: 12px;
+        border: 1px solid rgba(9, 35, 62, 0.10);
+        border-radius: 13px;
         background: #ffffff;
+        box-shadow: 0 4px 14px rgba(9, 35, 62, 0.045);
+
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease,
+            transform 0.2s ease;
+
+        &:hover {
+            border-color: rgba(9, 35, 62, 0.16);
+            box-shadow: 0 7px 20px rgba(9, 35, 62, 0.07);
+        }
+    }
+
+    &__file-preview-image {
+        position: relative;
+        width: 140px;
+        height: 140px;
+        flex: 0 0 140px;
+        display: block;
+        padding: 0;
+        overflow: hidden;
+        border: 1px solid #e1e4e8;
+        border-radius: 9px;
+        background: #f5f6f8;
+        cursor: zoom-in;
 
         img {
-            width: 64px;
-            height: 64px;
-            flex: 0 0 64px;
+            width: 100%;
+            height: 100%;
+            display: block;
             object-fit: cover;
-            border-radius: 7px;
-            border: 1px solid #e1e4e8;
+            transition:
+                transform 0.25s ease,
+                filter 0.25s ease;
         }
 
-        >div {
-            min-width: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+        &:hover {
+            img {
+                transform: scale(1.05);
+                filter: brightness(0.82);
+            }
+
+            .seguro-publico__file-preview-zoom {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
         }
+
+        &:focus-visible {
+            outline: 3px solid rgba(58, 110, 165, 0.22);
+            outline-offset: 2px;
+        }
+    }
+
+    &__file-preview-zoom {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px 9px;
+        border-radius: 6px;
+        background: rgba(9, 35, 62, 0.82);
+        color: #ffffff;
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1;
+        pointer-events: none;
+        opacity: 0;
+        transform: translate(-50%, -46%);
+        transition:
+            opacity 0.2s ease,
+            transform 0.2s ease;
+    }
+
+    &__file-preview-info {
+        min-width: 0;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
 
         strong {
-            font-size: 13px;
-            font-weight: 600;
             color: #20242b;
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.35;
         }
 
         span {
-            font-size: 12px;
-            line-height: 1.4;
             color: #858b94;
+            font-size: 16px;
+            line-height: 1.45;
+        }
+    }
+
+    &__file-preview-delete {
+        width: 30px;
+        height: 30px;
+        flex: 0 0 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border: 1px solid rgba(180, 55, 55, 0.18);
+        border-radius: 50%;
+        background: rgba(180, 55, 55, 0.055);
+        color: #a83232;
+        font-size: 21px;
+        font-weight: 400;
+        line-height: 1;
+        cursor: pointer;
+
+        transition:
+            background 0.2s ease,
+            border-color 0.2s ease,
+            color 0.2s ease,
+            transform 0.2s ease;
+
+        &:hover {
+            background: rgba(180, 55, 55, 0.10);
+            border-color: rgba(180, 55, 55, 0.30);
+            color: #8f2525;
+            transform: scale(1.05);
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
+
+        &:focus-visible {
+            outline: 3px solid rgba(180, 55, 55, 0.15);
+            outline-offset: 2px;
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Visor de fotografía
+    |--------------------------------------------------------------------------
+    */
+    &__image-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        background: rgba(7, 14, 22, 0.72);
+        backdrop-filter: blur(9px);
+        -webkit-backdrop-filter: blur(9px);
+        animation: seguroImageModalFadeIn 0.2s ease both;
+    }
+
+    &__image-modal-content {
+        position: relative;
+        max-width: min(900px, 92vw);
+        max-height: 88vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: seguroImageModalScaleIn 0.22s ease both;
+
+        img {
+            display: block;
+            max-width: 100%;
+            max-height: 88vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.35),
+                0 8px 25px rgba(0, 0, 0, 0.18);
+        }
+    }
+
+    &__image-modal-close {
+        position: fixed;
+        top: 22px;
+        right: 25px;
+        z-index: 10001;
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border: 1px solid rgba(255, 255, 255, 0.20);
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.10);
+        color: #ffffff;
+        font-size: 28px;
+        font-weight: 300;
+        line-height: 1;
+        cursor: pointer;
+
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+
+        transition:
+            background 0.2s ease,
+            border-color 0.2s ease,
+            transform 0.2s ease;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.20);
+            border-color: rgba(255, 255, 255, 0.35);
+            transform: scale(1.05);
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
+
+        &:focus-visible {
+            outline: 3px solid rgba(255, 255, 255, 0.30);
+            outline-offset: 3px;
+        }
+    }
+
+    @keyframes seguroImageModalFadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes seguroImageModalScaleIn {
+        from {
+            opacity: 0;
+            transform: scale(0.96);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
         }
     }
 
@@ -390,7 +617,7 @@
         padding: 17px 18px 16px;
         background: rgba(28, 143, 106, 0.07);
         border: 1px solid rgba(28, 143, 106, 0.25);
-        border-radius: 13px;
+        border-radius: 14px;
 
         transition:
             background 0.2s ease,
@@ -497,12 +724,12 @@
             top: calc(100% + 9px);
             right: 0;
             width: 240px;
-            padding: 11px 13px;
+            padding: 10px 12px;
             background: $primary;
             color: white;
             border-radius: 8px;
             box-shadow: 0 8px 20px rgba(9, 35, 62, 0.2);
-            font-size: 12px;
+            font-size: 14px;
             line-height: 1.45;
             text-align: left;
             opacity: 0;
@@ -531,22 +758,13 @@
             visibility: visible;
             transform: translateY(0);
         }
-
-
-
-
-
-
-
-
-
     }
 
     @media (max-width: 700px) {
         .insurance-option {
             min-height: 82px;
-            padding: 14px;
-            gap: 12px;
+            padding: 10px;
+            gap: 10px;
         }
 
         .insurance-option__icon {
@@ -579,11 +797,11 @@
 
         &__upload-content {
             strong {
-                font-size: 13px;
+                font-size: 14px;
             }
 
             span {
-                font-size: 11px;
+                font-size: 12px;
             }
         }
 
@@ -610,13 +828,71 @@
             }
         }
 
+        &__file-preview {
+            gap: 10px;
+            padding: 10px;
+        }
+
+        &__file-preview-image {
+            width: 120px;
+            height: 120px;
+            flex-basis: 120px;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        &__file-preview-info {
+            strong {
+                font-size: 16px;
+            }
+
+            span {
+                margin-top: 5px;
+                font-size: 14px;
+            }
+        }
+
+        &__file-preview-delete {
+            width: 28px;
+            height: 28px;
+            flex-basis: 28px;
+            font-size: 19px;
+        }
+
+        &__image-modal {
+            padding: 20px;
+        }
+
+        &__image-modal-content {
+            max-width: 95vw;
+            max-height: 85vh;
+
+            img {
+                max-width: 95vw;
+                max-height: 85vh;
+                border-radius: 8px;
+            }
+        }
+
+        &__image-modal-close {
+            top: 15px;
+            right: 15px;
+            width: 38px;
+            height: 38px;
+            font-size: 25px;
+        }
+
         .insurance-option__content {
             strong {
                 font-size: 16px;
             }
 
             p {
-                font-size: 13px;
+                font-size: 14px;
             }
         }
 
@@ -678,6 +954,53 @@
                 font-size: 12px;
                 text-align: justify;
             }
+        }
+
+        &__file-preview {
+            align-items: flex-start;
+            padding: 9px;
+        }
+
+        &__file-preview-info {
+            padding-top: 20px;
+
+            strong {
+                font-size: 16px;
+            }
+
+            span {
+                font-size: 14px;
+            }
+        }
+
+        &__file-preview-delete {
+            width: 26px;
+            height: 26px;
+            flex-basis: 26px;
+            font-size: 18px;
+        }
+
+        &__image-modal {
+            padding: 12px;
+        }
+
+        &__image-modal-content {
+            max-width: 96vw;
+            max-height: 82vh;
+
+            img {
+                max-width: 96vw;
+                max-height: 82vh;
+                border-radius: 7px;
+            }
+        }
+
+        &__image-modal-close {
+            top: 12px;
+            right: 12px;
+            width: 36px;
+            height: 36px;
+            font-size: 24px;
         }
     }
 }

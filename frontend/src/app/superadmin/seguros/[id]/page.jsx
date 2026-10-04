@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import SuperAdminLayout from "@/components/layout/SuperAdminLayout";
-import { getExpedienteSeguro, enviarCorreoSeguro, descargarPdfSeguro, } from "@/services/superAdminSeguros";
+import { getExpedienteSeguro, enviarCorreoSeguro, enviarCorreoSeguroPrueba, descargarPdfSeguro, } from "@/services/superAdminSeguros";
 
 export default function SuperAdminSeguroDetallePage() {
     const { id } = useParams();
@@ -12,6 +12,11 @@ export default function SuperAdminSeguroDetallePage() {
     const [sending, setSending] = useState(false);
     const [downloading, setDownloading] = useState(false);
     const [copied, setCopied] = useState(false);
+
+
+    const [sendingTest, setSendingTest] = useState("");
+
+
 
     useEffect(() => {
         if (id) {
@@ -41,6 +46,31 @@ export default function SuperAdminSeguroDetallePage() {
             setSending(false);
         }
     }
+
+
+
+    async function enviarCorreoPrueba(tipo) {
+        if (sendingTest) {
+            return;
+        }
+
+        setSendingTest(tipo);
+
+        try {
+            const data = await enviarCorreoSeguroPrueba(id, tipo);
+
+            alert(data.message);
+
+            await cargar();
+        } catch (error) {
+            console.error(error);
+            alert(error.message);
+        } finally {
+            setSendingTest("");
+        }
+    }
+
+
 
     async function descargarPdf() {
         if (downloading) {
@@ -164,7 +194,6 @@ export default function SuperAdminSeguroDetallePage() {
                         </div>
                     </div>
                 </div>
-
 
                 <div className="detailCard">
                     <h2> Información del seguro  </h2>
@@ -402,6 +431,47 @@ export default function SuperAdminSeguroDetallePage() {
                                 {expediente.ultimo_autoguardado_at ? new Date(expediente.ultimo_autoguardado_at).toLocaleString("es-MX") : "Sin registro"}
                             </strong>
                         </div>
+                    </div>
+                </div>
+
+
+
+
+                <div className="detailCard seguroDetail__emailTests">
+                    <div className="cardHeader">
+                        <div>
+                            <h2>Pruebas de correo</h2>
+
+                            <p className="seguroDetail__emailTestsDescription">
+                                Envía manualmente cualquiera de los correos del flujo de seguros para verificar su contenido y destinatarios.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="seguroDetail__emailTestsGrid">
+                        <button type="button" className="btn-secondary" onClick={() => enviarCorreoPrueba("solicitud-recibida")} disabled={sendingTest}  >
+                            {sendingTest === "solicitud-recibida" ? "Enviando..." : "Solicitud recibida"}
+                        </button>
+
+                        <button type="button" className="btn-secondary" onClick={() => enviarCorreoPrueba("invitacion")} disabled={sendingTest} >
+                            {sendingTest === "invitacion" ? "Enviando..." : "Invitación"}
+                        </button>
+
+                        <button type="button" className="btn-secondary" onClick={() => enviarCorreoPrueba("recordatorio")} disabled={sendingTest} >
+                            {sendingTest === "recordatorio" ? "Enviando..." : "Recordatorio"}
+                        </button>
+
+                        <button type="button" className="btn-secondary" onClick={() => enviarCorreoPrueba("empresa-datos-completados")} disabled={sendingTest} >
+                            {sendingTest === "empresa-datos-completados" ? "Enviando..." : "Empresa completó datos"}
+                        </button>
+
+                        <button type="button" className="btn-secondary" onClick={() => enviarCorreoPrueba("finalizado-cliente")} disabled={sendingTest} >
+                            {sendingTest === "finalizado-cliente" ? "Enviando..." : "Finalizado — cliente"}
+                        </button>
+
+                        <button type="button" className="btn-secondary" onClick={() => enviarCorreoPrueba("finalizado")} disabled={sendingTest} >
+                            {sendingTest === "finalizado" ? "Enviando..." : "Finalizado — interno"}
+                        </button>
                     </div>
                 </div>
             </section>

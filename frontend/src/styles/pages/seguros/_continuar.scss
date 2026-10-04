@@ -390,7 +390,7 @@
             font-size: 24px;
             font-weight: 800;
         }
-        
+
         p {
             margin: 0;
             color: $text-muted;
@@ -547,11 +547,35 @@
     |--------------------------------------------------------------------------
     */
     &__privacy {
-        margin: 25px 0 0;
+        margin-top: 20px;
         color: $text-muted;
-        font-size: 12px;
+        font-size: 14px;
         line-height: 1.5;
         text-align: center;
+
+        p {
+            margin: 0 0 10px;
+        }
+    }
+
+    &__insurance-company {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+
+        span {
+            color: $text-muted;
+            font-size: 14px;
+        }
+
+        img {
+            width: auto;
+            height: 28px;
+            display: block;
+            object-fit: contain;
+        }
     }
 
     /*
@@ -654,14 +678,14 @@
     |--------------------------------------------------------------------------
     */
     @media (max-width: 700px) {
-        padding: 25px 15px;
+        padding: 20px 14px;
 
         &__card {
-            padding: 28px 20px;
+            padding: 24px 20px;
             border-radius: 18px;
 
             h1 {
-                font-size: 28px;
+                font-size: 26px;
             }
         }
 

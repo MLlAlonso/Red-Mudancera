@@ -168,7 +168,7 @@
 
     &__modality-options {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(1, minmax(0, 1fr));
         gap: 15px;
     }
 
@@ -178,7 +178,6 @@
         align-items: flex-start;
         gap: 14px;
         width: 100%;
-        min-height: 145px;
         padding: 20px;
         border: 1px solid $cards;
         border-radius: 16px;
@@ -220,9 +219,9 @@
     }
 
     &__modality-icon {
-        width: 42px;
-        height: 42px;
-        flex: 0 0 42px;
+        width: 50px;
+        height: 50px;
+        flex: 0 0 50px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -230,7 +229,7 @@
         background: #f1f5f8;
         color: $azul_002;
         font-family: $font-title;
-        font-size: 11px;
+        font-size: 14px;
         font-weight: 800;
         letter-spacing: 0.04em;
 
@@ -250,7 +249,7 @@
             margin: 2px 0 7px;
             color: $title;
             font-family: $font-title;
-            font-size: 15px;
+            font-size: 18px;
             font-weight: 800;
             line-height: 1.35;
         }
@@ -258,7 +257,7 @@
         p {
             margin: 0;
             color: $text-muted;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.55;
         }
     }
@@ -564,8 +563,8 @@
     |--------------------------------------------------------------------------
     */
     &__form-section {
-        margin-top: 25px;
-        padding-top: 22px;
+        margin-top: 20px;
+        padding-top: 20px;
         border-top: 1px solid $cards;
 
         &:first-of-type {

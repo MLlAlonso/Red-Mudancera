@@ -99,67 +99,12 @@
                                 <strong>Prima estimada:</strong> $
                                 {{ number_format((float) ($expediente->prima_estimada ?? 0), 2) }} MXN
 
-                                <br>
-
-                                <strong>Modalidad:</strong>
-                                @if($expediente->modalidad_datos === 'asistida')
-                                    Póliza asistida
-                                @elseif($expediente->modalidad_datos === 'autogestion')
-                                    Autogestión
-                                @else
-                                    No especificada
-                                @endif
-
-                                @if($expediente->modalidad_datos === 'autogestion')
-                                    <br>
-
-                                    <strong>Quién proporciona los datos:</strong>
-                                    @if($expediente->forma_proporcion_datos === 'cliente')
-                                        Yo proporcionaré los datos
-                                    @elseif($expediente->forma_proporcion_datos === 'empresa')
-                                        La empresa de mudanza proporcionará los datos
-                                    @else
-                                        No especificado
-                                    @endif
-                                @endif
+                                {{-- <br>
 
                                 <br>
                                 <strong>Porcentaje aplicado:</strong>
-                                {{ $expediente->modalidad_datos === 'asistida' ? '1.75%' : '1.35%' }}
+                                {{ $expediente->modalidad_datos === 'asistida' ? '1.75%' : '1.35%' }} --}}
                             </p>
-
-                            @if($expediente->modalidad_datos === 'asistida')
-                                <h2 style=" color:#09233E; font-size:18px; margin-top:25px; ">
-                                    Datos para póliza asistida
-                                </h2>
-
-                                <p style="line-height:1.7;">
-                                    <strong>Empresa de mudanza:</strong>
-                                    {{ $expediente->asistencia_empresa_mudanza ?? 'No registrada' }}
-                                    <br>
-
-                                    <strong>Contacto:</strong>
-                                    {{ $expediente->asistencia_contacto ?? 'No registrado' }}
-                                    <br>
-
-                                    <strong>Teléfono / WhatsApp:</strong>
-                                    {{ $expediente->asistencia_telefono ?? 'No registrado' }}
-                                </p>
-
-                                <div
-                                    style=" margin-top:20px; padding:18px; background:#F4F7F6; border-left:4px solid #09233E; border-radius:0 8px 8px 0; ">
-                                    <strong style="color:#09233E;">
-                                        Seguimiento asistido
-                                    </strong>
-
-                                    <p style=" margin:6px 0 0; font-size:13px; line-height:1.5; ">
-                                        El cliente solicitó una póliza asistida.
-                                        El equipo deberá solicitar, revisar y validar
-                                        la información necesaria con la empresa de
-                                        mudanza y dar seguimiento con la aseguradora.
-                                    </p>
-                                </div>
-                            @endif
 
                             <h2 style=" color:#09233E; font-size:18px; margin-top:25px; ">
                                 Datos de la mudanza
@@ -197,9 +142,7 @@
                                 <br>
 
                                 <strong>Tipo de servicio:</strong>
-                                @if($expediente->tipo_servicio === 'contratado')
-                                    Contratado
-                                @elseif($expediente->tipo_servicio === 'compartido')
+                                @if($expediente->tipo_servicio === 'compartido')
                                     Compartido
                                 @elseif($expediente->tipo_servicio === 'exclusivo')
                                     Exclusivo
@@ -254,19 +197,6 @@
                                 <h2 style=" color:#09233E; font-size:18px; margin-top:25px; ">
                                     Datos del automóvil
                                 </h2>
-
-                                <p style="line-height:1.7;">
-                                    <strong>Marca:</strong>
-                                    {{ $expediente->automovil_marca ?? 'No registrada' }}
-                                    <br>
-
-                                    <strong>Modelo:</strong>
-                                    {{ $expediente->automovil_modelo ?? 'No registrado' }}
-                                    <br>
-
-                                    <strong>Número de serie:</strong>
-                                    {{ $expediente->automovil_numero_serie ?? 'No registrado' }}
-                                </p>
 
                                 @if($expediente->automovil_foto_circulacion_url)
                                     <div

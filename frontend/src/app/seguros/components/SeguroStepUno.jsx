@@ -1,13 +1,12 @@
 "use client";
+import { useState } from "react";
 
 export default function SeguroStepUno({
     tipoSeguro,
     valorMenaje,
     valorAutomovil,
-    automovilMarca,
-    automovilModelo,
-    automovilNumeroSerie,
     automovilFotoCirculacionUrl,
+    automovilFotoPreviewUrl,
     uploadingAutomovilFoto,
     pasoUnoGuardado,
     expediente,
@@ -16,10 +15,8 @@ export default function SeguroStepUno({
     onTipoSeguroChange,
     onValorMenajeChange,
     onValorAutomovilChange,
-    onAutomovilMarcaChange,
-    onAutomovilModeloChange,
-    onAutomovilNumeroSerieChange,
     onAutomovilFotoChange,
+    onEliminarAutomovilFoto,
     onGuardar,
     formatearMoneda,
 }) {
@@ -37,6 +34,7 @@ export default function SeguroStepUno({
 
     const primaEstimada = basePrima > 0 ? basePrima * 0.0135 : 0;
     const incluyeAutomovil = tipoSeguro === "automovil" || tipoSeguro === "menaje_auto";
+    const [imagenExpandida, setImagenExpandida] = useState(false);
 
     const mostrarPrima = tipoSeguro && (
         (tipoSeguro === "menaje" && valorMenajeNumero > 0) ||
@@ -179,69 +177,6 @@ export default function SeguroStepUno({
                         <div className="seguro-publico__form-section">
                             <div className="seguro-publico__form-section-heading">
                                 <h3> Datos del automóvil </h3>
-                                <p>Necesitamos estos datos para identificar correctamente el automóvil que deseas asegurar.
-                                    Si te falta algún dato, puedes guardar tu progreso y continuar más adelante cuando tengas la información necesaria.
-                                </p>
-                            </div>
-
-                            <div className="seguro-publico__field">
-                                <label htmlFor="automovil_marca">
-                                    Marca
-                                </label>
-
-                                <input
-                                    id="automovil_marca"
-                                    className="seguro-publico__text-input"
-                                    type="text"
-                                    maxLength={100}
-                                    placeholder="Ej. Toyota"
-                                    value={automovilMarca}
-                                    onChange={(e) => onAutomovilMarcaChange(e.target.value)}
-                                    disabled={saving}
-                                />
-                            </div>
-
-                            <div className="seguro-publico__field">
-                                <label htmlFor="automovil_modelo">
-                                    Modelo
-                                </label>
-
-                                <input
-                                    id="automovil_modelo"
-                                    className="seguro-publico__text-input"
-                                    type="text"
-                                    maxLength={100}
-                                    placeholder="Ej. Corolla"
-                                    value={automovilModelo}
-                                    onChange={(e) => onAutomovilModeloChange(e.target.value)}
-                                    disabled={saving}
-                                />
-                            </div>
-
-                            <div className="seguro-publico__field">
-                                <label htmlFor="automovil_numero_serie">
-                                    Número de serie
-                                </label>
-
-                                <input
-                                    id="automovil_numero_serie"
-                                    className="seguro-publico__text-input"
-                                    type="text"
-                                    maxLength={150}
-                                    placeholder="Ej. 9BR..."
-                                    value={automovilNumeroSerie}
-                                    onChange={(e) => onAutomovilNumeroSerieChange(e.target.value)}
-                                    disabled={saving}
-                                />
-
-                                <div className="seguro-publico__field-warning">
-                                    <span className="seguro-publico__field-warning-icon">!</span>
-
-                                    <span>
-                                        Captura el número de serie que aparece en la documentación del vehículo.
-                                        Puedes agregar el el número de serie más adelante cuando tengas la documentación de tu vehículo.
-                                    </span>
-                                </div>
                             </div>
 
                             <div className="seguro-publico__field">
@@ -250,10 +185,7 @@ export default function SeguroStepUno({
                                 </label>
 
                                 <div className="seguro-publico__upload">
-                                    <label
-                                        htmlFor="automovil_foto_circulacion"
-                                        className="seguro-publico__upload-label"
-                                    >
+                                    <label htmlFor="automovil_foto_circulacion" className="seguro-publico__upload-label" >
                                         <div className="seguro-publico__upload-icon">
                                             <img src="/icons/docs.png" alt="" aria-hidden="true" />
                                         </div>
@@ -284,22 +216,57 @@ export default function SeguroStepUno({
                                     <span className="seguro-publico__field-warning-icon">!</span>
 
                                     <span>
-                                        Toma una fotografía clara de la tarjeta de circulación.
-                                        Desde tu celular podrás utilizar directamente la cámara.
-                                        Puedes agregar el contenido más adelante cuando tengas la documentación de tu vehículo.
+                                        Toma una foto <strong> clara y legible</strong> de tu tarjeta de circulación.
+                                        Puedes usar la cámara de tu celular. Si no la tienes a la mano, podrás agregarla más adelante.
                                     </span>
                                 </div>
 
-                                {automovilFotoCirculacionUrl && (
-                                    <div className="seguro-publico__file-preview">
-                                        <img src={automovilFotoCirculacionUrl} alt="Fotografía de la tarjeta de circulación" />
 
-                                        <div>
-                                            <strong>Fotografía cargada correctamente</strong>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                {(automovilFotoPreviewUrl || automovilFotoCirculacionUrl) && (
+                                    <div className="seguro-publico__file-preview">
+                                        <button type="button" className="seguro-publico__file-preview-image" onClick={() => setImagenExpandida(true)}
+                                            aria-label="Ver fotografía de la tarjeta de circulación" >
+                                            <img src={automovilFotoPreviewUrl || automovilFotoCirculacionUrl} alt="Fotografía de la tarjeta de circulación" />
+
+                                            <span className="seguro-publico__file-preview-zoom">
+                                                Ver
+                                            </span>
+                                        </button>
+
+                                        <div className="seguro-publico__file-preview-info">
+                                            <strong>
+                                                {automovilFotoPreviewUrl ? "Nueva fotografía seleccionada" : "Fotografía cargada correctamente"}
+                                            </strong>
+
                                             <span>
-                                                Puedes cambiarla si necesitas utilizar otra.
+                                                {automovilFotoPreviewUrl ? "Se actualizará al guardar el Paso 1." : "Puedes cambiarla si necesitas utilizar otra."}
                                             </span>
                                         </div>
+
+                                        <button type="button" className="seguro-publico__file-preview-delete"
+                                            onClick={onEliminarAutomovilFoto} disabled={saving} aria-label="Eliminar fotografía" >
+                                            ×
+                                        </button>
                                     </div>
                                 )}
                             </div>
@@ -307,6 +274,20 @@ export default function SeguroStepUno({
                     </>
                 )
             }
+
+            {imagenExpandida && (
+                <div className="seguro-publico__image-modal" role="dialog" aria-modal="true"
+                    aria-label="Vista ampliada de la tarjeta de circulación" onClick={() => setImagenExpandida(false)}
+                >
+                    <button type="button" className="seguro-publico__image-modal-close" onClick={() => setImagenExpandida(false)} aria-label="Cerrar imagen" >
+                        ×
+                    </button>
+
+                    <div className="seguro-publico__image-modal-content" onClick={(e) => e.stopPropagation()} >
+                        <img src={automovilFotoPreviewUrl || automovilFotoCirculacionUrl} alt="Fotografía ampliada de la tarjeta de circulación" />
+                    </div>
+                </div>
+            )}
 
             {
                 mostrarPrima && (
@@ -368,10 +349,6 @@ export default function SeguroStepUno({
                     }
                 </button>
             </div>
-
-            <p className="seguro-publico__privacy">
-                Tu información será utilizada únicamente para dar seguimiento a tu solicitud de seguro.
-            </p>
         </section>
     );
 }

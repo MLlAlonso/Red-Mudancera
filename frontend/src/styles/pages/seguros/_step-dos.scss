@@ -66,23 +66,23 @@
         border-radius: 8px;
         color: $text;
         font-family: $font-text;
-        font-size: 13px;
+        font-size: 14px;
         font-weight: 600;
         line-height: 1.5;
 
         &::before {
             content: "!";
-            width: 18px;
-            height: 18px;
-            flex: 0 0 18px;
+            width: 26px;
+            height: 26px;
+            flex: 0 0 26px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-top: 1px;
             border-radius: 50%;
-            background: $tertiary;
+            background: $error-hover;
             color: white;
-            font-size: 11px;
+            font-size: 18px;
             font-weight: 800;
             line-height: 1;
         }

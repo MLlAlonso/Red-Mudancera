@@ -398,11 +398,6 @@ export default function SeguroEmpresaPage() {
 
                         <div className="seguro-empresa__radio-group">
                             <label className="seguro-empresa__radio">
-                                <input type="radio" name="tipo_servicio" value="contratado" checked={tipoServicio === "contratado"} onChange={(e) => setTipoServicio(e.target.value)} />
-                                <span> Contratado </span>
-                            </label>
-
-                            <label className="seguro-empresa__radio">
                                 <input type="radio" name="tipo_servicio" value="compartido" checked={tipoServicio === "compartido"} onChange={(e) => setTipoServicio(e.target.value)} />
                                 <span> Compartido </span>
                             </label>
@@ -411,7 +406,6 @@ export default function SeguroEmpresaPage() {
                                 <input type="radio" name="tipo_servicio" value="exclusivo" checked={tipoServicio === "exclusivo"} onChange={(e) => setTipoServicio(e.target.value)} />
                                 <span> Exclusivo </span>
                             </label>
-
                         </div>
                     </div>
 

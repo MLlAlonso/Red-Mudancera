@@ -8,6 +8,15 @@ use App\Modules\SuperAdmin\Services\SuperAdminSegurosService;
 use Illuminate\Support\Facades\Mail;
 use App\Modules\Seguro\Mail\InvitacionExpedienteSeguroMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
+use App\Modules\Seguro\Mail\EmpresaSeguroDatosCompletadosMail;
+use App\Modules\Seguro\Mail\RecordatorioExpedienteSeguroMail;
+use App\Modules\Seguro\Mail\SeguroExpedienteFinalizadoClienteMail;
+use App\Modules\Seguro\Mail\SeguroExpedienteFinalizadoMail;
+use App\Modules\Seguro\Mail\SolicitudAsistenciaSeguroClienteMail;
+use App\Modules\Seguro\Mail\SolicitudAsistenciaSeguroMail;
+use App\Modules\Seguro\Mail\SolicitudSeguroRecibidaMail;
 
 class SuperAdminSegurosController extends Controller
 {
@@ -106,16 +115,133 @@ class SuperAdminSegurosController extends Controller
         $expediente = ExpedienteSeguro::findOrFail($id);
 
         if ($expediente->estado === 'cancelado') {
-            return response()->json([ 'message' => 'Este expediente ha sido cancelado.' ], 410);
+            return response()->json(['message' => 'Este expediente ha sido cancelado.'], 410);
         }
 
         if ($expediente->progreso < 100) {
-            return response()->json([ 'message' => 'El expediente todavía no ha sido completado.' ], 409);
+            return response()->json(['message' => 'El expediente todavía no ha sido completado.'], 409);
         }
 
         $pdf = app('dompdf.wrapper');
-        $pdf->loadView( 'pdf.seguro.expediente-finalizado', ['expediente' => $expediente] );
+        $pdf->loadView('pdf.seguro.expediente-finalizado', ['expediente' => $expediente]);
 
-        return $pdf->download( 'expediente-' . $expediente->folio . '.pdf' );
+        return $pdf->download('expediente-' . $expediente->folio . '.pdf');
+    }
+
+
+
+
+    public function enviarCorreoPrueba($id, string $tipo)
+    {
+        $expediente = ExpedienteSeguro::findOrFail($id);
+
+        if (!$expediente->email && !in_array($tipo, [
+            'finalizado',
+            'asistencia',
+        ], true)) {
+            return response()->json([
+                'message' => 'El expediente no tiene un correo de cliente registrado.',
+            ], 422);
+        }
+
+        try {
+            switch ($tipo) {
+                case 'solicitud-recibida':
+                    Mail::to($expediente->email)->send(
+                        new SolicitudSeguroRecibidaMail($expediente)
+                    );
+
+                    $mensaje = 'Correo de solicitud recibida enviado correctamente.';
+                    break;
+
+                case 'invitacion':
+                    Mail::to($expediente->email)->send(
+                        new InvitacionExpedienteSeguroMail($expediente)
+                    );
+
+                    $mensaje = 'Correo de invitación enviado correctamente.';
+                    break;
+
+                case 'recordatorio':
+                    Mail::to($expediente->email)->send(
+                        new RecordatorioExpedienteSeguroMail($expediente)
+                    );
+
+                    $mensaje = 'Correo de recordatorio enviado correctamente.';
+                    break;
+
+                case 'empresa-datos-completados':
+                    Mail::to($expediente->email)->send(
+                        new EmpresaSeguroDatosCompletadosMail($expediente)
+                    );
+
+                    $mensaje = 'Correo de datos de empresa completados enviado correctamente.';
+                    break;
+
+                case 'finalizado-cliente':
+                    Mail::to($expediente->email)->send(
+                        new SeguroExpedienteFinalizadoClienteMail($expediente)
+                    );
+
+                    $mensaje = 'Correo de expediente finalizado al cliente enviado correctamente.';
+                    break;
+
+                case 'finalizado':
+                    Mail::to([
+                        'intermudanza@gmail.com',
+                        'Segurosmudanzafacil@gmail.com',
+                        'ventas12@segurosdecarga.com',
+                    ])->send(
+                        new SeguroExpedienteFinalizadoMail($expediente)
+                    );
+
+                    $mensaje = 'Correo de expediente finalizado enviado correctamente.';
+                    break;
+
+                case 'asistencia-cliente':
+                    Mail::to($expediente->email)->send(
+                        new SolicitudAsistenciaSeguroClienteMail($expediente)
+                    );
+
+                    $mensaje = 'Correo de solicitud asistida al cliente enviado correctamente.';
+                    break;
+
+                case 'asistencia':
+                    Mail::to([
+                        'intermudanza@gmail.com',
+                        'Segurosmudanzafacil@gmail.com',
+                    ])->send(
+                        new SolicitudAsistenciaSeguroMail($expediente)
+                    );
+
+                    $mensaje = 'Correo de solicitud asistida enviado correctamente.';
+                    break;
+
+                default:
+                    return response()->json([
+                        'message' => 'Tipo de correo no válido.',
+                    ], 422);
+            }
+
+            return response()->json([
+                'message' => $mensaje,
+            ]);
+        } catch (\Throwable $e) {
+            Log::error(
+                'Error al enviar correo de prueba de seguro.',
+                [
+                    'expediente_id' => $expediente->id,
+                    'folio' => $expediente->folio,
+                    'tipo' => $tipo,
+                    'email' => $expediente->email,
+                    'error' => $e->getMessage(),
+                ]
+            );
+
+            return response()->json([
+                'message' => 'No fue posible enviar el correo.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

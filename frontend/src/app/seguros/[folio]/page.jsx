@@ -39,13 +39,11 @@ export default function SeguroPublicoPage() {
     const [tipoSeguro, setTipoSeguro] = useState("");
     const [valorMenaje, setValorMenaje] = useState("");
     const [valorAutomovil, setValorAutomovil] = useState("");
-    const [automovilMarca, setAutomovilMarca] = useState("");
-    const [automovilModelo, setAutomovilModelo] = useState("");
-    const [automovilNumeroSerie, setAutomovilNumeroSerie] = useState("");
     const [automovilFotoCirculacionUrl, setAutomovilFotoCirculacionUrl] = useState("");
     const [automovilFotoCirculacionPublicId, setAutomovilFotoCirculacionPublicId] = useState("");
     const [automovilFotoFile, setAutomovilFotoFile] = useState(null);
     const [uploadingAutomovilFoto, setUploadingAutomovilFoto] = useState(false);
+    const [automovilFotoPreviewUrl, setAutomovilFotoPreviewUrl] = useState("");
     const [pasoUnoGuardado, setPasoUnoGuardado] = useState(false);
 
     /*
@@ -161,18 +159,6 @@ export default function SeguroPublicoPage() {
 
             if (data.valor_menaje !== null && data.valor_menaje !== undefined) {
                 setValorMenaje(String(data.valor_menaje));
-            }
-
-            if (data.automovil_marca !== null && data.automovil_marca !== undefined) {
-                setAutomovilMarca(String(data.automovil_marca));
-            }
-
-            if (data.automovil_modelo !== null && data.automovil_modelo !== undefined) {
-                setAutomovilModelo(String(data.automovil_modelo));
-            }
-
-            if (data.automovil_numero_serie !== null && data.automovil_numero_serie !== undefined) {
-                setAutomovilNumeroSerie(String(data.automovil_numero_serie));
             }
 
             if (data.automovil_foto_circulacion_url !== null && data.automovil_foto_circulacion_url !== undefined) {
@@ -342,7 +328,7 @@ export default function SeguroPublicoPage() {
                 setPasoTresGuardado(true);
             }
         } catch (error) {
-            console.error( "No fue posible refrescar el expediente:", error );
+            console.error("No fue posible refrescar el expediente:", error);
         }
     }
 
@@ -412,12 +398,10 @@ export default function SeguroPublicoPage() {
 
         if (tipo === "menaje") {
             setValorAutomovil("");
-            setAutomovilMarca("");
-            setAutomovilModelo("");
-            setAutomovilNumeroSerie("");
             setAutomovilFotoCirculacionUrl("");
             setAutomovilFotoCirculacionPublicId("");
             setAutomovilFotoFile(null);
+            setAutomovilFotoPreviewUrl("");
         }
 
         if (tipo === "automovil") {
@@ -430,18 +414,36 @@ export default function SeguroPublicoPage() {
 
         if (!file) {
             setAutomovilFotoFile(null);
+            setAutomovilFotoPreviewUrl("");
             return;
         }
 
-        const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp",];
+        const allowedTypes = [
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/webp",
+        ];
 
         if (!allowedTypes.includes(file.type)) {
             setAutomovilFotoFile(null);
+            setAutomovilFotoPreviewUrl("");
             setError("Formato no permitido. Solo se permiten imágenes JPG, PNG o WEBP.");
             return;
         }
 
         setAutomovilFotoFile(file);
+
+        const previewUrl = URL.createObjectURL(file);
+        setAutomovilFotoPreviewUrl(previewUrl);
+    }
+
+    function handleEliminarAutomovilFoto() {
+        setAutomovilFotoFile(null);
+        setAutomovilFotoPreviewUrl("");
+        setAutomovilFotoCirculacionUrl("");
+        setAutomovilFotoCirculacionPublicId("");
+        setError("");
     }
 
     /*
@@ -481,18 +483,6 @@ export default function SeguroPublicoPage() {
         | Validar datos del automóvil
         |--------------------------------------------------------------------------
         */
-        if (incluyeAutomovil) {
-            if (!automovilMarca.trim()) {
-                setError("Ingresa la marca del automóvil.");
-                return;
-            }
-
-            if (!automovilModelo.trim()) {
-                setError("Ingresa el modelo del automóvil.");
-                return;
-            }
-        }
-
         try {
             setSaving(true);
             let fotoCirculacionUrl = automovilFotoCirculacionUrl || null;
@@ -508,6 +498,7 @@ export default function SeguroPublicoPage() {
                 const uploaded = await uploadToCloudinary(automovilFotoFile);
                 fotoCirculacionUrl = uploaded.url;
                 fotoCirculacionPublicId = uploaded.public_id;
+                setAutomovilFotoPreviewUrl("");
                 setAutomovilFotoCirculacionUrl(uploaded.url);
                 setAutomovilFotoCirculacionPublicId(uploaded.public_id);
                 setAutomovilFotoFile(null);
@@ -525,9 +516,6 @@ export default function SeguroPublicoPage() {
                     tipo_seguro: tipoSeguro,
                     valor_menaje: menaje,
                     valor_automovil: automovil,
-                    automovil_marca: incluyeAutomovil ? automovilMarca.trim() : null,
-                    automovil_modelo: incluyeAutomovil ? automovilModelo.trim() : null,
-                    automovil_numero_serie: incluyeAutomovil ? automovilNumeroSerie.trim() : null,
                     automovil_foto_circulacion_url: incluyeAutomovil ? fotoCirculacionUrl : null,
                     automovil_foto_circulacion_public_id: incluyeAutomovil ? fotoCirculacionPublicId : null,
                 }
@@ -545,9 +533,6 @@ export default function SeguroPublicoPage() {
                 tipo_seguro: response.data.tipo_seguro,
                 valor_menaje: response.data.valor_menaje,
                 valor_automovil: response.data.valor_automovil,
-                automovil_marca: response.data.automovil_marca,
-                automovil_modelo: response.data.automovil_modelo,
-                automovil_numero_serie: response.data.automovil_numero_serie,
                 automovil_foto_circulacion_url: response.data.automovil_foto_circulacion_url,
                 automovil_foto_circulacion_public_id: response.data.automovil_foto_circulacion_public_id,
                 prima_estimada: response.data.prima_estimada,
@@ -568,6 +553,7 @@ export default function SeguroPublicoPage() {
             setSaving(false);
         }
     }
+
 
     /*
     |--------------------------------------------------------------------------
@@ -1019,9 +1005,6 @@ export default function SeguroPublicoPage() {
         valorMenaje,
         valorAutomovil,
         primaEstimada: expediente?.prima_estimada,
-        automovilMarca,
-        automovilModelo,
-        automovilNumeroSerie,
         automovilFotoCirculacionUrl,
         modalidadDatos,
         asistenciaEmpresaMudanza,
@@ -1047,10 +1030,12 @@ export default function SeguroPublicoPage() {
                 </div>
 
                 <div className="seguro-publico__top">
+
                     <div>
                         <span className="seguro-publico__eyebrow">
                             Expediente de seguro
                         </span>
+
                         <h1>Así se ve tu expediente</h1>
                     </div>
 
@@ -1060,12 +1045,14 @@ export default function SeguroPublicoPage() {
                     </div>
                 </div>
 
-                <div className="seguro-publico__subtitle">
-                    <p>
-                        Conoce paso a paso la información necesaria para preparar tu seguro.
-                        Puedes avanzar y ver cómo funciona sin compromiso y sin necesidad de terminarlo hoy.
-                    </p>
-                </div>
+                {paso < 3 && (
+                    <div className="seguro-publico__subtitle">
+                        <p>
+                            Conoce paso a paso la información necesaria para preparar tu seguro.
+                            Puedes avanzar y ver cómo funciona sin compromiso y sin necesidad de terminarlo hoy.
+                        </p>
+                    </div>
+                )}
 
                 <div className="seguro-publico__progress">
                     <div className="seguro-publico__progress-header">
@@ -1079,10 +1066,8 @@ export default function SeguroPublicoPage() {
                             tipoSeguro={tipoSeguro}
                             valorMenaje={valorMenaje}
                             valorAutomovil={valorAutomovil}
-                            automovilMarca={automovilMarca}
-                            automovilModelo={automovilModelo}
-                            automovilNumeroSerie={automovilNumeroSerie}
                             automovilFotoCirculacionUrl={automovilFotoCirculacionUrl}
+                            automovilFotoPreviewUrl={automovilFotoPreviewUrl}
                             uploadingAutomovilFoto={uploadingAutomovilFoto}
                             pasoUnoGuardado={pasoUnoGuardado}
                             expediente={expediente}
@@ -1091,10 +1076,8 @@ export default function SeguroPublicoPage() {
                             onTipoSeguroChange={handleTipoSeguro}
                             onValorMenajeChange={setValorMenaje}
                             onValorAutomovilChange={setValorAutomovil}
-                            onAutomovilMarcaChange={setAutomovilMarca}
-                            onAutomovilModeloChange={setAutomovilModelo}
-                            onAutomovilNumeroSerieChange={setAutomovilNumeroSerie}
                             onAutomovilFotoChange={handleAutomovilFotoChange}
+                            onEliminarAutomovilFoto={handleEliminarAutomovilFoto}
                             onGuardar={guardarPasoUno}
                             formatearMoneda={formatearMoneda}
                         />
@@ -1168,12 +1151,23 @@ export default function SeguroPublicoPage() {
 
                     <div className="seguro-publico__help-content">
                         <h3> ¿Necesitas ayuda? </h3>
-
                         <p> Contáctanos por Whatsapp y con gusto te ayudamos </p>
 
                         <a href="https://wa.me/524421896433" target="_blank" rel="noopener noreferrer" >
                             Contáctanos
                         </a>
+                    </div>
+                </div>
+
+                <div className="seguro-publico__privacy">
+                    <p>
+                        Tu información será utilizada únicamente para dar seguimiento a tu solicitud de seguro.
+                    </p>
+
+                    <div className="seguro-publico__insurance-company">
+                        <span> La cobertura de seguro es respaldada por </span>
+
+                        <img src="/logo/chubb_logo.png" alt="Chubb" />
                     </div>
                 </div>
             </section>
