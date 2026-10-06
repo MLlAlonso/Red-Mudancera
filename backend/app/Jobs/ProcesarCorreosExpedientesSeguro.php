@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Modules\Seguro\Mail\InvitacionExpedienteSeguroMail;
 use App\Modules\Seguro\Mail\RecordatorioExpedienteSeguroMail;
+use App\Modules\Seguro\Mail\VideoExpedienteSeguroMail;
 use App\Modules\Seguro\Services\ExpedienteSeguroService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -22,15 +23,51 @@ class ProcesarCorreosExpedientesSeguro implements ShouldQueue
 
     public function handle(ExpedienteSeguroService $service): void
     {
-        $expedientesIniciales = $service->obtenerExpedientesParaInvitacionInicial();
+        /*
+        |--------------------------------------------------------------------------
+        | Video - 24 horas
+        |--------------------------------------------------------------------------
+        */
+        $expedientesVideo = $service->obtenerExpedientesParaVideo();
 
-        foreach ($expedientesIniciales as $expediente) {
-            if (in_array($expediente->estado, ['completado', 'cancelado',], true)) {
+        foreach ($expedientesVideo as $expediente) {
+            if (in_array($expediente->estado, ['completado', 'cancelado'], true)) {
                 continue;
             }
 
             try {
-                Mail::to($expediente->email)->send(new InvitacionExpedienteSeguroMail($expediente));
+                Mail::to($expediente->email)->send( new VideoExpedienteSeguroMail($expediente) );
+                $service->marcarVideoEnviado($expediente);
+
+                Log::info('Correo de video de expediente de seguro enviado.', [
+                    'expediente_id' => $expediente->id,
+                    'folio' => $expediente->folio,
+                    'email' => $expediente->email,
+                ]);
+            } catch (\Throwable $e) {
+                Log::error('Error enviando correo de video de expediente de seguro.', [
+                    'expediente_id' => $expediente->id,
+                    'folio' => $expediente->folio,
+                    'email' => $expediente->email,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Invitación - 48 horas
+        |--------------------------------------------------------------------------
+        */
+        $expedientesIniciales = $service->obtenerExpedientesParaInvitacionInicial();
+
+        foreach ($expedientesIniciales as $expediente) {
+            if (in_array($expediente->estado, ['completado', 'cancelado'], true)) {
+                continue;
+            }
+
+            try {
+                Mail::to($expediente->email)->send( new InvitacionExpedienteSeguroMail($expediente) );
                 $service->marcarInvitacionEnviada($expediente);
 
                 Log::info('Invitación inicial de expediente de seguro enviada.', [
@@ -48,15 +85,20 @@ class ProcesarCorreosExpedientesSeguro implements ShouldQueue
             }
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Recordatorio - 5 días
+        |--------------------------------------------------------------------------
+        */
         $expedientesRecordatorio = $service->obtenerExpedientesParaRecordatorio();
 
         foreach ($expedientesRecordatorio as $expediente) {
-            if (in_array($expediente->estado, ['completado', 'cancelado',], true)) {
+            if (in_array($expediente->estado, ['completado', 'cancelado'], true)) {
                 continue;
             }
 
             try {
-                Mail::to($expediente->email)->send(new RecordatorioExpedienteSeguroMail($expediente));
+                Mail::to($expediente->email)->send( new RecordatorioExpedienteSeguroMail($expediente) );
                 $service->marcarRecordatorioEnviado($expediente);
 
                 Log::info('Recordatorio de expediente de seguro enviado.', [

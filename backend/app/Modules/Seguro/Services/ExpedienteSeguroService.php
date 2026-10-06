@@ -39,10 +39,16 @@ class ExpedienteSeguroService
                 'inventario' => $data['inventario'] ?? null,
                 'fecha_recoleccion' => $data['fecha_recoleccion'] ?? null,
                 'es_externo' => $data['es_externo'] ?? false,
-                'correo_programado_at' => $creadoEn->copy()->addHours(24000),
+
+                'correo_programado_at' => $creadoEn->copy()->addHours(48000),
+                'video_programado_at' => $creadoEn->copy()->addHours(24000),
                 'recordatorio_programado_at' => $creadoEn->copy()->addDays(5000),
-                /* 'correo_programado_at' => $creadoEn->copy()->addHours(24),
-                'recordatorio_programado_at' => $creadoEn->copy()->addDays(5), */
+
+                /* 
+                'correo_programado_at' => $creadoEn->copy()->addHours(48),
+                'video_programado_at' => $creadoEn->copy()->addHours(24),
+                'recordatorio_programado_at' => $creadoEn->copy()->addDays(5),
+                 */
             ]);
         });
     }
@@ -52,6 +58,7 @@ class ExpedienteSeguroService
         return ExpedienteSeguro::query()
             ->whereNotNull('correo_programado_at')
             ->whereNull('correo_enviado_at')
+            ->whereNotNull('video_enviado_at')
             ->where('correo_programado_at', '<=', now())
             ->whereNotIn('estado', ['completado', 'cancelado'])
             ->whereNotNull('email')
@@ -76,6 +83,23 @@ class ExpedienteSeguroService
             'estado' => $expediente->estado === 'nuevo' ? 'esperando_cliente' : $expediente->estado,
         ]);
 
+        return $expediente->fresh();
+    }
+
+    public function obtenerExpedientesParaVideo()
+    {
+        return ExpedienteSeguro::query()
+            ->whereNotNull('video_programado_at')
+            ->whereNull('video_enviado_at')
+            ->where('video_programado_at', '<=', now())
+            ->whereNotIn('estado', ['completado', 'cancelado'])
+            ->whereNotNull('email')
+            ->get();
+    }
+
+    public function marcarVideoEnviado(ExpedienteSeguro $expediente): ExpedienteSeguro
+    {
+        $expediente->update(['video_enviado_at' => now(),]);
         return $expediente->fresh();
     }
 

@@ -48,6 +48,8 @@ class ExpedienteSeguro extends Model
         'es_externo',
         'correo_programado_at',
         'correo_enviado_at',
+        'video_programado_at',
+        'video_enviado_at',
         'cliente_inicio_at',
         'cliente_finalizo_at',
         'ultimo_autoguardado_at',
@@ -59,6 +61,8 @@ class ExpedienteSeguro extends Model
     protected $casts = [
         'correo_programado_at' => 'datetime',
         'correo_enviado_at' => 'datetime',
+        'video_programado_at' => 'datetime',
+        'video_enviado_at' => 'datetime',
         'cliente_inicio_at' => 'datetime',
         'cliente_finalizo_at' => 'datetime',
         'ultimo_autoguardado_at' => 'datetime',
@@ -71,7 +75,7 @@ class ExpedienteSeguro extends Model
         'empresa_datos_finalizados_at' => 'datetime',
     ];
 
-    protected $appends = [ 'enlace_empresa', ];
+    protected $appends = ['enlace_empresa',];
 
     public function getEnlaceEmpresaAttribute(): ?string
     {
@@ -85,6 +89,6 @@ class ExpedienteSeguro extends Model
 
     public function solicitud()
     {
-        return $this->belongsTo( SolicitudMudanza::class, 'solicitud_mudanza_id' );
+        return $this->belongsTo(SolicitudMudanza::class, 'solicitud_mudanza_id');
     }
 }

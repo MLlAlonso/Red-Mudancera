@@ -17,6 +17,7 @@ use App\Modules\Seguro\Mail\SeguroExpedienteFinalizadoMail;
 use App\Modules\Seguro\Mail\SolicitudAsistenciaSeguroClienteMail;
 use App\Modules\Seguro\Mail\SolicitudAsistenciaSeguroMail;
 use App\Modules\Seguro\Mail\SolicitudSeguroRecibidaMail;
+use App\Modules\Seguro\Mail\VideoExpedienteSeguroMail;
 
 class SuperAdminSegurosController extends Controller
 {
@@ -129,8 +130,6 @@ class SuperAdminSegurosController extends Controller
     }
 
 
-
-
     public function enviarCorreoPrueba($id, string $tipo)
     {
         $expediente = ExpedienteSeguro::findOrFail($id);
@@ -147,42 +146,32 @@ class SuperAdminSegurosController extends Controller
         try {
             switch ($tipo) {
                 case 'solicitud-recibida':
-                    Mail::to($expediente->email)->send(
-                        new SolicitudSeguroRecibidaMail($expediente)
-                    );
-
+                    Mail::to($expediente->email)->send(new SolicitudSeguroRecibidaMail($expediente));
                     $mensaje = 'Correo de solicitud recibida enviado correctamente.';
                     break;
 
                 case 'invitacion':
-                    Mail::to($expediente->email)->send(
-                        new InvitacionExpedienteSeguroMail($expediente)
-                    );
-
+                    Mail::to($expediente->email)->send(new InvitacionExpedienteSeguroMail($expediente));
                     $mensaje = 'Correo de invitación enviado correctamente.';
                     break;
 
-                case 'recordatorio':
-                    Mail::to($expediente->email)->send(
-                        new RecordatorioExpedienteSeguroMail($expediente)
-                    );
+                case 'video':
+                    Mail::to($expediente->email)->send(new VideoExpedienteSeguroMail($expediente));
+                    $mensaje = 'Correo de video enviado correctamente.';
+                    break;
 
+                case 'recordatorio':
+                    Mail::to($expediente->email)->send(new RecordatorioExpedienteSeguroMail($expediente));
                     $mensaje = 'Correo de recordatorio enviado correctamente.';
                     break;
 
                 case 'empresa-datos-completados':
-                    Mail::to($expediente->email)->send(
-                        new EmpresaSeguroDatosCompletadosMail($expediente)
-                    );
-
+                    Mail::to($expediente->email)->send(new EmpresaSeguroDatosCompletadosMail($expediente));
                     $mensaje = 'Correo de datos de empresa completados enviado correctamente.';
                     break;
 
                 case 'finalizado-cliente':
-                    Mail::to($expediente->email)->send(
-                        new SeguroExpedienteFinalizadoClienteMail($expediente)
-                    );
-
+                    Mail::to($expediente->email)->send(new SeguroExpedienteFinalizadoClienteMail($expediente));
                     $mensaje = 'Correo de expediente finalizado al cliente enviado correctamente.';
                     break;
 
@@ -199,10 +188,7 @@ class SuperAdminSegurosController extends Controller
                     break;
 
                 case 'asistencia-cliente':
-                    Mail::to($expediente->email)->send(
-                        new SolicitudAsistenciaSeguroClienteMail($expediente)
-                    );
-
+                    Mail::to($expediente->email)->send(new SolicitudAsistenciaSeguroClienteMail($expediente));
                     $mensaje = 'Correo de solicitud asistida al cliente enviado correctamente.';
                     break;
 
@@ -218,9 +204,7 @@ class SuperAdminSegurosController extends Controller
                     break;
 
                 default:
-                    return response()->json([
-                        'message' => 'Tipo de correo no válido.',
-                    ], 422);
+                    return response()->json(['message' => 'Tipo de correo no válido.',], 422);
             }
 
             return response()->json([

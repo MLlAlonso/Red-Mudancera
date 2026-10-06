@@ -1,496 +1,204 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mudanza Fácil: recibimos tu solicitud de seguro</title>
+    <title>Mudanza Fácil: recibimos tu solicitud</title>
 </head>
 
-<body style="margin:0;padding:0;background:#F4F7F6;font-family:Arial,Helvetica,sans-serif;">
-
-    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+<body style="margin:0;padding:0;background:#F3F6F8;font-family:Arial,Helvetica,sans-serif;color:#243746;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F3F6F8;">
         <tr>
-            <td align="center" style="padding:40px 16px;">
-
+            <td align="center" style="padding:32px 16px;">
                 <table width="100%" cellpadding="0" cellspacing="0" border="0"
-                    style="max-width:560px;background:#ffffff;border-radius:16px;overflow:hidden;">
+                    style="max-width:600px;background:#ffffff;border-radius:18px;overflow:hidden;">
 
-                    <!-- Header -->
+                    <!-- ================= HEADER ================= -->
                     <tr>
-                        <td style="background:#09233E;padding:30px 28px;text-align:center;">
+                        <td style="background:#09233E;padding:28px 30px;text-align:center;">
+                            <div
+                                style="margin:0;color:#ffffff;font-size:18px;line-height:1.5;font-weight:bold; margin-bottom: 10px;">
+                                ✓ RECIBIMOS TU SOLICITUD
+                            </div>
 
-                            <h2 style="margin:0;color:#ffffff;font-size:24px;line-height:1.3;">
-                                ✓ Recibimos tu solicitud
-                            </h2>
-
-                            <p style="margin:10px 0 0;color:#DCE8F4;font-size:15px;line-height:1.5;">
+                            <p style="margin:0;color:#ffffff;font-size:16px;line-height:1.2;">
                                 Tu proceso para proteger tu mudanza ya comenzó.
                             </p>
 
                         </td>
                     </tr>
 
-                    <!-- Logo -->
+                    <!-- ================= LOGO ================= -->
                     <tr>
-                        <td align="center" style="padding:24px 22px 18px;">
-
+                        <td align="center" style="padding:24px 30px 12px;">
                             <img src="https://app.mudanzafacil.com.mx/logo/icon.png" alt="Mudanza Fácil"
-                                style="height:60px;display:block;margin:0 auto;">
-
+                                style="display:block;margin:0 auto;height:52px;width:auto;">
                         </td>
                     </tr>
 
-                    <!-- Saludo -->
+                    <!-- ================= INTRO ================= -->
                     <tr>
-                        <td style="padding:0 32px;color:#4A5E71;line-height:1.7;text-align:justify;">
+                        <td style="padding:20px 34px 28px;">
 
-                            <h3 style="color:#1F2937;margin:0 0 16px;font-size:21px;">
-                                Hola {{ $expediente->nombre }}
-                            </h3>
+                            <h1 style="margin:0 0 16px;color:#09233E;font-size:20px;line-height:1.3;font-weight:700;">
+                                Hola {{ $expediente->nombre }},
+                            </h1>
 
-                            <p style="margin:0 0 16px;">
-                                Recibimos correctamente tu solicitud para conocer las opciones
-                                de seguro disponibles para tu mudanza.
+                            <p
+                                style="margin:0 0 14px;color:#5E7182;font-size:16px;line-height:1.7; text-align:justify;">
+                                Recibimos correctamente tu solicitud para conocer cómo contratar tu seguro de mudanza
+                                a través de Mudanza Fácil.
                             </p>
 
-                            <p style="margin:0 0 16px;">
-                                <strong style="color:#15996f;">
-                                    No necesitas hacer nada más por ahora.
-                                </strong>
-                                En breve recibirás otro correo con las indicaciones para
-                                continuar con el proceso y completar la información necesaria.
-                            </p>
-
-                        </td>
-                    </tr>
-
-                    <!-- Confirmación -->
-                    <tr>
-                        <td style="padding:10px 30px 8px;">
-
-                            <div style="
-                                background:#EDF9F1;
-                                border:1px solid #C7E8D2;
-                                border-radius:14px;
-                                padding:22px;
-                                text-align:center;
-                            ">
-
-                                <div style="
-                                    display:inline-block;
-                                    width:42px;
-                                    height:42px;
-                                    line-height:42px;
-                                    background:#15996F;
-                                    color:#ffffff;
-                                    border-radius:50%;
-                                    font-size:22px;
-                                    font-weight:bold;
-                                    margin-bottom:10px;
-                                ">
-                                    ✓
-                                </div>
-
-                                <h3 style="
-                                    margin:0 0 8px;
-                                    color:#09233E;
-                                    font-size:19px;
-                                ">
-                                    Tu solicitud fue recibida correctamente
-                                </h3>
-                            </div>
-
-                        </td>
-                    </tr>
-
-                    <!-- Qué incluye -->
-                    <tr>
-                        <td style="padding:24px 32px 10px;">
-
-                            <h3 style="
-                                margin:0 0 8px;
-                                color:#09233E;
-                                font-size:21px;
-                                line-height:1.3;
-                            ">
-                                ¿Qué puedes obtener con tu seguro?
-                            </h3>
-
-                            <p style="
-                                margin:0;
-                                color:#4A5E71;
-                                font-size:14px;
-                                line-height:1.6;
-                                text-align:justify;
-                            ">
-                                En Mudanza Fácil buscamos que proteger tu patrimonio durante
-                                el traslado sea un proceso sencillo, claro y verificable.
+                            <p style="margin:0;color:#5E7182;font-size:16px;line-height:1.7;text-align:justify;">
+                                <span style="font-weight:bold; color:#1C8F6A;">No necesitas hacer nada más por
+                                    ahora.</span> En breve te iremos guiando paso a paso para que
+                                puedas dejar todo preparado y contratarlo cuando llegue el momento.
                             </p>
 
                         </td>
                     </tr>
 
-                    <!-- Beneficios -->
+                    <!-- ================= QUÉ SIGUE ================= -->
                     <tr>
-                        <td style="padding:10px 30px 5px;">
-
-                            <!-- Beneficio 1 -->
-                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:10px;">
+                        <td style="padding:0 20px 20px;">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#EEF4FA;border:1px solid #DCE8F4;border-radius:16px;">
                                 <tr>
-                                    <td width="42" valign="top">
+                                    <td style="padding:20px 10px 24px;">
+                                        <h2 style="margin:0 0 22px;color:#09233E;font-size:22px;line-height:1.3;">
+                                            ¿Qué sigue?
+                                        </h2>
 
-                                        <div style="
-                                            width:34px;
-                                            height:34px;
-                                            line-height:34px;
-                                            background:#15996F;
-                                            color:#ffffff;
-                                            border-radius:50%;
-                                            text-align:center;
-                                            font-size:18px;
-                                            font-weight:bold;
-                                        ">
-                                            ✓
-                                        </div>
+                                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
+                                            <tr>
+                                                <td width="32" valign="top">
+                                                    <div style="width:30px;height:30px;background:#15996F;border-radius:50%;text-align:center;line-height:28px;color:#ffffff;font-size:14px;font-weight:bold;">
+                                                        1
+                                                    </div>
+                                                </td>
 
-                                    </td>
+                                                <td width="50" valign="top" align="center">
+                                                    <img src="https://app.mudanzafacil.com.mx/icons/video.png"
+                                                        alt="Descubre las ventajas" width="40" height="38"
+                                                        style="display:block;border:0;outline:none;text-decoration:none;background:transparent;">
+                                                </td>
 
-                                    <td valign="top">
+                                                <td valign="top" style="padding-left:10px;">
+                                                    <p
+                                                        style="margin:0 0 5px;color:#09233E;font-size:14px;line-height:1.4;font-weight:bold;">
+                                                        Descubre las ventajas de asegurar tu mudanza con Mudanza Fácil
+                                                    </p>
 
-                                        <strong style="
-                                            display:block;
-                                            color:#1F2937;
-                                            font-size:15px;
-                                            margin-bottom:3px;
-                                        ">
-                                            Póliza formal y verificable
-                                        </strong>
+                                                    <p style="margin:0;color:#617487;font-size:13px;line-height:1.6;">
+                                                        Mañana te mostraremos una forma más clara, segura y sencilla
+                                                        de proteger tu patrimonio.
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
 
-                                        <span style="
-                                            color:#66757F;
-                                            font-size:13px;
-                                            line-height:1.5;
-                                        ">
-                                            Respaldo formal para proteger tu patrimonio
-                                            durante el traslado.
-                                        </span>
+                                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
+                                            <tr>
+                                                <td width="32" valign="top">
+                                                    <div style="width:28px;height:28px;background:#2F5C8C;border-radius:50%;text-align:center;line-height:28px;color:#ffffff;font-size:13px;font-weight:bold;">
+                                                        2
+                                                    </div>
+                                                </td>
 
+                                                <td width="50" valign="top" align="center">
+                                                    <img src="https://app.mudanzafacil.com.mx/icons/confirmar.png"
+                                                        alt="Accede a tu expediente" width="38" height="38" style="display:block;border:0;outline:none;text-decoration:none;background:transparent;">
+                                                </td>
+
+                                                <td valign="top" style="padding-left:10px;">
+                                                    <p style="margin:0 0 5px;color:#09233E;font-size:14px;line-height:1.4;font-weight:bold;">
+                                                        Accede a tu expediente digital
+                                                    </p>
+
+                                                    <p style="margin:0;color:#617487;font-size:13px;line-height:1.6;">
+                                                        Un solo lugar para reunir la información de tu mudanza y dejar todo listo para tu seguro.
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td width="32" valign="top">
+                                                    <div style="width:28px;height:28px;background:#2F5C8C;border-radius:50%;text-align:center;line-height:28px;color:#ffffff;font-size:13px;font-weight:bold;">
+                                                        3
+                                                    </div>
+                                                </td>
+
+                                                <td width="50" valign="top" align="center">
+                                                    <img src="https://app.mudanzafacil.com.mx/icons/formulario.png"
+                                                        alt="Completa tu expediente" width="38" height="38"
+                                                        style="display:block;border:0;outline:none;text-decoration:none;background:transparent;">
+                                                </td>
+
+                                                <td valign="top" style="padding-left:10px;">
+                                                    <p style="margin:0 0 5px;color:#09233E;font-size:14px;line-height:1.4;font-weight:bold;">
+                                                        Completa tu expediente cuando estés listo
+                                                    </p>
+
+                                                    <p style="margin:0;color:#617487;font-size:13px;line-height:1.6;">
+                                                        Cuando tengas definida tu mudanza, podrás completar fácilmente la información necesaria, 
+                                                        incluso solicitándola directamente a tu empresa de mudanza.
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </td>
                                 </tr>
                             </table>
-
-                            <!-- Beneficio 2 -->
-                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:10px;">
-                                <tr>
-                                    <td width="42" valign="top">
-
-                                        <div style="
-                                            width:34px;
-                                            height:34px;
-                                            line-height:34px;
-                                            background:#15996F;
-                                            color:#ffffff;
-                                            border-radius:50%;
-                                            text-align:center;
-                                            font-size:18px;
-                                            font-weight:bold;
-                                        ">
-                                            ✓
-                                        </div>
-
-                                    </td>
-
-                                    <td valign="top">
-
-                                        <strong style="
-                                            display:block;
-                                            color:#1F2937;
-                                            font-size:15px;
-                                            margin-bottom:3px;
-                                        ">
-                                            Tarifa preferencial
-                                        </strong>
-
-                                        <span style="
-                                            color:#66757F;
-                                            font-size:13px;
-                                            line-height:1.5;
-                                        ">
-                                            Acceso a una tarifa preferencial por realizar
-                                            tu proceso a través de Mudanza Fácil.
-                                        </span>
-
-                                    </td>
-                                </tr>
-                            </table>
-
-                            <!-- Beneficio 3 -->
-                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:10px;">
-                                <tr>
-                                    <td width="42" valign="top">
-
-                                        <div style="
-                                            width:34px;
-                                            height:34px;
-                                            line-height:34px;
-                                            background:#15996F;
-                                            color:#ffffff;
-                                            border-radius:50%;
-                                            text-align:center;
-                                            font-size:18px;
-                                            font-weight:bold;
-                                        ">
-                                            ✓
-                                        </div>
-
-                                    </td>
-
-                                    <td valign="top">
-
-                                        <strong style="
-                                            display:block;
-                                            color:#1F2937;
-                                            font-size:15px;
-                                            margin-bottom:3px;
-                                        ">
-                                            Expediente digital
-                                        </strong>
-
-                                        <span style="
-                                            color:#66757F;
-                                            font-size:13px;
-                                            line-height:1.5;
-                                        ">
-                                            Tu información se organiza en un solo lugar
-                                            para facilitar el proceso.
-                                        </span>
-
-                                    </td>
-                                </tr>
-                            </table>
-
-                            <!-- Beneficio 4 -->
-                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                                <tr>
-                                    <td width="42" valign="top">
-
-                                        <div style="
-                                            width:34px;
-                                            height:34px;
-                                            line-height:34px;
-                                            background:#15996F;
-                                            color:#ffffff;
-                                            border-radius:50%;
-                                            text-align:center;
-                                            font-size:18px;
-                                            font-weight:bold;
-                                        ">
-                                            ✓
-                                        </div>
-
-                                    </td>
-
-                                    <td valign="top">
-
-                                        <strong style="
-                                            display:block;
-                                            color:#1F2937;
-                                            font-size:15px;
-                                            margin-bottom:3px;
-                                        ">
-                                            Acompañamiento durante el proceso
-                                        </strong>
-
-                                        <span style="
-                                            color:#66757F;
-                                            font-size:13px;
-                                            line-height:1.5;
-                                        ">
-                                            Tendrás claridad sobre los siguientes pasos
-                                            hasta recibir tu póliza.
-                                        </span>
-
-                                    </td>
-                                </tr>
-                            </table>
-
                         </td>
                     </tr>
 
-                    <!-- Proceso -->
+                    <!-- ================= MENSAJE FINAL ================= -->
                     <tr>
-                        <td style="padding:28px 30px 10px;">
-
-                            <div style="
-                                background:#F8FAFC;
-                                border:1px solid #DCE8F4;
-                                border-radius:14px;
-                                padding:22px;
-                            ">
-
-                                <h3 style="
-                                    margin:0 0 16px;
-                                    color:#2F5C8C;
-                                    font-size:15px;
-                                    text-align:center;
-                                    letter-spacing:0.5px;
-                                ">
-                                    ¿QUÉ SIGUE?
-                                </h3>
-
-                                <p style="
-                                    margin:0 0 10px;
-                                    color:#4A5E71;
-                                    font-size:14px;
-                                    line-height:1.6;
-                                ">
-                                    <strong style="color:#09233E;">1.</strong>
-                                    Recibirás un correo para continuar con tu proceso.
-                                </p>
-
-                                <p style="
-                                    margin:0 0 10px;
-                                    color:#4A5E71;
-                                    font-size:14px;
-                                    line-height:1.6;
-                                ">
-                                    <strong style="color:#09233E;">2.</strong>
-                                    Podrás completar la información de tu mudanza
-                                    y del patrimonio que deseas proteger.
-                                </p>
-
-                                <p style="
-                                    margin:0;
-                                    color:#4A5E71;
-                                    font-size:14px;
-                                    line-height:1.6;
-                                ">
-                                    <strong style="color:#09233E;">3.</strong>
-                                    Una vez confirmados los datos, podrás continuar
-                                    con el proceso para recibir tu póliza.
-                                </p>
-
-                            </div>
-
-                        </td>
-                    </tr>
-
-                    <!-- Folio -->
-                    <tr>
-                        <td style="padding:22px 30px 10px;">
-
-                            <div style="
-                                background:#F8FAFC;
-                                border:2px solid #DCE8F4;
-                                border-radius:14px;
-                                padding:18px;
-                                text-align:center;
-                            ">
-
-                                <p style="
-                                    margin:0 0 7px;
-                                    color:#6B7280;
-                                    font-size:12px;
-                                    text-transform:uppercase;
-                                    letter-spacing:1px;
-                                ">
-                                    Folio de seguimiento
-                                </p>
-
-                                <strong style="
-                                    display:block;
-                                    color:#2F5C8C;
-                                    font-size:20px;
-                                    letter-spacing:2px;
-                                ">
-                                    {{ $expediente->folio }}
-                                </strong>
-
-                                <p style="
-                                    margin:9px 0 0;
-                                    color:#7A8982;
-                                    font-size:12px;
-                                    line-height:1.4;
-                                ">
-                                    Conserva este folio para futuras referencias
-                                    relacionadas con tu solicitud.
-                                </p>
-
-                            </div>
-
-                        </td>
-                    </tr>
-
-                    <!-- Cierre -->
-                    <tr>
-                        <td style="
-                            padding:24px 32px 30px;
-                            color:#4A5E71;
-                            line-height:1.7;
-                            text-align:center;
-                            font-size:14px;
-                        ">
-
-                            <p style="margin:0 0 14px;">
-                                Por ahora, puedes continuar organizando tu mudanza.
-                                Nosotros te indicaremos cuándo es momento de continuar.
+                        <td style="padding:0 34px 26px;text-align:center;">
+                            <p style="margin:0 0 10px;color:#5E7182;font-size:14px;line-height:1.7;">
+                                Por ahora, puedes seguir organizando tu mudanza.
                             </p>
 
-                            <p style="margin:0;">
-                                Queremos que tengas la certeza de que tu patrimonio
-                                puede viajar con mayor tranquilidad.
+                            <p style="margin:0;color:#5E7182;font-size:14px;line-height:1.7;">
+                                Nosotros te iremos indicando qué hacer cuando llegue el momento.
                             </p>
-
                         </td>
                     </tr>
 
-                    <!-- Footer -->
+                    <!-- ================= FOOTER ================= -->
                     <tr>
-                        <td style="
-                            padding:26px 30px;
-                            text-align:center;
-                            color:#4A5E71;
-                            border-top:1px solid #ECECEC;
-                        ">
-
-                            <p style="margin:0 0 7px;font-size:14px;">
+                        <td
+                            style="padding:24px 30px;text-align:center;background:#ffffff;border-top:1px solid #E9EEF2;">
+                            <p style="margin:0 0 6px;color:#7A8995;font-size:13px;">
                                 Nos vemos por ahí,
                             </p>
 
-                            <strong style="color:#1F2937;font-size:15px;">
+                            <strong style="color:#09233E;font-size:14px;">
                                 El equipo de Mudanza Fácil
                             </strong>
-
                         </td>
                     </tr>
 
-                    <!-- Footer folio -->
+                    <!-- ================= FOLIO ================= -->
                     <tr>
-                        <td style="
-                            padding:16px 18px;
-                            text-align:center;
-                            background:#FAFAFA;
-                            border-top:1px solid #ECECEC;
-                        ">
-
-                            <p style="
-                                margin:0;
-                                font-size:12px;
-                                color:#999999;
-                            ">
-                                Folio de seguimiento: {{ $expediente->folio }}
+                        <td
+                            style="padding:16px 30px;text-align:center;background:#F9FBFC;border-top:1px solid #E9EEF2;">
+                            <p style="margin:0;color:#8998A5;font-size:12px;">
+                                Folio de seguimiento:
+                                <strong style="color:#2F5C8C;letter-spacing:1px;">
+                                    {{ $expediente->folio }}
+                                </strong>
                             </p>
-
                         </td>
                     </tr>
-
                 </table>
-
             </td>
         </tr>
     </table>
-
 </body>
 
 </html>

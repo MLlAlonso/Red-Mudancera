@@ -453,6 +453,10 @@ export default function SuperAdminSeguroDetallePage() {
                             {sendingTest === "solicitud-recibida" ? "Enviando..." : "Solicitud recibida"}
                         </button>
 
+                        <button type="button" className="btn-secondary" onClick={() => enviarCorreoPrueba("video")} disabled={sendingTest} >
+                            {sendingTest === "video" ? "Enviando..." : "Video informativo"}
+                        </button>
+
                         <button type="button" className="btn-secondary" onClick={() => enviarCorreoPrueba("invitacion")} disabled={sendingTest} >
                             {sendingTest === "invitacion" ? "Enviando..." : "Invitación"}
                         </button>
