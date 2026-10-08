@@ -10,6 +10,9 @@ export default function SeguroStepTres({
     primaEstimada,
     valorMenaje,
     valorAutomovil,
+    nombre,
+    origen,
+    destino,
     onSeleccionarModalidad,
     onAnteriorSeleccion,
     onContinuarEmpresa,
@@ -36,8 +39,18 @@ export default function SeguroStepTres({
             return;
         }
 
-        const mensaje = encodeURIComponent(`Hola, necesito que completes la información necesaria para mi seguro de mudanza. Puedes hacerlo desde este enlace privado: ${enlaceEmpresa}`);
-        window.open(`https://wa.me/?text=${mensaje}`, "_blank", "noopener,noreferrer");
+        const mensaje = `Hola, buen día Soy ${nombre || "el cliente"}, tengo contratada mi mudanza con ustedes de ${origen || "el origen"} a ${destino || "el destino"}. Muchas gracias por el servicio.
+
+Decidí asegurar mi menaje por mi cuenta, y la aseguradora me pide los datos de la unidad: placas, operador y camión. Sé que se entregan un día antes de la salida o el mismo día, así que no busco apurarlos ni cambiar sus fechas. Cuando la unidad ya esté asignada, solo necesito que los llenen en este enlace privado, toma unos 2 minutos:
+
+${enlaceEmpresa}
+
+Para mí es muy importante dejar asegurado mi menaje, por eso prefiero mandarte esto desde ahora y no estarte recordando. Con este mensaje queda constancia de que te lo solicité con anticipación.
+
+¡Muchas gracias por tu apoyo!`;
+
+        const url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
+        window.open(url, "_blank", "noopener,noreferrer");
     }
 
     async function copiarEnlace() {
@@ -144,7 +157,7 @@ export default function SeguroStepTres({
                             </div>
 
                             <div className="seguro-publico__modality-content">
-                               <strong> Solicitar datos a la empresa de mudanzas </strong>
+                                <strong> Solicitar datos a la empresa de mudanzas </strong>
 
                                 <p>
                                     Generaremos un enlace privado para que tu empresa de

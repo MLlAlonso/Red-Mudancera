@@ -1118,6 +1118,9 @@ export default function SeguroPublicoPage() {
                             primaEstimada={expediente?.prima_estimada}
                             valorMenaje={valorMenaje}
                             valorAutomovil={valorAutomovil}
+                            nombre={nombre}
+                            origen={expediente?.origen}
+                            destino={expediente?.destino}
                             onSeleccionarModalidad={seleccionarModalidad}
                             onAnteriorSeleccion={volverSeleccionPasoTres}
                             onContinuarEmpresa={continuarEmpresa}
