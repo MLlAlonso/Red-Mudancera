@@ -161,6 +161,10 @@ export default function SeguroPublicoPage() {
                 setValorMenaje(String(data.valor_menaje));
             }
 
+            if (data.valor_automovil !== null && data.valor_automovil !== undefined) {
+                setValorAutomovil(String(data.valor_automovil));
+            }
+
             if (data.automovil_foto_circulacion_url !== null && data.automovil_foto_circulacion_url !== undefined) {
                 setAutomovilFotoCirculacionUrl(String(data.automovil_foto_circulacion_url));
             }
@@ -228,11 +232,7 @@ export default function SeguroPublicoPage() {
                 if (data.empresa_datos_finalizados_at) {
                     setVistaPasoTres("seleccion");
                     setPaso(4);
-                } else if (
-                    data.asistencia_empresa_mudanza &&
-                    data.asistencia_contacto &&
-                    data.asistencia_telefono
-                ) {
+                } else if (data.asistencia_empresa_mudanza && data.asistencia_contacto && data.asistencia_telefono) {
                     setVistaPasoTres("esperando_asistida");
                 } else {
                     setVistaPasoTres("asistida");
@@ -249,10 +249,7 @@ export default function SeguroPublicoPage() {
                 setPasoDosGuardado(true);
                 setPasoTresGuardado(true);
                 setPaso(4);
-            } else if (
-                data.empresa_datos_finalizados_at &&
-                data.progreso >= 100
-            ) {
+            } else if (data.empresa_datos_finalizados_at && data.progreso >= 100) {
                 setPasoUnoGuardado(true);
                 setPasoDosGuardado(true);
                 setPasoTresGuardado(true);
@@ -820,6 +817,125 @@ export default function SeguroPublicoPage() {
         };
     }, [folio, paso, vistaPasoTres]);
 
+
+
+    async function guardarEdicionCliente(datos) {
+        const response = await guardarPasoDosSeguro(folio, {
+            nombre: datos.nombre.trim(),
+            email: datos.email.trim(),
+            telefono: datos.telefono.trim(),
+        });
+
+        const guardados = {
+            nombre: response.data.nombre ?? datos.nombre.trim(),
+            email: response.data.email ?? datos.email.trim(),
+            telefono: response.data.telefono ?? datos.telefono.trim(),
+        };
+
+        setNombre(guardados.nombre);
+        setEmail(guardados.email);
+        setTelefono(guardados.telefono);
+
+        setExpediente((prev) => ({
+            ...prev,
+            ...response.data,
+            ...guardados,
+        }));
+    }
+
+    async function guardarEdicionSeguro(datos) {
+        if (saving) {
+            throw new Error("Espera a que termine el guardado actual.");
+        }
+
+        setSaving(true);
+        setUploadingAutomovilFoto(false);
+
+        try {
+            const incluyeAutomovil = datos.tipoSeguro === "automovil" || datos.tipoSeguro === "menaje_auto";
+            let fotoCirculacionUrl = null;
+            let fotoCirculacionPublicId = null;
+
+            if (incluyeAutomovil) {
+                if (datos.automovilFotoFile) {
+                    setUploadingAutomovilFoto(true);
+                    const uploaded = await uploadToCloudinary(datos.automovilFotoFile);
+                    fotoCirculacionUrl = uploaded.url;
+                    fotoCirculacionPublicId = uploaded.public_id;
+                } else if (!datos.eliminarFotoAutomovil) {
+                    fotoCirculacionUrl = expediente?.automovil_foto_circulacion_url || automovilFotoCirculacionUrl || null;
+                    fotoCirculacionPublicId = expediente?.automovil_foto_circulacion_public_id || automovilFotoCirculacionPublicId || null;
+                }
+
+                if (!fotoCirculacionUrl) {
+                    throw new Error("Adjunta la fotografía de la tarjeta de circulación.");
+                }
+            }
+
+            const response = await guardarPasoUnoSeguro(folio, {
+                tipo_seguro: datos.tipoSeguro,
+                valor_menaje: datos.valorMenaje,
+                valor_automovil: datos.valorAutomovil,
+                automovil_foto_circulacion_url: incluyeAutomovil ? fotoCirculacionUrl : null,
+                automovil_foto_circulacion_public_id: incluyeAutomovil ? fotoCirculacionPublicId : null,
+            });
+
+            const guardados = {
+                tipo_seguro: response.data.tipo_seguro ?? datos.tipoSeguro,
+                valor_menaje: response.data.valor_menaje ?? datos.valorMenaje,
+                valor_automovil: response.data.valor_automovil ?? datos.valorAutomovil,
+                automovil_foto_circulacion_url: response.data.automovil_foto_circulacion_url ?? (incluyeAutomovil ? fotoCirculacionUrl : null),
+                automovil_foto_circulacion_public_id: response.data.automovil_foto_circulacion_public_id ?? (incluyeAutomovil ? fotoCirculacionPublicId : null),
+            };
+
+            setTipoSeguro(guardados.tipo_seguro);
+            setValorMenaje(guardados.valor_menaje == null ? "" : String(guardados.valor_menaje));
+            setValorAutomovil(guardados.valor_automovil == null ? "" : String(guardados.valor_automovil));
+            setAutomovilFotoCirculacionUrl(guardados.automovil_foto_circulacion_url || "");
+            setAutomovilFotoCirculacionPublicId(guardados.automovil_foto_circulacion_public_id || "");
+            setAutomovilFotoFile(null);
+            setAutomovilFotoPreviewUrl("");
+
+            setExpediente((prev) => ({
+                ...prev,
+                ...response.data,
+                ...guardados,
+            }));
+        } finally {
+            setUploadingAutomovilFoto(false);
+            setSaving(false);
+        }
+    }
+
+    async function guardarEdicionAsistencia(datos) {
+        const response = await guardarPasoTresSeguro(folio, {
+            modalidad_datos: "asistida",
+            asistencia_empresa_mudanza:
+                datos.asistencia_empresa_mudanza.trim(),
+            asistencia_contacto: datos.asistencia_contacto.trim(),
+            asistencia_telefono: datos.asistencia_telefono.trim(),
+        });
+
+        const guardados = {
+            modalidad_datos: "asistida",
+            asistencia_empresa_mudanza: response.data.asistencia_empresa_mudanza ?? datos.asistencia_empresa_mudanza.trim(),
+            asistencia_contacto: response.data.asistencia_contacto ?? datos.asistencia_contacto.trim(),
+            asistencia_telefono: response.data.asistencia_telefono ?? datos.asistencia_telefono.trim(),
+        };
+
+        setModalidadDatos(guardados.modalidad_datos);
+        setAsistenciaEmpresaMudanza(guardados.asistencia_empresa_mudanza);
+        setAsistenciaContacto(guardados.asistencia_contacto);
+        setAsistenciaTelefono(guardados.asistencia_telefono);
+
+        setExpediente((prev) => ({
+            ...prev,
+            ...response.data,
+            ...guardados,
+        }));
+    }
+
+
     /*
     |--------------------------------------------------------------------------
     | Formatear moneda
@@ -1140,7 +1256,9 @@ export default function SeguroPublicoPage() {
                             expediente={expediente}
                             formData={datosRevision}
                             datosEmpresaCompletos={datosEmpresaCompletos}
-                            onAnterior={(pasoAnterior) => { setError(""); setPaso(pasoAnterior); }}
+                            onGuardarCliente={guardarEdicionCliente}
+                            onGuardarSeguro={guardarEdicionSeguro}
+                            onGuardarAsistencia={guardarEdicionAsistencia}
                             onFinalizar={solicitarFinalizacion}
                             finalizando={finalizando}
                         />
