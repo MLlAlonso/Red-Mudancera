@@ -470,20 +470,59 @@ export default function SeguroEmpresaPage() {
                     )
                 }
 
-                <div className="seguro-empresa__actions">
-                    <button type="button" className="seguro-empresa__button seguro-empresa__button--secondary" onClick={guardar} disabled={saving || finishing} >
-                        {
-                            saving ? "Guardando..." : "Guardar"
-                        }
-                    </button>
 
-                    <button type="button" className="seguro-empresa__button" onClick={finalizar} disabled={saving || finishing} >
-                        {
-                            finishing ? "Procesando..." : datosFinalizados
-                                ? "Actualizar" : "Finalizar"
-                        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div
+                    className={`seguro-empresa__actions ${datosFinalizados ? "seguro-empresa__actions--single" : ""
+                        }`}
+                >
+                    {!datosFinalizados && (
+                        <button
+                            type="button"
+                            className="seguro-empresa__button seguro-empresa__button--secondary"
+                            onClick={guardar}
+                            disabled={saving || finishing}
+                        >
+                            {saving ? "Guardando..." : "Guardar"}
+                        </button>
+                    )}
+
+                    <button
+                        type="button"
+                        className="seguro-empresa__button"
+                        onClick={finalizar}
+                        disabled={saving || finishing}
+                    >
+                        {finishing
+                            ? "Procesando..."
+                            : datosFinalizados
+                                ? "Actualizar"
+                                : "Finalizar"}
                     </button>
                 </div>
+
+
+
+
+
+
+
+
+
+
 
                 <p className="seguro-empresa__footer">
                     La información proporcionada será utilizada únicamente para completar el expediente de seguro.

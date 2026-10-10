@@ -261,6 +261,11 @@
         grid-template-columns: 1fr 1fr;
         gap: 12px;
         margin-top: 25px;
+
+        &--single {
+            grid-template-columns: minmax(0, 260px);
+            justify-content: center;
+        }
     }
 
     &__button {
@@ -271,7 +276,7 @@
         background: $primary;
         color: white;
         font-family: $font-text;
-        font-size: 14px;
+        font-size: 16px;
         font-weight: 800;
         cursor: pointer;
         transition:

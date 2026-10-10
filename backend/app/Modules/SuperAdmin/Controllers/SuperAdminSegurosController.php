@@ -18,6 +18,8 @@ use App\Modules\Seguro\Mail\SolicitudAsistenciaSeguroClienteMail;
 use App\Modules\Seguro\Mail\SolicitudAsistenciaSeguroMail;
 use App\Modules\Seguro\Mail\SolicitudSeguroRecibidaMail;
 use App\Modules\Seguro\Mail\VideoExpedienteSeguroMail;
+use App\Modules\Seguro\Mail\SegundoRecordatorioExpedienteSeguroMail;
+use App\Modules\Seguro\Mail\TercerRecordatorioExpedienteSeguroMail;
 
 class SuperAdminSegurosController extends Controller
 {
@@ -129,7 +131,6 @@ class SuperAdminSegurosController extends Controller
         return $pdf->download('expediente-' . $expediente->folio . '.pdf');
     }
 
-
     public function enviarCorreoPrueba($id, string $tipo)
     {
         $expediente = ExpedienteSeguro::findOrFail($id);
@@ -163,6 +164,16 @@ class SuperAdminSegurosController extends Controller
                 case 'recordatorio':
                     Mail::to($expediente->email)->send(new RecordatorioExpedienteSeguroMail($expediente));
                     $mensaje = 'Correo de recordatorio enviado correctamente.';
+                    break;
+
+                case 'recordatorio-segundo':
+                    Mail::to($expediente->email)->send(new SegundoRecordatorioExpedienteSeguroMail($expediente));
+                    $mensaje = 'Correo de segundo recordatorio enviado correctamente.';
+                    break;
+
+                case 'recordatorio-tercero':
+                    Mail::to($expediente->email)->send(new TercerRecordatorioExpedienteSeguroMail($expediente));
+                    $mensaje = 'Correo de tercer recordatorio enviado correctamente.';
                     break;
 
                 case 'empresa-datos-completados':

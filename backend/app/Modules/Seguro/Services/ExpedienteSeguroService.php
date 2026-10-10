@@ -40,9 +40,11 @@ class ExpedienteSeguroService
                 'fecha_recoleccion' => $data['fecha_recoleccion'] ?? null,
                 'es_externo' => $data['es_externo'] ?? false,
 
-                'correo_programado_at' => $creadoEn->copy()->addHours(48000),
-                'video_programado_at' => $creadoEn->copy()->addHours(24000),
-                'recordatorio_programado_at' => $creadoEn->copy()->addDays(5000),
+                'correo_programado_at' => $creadoEn->copy()->addHours(4800),
+                'video_programado_at' => $creadoEn->copy()->addHours(2400),
+                'recordatorio_programado_at' => $creadoEn->copy()->addDays(500),
+                'segundo_recordatorio_programado_at' => $creadoEn->copy()->addDays(1000),
+                'tercer_recordatorio_programado_at' => $creadoEn->copy()->addDays(1500),
 
                 /* 
                 'correo_programado_at' => $creadoEn->copy()->addHours(48),
@@ -75,6 +77,42 @@ class ExpedienteSeguroService
             ->whereNotNull('email')
             ->get();
     }
+
+
+    public function obtenerExpedientesParaSegundoRecordatorio()
+    {
+        return ExpedienteSeguro::query()
+            ->whereNotNull('segundo_recordatorio_programado_at')
+            ->whereNull('segundo_recordatorio_enviado_at')
+            ->where('segundo_recordatorio_programado_at', '<=', now())
+            ->whereNotIn('estado', ['completado', 'cancelado'])
+            ->whereNotNull('email')
+            ->get();
+    }
+
+    public function marcarSegundoRecordatorioEnviado(ExpedienteSeguro $expediente): ExpedienteSeguro
+    {
+        $expediente->update(['segundo_recordatorio_enviado_at' => now(),]);
+        return $expediente->fresh();
+    }
+
+    public function obtenerExpedientesParaTercerRecordatorio()
+    {
+        return ExpedienteSeguro::query()
+            ->whereNotNull('tercer_recordatorio_programado_at')
+            ->whereNull('tercer_recordatorio_enviado_at')
+            ->where('tercer_recordatorio_programado_at', '<=', now())
+            ->whereNotIn('estado', ['completado', 'cancelado'])
+            ->whereNotNull('email')
+            ->get();
+    }
+
+    public function marcarTercerRecordatorioEnviado(ExpedienteSeguro $expediente): ExpedienteSeguro
+    {
+        $expediente->update(['tercer_recordatorio_enviado_at' => now(),]);
+        return $expediente->fresh();
+    }
+
 
     public function marcarInvitacionEnviada(ExpedienteSeguro $expediente): ExpedienteSeguro
     {

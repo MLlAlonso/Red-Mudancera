@@ -34,24 +34,33 @@ export default function SeguroStepTres({
         );
     }
 
+
     function compartirWhatsApp() {
         if (!enlaceEmpresa) {
             return;
         }
 
-        const mensaje = `Hola, buen día Soy ${nombre || "el cliente"}, tengo contratada mi mudanza con ustedes de ${origen || "el origen"} a ${destino || "el destino"}. Muchas gracias por el servicio.
+        const mensaje = `Hola, buen día.
 
-Decidí asegurar mi menaje por mi cuenta, y la aseguradora me pide los datos de la unidad: placas, operador y camión. Sé que se entregan un día antes de la salida o el mismo día, así que no busco apurarlos ni cambiar sus fechas. Cuando la unidad ya esté asignada, solo necesito que los llenen en este enlace privado, toma unos 2 minutos:
+Soy ${nombre || "el cliente"}. Tengo contratada con ustedes mi mudanza de ${origen || "el origen"} a ${destino || "el destino"}.
 
-${enlaceEmpresa}
+Decidí asegurar mi menaje por mi cuenta y, para completar la póliza, la aseguradora necesita los datos del camión, operador y placas.
+Entiendo que esta información normalmente está disponible hasta un día antes de la salida o incluso el mismo día.No es necesario adelantar la asignación de la unidad.
 
-Para mí es muy importante dejar asegurado mi menaje, por eso prefiero mandarte esto desde ahora y no estarte recordando. Con este mensaje queda constancia de que te lo solicité con anticipación.
+Para mí es muy importante que mi menaje quede asegurado antes de la salida.Por eso les comparto esta solicitud con anticipación, para que puedan proporcionar los datos en cuanto estén disponibles.
+Les agradeceré que los registren en el siguiente enlace privado.Solo toma aproximadamente 2 minutos y no requiere registro.
 
-¡Muchas gracias por tu apoyo!`;
+        ${enlaceEmpresa}
+
+Este mensaje también deja constancia de que la información fue solicitada oportunamente, ya que es indispensable para completar la contratación del seguro.
+Les agradezco de antemano su colaboración para que mi mudanza pueda realizarse con la protección correspondiente.
+
+¡Muchas gracias por su apoyo!`;
 
         const url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
         window.open(url, "_blank", "noopener,noreferrer");
     }
+
 
     async function copiarEnlace() {
         if (!enlaceEmpresa) {
@@ -148,7 +157,7 @@ Para mí es muy importante dejar asegurado mi menaje, por eso prefiero mandarte 
                     <div className="seguro-publico__modality-options">
                         <button
                             type="button"
-                            className={`seguro-publico__modality-card ${modalidadDatos === "autogestion" ? "active" : ""}`}
+                            className={`seguro - publico__modality - card ${modalidadDatos === "autogestion" ? "active" : ""} `}
                             onClick={() => onSeleccionarModalidad("autogestion")}
                             disabled={saving}
                         >

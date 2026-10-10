@@ -56,6 +56,10 @@ class ExpedienteSeguro extends Model
         'empresa_access_token',
         'empresa_access_created_at',
         'empresa_datos_finalizados_at',
+        'segundo_recordatorio_programado_at',
+        'segundo_recordatorio_enviado_at',
+        'tercer_recordatorio_programado_at',
+        'tercer_recordatorio_enviado_at',
     ];
 
     protected $casts = [
@@ -73,6 +77,10 @@ class ExpedienteSeguro extends Model
         'prima_estimada' => 'decimal:2',
         'empresa_access_created_at' => 'datetime',
         'empresa_datos_finalizados_at' => 'datetime',
+        'segundo_recordatorio_programado_at' => 'datetime',
+        'segundo_recordatorio_enviado_at' => 'datetime',
+        'tercer_recordatorio_programado_at' => 'datetime',
+        'tercer_recordatorio_enviado_at' => 'datetime',
     ];
 
     protected $appends = ['enlace_empresa',];

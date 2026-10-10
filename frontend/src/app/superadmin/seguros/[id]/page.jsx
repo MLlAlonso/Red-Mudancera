@@ -12,11 +12,7 @@ export default function SuperAdminSeguroDetallePage() {
     const [sending, setSending] = useState(false);
     const [downloading, setDownloading] = useState(false);
     const [copied, setCopied] = useState(false);
-
-
     const [sendingTest, setSendingTest] = useState("");
-
-
 
     useEffect(() => {
         if (id) {
@@ -47,8 +43,6 @@ export default function SuperAdminSeguroDetallePage() {
         }
     }
 
-
-
     async function enviarCorreoPrueba(tipo) {
         if (sendingTest) {
             return;
@@ -69,8 +63,6 @@ export default function SuperAdminSeguroDetallePage() {
             setSendingTest("");
         }
     }
-
-
 
     async function descargarPdf() {
         if (downloading) {
@@ -434,9 +426,6 @@ export default function SuperAdminSeguroDetallePage() {
                     </div>
                 </div>
 
-
-
-
                 <div className="detailCard seguroDetail__emailTests">
                     <div className="cardHeader">
                         <div>
@@ -463,6 +452,14 @@ export default function SuperAdminSeguroDetallePage() {
 
                         <button type="button" className="btn-secondary" onClick={() => enviarCorreoPrueba("recordatorio")} disabled={sendingTest} >
                             {sendingTest === "recordatorio" ? "Enviando..." : "Recordatorio"}
+                        </button>
+
+                        <button type="button" className="btn-secondary" onClick={() => enviarCorreoPrueba("recordatorio-segundo")} disabled={sendingTest} >
+                            {sendingTest === "recordatorio-segundo" ? "Enviando..." : "Segundo recordatorio"}
+                        </button>
+
+                        <button type="button" className="btn-secondary" onClick={() => enviarCorreoPrueba("recordatorio-tercero")} disabled={sendingTest} >
+                            {sendingTest === "recordatorio-tercero" ? "Enviando..." : "Tercer recordatorio"}
                         </button>
 
                         <button type="button" className="btn-secondary" onClick={() => enviarCorreoPrueba("empresa-datos-completados")} disabled={sendingTest} >
