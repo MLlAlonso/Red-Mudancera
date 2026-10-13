@@ -15,7 +15,7 @@
                     <!-- Header -->
                     <tr>
                         <td style="background:#09233E;padding:28px;text-align:center;">
-                            <h2 style="margin:0;color:#ffffff;">
+                            <h2 style="margin:0;color:#ffffff; font-size:22px; line-height:1.4;">
                                 📄 Conoce tu expediente digital de seguro
                             </h2>
                         </td>
@@ -32,17 +32,17 @@
                     <!-- Contenido -->
                     <tr>
                         <td style="padding:0 32px;color:#4A5E71;line-height:1.7; text-align: justify;">
-                            <h3 style="color:#1F2937;margin-top:0;">
+                            <h3 style="color:#09233E; margin:0 0 15px; font-size:20px;">
                                 Hola {{ $expediente->nombre }}
                             </h3>
 
-                            <p>
+                            <p style="margin:0 0 15px; font-size:16px; text-align: justify;">
                                 Sabemos que todavía estás organizando tu mudanza y que el seguro normalmente se contrata
                                 más adelante, cuando ya tienes definida la empresa que realizará el servicio. Por eso,
                                 no necesitas completar ningún dato por ahora.
                             </p>
 
-                            <p style="text-align: center;">
+                            <p style="margin:0 0 15px; font-size:16px; text-align: center;">
                                 Lo que sí hicimos fue dejar todo preparado para cuando llegue el momento: </br>
                                 <strong style="color:#15996f;margin-top:0; font-size: 18px;"> Ya tienes tu expediente
                                     digital creado.</strong>
@@ -64,12 +64,12 @@
                     <tr>
                         <td style="padding:25px 30px;">
                             <div
-                                style=" background:#F8FAFC; border:2px solid #DCE8F4; border-radius:14px; padding:20px; text-align:center;">
-                                <h2 style=" margin:10px 0; color:#2F5C8C; letter-spacing:2px; font-size: 14px">
+                                style=" background:#EDF4FA; border:1px solid #D5E5F2; border-radius:12px; padding:20px; text-align:center;">
+                                <h2 style="margin:0 0 8px; color:#09233E; font-size:17px;">
                                     Puedes empezar a dejar algunos datos desde ahora
                                 </h2>
 
-                                <p style="margin:0;color:#6B7280; font-size: 14px;">
+                                <p style="margin:0;color:#6B7280; font-size: 16px;">
                                     Se guardan automaticamente, así cuando confirmes tu mudanza solo te faltará lo
                                     último.
                                 </p>
@@ -79,7 +79,7 @@
 
                     <tr>
                         <td style="padding:0 32px;color:#4A5E71;line-height:1.7; text-align: justify; font-size: 14px;">
-                            <p>
+                            <p style="margin:0 0 15px; font-size:16px; text-align: justify;">
                                 Cuando llegue el momento, desde ahí podrás completar la información necesaria,
                                 dar seguimiento al proceso y gestionar tu seguro sin llamadas, sin papeleo y sin
                                 perseguir a nadie por WhatsApp.
@@ -90,7 +90,7 @@
 
                     <tr>
                         <td style="padding:0 32px;color:#4A5E71;line-height:1.7; text-align: justify; font-size: 14px;">
-                            <p>
+                            <p style="margin:0 0 15px; font-size:16px; text-align: justify;">
                                 Nada de esto te compromete a contratar. Simplemente queremos que sepas que, si decides
                                 asegurar tu mudanza,
                                 ya tienes listo el lugar desde donde podrás hacerlo de forma fácil y ordenada.
@@ -98,23 +98,28 @@
                         </td>
                     </tr>
 
-                    <!-- Footer -->
+                    <!-- Despedida -->
                     <tr>
-                        <td style=" padding:30px; text-align:center; color:#4A5E71;">
-                            <p style="margin-bottom:8px;">
-                                Nos vemos por ahí,
+                        <td style="padding:0 30px 24px; text-align:center; color:#4A5E71;">
+                            <p style="margin:0 0 8px; font-size:16px;">
+                                Gracias por confiar en nosotros.
                             </p>
 
-                            <strong style="color:#1F2937;">
-                                El equipo de Mudanza Fácil
+                            <strong style="color:#09233E; font-size:16px;">
+                                Equipo Mudanza Fácil
                             </strong>
                         </td>
                     </tr>
 
+                    <!-- Pie -->
                     <tr>
-                        <td style=" padding:18px; text-align:center; border-top:1px solid #ECECEC;">
-                            <p style=" margin:0; font-size:14px; color:#999;">
-                                Folio de seguimiento: {{ $expediente->folio }}
+                        <td
+                            style=" padding:16px 30px; text-align:center; background-color:#F9FBFC; border-top:1px solid #E9EEF2; ">
+                            <p style=" margin:0; color:#8998A5; font-size:14px; line-height:1.5; ">
+                                Folio de seguimiento:
+                                <strong style=" color:#2F5C8C; letter-spacing:1px; ">
+                                    {{ $expediente->folio }}
+                                </strong>
                             </p>
                         </td>
                     </tr>

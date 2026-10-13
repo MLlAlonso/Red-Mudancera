@@ -98,21 +98,53 @@ export default function SeguroPublicoPage() {
     */
     async function generarEnlaceEmpresa() {
         if (generandoEnlaceEmpresa || !folio) {
-            return;
+            throw new Error("No fue posible iniciar la generación del enlace.");
         }
 
         try {
             setGenerandoEnlaceEmpresa(true);
             setError("");
             const response = await generarEnlaceEmpresaSeguro(folio);
-            setEnlaceEmpresa(response.data.url);
+            const url = response?.data?.url;
+
+            if (!url) {
+                throw new Error("La API no devolvió el enlace privado.");
+            }
+
+            setEnlaceEmpresa(url);
+            return url;
         } catch (error) {
             console.error(error);
             setError(error.message || "No fue posible generar el enlace para la empresa.");
+            throw error;
         } finally {
             setGenerandoEnlaceEmpresa(false);
         }
     }
+
+
+    useEffect(() => {
+        if (!folio || paso !== 3 || enlaceEmpresa || generandoEnlaceEmpresa) {
+            return;
+        }
+
+        let cancelado = false;
+
+        async function prepararEnlace() {
+            try {
+                await generarEnlaceEmpresa();
+            } catch (error) {
+                console.error("No fue posible generar el enlace automáticamente:", error);
+            }
+        }
+
+        prepararEnlace();
+
+        return () => {
+            cancelado = true;
+        };
+    }, [folio, paso]);
+
 
     /*
     |--------------------------------------------------------------------------
@@ -600,6 +632,14 @@ export default function SeguroPublicoPage() {
             }));
 
             setPasoDosGuardado(true);
+            setVistaPasoTres("seleccion");
+
+            try {
+                await generarEnlaceEmpresa();
+            } catch (error) {
+                console.error("No fue posible generar el enlace automáticamente:", error);
+            }
+
             setPaso(3);
         } catch (error) {
             console.error(error);
@@ -659,36 +699,35 @@ export default function SeguroPublicoPage() {
         }
 
         setError("");
-        setModalidadDatos(valor);
 
         if (valor === "autogestion") {
-            setAsistenciaEmpresaMudanza("");
-            setAsistenciaContacto("");
-            setAsistenciaTelefono("");
-
             try {
                 setSaving(true);
 
-                const response = await guardarPasoTresSeguro(
-                    folio,
-                    {
-                        modalidad_datos: "autogestion",
-                        asistencia_empresa_mudanza: null,
-                        asistencia_contacto: null,
-                        asistencia_telefono: null,
-                    }
-                );
+                const response = await guardarPasoTresSeguro(folio, {
+                    modalidad_datos: "autogestion",
+                    asistencia_empresa_mudanza: null,
+                    asistencia_contacto: null,
+                    asistencia_telefono: null,
+                });
+
+                setModalidadDatos("autogestion");
+                setAsistenciaEmpresaMudanza("");
+                setAsistenciaContacto("");
+                setAsistenciaTelefono("");
 
                 setExpediente((prev) => ({
                     ...prev,
                     ...response.data,
                 }));
 
-                await generarEnlaceEmpresa();
+                // Mostrar la pantalla para compartir el enlace.
                 setVistaPasoTres("empresa");
             } catch (error) {
                 console.error(error);
-                setError(error.message || "No fue posible preparar el enlace para tu empresa.");
+                setError(
+                    error.message || "No fue posible preparar el enlace para tu empresa."
+                );
             } finally {
                 setSaving(false);
             }
@@ -697,19 +736,28 @@ export default function SeguroPublicoPage() {
         }
 
         if (valor === "asistida") {
+            setModalidadDatos("asistida");
             setVistaPasoTres("asistida");
         }
     }
 
     async function continuarEmpresa() {
+        if (saving || generandoEnlaceEmpresa) {
+            return;
+        }
+
+        setError("");
+
+        // El enlace debe haberse generado al seleccionar la modalidad.
         if (!enlaceEmpresa) {
             setError("Primero genera el enlace privado para tu empresa.");
             return;
         }
 
-        setError("");
+        // Avanzar a la pantalla de espera.
         setVistaPasoTres("esperando_empresa");
     }
+
 
     function continuarAsistida() {
         setError("");
@@ -751,11 +799,7 @@ export default function SeguroPublicoPage() {
                 }
             );
 
-            setExpediente((prev) => ({
-                ...prev,
-                ...response.data,
-            }));
-
+            setExpediente((prev) => ({ ...prev, ...response.data, }));
             setModalidadDatos("asistida");
             setAsistenciaEmpresaMudanza(response.data.asistencia_empresa_mudanza || "");
             setAsistenciaContacto(response.data.asistencia_contacto || "");

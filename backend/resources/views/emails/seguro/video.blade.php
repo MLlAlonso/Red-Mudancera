@@ -20,20 +20,14 @@
                         <td style=" background-color:#09233E; padding:25px 10px; text-align:center; ">
                             <table cellpadding="0" cellspacing="0" border="0" align="center">
                                 <tr>
-
-                                    <!-- LOGO -->
-                                    <td valign="middle" style="padding:0 10px 0 0;">
+                                    <td valign="middle" style=" padding: 0; padding-right: 5px; ">
                                         <img src="https://app.mudanzafacil.com.mx/logo/icon.png" alt="Mudanza Fácil"
-                                            width="48" height="48"
-                                            style=" display:block; border:0; outline:none; text-decoration:none; ">
+                                            width="48" style=" display: block; width: 50px; height: auto; border: 0; ">
                                     </td>
 
-                                    <!-- TAGLINE -->
-                                    <td valign="middle" style="padding:0;">
-                                        <p
-                                            style=" margin:0; color:#FFFFFF; font-size:18px; line-height:1.4; font-weight:bold; text-align:left; white-space:nowrap; ">
-                                            Más tranquilidad para lo que más te importa
-                                        </p>
+                                    <td valign="middle"
+                                        style=" padding: 0; color: #ffffff; font-family: Arial, Helvetica, sans-serif; font-size: 18px; line-height: 20px; font-weight: 500; ">
+                                        Más tranquilidad para lo que más te importa
                                     </td>
                                 </tr>
                             </table>
@@ -48,10 +42,8 @@
                                 Una forma diferente de asegurar tu mudanza
                             </h1>
 
-                            <p style=" margin:0 0 16px; color:#5E7182; font-size:15px; line-height:1.7; ">
-                                Hola <strong style="color:#09233E;">
-                                    {{ $expediente->nombre ?: 'hola' }}
-                                </strong>,
+                            <p style="color:#09233E; margin:0 0 15px; font-size:20px;">
+                                Hola {{ $expediente->nombre }},
                             </p>
 
                             <p
@@ -60,12 +52,12 @@
                                 confiar en que todo quedó cubierto.
                             </p>
 
-                            <p style=" margin:0 0 28px; color:#475A6B; font-size:16px; line-height:1.7; ">
+                            <p
+                                style=" margin:0 0 28px; color:#475A6B; font-size:16px; line-height:1.7; text-align:justify;">
                                 Preparamos este breve video para mostrarte <span
                                     style="color:#09233E; font-weight:700;"> qué cambia
                                     cuando gestionas tu seguro a través de Mudanza Fácil</span>.
                             </p>
-
 
                             <!-- ================= VIDEO ================= -->
                             <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -86,7 +78,7 @@
 
                             <!-- ================= TEXTO VIDEO ================= -->
                             <p
-                                style=" margin:5px 0 0; text-align:center; color:#8998A5; font-size:14px; line-height:1.5; ">
+                                style=" margin:5px 0 0; text-align:center; color:#8998A5; font-size:16px; line-height:1.5; ">
                                 Haz clic en la imagen para ver el video
                             </p>
                         </td>
@@ -94,7 +86,7 @@
 
                     <!-- ================= SIGUIENTE PASO ================= -->
                     <tr>
-                        <td style="padding:0 30px 30px;">
+                        <td style="padding:0 20px 20px;">
                             <table width="100%" cellpadding="0" cellspacing="0" border="0"
                                 style=" background-color:#EEF4FA; border-radius:16px; ">
                                 <tr>
@@ -107,18 +99,18 @@
                                     <!-- CONTENIDO -->
                                     <td valign="middle" style="padding:24px 22px 24px 14px;">
                                         <p
-                                            style=" margin:0 0 7px; color:#09233E; font-size:17px; line-height:1.4; font-weight:bold; ">
+                                            style=" margin:0 0 7px; color:#09233E; font-size:16px; line-height:1.4; font-weight:bold; ">
                                             Y mañana damos el siguiente paso
                                         </p>
 
-                                        <p style=" margin:0; color:#475A6B; font-size:13px; line-height:1.65; ">
+                                        <p style=" margin:0; color:#475A6B; font-size:14px; line-height:1.65; ">
                                             Te enviaremos acceso a tu expediente digital, donde podrás reunir la
                                             información de tu mudanza
                                             y dejar todo preparado para contratar tu seguro cuando estés listo.
                                         </p>
 
                                         <p
-                                            style=" margin:10px 0 0; color:#475A6B; font-size:12px; line-height:1.5; font-weight:bold; ">
+                                            style=" margin:10px 0 0; color:#475A6B; font-size:14px; line-height:1.5; font-weight:bold; ">
                                             Sin compromiso y sin necesidad de completarlo ahora.
                                         </p>
                                     </td>
@@ -127,23 +119,24 @@
                         </td>
                     </tr>
 
-                    <!-- ================= DESPEDIDA ================= -->
+                    <!-- Despedida -->
                     <tr>
-                        <td style=" padding:0 34px 24px; text-align:center; ">
-                            <p style=" margin:0 0 7px; color:#7A8995; font-size:13px; line-height:1.5; ">
-                                Nos vemos por ahí,
+                        <td style="padding:0 30px 24px; text-align:center; color:#4A5E71;">
+                            <p style="margin:0 0 8px; font-size:16px;">
+                                Gracias por confiar en nosotros.
                             </p>
 
-                            <strong style=" color:#09233E; font-size:14px; ">
-                                El equipo de Mudanza Fácil
+                            <strong style="color:#09233E; font-size:16px;">
+                                Equipo Mudanza Fácil
                             </strong>
                         </td>
                     </tr>
 
-                    <!-- ================= FOLIO ================= -->
+                    <!-- Pie -->
                     <tr>
-                        <td style=" padding:16px 30px; text-align:center; background-color:#F9FBFC; border-top:1px solid #E9EEF2; ">
-                            <p style=" margin:0; color:#8998A5; font-size:12px; line-height:1.5; ">
+                        <td
+                            style=" padding:16px 30px; text-align:center; background-color:#F9FBFC; border-top:1px solid #E9EEF2; ">
+                            <p style=" margin:0; color:#8998A5; font-size:14px; line-height:1.5; ">
                                 Folio de seguimiento:
                                 <strong style=" color:#2F5C8C; letter-spacing:1px; ">
                                     {{ $expediente->folio }}

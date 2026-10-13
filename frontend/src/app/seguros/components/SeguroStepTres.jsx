@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 export default function SeguroStepTres({
     modalidadDatos,
     enlaceEmpresa,
@@ -21,6 +23,7 @@ export default function SeguroStepTres({
     const basePrima = (Number(valorMenaje) || 0) + (Number(valorAutomovil) || 0);
     const porcentajePrima = modalidadDatos === "asistida" ? 0.0175 : 0.0135;
     const primaActual = basePrima > 0 ? basePrima * porcentajePrima : Number(primaEstimada) || 0;
+    const [enlaceCopiado, setEnlaceCopiado] = useState(false);
 
     function formatearMoneda(valor) {
         return Number(valor || 0).toLocaleString(
@@ -33,7 +36,6 @@ export default function SeguroStepTres({
             }
         );
     }
-
 
     function compartirWhatsApp() {
         if (!enlaceEmpresa) {
@@ -61,16 +63,34 @@ Les agradezco de antemano su colaboración para que mi mudanza pueda realizarse 
         window.open(url, "_blank", "noopener,noreferrer");
     }
 
-
     async function copiarEnlace() {
         if (!enlaceEmpresa) {
             return;
         }
 
+        const mensaje = `Hola, buen día.
+
+Soy ${nombre || "el cliente"}. Tengo contratada con ustedes mi mudanza de ${origen || "el origen"} a ${destino || "el destino"}.
+
+Decidí asegurar mi menaje por mi cuenta y, para completar la póliza, la aseguradora necesita los datos del camión, operador y placas.
+Entiendo que esta información normalmente está disponible hasta un día antes de la salida o incluso el mismo día.No es necesario adelantar la asignación de la unidad.
+
+Para mí es muy importante que mi menaje quede asegurado antes de la salida.Por eso les comparto esta solicitud con anticipación, para que puedan proporcionar los datos en cuanto estén disponibles.
+Les agradeceré que los registren en el siguiente enlace privado.Solo toma aproximadamente 2 minutos y no requiere registro.
+
+        ${enlaceEmpresa}
+
+Este mensaje también deja constancia de que la información fue solicitada oportunamente, ya que es indispensable para completar la contratación del seguro.
+Les agradezco de antemano su colaboración para que mi mudanza pueda realizarse con la protección correspondiente.
+
+¡Muchas gracias por su apoyo!`;
+
         try {
-            await navigator.clipboard.writeText(enlaceEmpresa);
+            await navigator.clipboard.writeText(mensaje);
+            setEnlaceCopiado(true);
         } catch (error) {
-            console.error("No fue posible copiar el enlace:", error);
+            console.error("No fue posible copiar el mensaje:", error);
+            setEnlaceCopiado(false);
         }
     }
 
@@ -116,7 +136,7 @@ Les agradezco de antemano su colaboración para que mi mudanza pueda realizarse 
                     </button>
 
                     <button type="button" onClick={copiarEnlace} disabled={!enlaceEmpresa} >
-                        Copiar enlace
+                      {enlaceCopiado ? "Copiado" : "Copiar enlace"}
                     </button>
                 </div>
             </div>
@@ -148,7 +168,7 @@ Les agradezco de antemano su colaboración para que mi mudanza pueda realizarse 
                         <h3> ¿Qué tienes que hacer? </h3>
 
                         <p>
-                            Solo haz clic en el botón de abajo. Generaremos un enlace privado
+                            Solo haz clic en el recuadro de abajo. Generaremos un enlace privado
                             que podrás copiar y enviar a tu contacto de la empresa de mudanzas
                             para que complete la información necesaria.
                         </p>
@@ -166,7 +186,7 @@ Les agradezco de antemano su colaboración para que mi mudanza pueda realizarse 
                             </div>
 
                             <div className="seguro-publico__modality-content">
-                                <strong> Solicitar datos a la empresa de mudanzas </strong>
+                                <strong> Solicita datos a la empresa de mudanzas </strong>
 
                                 <p>
                                     Generaremos un enlace privado para que tu empresa de
@@ -260,7 +280,7 @@ Les agradezco de antemano su colaboración para que mi mudanza pueda realizarse 
                         </button>
 
                         <button type="button" onClick={copiarEnlace} disabled={!enlaceEmpresa} >
-                            Copiar enlace
+                           {enlaceCopiado ? "Copiado" : "Copiar enlace"}
                         </button>
                     </div>
                 </div>
@@ -332,7 +352,7 @@ Les agradezco de antemano su colaboración para que mi mudanza pueda realizarse 
                         </button>
 
                         <button type="button" onClick={copiarEnlace} disabled={!enlaceEmpresa} >
-                            Copiar enlace
+                         {enlaceCopiado ? "Copiado" : "Copiar enlace"}
                         </button>
                     </div>
                 </div>

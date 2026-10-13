@@ -24,14 +24,14 @@
                                         <table cellpadding="0" cellspacing="0" border="0"
                                             style="border-collapse:collapse;">
                                             <tr>
-                                                <td valign="middle" style="padding:0;padding-right:5px;">
+                                                <td valign="middle" style="padding:0;padding-right:10px;">
                                                     <img src="https://app.mudanzafacil.com.mx/logo/icon.png"
                                                         alt="Mudanza Fácil" width="48"
                                                         style="display:block;width:50px;height:auto;border:0;">
                                                 </td>
 
                                                 <td valign="middle"
-                                                    style="padding:0;color:#ffffff;font-family:Arial,Helvetica,sans-serif;font-size:18px;line-height:20px;font-weight:500;">
+                                                    style="padding:0;color:#ffffff;font-family:Arial,Helvetica,sans-serif;font-size:20px;line-height:20px;font-weight:500;">
                                                     Más tranquilidad para lo que más te importa
                                                 </td>
                                             </tr>
@@ -50,11 +50,11 @@
                                 Ultimo seguimiento
                             </div>
 
-                            <h1 style="margin:0 0 22px;color:#09233E;font-size:30px;line-height:1.2;font-weight:700;">
+                            <h1 style="margin:0 0 22px;color:#09233E;font-size:24px;line-height:1.2;font-weight:700;">
                                 Deja listo tu seguro antes de la mudanza
                             </h1>
 
-                            <p style="margin:0 0 18px;color:#4A5E71;font-size:16px;line-height:1.7;">
+                            <p style="color:#09233E; margin:0 0 15px; font-size:20px;">
                                 Hola {{ $expediente->nombre }},
                             </p>
 
@@ -65,10 +65,10 @@
 
                             <div
                                 style="background:#F8FAFC;border-left:4px solid #009E66;border-radius:8px;padding:16px 18px;margin:0 0 22px;">
-                                <p style="margin:0;color:#4A5E71;font-size:15px;line-height:1.7;">
-                                    <strong style="color:#09233E;">Recuerda:</strong>
-                                    el pago del seguro se <span style="color:#09233E;"> realiza un día antes de la
-                                        salida o el mismo día</span>.
+                                <p style="margin:0;color:#4A5E71;font-size:16px;line-height:1.7;">
+                                    <strong style="color:#09233E;">Recuerda:</strong> el pago del seguro se
+                                    <span style="color:#09233E;"> realiza un día antes de la ssalida o el mismo
+                                        día</span>.
                                     Para entonces, necesitamos tener completos los datos de la unidad y del operador.
                                 </p>
                             </div>
@@ -91,7 +91,7 @@
                     <tr>
                         <td align="center" style="padding:0 40px 12px;">
                             <a href="{{ config('app.frontend_url') }}/seguros/{{ $expediente->folio }}"
-                                style="display:block;background:#09233E;color:#ffffff;text-decoration:none;padding:16px 24px;border-radius:10px;font-size:16px;font-weight:bold;text-align:center;">
+                                style="display:block;background:#09233E;color:#ffffff;text-decoration:none;padding:16px 24px;border-radius:10px;font-size:18px;font-weight:bold;text-align:center;">
                                 Continuar mi expediente
                             </a>
                         </td>
@@ -101,7 +101,7 @@
                     <tr>
                         <td align="center" style="padding:0 40px 30px;">
                             <a href="https://wa.me/5214421896433?text=Hola%20Mudanza%20F%C3%A1cil%2C%20tengo%20una%20duda%20sobre%20mi%20expediente%20de%20seguro."
-                                style="display:block;background:#E8F5F0;color:#087A50;text-decoration:none;padding:15px 24px;border-radius:10px;font-size:15px;font-weight:bold;text-align:center;border:1px solid #C8E8DC;">
+                                style="display:block;background:#E8F5F0;color:#087A50;text-decoration:none;padding:15px 24px;border-radius:10px;font-size:16px;font-weight:bold;text-align:center;border:1px solid #C8E8DC;">
                                 Tengo una duda por WhatsApp
                             </a>
                         </td>
@@ -111,7 +111,7 @@
                     <tr>
                         <td style="padding:0 40px 34px;">
                             <div style="background:#F8FAFC;border-radius:10px;padding:16px 18px;text-align:center;">
-                                <p style="margin:0;color:#6B7280;font-size:13px;line-height:1.6;">
+                                <p style="margin:0;color:#6B7280;font-size:16px;line-height:1.6;">
                                     La información que ya proporcionaste permanece guardada.
                                     Puedes continuar desde donde te quedaste.
                                 </p>
@@ -119,31 +119,28 @@
                         </td>
                     </tr>
 
-                    <!-- SEPARADOR -->
+                    <!-- Despedida -->
                     <tr>
-                        <td style="padding:0 40px;">
-                            <div style="height:1px;background:#ECEFF2;"></div>
-                        </td>
-                    </tr>
-
-                    <!-- FOOTER -->
-                    <tr>
-                        <td align="center" style="padding:30px 40px 20px;">
-                            <p style="margin:0 0 8px;color:#4A5E71;font-size:14px;line-height:1.6;">
-                                Gracias por confiar en Mudanza Fácil.
+                        <td style="padding:0 30px 24px; text-align:center; color:#4A5E71;">
+                            <p style="margin:0 0 8px; font-size:16px;">
+                                Gracias por confiar en nosotros.
                             </p>
 
-                            <strong style="color:#09233E;font-size:14px;">
+                            <strong style="color:#09233E; font-size:16px;">
                                 Equipo Mudanza Fácil
                             </strong>
                         </td>
                     </tr>
 
-                    <!-- FOLIO -->
+                    <!-- Pie -->
                     <tr>
-                        <td align="center" style="padding:8px 40px 28px;">
-                            <p style="margin:0;color:#9CA3AF;font-size:11px;line-height:1.5;">
-                                Folio de seguimiento: {{ $expediente->folio }}
+                        <td
+                            style=" padding:16px 30px; text-align:center; background-color:#F9FBFC; border-top:1px solid #E9EEF2; ">
+                            <p style=" margin:0; color:#8998A5; font-size:14px; line-height:1.5; ">
+                                Folio de seguimiento:
+                                <strong style=" color:#2F5C8C; letter-spacing:1px; ">
+                                    {{ $expediente->folio }}
+                                </strong>
                             </p>
                         </td>
                     </tr>
