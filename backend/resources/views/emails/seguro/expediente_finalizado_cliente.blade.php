@@ -33,10 +33,7 @@
                     <tr>
                         <td style=" padding:20px 30px 30px; color:#4A5E71; ">
                             <p style="color:#09233E; margin:0 0 15px; font-size:20px;">
-                                Hola
-                                <strong>
-                                    {{ $expediente->nombre ?? '' }}
-                                </strong>,
+                                Hola {{ \Illuminate\Support\Str::before(trim($expediente->nombre), ' ') }},
                             </p>
 
                             <p style="margin:0 0 15px; font-size:16px; text-align: justify;">
@@ -120,30 +117,27 @@
 
                             <div style="margin-top:20px; text-align:center;">
                                 <a href="https://wa.me/524421896433?text={{ urlencode(
-                                        'Hola, buen día.' . " \n\n" . 'Mi nombre es ' . ($expediente->nombre ?? '') . '
+    'Hola, buen día.' . " \n\n" . 'Mi nombre es ' . ($expediente->nombre ?? '') . '
                                     y he realizado el pago correspondiente a mi seguro.' . "\n\n" .
-                                    'Nombre: ' . ($expediente->nombre ?? '') . "\n" .
-                                    'Folio: ' . ($expediente->folio ?? '') . "\n\n" .
-                                    'Quiero enviar mi comprobante de pago para continuar con el proceso.'
-                                    ) }}" target="_blank"
-                                    style=" display:inline-block; padding:12px 20px; background:#25D366; color:#ffffff;
+    'Nombre: ' . ($expediente->nombre ?? '') . "\n" .
+    'Folio: ' . ($expediente->folio ?? '') . "\n\n" .
+    'Quiero enviar mi comprobante de pago para continuar con el proceso.'
+) }}" target="_blank" style=" display:inline-block; padding:12px 20px; background:#25D366; color:#ffffff;
                                     text-decoration:none; border-radius:8px; font-weight:bold; font-size:14px;
-                                    margin:5px;"
-                                    >
+                                    margin:5px;">
                                     Enviar por WhatsApp
                                 </a>
 
                                 <a href="mailto:atnclientes@segurosdecarga.com?subject={{ rawurlencode(
-                                        'Comprobante de pago - ' . ($expediente->nombre ?? '') . ' - Folio ' . ($expediente->folio ?? '')
-                                    ) }}&body={{ rawurlencode(
-                                        'Hola, buen día.' . " \n\n" . 'Mi nombre es ' . ($expediente->nombre ?? '') . '
+    'Comprobante de pago - ' . ($expediente->nombre ?? '') . ' - Folio ' . ($expediente->folio ?? '')
+) }}&body={{ rawurlencode(
+    'Hola, buen día.' . " \n\n" . 'Mi nombre es ' . ($expediente->nombre ?? '') . '
                                     y adjunto mi comprobante de pago correspondiente a mi seguro.' . "\n\n" .
-                                    'Nombre: ' . ($expediente->nombre ?? '') . "\n" .
-                                    'Folio: ' . ($expediente->folio ?? '') . "\n\n" .
-                                    'Quedo atento(a) a la confirmación de la recepción de mi comprobante.' . "\n\n" .
-                                    'Saludos.'
-                                    ) }}"
-                                    style=" display:inline-block; padding:12px 20px; background:#09233E; color:#ffffff;
+    'Nombre: ' . ($expediente->nombre ?? '') . "\n" .
+    'Folio: ' . ($expediente->folio ?? '') . "\n\n" .
+    'Quedo atento(a) a la confirmación de la recepción de mi comprobante.' . "\n\n" .
+    'Saludos.'
+) }}" style=" display:inline-block; padding:12px 20px; background:#09233E; color:#ffffff;
                                     text-decoration:none; border-radius:8px; font-weight:bold; font-size:16px;
                                     margin:5px;
                                     ">

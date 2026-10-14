@@ -41,7 +41,7 @@
                     <tr>
                         <td style="padding:20px 30px 28px;">
                             <h1 style="color:#09233E; margin:0 0 15px; font-size:20px;">
-                                Hola {{ $expediente->nombre }},
+                               Hola {{ \Illuminate\Support\Str::before(trim($expediente->nombre), ' ') }},
                             </h1>
 
                             <p

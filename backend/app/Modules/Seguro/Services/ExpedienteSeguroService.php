@@ -2,6 +2,7 @@
 
 namespace App\Modules\Seguro\Services;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Modules\Seguro\Models\ExpedienteSeguro;
@@ -40,16 +41,18 @@ class ExpedienteSeguroService
                 'fecha_recoleccion' => $data['fecha_recoleccion'] ?? null,
                 'es_externo' => $data['es_externo'] ?? false,
 
-                'correo_programado_at' => $creadoEn->copy()->addHours(4800),
-                'video_programado_at' => $creadoEn->copy()->addHours(2400),
-                'recordatorio_programado_at' => $creadoEn->copy()->addDays(500),
-                'segundo_recordatorio_programado_at' => $creadoEn->copy()->addDays(1000),
-                'tercer_recordatorio_programado_at' => $creadoEn->copy()->addDays(1500),
+                'correo_programado_at' => $this->programarEnvioDespuesDePlazo($creadoEn, 4800, 'hours'),
+                'video_programado_at' => $this->programarEnvioDespuesDePlazo($creadoEn, 2400, 'hours'),
+                'recordatorio_programado_at' => $this->programarEnvioDespuesDePlazo($creadoEn, 50, 'days'),
+                'segundo_recordatorio_programado_at' => $this->programarEnvioDespuesDePlazo($creadoEn, 100, 'days'),
+                'tercer_recordatorio_programado_at' => $this->programarEnvioDespuesDePlazo($creadoEn, 150, 'days'),
 
                 /* 
-                'correo_programado_at' => $creadoEn->copy()->addHours(48),
-                'video_programado_at' => $creadoEn->copy()->addHours(24),
-                'recordatorio_programado_at' => $creadoEn->copy()->addDays(5),
+                'correo_programado_at' => $this->programarEnvioDespuesDePlazo($creadoEn, 48, 'hours'),
+                'video_programado_at' => $this->programarEnvioDespuesDePlazo($creadoEn, 24, 'hours'),
+                'recordatorio_programado_at' => $this->programarEnvioDespuesDePlazo($creadoEn, 5, 'days'),
+                'segundo_recordatorio_programado_at' => $this->programarEnvioDespuesDePlazo($creadoEn, 10, 'days'),
+                'tercer_recordatorio_programado_at' => $this->programarEnvioDespuesDePlazo($creadoEn, 15, 'days'),
                  */
             ]);
         });
@@ -328,5 +331,33 @@ class ExpedienteSeguroService
         $porcentaje = $modalidadDatos === 'asistida' ? 0.0175  : 0.0135;
 
         return round($basePrima * $porcentaje, 2);
+    }
+
+    private function programarEnvioDespuesDePlazo(Carbon $fechaBase, int $cantidad, string $unidad): Carbon
+    {
+        $zonaHoraria = 'America/Mexico_City';
+        $vencimiento = $fechaBase->copy()->utc();
+
+        switch ($unidad) {
+            case 'hours':
+                $vencimiento->addHours($cantidad);
+                break;
+
+            case 'days':
+                $vencimiento->addDays($cantidad);
+                break;
+
+            default:
+                throw new \InvalidArgumentException("Unidad de tiempo no válida: {$unidad}");
+        }
+
+        $vencimientoLocal = $vencimiento->copy()->setTimezone($zonaHoraria);
+        $envioLocal = $vencimientoLocal->copy()->setTime(10, 0, 0);
+
+        if ($vencimientoLocal->greaterThan($envioLocal)) {
+            $envioLocal->addDay();
+        }
+
+        return $envioLocal->setTimezone(config('app.timezone', 'UTC'));
     }
 }

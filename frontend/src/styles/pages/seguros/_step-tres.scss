@@ -687,3 +687,44 @@
         }
     }
 }
+
+.seguro-publico {
+    &__company-help-summary {
+        margin: 18px 0 24px;
+        padding: 18px 20px;
+        background: #f0f6fc;
+        border-left: 4px solid $success;
+        border-radius: 8px;
+
+        p {
+            margin: 0;
+            color: $text;
+            font-size: 14px;
+            line-height: 1.7;
+            text-align: justify;
+
+            &+p {
+                margin-top: 12px;
+            }
+
+            strong {
+                color: $title;
+                font-weight: 700;
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .seguro-publico {
+        &__company-help-summary {
+            margin: 14px 0 20px;
+            padding: 15px;
+
+            p {
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        }
+    }
+}

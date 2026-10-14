@@ -286,37 +286,42 @@ export default function SeguroEmpresaPage() {
                     Completa la información de la unidad y del operador responsable de realizar la mudanza.
                 </p>
 
-                <div className="seguro-empresa__privacy">
-                    <span className="seguro-empresa__privacy-icon">
-                        i
-                    </span>
+                {!datosFinalizados && (
+                    <div className="seguro-empresa__privacy">
+                        <span className="seguro-empresa__privacy-icon">
+                            i
+                        </span>
 
-                    <p>
-                        Puedes guardar la información y continuar más adelante desde este mismo enlace.
-                        Cuando completes todos los datos, selecciona <strong>Finalizar</strong> para avisar al cliente que la información está lista.
-                    </p>
-                </div>
+                        <p>
+                            Puedes guardar la información y continuar más adelante desde este
+                            mismo enlace. Antes de seleccionar <strong>Finalizar</strong>,
+                            verifica que todos los datos sean correctos, ya que, una vez
+                            finalizado el formulario, cualquier modificación deberá solicitarse
+                            directamente al cliente.
+                        </p>
+                    </div>
+                )}
 
-                {
-                    datosFinalizados && (
-                        <div className="seguro-empresa__completed">
-                            <span>
-                                ✓
-                            </span>
+                {datosFinalizados && (
+                    <div className="seguro-empresa__completed">
+                        <span>✓</span>
 
-                            <div>
-                                <strong>
-                                    Información enviada al cliente
-                                </strong>
+                        <div>
+                            <strong>Información enviada al cliente</strong>
 
-                                <p>
-                                    Los datos ya fueron enviados al cliente para su revisión.
-                                    Puedes seguir editándolos y actualizarlos si es necesario.
-                                </p>
-                            </div>
+                            <p>
+                                Los datos ya fueron enviados al cliente para su revisión.
+                                Puedes seguir editándolos y actualizarlos si es necesario.
+                            </p>
+
+                            <p>
+                                Si necesitas realizar algún cambio en los datos
+                                proporcionados, por favor, contacta al cliente para
+                                coordinar las modificaciones correspondientes.
+                            </p>
                         </div>
-                    )
-                }
+                    </div>
+                )}
 
                 <div className="seguro-empresa__form">
                     <div className="seguro-empresa__field">
@@ -470,59 +475,54 @@ export default function SeguroEmpresaPage() {
                     )
                 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                <div
-                    className={`seguro-empresa__actions ${datosFinalizados ? "seguro-empresa__actions--single" : ""
-                        }`}
-                >
-                    {!datosFinalizados && (
-                        <button
-                            type="button"
-                            className="seguro-empresa__button seguro-empresa__button--secondary"
-                            onClick={guardar}
-                            disabled={saving || finishing}
-                        >
-                            {saving ? "Guardando..." : "Guardar"}
+                {!datosFinalizados ? (
+                    <div className="seguro-empresa__actions">
+                        <button type="button" className="seguro-empresa__button seguro-empresa__button--secondary" onClick={guardar} disabled={saving || finishing} >
+                            {saving ? "Guardando..." : "Guardar y continuar después"}
                         </button>
-                    )}
 
-                    <button
-                        type="button"
-                        className="seguro-empresa__button"
-                        onClick={finalizar}
-                        disabled={saving || finishing}
-                    >
-                        {finishing
-                            ? "Procesando..."
-                            : datosFinalizados
-                                ? "Actualizar"
-                                : "Finalizar"}
-                    </button>
-                </div>
+                        <button type="button" className="seguro-empresa__button" onClick={finalizar} disabled={saving || finishing} >
+                            {finishing ? "Procesando..." : "Finalizar"}
+                        </button>
+                    </div>
 
+                ) : (
+                    <div className="seguro-empresa__completedNotice" role="status" >
+                        <div className="seguro-empresa__completedNoticeIcon">
+                            <img src="/logo/icon.png" alt="Mudanza Fácil" />
+                        </div>
 
+                        <div className="seguro-empresa__completedNoticeContent">
+                            <span className="seguro-empresa__completedNoticeEyebrow">
+                                MUDANZA FÁCIL
+                            </span>
 
+                            <h3>Sigamos moviendo oportunidades.</h3>
 
+                            <p>
+                                Gracias por completar la información de tu empresa.
+                                En Mudanza Fácil trabajamos para conectar empresas de
+                                mudanzas, facilitar su colaboración y crear nuevas
+                                oportunidades de negocio.
+                            </p>
 
+                            <p>
+                                ¿Aún no conoces todo lo que puedes encontrar en nuestra
+                                plataforma? Te invitamos a descubrir más sobre nosotros.
+                            </p>
 
-
-
-
-
+                            <a
+                                href="https://app.mudanzafacil.com.mx/bienvenida"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="seguro-empresa__completedNoticeLink"
+                            >
+                                Conocer Mudanza Fácil
+                                <span aria-hidden="true">→</span>
+                            </a>
+                        </div>
+                    </div>
+                )}
 
                 <p className="seguro-empresa__footer">
                     La información proporcionada será utilizada únicamente para completar el expediente de seguro.

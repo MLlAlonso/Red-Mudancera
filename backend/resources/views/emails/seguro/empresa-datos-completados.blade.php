@@ -35,7 +35,7 @@
                     <tr>
                         <td style="padding:0 32px; color:#4A5E71; line-height:1.7;">
                             <h3 style="color:#09233E; margin:0 0 15px; font-size:20px;">
-                                Hola {{ $expediente->nombre }},
+                                Hola {{ \Illuminate\Support\Str::before(trim($expediente->nombre), ' ') }},
                             </h3>
 
                             <p style="margin:0 0 15px; font-size:16px; text-align: justify;">
@@ -59,17 +59,17 @@
                             <table width="100%" cellpadding="0" cellspacing="0" border="0"
                                 style="background:#EDF4FA; border:1px solid #D5E5F2; border-radius:12px;">
                                 <tr>
-                                    <td width="76" valign="middle" align="center" style="padding:20px 8px 20px 16px;">
+                                    <td width="76" valign="middle" align="center" style="padding:20px 4px 20px 4px;">
                                         <img src="https://app.mudanzafacil.com.mx/icons/verificado.png" alt=""
                                             width="48" height="48" style="display:block; width:48px; height:48px;">
                                     </td>
 
-                                    <td valign="middle" style="padding:20px 18px 20px 8px;">
+                                    <td valign="middle" style="padding:20px 18px 20px 0px;">
                                         <h3 style="margin:0 0 8px; color:#09233E; font-size:17px;">
                                             Importante
                                         </h3>
 
-                                        <p style="margin:0; color:#4A5E71; font-size:16px; line-height:1.7;">
+                                        <p style="margin:0; color:#4A5E71; font-size:16px; line-height:1.7; text-align: justify;">
                                             Para que tu menaje viaje protegido, es necesario completar el expediente y
                                             realizar el pago a la aseguradora con tiempo suficiente para que tu póliza
                                             quede emitida antes de la salida.
@@ -84,8 +84,20 @@
                     <tr>
                         <td align="center" style="padding:0 30px 24px;">
                             <a href="{{ rtrim(config('app.frontend_url'), '/') }}/seguros/{{ $expediente->folio }}"
-                                style=" display:inline-block; background:#09233E; color:#ffffff; text-decoration:none; padding:16px 30px; border-radius:8px; font-weight:bold; font-size:16px; line-height:1.4; text-align:center; ">
-                                Revisar y finalizar mi expediente
+                                style=" display: inline-block;  background: #09233E; color: #ffffff; text-decoration: none; padding: 16px 30px; border-radius: 8px; font-weight: bold; font-size: 16px; line-height: 1.4; text-align: center; ">
+                                <table cellpadding="0" cellspacing="0" border="0" role="presentation"
+                                    style="border-collapse: collapse;">
+                                    <tr>
+                                        <td valign="middle"
+                                            style=" color: #ffffff; font-size: 16px; font-weight: bold; line-height: 1.4;  padding-right: 12px; ">
+                                            Revisar y finalizar mi expediente
+                                        </td>
+
+                                        <td valign="middle" style=" color: #ffffff; font-size: 24px; line-height: 1; ">
+                                            &rarr;
+                                        </td>
+                                    </tr>
+                                </table>
                             </a>
                         </td>
                     </tr>

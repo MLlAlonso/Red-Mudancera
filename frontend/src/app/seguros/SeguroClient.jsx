@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import BaseModal from "@/components/modals/BaseModal";
+import useClickOutside from "@/hooks/useClickOutside";
+
 
 export default function SeguroClient() {
     const searchParams = useSearchParams();
@@ -14,8 +16,15 @@ export default function SeguroClient() {
     const [loading, setLoading] = useState(false);
     const [sent, setSent] = useState(false);
     const [showForm, setShowForm] = useState(false);
-
     const PREVIEW_MODAL = true;
+
+    const successModalRef = useRef(null);
+
+    const cerrarModalExito = useCallback(() => {
+        setModalMsg("");
+    }, []);
+
+    useClickOutside(successModalRef, cerrarModalExito);
 
     const [form, setForm] = useState({
         nombre: "",
@@ -146,8 +155,8 @@ export default function SeguroClient() {
                 </button>
 
                 {modalMsg && (
-                    <BaseModal onClose={() => { setModalMsg(""); window.location.href = "https://segurosdecarga.com/"; }} >
-                        <div className="success-modal">
+                    <BaseModal >
+                        <div className="success-modal" ref={successModalRef}>
                             <img src="/icons/verificado.png" alt="verificado" className="success-img" />
                             <h3>Solicitud enviada</h3>
                             <div className="success-divider"></div>
@@ -163,17 +172,13 @@ export default function SeguroClient() {
                             </p>
 
                             <section>
-                                <img src="/icons/web.png" alt="web" />
+                                <img src="/icons/mensaje.png" alt="correo" />
 
                                 <p>
-                                    Al continuar podrás visitar el sitio oficial de{" "}
-                                    <span> Chubb Seguros México </span>
+                                    <span> ¿Qué sigue? </span> <br />
+                                    Revisa tu correo electrónico. Ahí recibirás los siguientes pasos para continuar con el proceso de protección de tu mudanza.
                                 </p>
                             </section>
-
-                            <button onClick={() => { setModalMsg(""); window.location.href = "https://segurosdecarga.com/"; }} >
-                                Ir al sitio oficial de Chubb
-                            </button>
 
                             <p className="privacy-note">
                                 <img src="/icons/candado.png" alt="Privacidad" />
@@ -382,12 +387,12 @@ export default function SeguroClient() {
             )}
 
             {modalMsg && (
-                <BaseModal onClose={() => { setModalMsg(""); window.location.href = "https://segurosdecarga.com/"; }} >
-                    <div className="success-modal">
+                <BaseModal >
+                    <div className="success-modal" ref={successModalRef}>
                         <img src="/icons/verificado.png" alt="verificado" className="success-img" />
                         <h3>Solicitud enviada</h3>
-
                         <div className="success-divider"></div>
+
                         <p>
                             {modalMsg || "Tu interés fue registrado correctamente."}
                         </p>
@@ -399,21 +404,17 @@ export default function SeguroClient() {
                         </p>
 
                         <section>
-                            <img src="/icons/web.png" alt="web" />
+                            <img src="/icons/mensaje.png" alt="correo" />
 
                             <p>
-                                Al continuar podrás visitar el sitio oficial de{" "}
-                                <span> Chubb Seguros México </span>
+                                <span> ¿Qué sigue? </span> <br />
+                                Revisa tu correo electrónico. Ahí recibirás los siguientes pasos para continuar con el proceso de protección de tu mudanza.
                             </p>
                         </section>
 
-                        <button onClick={() => { setModalMsg(""); window.location.href = "https://segurosdecarga.com/"; }} >
-                            Ir al sitio oficial de Chubb
-                        </button>
-
                         <p className="privacy-note">
                             <img src="/icons/candado.png" alt="Privacidad" />
-                            Tu información será utilizada únicamente  para dar seguimiento a tu solicitud
+                            Tu información será utilizada únicamente para dar seguimiento a tu solicitud
                         </p>
                     </div>
                 </BaseModal>
@@ -425,7 +426,7 @@ export default function SeguroClient() {
                         <h3>Error</h3>
                         <p>{modalError}</p>
 
-                        <button onClick={() => setModalError("") } >
+                        <button onClick={() => setModalError("")} >
                             Cerrar
                         </button>
                     </div>

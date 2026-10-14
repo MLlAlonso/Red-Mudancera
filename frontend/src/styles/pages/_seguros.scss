@@ -131,7 +131,7 @@
         margin: 0;
         color: $text;
         font-family: $font-title;
-        font-size: 14px;
+        font-size: 16px;
         font-weight: 500;
         line-height: 1.4;
         opacity: 0.8;
@@ -380,7 +380,7 @@
 .error-modal {
     width: 100%;
     max-width: 460px;
-    padding: 32px;
+    padding:30px 25px;
     text-align: center;
     font-family: $font-title;
 
@@ -450,7 +450,7 @@
         gap: 14px;
         width: 100%;
         margin: 20px 0;
-        padding: 14px;
+        padding: 12px;
         background: #e9f3fc;
         border: 1px solid #b3d4f2;
         border-radius: 12px;
@@ -469,11 +469,13 @@
             font-size: 14px;
             line-height: 1.45;
             text-align: justify;
+            padding-right: 10px;
         }
 
         span {
             color: $primary;
             font-weight: 800;
+            font-size: 16px;
         }
     }
 
@@ -512,6 +514,7 @@
         }
     }
 }
+
 
 .error-modal {
     h3 {
@@ -660,7 +663,7 @@
         margin: 14px 0 0;
         color: $text;
         font-family: $font-title;
-        font-size: 13px;
+        font-size: 14px;
         font-weight: 500;
         line-height: 1.4;
         text-align: center;
@@ -1090,7 +1093,7 @@
 
     &__disclaimer {
         max-width: 850px;
-        margin: 22px auto 0;
+        margin: 20px auto 0;
         color: #7d8985;
         font-family: $font-title;
         font-size: 14px;
@@ -1190,6 +1193,13 @@
     }
 }
 
+.seguroPrecios__disclaimer {
+    color: #6f7f8d;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: -20px;
+}
+
 @media (max-width: 1024px) {
     .seguroHero {
         padding: 65px 24px 75px;
@@ -1217,7 +1227,7 @@
     }
 
     .seguroCaracteristicas {
-        padding: 14px 24px 60px;
+        padding: 14px 24px 40px;
     }
 
     .seguroCaracteristicas__container {
@@ -1428,13 +1438,14 @@
         margin-bottom: 14px;
 
         .btnSeguro {
-            font-size: 17px;
+            font-size: 18px;
         }
     }
 
     .seguroHero__note {
-        max-width: 500px;
-        font-size: 12px;
+        max-width: 650px;
+        font-size: 14px;
+        text-align: center;
     }
 
     .seguroHero__visual img {
@@ -1523,7 +1534,7 @@
         }
 
         .privacy-note {
-            font-size: 12px;
+            font-size: 14px;
 
             img {
                 width: 28px;
@@ -1703,6 +1714,7 @@
     .seguroPrecio {
         min-height: 210px;
         padding: 32px 24px;
+        text-align: center;
     }
 
     .seguroPrecio__amount {
@@ -1711,6 +1723,9 @@
 
     .seguroPrecios__disclaimer {
         font-size: 14px;
+        text-align: justify;
+        color: #6f7f8d;
+        margin-top: 10px;
     }
 
     /*
@@ -1754,7 +1769,7 @@
 
     .seguroCaracteristicas {
         &__action {
-            margin-top: 35px;
+            margin-top: 30px;
             padding: 30px 25px 26px;
 
             .btnSeguro {
@@ -1763,8 +1778,8 @@
         }
 
         &__note {
-            max-width: 500px;
-            font-size: 12px;
+            max-width: 650px;
+            font-size: 13px;
         }
     }
 
@@ -1810,7 +1825,7 @@
     }
 
     .seguroHero__note {
-        font-size: 12px;
+        font-size: 13px;
     }
 
     .seguroHero__visual img {
@@ -1927,7 +1942,7 @@
 
         .privacy-note {
             align-items: flex-start;
-            font-size: 10px;
+            font-size: 13px;
 
             img {
                 width: 25px;
@@ -2126,7 +2141,7 @@
 
     .seguroPrecios__disclaimer {
         margin-top: 18px;
-        font-size: 12px;
+        font-size: 14px;
     }
 
     /*
@@ -2175,7 +2190,7 @@
 
         &__note {
             max-width: 320px;
-            font-size: 11px;
+            font-size: 13px;
         }
     }
 
@@ -2187,7 +2202,7 @@
         font-size: 11px;
 
         img {
-            height: 25px;
+            height: 35px;
         }
     }
 }

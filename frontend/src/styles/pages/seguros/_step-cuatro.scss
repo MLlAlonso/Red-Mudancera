@@ -56,6 +56,14 @@
         background: #ffffff;
         border: 1px solid $cards;
         border-radius: 14px;
+
+        &:hover {
+            .seguro-publico__review-section-icon {
+                background: rgba(33, 112, 181, 0.13);
+                border-color: rgba(33, 112, 181, 0.24);
+                transform: translateY(-1px);
+            }
+        }
     }
 
     &__review-section-heading {
@@ -71,20 +79,6 @@
             gap: 12px;
         }
 
-        >div>span {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex: 0 0 34px;
-            width: 34px;
-            height: 34px;
-            border-radius: 9px;
-            background: $background;
-            color: $primary;
-            font-size: 12px;
-            font-weight: 800;
-        }
-
         h3 {
             margin: 0;
             color: $title;
@@ -96,23 +90,82 @@
             color: $text-muted;
             font-size: 12px;
         }
+    }
 
-        button {
-            border: 0;
-            background: transparent;
-            color: $primary;
-            font-size: 14px;
-            font-weight: 800;
-            cursor: pointer;
+    &__review-section-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 34px;
+        width: 40px;
+        height: 40px;
+        padding: 7px;
+        box-sizing: border-box;
+        background: rgba(33, 112, 181, 0.09);
+        border: 1px solid rgba(33, 112, 181, 0.14);
+        border-radius: 9px;
 
-            &:hover {
-                text-decoration: underline;
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    }
+
+    &__review-edit {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        flex-shrink: 0;
+        padding: 9px 13px;
+        border: 1px solid transparent;
+        border-radius: 9px;
+        background: #2170b514;
+        color: #2170b5;
+        font-family: inherit;
+        font-size: 16px;
+        font-weight: 800;
+        line-height: 1;
+        cursor: pointer;
+        transition:
+            background-color 0.2s ease,
+            border-color 0.2s ease,
+            box-shadow 0.2s ease,
+            transform 0.2s ease;
+
+        img {
+            display: block;
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+            transition: transform 0.2s ease;
+        }
+
+        &:hover:not(:disabled) {
+            background: #2170b526;
+            border-color: #2170b533;
+            box-shadow: 0 3px 10px rgba(33, 112, 181, 0.10);
+
+            img {
+                transform: translateY(-1px);
             }
+        }
 
-            &:disabled {
-                opacity: 0.5;
-                cursor: not-allowed;
-            }
+        &:active:not(:disabled) {
+            transform: scale(0.97);
+            box-shadow: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid #2170b5;
+            outline-offset: 3px;
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
     }
 
@@ -235,6 +288,15 @@
         .seguro-publico__review-notice,
         .seguro-publico__review-confirmation {
             padding: 14px;
+        }
+
+
+        .seguro-publico__review-section-icon {
+            flex-basis: 38px;
+            width: 38px;
+            height: 38px;
+            padding: 9px;
+            border-radius: 10px;
         }
     }
 }
@@ -522,6 +584,29 @@
                 padding: 18px;
             }
 
+            &__review-section-icon {
+                flex-basis: 32px;
+                width: 32px;
+                height: 32px;
+                padding: 6px;
+
+                img {
+                    width: 18px;
+                    height: 18px;
+                }
+            }
+
+            &__review-edit {
+                gap: 5px;
+                padding: 10px 20px;
+                font-size: 14px;
+
+                img {
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+
             &__actions {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
@@ -542,7 +627,6 @@
         }
 
         &__review-section-heading {
-            align-items: flex-start;
             gap: 10px;
 
             >div {

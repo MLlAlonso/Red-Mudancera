@@ -43,7 +43,7 @@
                             </h1>
 
                             <p style="color:#09233E; margin:0 0 15px; font-size:20px;">
-                                Hola {{ $expediente->nombre }},
+                                Hola {{ \Illuminate\Support\Str::before(trim($expediente->nombre), ' ') }},
                             </p>
 
                             <p
@@ -90,22 +90,17 @@
                             <table width="100%" cellpadding="0" cellspacing="0" border="0"
                                 style=" background-color:#EEF4FA; border-radius:16px; ">
                                 <tr>
-                                    <td width="76" valign="middle" align="center" style="padding:24px 0 24px 18px;">
-                                        <img src="https://app.mudanzafacil.com.mx/icons/calendario.png" alt=""
-                                            width="44" height="44" style=" display:block; border:0; outline:none; text-decoration:none; background:transparent;
-                                        ">
-                                    </td>
-
                                     <!-- CONTENIDO -->
-                                    <td valign="middle" style="padding:24px 22px 24px 14px;">
+                                    <td valign="middle" style="padding:24px 24px 24px 18px;">
                                         <p
-                                            style=" margin:0 0 7px; color:#09233E; font-size:16px; line-height:1.4; font-weight:bold; ">
+                                            style=" margin:0 0 7px; color:#09233E; font-size:18px; line-height:1.4; font-weight:bold; ">
                                             Y mañana damos el siguiente paso
                                         </p>
 
-                                        <p style=" margin:0; color:#475A6B; font-size:14px; line-height:1.65; ">
-                                            Te enviaremos acceso a tu expediente digital, donde podrás reunir la
-                                            información de tu mudanza
+                                        <p
+                                            style=" margin:0; color:#475A6B; font-size:14px; line-height:1.65;text-align: justify;">
+                                            Te enviaremos un correo con el acceso a tu expediente digital,
+                                            donde podrás reunir la información de tu mudanza
                                             y dejar todo preparado para contratar tu seguro cuando estés listo.
                                         </p>
 

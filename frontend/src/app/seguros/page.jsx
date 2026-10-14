@@ -1,7 +1,7 @@
 import Footer from "@/components/layout/Footer";
-import SeguroClient from "./SeguroClient";
 import { Suspense } from "react";
 import FAQItem from "./FAQItem";
+import SeguroClient from "./SeguroClient";
 import "@/styles/pages/_seguros.scss";
 
 export const metadata = {
@@ -139,7 +139,9 @@ export default function SegurosPage() {
                     </Suspense>
 
                     <p className="seguroCaracteristicas__note">
-                        Sin compromiso, puedes empezar aunque todavía no tengas todos los datos.
+                        Gracias a nuestro acuerdo con Chubb, accede a <strong> tarifas preferenciales </strong> para proteger tu mudanza.
+                        <br />
+                        Sin compromiso y aunque todavía no tengas todos los datos.
                     </p>
 
                     <div className="seguro-publico__insurance-company">
@@ -261,7 +263,7 @@ export default function SegurosPage() {
             <section className="seguroPrecios">
                 <div className="seguroPrecios__container">
                     <h2 className="seguroPrecios__title">
-                        Más certeza no significa pagar más
+                        La protección que buscas, a una tarifa preferencial
                     </h2>
 
                     <div className="seguroPrecios__comparison">
@@ -304,8 +306,8 @@ export default function SegurosPage() {
                     </div>
 
                     <p className="seguroPrecios__disclaimer">
-                        Precios de referencia. El costo final y la protección dependen
-                        de la cotización, los bienes y las condiciones de la póliza.
+                        Gracias a nuestro acuerdo con Chubb, accede a tarifas preferenciales.
+                        Los precios finales, la cobertura y las condiciones están sujetos a la cotización y a los términos habituales de la póliza.
                     </p>
                 </div>
             </section>

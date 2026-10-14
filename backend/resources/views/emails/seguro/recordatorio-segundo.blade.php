@@ -55,7 +55,7 @@
                             </h1>
 
                             <p style="color:#09233E; margin:0 0 15px; font-size:20px;">
-                                Hola {{ $expediente->nombre }},
+                                Hola {{ \Illuminate\Support\Str::before(trim($expediente->nombre), ' ') }},
                             </p>
 
                             <p style="margin:0 0 18px;color:#4A5E71;font-size:16px;line-height:1.7;">
@@ -91,8 +91,20 @@
                     <tr>
                         <td align="center" style="padding:0 40px 12px;">
                             <a href="{{ config('app.frontend_url') }}/seguros/{{ $expediente->folio }}"
-                                style="display:block;background:#09233E;color:#ffffff;text-decoration:none;padding:16px 24px;border-radius:10px;font-size:18px;font-weight:bold;text-align:center;">
-                                Continuar mi expediente
+                                style=" display: inline-block; background: #09233E; color: #ffffff; text-decoration: none; padding: 16px 32px; border-radius: 14px; font-size: 18px; font-weight: bold; text-align: center; ">
+                                <table cellpadding="0" cellspacing="0" border="0" role="presentation"
+                                    style="border-collapse: collapse;">
+                                    <tr>
+                                        <td valign="middle"
+                                            style=" color: #ffffff; font-size: 18px; font-weight: bold; padding-right: 14px; ">
+                                            Continuar mi expediente
+                                        </td>
+
+                                        <td valign="middle" style=" color: #ffffff; font-size: 25px; line-height: 1; ">
+                                            &rarr;
+                                        </td>
+                                    </tr>
+                                </table>
                             </a>
                         </td>
                     </tr>
@@ -101,7 +113,7 @@
                     <tr>
                         <td align="center" style="padding:0 40px 30px;">
                             <a href="https://wa.me/5214421896433?text=Hola%20Mudanza%20F%C3%A1cil%2C%20tengo%20una%20duda%20sobre%20mi%20expediente%20de%20seguro."
-                                style="display:block;background:#E8F5F0;color:#087A50;text-decoration:none;padding:15px 24px;border-radius:10px;font-size:16px;font-weight:bold;text-align:center;border:1px solid #C8E8DC;">
+                                style=" display: block; box-sizing: border-box; width: 70%; background: #E8F5F0; color: #087A50; text-decoration: none; padding: 15px 24px; border-radius: 10px; font-size: 16px; font-weight: bold; text-align: center; border: 1px solid #C8E8DC; ">
                                 Tengo una duda por WhatsApp
                             </a>
                         </td>

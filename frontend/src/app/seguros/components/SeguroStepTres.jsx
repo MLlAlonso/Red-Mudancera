@@ -136,7 +136,7 @@ Les agradezco de antemano su colaboración para que mi mudanza pueda realizarse 
                     </button>
 
                     <button type="button" onClick={copiarEnlace} disabled={!enlaceEmpresa} >
-                      {enlaceCopiado ? "Copiado" : "Copiar enlace"}
+                        {enlaceCopiado ? "Copiado" : "Copiar enlace"}
                     </button>
                 </div>
             </div>
@@ -155,11 +155,8 @@ Les agradezco de antemano su colaboración para que mi mudanza pueda realizarse 
                     <h2> Datos necesarios para asegurar tu mudanza </h2>
 
                     <p id="empresa_info">
-                        Para preparar correctamente tu seguro necesitamos algunos datos del servicio
-                        que solo puede proporcionar la empresa de mudanzas, como las fechas del
-                        traslado, el origen y destino, y los datos de la unidad que transportará
-                        tus bienes.
-                        <strong> Tú no necesitas ingresar esta información.</strong>
+                        Para completar tu seguro necesitamos información específica del servicio, como los datos del camión y del conductor que transportarán tu mudanza.
+                        <strong> Esta información deberá proporcionarla la empresa de mudanzas que contrataste.</strong>
                     </p>
                 </div>
 
@@ -168,9 +165,8 @@ Les agradezco de antemano su colaboración para que mi mudanza pueda realizarse 
                         <h3> ¿Qué tienes que hacer? </h3>
 
                         <p>
-                            Solo haz clic en el recuadro de abajo. Generaremos un enlace privado
-                            que podrás copiar y enviar a tu contacto de la empresa de mudanzas
-                            para que complete la información necesaria.
+                            Haz clic en <strong>"Solicita datos a la empresa de mudanzas"</strong> para generar un enlace privado a un formulario diseñado especialmente para la empresa de mudanzas que contrataste.
+                            Copia el enlace y compártelo con tu contacto para que complete los datos del camión, el conductor y el traslado necesarios para preparar tu seguro.
                         </p>
                     </div>
 
@@ -241,28 +237,44 @@ Les agradezco de antemano su colaboración para que mi mudanza pueda realizarse 
 
                 <div className="seguro-publico__form-section">
                     <div className="seguro-publico__form-section-heading">
-                        <h3> ¿Cómo funciona? </h3>
+                        <h3>¿Cómo funciona?</h3>
+                    </div>
+
+                    <div className="seguro-publico__company-help-summary">
+                        <p>
+                            Este enlace abre un <strong>formulario privado para la empresa
+                                de mudanzas que contrataste</strong>. Lo necesitamos para
+                            recopilar los datos del camión, del conductor y del traslado
+                            que se utilizarán para preparar tu seguro.
+                        </p>
+
+                        <p>
+                            <strong>¿Qué tienes que hacer?</strong> Copia el enlace y
+                            envíaselo a tu contacto de la empresa. Ellos deberán completar
+                            el formulario; después podrás revisar la información para
+                            continuar con tu solicitud de seguro.
+                        </p>
                     </div>
 
                     <div className="seguro-publico__company-help-steps">
                         <div>
                             <strong>1.</strong>
-                            <span> Generamos un enlace privado. </span>
+                            <span>Generamos un enlace privado.</span>
                         </div>
 
                         <div>
                             <strong>2.</strong>
-                            <span> Tú copias el enlace y lo envías a tu empresa de mudanza. </span>
+                            <span>Copias el enlace y lo envías a tu empresa de mudanza.</span>
                         </div>
 
                         <div>
                             <strong>3.</strong>
-                            <span> La empresa completa la información. </span>
+                            <span>La empresa completa la información solicitada.</span>
                         </div>
 
                         <div>
                             <strong>4.</strong>
-                            <span> Tú revisas los datos antes de continuar. </span>
+                            <span>Revisas los datos antes de continuar.</span>
                         </div>
                     </div>
                 </div>
@@ -280,7 +292,7 @@ Les agradezco de antemano su colaboración para que mi mudanza pueda realizarse 
                         </button>
 
                         <button type="button" onClick={copiarEnlace} disabled={!enlaceEmpresa} >
-                           {enlaceCopiado ? "Copiado" : "Copiar enlace"}
+                            {enlaceCopiado ? "Copiado" : "Copiar enlace"}
                         </button>
                     </div>
                 </div>
@@ -352,7 +364,7 @@ Les agradezco de antemano su colaboración para que mi mudanza pueda realizarse 
                         </button>
 
                         <button type="button" onClick={copiarEnlace} disabled={!enlaceEmpresa} >
-                         {enlaceCopiado ? "Copiado" : "Copiar enlace"}
+                            {enlaceCopiado ? "Copiado" : "Copiar enlace"}
                         </button>
                     </div>
                 </div>

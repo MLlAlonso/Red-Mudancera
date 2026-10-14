@@ -75,8 +75,9 @@
         p {
             margin: 0;
             color: $text;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.5;
+            text-align: justify;
         }
     }
 
@@ -114,7 +115,7 @@
             background: $success;
             color: white;
             border-radius: 50%;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 800;
         }
 
@@ -122,13 +123,13 @@
             display: block;
             margin-bottom: 3px;
             color: $success;
-            font-size: 14px;
+            font-size: 16px;
         }
 
         p {
             margin: 0;
             color: $text;
-            font-size: 12px;
+            font-size: 14px;
             line-height: 1.5;
         }
     }
@@ -421,6 +422,131 @@
         }
     }
 
+    &__completedNotice {
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+        gap: 22px;
+        width: 100%;
+        padding: 20px;
+        overflow: hidden;
+        background: linear-gradient(135deg,
+                #f0f8f4 0%,
+                #ffffff 65%,
+                #f3f8fc 100%);
+        border: 1px solid rgba(28, 143, 106, 0.18);
+        border-radius: 18px;
+        box-shadow: 0 8px 24px rgba(9, 35, 62, 0.05);
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: #09233e;
+        }
+    }
+
+    &__completedNoticeIcon {
+        display: flex;
+        flex: 0 0 58px;
+        align-items: center;
+        justify-content: center;
+        width: 60px;
+        height: 60px;
+        padding: 8px;
+        background: #fff;
+        border: 1px solid rgba(28, 143, 106, 0.12);
+        border-radius: 14px;
+        box-shadow: 0 4px 12px rgba(9, 35, 62, 0.06);
+
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    }
+
+    &__completedNoticeContent {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        min-width: 0;
+
+        h3 {
+            margin: 0;
+            color: #09233e;
+            font-family: $font-title;
+            font-size: 23px;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
+        p {
+            margin: 0;
+            color: #52616d;
+            font-family: $font-text;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+    }
+
+    &__completedNoticeEyebrow {
+        color: #1c8f6a;
+        font-family: $font-title;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+    }
+
+    &__completedNoticeLink {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 6px;
+        padding: 12px 20px;
+        background: #09233e;
+        color: #fff;
+        border-radius: 999px;
+        font-family: $font-title;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.3;
+        text-decoration: none;
+        box-shadow: 0 5px 14px rgba(28, 143, 106, 0.18);
+        transition:
+            background-color 0.2s ease,
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+
+        span {
+            font-size: 19px;
+            line-height: 1;
+            transition: transform 0.2s ease;
+        }
+
+        &:hover {
+            background: #176f54;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(28, 143, 106, 0.25);
+
+            span {
+                transform: translateX(4px);
+            }
+        }
+
+        &:focus-visible {
+            outline: 3px solid rgba(28, 143, 106, 0.35);
+            outline-offset: 4px;
+        }
+    }
+
     @media (max-width: 600px) {
         padding: 25px 15px;
 
@@ -459,6 +585,21 @@
         }
     }
 }
+
+@media (max-width: 480px) {
+    .seguro-empresa {
+        &__completedNotice {
+            flex-direction: column;
+        }
+
+        &__completedNoticeLink {
+            width: 100%;
+            padding: 13px 16px;
+            font-size: 13px;
+        }
+    }
+}
+
 
 @keyframes seguro-empresa-spinner {
     to {

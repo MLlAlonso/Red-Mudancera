@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seguimiento de tu expediente</title>
+    <title>Último seguimiento de tu seguro de mudanza</title>
 </head>
 
 <body style="margin:0;padding:0;background:#F4F7F6;font-family:Arial,Helvetica,sans-serif;color:#1F2937;">
@@ -13,24 +13,25 @@
             <td align="center" style="padding:40px 16px;">
                 <table width="100%" cellpadding="0" cellspacing="0" border="0"
                     style="max-width:600px;background:#ffffff;border-radius:18px;overflow:hidden;">
+
                     <!-- HEADER -->
                     <tr>
                         <td style="background:#09233E;padding:26px 32px;">
                             <table width="100%" cellpadding="0" cellspacing="0" border="0"
-                                style="border-collapse: collapse;">
+                                style="border-collapse:collapse;">
                                 <tr>
-                                    <td align="center" style=" padding: 10px 10px; background-color: #09233E; ">
+                                    <td align="center" style="padding:10px;background-color:#09233E;">
                                         <table cellpadding="0" cellspacing="0" border="0"
-                                            style="border-collapse: collapse;">
+                                            style="border-collapse:collapse;">
                                             <tr>
-                                                <td valign="middle" style=" padding: 0; padding-right: 5px; ">
+                                                <td valign="middle" style="padding:0;padding-right:10px;">
                                                     <img src="https://app.mudanzafacil.com.mx/logo/icon.png"
                                                         alt="Mudanza Fácil" width="48"
-                                                        style=" display: block; width: 50px; height: auto; border: 0; ">
+                                                        style="display:block;width:50px;height:auto;border:0;">
                                                 </td>
 
                                                 <td valign="middle"
-                                                    style=" padding: 0; color: #ffffff; font-family: Arial, Helvetica, sans-serif; font-size: 18px; line-height: 20px; font-weight: 500; ">
+                                                    style="padding:0;color:#ffffff;font-family:Arial,Helvetica,sans-serif;font-size:20px;line-height:20px;font-weight:500;">
                                                     Más tranquilidad para lo que más te importa
                                                 </td>
                                             </tr>
@@ -46,35 +47,50 @@
                         <td style="padding:42px 40px 20px;">
                             <div
                                 style="display:inline-block;background:#E8F5F0;color:#087A50;font-size:12px;font-weight:bold;letter-spacing:.5px;text-transform:uppercase;padding:7px 12px;border-radius:999px;margin-bottom:16px;">
-                                Seguimiento
+                                Ultimo seguimiento
                             </div>
 
                             <h1 style="margin:0 0 22px;color:#09233E;font-size:24px;line-height:1.2;font-weight:700;">
-                                Seguimiento de tu expediente
+                                Tu mudanza se acerca. ¿Ya tienes todo listo?
                             </h1>
 
-                            <!-- TEXTO -->
+                            <!-- SALUDO -->
                             <p style="color:#09233E; margin:0 0 15px; font-size:20px;">
-                                Hola {{ $expediente->nombre }},
+                                Hola {{ \Illuminate\Support\Str::before(trim($expediente->nombre), ' ') }},
                             </p>
 
-                            <p
-                                style=" margin:0 0 18px; color:#4A5E71; font-size:16px; line-height:1.7; text-align: justify; ">
-                                Hace unos días comenzaste el proceso para proteger tu mudanza y queremos saber cómo vas.
+                            <!-- MENSAJE -->
+                            <p style="margin:0 0 18px;color:#4A5E71;font-size:16px;line-height:1.7;">
+                                Hace algunas semanas mostraste interés en proteger tu mudanza a través de Mudanza Fácil.
                             </p>
 
-                            <p
-                                style=" margin:0 0 18px; color:#4A5E71; font-size:16px; line-height:1.7; text-align: justify; ">
-                                Si ya elegiste la empresa que realizará tu mudanza, el siguiente paso es muy sencillo:
-                                <strong style="color:#09233E;"> desde tu expediente puedes enviarle el enlace</strong>
-                                para que complete los datos de la unidad, operador y placas.
+                            <p style="margin:0 0 18px;color:#4A5E71;font-size:16px;line-height:1.7;">
+                                Sabemos que organizar una mudanza lleva tiempo y que posiblemente todavía estés
+                                definiendo algunos detalles.
                             </p>
 
-                            <p
-                                style=" margin:0 0 28px; color:#4A5E71; font-size:16px; line-height:1.7; text-align: justify; ">
-                                Si todavía tienes dudas, no sabes cómo enviar el enlace o
-                                necesitas ayuda con cualquier parte del proceso, estamos aquí para ayudarte.
+                            <div
+                                style="background:#F8FAFC;border-left:4px solid #009E66;border-radius:8px;padding:16px 18px;margin:0 0 28px;">
+                                <p style="margin:0;color:#4A5E71;font-size:14px;line-height:1.7;">
+                                    <strong style="color:#09233E;font-size:16px;">Tu expediente sigue
+                                        disponible</strong>
+                                    <br>
+                                    Puedes retomarlo cuando estés listo y enviar el enlace a tu empresa de mudanza para
+                                    que complete los datos de la unidad, operador y placas.
+                                </p>
+                            </div>
+
+                            <p style="margin:0 0 28px;color:#4A5E71;font-size:16px;line-height:1.7;">
+                                Si ya elegiste tu empresa de mudanza
+                                <strong style="color:#09233E;">puedes continuar tu expediente</strong>,
+                                y enviarle el enlace para que complete la información necesaria.
                             </p>
+
+                            <p style="margin:0 0 28px;color:#4A5E71;font-size:16px;line-height:1.7;">
+                                Si aún no tienes todo definido, no te preocupes. <br>
+                                Tu expediente seguirá disponible y podrás retomarlo cuando lo necesites
+                            </p>
+
                         </td>
                     </tr>
 
@@ -82,8 +98,20 @@
                     <tr>
                         <td align="center" style="padding:0 40px 12px;">
                             <a href="{{ config('app.frontend_url') }}/seguros/{{ $expediente->folio }}"
-                                style=" display:block; background:#09233E; color:#ffffff; text-decoration:none; padding:16px 24px; border-radius:10px; font-size:18px; font-weight:bold; text-align:center; ">
-                                Continuar mi expediente
+                                style=" display: inline-block; background: #09233E; color: #ffffff; text-decoration: none; padding: 16px 32px; border-radius: 14px; font-size: 18px; font-weight: bold; text-align: center; ">
+                                <table cellpadding="0" cellspacing="0" border="0" role="presentation"
+                                    style="border-collapse: collapse;">
+                                    <tr>
+                                        <td valign="middle"
+                                            style=" color: #ffffff; font-size: 18px; font-weight: bold; padding-right: 14px; ">
+                                            Continuar mi expediente
+                                        </td>
+
+                                        <td valign="middle" style=" color: #ffffff; font-size: 25px; line-height: 1; ">
+                                            &rarr;
+                                        </td>
+                                    </tr>
+                                </table>
                             </a>
                         </td>
                     </tr>
@@ -91,22 +119,33 @@
                     <!-- CTA WHATSAPP -->
                     <tr>
                         <td align="center" style="padding:0 40px 30px;">
-                            <a href="https://wa.me/5214421896433?text=Hola%20Mudanza%20Fácil,%20tengo%20una%20duda%20sobre%20mi%20expediente%20de%20seguro."
-                                style=" display:block; background:#E8F5F0; color:#087A50; text-decoration:none; padding:15px 24px; border-radius:10px; font-size:16px; font-weight:bold; text-align:center; border:1px solid #C8E8DC;
-                                ">
+                            <a href="https://wa.me/5214421896433?text=Hola%20Mudanza%20F%C3%A1cil%2C%20tengo%20una%20duda%20sobre%20mi%20expediente%20de%20seguro."
+                                style="
+                display: block;
+                box-sizing: border-box;
+                width: 70%;
+                background: #E8F5F0;
+                color: #087A50;
+                text-decoration: none;
+                padding: 15px 24px;
+                border-radius: 10px;
+                font-size: 16px;
+                font-weight: bold;
+                text-align: center;
+                border: 1px solid #C8E8DC;
+            ">
                                 Tengo una duda por WhatsApp
                             </a>
                         </td>
                     </tr>
 
-                    <!-- NOTA -->
+                    <!-- AVISO DE ÚLTIMO CORREO -->
                     <tr>
                         <td style="padding:0 40px 34px;">
-                            <div
-                                style=" background:#F8FAFC; border-radius:10px; padding:16px 18px; text-align:center; ">
-                                <p style=" margin:0; color:#6B7280; font-size:16px; line-height:1.6; ">
-                                    Tu expediente conserva la información que ya proporcionaste,
-                                    así que puedes retomarlo desde donde te quedaste.
+                            <div style="background:#F8FAFC;border-radius:10px;padding:18px;text-align:center;">
+                                <p style="margin:0;color:#4A5E71;font-size:16px;line-height:1.7;">
+                                    Este es nuestro último correo de seguimiento automático, pero seguimos aquí para
+                                    ayudarte cuando lo necesites.
                                 </p>
                             </div>
                         </td>

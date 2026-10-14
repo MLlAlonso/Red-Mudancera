@@ -32,9 +32,9 @@
                     <!-- Contenido -->
                     <tr>
                         <td style="padding:0 32px;color:#4A5E71;line-height:1.7; text-align: justify;">
-                            <h3 style="color:#09233E; margin:0 0 15px; font-size:20px;">
-                                Hola {{ $expediente->nombre }}
-                            </h3>
+                            <p style="color:#09233E; margin:0 0 15px; font-size:20px;">
+                                Hola {{ \Illuminate\Support\Str::before(trim($expediente->nombre), ' ') }},
+                            </p>
 
                             <p style="margin:0 0 15px; font-size:16px; text-align: justify;">
                                 Sabemos que todavía estás organizando tu mudanza y que el seguro normalmente se contrata
@@ -42,9 +42,9 @@
                                 no necesitas completar ningún dato por ahora.
                             </p>
 
-                            <p style="margin:0 0 15px; font-size:16px; text-align: center;">
-                                Lo que sí hicimos fue dejar todo preparado para cuando llegue el momento: </br>
-                                <strong style="color:#15996f;margin-top:0; font-size: 18px;"> Ya tienes tu expediente
+                            <p style="margin:0 0 15px; font-size:16px; text-align: justify;">
+                                Lo que sí hicimos fue dejar todo preparado para cuando llegue el momento:
+                                <strong style="margin-left: 10px; font-size: 18px;"> Ya tienes tu expediente
                                     digital creado.</strong>
                             </p>
                         </td>
@@ -54,8 +54,18 @@
                     <tr>
                         <td align="center" style="padding:10px 30px 5px;">
                             <a href="{{ config('app.frontend_url') }}/seguros/{{ $expediente->folio }}"
-                                style=" display:inline-block; background:#09233E; color:#ffffff; text-decoration:none; padding:16px 42px; border-radius:8px; font-weight:bold; font-size:20px;">
-                                Ver mi expediente
+                                style=" display: inline-block; background: #09233E; color: #ffffff; text-decoration: none; padding: 16px 32px; border-radius: 14px; font-weight: bold; font-size: 18px;">
+                                <table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse: collapse;">
+                                    <tr>
+                                        <td valign="middle" style="color: #ffffff; font-size: 18px; font-weight: bold; padding-right: 14px;">
+                                            Ver mi expediente
+                                        </td>
+
+                                        <td valign="middle" style="color: #ffffff; font-size: 25px; line-height: 1;">
+                                            &rarr;
+                                        </td>
+                                    </tr>
+                                </table>
                             </a>
                         </td>
                     </tr>

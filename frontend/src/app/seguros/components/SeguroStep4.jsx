@@ -369,15 +369,18 @@ export default function SeguroStep4({ expediente, formData, onGuardarCliente, on
             <div className="seguro-publico__review-section">
                 <div className="seguro-publico__review-section-heading">
                     <div>
-                        <span>01</span>
+                        <div className="seguro-publico__review-section-icon">
+                            <img src="/icons/cuenta.png" alt="" aria-hidden="true" />
+                        </div>
                         <div>
-                            <h3>Datos del cliente</h3>
+                            <h3> <span>01</span> Datos del cliente</h3>
                             <p>Información de contacto.</p>
                         </div>
                     </div>
 
-                    <button type="button" onClick={abrirModalCliente} disabled={finalizando || guardando} >
-                        Editar
+                    <button type="button" className="seguro-publico__review-edit" onClick={abrirModalCliente} disabled={finalizando || guardando} >
+                        <img src="/icons/edit.png" alt="" aria-hidden="true" />
+                        <span>Editar</span>
                     </button>
                 </div>
 
@@ -400,15 +403,19 @@ export default function SeguroStep4({ expediente, formData, onGuardarCliente, on
             <div className="seguro-publico__review-section">
                 <div className="seguro-publico__review-section-heading">
                     <div>
-                        <span>02</span>
+                        <div className="seguro-publico__review-section-icon">
+                            <img src="/icons/docs.png" alt="" aria-hidden="true" />
+                        </div>
+
                         <div>
-                            <h3>Información del seguro</h3>
+                            <h3>  <span>02</span> Información del seguro</h3>
                             <p>Tipo de protección y valores declarados.</p>
                         </div>
                     </div>
 
-                    <button type="button" onClick={abrirModalSeguro} disabled={finalizando || guardando} >
-                        Editar
+                    <button type="button" className="seguro-publico__review-edit" onClick={abrirModalCliente} disabled={finalizando || guardando} >
+                        <img src="/icons/edit.png" alt="" aria-hidden="true" />
+                        <span>Editar</span>
                     </button>
                 </div>
 
@@ -443,15 +450,19 @@ export default function SeguroStep4({ expediente, formData, onGuardarCliente, on
                 <div className="seguro-publico__review-section">
                     <div className="seguro-publico__review-section-heading">
                         <div>
-                            <span>03</span>
+                            <div className="seguro-publico__review-section-icon">
+                                <img src="/icons/auto.png" alt="" aria-hidden="true" />
+                            </div>
+
                             <div>
                                 <h3>Tarjeta de circulación</h3>
                                 <p>Fotografía asociada al automóvil asegurado.</p>
                             </div>
                         </div>
 
-                        <button type="button" onClick={abrirModalSeguro} disabled={finalizando || guardando} >
-                            Editar
+                        <button type="button" className="seguro-publico__review-edit" onClick={abrirModalCliente} disabled={finalizando || guardando} >
+                            <img src="/icons/edit.png" alt="" aria-hidden="true" />
+                            <span>Editar</span>
                         </button>
                     </div>
 
@@ -474,10 +485,14 @@ export default function SeguroStep4({ expediente, formData, onGuardarCliente, on
                 </div>
             )}
 
-            <div className="seguro-publico__review-section">
+            {/*  <div className="seguro-publico__review-section">
                 <div className="seguro-publico__review-section-heading">
                     <div>
-                        <span>04</span>
+                        <div className="seguro-publico__review-section-icon">
+                            <img src="/icons/cuenta.png" alt="" aria-hidden="true" />
+                        </div>
+
+                        <span>03</span>
                         <div>
                             <h3>Modalidad de atención</h3>
                             <p>Modalidad seleccionada al completar el expediente.</p>
@@ -522,14 +537,18 @@ export default function SeguroStep4({ expediente, formData, onGuardarCliente, on
                         Los datos de la mudanza y de la unidad los completa la empresa mediante su enlace privado.
                     </p>
                 )}
-            </div>
+            </div> */}
 
             <div className="seguro-publico__review-section">
                 <div className="seguro-publico__review-section-heading">
                     <div>
-                        <span>05</span>
+                        <div className="seguro-publico__review-section-icon">
+                            <img src="/icons/hogar.png" alt="" aria-hidden="true" />
+                        </div>
+
+
                         <div>
-                            <h3>Datos de la mudanza</h3>
+                            <h3><span>03</span> Datos de la mudanza</h3>
                             <p>Información administrada por la empresa de mudanza.</p>
                         </div>
                     </div>
@@ -571,9 +590,12 @@ export default function SeguroStep4({ expediente, formData, onGuardarCliente, on
             <div className="seguro-publico__review-section">
                 <div className="seguro-publico__review-section-heading">
                     <div>
-                        <span>06</span>
+                        <div className="seguro-publico__review-section-icon">
+                            <img src="/icons/truck.png" alt="" aria-hidden="true" />
+                        </div>
+
                         <div>
-                            <h3>Datos de la unidad</h3>
+                            <h3><span>04</span> Datos de la unidad</h3>
                             <p>Información proporcionada por la empresa de mudanza.</p>
                         </div>
                     </div>
