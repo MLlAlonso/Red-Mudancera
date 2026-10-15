@@ -97,7 +97,7 @@
                                     <tr>
                                         <td valign="middle"
                                             style=" color: #ffffff; font-size: 18px; font-weight: bold; padding-right: 14px; ">
-                                            Continuar mi expediente
+                                            Continuar expediente
                                         </td>
 
                                         <td valign="middle" style=" color: #ffffff; font-size: 25px; line-height: 1; ">
@@ -114,7 +114,7 @@
                         <td align="center" style="padding:0 40px 30px;">
                             <a href="https://wa.me/5214421896433?text=Hola%20Mudanza%20F%C3%A1cil%2C%20tengo%20una%20duda%20sobre%20mi%20expediente%20de%20seguro."
                                 style=" display: block; box-sizing: border-box; width: 70%; background: #E8F5F0; color: #087A50; text-decoration: none; padding: 15px 24px; border-radius: 10px; font-size: 16px; font-weight: bold; text-align: center; border: 1px solid #C8E8DC; ">
-                                Tengo una duda por WhatsApp
+                                Duda por WhatsApp
                             </a>
                         </td>
                     </tr>

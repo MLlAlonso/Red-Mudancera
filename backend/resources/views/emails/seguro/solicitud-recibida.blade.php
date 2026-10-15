@@ -41,7 +41,7 @@
                     <tr>
                         <td style="padding:20px 30px 28px;">
                             <h1 style="color:#09233E; margin:0 0 15px; font-size:20px;">
-                               Hola {{ \Illuminate\Support\Str::before(trim($expediente->nombre), ' ') }},
+                                Hola {{ \Illuminate\Support\Str::before(trim($expediente->nombre), ' ') }},
                             </h1>
 
                             <p
@@ -70,29 +70,36 @@
                                             ¿Qué sigue?
                                         </h2>
 
-                                        <table width="100%" cellpadding="0" cellspacing="0" border="0"
-                                            style="margin-bottom:20px;">
+                                        <!-- PASO 1 -->
+                                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
                                             <tr>
-                                                <td width="32" valign="top">
-                                                    <div
-                                                        style="width:30px;height:30px;background:#15996F;border-radius:50%;text-align:center;line-height:28px;color:#ffffff;font-size:14px;font-weight:bold;">
+                                                <td align="center" style="padding-bottom:12px;">
+                                                    <div style="width:30px;height:30px;background:#15996F;border-radius:50%;text-align:center;line-height:30px;color:#ffffff;font-size:14px;font-weight:bold;">
                                                         1
                                                     </div>
                                                 </td>
+                                            </tr>
 
-                                                <td width="50" valign="top" align="center">
+                                            <tr>
+                                                <td align="center" style="padding-bottom:12px;">
                                                     <img src="https://app.mudanzafacil.com.mx/icons/video.png"
-                                                        alt="Descubre las ventajas" width="40" height="38"
-                                                        style="display:block;border:0;outline:none;text-decoration:none;background:transparent;">
+                                                        alt="Descubre las ventajas" width="40" height="40"
+                                                        style="display:block;margin:0 auto;border:0;outline:none;text-decoration:none;">
                                                 </td>
+                                            </tr>
 
-                                                <td valign="top" style="padding-left:10px;">
-                                                    <p
-                                                        style="margin:0 0 5px;color:#09233E;font-size:16px;line-height:1.4;font-weight:bold;">
+                                            <tr>
+                                                <td align="center" style="padding:0 10px 6px;">
+                                                    <p style="margin:0;color:#09233E;font-size:18px;line-height:1.4;font-weight:bold;text-align:center;">
                                                         Descubre las ventajas de asegurar tu mudanza con Mudanza Fácil
                                                     </p>
+                                                </td>
+                                            </tr>
 
-                                                    <p style="margin:0;color:#617487;font-size:14px;line-height:1.6;">
+                                            <tr>
+                                                <td align="center" style="padding:0 10px;">
+                                                    <p
+                                                        style="margin:0;color:#617487;font-size:16px;line-height:1.6;text-align:center;">
                                                         Mañana te mostraremos una forma más clara, segura y sencilla
                                                         de proteger tu patrimonio.
                                                     </p>
@@ -100,29 +107,37 @@
                                             </tr>
                                         </table>
 
-                                        <table width="100%" cellpadding="0" cellspacing="0" border="0"
-                                            style="margin-bottom:20px;">
+                                        <!-- PASO 2 -->
+                                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
                                             <tr>
-                                                <td width="32" valign="top">
-                                                    <div
-                                                        style="width:28px;height:28px;background:#2F5C8C;border-radius:50%;text-align:center;line-height:28px;color:#ffffff;font-size:13px;font-weight:bold;">
+                                                <td align="center" style="padding-bottom:12px;">
+                                                    <div style="width:30px;height:30px;background:#2F5C8C;border-radius:50%;text-align:center;line-height:30px;color:#ffffff;font-size:14px;font-weight:bold;">
                                                         2
                                                     </div>
                                                 </td>
+                                            </tr>
 
-                                                <td width="50" valign="top" align="center">
+                                            <tr>
+                                                <td align="center" style="padding-bottom:12px;">
                                                     <img src="https://app.mudanzafacil.com.mx/icons/confirmar.png"
-                                                        alt="Accede a tu expediente" width="38" height="38"
-                                                        style="display:block;border:0;outline:none;text-decoration:none;background:transparent;">
+                                                        alt="Accede a tu expediente" width="40" height="40"
+                                                        style="display:block;margin:0 auto;border:0;outline:none;text-decoration:none;">
                                                 </td>
+                                            </tr>
 
-                                                <td valign="top" style="padding-left:10px;">
+                                            <tr>
+                                                <td align="center" style="padding:0 10px 6px;">
                                                     <p
-                                                        style="margin:0 0 5px;color:#09233E;font-size:16px;line-height:1.4;font-weight:bold;">
+                                                        style="margin:0;color:#09233E;font-size:18px;line-height:1.4;font-weight:bold;text-align:center;">
                                                         Accede a tu expediente digital
                                                     </p>
+                                                </td>
+                                            </tr>
 
-                                                    <p style="margin:0;color:#617487;font-size:14px;line-height:1.6;">
+                                            <tr>
+                                                <td align="center" style="padding:0 10px;">
+                                                    <p
+                                                        style="margin:0;color:#617487;font-size:16px;line-height:1.6;text-align:center;">
                                                         Un solo lugar para reunir la información de tu mudanza y dejar
                                                         todo listo para tu seguro.
                                                     </p>
@@ -130,31 +145,41 @@
                                             </tr>
                                         </table>
 
+                                        <!-- PASO 3 -->
                                         <table width="100%" cellpadding="0" cellspacing="0" border="0">
                                             <tr>
-                                                <td width="32" valign="top">
+                                                <td align="center" style="padding-bottom:12px;">
                                                     <div
-                                                        style="width:28px;height:28px;background:#2F5C8C;border-radius:50%;text-align:center;line-height:28px;color:#ffffff;font-size:13px;font-weight:bold;">
+                                                        style="width:30px;height:30px;background:#2F5C8C;border-radius:50%;text-align:center;line-height:30px;color:#ffffff;font-size:14px;font-weight:bold;">
                                                         3
                                                     </div>
                                                 </td>
+                                            </tr>
 
-                                                <td width="50" valign="top" align="center">
+                                            <tr>
+                                                <td align="center" style="padding-bottom:12px;">
                                                     <img src="https://app.mudanzafacil.com.mx/icons/formulario.png"
-                                                        alt="Completa tu expediente" width="38" height="38"
-                                                        style="display:block;border:0;outline:none;text-decoration:none;background:transparent;">
+                                                        alt="Completa tu expediente" width="40" height="40"
+                                                        style="display:block;margin:0 auto;border:0;outline:none;text-decoration:none;">
                                                 </td>
+                                            </tr>
 
-                                                <td valign="top" style="padding-left:10px;">
+                                            <tr>
+                                                <td align="center" style="padding:0 10px 6px;">
                                                     <p
-                                                        style="margin:0 0 5px;color:#09233E;font-size:16px;line-height:1.4;font-weight:bold;">
+                                                        style="margin:0;color:#09233E;font-size:18px;line-height:1.4;font-weight:bold;text-align:center;">
                                                         Completa tu expediente cuando estés listo
                                                     </p>
+                                                </td>
+                                            </tr>
 
-                                                    <p style="margin:0;color:#617487;font-size:14px;line-height:1.6;">
+                                            <tr>
+                                                <td align="center" style="padding:0 10px;">
+                                                    <p
+                                                        style="margin:0;color:#617487;font-size:16px;line-height:1.6;text-align:center;">
                                                         Cuando tengas definida tu mudanza, podrás completar fácilmente
-                                                        la información necesaria,
-                                                        incluso solicitándola directamente a tu empresa de mudanza.
+                                                        la información necesaria, incluso solicitándola directamente
+                                                        a tu empresa de mudanza.
                                                     </p>
                                                 </td>
                                             </tr>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getEmpresaToken } from "@/utils/auth";
+import { useSearch } from "@/store/searchContext";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ServiceFilters from "@/components/filters/ServiceFilters";
@@ -13,113 +14,206 @@ import ConfirmFinalizarServicioModal from "@/components/modals/ConfirmFinalizarS
 import FinalizarServicioGananciaModal from "@/components/modals/FinalizarServicioGananciaModal";
 import ReporteMensualModal from "@/components/modals/ReporteMensualModal";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
-import { useSearch } from "@/store/searchContext";
 import ShareClienteReviewLinkModal from "@/components/modals/ShareClienteReviewLinkModal";
 
-import "@/styles/pages/empresa/_empresaDashboard.scss";
+import "@/styles/pages/empresa/_empresaPublicaciones.scss";
 
-export default function MisServiciosEmpresa() {
+const ESTADOS_PUBLICACION = [
+  {
+    id: "activo",
+    titulo: "Pendientes",
+    descripcion: "Sin gestionar",
+    icono: "●",
+  },
+  {
+    id: "asignado",
+    titulo: "Asignadas",
+    descripcion: "Con vendedor",
+    icono: "↗",
+  },
+  {
+    id: "finalizado",
+    titulo: "Vendidas",
+    descripcion: "Concluidas",
+    icono: "✓",
+  },
+  {
+    id: "en_proceso",
+    titulo: "Cotizadas",
+    descripcion: "Cotización enviada",
+    icono: "$",
+  },
+  {
+    id: "sin_respuesta",
+    titulo: "Sin respuesta",
+    descripcion: "No se logró contactar",
+    icono: "…",
+  },
+  {
+    id: "perdido",
+    titulo: "Perdidas",
+    descripcion: "No se concretaron",
+    icono: "×",
+  },
+];
+
+const DEFAULT_MONTH = "recentes";
+
+const getEstadoPublicacion = (item) => {
+  return String(item.estado_operacion || item.estado || "activo")
+    .trim()
+    .toLowerCase();
+};
+
+export default function MisPublicacionesEmpresa() {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
+  // Wizard de estados
+  const [estadoSeleccionado, setEstadoSeleccionado] = useState("activo");
+  // Filtros existentes
   const [filter, setFilter] = useState("todos");
+  const { search } = useSearch();
+  // Datos de empresa
+  const [empresa, setEmpresa] = useState(null);
+  // Filtro de periodo
+  const [selectedMonth, setSelectedMonth] = useState(DEFAULT_MONTH);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  // Finalizar servicio
   const [selectedService, setSelectedService] = useState(null);
   const [showConfirmFinalizar, setShowConfirmFinalizar] = useState(false);
   const [showGananciaModal, setShowGananciaModal] = useState(false);
+  // Reportes
   const [showReporte, setShowReporte] = useState(false);
-  const { search, city } = useSearch(); const [empresa, setEmpresa] = useState(null);
+  // Reseñas
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewLink, setReviewLink] = useState("");
-  const now = new Date();
-  const DEFAULT_MONTH = "recentes";
-  const [selectedMonth, setSelectedMonth] = useState(DEFAULT_MONTH);
-  const [selectedYear, setSelectedYear] = useState(now.getFullYear());
+  // Ocultar solicitudes y servicios
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showDeleteServiceModal, setShowDeleteServiceModal] = useState(false);
   const [selectedLeadId, setSelectedLeadId] = useState(null);
   const [selectedServiceId, setSelectedServiceId] = useState(null);
 
+  /**
+   * Actualiza el estado de un servicio o lead.
+   */
   const cambiarEstadoDirecto = async (id, estado, tipo) => {
     const token = getEmpresaToken();
     const endpoint = tipo === "lead" ? `/solicitudes-mudanza/leads/${id}/estado` : `/servicios/${id}/estado`;
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}${endpoint}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ estado }),
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`,
+        {
+          method: "PATCH",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ estado }),
+        }
+      );
+
+      if (!res.ok) {
+        alert("No se pudo actualizar el estado.");
+        return;
       }
-    );
 
-    if (!res.ok) {
-      alert("No se pudo actualizar el estado");
-      return;
+      const json = await res.json();
+
+      setServices((prev) => prev.map((item) => item.id === json.data.id && item.tipo_item
+        === (tipo === "lead" ? "lead" : "servicio") ? { ...item, ...json.data } : item));
+    } catch (error) {
+      console.error("Error al actualizar el estado:", error);
+      alert("Ocurrió un error al actualizar el estado.");
     }
-
-    const json = await res.json();
-
-    setServices((prev) =>
-      prev.map((s) => s.id === json.data.id ? { ...s, ...json.data } : s )
-    );
   };
 
+  /**
+   * Oculta un lead de la actividad de la empresa.
+   */
   const ocultarLead = async () => {
     const token = getEmpresaToken();
 
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/solicitudes-mudanza/leads/${selectedLeadId}/ocultar`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/solicitudes-mudanza/leads/${selectedLeadId}/ocultar`,
+        {
+          method: "PATCH",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!res.ok) {
+        alert("No se pudo ocultar la solicitud.");
+        return;
       }
-    );
 
-    setServices((prev) =>
-      prev.filter( (s) => !(s.tipo_item === "lead" && s.id === selectedLeadId) )
-    );
+      setServices((prev) => prev.filter((item) => !(item.tipo_item === "lead" && item.id === selectedLeadId))
+      );
 
-    setShowDeleteModal(false);
-    setSelectedLeadId(null);
+      setShowDeleteModal(false);
+      setSelectedLeadId(null);
+    } catch (error) {
+      console.error("Error al ocultar la solicitud:", error);
+      alert("Ocurrió un error al ocultar la solicitud.");
+    }
   };
 
+  /**
+   * Finaliza un servicio y lo retira de esta lista, conservando el comportamiento actual de la aplicación.
+   */
   const ocultarServicio = async () => {
     const token = getEmpresaToken();
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/servicios/${selectedServiceId}/estado`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          estado: "finalizado",
-        }),
-      }
-    );
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/servicios/${selectedServiceId}/estado`,
+        {
+          method: "PATCH",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            estado: "finalizado",
+          }),
+        }
+      );
 
-    if (!res.ok) {
-      alert("No se pudo finalizar el servicio");
+      if (!res.ok) {
+        alert("No se pudo finalizar el servicio.");
+        return;
+      }
+
+      const json = await res.json();
+
+      setServices((prev) => prev.map((item) => item.tipo_item === "servicio" && item.id === selectedServiceId ?
+        { ...item, ...(json.data || {}), estado: "finalizado", } : item));
+
+      setShowDeleteServiceModal(false);
+      setSelectedServiceId(null);
+    } catch (error) {
+      console.error("Error al finalizar el servicio:", error);
+      alert("Ocurrió un error al finalizar el servicio.");
+    }
+  };
+
+  /**
+   * Carga los servicios, los leads y los datos de la empresa.
+   */
+  useEffect(() => {
+    const token = getEmpresaToken();
+
+    if (!token) {
+      setLoading(false);
       return;
     }
 
-    setServices((prev) =>
-      prev.filter( (s) => !(s.tipo_item === "servicio" && s.id === selectedServiceId) )
-    );
-
-    setShowDeleteServiceModal(false);
-    setSelectedServiceId(null);
-  };
-
-  useEffect(() => {
-    const token = getEmpresaToken();
-    if (!token) return;
+    let cancelled = false;
 
     const fetchServicios = async (month) => {
       const res = await fetch(
@@ -131,6 +225,10 @@ export default function MisServiciosEmpresa() {
           },
         }
       );
+
+      if (!res.ok) {
+        throw new Error("No se pudieron cargar los servicios.");
+      }
 
       return res.json();
     };
@@ -146,23 +244,23 @@ export default function MisServiciosEmpresa() {
         }
       );
 
+      if (!res.ok) {
+        throw new Error("No se pudieron cargar las solicitudes.");
+      }
+
       return res.json();
     };
 
-    setLoading(true);
-
     const cargar = async () => {
+      setLoading(true);
+
       try {
+        const fechaActual = new Date();
         let meses = [];
 
         if (selectedMonth === DEFAULT_MONTH) {
-          const actual = now.getMonth() + 1;
-          let anterior = actual - 1;
-
-          if (anterior === 0) {
-            anterior = 12;
-          }
-
+          const actual = fechaActual.getMonth() + 1;
+          const anterior = actual === 1 ? 12 : actual - 1;
           meses = [actual, anterior];
         } else {
           meses = [selectedMonth];
@@ -172,24 +270,9 @@ export default function MisServiciosEmpresa() {
         const leads = [];
 
         for (const mes of meses) {
-          const [serviciosRes, leadsRes] = await Promise.all([
-            fetchServicios(mes),
-            fetchLeads(mes),
-          ]);
-
-          servicios.push(
-            ...(serviciosRes?.data || []).map((s) => ({
-              ...s,
-              tipo_item: "servicio",
-            }))
-          );
-
-          leads.push(
-            ...(leadsRes?.data || []).map((l) => ({
-              ...l,
-              tipo_item: "lead",
-            }))
-          );
+          const [serviciosRes, leadsRes] = await Promise.all([fetchServicios(mes), fetchLeads(mes),]);
+          servicios.push(...(serviciosRes?.data || []).map((item) => ({ ...item, tipo_item: "servicio", })));
+          leads.push(...(leadsRes?.data || []).map((item) => ({ ...item, tipo_item: "lead", })));
         }
 
         const empresaRes = await fetch(
@@ -202,259 +285,433 @@ export default function MisServiciosEmpresa() {
           }
         );
 
+        if (!empresaRes.ok) {
+          throw new Error("No se pudieron cargar los datos de la empresa.");
+        }
+
         const empresaData = await empresaRes.json();
-        setEmpresa(empresaData);
+        const estadoOrder = { activo: 1, asignado: 2, finalizado: 3, };
 
-        const estadoOrder = {
-          activo: 1,
-          asignado: 2,
-          finalizado: 3,
-        };
+        const combinado = [...servicios, ...leads].sort((a, b) => {
+          const estadoA = estadoOrder[getEstadoPublicacion(a)] ?? 99;
+          const estadoB = estadoOrder[getEstadoPublicacion(b)] ?? 99;
 
-        const combinado = [...servicios, ...leads]
-          .sort((a, b) => {
-            const estadoA = estadoOrder[a.estado_operacion || a.estado] || 99;
-            const estadoB = estadoOrder[b.estado_operacion || b.estado] || 99;
+          if (estadoA !== estadoB) {
+            return estadoA - estadoB;
+          }
 
-            if (estadoA !== estadoB) {
-              return estadoA - estadoB;
-            }
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
 
-            return (new Date(b.created_at) - new Date(a.created_at));
-          });
+        if (!cancelled) {
+          setEmpresa(empresaData);
+          setServices(combinado);
+        }
+      } catch (error) {
+        console.error("Error al cargar las publicaciones:", error);
 
-        setServices(combinado);
+        if (!cancelled) {
+          setServices([]);
+        }
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     };
 
     cargar();
+    return () => {
+      cancelled = true;
+    };
   }, [selectedMonth, selectedYear]);
 
-  const visible = services
-    .filter((s) => {
+  /**
+   * Primero aplicamos los filtros complementarios, Después el wizard filtra por estado.
+   */
+  const publicacionesFiltradas = services
+    .filter((item) => {
       if (filter === "todos") return true;
 
       if (filter === "cliente") {
-        return s.tipo_item === "lead";
+        return item.tipo_item === "lead";
       }
 
       if (filter === "busco" || filter === "ofrezco") {
-        return (s.tipo_item === "servicio" && s.tipo === filter);
+        return (item.tipo_item === "servicio" && item.tipo === filter);
       }
 
       return true;
     })
-    .filter((s) => {
-      if (!search) return true;
-      const q = search.toLowerCase();
+    .filter((item) => {
+      if (!search?.trim()) return true;
+      const query = search.trim().toLowerCase();
 
       return (
-        s.empresa?.empresa?.toLowerCase().includes(q) ||
-        s.origen?.toLowerCase().includes(q) ||
-        s.destino?.toLowerCase().includes(q) ||
-        s.nombre?.toLowerCase().includes(q) ||
-        s.telefono?.toLowerCase().includes(q)
+        item.empresa?.empresa?.toLowerCase().includes(query) ||
+        item.origen?.toLowerCase().includes(query) ||
+        item.destino?.toLowerCase().includes(query) ||
+        item.nombre?.toLowerCase().includes(query) ||
+        item.telefono?.toLowerCase().includes(query)
       );
     });
+
+  // Los contadores reflejan el resultado de los filtros complementarios.
+  const conteos = ESTADOS_PUBLICACION.reduce((resultado, estado) => {
+    resultado[estado.id] = publicacionesFiltradas.filter((item) => getEstadoPublicacion(item) === estado.id).length;
+    return resultado;
+  }, {});
+
+  const publicacionesVisibles = publicacionesFiltradas.filter((item) => getEstadoPublicacion(item) === estadoSeleccionado);
+
+  const cambiarPeriodo = (value) => {
+    setSelectedMonth(value === DEFAULT_MONTH ? DEFAULT_MONTH : Number(value));
+  };
+
+  const abrirFinalizacion = (item) => {
+    setSelectedService(item);
+    setShowConfirmFinalizar(true);
+  };
+
+  const cancelarFinalizacion = () => {
+    setShowConfirmFinalizar(false);
+    setSelectedService(null);
+  };
+
+  const abrirEliminarLead = (id) => {
+    setSelectedLeadId(id);
+    setShowDeleteModal(true);
+  };
+
+  const abrirFinalizarServicio = (id) => {
+    setSelectedServiceId(id);
+    setShowDeleteServiceModal(true);
+  };
+
+  const cerrarEliminarLead = () => {
+    setShowDeleteModal(false);
+    setSelectedLeadId(null);
+  };
+
+  const cerrarFinalizarServicio = () => {
+    setShowDeleteServiceModal(false);
+    setSelectedServiceId(null);
+  };
 
   return (
     <>
       <Header />
 
-      <main className="empresa-dashboard">
-        <div className="empresa-dashboard__header">
-          <h1 className="empresa-dashboard__title">Mi Actividad</h1>
-          <p className="empresa-dashboard__subtitle">
-            Aquí puedes ver y gestionar tus cargas y contactos comprados
-          </p>
-        </div>
+      <main className="empresa-publicaciones">
+        {/* Encabezado */}
+        <header className="empresa-publicaciones__header">
+          <div className="empresa-publicaciones__heading">
+            <h1 className="empresa-publicaciones__title">
+              Mi Actividad
+            </h1>
 
-        <div className="empresa-dashboard__controls" id="publicaciones">
-          <ServiceFilters onChange={setFilter} />
-
-          <div className="actividad-filter">
-            <select
-              value={selectedMonth}
-              onChange={(e) => {
-                const value = e.target.value;
-
-                if (value === DEFAULT_MONTH) {
-                  setSelectedMonth(DEFAULT_MONTH);
-                } else {
-                  setSelectedMonth(Number(value));
-                }
-              }}
-            >
-              <option value={DEFAULT_MONTH}> Último bimestre </option>
-              <option value={1}>Enero</option>
-              <option value={2}>Febrero</option>
-              <option value={3}>Marzo</option>
-              <option value={4}>Abril</option>
-              <option value={5}>Mayo</option>
-              <option value={6}>Junio</option>
-              <option value={7}>Julio</option>
-              <option value={8}>Agosto</option>
-              <option value={9}>Septiembre</option>
-              <option value={10}>Octubre</option>
-              <option value={11}>Noviembre</option>
-              <option value={12}>Diciembre</option>
-            </select>
-
-            <select value={selectedYear} onChange={(e) => setSelectedYear(Number(e.target.value))} >
-              {[2026, 2027, 2028, 2029, 2030].map((y) => (
-                <option key={y} value={y}>
-                  {y}
-                </option>
-              ))}
-            </select>
+            <p className="empresa-publicaciones__subtitle">
+              Aquí puedes ver y gestionar tus cargas y contactos comprados
+            </p>
           </div>
 
-          <button className="btn-outline" id="reporte" onClick={() => setShowReporte(true)} >
-            Crear reporte
-          </button>
-        </div>
+          <div className="empresa-publicaciones__header-actions">
+            <button type="button" className="empresa-publicaciones__report-button" onClick={() => setShowReporte(true)}  >
+              <span aria-hidden="true">▤</span>
+              Crear reporte
+            </button>
+          </div>
+        </header>
 
-        <Button_crud value="+" onClick={() => (window.location.href = "/empresa/cargas")} />
+        {/* Filtros y herramientas */}
+        <section className="publicaciones-toolbar" aria-label="Filtros de publicaciones" >
+          <div className="publicaciones-toolbar__filters">
+            <div className="publicaciones-toolbar__filter-group">
+              <span className="publicaciones-toolbar__label">
+                Tipo de publicación
+              </span>
 
-        <div className="empresa-dashboard__cards">
-          {loading && Array.from({ length: 6 }).map((_, i) => (
-            <ServiceCardSkeleton key={i} />
-          ))}
+              <ServiceFilters onChange={setFilter} />
+            </div>
 
-          {!loading && visible.map((s) => {
-            if (s.tipo_item === "lead") {
-              const estadoLead = s.estado_operacion || "activo";
+            <div className="publicaciones-toolbar__period">
+              <label className="publicaciones-toolbar__field" htmlFor="publicaciones-month" >
+                <span>Periodo</span>
+
+                <select id="publicaciones-month" value={selectedMonth} onChange={(event) => cambiarPeriodo(event.target.value)} >
+                  <option value={DEFAULT_MONTH}>Último bimestre</option>
+                  <option value={1}>Enero</option>
+                  <option value={2}>Febrero</option>
+                  <option value={3}>Marzo</option>
+                  <option value={4}>Abril</option>
+                  <option value={5}>Mayo</option>
+                  <option value={6}>Junio</option>
+                  <option value={7}>Julio</option>
+                  <option value={8}>Agosto</option>
+                  <option value={9}>Septiembre</option>
+                  <option value={10}>Octubre</option>
+                  <option value={11}>Noviembre</option>
+                  <option value={12}>Diciembre</option>
+                </select>
+              </label>
+
+              <label className="publicaciones-toolbar__field" htmlFor="publicaciones-year" >
+                <span>Año</span>
+
+                <select id="publicaciones-year" value={selectedYear} onChange={(event) => setSelectedYear(Number(event.target.value))} >
+                  {[2026, 2027, 2028, 2029, 2030].map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div className="publicaciones-toolbar__actions">
+            <Button_crud value="+" onClick={() => { window.location.href = "/empresa/cargas"; }} />
+          </div>
+        </section>
+
+        {/* Navegación wizard */}
+        <section className="publicaciones-wizard" aria-label="Estados de las publicaciones" >
+          <div className="publicaciones-wizard__intro">
+            <div>
+              <h2 className="publicaciones-wizard__title">
+                Tu actividad
+              </h2>
+
+              <p className="publicaciones-wizard__description">
+                Selecciona una etapa para consultar sus publicaciones.
+              </p>
+            </div>
+
+            <span className="publicaciones-wizard__total">
+              {publicacionesFiltradas.length}{" "}
+              {publicacionesFiltradas.length === 1 ? "publicación" : "publicaciones"}
+            </span>
+          </div>
+
+          <div className="publicaciones-wizard__steps">
+            {ESTADOS_PUBLICACION.map((estado, index) => {
+              const activo = estadoSeleccionado === estado.id;
 
               return (
-                <SolicitudMudanzaCard
-                  key={`lead-${s.id}`}
-                  id={s.id}
-                  origen={s.origen}
-                  destino={s.destino}
-                  fechaRecoleccion={s.fecha_recoleccion}
-                  inventario={s.inventario}
-                  tipoMudanza={s.tipo_mudanza}
-                  fecha={new Date(s.created_at).toLocaleDateString()}
-                  telefono={s.telefono}
-                  isLead={true}
-                  showContact={false}
-                  estado={estadoLead}
-                  nombreCliente={s.nombre}
-                  tipoVivienda={s.tipo_vivienda}
-                  empresaNombre={empresa?.empresa}
-                  showDelete={true}
-                  showNotes={true}
-                  onDelete={() => { setSelectedLeadId(s.id); setShowDeleteModal(true); }}
-                  onChangeEstado={(id, nuevoEstado) => {
-                    setSelectedService({ ...s, tipo_item: "lead" });
+                <button
+                  key={estado.id}
+                  type="button"
+                  className={["publicaciones-wizard__step", `publicaciones-wizard__step--${estado.id}`, activo ? "publicaciones-wizard__step--selected" : "",].filter(Boolean).join(" ")}
+                  aria-pressed={activo}
+                  onClick={() => setEstadoSeleccionado(estado.id)}
+                >
+                  <span className="publicaciones-wizard__step-top">
+                    <span className="publicaciones-wizard__step-number">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
 
+                    <span className="publicaciones-wizard__step-icon" aria-hidden="true" >
+                      {estado.icono}
+                    </span>
+                  </span>
+
+                  <span className="publicaciones-wizard__step-name">
+                    {estado.titulo}
+                  </span>
+
+                  <span className="publicaciones-wizard__step-description">
+                    {estado.descripcion}
+                  </span>
+
+                  <span className="publicaciones-wizard__step-bottom">
+                    <span className="publicaciones-wizard__step-count">
+                      {conteos[estado.id]}
+                    </span>
+
+                    <span className="publicaciones-wizard__step-link">
+                      {activo ? "Seleccionada" : "Ver publicaciones"}
+                    </span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Resultados */}
+        <section className="publicaciones-resultados" aria-live="polite" aria-busy={loading} >
+          <div className="publicaciones-resultados__heading">
+            <div>
+              <h2 className="publicaciones-resultados__title">
+                {ESTADOS_PUBLICACION.find((estado) => estado.id === estadoSeleccionado)?.titulo}
+              </h2>
+
+              <p className="publicaciones-resultados__subtitle">
+                {ESTADOS_PUBLICACION.find((estado) => estado.id === estadoSeleccionado)?.descripcion}
+              </p>
+            </div>
+
+            <span className="publicaciones-resultados__count">
+              {conteos[estadoSeleccionado]}{" "}
+              {conteos[estadoSeleccionado] === 1 ? "resultado" : "resultados"}
+            </span>
+          </div>
+
+          <div className="empresa-publicaciones__cards">
+            {loading && Array.from({ length: 6 }).map((_, index) => (<ServiceCardSkeleton key={`skeleton-${index}`} />))}
+
+            {!loading && publicacionesVisibles.map((item) => {
+              if (item.tipo_item === "lead") {
+                return (
+                  <SolicitudMudanzaCard
+                    key={`lead-${item.id}`}
+                    id={item.id}
+                    origen={item.origen}
+                    destino={item.destino}
+                    fechaRecoleccion={item.fecha_recoleccion}
+                    inventario={item.inventario}
+                    tipoMudanza={item.tipo_mudanza}
+                    fecha={item.created_at ? new Date(item.created_at).toLocaleDateString("es-MX") : "Sin fecha"}
+                    telefono={item.telefono}
+                    isLead={true}
+                    showContact={false}
+                    estado={getEstadoPublicacion(item)}
+                    nombreCliente={item.nombre}
+                    tipoVivienda={item.tipo_vivienda}
+                    empresaNombre={empresa?.empresa}
+                    showDelete={true}
+                    showNotes={true}
+                    onDelete={() => abrirEliminarLead(item.id)}
+                    onChangeEstado={(id, nuevoEstado) => {
+                      if (nuevoEstado === "finalizado") {
+                        abrirFinalizacion({ ...item, tipo_item: "lead", });
+                        return;
+                      }
+                      cambiarEstadoDirecto(id, nuevoEstado, "lead");
+                    }}
+                  />
+                );
+              }
+
+              return (
+                <ServiceCard
+                  key={`servicio-${item.id}`}
+                  id={item.id}
+                  estado={getEstadoPublicacion(item)}
+                  type={item.tipo}
+                  origen={item.origen}
+                  destino={item.destino}
+                  volumen={item.volumen ? `${item.volumen} m³` : "No especificado"}
+                  tipoCarga={item.tipo_carga}
+                  tipoVehiculo={item.tipo_vehiculo}
+                  empresa={item.empresa?.empresa ?? "Empresa"}
+                  fecha={item.created_at ? new Date(item.created_at).toLocaleDateString("es-MX") : "Sin fecha"}
+                  showContact={false}
+                  showDelete={true}
+                  onDelete={() => abrirFinalizarServicio(item.id)}
+                  onChangeEstado={(id, nuevoEstado) => {
                     if (nuevoEstado === "finalizado") {
-                      setShowConfirmFinalizar(true);
+                      abrirFinalizacion({ ...item, tipo_item: "servicio", });
                       return;
                     }
-
-                    cambiarEstadoDirecto(id, nuevoEstado, "lead");
-                    setSelectedService(null);
+                    cambiarEstadoDirecto(id, nuevoEstado, "servicio");
                   }}
                 />
               );
-            }
+            })}
+          </div>
 
-            return (
-              <ServiceCard
-                key={`servicio-${s.id}`}
-                id={s.id}
-                estado={s.estado}
-                type={s.tipo}
-                origen={s.origen}
-                destino={s.destino}
-                volumen={s.volumen ? `${s.volumen} m³` : "No especificado"}
-                tipoCarga={s.tipo_carga}
-                tipoVehiculo={s.tipo_vehiculo}
-                empresa={s.empresa?.empresa ?? "Empresa"}
-                fecha={new Date(s.created_at).toLocaleDateString()}
-                showContact={false}
-                showDelete={true}
-                onDelete={() => { setSelectedServiceId(s.id); setShowDeleteServiceModal(true); }}
-                onChangeEstado={(id, nuevoEstado) => {
-                  setSelectedService(s);
-                  if (nuevoEstado === "finalizado") {
-                    setShowConfirmFinalizar(true);
-                    return;
-                  }
-                  cambiarEstadoDirecto(id, nuevoEstado, "servicio");
-                  setSelectedService(null);
-                }}
-              />
-            );
-          })}
-        </div>
+          {!loading && publicacionesVisibles.length === 0 && (
+            <div className="publicaciones-empty">
+              <div className="publicaciones-empty__icon" aria-hidden="true">
+                {estadoSeleccionado === "activo" && "○"}
+                {estadoSeleccionado === "asignado" && "↗"}
+                {estadoSeleccionado === "finalizado" && "✓"}
+              </div>
+
+              <h3 className="publicaciones-empty__title">
+                No hay publicaciones en este estado
+              </h3>
+
+              <p className="publicaciones-empty__description">
+                No encontramos publicaciones que coincidan con el estado y
+                los filtros seleccionados. Prueba con otro periodo o tipo de
+                publicación.
+              </p>
+
+              <button type="button" className="publicaciones-empty__button" onClick={() => { setFilter("todos"); setSelectedMonth(DEFAULT_MONTH); setSelectedYear(new Date().getFullYear()); }} >
+                Restablecer filtros
+              </button>
+            </div>
+          )}
+        </section>
       </main>
 
-      <ConfirmFinalizarServicioModal
-        open={showConfirmFinalizar}
-        onCancel={() => { setShowConfirmFinalizar(false); setSelectedService(null); }}
-        onConfirm={() => { setShowConfirmFinalizar(false); setShowGananciaModal(true); }}
-      />
+      {/* Confirmación de finalización */}
+      <ConfirmFinalizarServicioModal open={showConfirmFinalizar} onCancel={cancelarFinalizacion} onConfirm={() => { setShowConfirmFinalizar(false); setShowGananciaModal(true); }} />
 
+      {/* Ganancia y generación de enlace de reseña */}
       <FinalizarServicioGananciaModal
         open={showGananciaModal}
         servicio={selectedService}
         onClose={() => { setShowGananciaModal(false); setSelectedService(null); }}
         onSuccess={async (updated) => {
-          setServices((prev) => prev.map((s) => s.id === updated.id ? { ...s, ...updated } : s ) );
+          setServices((prev) => prev.map((item) => item.id === updated.id && item.tipo_item === (selectedService?.tipo_item || "servicio")
+            ? { ...item, ...updated, estado: updated.estado || "finalizado", } : item));
+          setShowGananciaModal(false);
+          setSelectedService(null);
 
           try {
             const token = getEmpresaToken();
+
             const res = await fetch(
               `${process.env.NEXT_PUBLIC_API_URL}/empresa/resenas/link`,
               {
                 method: "POST",
                 headers: {
+                  Accept: "application/json",
                   Authorization: `Bearer ${token}`,
                 },
               }
             );
 
             const data = await res.json();
-            if (data?.url) {
+
+            if (res.ok && data?.url) {
               setReviewLink(data.url);
               setShowReviewModal(true);
             }
-
-          } catch (err) {
-            console.error("Error generando link de reseña");
+          } catch (error) {
+            console.error("Error generando link de reseña:", error);
           }
         }}
       />
 
+      {/* Reporte mensual */}
       <ReporteMensualModal open={showReporte} onClose={() => setShowReporte(false)} />
 
-      <ShareClienteReviewLinkModal
-        open={showReviewModal}
-        link={reviewLink}
-        onClose={() => { setShowReviewModal(false); setReviewLink(""); }}
-      />
+      {/* Compartir reseña */}
+      <ShareClienteReviewLinkModal open={showReviewModal} link={reviewLink} onClose={() => { setShowReviewModal(false); setReviewLink(""); }} />
 
+      {/* Ocultar solicitud */}
       <ConfirmDeleteModal
         open={showDeleteModal}
         title="Eliminar solicitud"
         message="Esta solicitud dejará de mostrarse en Mi Actividad."
         confirmText="Eliminar"
         cancelText="Cancelar"
-        onCancel={() => { setShowDeleteModal(false); setSelectedLeadId(null); }}
+        onCancel={cerrarEliminarLead}
         onConfirm={ocultarLead}
       />
 
+      {/* Finalizar y retirar servicio de la lista */}
       <ConfirmDeleteModal
         open={showDeleteServiceModal}
         title="Finalizar servicio"
         message="El servicio será marcado como finalizado y dejará de mostrarse en Mi Actividad."
         confirmText="Finalizar"
         cancelText="Cancelar"
-        onCancel={() => { setShowDeleteServiceModal(false); setSelectedServiceId(null); }}
+        onCancel={cerrarFinalizarServicio}
         onConfirm={ocultarServicio}
       />
 

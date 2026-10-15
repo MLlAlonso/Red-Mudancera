@@ -104,7 +104,7 @@
                                     <tr>
                                         <td valign="middle"
                                             style=" color: #ffffff; font-size: 18px; font-weight: bold; padding-right: 14px; ">
-                                            Continuar mi expediente
+                                            Continuar expediente
                                         </td>
 
                                         <td valign="middle" style=" color: #ffffff; font-size: 25px; line-height: 1; ">
@@ -134,7 +134,7 @@
                 text-align: center;
                 border: 1px solid #C8E8DC;
             ">
-                                Tengo una duda por WhatsApp
+                                Duda por WhatsApp
                             </a>
                         </td>
                     </tr>

@@ -59,12 +59,7 @@
                             <table width="100%" cellpadding="0" cellspacing="0" border="0"
                                 style="background:#EDF4FA; border:1px solid #D5E5F2; border-radius:12px;">
                                 <tr>
-                                    <td width="76" valign="middle" align="center" style="padding:20px 4px 20px 4px;">
-                                        <img src="https://app.mudanzafacil.com.mx/icons/verificado.png" alt=""
-                                            width="48" height="48" style="display:block; width:48px; height:48px;">
-                                    </td>
-
-                                    <td valign="middle" style="padding:20px 18px 20px 0px;">
+                                    <td valign="middle" style="padding:20px 18px 20px 20px;">
                                         <h3 style="margin:0 0 8px; color:#09233E; font-size:17px;">
                                             Importante
                                         </h3>
