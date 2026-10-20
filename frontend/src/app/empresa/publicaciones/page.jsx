@@ -26,22 +26,22 @@ const ESTADOS_PUBLICACION = [
     icono: "●",
   },
   {
-    id: "asignado",
-    titulo: "Asignadas",
-    descripcion: "Con vendedor",
+    id: "en_proceso",
+    titulo: "En proceso",
+    descripcion: "Seguimiento en curso",
     icono: "↗",
+  },
+  {
+    id: "asignado",
+    titulo: "Cotizadas",
+    descripcion: "Cotización enviada",
+    icono: "$",
   },
   {
     id: "finalizado",
     titulo: "Vendidas",
     descripcion: "Concluidas",
     icono: "✓",
-  },
-  {
-    id: "en_proceso",
-    titulo: "Cotizadas",
-    descripcion: "Cotización enviada",
-    icono: "$",
   },
   {
     id: "sin_respuesta",

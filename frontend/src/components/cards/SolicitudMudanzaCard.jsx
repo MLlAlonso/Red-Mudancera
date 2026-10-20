@@ -108,8 +108,8 @@ export default function SolicitudMudanzaCard({
               labels={{
                 activo: "Pendiente",
                 sin_respuesta: "Sin respuesta",
-                asignado: "En proceso",
-                en_proceso: "Cotizado",
+                en_proceso: "En proceso",
+                asignado: "Cotizado",
                 finalizado: "Vendido",
                 perdido: "Perdido",
               }}
