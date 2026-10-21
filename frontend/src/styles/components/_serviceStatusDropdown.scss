@@ -83,12 +83,12 @@
     }
 
     &.asignado:hover {
-      background: variables.$tertiary-hover;
+      background: variables.$azul_002;
       color: #fff;
     }
 
     &.en_proceso:hover {
-      background: variables.$azul_002;
+      background: variables.$tertiary-hover;
       color: #fff;
     }
 

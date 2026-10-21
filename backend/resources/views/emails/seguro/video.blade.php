@@ -63,7 +63,7 @@
                             <table width="100%" cellpadding="0" cellspacing="0" border="0">
                                 <tr>
                                     <td align="center">
-                                        <a href="https://res.cloudinary.com/dt3jhwxfw/video/upload/v1791503153/WhatsApp_Video_2026-10-08_at_5.10.34_PM_ccwbze.mp4"
+                                        <a href="https://res.cloudinary.com/dt3jhwxfw/video/upload/v1792472290/WhatsApp_Video_2026-10-19_at_10.07.05_PM_pjjxeo.mp4"
                                             target="_blank" style=" display:block; text-decoration:none;
                                         ">
 

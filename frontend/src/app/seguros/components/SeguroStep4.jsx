@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -413,7 +412,7 @@ export default function SeguroStep4({ expediente, formData, onGuardarCliente, on
                         </div>
                     </div>
 
-                    <button type="button" className="seguro-publico__review-edit" onClick={abrirModalCliente} disabled={finalizando || guardando} >
+                    <button type="button" className="seguro-publico__review-edit" onClick={abrirModalSeguro} disabled={finalizando || guardando} >
                         <img src="/icons/edit.png" alt="" aria-hidden="true" />
                         <span>Editar</span>
                     </button>
@@ -460,7 +459,7 @@ export default function SeguroStep4({ expediente, formData, onGuardarCliente, on
                             </div>
                         </div>
 
-                        <button type="button" className="seguro-publico__review-edit" onClick={abrirModalCliente} disabled={finalizando || guardando} >
+                        <button type="button" className="seguro-publico__review-edit" onClick={abrirModalSeguro} disabled={finalizando || guardando} >
                             <img src="/icons/edit.png" alt="" aria-hidden="true" />
                             <span>Editar</span>
                         </button>
@@ -648,9 +647,7 @@ export default function SeguroStep4({ expediente, formData, onGuardarCliente, on
                 </div>
             )}
 
-            {faltantesCliente.length > 0 ||
-                faltantesSeguro.length > 0 ||
-                faltantesAsistencia.length > 0 ? (
+            {faltantesCliente.length > 0 || faltantesSeguro.length > 0 || faltantesAsistencia.length > 0 ? (
                 <div className="seguro-publico__review-notice seguro-publico__review-notice--warning">
                     <div className="seguro-publico__review-notice-icon">!</div>
                     <div>
@@ -659,11 +656,7 @@ export default function SeguroStep4({ expediente, formData, onGuardarCliente, on
                             Corrige los siguientes datos antes de finalizar:
                         </p>
                         <p>
-                            {[
-                                ...faltantesCliente,
-                                ...faltantesSeguro,
-                                ...faltantesAsistencia,
-                            ].join(", ")}.
+                            {[...faltantesCliente, ...faltantesSeguro, ...faltantesAsistencia,].join(", ")}.
                         </p>
                     </div>
                 </div>

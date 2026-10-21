@@ -47,9 +47,7 @@ export default function ServiceCard({
   }[tipoVehiculo] || "No especificado";
 
   // Sincroniza cuando el backend responda
-  useEffect(() => {
-    setEstadoLocal(estado);
-  }, [estado]);
+  useEffect(() => { setEstadoLocal(estado); }, [estado]);
 
   return (
     <motion.div
@@ -120,10 +118,7 @@ export default function ServiceCard({
       <p className="service-card__date">Publicado el {fecha}</p>
 
       <div className="service-card__actions">
-        <button
-          className="btn-outline"
-          onClick={() => router.push(`/servicios/${id}`)}
-        >
+        <button className="btn-outline" onClick={() => router.push(`/servicios/${id}`)} >
           Ver detalles
         </button>
 

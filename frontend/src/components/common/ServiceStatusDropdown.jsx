@@ -4,11 +4,7 @@ import { useState } from "react";
 
 export default function ServiceStatusDropdown({ estado, onSelect, labels = {}, options = [], }) {
   const [open, setOpen] = useState(false);
-
-  const estados =
-    options.length > 0
-      ? options
-      : ["activo", "asignado", "finalizado"];
+  const estados = options.length > 0 ? options : ["activo", "asignado", "finalizado"];
 
   const labelMap = {
     activo: labels.activo || "Activo",
@@ -21,11 +17,7 @@ export default function ServiceStatusDropdown({ estado, onSelect, labels = {}, o
 
   return (
     <div className="service-status">
-      <button
-        type="button"
-        className={`service-status__btn is-${estado}`}
-        onClick={() => setOpen(!open)}
-      >
+      <button type="button" className={`service-status__btn is-${estado}`} onClick={() => setOpen(!open)} >
         {labelMap[estado]}
         <span className={`arrow ${open ? "open" : ""}`}>▾</span>
       </button>
@@ -35,11 +27,7 @@ export default function ServiceStatusDropdown({ estado, onSelect, labels = {}, o
           {estados
             .filter((item) => item !== estado)
             .map((item) => (
-              <div
-                key={item}
-                className={`service-status__item ${item}`}
-                onClick={() => { setOpen(false); onSelect(item); }}
-              >
+              <div key={item} className={`service-status__item ${item}`} onClick={() => { setOpen(false); onSelect(item); }} >
                 {labelMap[item]}
               </div>
             ))}

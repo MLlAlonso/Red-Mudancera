@@ -188,7 +188,7 @@
             border: 1px solid #e3e9e8;
             border-radius: 10px;
             background: #fff;
-            color: var(--pub-text);
+            color: $text-muted;
             text-align: left;
             cursor: pointer;
             transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
@@ -223,11 +223,11 @@
 
                 .publicaciones-wizard__step-icon,
                 .publicaciones-wizard__step-count {
-                    color: var(--pub-success);
+                    color: $error;
                 }
 
                 .publicaciones-wizard__step-icon {
-                    background: rgba($success, 0.1);
+                    background: rgba($error, 0.1);
                 }
             }
 
@@ -235,55 +235,51 @@
 
                 .publicaciones-wizard__step-icon,
                 .publicaciones-wizard__step-count {
-                    color: #a7650b;
+                    color: $azul_002;
                 }
 
                 .publicaciones-wizard__step-icon {
-                    background: rgba($tertiary, 0.17);
+                    background: rgba($azul_002, 0.17);
                 }
             }
 
             &--finalizado {
-
                 .publicaciones-wizard__step-icon,
                 .publicaciones-wizard__step-count {
-                    color: var(--pub-blue);
+                    color: $success;
                 }
 
                 .publicaciones-wizard__step-icon {
-                    background: rgba($azul_001, 0.11);
+                    background: rgba($success, 0.11);
                 }
             }
 
             &--en_proceso {
-
                 .publicaciones-wizard__step-icon,
                 .publicaciones-wizard__step-count {
-                    color: var(--pub-purple);
+                    color: $tertiary-hover;
                 }
 
                 .publicaciones-wizard__step-icon {
-                    background: rgba($morado_001, 0.11);
+                    background: rgba($tertiary-hover, 0.11);
                 }
             }
 
             &--sin_respuesta {
-
                 .publicaciones-wizard__step-icon,
                 .publicaciones-wizard__step-count {
-                    color: var(--pub-text-muted);
+                    color: #696969;
                 }
 
                 .publicaciones-wizard__step-icon {
-                    background: rgba($secondary, 0.2);
+                    background: rgba(#696969, 0.2);
                 }
             }
 
             &--perdido {
-
                 .publicaciones-wizard__step-icon,
                 .publicaciones-wizard__step-count {
-                    color: var(--pub-error-hover);
+                    color: $error-hover;
                 }
 
                 .publicaciones-wizard__step-icon {
@@ -446,10 +442,6 @@
         }
     }
 
-    // ======================================================
-    // RESULTADOS
-    // ======================================================
-
     .publicaciones-resultados {
         &__heading {
             display: flex;
@@ -502,10 +494,6 @@
             max-width: 100%;
         }
     }
-
-    // ======================================================
-    // ESTADO VACÍO
-    // ======================================================
 
     .publicaciones-empty {
         display: flex;
@@ -573,10 +561,6 @@
         }
     }
 
-    // ======================================================
-    // TABLETS Y LAPTOPS PEQUEÑAS
-    // ======================================================
-
     @media (max-width: 1100px) {
         padding-right: 22px;
         padding-left: 22px;
@@ -615,10 +599,6 @@
             }
         }
     }
-
-    // ======================================================
-    // MÓVILES
-    // ======================================================
 
     @media (max-width: 700px) {
         padding: 22px 14px 20px;
@@ -791,10 +771,6 @@
         }
     }
 
-    // ======================================================
-    // MÓVILES ESTRECHOS
-    // ======================================================
-
     @media (max-width: 380px) {
         padding-right: 9px;
         padding-left: 9px;
@@ -861,10 +837,6 @@
             }
         }
     }
-
-    // ======================================================
-    // ACCESIBILIDAD
-    // ======================================================
 
     @media (prefers-reduced-motion: reduce) {
 

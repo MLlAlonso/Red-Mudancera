@@ -239,4 +239,10 @@ class SuperAdminSegurosController extends Controller
             ], 500);
         }
     }
+
+    public function destroy($id)
+    {
+        $this->service->eliminarExpediente((int) $id);
+        return response()->json(['message' => 'Expediente eliminado correctamente.',]);
+    }
 }

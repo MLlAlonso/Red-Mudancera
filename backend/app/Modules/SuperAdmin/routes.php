@@ -34,9 +34,9 @@ Route::prefix('superadmin')->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::get('/servicios-dashboard', [SuperAdminServiciosController::class, 'dashboard']);
-    Route::get( '/servicios/compras/empresas', [SuperAdminServiciosController::class, 'empresasCompradoras'] );
-    Route::get( '/servicios/compras/ultimas', [SuperAdminServiciosController::class, 'ultimasCompras'] );
-    Route::get( '/servicios/compras/empresa/{empresaId}', [SuperAdminServiciosController::class, 'comprasPorEmpresa'] );
+    Route::get('/servicios/compras/empresas', [SuperAdminServiciosController::class, 'empresasCompradoras']);
+    Route::get('/servicios/compras/ultimas', [SuperAdminServiciosController::class, 'ultimasCompras']);
+    Route::get('/servicios/compras/empresa/{empresaId}', [SuperAdminServiciosController::class, 'comprasPorEmpresa']);
     Route::get('/solicitudes-mudanza/exportar', [SuperAdminServiciosController::class, 'exportarSolicitudesMudanza']);
 
     /*
@@ -48,6 +48,7 @@ Route::prefix('superadmin')->group(function () {
     Route::get('/seguros/{id}', [SuperAdminSegurosController::class, 'show']);
     Route::post('/seguros/{id}/enviar-correo', [SuperAdminSegurosController::class, 'enviarCorreo']);
     Route::get('/seguros/{id}/pdf', [SuperAdminSegurosController::class, 'pdf']);
+    Route::delete('/seguros/{id}', [SuperAdminSegurosController::class, 'destroy']);
 
     /*
     |--------------------------------------------------------------------------
@@ -55,8 +56,6 @@ Route::prefix('superadmin')->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::get('/analytics/servicios', [SuperAdminAnalyticsController::class, 'servicios']);
-
-
 
     Route::post('/seguros/{id}/enviar-correo/{tipo}', [SuperAdminSegurosController::class, 'enviarCorreoPrueba']);
 });

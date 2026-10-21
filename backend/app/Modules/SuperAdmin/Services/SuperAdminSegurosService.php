@@ -128,4 +128,10 @@ class SuperAdminSegurosService
 
         return $meses[$fecha->month] . ' ' . $fecha->year;
     }
+
+    public function eliminarExpediente(int $id): void
+    {
+        $expediente = ExpedienteSeguro::findOrFail($id);
+        $expediente->delete();
+    }
 }

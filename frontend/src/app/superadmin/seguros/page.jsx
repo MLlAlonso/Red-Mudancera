@@ -15,9 +15,7 @@ export default function SuperAdminSegurosPage() {
     const [month, setMonth] = useState("");
     const [modalidad, setModalidad] = useState("todas");
 
-    useEffect(() => {
-        loadData();
-    }, [search, month, modalidad]);
+    useEffect(() => { loadData(); }, [search, month, modalidad]);
 
     async function loadData() {
         try {
@@ -29,6 +27,7 @@ export default function SuperAdminSegurosPage() {
             if (!month && data.selected_month) {
                 setMonth(data.selected_month);
             }
+
         } catch (error) {
             console.error(error);
         }
@@ -70,7 +69,6 @@ export default function SuperAdminSegurosPage() {
             <section className="seguros-toolbar">
                 <div className="search-box">
                     <img src="/icons/lupa.png" alt="" />
-
                     <input placeholder="Buscar por folio, cliente o correo..." value={search} onChange={(e) => setSearch(e.target.value)} />
                 </div>
 
@@ -121,6 +119,7 @@ export default function SuperAdminSegurosPage() {
                         tipoSeguro={exp.tipo_seguro}
                         esExterno={exp.es_externo}
                         fecha={exp.created_at}
+                        onDeleted={(id) => { setExpedientes((actuales) => actuales.filter((item) => item.id !== id)); }}
                         modalidadDatos={exp.modalidad_datos}
                     />
                 ))}
