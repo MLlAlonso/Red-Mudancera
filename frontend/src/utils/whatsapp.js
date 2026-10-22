@@ -189,3 +189,167 @@ export function openLeadWhatsappMessage({
   const url = `https://wa.me/52${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
   window.open(url, "_blank");
 }
+
+export const WHATSAPP_VARIABLES = {
+  empresa_empresa: [
+    {
+      key: "origen",
+      label: "Origen del servicio",
+    },
+    {
+      key: "destino",
+      label: "Destino del servicio",
+    },
+    {
+      key: "tipo",
+      label: "Tipo de publicación",
+    },
+    {
+      key: "volumen",
+      label: "Volumen",
+    },
+    {
+      key: "tipoCarga",
+      label: "Tipo de carga",
+    },
+    {
+      key: "tipoVehiculo",
+      label: "Tipo de vehículo",
+    },
+    {
+      key: "servicioUrl",
+      label: "Enlace al servicio",
+    },
+  ],
+
+  empresa_cliente: [
+    {
+      key: "empresaNombre",
+      label: "Nombre de mi empresa",
+    },
+    {
+      key: "nombreCliente",
+      label: "Nombre del cliente",
+    },
+    {
+      key: "origen",
+      label: "Origen de la mudanza",
+    },
+    {
+      key: "destino",
+      label: "Destino de la mudanza",
+    },
+    {
+      key: "tipoServicio",
+      label: "Tipo de servicio",
+    },
+    {
+      key: "fechaRecoleccion",
+      label: "Fecha deseada",
+    },
+    {
+      key: "tipoMudanza",
+      label: "Modalidad",
+    },
+    {
+      key: "tipoVivienda",
+      label: "Vivienda de origen",
+    },
+    {
+      key: "viviendaDestino",
+      label: "Vivienda de destino",
+    },
+    {
+      key: "inventario",
+      label: "Inventario",
+    },
+  ],
+};
+
+export function renderWhatsappTemplate(template, variables = {}) {
+  return String(template || "").replace(
+    /\{\{\s*([a-zA-Z][a-zA-Z0-9_]*)\s*\}\}/g,
+    (_, key) => {
+      const value = variables[key];
+
+      if (value === null || value === undefined) {
+        return "—";
+      }
+
+      const normalized = String(value).trim();
+      return normalized || "—";
+    }
+  );
+}
+
+export function buildServiceWhatsappVariables({ empresaNombre, tipo, origen, destino, volumen, tipoCarga, tipoVehiculo, servicioId, }) {
+  const tipoCargaLabels = {
+    menaje: "Menaje de casa",
+    vehiculo: "Vehículo",
+    menaje_vehiculo: "Menaje + vehículo",
+    otro: "Otro",
+  };
+
+  const tipoVehiculoLabels = {
+    compacto: "Auto compacto",
+    camioneta: "Camioneta",
+    motocicleta: "Motocicleta",
+  };
+
+  return {
+    empresaNombre: empresaNombre || "",
+    tipo: tipo || "",
+    origen: origen || "",
+    destino: destino || "",
+    volumen: volumen ? `${volumen} m³` : "",
+    tipoCarga: tipoCargaLabels[tipoCarga] || tipoCarga || "",
+    tipoVehiculo: tipoVehiculoLabels[tipoVehiculo] || tipoVehiculo || "",
+    servicioUrl: servicioId ? `https://app.mudanzafacil.com.mx/servicios/${servicioId}` : "",
+  };
+}
+
+export function buildLeadWhatsappVariables(datos = {}) {
+  const inventario = String(datos.inventario || "")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/p>/gi, "\n")
+    .replace(/<\/li>/gi, "\n")
+    .replace(/<li[^>]*>/gi, "")
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .trim();
+
+  return {
+    empresaNombre: datos.empresaNombre || "",
+    nombreCliente: datos.nombreCliente || "",
+    origen: datos.origen || "",
+    destino: datos.destino || "",
+    tipoServicio: datos.tipoServicio || "",
+    fechaRecoleccion: datos.fechaRecoleccion || "",
+    tipoMudanza: datos.tipoMudanza || "",
+    tipoVivienda: datos.tipoVivienda || "",
+    viviendaDestino: datos.viviendaDestino || "",
+    inventario: inventario || "",
+  };
+}
+
+export function openWhatsappTemplate({ telefono, mensaje = "", conMensaje = true, }) {
+  if (!telefono) {
+    alert("Este contacto no tiene teléfono disponible");
+    return;
+  }
+
+  let telefonoLimpio = String(telefono).replace(/\D/g, "");
+
+  // Mantener la normalización de teléfonos mexicanos.
+  if (telefonoLimpio.startsWith("521")) {
+    telefonoLimpio = `52${telefonoLimpio.slice(3)}`;
+  } else if (!telefonoLimpio.startsWith("52")) {
+    telefonoLimpio = `52${telefonoLimpio}`;
+  }
+
+  const url = `https://wa.me/${telefonoLimpio}${conMensaje && mensaje ? `?text=${encodeURIComponent(mensaje)}` : ""}`;
+  window.open(url, "_blank", "noopener,noreferrer");
+}

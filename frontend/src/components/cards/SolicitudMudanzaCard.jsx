@@ -8,6 +8,9 @@ import ComprarLeadModal from "@/components/modals/ComprarLeadModal";
 import EmpresaNotesModal from "@/components/modals/EmpresaNotesModal";
 import Button_cta from "@/components/common/Button_cta";
 import { openLeadWhatsappMessage } from "@/utils/whatsapp";
+import WhatsappMensajeSelectorModal from "@/components/modals/WhatsappMensajeSelectorModal";
+import { buildLeadWhatsappVariables, openWhatsappTemplate, } from "@/utils/whatsapp";
+import { DEFAULT_WHATSAPP_TEMPLATES } from "@/utils/whatsappTemplates";
 
 export default function SolicitudMudanzaCard({
   id, origen = "", destino = "",
@@ -18,16 +21,24 @@ export default function SolicitudMudanzaCard({
   empresaNombre = "", empresaId = null, showDelete = false,
   onDelete = null,
   showNotes = false,
+  emailCliente = "",
+  viviendaDestino = "",
+  origenPisos = "",
+  origenElevador = "",
+  origenAcarreo = "",
+  destinoPisos = "",
+  destinoElevador = "",
+  destinoAcarreo = "",
+  tipoServicio = "",
 }) {
 
   const router = useRouter();
   const [estadoLocal, setEstadoLocal] = useState(estado);
   const [showModal, setShowModal] = useState(false);
   const [showNotesModal, setShowNotesModal] = useState(false);
+  const [mostrarMensajesWhatsapp, setMostrarMensajesWhatsapp] = useState(false);
 
-  useEffect(() => {
-    setEstadoLocal(estado);
-  }, [estado]);
+  useEffect(() => { setEstadoLocal(estado); }, [estado]);
 
   const formatFechaRecoleccion = (value) => {
     const map = {
@@ -139,30 +150,16 @@ export default function SolicitudMudanzaCard({
                           },
                         })
                       );
+
                       return;
                     }
 
-                    openLeadWhatsappMessage({
-                      telefono,
-                      nombreCliente,
-                      emailCliente,
-                      origen,
-                      destino,
-                      tipoVivienda,
-                      viviendaDestino,
-                      origenPisos,
-                      origenElevador,
-                      origenAcarreo,
-                      destinoPisos,
-                      destinoElevador,
-                      destinoAcarreo,
-                      inventario,
-                      fechaRecoleccion,
-                      tipoServicio,
-                      tipoMudanza,
-                      empresaNombre,
-                      empresaId,
-                    });
+                    if (!telefono) {
+                      alert("Este lead no tiene teléfono disponible");
+                      return;
+                    }
+
+                    setMostrarMensajesWhatsapp(true);
                   }}
                 />
               ) : (
@@ -178,14 +175,40 @@ export default function SolicitudMudanzaCard({
       </motion.div>
 
       {showModal && (
-        <ComprarLeadModal
-          solicitudId={id}
-          onClose={() => setShowModal(false)}
-          onSuccess={() => window.location.reload()}
-        />
+        <ComprarLeadModal solicitudId={id} onClose={() => setShowModal(false)} onSuccess={() => window.location.reload()} />
       )}
 
       <EmpresaNotesModal open={showNotesModal} leadId={id} onClose={() => setShowNotesModal(false)} />
+
+      <WhatsappMensajeSelectorModal
+        open={mostrarMensajesWhatsapp}
+        onClose={() => setMostrarMensajesWhatsapp(false)}
+        tipoContacto="empresa_cliente"
+        telefono={telefono}
+        mensajesDefault={DEFAULT_WHATSAPP_TEMPLATES.empresa_cliente}
+        variables={buildLeadWhatsappVariables({
+          empresaNombre,
+          nombreCliente,
+          emailCliente,
+          origen,
+          destino,
+          tipoVivienda,
+          viviendaDestino,
+          origenPisos,
+          origenElevador,
+          origenAcarreo,
+          destinoPisos,
+          destinoElevador,
+          destinoAcarreo,
+          inventario,
+          fechaRecoleccion,
+          tipoServicio,
+          tipoMudanza,
+        })}
+        onContactar={({ telefono, mensaje, conMensaje }) => {
+          openWhatsappTemplate({ telefono, mensaje, conMensaje, });
+        }}
+      />
     </>
   );
 }

@@ -159,4 +159,9 @@ class Empresa extends Authenticatable
     {
         return $this->hasMany(EmpresaTutorialVisto::class);
     }
+
+    public function mensajesWhatsapp()
+    {
+        return $this->hasMany(EmpresaMensajeWhatsapp::class, 'empresa_id');
+    }
 }

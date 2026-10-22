@@ -6,6 +6,9 @@ import { useEffect, useState } from "react";
 import { openWhatsappMessage } from "@/utils/whatsapp";
 import { getPlan, canContact } from "@/utils/plan";
 import ServiceStatusDropdown from "@/components/common/ServiceStatusDropdown";
+import WhatsappMensajeSelectorModal from "@/components/modals/WhatsappMensajeSelectorModal";
+import { buildServiceWhatsappVariables, openWhatsappTemplate, } from "@/utils/whatsapp";
+import { DEFAULT_WHATSAPP_TEMPLATES } from "@/utils/whatsappTemplates";
 
 export default function ServiceCard({
   id,
@@ -29,8 +32,6 @@ export default function ServiceCard({
 
   const router = useRouter();
   const isOffer = type === "ofrezco";
-
-  // ESTADO LOCAL VISUAL
   const [estadoLocal, setEstadoLocal] = useState(estado);
 
   const tipoCargaLabel = {
@@ -46,7 +47,7 @@ export default function ServiceCard({
     motocicleta: "Motocicleta",
   }[tipoVehiculo] || "No especificado";
 
-  // Sincroniza cuando el backend responda
+  const [mostrarMensajesWhatsapp, setMostrarMensajesWhatsapp] = useState(false);
   useEffect(() => { setEstadoLocal(estado); }, [estado]);
 
   return (
@@ -70,8 +71,6 @@ export default function ServiceCard({
           {origen} → {destino}
         </h2>
       </div>
-
-      {/* ========================= INFO CARGA ========================= */}
 
       {/* BUSCO → comportamiento normal */}
       {!isOffer && (
@@ -109,9 +108,7 @@ export default function ServiceCard({
       {isOffer && (
         <p className="service-card__info">
           <label>Oferta:</label>{" "}
-          {Number(importe) > 0
-            ? `$${Number(importe).toLocaleString()}`
-            : "A convenir"}
+          {Number(importe) > 0 ? `$${Number(importe).toLocaleString()}` : "A convenir"}
         </p>
       )}
 
@@ -138,22 +135,20 @@ export default function ServiceCard({
                     },
                   })
                 );
+
                 return;
               }
 
-              openWhatsappMessage({
-                telefono,
-                tipo: isOffer ? "Ofrezco" : "Busco",
-                origen,
-                destino,
-                volumen,
-                tipoCarga,
-                tipoVehiculo,
-                servicioId: id,
-              });
+              if (!telefono) {
+                alert("Este servicio no tiene teléfono de contacto");
+                return;
+              }
+
+              setMostrarMensajesWhatsapp(true);
             }}
           >
             <img src="/icons/whatsapp.png" alt="WhatsApp" className="btn-contact__icon" />
+
             <span>Contactar</span>
           </button>
         )}
@@ -166,6 +161,24 @@ export default function ServiceCard({
           />
         )}
       </div>
+
+      <WhatsappMensajeSelectorModal
+        open={mostrarMensajesWhatsapp}
+        onClose={() => setMostrarMensajesWhatsapp(false)}
+        tipoContacto="empresa_empresa"
+        telefono={telefono}
+        mensajesDefault={DEFAULT_WHATSAPP_TEMPLATES.empresa_empresa}
+        variables={buildServiceWhatsappVariables({
+          tipo: isOffer ? "Ofrezco" : "Busco",
+          origen,
+          destino,
+          volumen,
+          tipoCarga,
+          tipoVehiculo,
+          servicioId: id,
+        })}
+        onContactar={({ telefono, mensaje, conMensaje }) => { openWhatsappTemplate({ telefono, mensaje, conMensaje, }); }}
+      />
     </motion.div>
   );
 }

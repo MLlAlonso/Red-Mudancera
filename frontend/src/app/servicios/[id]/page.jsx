@@ -9,6 +9,8 @@ import Button_cta from "@/components/common/Button_cta";
 import { openWhatsappMessage } from "@/utils/whatsapp";
 import { getPlan, canContact, canSeePhone } from "@/utils/plan";
 import LiveViewToast from "@/components/common/LiveViewToast";
+import WhatsappMensajeSelectorModal from "@/components/modals/WhatsappMensajeSelectorModal";
+import { buildServiceWhatsappVariables, openWhatsappTemplate, } from "@/utils/whatsapp";
 
 import "@/styles/pages/servicios/_detallesServicio.scss";
 
@@ -18,6 +20,7 @@ export default function DetalleServicioPage() {
   const [servicio, setServicio] = useState(null);
   const [empresaAuth, setEmpresaAuth] = useState(null);
   const [imagenActiva, setImagenActiva] = useState(null);
+  const [showWhatsappSelector, setShowWhatsappSelector] = useState(false);
 
   /* =========================
      Obtener servicio
@@ -276,7 +279,8 @@ export default function DetalleServicioPage() {
                       new CustomEvent("plan-limit", {
                         detail: {
                           error: "PLAN_LIMIT",
-                          message: "Necesitas un plan activo para contactar empresas.",
+                          message:
+                            "Necesitas un plan activo para contactar empresas.",
                           required_plan: "conector",
                         },
                       })
@@ -284,16 +288,7 @@ export default function DetalleServicioPage() {
                     return;
                   }
 
-                  openWhatsappMessage({
-                    telefono: telefonoContacto,
-                    tipo: isOffer ? "Ofrezco" : "Busco",
-                    origen: servicio.origen,
-                    destino: servicio.destino,
-                    tipoCarga: servicio.tipo_carga,
-                    volumen: servicio.volumen,
-                    tipoVehiculo: servicio.tipo_vehiculo,
-                    servicioId: servicio.id,
-                  });
+                  setShowWhatsappSelector(true);
                 }}
               />
             </div>
@@ -321,6 +316,27 @@ export default function DetalleServicioPage() {
       </main>
 
       <LiveViewToast tipo="servicio" registroId={servicio.id} />
+
+      <WhatsappMensajeSelectorModal
+        open={showWhatsappSelector}
+        onClose={() => setShowWhatsappSelector(false)}
+        tipoContacto="empresa_empresa"
+        telefono={telefonoContacto}
+        variables={buildServiceWhatsappVariables({
+          telefono: telefonoContacto,
+          tipo: isOffer ? "Ofrezco" : "Busco",
+          origen: servicio.origen,
+          destino: servicio.destino,
+          tipoCarga: servicio.tipo_carga,
+          volumen: servicio.volumen,
+          tipoVehiculo: servicio.tipo_vehiculo,
+          servicioId: servicio.id,
+        })}
+        onContactar={({ telefono, mensaje, conMensaje }) => {
+          setShowWhatsappSelector(false);
+          openWhatsappTemplate({ telefono, mensaje, conMensaje });
+        }}
+      />
 
       <Footer />
     </>

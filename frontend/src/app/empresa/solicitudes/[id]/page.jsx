@@ -11,6 +11,8 @@ import ComprarLeadModal from "@/components/modals/ComprarLeadModal";
 import LiveViewToast from "@/components/common/LiveViewToast";
 import EmpresaNotesModal from "@/components/modals/EmpresaNotesModal";
 import LeadWhatsappMessageModal from "@/components/modals/LeadWhatsappMessageModal";
+import WhatsappMensajeSelectorModal from "@/components/modals/WhatsappMensajeSelectorModal";
+import { buildLeadWhatsappVariables, openWhatsappTemplate, } from "@/utils/whatsapp";
 import "@/styles/pages/solicitudes/_detalleSolicitud.scss";
 
 export default function DetalleSolicitudPage() {
@@ -21,6 +23,7 @@ export default function DetalleSolicitudPage() {
     const [haComprado, setHaComprado] = useState(false);
     const [fueExclusivo, setFueExclusivo] = useState(false);
     const [showNotesModal, setShowNotesModal] = useState(false);
+    const [showWhatsappSelector, setShowWhatsappSelector] = useState(false);
     const [showWhatsappMessageModal, setShowWhatsappMessageModal] = useState(false);
 
     useEffect(() => {
@@ -229,29 +232,7 @@ export default function DetalleSolicitudPage() {
                                 value="Contactar"
                                 icon="/icons/whatsapp.png"
                                 iconAlt="WhatsApp"
-                                onClick={() =>
-                                    openLeadWhatsappMessage({
-                                        telefono: solicitud.telefono,
-                                        empresaNombre: empresa?.empresa || "Mi empresa",
-                                        empresaId: empresa?.id,
-                                        nombreCliente: solicitud.nombre,
-                                        emailCliente: solicitud.email,
-                                        origen: solicitud.origen,
-                                        destino: solicitud.destino,
-                                        tipoVivienda: solicitud.tipo_vivienda,
-                                        viviendaDestino: solicitud.vivienda_destino,
-                                        origenPisos: solicitud.origen_pisos,
-                                        origenElevador: solicitud.origen_elevador,
-                                        origenAcarreo: solicitud.origen_acarreo,
-                                        destinoPisos: solicitud.destino_pisos,
-                                        destinoElevador: solicitud.destino_elevador,
-                                        destinoAcarreo: solicitud.destino_acarreo,
-                                        inventario: solicitud.inventario,
-                                        fechaRecoleccion: solicitud.fecha_recoleccion,
-                                        tipoServicio: solicitud.tipo_servicio,
-                                        tipoMudanza: solicitud.tipo_mudanza,
-                                    })
-                                }
+                                onClick={() => setShowWhatsappSelector(true)}
                             />
                         )}
                     </div>
@@ -269,6 +250,38 @@ export default function DetalleSolicitudPage() {
             )}
 
             <LeadWhatsappMessageModal open={showWhatsappMessageModal} solicitud={solicitud} empresa={empresa} onClose={() => setShowWhatsappMessageModal(false)} />
+
+            <WhatsappMensajeSelectorModal
+                open={showWhatsappSelector}
+                onClose={() => setShowWhatsappSelector(false)}
+                tipoContacto="empresa_cliente"
+                telefono={solicitud.telefono}
+                variables={buildLeadWhatsappVariables({
+                    telefono: solicitud.telefono,
+                    empresaNombre: empresa?.empresa || "Mi empresa",
+                    empresaId: empresa?.id,
+                    nombreCliente: solicitud.nombre,
+                    emailCliente: solicitud.email,
+                    origen: solicitud.origen,
+                    destino: solicitud.destino,
+                    tipoVivienda: solicitud.tipo_vivienda,
+                    viviendaDestino: solicitud.vivienda_destino,
+                    origenPisos: solicitud.origen_pisos,
+                    origenElevador: solicitud.origen_elevador,
+                    origenAcarreo: solicitud.origen_acarreo,
+                    destinoPisos: solicitud.destino_pisos,
+                    destinoElevador: solicitud.destino_elevador,
+                    destinoAcarreo: solicitud.destino_acarreo,
+                    inventario: solicitud.inventario,
+                    fechaRecoleccion: solicitud.fecha_recoleccion,
+                    tipoServicio: solicitud.tipo_servicio,
+                    tipoMudanza: solicitud.tipo_mudanza,
+                })}
+                onContactar={({ telefono, mensaje, conMensaje }) => {
+                    setShowWhatsappSelector(false);
+                    openWhatsappTemplate({ telefono, mensaje, conMensaje });
+                }}
+            />
         </>
     );
 }

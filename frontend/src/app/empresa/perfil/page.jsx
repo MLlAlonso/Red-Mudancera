@@ -25,7 +25,6 @@ export default function EmpresaPerfil() {
   const [openCancelModal, setOpenCancelModal] = useState(false);
   const [paymentMessage, setPaymentMessage] = useState(null);
 
-
   const getCookie = (name) => {
     const match = document.cookie.match(
       new RegExp("(^| )" + name + "=([^;]+)")
@@ -243,6 +242,7 @@ export default function EmpresaPerfil() {
                 </div>
               )}
             </div>
+
           </div>
 
           {/* RIGHT */}
@@ -329,8 +329,6 @@ export default function EmpresaPerfil() {
                 {copiedProfile ? "Link copiado" : "Compartir perfil"}
               </button>
             </div>
-
-
 
             {/* SUSCRIPCIÓN */}
             {empresa.plan !== "free" && (

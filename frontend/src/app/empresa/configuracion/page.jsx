@@ -6,6 +6,7 @@ import Footer from "@/components/layout/Footer";
 import Input from "@/components/common/Input";
 import BaseModal from "@/components/modals/BaseModal";
 import OneSignal from "react-onesignal";
+import MensajesWhatsappManager from "@/components/empresa/MensajesWhatsappManager";
 import "@/styles/pages/empresa/_empresaConfiguracion.scss";
 
 export default function ConfiguracionPage() {
@@ -23,9 +24,7 @@ export default function ConfiguracionPage() {
     const [pushLoading, setPushLoading] = useState(true);
 
     const getCookie = (name) => {
-        const match = document.cookie.match(
-            new RegExp("(^| )" + name + "=([^;]+)")
-        );
+        const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
         return match ? match[2] : null;
     };
 
@@ -41,7 +40,6 @@ export default function ConfiguracionPage() {
     const calcularTiempoRestante = (updatedAt) => {
         const ultima = new Date(updatedAt);
         setUltimaModificacion(ultima);
-
         const ahora = new Date();
         const diffMs = ahora - ultima;
         const dias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
@@ -73,18 +71,14 @@ export default function ConfiguracionPage() {
 
         // EMPRESA
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/me`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}`, },
         })
             .then(res => res.json())
             .then(data => setEmpresa(data));
 
         // CONFIG RADAR
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/radar/config`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}`, },
         })
             .then(res => res.json())
             .then(data => {
@@ -169,8 +163,8 @@ export default function ConfiguracionPage() {
     const togglePushNotifications = async () => {
         try {
             if (pushEnabled) {
-                await OneSignal.User.PushSubscription.optOut(); 
-                await OneSignal.User.removeTag( "empresa_id" );
+                await OneSignal.User.PushSubscription.optOut();
+                await OneSignal.User.removeTag("empresa_id");
                 setPushEnabled(false);
                 return;
             }
@@ -181,22 +175,14 @@ export default function ConfiguracionPage() {
                 await OneSignal.Notifications.requestPermission();
             }
 
-            await OneSignal.User.addTag(
-                "empresa_id",
-                String(empresa.id)
-            );
-
+            await OneSignal.User.addTag("empresa_id", String(empresa.id));
             const token = getCookie("token_empresa");
 
             await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/test-push`,
-                {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+                `${process.env.NEXT_PUBLIC_API_URL}/test-push`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}`, },
+            });
 
             setPushEnabled(true);
 
@@ -218,8 +204,26 @@ export default function ConfiguracionPage() {
                 </h1>
 
                 <p className="configuracion__subtitle">
-                    Subtitulo pendiente.
+                    Personaliza tus preferencias y configura las herramientas que necesitas para gestionar tu cuenta.
                 </p>
+
+                <div className="configuracion__block">
+                    <h2>Mis notificaciones</h2>
+
+                    <p className="configuracion__copy">
+                        Podrás activarlas o desactivarlas a tu gusto para recibir notificaciones push.
+                    </p>
+
+                    {!pushLoading && (
+                        <button className={`push-btn ${pushEnabled ? "push-btn--active" : "push-btn--inactive"}`} onClick={togglePushNotifications} >
+                            {pushEnabled ? "Desactivar notificaciones push" : "Activar notificaciones push"}
+                        </button>
+                    )}
+                </div>
+
+                <div className="configuracion__block">
+                    <MensajesWhatsappManager />
+                </div>
 
                 {/* ========================= FREE ========================= */}
                 {empresa.plan === "free" && (
@@ -227,14 +231,10 @@ export default function ConfiguracionPage() {
                         <h2>Radar no disponible</h2>
 
                         <p className="configuracion__copy">
-                            Estás en modo exploración. Para recibir coincidencias automáticas
-                            necesitas activar un plan.
+                            Estás en modo exploración. Para recibir coincidencias automáticas necesitas activar un plan.
                         </p>
 
-                        <button
-                            className="configuracion__btn"
-                            onClick={() => window.location.href = "/empresa/planes"}
-                        >
+                        <button className="configuracion__btn" onClick={() => window.location.href = "/empresa/planes"} >
                             Ver planes
                         </button>
                     </div>
@@ -267,8 +267,6 @@ export default function ConfiguracionPage() {
                                 />
                             ))}
 
-
-
                             {editando && ciudades.length < 2 && (
                                 <button onClick={agregarCiudad} className="configuracion__addDestino">
                                     + Agregar destino
@@ -291,11 +289,7 @@ export default function ConfiguracionPage() {
                                 Editar destinos
                             </button>
                         ) : (
-                            <button
-                                className="configuracion__btn"
-                                onClick={abrirConfirmacion}
-                                disabled={loading || ciudadesValidas.length < 2}
-                            >
+                            <button className="configuracion__btn" onClick={abrirConfirmacion} disabled={loading || ciudadesValidas.length < 2} >
                                 {loading ? "Guardando..." : "Guardar"}
                             </button>
                         )}
@@ -303,8 +297,7 @@ export default function ConfiguracionPage() {
                         {ultimaModificacion && (
                             <div className="configuracion__info">
                                 <p>
-                                    Última actualización:{" "}
-                                    <strong>{formatearFecha(ultimaModificacion)}</strong>
+                                    Última actualización:{" "} <strong>{formatearFecha(ultimaModificacion)}</strong>
                                 </p>
 
                                 {diasRestantes > 0 ? (
@@ -324,9 +317,7 @@ export default function ConfiguracionPage() {
                         </p>
 
                         <div className="configuracion__upgrade">
-                            <p>
-                                ¿Quieres recibir oportunidades en todos los destinos?
-                            </p>
+                            <p> ¿Quieres recibir oportunidades en todos los destinos? </p>
 
                             <button onClick={() => window.location.href = "/empresa/planes"} >
                                 Activa Radar
@@ -349,35 +340,10 @@ export default function ConfiguracionPage() {
                         </p>
 
                         <div className="configuracion__pro">
-                            <p>
-                                Olvídate de elegir destinos manualmente, el sistema trabaja por ti.
-                            </p>
+                            <p> Olvídate de elegir destinos manualmente, el sistema trabaja por ti. </p>
                         </div>
                     </div>
                 )}
-
-                <div className="configuracion__block">
-                    <h2>Mis notificaciones</h2>
-
-                    <p className="configuracion__copy">
-                        Podrás activarlas o desactivarlas a tu gusto para recibir notificaciones push.
-                    </p>
-
-                    {!pushLoading && (
-                        <button
-                            className={`push-btn ${pushEnabled
-                                ? "push-btn--active"
-                                : "push-btn--inactive"
-                                }`}
-                            onClick={togglePushNotifications}
-                        >
-
-                            {pushEnabled
-                                ? "Desactivar notificaciones push"
-                                : "Activar notificaciones push"}
-                        </button>
-                    )}
-                </div>
             </main>
 
             {showConfirmModal && (
@@ -385,9 +351,7 @@ export default function ConfiguracionPage() {
                     <div className="configuracion__modal">
                         <h3>Confirmar cambios</h3>
 
-                        <p>
-                            Estás por actualizar tus destinos a:
-                        </p>
+                        <p> Estás por actualizar tus destinos a: </p>
 
                         <div className="configuracion__modal-list">
                             {ciudadesValidas.map((c, i) => (
@@ -397,10 +361,7 @@ export default function ConfiguracionPage() {
                             ))}
                         </div>
 
-                        <p>
-                            Los destinos solo se pueden modificar una vez cada 30 días.
-                            <strong>¿Deseas continuar?</strong>
-                        </p>
+                        <p> Los destinos solo se pueden modificar una vez cada 30 días. <strong>¿Deseas continuar?</strong> </p>
 
                         <div className="configuracion__modal-actions">
                             <button className="configuracion__btn--secondary" onClick={() => setShowConfirmModal(false)} >

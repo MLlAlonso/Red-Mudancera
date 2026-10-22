@@ -13,6 +13,7 @@ use App\Modules\Empresa\Controllers\TrialController;
 use App\Modules\Empresa\Controllers\EmpresaCRMController;
 use App\Modules\Empresa\Controllers\EmpresaNotaController;
 use App\Modules\Tutorial\Controllers\TutorialController;
+use App\Modules\Empresa\Controllers\EmpresaMensajeWhatsappController;
 
 Route::prefix('empresa')->group(function () {
     Route::post('/register', [EmpresaAuthController::class, 'register']);
@@ -31,8 +32,7 @@ Route::prefix('empresa')->group(function () {
 
         // RUTAS PARA CRUD DE USUARIOS
         Route::get('/usuarios', [EmpresaController::class, 'usuariosEmpresa']);
-        Route::delete('/usuario/{id}', [EmpresaController::class, 'eliminarUsuario'])
-            ->middleware('plan.permission:add_users');
+        Route::delete('/usuario/{id}', [EmpresaController::class, 'eliminarUsuario'])->middleware('plan.permission:add_users');
         Route::patch('/usuario/{id}/pausar', [EmpresaController::class, 'pausarUsuario']);
         Route::patch('/usuario/{id}/reanudar', [EmpresaController::class, 'reanudarUsuario']);
 
@@ -57,6 +57,12 @@ Route::prefix('empresa')->group(function () {
 
         //Rutas para CRM
         Route::get('/crm/dashboard', [EmpresaCRMController::class, 'dashboard']);
+
+        // Plantillas personalizadas de WhatsApp
+        Route::get('/mensajes-whatsapp', [EmpresaMensajeWhatsappController::class, 'index']);
+        Route::post('/mensajes-whatsapp', [EmpresaMensajeWhatsappController::class, 'store']);
+        Route::put('/mensajes-whatsapp/{id}', [EmpresaMensajeWhatsappController::class, 'update'])->whereNumber('id');
+        Route::delete('/mensajes-whatsapp/{id}',  [EmpresaMensajeWhatsappController::class, 'destroy'])->whereNumber('id');
     });
 
     Route::get('/empresas/{id}', [EmpresaPublicController::class, 'show']);
