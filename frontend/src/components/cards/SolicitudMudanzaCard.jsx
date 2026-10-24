@@ -2,25 +2,54 @@
 
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import ServiceStatusDropdown from "@/components/common/ServiceStatusDropdown";
+import { useEffect, useRef, useState } from "react";
+import { DEFAULT_WHATSAPP_TEMPLATES } from "@/utils/whatsappTemplates";
+import { buildLeadWhatsappVariables, openWhatsappTemplate, } from "@/utils/whatsapp";
+import Button_cta from "@/components/common/Button_cta";
 import ComprarLeadModal from "@/components/modals/ComprarLeadModal";
 import EmpresaNotesModal from "@/components/modals/EmpresaNotesModal";
-import Button_cta from "@/components/common/Button_cta";
-import { openLeadWhatsappMessage } from "@/utils/whatsapp";
 import WhatsappMensajeSelectorModal from "@/components/modals/WhatsappMensajeSelectorModal";
-import { buildLeadWhatsappVariables, openWhatsappTemplate, } from "@/utils/whatsapp";
-import { DEFAULT_WHATSAPP_TEMPLATES } from "@/utils/whatsappTemplates";
+
+import "@/styles/components/_solicitudMudanzaCard.scss";
+
+const ESTADOS = {
+  activo: "Pendiente",
+  asignado: "Cotizado",
+  en_proceso: "En proceso",
+  sin_respuesta: "Sin respuesta",
+  finalizado: "Vendido",
+  perdido: "Perdido",
+};
+
+
+const abreviarUbicacion = (ubicacion = "") => {
+  const nombre = ubicacion.trim();
+
+  const equivalencias = {
+    "Ciudad de México, Ciudad de México": "CDMX",
+    "Ciudad de México": "CDMX",
+    "Veracruz de Ignacio de la Llave, Veracruz": "Veracruz",
+  };
+
+  return equivalencias[nombre] || nombre;
+};
+
 
 export default function SolicitudMudanzaCard({
-  id, origen = "", destino = "",
-  fechaRecoleccion = "", distanciaKm = null, tipoMudanza = "",
-  inventario = "", fecha = "", telefono = "",
-  estado = "activo", showContact = true, onChangeEstado = null,
-  isLead = false, nombreCliente = "", tipoVivienda = "",
-  empresaNombre = "", empresaId = null, showDelete = false,
-  onDelete = null,
-  showNotes = false,
+  id,
+  origen = "",
+  destino = "",
+  fechaRecoleccion = "",
+  distanciaKm = null,
+  tipoMudanza = "",
+  inventario = "",
+  fecha = "",
+  telefono = "",
+  estado = "activo",
+  isLead = false,
+  nombreCliente = "",
+  tipoVivienda = "",
+  empresaNombre = "",
   emailCliente = "",
   viviendaDestino = "",
   origenPisos = "",
@@ -30,146 +59,202 @@ export default function SolicitudMudanzaCard({
   destinoElevador = "",
   destinoAcarreo = "",
   tipoServicio = "",
+  showNotes = true,
+  showDelete = true,
+  onDelete,
 }) {
-
   const router = useRouter();
-  const [estadoLocal, setEstadoLocal] = useState(estado);
+  const menuRef = useRef(null);
   const [showModal, setShowModal] = useState(false);
-  const [showNotesModal, setShowNotesModal] = useState(false);
   const [mostrarMensajesWhatsapp, setMostrarMensajesWhatsapp] = useState(false);
+  const [showNotesModal, setShowNotesModal] = useState(false);
+  const [menuAccionesAbierto, setMenuAccionesAbierto] = useState(false);
 
-  useEffect(() => { setEstadoLocal(estado); }, [estado]);
+  useEffect(() => {
+    setShowModal(false);
+    setMostrarMensajesWhatsapp(false);
+    setShowNotesModal(false);
+    setMenuAccionesAbierto(false);
+  }, [id]);
+
+  // Cierra el menú al hacer clic fuera de él o pulsar Escape.
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuAccionesAbierto(false);
+      }
+    };
+
+    const handleEscape = (event) => {
+      if (event.key === "Escape") {
+        setMenuAccionesAbierto(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
 
   const formatFechaRecoleccion = (value) => {
     const map = {
       "1-7": "1 a 7 días",
       "8-15": "8 a 15 días",
       "+15": "Más de 15 días",
-      "lo_antes_posible": "Lo antes posible",
+      lo_antes_posible: "Lo antes posible",
       "30+": "Más de 30 días",
     };
 
-    return map[value] || value;
+    return map[value] || value || "No especificada";
+  };
+
+  const contactarCliente = () => {
+    const plan = document.cookie.match(/plan=([^;]+)/)?.[1];
+
+    if (plan === "free" || plan === "explorador") {
+      window.dispatchEvent(
+        new CustomEvent("plan-limit", {
+          detail: {
+            message: "Necesitas un plan activo para contactar clientes.",
+            required_plan: "conector",
+          },
+        })
+      );
+      return;
+    }
+
+    if (!telefono) {
+      alert("Este lead no tiene teléfono disponible");
+      return;
+    }
+
+    setMostrarMensajesWhatsapp(true);
+  };
+
+  const estadoClase = String(estado || "activo").replace(/[^a-z_]/g, "");
+
+  const abrirNotas = () => {
+    setMenuAccionesAbierto(false);
+    setShowNotesModal(true);
+  };
+
+  const eliminarSolicitud = () => {
+    setMenuAccionesAbierto(false);
+
+    if (typeof onDelete === "function") {
+      onDelete(id);
+    }
   };
 
   return (
     <>
-      <motion.div
-        className="service-card solicitud-card"
-        initial={{ opacity: 0, scale: 0.95, y: 10 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.25 }}
-      >
+      <motion.div className="service-card solicitud-card" initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 0.25 }} >
 
-        {showDelete && (
-          <button className="lead-delete-btn" onClick={onDelete}>
-            <img src="/icons/delete.png" alt="Eliminar" />
-          </button>
-        )}
+        <div className="solicitud-card__header">
+          <div className="solicitud-card__top-row">
+            <span className="service-card__tag">Contacto</span>
 
-        {showNotes && (
-          <button className="lead-notes-btn" onClick={() => setShowNotesModal(true)} title="Notas" >
-            <p>📝</p>
-          </button>
-        )}
+            {isLead && (
+              <div className="solicitud-card__header-actions">
+                <span className={`solicitud-card__status solicitud-card__status--${estadoClase}`} aria-label={`Estado: ${ESTADOS[estado] || estado}`} >
+                  {ESTADOS[estado] || estado}
+                </span>
 
-        <div className="service-card__title">
-          <span className="service-card__tag">
-            Contacto
-          </span>
+                {(showNotes || showDelete) && (
+                  <div
+                    ref={menuRef}
+                    className={`solicitud-card__menu ${menuAccionesAbierto ? "is-open" : ""}`}
+                    onMouseEnter={() => setMenuAccionesAbierto(true)}
+                    onMouseLeave={() => setMenuAccionesAbierto(false)}
+                  >
+                    <button
+                      type="button"
+                      className="solicitud-card__menu-trigger"
+                      aria-label="Más acciones"
+                      aria-haspopup="true"
+                      aria-expanded={menuAccionesAbierto}
+                      onClick={() => setMenuAccionesAbierto((abierto) => !abierto)}
+                    >
+                      <span aria-hidden="true">⋮</span>
+                    </button>
+
+                    <div className="solicitud-card__menu-dropdown" role="menu" aria-label="Acciones de la solicitud"  >
+                      {showNotes && (
+                        <button type="button" role="menuitem" className="solicitud-card__menu-item" onClick={abrirNotas} >
+                          <img src="/icons/notes.png" alt="" aria-hidden="true" />
+                          <span>Notas</span>
+                        </button>
+                      )}
+
+                      {showDelete && (
+                        <button
+                          type="button"
+                          role="menuitem"
+                          className="solicitud-card__menu-item solicitud-card__menu-item--delete"
+                          onClick={eliminarSolicitud}
+                          disabled={typeof onDelete !== "function"}
+                          title={typeof onDelete !== "function" ? "La acción de eliminar no está configurada" : "Eliminar solicitud"}
+                        >
+                          <img src="/icons/delete.png" alt="" aria-hidden="true" />
+                          <span>Eliminar</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
 
           <h2 className="service-card__route">
-            {origen} → {destino}
+            {abreviarUbicacion(origen)} → {abreviarUbicacion(destino)}
           </h2>
         </div>
 
-        <p className="service-card__info" id="solicitud">
-          <strong>Fecha deseada:</strong> {formatFechaRecoleccion(fechaRecoleccion)}
+        <p className="service-card__info" id="recoleccion">
+          <strong>Fecha deseada:</strong>{" "}
+          {formatFechaRecoleccion(fechaRecoleccion)}
         </p>
 
-        <p className="service-card__info" id="solicitud">
-          <strong>Modalidad:</strong>  {tipoMudanza}
+        <p className="service-card__info">
+          <strong>Modalidad:</strong> {tipoMudanza || "No especificada"}
         </p>
 
-        <p className="service-card__info solicitud-card__inventario" id="solicitud">
+        <p className="service-card__info solicitud-card__inventario">
           <strong>Inventario:</strong>{" "}
-          {inventario?.replace(/<[^>]*>/g, "").slice(0, 80)}
-          {inventario?.length > 80 && "..."}
+          {inventario?.replace(/<[^>]*>/g, "").slice(0, 80) || "Sin inventario"}
+          {inventario?.replace(/<[^>]*>/g, "").length > 80 && "..."}
         </p>
 
-        {distanciaKm && (
+        {distanciaKm != null && distanciaKm !== "" && (
           <p className="service-card__info" id="kilometros">
             {distanciaKm} km
           </p>
         )}
 
-        <p className="service-card__date">
-          Publicado el {fecha}
-        </p>
+        <p className="service-card__date">Publicado el {fecha}</p>
 
-        <div className="service-card__actions">
-          <button className="btn-outline" onClick={() => router.push(`/empresa/solicitudes/${id}`)} >
-            Ver detalles
+        <div className="service-card__actions solicitud-card__actions">
+          <button
+            type="button"
+            className="btn-outline solicitud-card__btn solicitud-card__btn--details"
+            onClick={() => router.push(`/empresa/solicitudes/${id}`)}
+          >
+            <img src="/icons/eye.png" alt="" aria-hidden="true" />
+            <span>Ver detalles</span>
           </button>
 
-          {onChangeEstado ? (
-            <ServiceStatusDropdown
-              estado={estadoLocal}
-              options={["activo", "asignado", "en_proceso", "finalizado", "sin_respuesta", "perdido",]}
-              labels={{
-                activo: "Pendiente",
-                sin_respuesta: "Sin respuesta",
-                en_proceso: "En proceso",
-                asignado: "Cotizado",
-                finalizado: "Vendido",
-                perdido: "Perdido",
-              }}
-              onSelect={(nuevoEstado) => {
-                setEstadoLocal(nuevoEstado);
-                onChangeEstado(id, nuevoEstado);
-              }}
-            />
+          {isLead ? (
+            <Button_cta value="Contactar" icon="/icons/whatsapp.png" iconAlt="WhatsApp" onClick={contactarCliente} />
           ) : (
-
-            <>
-              {/* HOME */}
-              {isLead ? (
-                <Button_cta
-                  value="Contactar"
-                  icon="/icons/whatsapp.png"
-                  iconAlt="WhatsApp"
-                  onClick={() => {
-                    const plan = document.cookie.match(/plan=([^;]+)/)?.[1];
-
-                    if (plan === "free" || plan === "explorador") {
-                      window.dispatchEvent(
-                        new CustomEvent("plan-limit", {
-                          detail: {
-                            message: "Necesitas un plan activo para contactar clientes.",
-                            required_plan: "conector",
-                          },
-                        })
-                      );
-
-                      return;
-                    }
-
-                    if (!telefono) {
-                      alert("Este lead no tiene teléfono disponible");
-                      return;
-                    }
-
-                    setMostrarMensajesWhatsapp(true);
-                  }}
-                />
-              ) : (
-                <button className="btn-solid btn-contact" onClick={() => setShowModal(true)}>
-                  <img src="/icons/token.png" alt="Comprar" className="btn-contact__icon" />
-                  <span>Comprar</span>
-                </button>
-              )}
-            </>
-
+            <button type="button" className="btn-solid btn-contact solicitud-card__btn" id="contact_contact" onClick={() => setShowModal(true)} >
+              <img src="/icons/token.png" alt="" aria-hidden="true" className="btn-contact__icon" />
+              <span>Comprar</span>
+            </button>
           )}
         </div>
       </motion.div>
@@ -205,9 +290,7 @@ export default function SolicitudMudanzaCard({
           tipoServicio,
           tipoMudanza,
         })}
-        onContactar={({ telefono, mensaje, conMensaje }) => {
-          openWhatsappTemplate({ telefono, mensaje, conMensaje, });
-        }}
+        onContactar={({ telefono, mensaje, conMensaje }) => { openWhatsappTemplate({ telefono, mensaje, conMensaje }); }}
       />
     </>
   );

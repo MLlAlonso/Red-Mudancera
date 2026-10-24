@@ -28,11 +28,11 @@
   }
 
   &__btn.is-asignado {
-    background: variables.$tertiary;
+    background: variables.$azul_002;
   }
 
   &__btn.is-en_proceso {
-    background: variables.$azul_002;
+    background: variables.$tertiary;
   }
 
   &__btn.is-sin_respuesta {
