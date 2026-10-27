@@ -1,120 +1,373 @@
+
 @use "../utils/variables";
 
 .service-status {
-  position: relative;
-  display: inline-block;
-
-  &__btn {
-    min-width: 150px;
-    height: 50px;
-    padding: 0 16px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    font-weight: 600;
-    font-size: 18px;
-    cursor: pointer;
-    border: none;
-    font-family: variables.$font-title;
-    color: #fff;
-    transition: background 0.2s ease;
-  }
-
-  /* ===== Estados ===== */
-  &__btn.is-activo {
-    background: variables.$error;
-  }
-
-  &__btn.is-asignado {
-    background: variables.$azul_002;
-  }
-
-  &__btn.is-en_proceso {
-    background: variables.$tertiary;
-  }
-
-  &__btn.is-sin_respuesta {
-    background: #757575;
-    color: #fff;
-  }
-
-  &__btn.is-perdido {
-    background: variables.$error-hover;
-  }
-
-  &__btn.is-finalizado {
-    background: variables.$success;
-  }
-
-  /* ===== Menú ===== */
-  &__menu {
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 0;
-    min-width: 150px;
-    background: variables.$cards;
-    border-radius: 10px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-    z-index: 50;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  &__item {
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 12px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    background: #fff;
-    color: variables.$text;
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
     font-family: variables.$font-text;
-    transition: background 0.2s ease, color 0.2s ease;
+    z-index: 40;
 
-    &.activo:hover {
-      background: variables.$error;
-      color: #fff;
+    /* =====================================
+       BOTÓN DEL ESTADO ACTUAL
+    ===================================== */
+
+    &__btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        min-width: 100px;
+        max-width: 100%;
+        min-height: 40px;
+        padding: 10px;
+        border: 0;
+        border-radius: 10px;
+        color: #fff;
+        font-family: variables.$font-title;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.2;
+        cursor: pointer;
+        transition:
+            background 0.2s ease,
+            box-shadow 0.2s ease,
+            transform 0.2s ease;
+        -webkit-tap-highlight-color: transparent;
+
+        &:hover {
+            filter: brightness(0.96);
+        }
+
+        &:active {
+            transform: scale(0.98);
+        }
+
+        &:focus-visible {
+            outline: 2px solid variables.$primary;
+            outline-offset: 3px;
+        }
+
+        &.is-activo {
+            background: variables.$error;
+        }
+
+        &.is-asignado {
+            background: variables.$azul_002;
+        }
+
+        &.is-en_proceso {
+            background: variables.$tertiary;
+        }
+
+        &.is-sin_respuesta {
+            background: #757575;
+            color: #fff;
+        }
+
+        &.is-perdido {
+            background: variables.$error-hover;
+        }
+
+        &.is-finalizado {
+            background: variables.$success;
+        }
     }
 
-    &.asignado:hover {
-      background: variables.$azul_002;
-      color: #fff;
+    &__current-label {
+        min-width: 0;
+        overflow-wrap: anywhere;
     }
 
-    &.en_proceso:hover {
-      background: variables.$tertiary-hover;
-      color: #fff;
+    &__arrow {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: transform 0.2s ease;
+
+        &.is-open {
+            transform: rotate(180deg);
+        }
     }
 
-    &.sin_respuesta:hover {
-      background: #696969;
-      color: #fff;
+    /* =====================================
+       CONTENEDOR DEL MENÚ
+    ===================================== */
+    &__menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        width: 200px;
+        max-width: calc(100vw - 24px);
+        padding: 8px;
+        border: 1px solid rgba(9, 35, 62, 0.09);
+        border-radius: 14px;
+        background: variables.$cards;
+        box-shadow:
+            0 12px 35px rgba(9, 35, 62, 0.14),
+            0 2px 8px rgba(9, 35, 62, 0.04);
+        box-sizing: border-box;
+        animation: service-status-menu-in 0.16s ease-out;
+        z-index: 100;
     }
 
-    &.perdido:hover {
-      background: variables.$error-hover;
-      color: #fff;
+    /* =====================================
+       OPCIONES
+    ===================================== */
+    &__item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        min-width: 0;
+        min-height: 60px;
+        padding: 10px 5px;
+        border: 1px solid transparent;
+        border-radius: 9px;
+        background: transparent;
+        color: variables.$text;
+        text-align: left;
+        cursor: pointer;
+        box-sizing: border-box;
+        transition:
+            background 0.18s ease,
+            border-color 0.18s ease,
+            transform 0.18s ease;
+        -webkit-tap-highlight-color: transparent;
+
+        &:hover,
+        &:focus-visible {
+            outline: none;
+        }
+
+        &:active {
+            transform: scale(0.99);
+        }
+
+        &.is-activo:hover,
+        &.is-activo:focus-visible {
+            background: rgba(variables.$error, 0.09);
+            border-color: rgba(variables.$error, 0.18);
+        }
+
+        &.is-asignado:hover,
+        &.is-asignado:focus-visible {
+            background: rgba(variables.$azul_002, 0.1);
+            border-color: rgba(variables.$azul_002, 0.2);
+        }
+
+        &.is-en_proceso:hover,
+        &.is-en_proceso:focus-visible {
+            background: rgba(variables.$tertiary, 0.1);
+            border-color: rgba(variables.$tertiary, 0.22);
+        }
+
+        &.is-sin_respuesta:hover,
+        &.is-sin_respuesta:focus-visible {
+            background: rgba(117, 117, 117, 0.09);
+            border-color: rgba(117, 117, 117, 0.2);
+        }
+
+        &.is-perdido:hover,
+        &.is-perdido:focus-visible {
+            background: rgba(variables.$error-hover, 0.09);
+            border-color: rgba(variables.$error-hover, 0.2);
+        }
+
+        &.is-finalizado:hover,
+        &.is-finalizado:focus-visible {
+            background: rgba(variables.$success, 0.09);
+            border-color: rgba(variables.$success, 0.2);
+        }
     }
 
-    &.finalizado:hover {
-      background: variables.$success;
-      color: #fff;
+    &__item-indicator {
+        display: block;
+        width: 10px;
+        height: 11px;
+        flex: 0 0 10px;
+        border-radius: 50%;
+        background: currentColor;
+        align-self: flex-start;
+        margin-top: 5px;
     }
-  }
+
+    &__item.is-activo {
+        color: variables.$error;
+    }
+
+    &__item.is-asignado {
+        color: variables.$azul_002;
+    }
+
+    &__item.is-en_proceso {
+        color: variables.$tertiary;
+    }
+
+    &__item.is-sin_respuesta {
+        color: #757575;
+    }
+
+    &__item.is-perdido {
+        color: variables.$error-hover;
+    }
+
+    &__item.is-finalizado {
+        color: variables.$success;
+    }
+
+    &__item-content {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 0;
+    }
+
+    &__item-label {
+        color: variables.$primary;
+        font-family: variables.$font-title;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+    }
+
+    &__item-description {
+        color: variables.$text-muted;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+    }
 }
 
-/* Flecha */
-.arrow {
-  transition: transform 0.2s ease;
-  font-size: 18px;
+/* =========================================
+   ANIMACIÓN
+========================================= */
+@keyframes service-status-menu-in {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
 
-  &.open {
-    transform: rotate(180deg);
-  }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .service-status {
+        &__btn {
+            min-width: 132px;
+            min-height: 42px;
+            gap: 8px;
+            padding: 10px 12px;
+            font-size: 14px;
+        }
+
+        &__menu {
+            width: 200px;
+        }
+
+        &__item {
+            min-height: 30px;
+            padding: 0px 5px;
+        }
+    }
+}
+
+
+@media (max-width: 480px) {
+    .service-status {
+        width: auto;
+        max-width: 100%;
+
+        &__btn {
+            min-width: 0;
+            min-height: 40px;
+            gap: 7px;
+            padding: 9px 10px;
+            border-radius: 9px;
+            font-size: 14px;
+        }
+
+        &__arrow svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        &__menu {
+            right: 0;
+            width: min(200px, calc(100vw - 24px));
+            max-width: calc(100vw - 24px);
+            padding: 7px;
+            border-radius: 12px;
+        }
+
+        &__menu-heading {
+            padding: 9px 10px 11px;
+        }
+
+        &__options {
+            gap: 2px;
+        }
+
+        &__item {
+            gap: 10px;
+            min-height: 30px;
+            padding: 0px 5px;
+            border-radius: 8px;
+        }
+
+        &__item-indicator {
+            width: 9px;
+            height: 9px;
+            flex-basis: 9px;
+        }
+
+        &__item-label {
+            font-size: 14px;
+        }
+
+        &__item-description {
+            font-size: 12px;
+        }
+
+        &__item-arrow {
+            width: 16px;
+            height: 16px;
+            flex-basis: 16px;
+        }
+    }
+}
+
+@media (max-width: 340px) {
+    .service-status {
+        &__btn {
+            padding: 8px;
+            font-size: 12px;
+        }
+
+        &__menu {
+            width: min(200px, calc(100vw - 20px));
+            max-width: calc(100vw - 20px);
+        }
+
+        &__item {
+            gap: 8px;
+            padding: 9px 8px;
+        }
+    }
+}
+
+/* Respeta las preferencias de movimiento del dispositivo */
+@media (prefers-reduced-motion: reduce) {
+    .service-status,
+    .service-status * {
+        animation: none !important;
+        transition: none !important;
+    }
 }

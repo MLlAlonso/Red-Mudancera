@@ -1,493 +1,784 @@
 @use "../../utils/variables";
 
 .detalle-servicio {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 30px 20px;
-
-  &__header {
-    max-width: 1100px;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 1rem;
-    justify-content: space-between;
-  }
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px 20px 40px;
+    color: variables.$text;
+    box-sizing: border-box;
 
-  &__title {
-    font-family: variables.$font-title;
-    font-size: 40px;
-    font-weight: bold;
-    color: variables.$primary;
-    margin-bottom: 5px;
-  }
-
-  &__subtitle {
-    font-family: variables.$font-text;
-    color: variables.$text-muted;
-    font-size: 22px;
-    margin-bottom: 25px;
-    text-align: justify;
-  }
-
-  &__card {
-    background: variables.$cards;
-    border-radius: 20px;
-    padding: 2.5rem;
-    max-width: 1100px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  &__route {
-    display: flex;
-    flex-direction: column;
-
-    &-tags {
-      display: flex;
-      flex-direction: row;
-      width: 100%;
-      align-items: center;
-      justify-content: space-between;
+    &__header {
+        width: 100%;
+        margin-bottom: 20px;
     }
 
-    &-title {
-      font-family: variables.$font-title;
-      font-size: 40px;
-      font-weight: bold;
-      color: #09233e;
-      align-items: center;
-
-      img {
-        width: 50px;
-        height: 40px;
-        margin: 0px;
-      }
-
-    }
-  }
-
-  .service-card__tag {
-    display: inline-block;
-    border-radius: 10px;
-    font-size: 26px;
-    font-weight: 600;
-    text-align: center;
-    min-width: 120px;
-    max-width: 120px;
-    height: 30px;
-    line-height: 30px;
-    margin-bottom: 10px;
-  }
-
-  &__grid,
-  &__empresa {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(260px, 1fr));
-    gap: 1rem;
-    margin-top: 20px;
-  }
-
-  label {
-    font-family: variables.$font-text;
-    font-size: 30px;
-    font-weight: 400;
-    color: variables.$primary;
-    margin-right: 20px;
-  }
-
-  span,
-  p {
-    font-family: variables.$font-text;
-    font-size: 25px;
-    color: #4a5e71;
-    text-transform: capitalize;
-  }
-
-  &__divider {
-    display: flex;
-    align-items: center;
-    width: 100%;
-
-    &::before,
-    &::after {
-      content: "";
-      flex: 1;
-      border-top: 2px dashed #abb0b4;
-      opacity: 0.5;
+    &__title {
+        margin: 0 0 8px;
+        color: variables.$primary;
+        font-family: variables.$font-title;
+        font-size: 40px;
+        font-weight: 700;
+        line-height: 1.2;
     }
 
-    img {
-      width: 60px;
-      height: 50px;
-      margin: 0 16px;
-      opacity: 0.7;
+    &__subtitle {
+        margin: 0;
+        color: variables.$text-muted;
+        font-family: variables.$font-text;
+        font-size: 20px;
+        line-height: 1.5;
     }
-  }
-
-  .offer {
-    border-left: 10px solid transparent;
-  }
-
-  .empresa-clickable {
-    cursor: pointer;
-
-    span {
-      color: variables.$primary;
-      font-weight: 600;
-    }
-
-    &:hover {
-      transform: scale(1.1);
-    }
-  }
-
-  &__actions {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    justify-content: space-evenly;
-
-    .btn_crud {
-      font-size: 20px;
-    }
-  }
-
-  .reputacion {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-weight: 600;
-    color: #f5a623;
-  }
-
-  .nota-html {
-    font-size: 20px;
-
-    ul,
-    ol {
-      padding-left: 1.2rem;
-    }
-
-    li {
-      margin-bottom: 4px;
-    }
-
-    b {
-      font-weight: 700;
-    }
-
-    i {
-      font-style: italic;
-    }
-  }
-
-  /* =========================
-      Galería de imágenes
-    ========================= */
-
-  .servicio-galeria {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-    margin-top: 10px;
-    flex-wrap: wrap;
-
-    &__item {
-      cursor: pointer;
-
-      img {
-        width: 200px;
-        height: 200px;
-        object-fit: cover;
-        border-radius: 10px;
-        border: 1px solid #ddd;
-        transition: transform 0.2s ease;
-      }
-
-      &:hover img {
-        transform: scale(1.05);
-      }
-    }
-  }
-
-  /* =========================
-      Modal imagen
-    ========================= */
-
-  .imagen-modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.75);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
 
     &__content {
-      position: relative;
-      max-width: 90%;
-      max-height: 90%;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+        min-width: 0;
     }
-
-    img {
-      width: 100%;
-      height: auto;
-      max-height: 90vh;
-      border-radius: 12px;
-    }
-
-    &__close {
-      position: absolute;
-      top: -10px;
-      right: -10px;
-      background: variables.$secondary;
-      color: variables.$primary;
-      border: none;
-      border-radius: 50%;
-      width: 32px;
-      height: 32px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-  }
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-  .detalle-servicio {
-    padding: 2.5rem 1.5rem;
 
     &__card {
-      padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+        min-width: 0;
+        padding: 20px;
+        border: 1px solid rgba(9, 35, 62, 0.08);
+        border-radius: 18px;
+        background: variables.$cards;
+        box-shadow: 0 5px 20px rgba(9, 35, 62, 0.05);
+        box-sizing: border-box;
     }
 
-    &__route-title {
-      font-size: 36px;
+    &__summary {
+        gap: 20px;
     }
 
-    .service-card__tag {
-      font-size: 24px;
+    &__top-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        width: 100%;
+        min-width: 0;
     }
-  }
-}
 
-@media (max-width: 768px) {
-  .detalle-servicio {
-    padding: 1rem 1rem;
+    &__badges {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        min-width: 0;
+    }
 
-    &__card {
-      padding: 1.5rem;
-      gap: 1rem;
+    &__badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        min-height: 38px;
+        padding: 8px 14px;
+        border-radius: 10px;
+        font-family: variables.$font-title;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.2;
+        box-sizing: border-box;
+
+        &--busco {
+            background: rgba(variables.$azul_002, 0.1);
+            color: variables.$azul_002;
+        }
+
+        &--ofrezco {
+            background: rgba(variables.$tertiary, 0.12);
+            color: variables.$tertiary;
+        }
+    }
+
+    &__badge-dot {
+        width: 10px;
+        height: 10px;
+        flex: 0 0 10px;
+        border-radius: 50%;
+        background: currentColor;
     }
 
     &__route {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.2rem;
+        width: 100%;
+        min-width: 0;
     }
 
     &__route-title {
-      font-size: 24px;
-    }
-
-    &__grid,
-    &__empresa {
-      grid-template-columns: 1fr;
-
-      div {
         display: flex;
-        flex-direction: row;
         align-items: center;
-        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 0;
+        color: variables.$primary;
+        font-family: variables.$font-title;
+        font-size: clamp(26px, 3vw, 36px);
+        font-weight: 700;
+        line-height: 1.35;
+        overflow-wrap: anywhere;
+        word-break: normal;
 
-        #salida,
-        #vendedor {
-          white-space: nowrap;
+        > span {
+            min-width: 0;
         }
-      }
     }
 
-    &__divider {
-      margin: 10px 0;
-
-      img {
-        width: 45px;
-        height: 40px;
-      }
+    &__route-arrow {
+        flex-shrink: 0;
+        color: variables.$primary;
+        font-size: 20px;
     }
 
-    .service-card__tag {
-      font-size: 20px;
-      min-width: 100px;
-      max-width: 100px;
-      height: 35px;
-      line-height: 35px;
-    }
-  }
-
-  .estado-badge {
-    height: 50px;
-  }
-
-  .detalle-servicio__route-title img {
-    width: 40px;
-    height: 30px;
-    margin: 0;
-  }
-}
-
-@media (max-width: 600px) {
-  .detalle-servicio {
-    padding: 1.5rem 1rem;
-
-    &__card {
-      padding: 1rem;
-      gap: 0.75rem;
+    &__quick-info {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        width: 100%;
     }
 
-    &__title {
-      font-size: 30px;
-      text-align: center;
-      margin-bottom: 5px;
-    }
-
-    &__subtitle {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-    
-    &__route-title {
-      font-size: 26px;
-    }
-
-    label {
-      font-size: 20px;
-      margin-right: 5px;
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    span,
-    p {
-      font-size: 18px;
-    }
-
-    .detalle-servicio__route-tags {
-      align-items: center;
-
-      .service-card__tag {
-        font-size: 16px;
-        min-width: 80px;
-        height: 30px;
+    &__info-badge {
         display: flex;
         align-items: center;
-        justify-content: center;
-        margin-top: 20px;
-      }
+        gap: 10px;
+        min-width: 0;
+        min-height: 40px;
+        padding: 12px 14px;
+        border: 1px solid rgba(9, 35, 62, 0.08);
+        border-radius: 12px;
+        background: rgba(9, 35, 62, 0.025);
+        box-sizing: border-box;
 
-      .btn_crud {
-        font-size: 16px;
-        min-width: 100px;
-        max-width: 100px;
+        svg {
+            flex: 0 0 22px;
+            color: variables.$primary;
+        }
+
+        span {
+            min-width: 0;
+            color: variables.$primary;
+            font-family: variables.$font-text;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
+        }
+    }
+
+    &__section {
+        gap: 20px;
+    }
+
+    &__section-heading {
         display: flex;
         align-items: center;
+        gap: 10px;
+        min-width: 0;
+
+        h3 {
+            margin: 0;
+            color: variables.$primary;
+            font-family: variables.$font-title;
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.35;
+        }
+    }
+
+    &__section-icon {
+        display: inline-flex;
+        align-items: center;
         justify-content: center;
-      }
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .detalle-servicio {
-
-    &__title {
-      font-size: 26px;
+        width: 44px;
+        height: 44px;
+        flex: 0 0 44px;
+        border-radius: 12px;
+        background: rgba(variables.$text-muted, 0.1);
+        color: variables.$primary;
     }
 
-    &__subtitle {
-      font-size: 16px;
+    &__empresa {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 22px 30px;
+        width: 100%;
+        margin: 0;
+
+        > div {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 7px;
+            min-width: 0;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(9, 35, 62, 0.08);
+        }
+
+        label {
+            margin: 0;
+            color: variables.$text-muted;
+            font-family: variables.$font-text;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        span {
+            min-width: 0;
+            color: variables.$primary;
+            font-family: variables.$font-text;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .empresa-clickable {
+            cursor: pointer;
+            border-radius: 6px;
+            transition: opacity 0.2s ease;
+
+            &:hover {
+                opacity: 0.78;
+            }
+
+            &:focus-visible {
+                outline: 2px solid variables.$tertiary;
+                outline-offset: 4px;
+            }
+
+            span {
+                color: variables.$primary;
+                font-weight: 700;
+            }
+        }
     }
 
-    &__route-title {
-      font-size: 22px;
+    .reputacion {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: #d99516;
+        font-weight: 700;
 
-      img {
-        width: 35px;
-        height: 28px;
-      }
+        > span {
+            color: #d99516;
+            font-size: 20px;
+        }
     }
 
-    label {
-      font-size: 16px;
+    &__phone-locked {
+        color: variables.$text-muted !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
     }
 
-    span,
-    p {
-      font-size: 16px;
-    }
+    .nota-html {
+        min-width: 0;
+        color: variables.$text;
+        font-family: variables.$font-text;
+        font-size: 16px;
+        line-height: 1.7;
+        overflow-wrap: anywhere;
 
-    &__actions .btn_crud {
-      font-size: 16px;
-    }
+        p {
+            margin: 0 0 12px;
+        }
 
-    .servicio-galeria__item img {
-      width: 140px;
-      height: 140px;
-    }
-  }
-}
+        ul,
+        ol {
+            padding-left: 1.4rem;
+        }
 
-@media (max-width: 360px) {
-  .detalle-servicio {
+        li {
+            margin-bottom: 6px;
+        }
 
-    &__title {
-      font-size: 22px;
-    }
+        b,
+        strong {
+            font-weight: 700;
+        }
 
-    &__subtitle {
-      font-size: 14px;
-    }
+        i,
+        em {
+            font-style: italic;
+        }
 
-    &__route-title {
-      font-size: 18px;
-    }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
 
-    span,
-    p {
-      font-size: 14px;
-    }
-
-    .servicio-galeria__item img {
-      width: 110px;
-      height: 110px;
-    }
-  }
-}
-
-@media (max-width: 300px) {
-  .detalle-servicio {
-
-    &__title {
-      font-size: 18px;
-    }
-
-    span,
-    p {
-      font-size: 13px;
+        > :last-child {
+            margin-bottom: 0;
+        }
     }
 
     .servicio-galeria {
-      gap: 10px;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        width: 100%;
+        margin: 0;
+
+        &__item {
+            display: block;
+            width: 100%;
+            min-width: 0;
+            padding: 0;
+            overflow: hidden;
+            border: 1px solid rgba(9, 35, 62, 0.12);
+            border-radius: 12px;
+            background: variables.$cards;
+            cursor: pointer;
+            aspect-ratio: 1 / 1;
+
+            img {
+                display: block;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.25s ease;
+            }
+
+            &:hover img {
+                transform: scale(1.045);
+            }
+
+            &:focus-visible {
+                outline: 2px solid variables.$tertiary;
+                outline-offset: 3px;
+            }
+        }
     }
 
-    .servicio-galeria__item img {
-      width: 90px;
-      height: 90px;
+    &__actions {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin: 0;
+
+        .btn_cta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 380px;
+            min-height: 50px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            background: variables.$primary;
+            font-size: 17px;
+            font-weight: 700;
+            box-sizing: border-box;
+            transition:
+                background 0.2s ease,
+                transform 0.2s ease;
+
+            &:hover {
+                background: variables.$primary-hover;
+                transform: translateY(-1px);
+            }
+        }
     }
-  }
+
+    .imagen-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.78);
+        box-sizing: border-box;
+
+        &__content {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 92vw;
+            max-height: 90vh;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+            max-height: 86vh;
+            width: auto;
+            height: auto;
+            border-radius: 12px;
+            object-fit: contain;
+        }
+
+        &__close {
+            position: absolute;
+            top: -14px;
+            right: -14px;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            padding: 0;
+            border: none;
+            border-radius: 50%;
+            background: variables.$secondary;
+            color: variables.$primary;
+            font-size: 17px;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+
+            &:hover {
+                filter: brightness(0.94);
+            }
+
+            &:focus-visible {
+                outline: 2px solid #fff;
+                outline-offset: 3px;
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .detalle-servicio {
+        padding: 28px 20px 36px;
+
+        &__card {
+            padding: 22px;
+        }
+
+        &__quick-info {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        &__route-title {
+            font-size: 30px;
+        }
+
+        .servicio-galeria {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .detalle-servicio {
+        padding: 24px 16px 32px;
+
+        &__header {
+            margin-bottom: 22px;
+        }
+
+        &__title {
+            font-size: 32px;
+        }
+
+        &__subtitle {
+            font-size: 17px;
+        }
+
+        &__content {
+            gap: 18px;
+        }
+
+        &__card {
+            gap: 18px;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        &__summary {
+            gap: 18px;
+        }
+
+        &__badge {
+            min-height: 35px;
+            padding: 8px 11px;
+            font-size: 14px;
+        }
+
+        &__route-title {
+            gap: 8px;
+            font-size: 27px;
+        }
+
+        &__info-badge {
+            min-height: 54px;
+            padding: 11px;
+        }
+
+        &__section-heading {
+            h3 {
+                font-size: 21px;
+            }
+        }
+
+        &__empresa {
+            gap: 18px 22px;
+        }
+
+        .servicio-galeria {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    .detalle-servicio {
+        padding: 22px 12px 30px;
+
+        &__header {
+            margin-bottom: 20px;
+        }
+
+        &__title {
+            font-size: 28px;
+            text-align: center;
+        }
+
+        &__subtitle {
+            font-size: 15px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        &__content {
+            gap: 15px;
+        }
+
+        &__card {
+            gap: 16px;
+            padding: 16px;
+            border-radius: 13px;
+        }
+
+        &__top-row {
+            align-items: center;
+            gap: 10px;
+        }
+
+        &__badges {
+            gap: 7px;
+        }
+
+        &__badge {
+            min-height: 32px;
+            padding: 7px 9px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        &__badge-dot {
+            width: 8px;
+            height: 8px;
+            flex-basis: 8px;
+        }
+
+        &__route-title {
+            align-items: flex-start;
+            gap: 6px;
+            font-size: 23px;
+            line-height: 1.4;
+        }
+
+        &__quick-info {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 7px;
+        }
+
+        &__info-badge {
+            align-items: flex-start;
+            gap: 8px;
+            min-height: 52px;
+            padding: 10px;
+
+            svg {
+                width: 19px;
+                height: 19px;
+                flex-basis: 19px;
+            }
+
+            span {
+                font-size: 12px;
+                line-height: 1.4;
+            }
+        }
+
+        &__section-heading {
+            gap: 10px;
+
+            h3 {
+                font-size: 19px;
+            }
+        }
+
+        &__section-icon {
+            width: 38px;
+            height: 38px;
+            flex-basis: 38px;
+        }
+
+        &__empresa {
+            grid-template-columns: minmax(0, 1fr);
+            gap: 16px;
+
+            > div {
+                gap: 5px;
+                padding-bottom: 12px;
+            }
+
+            label {
+                font-size: 13px;
+            }
+
+            span {
+                font-size: 15px;
+            }
+        }
+
+        &__phone-locked {
+            font-size: 13px !important;
+        }
+
+        .nota-html {
+            font-size: 14px;
+            line-height: 1.65;
+        }
+
+        .servicio-galeria {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 9px;
+
+            &__item {
+                border-radius: 9px;
+            }
+        }
+
+        &__actions {
+            .btn_cta {
+                max-width: none;
+                min-height: 46px;
+                padding: 11px 16px;
+                font-size: 15px;
+            }
+        }
+
+        .imagen-modal {
+            padding: 12px;
+
+            &__content {
+                max-width: 96vw;
+                max-height: 88vh;
+            }
+
+            img {
+                max-height: 82vh;
+                border-radius: 9px;
+            }
+
+            &__close {
+                top: -10px;
+                right: -5px;
+                width: 34px;
+                height: 34px;
+            }
+        }
+    }
+}
+
+@media (max-width: 380px) {
+    .detalle-servicio {
+        padding-right: 10px;
+        padding-left: 10px;
+
+        &__title {
+            font-size: 25px;
+        }
+
+        &__subtitle {
+            font-size: 14px;
+        }
+
+        &__card {
+            padding: 13px;
+        }
+
+        &__route-title {
+            font-size: 20px;
+        }
+
+        &__quick-info {
+            gap: 6px;
+        }
+
+        &__info-badge {
+            gap: 6px;
+            padding: 8px;
+
+            svg {
+                width: 17px;
+                height: 17px;
+                flex-basis: 17px;
+            }
+
+            span {
+                font-size: 11px;
+            }
+        }
+
+        &__section-heading {
+            h3 {
+                font-size: 18px;
+            }
+        }
+
+        .servicio-galeria {
+            gap: 7px;
+        }
+    }
+}
+
+@media (max-width: 300px) {
+    .detalle-servicio {
+        &__title {
+            font-size: 22px;
+        }
+
+        &__route-title {
+            font-size: 18px;
+        }
+
+        &__info-badge {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        &__info-badge span {
+            font-size: 11px;
+        }
+
+        .servicio-galeria {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .detalle-servicio,
+    .detalle-servicio * {
+        scroll-behavior: auto;
+        animation: none !important;
+        transition: none !important;
+    }
 }
