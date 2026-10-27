@@ -121,6 +121,66 @@ function formatFecha(value) {
     return map[value] || value || "No especificada";
 }
 
+function sumarDias(fecha, dias) {
+    const resultado = new Date(fecha);
+    resultado.setDate(resultado.getDate() + dias);
+    return resultado;
+}
+
+function formatearFechaCorta(fecha) {
+    return new Intl.DateTimeFormat("es-MX", { day: "numeric", month: "long", }).format(fecha);
+}
+
+function calcularNotaFecha(solicitud) {
+    const fechaCreacion = solicitud?.created_at;
+    const fechaEstimada = solicitud?.fecha_recoleccion;
+
+    if (!fechaCreacion || !fechaEstimada) {
+        return "No se especificó una fecha estimada para la mudanza.";
+    }
+
+    if (fechaEstimada === "lo_antes_posible") {
+        return "Prefiere realizar la mudanza lo antes posible.";
+    }
+
+    const rangos = {
+        "1-7": [1, 8],
+        "8-15": [8, 15],
+        "+15": [16, 30],
+        "30+": [30, 60],
+    };
+
+    const rango = rangos[fechaEstimada];
+
+    if (!rango) {
+        return "No se pudo determinar el rango de fechas de la mudanza.";
+    }
+
+    const referencia = new Date(fechaCreacion);
+
+    if (Number.isNaN(referencia.getTime())) {
+        return "No se pudo determinar el rango de fechas de la mudanza.";
+    }
+
+    referencia.setHours(12, 0, 0, 0);
+    const inicio = sumarDias(referencia, rango[0]);
+    const fin = sumarDias(referencia, rango[1]);
+    const mismoMes = inicio.getMonth() === fin.getMonth() && inicio.getFullYear() === fin.getFullYear();
+    const mismoAnio = inicio.getFullYear() === fin.getFullYear();
+    const fechaInicio = formatearFechaCorta(inicio);
+    const fechaFin = formatearFechaCorta(fin);
+
+    if (mismoMes) {
+        return `Prefiere mudanza entre el ${inicio.getDate()} y el ${fechaFin}.`;
+    }
+
+    if (mismoAnio) {
+        return `Prefiere mudanza entre el ${fechaInicio} y el ${fechaFin}.`;
+    }
+
+    return `Prefiere mudanza entre el ${fechaInicio} de ${inicio.getFullYear()} y el ${fechaFin} de ${fin.getFullYear()}.`;
+}
+
 function formatTipoServicio(value) {
     const normalized = String(value || "").toLowerCase();
     if (normalized === "local") return "Local";
@@ -455,75 +515,63 @@ export default function DetalleSolicitudPage() {
                     </section>
 
                     <section className="detalle-solicitud__locations">
-                        <article className="detalle-solicitud__card detalle-solicitud__location-card">
+                        <div className="detalle-solicitud__card detalle-solicitud__locations-card">
                             <div className="detalle-solicitud__section-heading">
                                 <span className="detalle-solicitud__section-icon">
-                                    <Icon name="home" size={25} />
+                                    <Icon name="truck" size={25} />
                                 </span>
-                                <h3>Origen</h3>
+
+                                <h3>Detalles de la ruta</h3>
                             </div>
 
-                            <div className="detalle-solicitud__location-details">
-                                <div>
-                                    <label>Tipo de vivienda</label>
-                                    <span>{solicitud.tipo_vivienda || "—"}</span>
-                                </div>
+                            <div className="detalle-solicitud__locations-table-wrapper">
+                                <table className="detalle-solicitud__locations-table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Característica</th>
+                                            <th scope="col">
+                                                <span className="detalle-solicitud__location-heading">
+                                                    <Icon name="home" size={18} />
+                                                    Origen
+                                                </span>
+                                            </th>
+                                            <th scope="col">
+                                                <span className="detalle-solicitud__location-heading">
+                                                    <Icon name="home" size={18} />
+                                                    Destino
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </thead>
 
-                                <div>
-                                    <label>Pisos</label>
-                                    <span>{solicitud.origen_pisos || "—"}</span>
-                                </div>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Tipo de vivienda</th>
+                                            <td>{solicitud.tipo_vivienda || "—"}</td>
+                                            <td>{solicitud.vivienda_destino || "—"}</td>
+                                        </tr>
 
-                                <div>
-                                    <label>Elevador</label>
-                                    <span>{formatElevador(solicitud.origen_elevador)}</span>
-                                </div>
+                                        <tr>
+                                            <th scope="row">Pisos</th>
+                                            <td>{solicitud.origen_pisos || "—"}</td>
+                                            <td>{solicitud.destino_pisos || "—"}</td>
+                                        </tr>
 
-                                <div>
-                                    <label>Acarreo</label>
-                                    <span>{solicitud.origen_acarreo || "—"}</span>
-                                </div>
+                                        <tr>
+                                            <th scope="row">Elevador</th>
+                                            <td>{formatElevador(solicitud.origen_elevador)}</td>
+                                            <td>{formatElevador(solicitud.destino_elevador)}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th scope="row">Acarreo</th>
+                                            <td>{solicitud.origen_acarreo || "—"}</td>
+                                            <td>{solicitud.destino_acarreo || "—"}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                        </article>
-
-                        <div className="detalle-solicitud__locations-divider" aria-hidden="true">
-                            <span />
-                            <div>
-                                <Icon name="truck" size={26} />
-                            </div>
-                            <span />
                         </div>
-
-                        <article className="detalle-solicitud__card detalle-solicitud__location-card">
-                            <div className="detalle-solicitud__section-heading">
-                                <span className="detalle-solicitud__section-icon">
-                                    <Icon name="home" size={25} />
-                                </span>
-                                <h3>Destino</h3>
-                            </div>
-
-                            <div className="detalle-solicitud__location-details">
-                                <div>
-                                    <label>Tipo de vivienda</label>
-                                    <span>{solicitud.vivienda_destino || "—"}</span>
-                                </div>
-
-                                <div>
-                                    <label>Pisos</label>
-                                    <span>{solicitud.destino_pisos || "—"}</span>
-                                </div>
-
-                                <div>
-                                    <label>Elevador</label>
-                                    <span>{formatElevador(solicitud.destino_elevador)}</span>
-                                </div>
-
-                                <div>
-                                    <label>Acarreo</label>
-                                    <span>{solicitud.destino_acarreo || "—"}</span>
-                                </div>
-                            </div>
-                        </article>
                     </section>
 
                     <section className="detalle-solicitud__card detalle-solicitud__section">
@@ -593,6 +641,20 @@ export default function DetalleSolicitudPage() {
                             </div>
                         </section>
                     )}
+
+                    <section className="detalle-solicitud__card detalle-solicitud__note">
+                        <div className="detalle-solicitud__section-heading">
+                            <span className="detalle-solicitud__section-icon">
+                                <Icon name="calendar" size={25} />
+                            </span>
+
+                            <h3>Nota sobre la fecha de mudanza</h3>
+                        </div>
+
+                        <p className="detalle-solicitud__note-text">
+                            {calcularNotaFecha(solicitud)}
+                        </p>
+                    </section>
                 </div>
             </main>
 

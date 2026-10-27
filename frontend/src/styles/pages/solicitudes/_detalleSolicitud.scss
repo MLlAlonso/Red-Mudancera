@@ -105,8 +105,9 @@
     }
 
     &--exclusivo {
-      background: variables.$tertiary;
-      color: #fff;
+      background: rgba(228, 191, 67, 0.5);
+      color: rgba(variables.$primary, 0.6);
+      font-weight: bold;
     }
   }
 
@@ -280,22 +281,19 @@
   }
 
   /* =====================================
-       ORIGEN Y DESTINO
-    ===================================== */
+   TABLA COMPARATIVA: ORIGEN Y DESTINO
+===================================== */
+
   &__locations {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 48px minmax(0, 1fr);
-    align-items: stretch;
-    gap: 16px;
     width: 100%;
+    min-width: 0;
   }
 
-  &__location-card {
+  &__locations-card {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 22px;
     min-width: 0;
-    padding: 20px;
   }
 
   &__section-heading {
@@ -318,75 +316,99 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    flex: 0 0 46px;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
     border-radius: 12px;
     background: rgba(variables.$text-muted, 0.12);
     color: variables.$primary;
   }
 
-  &__location-details {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  &__locations-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid rgba(9, 35, 62, 0.09);
+    border-radius: 12px;
+    -webkit-overflow-scrolling: touch;
+  }
 
-    >div {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      min-width: 0;
-      padding-bottom: 10px;
+  &__locations-table {
+    width: 100%;
+    min-width: 420px;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    color: variables.$primary;
+    font-family: variables.$font-text;
+    font-size: 15px;
+
+    th,
+    td {
+      padding: 16px 20px;
+      text-align: left;
+      vertical-align: middle;
       border-bottom: 1px solid rgba(9, 35, 62, 0.08);
+      overflow-wrap: anywhere;
+    }
 
-      &:last-child {
-        padding-bottom: 0;
-        border-bottom: 0;
+    thead {
+      background: rgba(9, 35, 62, 0.045);
+
+      th {
+        color: variables.$primary;
+        font-size: 16px;
+        font-weight: 700;
       }
     }
 
-    label {
-      color: variables.$text-muted;
-      font-family: variables.$font-text;
-      font-size: 14px;
-      font-weight: 600;
+    tbody {
+      text-transform: capitalize;
+
+      th {
+        width: 34%;
+        color: variables.$text-muted;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: capitalize;
+      }
+
+      td {
+        font-weight: 600;
+        line-height: 1.5;
+      }
+
+      tr:last-child {
+
+        th,
+        td {
+          border-bottom: 0;
+        }
+      }
+
+      tr:hover {
+        background: rgba(9, 35, 62, 0.025);
+      }
     }
 
-    span {
-      color: variables.$primary;
-      font-family: variables.$font-text;
-      font-size: 16px;
-      font-weight: 600;
-      line-height: 1.45;
-      overflow-wrap: anywhere;
+    th:first-child {
+      width: 34%;
+    }
+
+    th:nth-child(2),
+    th:nth-child(3) {
+      width: 33%;
     }
   }
 
-  &__locations-divider {
-    display: flex;
-    flex-direction: column;
+  &__location-heading {
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
-    min-height: 100%;
+    gap: 8px;
+    color: variables.$primary;
+    font-weight: 700;
 
-    >span {
-      width: 1px;
-      flex: 1;
-      min-height: 20px;
-      border-left: 2px dashed rgba(9, 35, 62, 0.2);
-    }
-
-    >div {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      flex: 0 0 44px;
-      border: 1px solid rgba(9, 35, 62, 0.1);
-      border-radius: 50%;
-      background: variables.$cards;
+    svg {
+      flex: 0 0 18px;
       color: variables.$primary;
     }
   }
@@ -481,6 +503,23 @@
       height: auto;
     }
   }
+
+  &__note {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-left: 4px solid variables.$tertiary;
+  }
+
+  &__note-text {
+    margin: 0;
+    border-radius: 10px;
+    color: variables.$primary;
+    font-family: variables.$font-text;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.6;
+  }
 }
 
 @media (max-width: 1024px) {
@@ -512,6 +551,18 @@
       gap: 6px;
       padding: 10px 8px;
       font-size: 13px;
+    }
+
+    &__locations-card {
+      gap: 18px;
+    }
+
+    &__locations-table {
+
+      th,
+      td {
+        padding: 14px 16px;
+      }
     }
   }
 }
@@ -617,8 +668,9 @@
     &__route-title {
       align-items: flex-start;
       gap: 5px;
-      font-size: 24px;
-      line-height: 1.4;
+      font-size: 20px;
+      line-height: 1.2;
+      margin-bottom: 4px;
     }
 
     &__quick-info {
@@ -727,6 +779,43 @@
     &__inventory {
       padding-top: 16px;
     }
+
+    &__locations-card {
+      gap: 16px;
+    }
+
+    &__locations-table {
+      min-width: 380px;
+      font-size: 14px;
+
+      th,
+      td {
+        padding: 13px 12px;
+      }
+
+      thead th {
+        font-size: 13px;
+      }
+
+      tbody th {
+        font-size: 12px;
+      }
+
+      tbody td {
+        font-size: 13px;
+      }
+    }
+
+    &__location-heading {
+      gap: 5px;
+    }
+  }
+
+  .detalle-solicitud {
+    &__note-text {
+      padding: 0px;
+      font-size: 14px;
+    }
   }
 }
 
@@ -782,6 +871,15 @@
     &__action {
       gap: 5px;
       font-size: 12px;
+    }
+
+    &__locations-table {
+      min-width: 360px;
+
+      th,
+      td {
+        padding: 12px 10px;
+      }
     }
   }
 }
