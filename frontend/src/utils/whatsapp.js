@@ -192,77 +192,37 @@ export function openLeadWhatsappMessage({
 
 export const WHATSAPP_VARIABLES = {
   empresa_empresa: [
-    {
-      key: "origen",
-      label: "Origen del servicio",
-    },
-    {
-      key: "destino",
-      label: "Destino del servicio",
-    },
-    {
-      key: "tipo",
-      label: "Tipo de publicación",
-    },
-    {
-      key: "volumen",
-      label: "Volumen",
-    },
-    {
-      key: "tipoCarga",
-      label: "Tipo de carga",
-    },
-    {
-      key: "tipoVehiculo",
-      label: "Tipo de vehículo",
-    },
-    {
-      key: "servicioUrl",
-      label: "Enlace al servicio",
-    },
+    { key: "origen", label: "Origen del servicio", },
+    { key: "destino", label: "Destino del servicio", },
+    { key: "tipo", label: "Tipo de publicación", },
+    { key: "volumen", label: "Volumen", },
+    { key: "tipoCarga", label: "Tipo de carga", },
+    { key: "tipoVehiculo", label: "Tipo de vehículo", },
+    { key: "servicioUrl", label: "Enlace al servicio", },
+    { key: "tipoCargaLabel", label: "Tipo de carga (etiqueta)" },
+    { key: "detalleCarga", label: "Detalle de la carga" },
   ],
 
   empresa_cliente: [
-    {
-      key: "empresaNombre",
-      label: "Nombre de mi empresa",
-    },
-    {
-      key: "nombreCliente",
-      label: "Nombre del cliente",
-    },
-    {
-      key: "origen",
-      label: "Origen de la mudanza",
-    },
-    {
-      key: "destino",
-      label: "Destino de la mudanza",
-    },
-    {
-      key: "tipoServicio",
-      label: "Tipo de servicio",
-    },
-    {
-      key: "fechaRecoleccion",
-      label: "Fecha deseada",
-    },
-    {
-      key: "tipoMudanza",
-      label: "Modalidad",
-    },
-    {
-      key: "tipoVivienda",
-      label: "Vivienda de origen",
-    },
-    {
-      key: "viviendaDestino",
-      label: "Vivienda de destino",
-    },
-    {
-      key: "inventario",
-      label: "Inventario",
-    },
+    { key: "empresaNombre", label: "Nombre de mi empresa", },
+    { key: "nombreCliente", label: "Nombre del cliente", },
+    { key: "origen", label: "Origen de la mudanza", },
+    { key: "destino", label: "Destino de la mudanza", },
+    { key: "tipoServicio", label: "Tipo de servicio", },
+    { key: "fechaRecoleccion", label: "Fecha deseada", },
+    { key: "tipoMudanza", label: "Modalidad", },
+    { key: "tipoVivienda", label: "Vivienda de origen", },
+    { key: "viviendaDestino", label: "Vivienda de destino", },
+    { key: "inventario", label: "Inventario", },
+    { key: "telefono", label: "Teléfono del cliente" },
+    { key: "emailCliente", label: "Correo del cliente" },
+    { key: "origenPisos", label: "Pisos de origen" },
+    { key: "origenElevador", label: "Elevador de origen" },
+    { key: "origenAcarreo", label: "Acarreo de origen" },
+    { key: "destinoPisos", label: "Pisos de destino" },
+    { key: "destinoElevador", label: "Elevador de destino" },
+    { key: "destinoAcarreo", label: "Acarreo de destino" },
+    { key: "inventarioLista", label: "Inventario en lista" },
   ],
 };
 
@@ -283,18 +243,11 @@ export function renderWhatsappTemplate(template, variables = {}) {
 }
 
 export function buildServiceWhatsappVariables({ empresaNombre, tipo, origen, destino, volumen, tipoCarga, tipoVehiculo, servicioId, }) {
-  const tipoCargaLabels = {
-    menaje: "Menaje de casa",
-    vehiculo: "Vehículo",
-    menaje_vehiculo: "Menaje + vehículo",
-    otro: "Otro",
-  };
-
-  const tipoVehiculoLabels = {
-    compacto: "Auto compacto",
-    camioneta: "Camioneta",
-    motocicleta: "Motocicleta",
-  };
+  const tipoCargaLabels = { menaje: "Menaje de casa", vehiculo: "Vehículo", menaje_vehiculo: "Menaje + vehículo", otro: "Otro", };
+  const tipoVehiculoLabels = { compacto: "Auto compacto", camioneta: "Camioneta", motocicleta: "Motocicleta", };
+  const tipoCargaLabel = tipoCargaLabels[tipoCarga] || tipoCarga || "No especificado";
+  const tipoVehiculoLabel = tipoVehiculoLabels[tipoVehiculo] || tipoVehiculo || "No especificado";
+  const detalleCarga = tipoCarga === "vehiculo" ? `Tipo de vehículo: ${tipoVehiculoLabel}` : `Volumen: ${volumen ? `${volumen} m³` : "No especificado"}`;
 
   return {
     empresaNombre: empresaNombre || "",
@@ -302,8 +255,10 @@ export function buildServiceWhatsappVariables({ empresaNombre, tipo, origen, des
     origen: origen || "",
     destino: destino || "",
     volumen: volumen ? `${volumen} m³` : "",
-    tipoCarga: tipoCargaLabels[tipoCarga] || tipoCarga || "",
-    tipoVehiculo: tipoVehiculoLabels[tipoVehiculo] || tipoVehiculo || "",
+    tipoCarga: tipoCargaLabel,
+    tipoCargaLabel,
+    tipoVehiculo: tipoVehiculoLabel,
+    detalleCarga,
     servicioUrl: servicioId ? `https://app.mudanzafacil.com.mx/servicios/${servicioId}` : "",
   };
 }
@@ -321,9 +276,20 @@ export function buildLeadWhatsappVariables(datos = {}) {
     .replace(/&gt;/gi, ">")
     .trim();
 
+  const inventarioLista = inventario
+    ? inventario
+      .split(/[,\r\n]+/)
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .map((item) => `- ${item}`)
+      .join("\n")
+    : "- No especificado";
+
   return {
     empresaNombre: datos.empresaNombre || "",
     nombreCliente: datos.nombreCliente || "",
+    emailCliente: datos.emailCliente || "",
+    telefono: datos.telefono || "",
     origen: datos.origen || "",
     destino: datos.destino || "",
     tipoServicio: datos.tipoServicio || "",
@@ -331,7 +297,14 @@ export function buildLeadWhatsappVariables(datos = {}) {
     tipoMudanza: datos.tipoMudanza || "",
     tipoVivienda: datos.tipoVivienda || "",
     viviendaDestino: datos.viviendaDestino || "",
-    inventario: inventario || "",
+    origenPisos: datos.origenPisos || "",
+    origenElevador: datos.origenElevador || "",
+    origenAcarreo: datos.origenAcarreo || "",
+    destinoPisos: datos.destinoPisos || "",
+    destinoElevador: datos.destinoElevador || "",
+    destinoAcarreo: datos.destinoAcarreo || "",
+    inventario,
+    inventarioLista,
   };
 }
 

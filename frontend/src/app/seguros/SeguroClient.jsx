@@ -146,7 +146,7 @@ export default function SeguroClient() {
             <>
                 <button className="btnSeguro" onClick={handleSeguro} disabled={sent || loading} >
                     <span className="text">
-                        {sent ? "Solicitud enviada" : "Quiero proteger mi Mudanza"}
+                        {sent ? "Solicitud enviada" : "Me interesa el seguro"}
                     </span>
 
                     <span className="arrow">
@@ -210,7 +210,7 @@ export default function SeguroClient() {
             {!showForm && (
                 <button className="btnSeguro" onClick={() => setShowForm(true)} >
                     <span className="text">
-                        Quiero proteger mi mudanza
+                        Me interesa el seguro
                     </span>
 
                     <span className="arrow">

@@ -40,20 +40,11 @@ class ExpedienteSeguroService
                 'inventario' => $data['inventario'] ?? null,
                 'fecha_recoleccion' => $data['fecha_recoleccion'] ?? null,
                 'es_externo' => $data['es_externo'] ?? false,
-
-                'correo_programado_at' => $this->programarEnvioDespuesDePlazo($creadoEn, 4800, 'hours'),
-                'video_programado_at' => $this->programarEnvioDespuesDePlazo($creadoEn, 2400, 'hours'),
-                'recordatorio_programado_at' => $this->programarEnvioDespuesDePlazo($creadoEn, 50, 'days'),
-                'segundo_recordatorio_programado_at' => $this->programarEnvioDespuesDePlazo($creadoEn, 100, 'days'),
-                'tercer_recordatorio_programado_at' => $this->programarEnvioDespuesDePlazo($creadoEn, 150, 'days'),
-
-                /* 
                 'correo_programado_at' => $this->programarEnvioDespuesDePlazo($creadoEn, 48, 'hours'),
                 'video_programado_at' => $this->programarEnvioDespuesDePlazo($creadoEn, 24, 'hours'),
                 'recordatorio_programado_at' => $this->programarEnvioDespuesDePlazo($creadoEn, 5, 'days'),
                 'segundo_recordatorio_programado_at' => $this->programarEnvioDespuesDePlazo($creadoEn, 10, 'days'),
                 'tercer_recordatorio_programado_at' => $this->programarEnvioDespuesDePlazo($creadoEn, 15, 'days'),
-                 */
             ]);
         });
     }

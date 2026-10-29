@@ -7,13 +7,13 @@ const ESTADOS_CONFIG = {
     label: "Pendiente",
     descripcion: "Sin gestionar",
   },
-  asignado: {
-    label: "Cotizada",
-    descripcion: "Cotización enviada",
-  },
   en_proceso: {
     label: "En proceso",
     descripcion: "Seguimiento en curso",
+  },
+  asignado: {
+    label: "Cotizada",
+    descripcion: "Cotización enviada",
   },
   finalizado: {
     label: "Vendida",
@@ -29,14 +29,7 @@ const ESTADOS_CONFIG = {
   },
 };
 
-const ESTADOS_DEFAULT = [
-  "activo",
-  "asignado",
-  "en_proceso",
-  "finalizado",
-  "sin_respuesta",
-  "perdido",
-];
+const ESTADOS_DEFAULT = ["activo", "en_proceso", "asignado", "finalizado", "sin_respuesta", "perdido",];
 
 export default function ServiceStatusDropdown({ estado, onSelect, labels = {}, options = [], }) {
   const [open, setOpen] = useState(false);
@@ -45,8 +38,8 @@ export default function ServiceStatusDropdown({ estado, onSelect, labels = {}, o
 
   const labelMap = {
     activo: labels.activo || ESTADOS_CONFIG.activo.label,
-    asignado: labels.asignado || ESTADOS_CONFIG.asignado.label,
     en_proceso: labels.en_proceso || ESTADOS_CONFIG.en_proceso.label,
+    asignado: labels.asignado || ESTADOS_CONFIG.asignado.label,
     sin_respuesta: labels.sin_respuesta || ESTADOS_CONFIG.sin_respuesta.label,
     perdido: labels.perdido || ESTADOS_CONFIG.perdido.label,
     finalizado: labels.finalizado || ESTADOS_CONFIG.finalizado.label,

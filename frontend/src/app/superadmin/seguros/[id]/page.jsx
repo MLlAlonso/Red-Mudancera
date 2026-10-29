@@ -7,18 +7,13 @@ import { getExpedienteSeguro, enviarCorreoSeguro, enviarCorreoSeguroPrueba, desc
 
 export default function SuperAdminSeguroDetallePage() {
     const { id } = useParams();
-
     const [expediente, setExpediente] = useState(null);
     const [sending, setSending] = useState(false);
     const [downloading, setDownloading] = useState(false);
     const [copied, setCopied] = useState(false);
     const [sendingTest, setSendingTest] = useState("");
 
-    useEffect(() => {
-        if (id) {
-            cargar();
-        }
-    }, [id]);
+    useEffect(() => { if (id) { cargar(); } }, [id]);
 
     async function cargar() {
         const data = await getExpedienteSeguro(id);
@@ -104,6 +99,36 @@ export default function SuperAdminSeguroDetallePage() {
         }
     }
 
+    function contactarWhatsApp() {
+        if (!expediente?.telefono) {
+            alert("El cliente no tiene un número de teléfono registrado.");
+            return;
+        }
+
+        const nombre = expediente.nombre?.trim() || "cliente";
+
+        // WhatsApp requiere el número con código de país, solo dígitos.
+        let telefono = String(expediente.telefono).replace(/\D/g, "");
+
+        // Si el número mexicano tiene 10 dígitos, agrega el código de país.
+        if (telefono.length === 10) {
+            telefono = `52${telefono}`;
+        }
+
+        const mensaje = `Hola, ${nombre} 
+
+Somos de *Mudanza Fácil*.
+
+Además de tu solicitud de cotización de mudanza, recibimos tu interés en conocer cómo puedes asegurarla.
+
+Durante los próximos días te enviaremos por correo información sencilla sobre las ventajas del seguro y cómo preparar tu expediente digital, sin compromiso.
+
+Por ahora no necesitas hacer nada más. ¡Gracias por confiar en nosotros!`;
+
+        const url = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
+        window.open(url, "_blank", "noopener,noreferrer");
+    }
+
     if (!expediente) {
         return null;
     }
@@ -122,6 +147,10 @@ export default function SuperAdminSeguroDetallePage() {
 
                             <button type="button" className="btn-primary" onClick={enviarCorreo} disabled={sending} >
                                 {sending ? "Enviando..." : "Enviar correo"}
+                            </button>
+
+                            <button type="button" className="btn-whatsapp" onClick={contactarWhatsApp} >
+                                Enviar WhatsApp
                             </button>
                         </div>
                     </div>

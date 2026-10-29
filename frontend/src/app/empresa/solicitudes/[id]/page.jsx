@@ -15,14 +15,14 @@ import LiveViewToast from "@/components/common/LiveViewToast";
 
 import "@/styles/pages/solicitudes/_detalleSolicitud.scss";
 
-const ESTADOS = ["activo", "asignado", "en_proceso", "sin_respuesta", "finalizado", "perdido",];
+const ESTADOS = ["activo", "en_proceso", "asignado", "finalizado", "sin_respuesta", "perdido",];
 
 const ESTADOS_LABELS = {
     activo: "Pendiente",
-    asignado: "Cotizado",
     en_proceso: "En proceso",
-    sin_respuesta: "Sin respuesta",
+    asignado: "Cotizado",
     finalizado: "Vendido",
+    sin_respuesta: "Sin respuesta",
     perdido: "Perdido",
 };
 
@@ -143,19 +143,6 @@ function calcularNotaFecha(solicitud) {
         return "Prefiere realizar la mudanza lo antes posible.";
     }
 
-    const rangos = {
-        "1-7": [1, 8],
-        "8-15": [8, 15],
-        "+15": [16, 30],
-        "30+": [30, 60],
-    };
-
-    const rango = rangos[fechaEstimada];
-
-    if (!rango) {
-        return "No se pudo determinar el rango de fechas de la mudanza.";
-    }
-
     const referencia = new Date(fechaCreacion);
 
     if (Number.isNaN(referencia.getTime())) {
@@ -163,6 +150,19 @@ function calcularNotaFecha(solicitud) {
     }
 
     referencia.setHours(12, 0, 0, 0);
+
+    if (fechaEstimada === "30+") {
+        const fechaLimite = sumarDias(referencia, 30);
+        return `Prefiere la mudanza después del ${formatearFechaCorta(fechaLimite)}.`;
+    }
+
+    const rangos = { "1-7": [1, 8], "8-15": [8, 15], "+15": [16, 30], };
+    const rango = rangos[fechaEstimada];
+
+    if (!rango) {
+        return "No se pudo determinar el rango de fechas de la mudanza.";
+    }
+
     const inicio = sumarDias(referencia, rango[0]);
     const fin = sumarDias(referencia, rango[1]);
     const mismoMes = inicio.getMonth() === fin.getMonth() && inicio.getFullYear() === fin.getFullYear();
@@ -579,39 +579,27 @@ export default function DetalleSolicitudPage() {
                             <span className="detalle-solicitud__section-icon">
                                 <Icon name="notes" size={25} />
                             </span>
-                            <h3>Detalles generales</h3>
-                        </div>
-
-                        <div className="detalle-solicitud__details-grid">
-                            <div>
-                                <label>Tipo de servicio</label>
-                                <span>{formatTipoServicio(solicitud.tipo_servicio)}</span>
-                            </div>
-
-                            <div>
-                                <label>Modalidad</label>
-                                <span>{formatModalidad(solicitud.tipo_mudanza)}</span>
-                            </div>
-
-                            <div>
-                                <label>Distancia</label>
-                                <span>
-                                    {solicitud.distancia_km !== null && solicitud.distancia_km !== undefined && solicitud.distancia_km !== ""
-                                        ? `${solicitud.distancia_km} km` : "—"}
-                                </span>
-                            </div>
-
-                            <div>
-                                <label>Fecha estimada</label>
-                                <span>{formatFecha(solicitud.fecha_recoleccion)}</span>
-                            </div>
+                            <h3>Inventario</h3>
                         </div>
 
                         <div className="detalle-solicitud__inventory">
-                            <label>Inventario</label>
                             <div className="nota-html" dangerouslySetInnerHTML={{ __html: solicitud.inventario || "<p>Sin detalle</p>", }}
                             />
                         </div>
+                    </section>
+
+                    <section className="detalle-solicitud__card detalle-solicitud__note">
+                        <div className="detalle-solicitud__section-heading">
+                            <span className="detalle-solicitud__section-icon">
+                                <Icon name="calendar" size={25} />
+                            </span>
+
+                            <h3>Nota sobre la fecha de mudanza</h3>
+                        </div>
+
+                        <p className="detalle-solicitud__note-text">
+                            {calcularNotaFecha(solicitud)}
+                        </p>
                     </section>
 
                     {haComprado && (
@@ -641,20 +629,6 @@ export default function DetalleSolicitudPage() {
                             </div>
                         </section>
                     )}
-
-                    <section className="detalle-solicitud__card detalle-solicitud__note">
-                        <div className="detalle-solicitud__section-heading">
-                            <span className="detalle-solicitud__section-icon">
-                                <Icon name="calendar" size={25} />
-                            </span>
-
-                            <h3>Nota sobre la fecha de mudanza</h3>
-                        </div>
-
-                        <p className="detalle-solicitud__note-text">
-                            {calcularNotaFecha(solicitud)}
-                        </p>
-                    </section>
                 </div>
             </main>
 

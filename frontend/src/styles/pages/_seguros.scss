@@ -380,7 +380,7 @@
 .error-modal {
     width: 100%;
     max-width: 460px;
-    padding:30px 25px;
+    padding: 30px 25px;
     text-align: center;
     font-family: $font-title;
 
@@ -2218,5 +2218,494 @@
 
     .seguroForm {
         gap: 14px;
+    }
+}
+
+.seguroPrecios {
+    width: 100%;
+    padding: 20px 10px 40px;
+    background: #fff;
+
+    &__container {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    &__heading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    &__title {
+        margin: 0;
+        color: $title;
+        font-family: $font-title;
+        font-size: 40px;
+        font-weight: 900;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+        text-align: center;
+    }
+
+    &__badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        padding: 7px 13px;
+        background: #edf9f1;
+        color: $success-hover;
+        border: 1px solid rgba($success, 0.2);
+        border-radius: 999px;
+        font-family: $font-title;
+        font-size: 13px;
+        font-weight: 800;
+        line-height: 1.2;
+        white-space: nowrap;
+    }
+
+    &__intro {
+        max-width: 800px;
+        margin: 0 auto 36px;
+        text-align: center;
+
+        h3 {
+            margin: 0 0 6px;
+            color: $title;
+            font-family: $font-title;
+            font-size: 24px;
+            font-weight: 900;
+            line-height: 1.25;
+        }
+
+        p {
+            margin: 0;
+            color: $text;
+            font-family: $font-title;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+    }
+
+    &__comparison {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+        overflow: hidden;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    }
+
+    &__disclaimer {
+        max-width: 850px;
+        margin: 20px auto 0;
+        color: #6f7f8d;
+        font-family: $font-title;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.5;
+        text-align: center;
+    }
+
+    &__example {
+        display: flex;
+        align-items: flex-start;
+        gap: 18px;
+        width: 100%;
+        max-width: 1000px;
+        margin: 32px auto 0;
+        padding: 24px 28px;
+        background: #edf5ff;
+        border: 1px solid #c8dcf5;
+        border-radius: 16px;
+    }
+
+    &__exampleIcon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        width: 44px;
+        height: 44px;
+        background: #d9eaff;
+        border-radius: 12px;
+
+        img {
+            display: block;
+            width: 25px;
+            height: 25px;
+            object-fit: contain;
+        }
+    }
+
+    &__exampleContent {
+        h3 {
+            margin: 0 0 6px;
+            color: #164b80;
+            font-family: $font-title;
+            font-size: 18px;
+            font-weight: 900;
+            line-height: 1.3;
+        }
+
+        p {
+            margin: 0;
+            color: #365b7e;
+            font-family: $font-title;
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 1.55;
+        }
+    }
+}
+
+.seguroPrecio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 0;
+    min-height: 300px;
+    padding: 36px 30px 0;
+    text-align: center;
+
+    &--preferencial {
+        background: #edf9f1;
+    }
+
+    &--referencia {
+        background: #f5f8fc;
+    }
+
+    &__label {
+        margin: 0 0 5px;
+        color: $text;
+        font-family: $font-title;
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 1.3;
+    }
+
+    &__tag {
+        margin-bottom: 20px;
+        color: $title;
+        font-family: $font-title;
+        font-size: 16px;
+        font-weight: 800;
+        line-height: 1.3;
+    }
+
+    &__amount {
+        display: block;
+        margin-bottom: 8px;
+        color: $success-hover;
+        font-family: $font-title;
+        font-size: 46px;
+        font-weight: 900;
+        line-height: 1.1;
+        letter-spacing: -0.025em;
+    }
+
+    #amountMuted {
+        color: $text-muted;
+        font-weight: 600;
+    }
+
+    &__currency {
+        color: #7d8985;
+        font-family: $font-title;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.5;
+    }
+
+    &__footer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        width: calc(100% + 60px);
+        min-height: 58px;
+        margin-top: auto;
+        padding: 12px 20px;
+        background: rgba($success, 0.08);
+        border-top: 1px solid rgba($success, 0.14);
+        color: $success-hover;
+        font-family: $font-title;
+        font-size: 14px;
+        font-weight: 800;
+        line-height: 1.35;
+
+        &--muted {
+            background: rgba(9, 35, 62, 0.035);
+            border-top-color: rgba(9, 35, 62, 0.08);
+            color: $text-muted;
+        }
+    }
+
+    &__footerIcon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        width: 20px;
+        height: 20px;
+
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    }
+}
+
+.seguroCtaFinal {
+    &__actionWrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+    }
+
+    &__note {
+        margin: 0;
+        color: #fff;
+        font-family: $font-title;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.5;
+        text-align: center;
+        opacity: 0.8;
+    }
+
+    &__copyright {
+        width: 100%;
+        max-width: 1400px;
+        margin: 50px auto 0;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+        color: #fff;
+        font-family: $font-title;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.5;
+        text-align: center;
+        opacity: 0.7;
+    }
+}
+
+@media (max-width: 1024px) {
+    .seguroPrecios {
+        padding: 10px 20px 40px;
+
+        &__title {
+            font-size: 36px;
+        }
+
+        &__intro {
+            max-width: 700px;
+            margin-bottom: 30px;
+        }
+
+        &__example {
+            margin-top: 28px;
+        }
+    }
+
+    .seguroPrecio {
+        min-height: 280px;
+        padding: 30px 24px 0;
+
+        &__amount {
+            font-size: 40px;
+        }
+
+        &__footer {
+            width: calc(100% + 48px);
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .seguroPrecios {
+        padding: 0px 20px 40px;
+
+        &__heading {
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        &__title {
+            font-size: 32px;
+        }
+
+        &__badge {
+            padding: 6px 11px;
+            font-size: 12px;
+        }
+
+        &__intro {
+            margin-bottom: 28px;
+
+            h3 {
+                font-size: 22px;
+            }
+
+            p {
+                font-size: 15px;
+                line-height: 1.6;
+            }
+        }
+
+        &__comparison {
+            grid-template-columns: 1fr;
+        }
+
+        &__disclaimer {
+            margin-top: 18px;
+            font-size: 14px;
+            text-align: justify;
+        }
+
+        &__example {
+            gap: 14px;
+            margin-top: 24px;
+            padding: 22px 20px;
+        }
+
+        &__exampleIcon {
+            width: 40px;
+            height: 40px;
+        }
+
+        &__exampleContent {
+            h3 {
+                font-size: 17px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+        }
+    }
+
+    .seguroPrecio {
+        min-height: 0;
+        padding: 30px 24px 0;
+
+        &__amount {
+            font-size: 38px;
+        }
+
+        &__footer {
+            width: calc(100% + 48px);
+            min-height: 54px;
+            margin-top: 26px;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .seguroPrecios {
+        padding: 0px 20px 20px;
+
+        &__heading {
+            gap: 10px;
+        }
+
+        &__title {
+            font-size: 28px;
+        }
+
+        &__badge {
+            font-size: 11px;
+        }
+
+        &__intro {
+            margin-bottom: 24px;
+
+            h3 {
+                font-size: 20px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+        }
+
+        &__example {
+            gap: 12px;
+            padding: 18px 15px;
+            border-radius: 14px;
+        }
+
+        &__exampleIcon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+
+            img {
+                width: 22px;
+                height: 22px;
+            }
+        }
+
+        &__exampleContent {
+            h3 {
+                font-size: 16px;
+            }
+
+            p {
+                font-size: 13px;
+            }
+        }
+    }
+
+    .seguroPrecio {
+        padding: 28px 20px 0;
+
+        &__label {
+            font-size: 16px;
+        }
+
+        &__tag {
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        &__amount {
+            font-size: 34px;
+        }
+
+        &__currency {
+            font-size: 13px;
+        }
+
+        &__footer {
+            width: calc(100% + 40px);
+            gap: 7px;
+            padding: 12px 14px;
+            font-size: 13px;
+        }
+    }
+
+    .seguroCtaFinal {
+        &__copyright {
+            margin-top: 35px;
+            padding-top: 16px;
+            font-size: 14px;
+        }
+
+        &__note {
+            font-size: 14px;
+        }
     }
 }

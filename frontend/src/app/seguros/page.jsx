@@ -262,9 +262,26 @@ export default function SegurosPage() {
 
             <section className="seguroPrecios">
                 <div className="seguroPrecios__container">
-                    <h2 className="seguroPrecios__title">
-                        La protección que buscas, a una tarifa preferencial
-                    </h2>
+                    <div className="seguroPrecios__heading">
+                        <h2 className="seguroPrecios__title">
+                            Tarifa preferencial
+                        </h2>
+
+                        <span className="seguroPrecios__badge">
+                            Incluye IVA
+                        </span>
+                    </div>
+
+                    <div className="seguroPrecios__intro">
+                        <h3>
+                            Misma protección, menor costo.
+                        </h3>
+
+                        <p>
+                            Comparamos una cobertura equivalente con las mismas condiciones de póliza,
+                            para que tengas la misma protección y pagues menos.
+                        </p>
+                    </div>
 
                     <div className="seguroPrecios__comparison">
                         <div className="seguroPrecio seguroPrecio--preferencial">
@@ -282,7 +299,17 @@ export default function SegurosPage() {
 
                             <span className="seguroPrecio__currency">
                                 por cada $100,000 asegurados
+                                <br />
+                                (1.35% del valor asegurado)
                             </span>
+
+                            <div className="seguroPrecio__footer">
+                                <span className="seguroPrecio__footerIcon">
+                                    <img src="/icons/check_success.png" alt="" aria-hidden="true" />
+                                </span>
+
+                                <span>Pago directo a CHUBB</span>
+                            </div>
                         </div>
 
                         <div className="seguroPrecio seguroPrecio--referencia">
@@ -294,43 +321,80 @@ export default function SegurosPage() {
                                 de referencia
                             </span>
 
-                            <strong className="seguroPrecio__amount" id="amountMuted">
+                            <strong className="seguroPrecio__amount" id="amountMuted"  >
                                 $2,500 – $3,500
                             </strong>
 
                             <span className="seguroPrecio__currency">
-                                por cada $100,000 asegurados
+                                por cada $100,000 asegurados <br /> (2.5% - 3.5% del valor asegurado)
                             </span>
-                        </div>
 
+                            <div className="seguroPrecio__footer seguroPrecio__footer--muted">
+                                <span className="seguroPrecio__footerIcon">
+                                    <img src="/icons/prohibicion.png" alt="" aria-hidden="true" />
+                                </span>
+
+                                <span>Con intermediarios</span>
+                            </div>
+                        </div>
                     </div>
 
-                    <p className="seguroPrecios__disclaimer">
-                        Gracias a nuestro acuerdo con Chubb, accede a tarifas preferenciales.
-                        Los precios finales, la cobertura y las condiciones están sujetos a la cotización y a los términos habituales de la póliza.
-                    </p>
+                    <div className="seguroPrecios__example">
+                        <div className="seguroPrecios__exampleIcon">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="25"
+                                height="25"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="#2563EB"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M12 3 2.8 19a1.5 1.5 0 0 0 1.3 2.2h15.8a1.5 1.5 0 0 0 1.3-2.2L12 3Z" />
+                                <path d="M12 9v4" />
+                                <path d="M12 17h.01" />
+                            </svg>
+                        </div>
+
+
+                        <div className="seguroPrecios__exampleContent">
+                            <h3>Este es solo un ejemplo</h3>
+
+                            <p> El costo de tu seguro se calcula según el valor que deseas asegurar. </p>
+                        </div>
+                    </div>
                 </div>
             </section>
+
 
             <section className="seguroCtaFinal">
                 <div className="seguroCtaFinal__container">
                     <div className="seguroCtaFinal__content">
-                        <h2>
-                            Tu próximo comienzo, <br /> con más tranquilidad.
-                        </h2>
-
-                        <p> Protege tu mudanza con un proceso claro, sencillo y verificable. </p>
+                        <h2> Tu próximo comienzo, <br /> con más tranquilidad. </h2>
+                        <p>  Protege tu mudanza con un proceso claro, sencillo y verificable. </p>
                     </div>
 
-                    <div className="seguroCtaFinal__action">
-                        <Suspense>
-                            <SeguroClient />
-                        </Suspense>
+                    <div className="seguroCtaFinal__actionWrapper">
+                        <div className="seguroCtaFinal__action">
+                            <Suspense>
+                                <SeguroClient />
+                            </Suspense>
+                        </div>
+
+                        <p className="seguroCtaFinal__note">
+                            Sin compromiso. Recibirás información por correo.
+                        </p>
                     </div>
+                </div>
+
+                <div className="seguroCtaFinal__copyright">
+                    © {new Date().getFullYear()} Mudanza Fácil
                 </div>
             </section>
 
-            <Footer />
         </div>
     );
 }
