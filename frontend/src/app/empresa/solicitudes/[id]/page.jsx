@@ -12,7 +12,6 @@ import ComprarLeadModal from "@/components/modals/ComprarLeadModal";
 import EmpresaNotesModal from "@/components/modals/EmpresaNotesModal";
 import WhatsappMensajeSelectorModal from "@/components/modals/WhatsappMensajeSelectorModal";
 import LiveViewToast from "@/components/common/LiveViewToast";
-
 import "@/styles/pages/solicitudes/_detalleSolicitud.scss";
 
 const ESTADOS = ["activo", "en_proceso", "asignado", "finalizado", "sin_respuesta", "perdido",];
@@ -227,6 +226,7 @@ export default function DetalleSolicitudPage() {
     const [showNotesModal, setShowNotesModal] = useState(false);
     const [showWhatsappSelector, setShowWhatsappSelector] = useState(false);
     const [actualizandoEstado, setActualizandoEstado] = useState(false);
+    const [contactoCopiado, setContactoCopiado] = useState(false);
 
     useEffect(() => {
         if (!id) return;
@@ -245,7 +245,7 @@ export default function DetalleSolicitudPage() {
             try {
                 const [solicitudResponse, empresaResponse] = await Promise.all([
                     fetch(`${process.env.NEXT_PUBLIC_API_URL}/solicitudes-mudanza/${id}`, { headers }),
-                    token ? fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/me`, { headers, }) : Promise.resolve(null),
+                    token ? fetch(`${process.env.NEXT_PUBLIC_API_URL}/empresa/me`, { headers }) : Promise.resolve(null),
                 ]);
 
                 if (!solicitudResponse.ok) {
@@ -316,7 +316,6 @@ export default function DetalleSolicitudPage() {
             if (nuevoEstado === estadoAnterior) return;
             setActualizandoEstado(true);
 
-            // Actualización optimista de la interfaz.
             setSolicitud((actual) => ({
                 ...actual,
                 estado_operacion: nuevoEstado,
@@ -357,6 +356,90 @@ export default function DetalleSolicitudPage() {
         [haComprado, solicitud, actualizandoEstado]
     );
 
+    const copiarContacto = useCallback(async () => {
+        if (!haComprado || !solicitud) return;
+        const estadoActual = solicitud.estado_operacion || solicitud.estado || "activo";
+        const valor = (dato) => dato !== null && dato !== undefined && dato !== "" ? String(dato).trim() : "—";
+
+        const inventarioTexto = (() => {
+            if (!solicitud.inventario) return "Sin detalle";
+
+            if (typeof document === "undefined") {
+                return solicitud.inventario;
+            }
+
+            const contenedor = document.createElement("div");
+            contenedor.innerHTML = solicitud.inventario;
+            return contenedor.innerText.trim() || "Sin detalle";
+        })();
+
+        const datosContacto = [
+            "Información completa de la solicitud de mudanza",
+            "",
+            "===================================",
+            "RESUMEN DE LA SOLICITUD",
+            "===================================",
+            "Tipo: Contacto",
+            `Exclusividad: ${fueExclusivo ? "Exclusivo" : "No exclusivo"}`,
+            `Estado: ${ESTADOS_LABELS?.[estadoActual] || estadoActual || "—"}`,
+            `Origen: ${valor(solicitud.origen)}`,
+            `Destino: ${valor(solicitud.destino)}`,
+            `Tipo de servicio: ${valor(formatTipoServicio(solicitud.tipo_servicio))}`,
+            `Modalidad: ${valor(formatModalidad(solicitud.tipo_mudanza))}`,
+            `Distancia: ${solicitud.distancia_km !== null &&
+                solicitud.distancia_km !== undefined &&
+                solicitud.distancia_km !== ""
+                ? `${solicitud.distancia_km} km`
+                : "Distancia no disponible"
+            }`,
+            `Fecha de recolección: ${valor(formatFecha(solicitud.fecha_recoleccion))}`,
+            "",
+            "===================================",
+            "DETALLES DEL ORIGEN",
+            "===================================",
+            `Tipo de vivienda: ${valor(solicitud.tipo_vivienda)}`,
+            `Pisos: ${valor(solicitud.origen_pisos)} `,
+            `Elevador: ${valor(formatElevador(solicitud.origen_elevador))}`,
+            `Acarreo: ${valor(solicitud.origen_acarreo)}`,
+            "",
+            "===================================",
+            "DETALLES DEL DESTINO",
+            "===================================",
+            `Tipo de vivienda: ${valor(solicitud.vivienda_destino)}`,
+            `Pisos: ${valor(solicitud.destino_pisos)}`,
+            `Elevador: ${valor(formatElevador(solicitud.destino_elevador))}`,
+            `Acarreo: ${valor(solicitud.destino_acarreo)}`,
+            "",
+            "===================================",
+            "INVENTARIO",
+            "===================================",
+            inventarioTexto,
+            "",
+            "===================================",
+            "NOTA SOBRE LA FECHA DE MUDANZA",
+            "===================================",
+            calcularNotaFecha(solicitud),
+            "",
+            "===================================",
+            "DATOS DE CONTACTO",
+            "===================================",
+            `Nombre: ${valor(solicitud.nombre)}`,
+            `Teléfono: ${valor(solicitud.telefono)}`,
+            `Correo electrónico: ${valor(solicitud.email)}`,
+        ].join("\n");
+
+        try {
+            await navigator.clipboard.writeText(datosContacto);
+            setContactoCopiado(true);
+            window.setTimeout(() => {
+                setContactoCopiado(false);
+            }, 2000);
+        } catch (error) {
+            console.error("Error al copiar los datos de la solicitud:", error);
+            alert("No fue posible copiar la información. Verifica los permisos del navegador.");
+        }
+    }, [haComprado, solicitud, fueExclusivo]);
+
     if (cargando) {
         return (
             <>
@@ -375,7 +458,9 @@ export default function DetalleSolicitudPage() {
                 <Header />
                 <main className="detalle-solicitud detalle-solicitud--feedback">
                     <h1>No se pudo mostrar la solicitud</h1>
-                    <p>{errorCarga || "La solicitud no está disponible."}</p>
+                    <p>
+                        {errorCarga || "La solicitud no está disponible."}
+                    </p>
                 </main>
                 <Footer />
             </>
@@ -438,7 +523,7 @@ export default function DetalleSolicitudPage() {
                             </div>
 
                             {haComprado && (
-                                <div className="detalle-solicitud__status">
+                                <div className="detalle-solicitud__status-actions">
                                     <ServiceStatusDropdown
                                         estado={estadoActual}
                                         options={ESTADOS}
@@ -446,6 +531,20 @@ export default function DetalleSolicitudPage() {
                                         onSelect={cambiarEstado}
                                         disabled={actualizandoEstado}
                                     />
+
+                                    <button
+                                        type="button"
+                                        className={`detalle-solicitud__copy-contact ${contactoCopiado ? "detalle-solicitud__copy-contact--copied" : ""}`}
+                                        onClick={copiarContacto}
+                                        aria-label="Copiar contacto"
+                                        title="Copiar contacto"
+                                    >
+                                        <img src="/icons/copy.png" alt="" width={20} height={20} aria-hidden="true" />
+
+                                        <span className="detalle-solicitud__copy-tooltip">
+                                            {contactoCopiado ? "¡Copiado!" : "Copiar contacto"}
+                                        </span>
+                                    </button>
                                 </div>
                             )}
                         </div>

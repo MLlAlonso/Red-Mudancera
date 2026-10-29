@@ -269,8 +269,8 @@
     }
 
     &--contact {
-      border-color: variables.$tertiary;
-      background: variables.$tertiary;
+      border-color: #D97912;
+      background: #D97912;
       color: #fff;
 
       &:hover:not(:disabled) {
@@ -519,6 +519,101 @@
     font-size: 16px;
     font-weight: 500;
     line-height: 1.6;
+  }
+}
+
+.detalle-solicitud {
+  &__status-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+
+  &__copy-contact {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid #dce3e8;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #09233e;
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+
+    img {
+      display: block;
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+
+    &:hover {
+      background: #f0f5f8;
+      border-color: #abb0b4;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #09233e;
+      outline-offset: 3px;
+    }
+
+    &--copied {
+      background: #e8f6ef;
+      border-color: #1c8f6a;
+    }
+  }
+
+  &__copy-tooltip {
+    position: absolute;
+    z-index: 20;
+    top: calc(100% + 9px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-3px);
+    padding: 7px 10px;
+    border-radius: 6px;
+    background: #09233e;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.3;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      visibility 0.2s ease;
+  }
+
+  &__copy-contact:hover &__copy-tooltip,
+  &__copy-contact:focus-visible &__copy-tooltip,
+  &__copy-contact--copied &__copy-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .detalle-solicitud {
+    &__status-actions {
+      gap: 6px;
+    }
+
+    &__copy-contact {
+      width: 36px;
+      height: 36px;
+    }
   }
 }
 
