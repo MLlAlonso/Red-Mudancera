@@ -5,11 +5,12 @@ import { useRouter } from "next/navigation";
 import SuperAdminLayout from "@/components/layout/SuperAdminLayout";
 import { getDashboardMetrics } from "@/services/superAdmin";
 import BaseModal from "@/components/modals/BaseModal";
+import SuperAdminWhatsappPlantillasManager from "@/components/superadmin/SuperAdminWhatsappPlantillasManager";
 
 export default function SuperAdminDashboardPage() {
     const router = useRouter();
     const [metrics, setMetrics] = useState(null);
-
+    const [showScrollTop, setShowScrollTop] = useState(false);
     const [announcement, setAnnouncement] = useState({ titulo: "", mensaje: "" });
 
     const [feedbackModal, setFeedbackModal] = useState({
@@ -21,6 +22,15 @@ export default function SuperAdminDashboardPage() {
 
     useEffect(() => {
         loadData();
+    }, []);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setShowScrollTop(window.scrollY > 300);
+        };
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => { window.removeEventListener("scroll", handleScroll); };
     }, []);
 
     const loadData = async () => {
@@ -334,6 +344,8 @@ export default function SuperAdminDashboardPage() {
 
             </div>
 
+            <SuperAdminWhatsappPlantillasManager />
+
             {
                 feedbackModal.open && (
                     <BaseModal onClose={() => setFeedbackModal({ ...feedbackModal, open: false })} >
@@ -359,6 +371,18 @@ export default function SuperAdminDashboardPage() {
                     </BaseModal>
                 )
             }
+
+            {showScrollTop && (
+                <button
+                    className="scroll-to-top"
+                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                    aria-label="Volver al inicio"
+                    title="Volver al inicio"
+                >
+                    ↑
+                </button>
+            )}
+
         </SuperAdminLayout>
     );
 }

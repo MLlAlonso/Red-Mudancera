@@ -198,68 +198,6 @@ export default function SegurosPage() {
                 </div>
             </section>
 
-            <section className="seguroBeneficios">
-                <div className="seguroBeneficios__container">
-                    <div className="seguroBeneficios__heading">
-                        <span className="seguroBeneficios__badge">
-                            TU TRANQUILIDAD, PRIMERO
-                        </span>
-
-                        <h2> Beneficios que te dan más tranquilidad </h2>
-                    </div>
-
-                    <div className="seguroBeneficios__columns">
-                        <div className="seguroBeneficios__column">
-                            <article className="seguroBeneficioCard">
-                                <div className="seguroBeneficioCard__check">
-                                    ✓
-                                </div>
-
-                                <div className="seguroBeneficioCard__content">
-                                    <h3> Póliza formal y verificable </h3>
-                                    <p> Respaldo real para tu patrimonio. </p>
-                                </div>
-                            </article>
-
-                            <article className="seguroBeneficioCard">
-                                <div className="seguroBeneficioCard__check">
-                                    ✓
-                                </div>
-
-                                <div className="seguroBeneficioCard__content">
-                                    <h3> Tarifa preferencial </h3>
-                                    <p> Por ser parte de Mudanza Fácil. </p>
-                                </div>
-                            </article>
-                        </div>
-
-                        <div className="seguroBeneficios__column">
-                            <article className="seguroBeneficioCard">
-                                <div className="seguroBeneficioCard__check">
-                                    ✓
-                                </div>
-
-                                <div className="seguroBeneficioCard__content">
-                                    <h3> Pago directo a la aseguradora </h3>
-                                    <p> Sin intermediarios en el pago. </p>
-                                </div>
-                            </article>
-
-                            <article className="seguroBeneficioCard">
-                                <div className="seguroBeneficioCard__check">
-                                    ✓
-                                </div>
-
-                                <div className="seguroBeneficioCard__content">
-                                    <h3> Acompañamiento en el proceso </h3>
-                                    <p> Estamos contigo en cada etapa. </p>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             <section className="seguroPrecios">
                 <div className="seguroPrecios__container">
                     <div className="seguroPrecios__heading">
@@ -369,6 +307,67 @@ export default function SegurosPage() {
                 </div>
             </section>
 
+            {/* <section className="seguroBeneficios">
+                <div className="seguroBeneficios__container">
+                    <div className="seguroBeneficios__heading">
+                        <span className="seguroBeneficios__badge">
+                            TU TRANQUILIDAD, PRIMERO
+                        </span>
+
+                        <h2> Beneficios que te dan más tranquilidad </h2>
+                    </div>
+
+                    <div className="seguroBeneficios__columns">
+                        <div className="seguroBeneficios__column">
+                            <article className="seguroBeneficioCard">
+                                <div className="seguroBeneficioCard__check">
+                                    ✓
+                                </div>
+
+                                <div className="seguroBeneficioCard__content">
+                                    <h3> Tarifa preferencial </h3>
+                                    <p> Por ser parte de Mudanza Fácil. </p>
+                                </div>
+                            </article>
+
+                            <article className="seguroBeneficioCard">
+                                <div className="seguroBeneficioCard__check">
+                                    ✓
+                                </div>
+
+                                <div className="seguroBeneficioCard__content">
+                                    <h3> Póliza formal y verificable </h3>
+                                    <p> Respaldo real para tu patrimonio. </p>
+                                </div>
+                            </article>
+                        </div>
+
+                        <div className="seguroBeneficios__column">
+                            <article className="seguroBeneficioCard">
+                                <div className="seguroBeneficioCard__check">
+                                    ✓
+                                </div>
+
+                                <div className="seguroBeneficioCard__content">
+                                    <h3> Pago directo a la aseguradora </h3>
+                                    <p> Sin intermediarios en el pago. </p>
+                                </div>
+                            </article>
+
+                            <article className="seguroBeneficioCard">
+                                <div className="seguroBeneficioCard__check">
+                                    ✓
+                                </div>
+
+                                <div className="seguroBeneficioCard__content">
+                                    <h3> Acompañamiento en el proceso </h3>
+                                    <p> Estamos contigo en cada etapa. </p>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </section> */}
 
             <section className="seguroCtaFinal">
                 <div className="seguroCtaFinal__container">
@@ -394,7 +393,6 @@ export default function SegurosPage() {
                     © {new Date().getFullYear()} Mudanza Fácil
                 </div>
             </section>
-
         </div>
     );
 }

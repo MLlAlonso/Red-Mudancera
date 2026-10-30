@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import SuperAdminLayout from "@/components/layout/SuperAdminLayout";
 import { getExpedienteSeguro, enviarCorreoSeguro, enviarCorreoSeguroPrueba, descargarPdfSeguro, } from "@/services/superAdminSeguros";
+import SuperAdminWhatsappPlantillaSelectorModal from "@/components/superadmin/SuperAdminWhatsappPlantillaSelectorModal";
 
 export default function SuperAdminSeguroDetallePage() {
     const { id } = useParams();
@@ -12,6 +13,7 @@ export default function SuperAdminSeguroDetallePage() {
     const [downloading, setDownloading] = useState(false);
     const [copied, setCopied] = useState(false);
     const [sendingTest, setSendingTest] = useState("");
+    const [whatsappModalOpen, setWhatsappModalOpen] = useState(false);
 
     useEffect(() => { if (id) { cargar(); } }, [id]);
 
@@ -99,34 +101,35 @@ export default function SuperAdminSeguroDetallePage() {
         }
     }
 
-    function contactarWhatsApp() {
+    function abrirSelectorWhatsApp() {
         if (!expediente?.telefono) {
             alert("El cliente no tiene un número de teléfono registrado.");
             return;
         }
 
-        const nombre = expediente.nombre?.trim() || "cliente";
+        setWhatsappModalOpen(true);
+    }
 
-        // WhatsApp requiere el número con código de país, solo dígitos.
+    function contactarWhatsApp({ mensaje = "", conMensaje = true }) {
+        if (!expediente?.telefono) {
+            alert("El cliente no tiene un número de teléfono registrado.");
+            return;
+        }
+
         let telefono = String(expediente.telefono).replace(/\D/g, "");
 
-        // Si el número mexicano tiene 10 dígitos, agrega el código de país.
-        if (telefono.length === 10) {
+        // Normalizar números mexicanos.
+        if (telefono.startsWith("521")) {
+            telefono = `52${telefono.slice(3)}`;
+        } else if (telefono.length === 10) {
+            telefono = `52${telefono}`;
+        } else if (!telefono.startsWith("52")) {
             telefono = `52${telefono}`;
         }
 
-        const mensaje = `Hola, ${nombre} 
-
-Somos de *Mudanza Fácil*.
-
-Además de tu solicitud de cotización de mudanza, recibimos tu interés en conocer cómo puedes asegurarla.
-
-Durante los próximos días te enviaremos por correo información sencilla sobre las ventajas del seguro y cómo preparar tu expediente digital, sin compromiso.
-
-Por ahora no necesitas hacer nada más. ¡Gracias por confiar en nosotros!`;
-
-        const url = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
+        const url = `https://wa.me/${telefono}${conMensaje && mensaje ? `?text=${encodeURIComponent(mensaje)}` : ""}`;
         window.open(url, "_blank", "noopener,noreferrer");
+        setWhatsappModalOpen(false);
     }
 
     if (!expediente) {
@@ -149,7 +152,7 @@ Por ahora no necesitas hacer nada más. ¡Gracias por confiar en nosotros!`;
                                 {sending ? "Enviando..." : "Enviar correo"}
                             </button>
 
-                            <button type="button" className="btn-whatsapp" onClick={contactarWhatsApp} >
+                            <button type="button" className="btn-whatsapp" onClick={abrirSelectorWhatsApp} >
                                 Enviar WhatsApp
                             </button>
                         </div>
@@ -504,6 +507,13 @@ Por ahora no necesitas hacer nada más. ¡Gracias por confiar en nosotros!`;
                         </button>
                     </div>
                 </div>
+
+                <SuperAdminWhatsappPlantillaSelectorModal
+                    open={whatsappModalOpen}
+                    onClose={() => setWhatsappModalOpen(false)}
+                    onContactar={contactarWhatsApp}
+                    expediente={expediente}
+                />
             </section>
         </SuperAdminLayout>
     );

@@ -6,6 +6,7 @@ use App\Modules\SuperAdmin\Controllers\SuperAdminEmpresaController;
 use App\Modules\SuperAdmin\Controllers\SuperAdminServiciosController;
 use App\Modules\SuperAdmin\Controllers\SuperAdminAnalyticsController;
 use App\Modules\SuperAdmin\Controllers\SuperAdminSegurosController;
+use App\Modules\SuperAdmin\Controllers\SuperAdminWhatsappPlantillaController;
 
 Route::prefix('superadmin')->group(function () {
     Route::get('/dashboard', [SuperAdminController::class, 'dashboard']);
@@ -58,4 +59,14 @@ Route::prefix('superadmin')->group(function () {
     Route::get('/analytics/servicios', [SuperAdminAnalyticsController::class, 'servicios']);
 
     Route::post('/seguros/{id}/enviar-correo/{tipo}', [SuperAdminSegurosController::class, 'enviarCorreoPrueba']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Plantillas de WhatsApp de SuperAdmin
+    |--------------------------------------------------------------------------
+    */
+    Route::get( '/whatsapp-plantillas', [SuperAdminWhatsappPlantillaController::class, 'index'] );
+    Route::post( '/whatsapp-plantillas', [SuperAdminWhatsappPlantillaController::class, 'store'] );
+    Route::put( '/whatsapp-plantillas/{id}', [SuperAdminWhatsappPlantillaController::class, 'update'] )->whereNumber('id');
+    Route::delete( '/whatsapp-plantillas/{id}', [SuperAdminWhatsappPlantillaController::class, 'destroy'] )->whereNumber('id');
 });
