@@ -6,12 +6,14 @@ use App\Modules\Servicio\Controllers\ServicioController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\StripeCreditosController;
 use App\Modules\SolicitudMudanza\Controllers\SolicitudMudanzaController;
+use App\Modules\DashboardExterno\Controllers\DashboardExternoController;
 
 /*
 |--------------------------------------------------------------------------
 | Empresa
 |--------------------------------------------------------------------------
 */
+
 require base_path('app/Modules/Empresa/routes.php');
 
 /*
@@ -47,7 +49,7 @@ Route::post('/auth/recover-password', [RecoverPasswordController::class, 'recove
 | Images
 |--------------------------------------------------------------------------
 */
-Route::post( '/servicios/{id}/imagenes', [ServicioController::class, 'updateImagenes'] )->middleware('auth:empresa');
+Route::post('/servicios/{id}/imagenes', [ServicioController::class, 'updateImagenes'])->middleware('auth:empresa');
 
 /*
 |--------------------------------------------------------------------------
@@ -78,7 +80,7 @@ Route::post('/solicitudes-mudanza/solicitar-seguro', [SolicitudMudanzaController
 Route::middleware('auth:sanctum')->post('/stripe/checkout', [StripeController::class, 'checkout']);
 Route::post('/stripe/webhook', [StripeController::class, 'webhook']);
 
-Route::middleware('auth:sanctum')->post( '/stripe/creditos/checkout', [StripeCreditosController::class, 'checkout'] );
+Route::middleware('auth:sanctum')->post('/stripe/creditos/checkout', [StripeCreditosController::class, 'checkout']);
 Route::middleware('auth:sanctum')->post('/stripe/cancel', [StripeController::class, 'cancel']);
 
 /*
@@ -100,14 +102,14 @@ require base_path('app/Modules/SuperAdmin/routes.php');
 | SystemAnnouncement
 |--------------------------------------------------------------------------
 */
-require base_path( 'app/Modules/SystemAnnouncement/routes.php' );
+require base_path('app/Modules/SystemAnnouncement/routes.php');
 
 /*
 |--------------------------------------------------------------------------
 | Analytics - Live Viewers
 |--------------------------------------------------------------------------
 */
-require base_path( 'app/Modules/Analytics/routes.php' );
+require base_path('app/Modules/Analytics/routes.php');
 
 /*
 |--------------------------------------------------------------------------
@@ -115,3 +117,12 @@ require base_path( 'app/Modules/Analytics/routes.php' );
 |--------------------------------------------------------------------------
 */
 require base_path('app/Modules/Seguro/routes.php');
+
+/*
+|--------------------------------------------------------------------------
+| Dashboard Externo - API de solo lectura
+|--------------------------------------------------------------------------
+*/
+Route::prefix('dashboard')->middleware('dashboard.api.key')->group(function () {
+    Route::get('/externo',  [DashboardExternoController::class, 'index']);
+});

@@ -384,7 +384,7 @@ export default function SegurosPage() {
                         </div>
 
                         <p className="seguroCtaFinal__note">
-                            Sin compromiso. Recibirás información por correo.
+                            Información por correo, gratis y sin compromiso.
                         </p>
                     </div>
                 </div>

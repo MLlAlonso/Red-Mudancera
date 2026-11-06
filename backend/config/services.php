@@ -64,4 +64,8 @@ return [
         'token' => env('TWILIO_TOKEN'),
         'whatsapp_from' => env('TWILIO_WHATSAPP_FROM'),
     ],
+
+    'dashboard_externo' => [
+        'api_key' => env('DASHBOARD_EXTERNO_API_KEY'),
+    ],
 ];

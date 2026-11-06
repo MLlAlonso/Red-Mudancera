@@ -9,10 +9,20 @@ import Button_cta from "@/components/common/Button_cta";
 import ComprarLeadModal from "@/components/modals/ComprarLeadModal";
 import EmpresaNotesModal from "@/components/modals/EmpresaNotesModal";
 import WhatsappMensajeSelectorModal from "@/components/modals/WhatsappMensajeSelectorModal";
+import ServiceStatusDropdown from "@/components/common/ServiceStatusDropdown";
 
 import "@/styles/components/_solicitudMudanzaCard.scss";
 
-const ESTADOS = {
+const ESTADOS = [
+  "activo",
+  "en_proceso",
+  "asignado",
+  "finalizado",
+  "sin_respuesta",
+  "perdido",
+];
+
+const ESTADOS_LABELS = {
   activo: "Pendiente",
   asignado: "Cotizado",
   en_proceso: "En proceso",
@@ -20,7 +30,6 @@ const ESTADOS = {
   finalizado: "Vendido",
   perdido: "Perdido",
 };
-
 
 const abreviarUbicacion = (ubicacion = "") => {
   const nombre = ubicacion.trim();
@@ -33,7 +42,6 @@ const abreviarUbicacion = (ubicacion = "") => {
 
   return equivalencias[nombre] || nombre;
 };
-
 
 export default function SolicitudMudanzaCard({
   id,
@@ -61,6 +69,8 @@ export default function SolicitudMudanzaCard({
   tipoServicio = "",
   showNotes = true,
   showDelete = true,
+  onChangeEstado,
+  actualizandoEstado = false,
   onDelete,
 }) {
   const router = useRouter();
@@ -150,6 +160,16 @@ export default function SolicitudMudanzaCard({
     }
   };
 
+  const cambiarEstado = (nuevoEstado) => {
+    if (!isLead || actualizandoEstado) return;
+    if (!ESTADOS.includes(nuevoEstado)) return;
+    if (nuevoEstado === estado) return;
+
+    if (typeof onChangeEstado === "function") {
+      onChangeEstado(id, nuevoEstado);
+    }
+  };
+
   return (
     <>
       <motion.div className="service-card solicitud-card" initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 0.25 }} >
@@ -160,9 +180,13 @@ export default function SolicitudMudanzaCard({
 
             {isLead && (
               <div className="solicitud-card__header-actions">
-                <span className={`solicitud-card__status solicitud-card__status--${estadoClase}`} aria-label={`Estado: ${ESTADOS[estado] || estado}`} >
-                  {ESTADOS[estado] || estado}
-                </span>
+                <ServiceStatusDropdown
+                  estado={estado}
+                  options={ESTADOS}
+                  labels={ESTADOS_LABELS}
+                  onSelect={cambiarEstado}
+                  disabled={actualizandoEstado}
+                />
 
                 {(showNotes || showDelete) && (
                   <div

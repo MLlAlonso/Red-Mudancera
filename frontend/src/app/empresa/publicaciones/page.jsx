@@ -92,42 +92,9 @@ export default function MisPublicacionesEmpresa() {
   const [showDeleteServiceModal, setShowDeleteServiceModal] = useState(false);
   const [selectedLeadId, setSelectedLeadId] = useState(null);
   const [selectedServiceId, setSelectedServiceId] = useState(null);
+  const [actualizandoLeadId, setActualizandoLeadId] = useState(null);
 
-  /**
-   * Actualiza el estado de un servicio o lead.
-   */
-  const cambiarEstadoDirecto = async (id, estado, tipo) => {
-    const token = getEmpresaToken();
-    const endpoint = tipo === "lead" ? `/solicitudes-mudanza/leads/${id}/estado` : `/servicios/${id}/estado`;
-
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`,
-        {
-          method: "PATCH",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ estado }),
-        }
-      );
-
-      if (!res.ok) {
-        alert("No se pudo actualizar el estado.");
-        return;
-      }
-
-      const json = await res.json();
-
-      setServices((prev) => prev.map((item) => item.id === json.data.id && item.tipo_item
-        === (tipo === "lead" ? "lead" : "servicio") ? { ...item, ...json.data } : item));
-    } catch (error) {
-      console.error("Error al actualizar el estado:", error);
-      alert("Ocurrió un error al actualizar el estado.");
-    }
-  };
-
+  
   /**
    * Oculta un lead de la actividad de la empresa.
    */
@@ -199,6 +166,116 @@ export default function MisPublicacionesEmpresa() {
     } catch (error) {
       console.error("Error al finalizar el servicio:", error);
       alert("Ocurrió un error al finalizar el servicio.");
+    }
+  };
+
+  /**
+ * Actualiza el estado de un servicio o lead.
+ */
+  const cambiarEstadoDirecto = async (id, estado, tipo) => {
+    const token = getEmpresaToken();
+
+    if (!token) {
+      alert("Tu sesión ha expirado. Inicia sesión nuevamente.");
+      return;
+    }
+
+    const endpoint =
+      tipo === "lead"
+        ? `/solicitudes-mudanza/leads/${id}/estado`
+        : `/servicios/${id}/estado`;
+
+    const itemAnterior = services.find(
+      (item) =>
+        item.id === id &&
+        item.tipo_item === (tipo === "lead" ? "lead" : "servicio")
+    );
+
+    if (!itemAnterior) return;
+
+    const estadoAnterior = getEstadoPublicacion(itemAnterior);
+
+    if (estadoAnterior === estado) return;
+
+    if (tipo === "lead") {
+      if (actualizandoLeadId !== null) return;
+
+      setActualizandoLeadId(id);
+    }
+
+    // Actualización optimista.
+    setServices((prev) =>
+      prev.map((item) =>
+        item.id === id &&
+          item.tipo_item === (tipo === "lead" ? "lead" : "servicio")
+          ? {
+            ...item,
+            estado,
+            estado_operacion: estado,
+          }
+          : item
+      )
+    );
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}${endpoint}`,
+        {
+          method: "PATCH",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ estado }),
+        }
+      );
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => null);
+
+        throw new Error(
+          errorData?.message || "No se pudo actualizar el estado."
+        );
+      }
+
+      const json = await res.json();
+
+      if (json.data) {
+        setServices((prev) =>
+          prev.map((item) =>
+            item.id === json.data.id &&
+              item.tipo_item === (tipo === "lead" ? "lead" : "servicio")
+              ? {
+                ...item,
+                ...json.data,
+              }
+              : item
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error al actualizar el estado:", error);
+
+      // Revertir actualización optimista.
+      setServices((prev) =>
+        prev.map((item) =>
+          item.id === id &&
+            item.tipo_item === (tipo === "lead" ? "lead" : "servicio")
+            ? {
+              ...item,
+              estado: estadoAnterior,
+              estado_operacion: estadoAnterior,
+            }
+            : item
+        )
+      );
+
+      alert(error.message || "Ocurrió un error al actualizar el estado.");
+    } finally {
+      if (tipo === "lead") {
+        setActualizandoLeadId(null);
+      }
     }
   };
 
@@ -571,11 +648,16 @@ export default function MisPublicacionesEmpresa() {
                     fechaRecoleccion={item.fecha_recoleccion}
                     inventario={item.inventario}
                     tipoMudanza={item.tipo_mudanza}
-                    fecha={item.created_at ? new Date(item.created_at).toLocaleDateString("es-MX") : "Sin fecha"}
+                    fecha={
+                      item.created_at
+                        ? new Date(item.created_at).toLocaleDateString("es-MX")
+                        : "Sin fecha"
+                    }
                     telefono={item.telefono}
                     isLead={true}
                     showContact={false}
                     estado={getEstadoPublicacion(item)}
+                    actualizandoEstado={actualizandoLeadId === item.id}
                     nombreCliente={item.nombre}
                     tipoVivienda={item.tipo_vivienda}
                     empresaNombre={empresa?.empresa}
@@ -584,9 +666,14 @@ export default function MisPublicacionesEmpresa() {
                     onDelete={() => abrirEliminarLead(item.id)}
                     onChangeEstado={(id, nuevoEstado) => {
                       if (nuevoEstado === "finalizado") {
-                        abrirFinalizacion({ ...item, tipo_item: "lead", });
+                        abrirFinalizacion({
+                          ...item,
+                          tipo_item: "lead",
+                        });
+
                         return;
                       }
+
                       cambiarEstadoDirecto(id, nuevoEstado, "lead");
                     }}
                   />

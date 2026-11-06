@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\Log;
+use App\Modules\DashboardExterno\Middleware\ValidarDashboardApiKey;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -20,18 +21,15 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'internal.api' => \App\Http\Middleware\InternalApiMiddleware::class,
             'plan.permission' => \App\Http\Middleware\CheckPlanPermission::class,
+            'dashboard.api.key' => ValidarDashboardApiKey::class,
         ]);
     })
 
     ->withSchedule(function ($schedule) {
         Log::info('SCHEDULER FUNCIONANDO');
 
-        $schedule->command('radar:process')
-            ->hourly()
-            ->between('09:00', '21:00');
-
-        $schedule->command('subscriptions:check')
-            ->dailyAt('08:00');
+        $schedule->command('radar:process')->hourly()->between('09:00', '21:00');
+        $schedule->command('subscriptions:check')->dailyAt('08:00');
     })
 
     ->withExceptions(function (Exceptions $exceptions): void {
