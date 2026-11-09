@@ -124,5 +124,8 @@ require base_path('app/Modules/Seguro/routes.php');
 |--------------------------------------------------------------------------
 */
 Route::prefix('dashboard')->middleware('dashboard.api.key')->group(function () {
-    Route::get('/externo',  [DashboardExternoController::class, 'index']);
+    // Dashboard general existente.
+    Route::get('/externo', [DashboardExternoController::class, 'index',]);
+    // Histórico con filtros y agrupaciones.
+    Route::get('/historico', [DashboardExternoController::class, 'historico',]);
 });

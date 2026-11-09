@@ -54,7 +54,6 @@ class ExpedienteSeguroService
         return ExpedienteSeguro::query()
             ->whereNotNull('correo_programado_at')
             ->whereNull('correo_enviado_at')
-            ->whereNotNull('video_enviado_at')
             ->where('correo_programado_at', '<=', now())
             ->whereNotIn('estado', ['completado', 'cancelado'])
             ->whereNotNull('email')

@@ -28,8 +28,24 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withSchedule(function ($schedule) {
         Log::info('SCHEDULER FUNCIONANDO');
 
+        // Radar
         $schedule->command('radar:process')->hourly()->between('09:00', '21:00');
+
+        // Suscripciones
         $schedule->command('subscriptions:check')->dailyAt('08:00');
+
+        // Limpieza de verificaciones de email
+        $schedule->command('email:clean')->daily();
+
+        // Notificaciones
+        $schedule->command('notificaciones:daily-views-summary')->dailyAt('23:59');
+        $schedule->command('notificaciones:check-expiring')->hourly();
+
+        // Seguros: procesamiento de correos
+        $schedule->command('seguro:procesar-correos')->hourly();
+
+        // Leads
+        $schedule->command('leads:expire')->daily();
     })
 
     ->withExceptions(function (Exceptions $exceptions): void {
