@@ -71,7 +71,6 @@ class ExpedienteSeguroService
             ->get();
     }
 
-
     public function obtenerExpedientesParaSegundoRecordatorio()
     {
         return ExpedienteSeguro::query()

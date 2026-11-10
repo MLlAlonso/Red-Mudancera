@@ -34,8 +34,9 @@ class SuperAdminSegurosController extends Controller
     {
         $data = $this->service->obtenerExpedientes(
             $request->input('search', ''),
-            $request->input('month'),
-            $request->input('modalidad', 'todas')
+            $request->input('month', 'bimestre'),
+            $request->input('modalidad', 'todas'),
+            $request->input('estado', 'todos')
         );
 
         return response()->json($data);
@@ -105,10 +106,7 @@ class SuperAdminSegurosController extends Controller
         $expediente = ExpedienteSeguro::findOrFail($id);
         Mail::to($expediente->email)->send(new InvitacionExpedienteSeguroMail($expediente));
 
-        $expediente->update([
-            'estado' => 'esperando_cliente',
-            'correo_enviado_at' => now()
-        ]);
+        $expediente->update([ 'estado' => 'esperando_cliente', 'correo_enviado_at' => now() ]);
 
         return response()->json(['message' => 'Correo enviado correctamente.']);
     }

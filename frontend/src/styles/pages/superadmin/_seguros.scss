@@ -514,3 +514,306 @@
         outline-offset: 3px;
     }
 }
+
+
+
+
+
+.superadmin-tools {
+    margin-bottom: 28px;
+}
+
+.seguros-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 18px;
+}
+
+.metric-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 22px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+
+    span {
+        font-size: 14px;
+        color: #64748b;
+    }
+
+    strong {
+        text-align: center;
+        font-size: 34px;
+        color: #09233e;
+    }
+
+    &.success {
+        background: #ecfdf5;
+
+        strong {
+            color: #059669;
+        }
+    }
+
+    &.warning {
+        background: #fef3c7;
+
+        strong {
+            color: #b45309;
+        }
+    }
+
+    &.premium {
+        background: #eef2ff;
+
+        strong {
+            color: #4338ca;
+        }
+    }
+
+    &.dark {
+        background: #0f172a;
+
+        span {
+            color: #cbd5e1;
+        }
+
+        strong {
+            color: #ffffff;
+        }
+    }
+}
+
+// FILTROS
+
+.seguros-toolbar {
+    display: grid;
+    grid-template-columns: minmax(250px, 1fr) repeat(3, minmax(170px, 210px));
+    gap: 14px;
+    margin: 30px 0;
+    align-items: stretch;
+}
+
+.search-box {
+    min-width: 0;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0 18px;
+    background: #ffffff;
+    border: 1px solid #edf0f2;
+    border-radius: 14px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.035);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus-within {
+        border-color: rgba(10, 108, 241, 0.4);
+        box-shadow: 0 0 0 3px rgba(10, 108, 241, 0.07);
+    }
+
+    img {
+        width: 21px;
+        flex-shrink: 0;
+        opacity: 0.45;
+    }
+
+    input {
+        flex: 1;
+        min-width: 0;
+        height: 100%;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: 14px;
+        color: #09233e;
+
+        &::placeholder {
+            color: #94a3b8;
+        }
+    }
+}
+
+.period-filter,
+.modality-filter,
+.status-filter {
+    width: 100%;
+    min-width: 0;
+    height: 56px;
+    padding: 0 14px;
+    border: 1px solid #edf0f2;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.035);
+    color: #09233e;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus {
+        border-color: rgba(10, 108, 241, 0.4);
+        box-shadow: 0 0 0 3px rgba(10, 108, 241, 0.07);
+    }
+}
+
+// RESULTADOS
+
+.seguros-results {
+    width: 100%;
+}
+
+.seguros-results__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+
+    h2 {
+        margin: 0;
+        color: #09233e;
+        font-size: 19px;
+        font-weight: 700;
+    }
+
+    p {
+        margin: 5px 0 0;
+        color: #84909b;
+        font-size: 13px;
+    }
+}
+
+.seguros-loading {
+    padding: 7px 12px;
+    border-radius: 20px;
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.seguros-error {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 18px;
+    margin-bottom: 20px;
+    border: 1px solid #fecaca;
+    border-radius: 14px;
+    background: #fef2f2;
+
+    p {
+        margin: 0;
+        color: #b91c1c;
+        font-size: 14px;
+    }
+
+    button {
+        flex-shrink: 0;
+        padding: 9px 16px;
+        border: none;
+        border-radius: 8px;
+        background: #b91c1c;
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+}
+
+.seguros-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 24px;
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+    padding: 80px 25px;
+    text-align: center;
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+
+    img {
+        width: 80px;
+        opacity: 0.35;
+    }
+
+    h3 {
+        margin: 20px 0 0;
+        color: #09233e;
+        font-size: 20px;
+    }
+
+    p {
+        margin: 10px 0 0;
+        color: #64748b;
+        font-size: 14px;
+    }
+}
+
+// RESPONSIVE
+
+@media (max-width: 1100px) {
+    .seguros-toolbar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .search-box {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 700px) {
+    .seguros-toolbar {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin: 22px 0;
+    }
+
+    .search-box {
+        grid-column: auto;
+    }
+
+    .period-filter,
+    .modality-filter,
+    .status-filter {
+        width: 100%;
+    }
+
+    .seguros-results__header {
+        align-items: flex-start;
+    }
+
+    .seguros-error {
+        align-items: flex-start;
+        flex-direction: column;
+
+        button {
+            width: 100%;
+        }
+    }
+
+    .seguros-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .seguros-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .metric-card {
+        padding: 18px;
+
+        strong {
+            font-size: 28px;
+        }
+    }
+}

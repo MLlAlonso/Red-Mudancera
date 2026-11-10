@@ -7,19 +7,34 @@ use Carbon\Carbon;
 
 class SuperAdminSegurosService
 {
-    public function obtenerExpedientes(string $search = '', ?string $month = null, string $modalidad = 'todas'): array
+    private const ESTADOS_VALIDOS = ['nuevo', 'esperando_cliente', 'capturando', 'revision', 'completado', 'cancelado',];
+
+    public function obtenerExpedientes(string $search = '', ?string $month = 'bimestre', string $modalidad = 'todas', string $estado = 'todos'): array
     {
+
         $hoy = now();
         $mesActual = $hoy->copy()->startOfMonth();
         $mesAnterior = $hoy->copy()->subMonth()->startOfMonth();
-        $mesSeleccionado = $month ? Carbon::createFromFormat('Y-m', $month)->startOfMonth() : $mesActual->copy();
+        $month = $month ?: 'bimestre';
 
-        if (!$mesSeleccionado->equalTo($mesActual) && !$mesSeleccionado->equalTo($mesAnterior)) {
-            $mesSeleccionado = $mesActual->copy();
+        // Determinar el periodo seleccionado.
+        if ($month === 'bimestre') {
+            $inicio = $mesAnterior->copy()->startOfMonth();
+            $fin = $mesActual->copy()->endOfMonth();
+        } elseif ($month === $mesActual->format('Y-m')) {
+            $inicio = $mesActual->copy()->startOfMonth();
+            $fin = $mesActual->copy()->endOfMonth();
+        } elseif ($month === $mesAnterior->format('Y-m')) {
+            $inicio = $mesAnterior->copy()->startOfMonth();
+            $fin = $mesAnterior->copy()->endOfMonth();
+        } else {
+            // Valor no permitido: regresar al bimestre.
+            $month = 'bimestre';
+            $inicio = $mesAnterior->copy()->startOfMonth();
+            $fin = $mesActual->copy()->endOfMonth();
         }
 
-        $inicio = $mesSeleccionado->copy()->startOfMonth();
-        $fin = $mesSeleccionado->copy()->endOfMonth();
+        // Consulta base.
         $query = ExpedienteSeguro::query()->whereBetween('created_at', [$inicio, $fin]);
         $search = trim($search);
 
@@ -29,6 +44,7 @@ class SuperAdminSegurosService
             });
         }
 
+        // Filtro por modalidad.
         if ($modalidad === 'asistida') {
             $query->where('modalidad_datos', 'asistida');
         }
@@ -39,6 +55,7 @@ class SuperAdminSegurosService
             });
         }
 
+        // Métricas generales, independientes del estado seleccionado.
         $baseMetrics = clone $query;
 
         $metrics = [
@@ -49,16 +66,18 @@ class SuperAdminSegurosService
             'completados' => (clone $baseMetrics)->where('estado', 'completado')->count(),
         ];
 
-        $ordenEstados = [
-            'nuevo' => 1,
-            'esperando_cliente' => 2,
-            'capturando' => 3,
-            'revision' => 4,
-            'completado' => 5,
-            'cancelado' => 6,
-        ];
+        // Aplicar filtro de estado únicamente al listado.
+        $estado = in_array($estado, self::ESTADOS_VALIDOS, true) ? $estado : 'todos';
+        $listQuery = clone $query;
 
-        $expedientes = $query->get()->sort(function ($a, $b) use ($ordenEstados) {
+        if ($estado !== 'todos') {
+            $listQuery->where('estado', $estado);
+        }
+
+        // Orden de prioridad de los expedientes.
+        $ordenEstados = ['nuevo' => 1, 'esperando_cliente' => 2, 'capturando' => 3, 'revision' => 4, 'completado' => 5, 'cancelado' => 6,];
+
+        $expedientes = $listQuery->get()->sort(function ($a, $b) use ($ordenEstados) {
             $ordenA = $ordenEstados[$a->estado] ?? 99;
             $ordenB = $ordenEstados[$b->estado] ?? 99;
 
@@ -70,6 +89,7 @@ class SuperAdminSegurosService
         })
             ->values()
             ->map(function ($expediente) {
+
                 return [
                     'id' => $expediente->id,
                     'folio' => $expediente->folio,
@@ -90,22 +110,19 @@ class SuperAdminSegurosService
             })
             ->values();
 
+        // Opciones del selector de periodos.
         $periods = [
-            [
-                'value' => $mesActual->format('Y-m'),
-                'label' => $this->nombreMes($mesActual),
-            ],
-            [
-                'value' => $mesAnterior->format('Y-m'),
-                'label' => $this->nombreMes($mesAnterior),
-            ],
+            ['value' => 'bimestre', 'label' => 'Últimos 2 meses',],
+            ['value' => $mesActual->format('Y-m'), 'label' => $this->nombreMes($mesActual),],
+            ['value' => $mesAnterior->format('Y-m'), 'label' => $this->nombreMes($mesAnterior),],
         ];
 
         return [
             'metrics' => $metrics,
             'data' => $expedientes,
             'periods' => $periods,
-            'selected_month' => $mesSeleccionado->format('Y-m'),
+            'selected_month' => $month,
+            'selected_estado' => $estado,
         ];
     }
 

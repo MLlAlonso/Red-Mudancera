@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
 use App\Modules\SolicitudMudanza\Models\LeadCompra;
@@ -189,22 +190,25 @@ class SolicitudMudanzaController extends Controller
             'destino' => $solicitud->destino,
             'inventario' => $solicitud->inventario,
             'fecha_recoleccion' => $solicitud->fecha_recoleccion,
-            'es_externo' => false
+            'es_externo' => false,
         ]);
 
-        Mail::to(['intermudanza@gmail.com', 'Segurosmudanzafacil@gmail.com', 'ventas12@segurosdecarga.com'])->send(
-            new \App\Modules\SolicitudMudanza\Mail\SolicitudSeguroMail($solicitud)
-        );
-
-        if ($expediente->email) {
-            Mail::to($expediente->email)->send(new SolicitudSeguroRecibidaMail($expediente));
+        if (!$expediente->email) {
+            Log::warning('No se envió la confirmación del seguro: expediente sin correo.', ['folio' => $expediente->folio, 'solicitud_id' => $solicitud->id,]);
+            return response()->json(['message' => 'El expediente fue creado, pero no tiene un correo de contacto.', 'folio' => $expediente->folio,], 422);
         }
 
-        return response()->json([
-            'message' => 'Solicitud enviada correctamente.',
-            'folio' => $expediente->folio
-        ]);
+        try {
+            Mail::to($expediente->email)->send(new SolicitudSeguroRecibidaMail($expediente));
+            Log::info('Confirmación inicial de seguro enviada.', ['folio' => $expediente->folio, 'email' => $expediente->email,]);
+        } catch (\Throwable $e) {
+            Log::error('Error al enviar la confirmación inicial de seguro.', ['folio' => $expediente->folio, 'email' => $expediente->email, 'error' => $e->getMessage(),]);
+            throw $e;
+        }
+
+        return response()->json(['message' => 'Solicitud enviada correctamente.', 'folio' => $expediente->folio,]);
     }
+
 
     public function solicitarSeguroExterno(Request $request): JsonResponse
     {
@@ -215,7 +219,7 @@ class SolicitudMudanzaController extends Controller
             'origen' => 'required|string',
             'destino' => 'required|string',
             'inventario' => 'required|string|min:10',
-            'fecha_recoleccion' => ['required', 'in:1-7,8-15,15-30,30+,lo_antes_posible'],
+            'fecha_recoleccion' => ['required', 'in:1-7,8-15,15-30,30+,lo_antes_posible',],
         ]);
 
         $expediente = app(ExpedienteSeguroService::class)->crear([
@@ -227,23 +231,18 @@ class SolicitudMudanzaController extends Controller
             'destino' => $data['destino'],
             'inventario' => $data['inventario'],
             'fecha_recoleccion' => $data['fecha_recoleccion'],
-            'es_externo' => true
+            'es_externo' => true,
         ]);
 
-        $fakeSolicitud = (object) $data;
-
-        Mail::to(['intermudanza@gmail.com', 'Segurosmudanzafacil@gmail.com', 'ventas12@segurosdecarga.com'])->send(
-            new \App\Modules\SolicitudMudanza\Mail\SolicitudSeguroMail($fakeSolicitud)
-        );
-
-        if ($expediente->email) {
+        try {
             Mail::to($expediente->email)->send(new SolicitudSeguroRecibidaMail($expediente));
+            Log::info('Confirmación inicial de seguro externo enviada.', ['folio' => $expediente->folio, 'email' => $expediente->email,]);
+        } catch (\Throwable $e) {
+            Log::error('Error al enviar la confirmación inicial de seguro externo.', ['folio' => $expediente->folio, 'email' => $expediente->email, 'error' => $e->getMessage(),]);
+            throw $e;
         }
 
-        return response()->json([
-            'message' => 'Solicitud enviada correctamente.',
-            'folio' => $expediente->folio
-        ]);
+        return response()->json(['message' => 'Solicitud enviada correctamente.', 'folio' => $expediente->folio,]);
     }
 
     public function cancelar($id)

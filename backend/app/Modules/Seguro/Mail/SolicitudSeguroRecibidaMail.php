@@ -21,10 +21,7 @@ class SolicitudSeguroRecibidaMail extends Mailable
     public function build()
     {
         return $this
-            ->subject(
-                'Mudanza Fácil: recibimos tu solicitud de seguro - '
-                    . $this->expediente->folio
-            )
+            ->subject('Mudanza Fácil: recibimos tu solicitud de seguro - ' . $this->expediente->folio)
             ->view('emails.seguro.solicitud-recibida');
     }
 }

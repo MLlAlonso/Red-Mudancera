@@ -10,25 +10,18 @@ async function handleResponse(res) {
     return res.json();
 }
 
-export async function getExpedientesSeguro(search = "", month = "", modalidad = "todas") {
+export async function getExpedientesSeguro(search = "", month = "bimestre", modalidad = "todas", estado = "todos") {
     const params = new URLSearchParams();
 
     if (search) {
         params.append("search", search);
     }
 
-    if (month) {
-        params.append("month", month);
-    }
-
-    if (modalidad) {
-        params.append("modalidad", modalidad);
-    }
-
-    const res = await fetch(
-        `${API}/superadmin/seguros?${params.toString()}`
-    );
-
+    params.append("month", month);
+    params.append("modalidad", modalidad);
+    params.append("estado", estado);
+    const res = await fetch(`${API}/superadmin/seguros?${params.toString()}`);
+    
     return handleResponse(res);
 }
 
