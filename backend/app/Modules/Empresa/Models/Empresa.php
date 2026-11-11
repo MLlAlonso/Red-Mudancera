@@ -46,6 +46,8 @@ class Empresa extends Authenticatable
         'freeSince',
         'isTrial',
         'trialEndsAt',
+        'firma_recibo_path',
+        'recibo_colores',
     ];
 
     protected $hidden = [
@@ -64,6 +66,7 @@ class Empresa extends Authenticatable
         'trialEndsAt' => 'date',
         'verificado' => 'boolean',
         'cancel_at_period_end' => 'boolean',
+        'recibo_colores' => 'array',
     ];
 
     // ===========================================

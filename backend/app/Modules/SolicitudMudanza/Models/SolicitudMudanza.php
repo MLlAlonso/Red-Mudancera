@@ -52,33 +52,26 @@ class SolicitudMudanza extends Model
 
     public function compras()
     {
-        return $this->hasMany(
-            LeadCompra::class,
-            'solicitud_id'
-        );
+        return $this->hasMany(LeadCompra::class, 'solicitud_id');
     }
 
     public function empresaReferente()
     {
-        return $this->belongsTo(
-            \App\Modules\Empresa\Models\Empresa::class,
-            'referido_por_empresa_id'
-        );
+        return $this->belongsTo(\App\Modules\Empresa\Models\Empresa::class, 'referido_por_empresa_id');
     }
 
     public function partnerReferral()
     {
-        return $this->belongsTo(
-            \App\Modules\PartnerReferral\Models\PartnerReferral::class,
-            'partner_referral_id'
-        );
+        return $this->belongsTo(\App\Modules\PartnerReferral\Models\PartnerReferral::class,  'partner_referral_id');
     }
 
     public function empresaPrivada()
     {
-        return $this->belongsTo(
-            \App\Modules\Empresa\Models\Empresa::class,
-            'empresa_privada_id'
-        );
+        return $this->belongsTo(\App\Modules\Empresa\Models\Empresa::class, 'empresa_privada_id');
+    }
+
+    public function recibos()
+    {
+        return $this->hasMany(Recibo::class,  'solicitud_id');
     }
 }

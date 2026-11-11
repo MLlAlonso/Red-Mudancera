@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Modules\SolicitudMudanza\Controllers\LeadNotaController;
 use App\Modules\SolicitudMudanza\Controllers\LeadOperacionController;
 use App\Modules\SolicitudMudanza\Controllers\SolicitudMudanzaController;
+use App\Modules\SolicitudMudanza\Controllers\ReciboController;
 
 Route::prefix('solicitudes-mudanza')->group(function () {
     Route::post('/', [SolicitudMudanzaController::class, 'store']);
@@ -22,6 +23,15 @@ Route::prefix('solicitudes-mudanza')->group(function () {
     Route::patch('/leads/{id}/ocultar', [LeadOperacionController::class, 'ocultar'])->middleware('auth:empresa');
     Route::delete('/leads/{id}/poner-en-venta',  [LeadOperacionController::class, 'ponerEnVenta'])->middleware('auth:empresa');
 
-    Route::get( '/leads/{id}/nota', [LeadNotaController::class, 'show'] );
-    Route::post( '/leads/{id}/nota', [LeadNotaController::class, 'store'] );
+    Route::get('/leads/{id}/nota', [LeadNotaController::class, 'show']);
+    Route::post('/leads/{id}/nota', [LeadNotaController::class, 'store']);
+
+    Route::middleware('auth:empresa')->prefix('empresa/solicitudes')->group(function () {
+        Route::get('/{solicitudId}/recibos/datos', [ReciboController::class, 'datos']);
+        Route::get('/{solicitudId}/recibos', [ReciboController::class, 'index']);
+        Route::post('/{solicitudId}/recibos', [ReciboController::class, 'store']);
+        Route::get('/recibos/{id}/descargar', [ReciboController::class, 'download']);
+        Route::put('/recibos/firma', [ReciboController::class, 'firma']);
+        Route::delete('/recibos/firma', [ReciboController::class, 'eliminarFirma']);
+    });
 });

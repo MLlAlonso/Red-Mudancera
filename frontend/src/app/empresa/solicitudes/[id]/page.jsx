@@ -12,6 +12,7 @@ import ComprarLeadModal from "@/components/modals/ComprarLeadModal";
 import EmpresaNotesModal from "@/components/modals/EmpresaNotesModal";
 import WhatsappMensajeSelectorModal from "@/components/modals/WhatsappMensajeSelectorModal";
 import LiveViewToast from "@/components/common/LiveViewToast";
+import GenerarReciboModal from "@/components/modals/recibos/GenerarReciboModal";
 import "@/styles/pages/solicitudes/_detalleSolicitud.scss";
 
 const ESTADOS = ["activo", "en_proceso", "asignado", "finalizado", "sin_respuesta", "perdido",];
@@ -227,6 +228,7 @@ export default function DetalleSolicitudPage() {
     const [showWhatsappSelector, setShowWhatsappSelector] = useState(false);
     const [actualizandoEstado, setActualizandoEstado] = useState(false);
     const [contactoCopiado, setContactoCopiado] = useState(false);
+    const [showReciboModal, setShowReciboModal] = useState(false);
 
     useEffect(() => {
         if (!id) return;
@@ -602,10 +604,10 @@ export default function DetalleSolicitudPage() {
                                         <span>Notas</span>
                                     </button>
 
-                                    {/* <button type="button" className="detalle-solicitud__action" disabled title="Disponible próximamente" >
+                                    <button type="button" className="detalle-solicitud__action" onClick={() => setShowReciboModal(true)} >
                                         <Icon name="receipt" />
                                         <span>Generar recibo</span>
-                                    </button> */}
+                                    </button>
                                 </>
                             ) : (
                                 <Button_cta value="Comprar contacto" onClick={() => setShowModal(true)} />
@@ -754,6 +756,14 @@ export default function DetalleSolicitudPage() {
                     openWhatsappTemplate({ telefono, mensaje, conMensaje });
                 }}
             />
+
+            {haComprado && showReciboModal && (
+                <GenerarReciboModal
+                    solicitudId={solicitud.id}
+                    onClose={() => setShowReciboModal(false)}
+                    onSuccess={(recibo) => { console.log("Recibo generado:", recibo?.folio); }}
+                />
+            )}
         </>
     );
 }
