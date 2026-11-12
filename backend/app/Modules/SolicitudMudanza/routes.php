@@ -5,6 +5,7 @@ use App\Modules\SolicitudMudanza\Controllers\LeadNotaController;
 use App\Modules\SolicitudMudanza\Controllers\LeadOperacionController;
 use App\Modules\SolicitudMudanza\Controllers\SolicitudMudanzaController;
 use App\Modules\SolicitudMudanza\Controllers\ReciboController;
+use App\Modules\SolicitudMudanza\Controllers\ReciboColorController;
 
 Route::prefix('solicitudes-mudanza')->group(function () {
     Route::post('/', [SolicitudMudanzaController::class, 'store']);
@@ -33,5 +34,11 @@ Route::prefix('solicitudes-mudanza')->group(function () {
         Route::get('/recibos/{id}/descargar', [ReciboController::class, 'download']);
         Route::put('/recibos/firma', [ReciboController::class, 'firma']);
         Route::delete('/recibos/firma', [ReciboController::class, 'eliminarFirma']);
+    });
+
+    Route::middleware('auth:empresa')->prefix('empresa/recibos')->group(function () {
+        Route::get('/colores', [ReciboColorController::class, 'show']);
+        Route::put('/colores', [ReciboColorController::class, 'update']);
+        Route::delete('/colores', [ReciboColorController::class, 'reset']);
     });
 });

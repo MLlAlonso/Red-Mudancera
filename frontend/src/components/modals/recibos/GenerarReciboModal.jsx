@@ -483,6 +483,26 @@ export default function GenerarReciboModal({ solicitudId, onClose, onSuccess, })
                         </div>
                     </section>
 
+                    <div className="recibo-modal__custom-colors">
+                        <div className="recibo-modal__custom-colors-info">
+                            <span className="recibo-modal__custom-colors-icon">
+                                <img src="/icons/color.png" alt="Personalizar recibo" />
+                            </span>
+
+                            <div>
+                                <strong>Personaliza tu recibo</strong>
+                                <p>
+                                    Puedes cambiar los colores de tus recibos desde la configuración de tu empresa.
+                                </p>
+                            </div>
+                        </div>
+
+                        <button type="button" onClick={() => { window.location.href = "/empresa/configuracion#recibo-colores"; }} disabled={generando} >
+                            Personalizar colores
+                            <span>↗</span>
+                        </button>
+                    </div>
+
                     <footer className="recibo-modal__footer">
                         <button type="button" onClick={cerrar} disabled={generando} >
                             Cancelar

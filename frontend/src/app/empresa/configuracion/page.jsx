@@ -7,6 +7,7 @@ import Input from "@/components/common/Input";
 import BaseModal from "@/components/modals/BaseModal";
 import OneSignal from "react-onesignal";
 import MensajesWhatsappManager from "@/components/empresa/MensajesWhatsappManager";
+import ReciboColoresManager from "@/components/empresa/ReciboColoresManager";
 import "@/styles/pages/empresa/_empresaConfiguracion.scss";
 
 export default function ConfiguracionPage() {
@@ -219,6 +220,10 @@ export default function ConfiguracionPage() {
                             {pushEnabled ? "Desactivar notificaciones push" : "Activar notificaciones push"}
                         </button>
                     )}
+                </div>
+
+                <div id="recibo-colores" className="configuracion__block">
+                    <ReciboColoresManager />
                 </div>
 
                 <div className="configuracion__block">
