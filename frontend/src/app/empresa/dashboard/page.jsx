@@ -23,6 +23,7 @@ export default function EmpresaDashboard() {
   const [filter, setFilter] = useState("todos");
   const [empresa, setEmpresa] = useState(null);
   const [tutorialAutomatico, setTutorialAutomatico] = useState(null);
+  const [actualizandoLeadId, setActualizandoLeadId] = useState(null);
 
   const [filters, setFilters] = useState({
     origen: "",
@@ -42,23 +43,19 @@ export default function EmpresaDashboard() {
   const dashboardTexts = {
     todos: {
       title: "Actividad reciente",
-      subtitle:
-        "Publicaciones recientes de carga y contactos de mudanza.",
+      subtitle: "Publicaciones recientes de carga y contactos de mudanza.",
     },
     busco: {
       title: "Publicaciones de Búsqueda",
-      subtitle:
-        "Empresas que buscan carga disponible para completar sus viajes.",
+      subtitle: "Empresas que buscan carga disponible para completar sus viajes.",
     },
     ofrezco: {
       title: "Publicaciones de Cargas a ofrecer",
-      subtitle:
-        "Empresas que publican carga disponible.",
+      subtitle: "Empresas que publican carga disponible.",
     },
     cliente: {
       title: "Contactos de Clientes",
-      subtitle:
-        "Contactos de mudanza, cargas publicadas en la red.",
+      subtitle: "Contactos de mudanza, cargas publicadas en la red.",
     },
   };
 
@@ -80,6 +77,84 @@ export default function EmpresaDashboard() {
 
     setSearch("");
     setShowFilters(false);
+  };
+
+  /**
+   * Actualiza el estado de un lead desde el dashboard.
+   */
+  const cambiarEstadoLead = async (id, nuevoEstado) => {
+    const token = getEmpresaToken();
+
+    if (!token) {
+      alert("Tu sesión ha expirado. Inicia sesión nuevamente.");
+      return;
+    }
+
+    if (actualizandoLeadId !== null) return;
+    const itemAnterior = services.find( (item) => item.id === id &&  item.tipo_item === "solicitud" );
+    if (!itemAnterior) return;
+    const estadoAnterior = itemAnterior.estado_operacion || itemAnterior.estado || "activo";
+    if (estadoAnterior === nuevoEstado) return;
+    setActualizandoLeadId(id);
+
+    // Actualización optimista.
+    setServices((prev) =>
+      prev.map((item) =>
+        item.id === id && item.tipo_item === "solicitud"
+          ? { ...item, estado: nuevoEstado, estado_operacion: nuevoEstado, }
+          : item
+      )
+    );
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/solicitudes-mudanza/leads/${id}/estado`,
+        {
+          method: "PATCH",
+          headers: {
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            estado: nuevoEstado,
+          }),
+        }
+      );
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => null);
+        throw new Error( errorData?.message || "No se pudo actualizar el estado." );
+      }
+
+      const json = await res.json();
+
+      if (json.data) {
+        setServices((prev) =>
+          prev.map((item) =>
+            item.id === id && item.tipo_item === "solicitud" ? { ...item, ...json.data, } : item
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error al actualizar el estado del lead:", error);
+
+      // Revertir actualización optimista.
+      setServices((prev) =>
+        prev.map((item) =>
+          item.id === id && item.tipo_item === "solicitud"
+            ? {
+              ...item,
+              estado: estadoAnterior,
+              estado_operacion: estadoAnterior,
+            }
+            : item
+        )
+      );
+
+      alert(error.message || "Ocurrió un error al actualizar el estado.");
+    } finally {
+      setActualizandoLeadId(null);
+    }
   };
 
   /* =========================
@@ -154,10 +229,7 @@ export default function EmpresaDashboard() {
       }
 
       if (filter === "busco" || filter === "ofrezco") {
-        return (
-          s.tipo_item === "servicio" &&
-          s.subtipo === filter
-        );
+        return ( s.tipo_item === "servicio" && s.subtipo === filter );
       }
 
       return true;
@@ -179,9 +251,7 @@ export default function EmpresaDashboard() {
       <Header />
 
       <main className="empresa-dashboard">
-        {/* =========================
-            Header
-        ========================= */}
+
         <div className="empresa-dashboard__header">
           <h1 className="empresa-dashboard__title">
             {dashboardTexts[filter].title}
@@ -191,21 +261,12 @@ export default function EmpresaDashboard() {
           </p>
         </div>
 
-        {/* =========================
-            Controls
-        ========================= */}
         <div className="empresa-dashboard__controls">
           <ServiceFilters onChange={setFilter} />
         </div>
 
-        {/* =========================
-            Floating CRUD button
-        ========================= */}
         <Button_crud value="+" onClick={() => (window.location.href = "/empresa/cargas")} />
 
-        {/* =========================
-            Cards
-        ========================= */}
         <div className="empresa-dashboard__cards">
 
           {loading &&
@@ -247,8 +308,11 @@ export default function EmpresaDashboard() {
                       distanciaKm={item.distancia_km}
                       tipoMudanza={item.tipo_mudanza}
                       inventario={item.inventario}
-                      fecha={new Date(item.created_at).toLocaleDateString()}
+                      fecha={ new Date(item.created_at).toLocaleDateString("es-MX")  }
                       isLead={item.ya_comprado}
+                      estado={item.estado_operacion || item.estado || "activo"}
+                      actualizandoEstado={actualizandoLeadId === item.id}
+                      onChangeEstado={cambiarEstadoLead}
                       telefono={item.telefono}
                       nombreCliente={item.nombre_cliente}
                       tipoVivienda={item.tipo_vivienda}
