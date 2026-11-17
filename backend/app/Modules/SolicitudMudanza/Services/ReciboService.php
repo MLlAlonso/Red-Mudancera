@@ -78,7 +78,7 @@ class ReciboService
                 'solicitud_id' => $solicitud->id,
                 'folio' => $this->generarFolio(),
                 'fecha_recibo' => $data['fecha_recibo'],
-                'ciudad' => $data['ciudad'],
+                'ciudad' => $data['ciudad'] ?? null,
                 'nombre_cliente' => $data['nombre_cliente'],
                 'origen' => $data['origen'],
                 'destino' => $data['destino'],

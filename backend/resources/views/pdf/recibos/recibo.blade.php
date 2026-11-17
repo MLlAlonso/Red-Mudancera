@@ -179,9 +179,9 @@
                 </td>
 
                 <td width="50%">
-                    <span class="label">Ciudad</span>
+                    <span class="label">Concepto</span>
                     <span class="value">
-                        {{ $recibo->ciudad }}
+                        Servicio de mudanza
                     </span>
                 </td>
             </tr>

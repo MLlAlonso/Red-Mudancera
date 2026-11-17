@@ -339,7 +339,10 @@ class SuperAdminServiciosService
 
         return LeadCompra::query()
             ->whereBetween('created_at', [$fechaInicio, $fechaFin])
-            ->with(['empresa:id,empresa,logo', 'solicitud:id,nombre,origen,destino,tipo_mudanza'])
+            ->with([
+                'empresa:id,empresa,logo',
+                'solicitud:id,nombre,email,telefono,origen,destino,tipo_mudanza'
+            ])
             ->latest()
             ->limit($limit)
             ->get()
@@ -353,13 +356,14 @@ class SuperAdminServiciosService
                         'logo' => $compra->empresa?->logo_url ?? $compra->empresa?->logo ?? null,
                     ],
 
-                    'lead' => [
-                        'id' => $compra->solicitud?->id,
-                        'nombre' => $compra->solicitud?->nombre,
-                        'origen' => $compra->solicitud?->origen,
-                        'destino' => $compra->solicitud?->destino,
-                        'tipo_mudanza' => $compra->solicitud?->tipo_mudanza,
-                    ],
+                    'lead' => array_merge(
+                        $this->obtenerDatosContacto($compra->solicitud),
+                        [
+                            'origen' => $compra->solicitud?->origen,
+                            'destino' => $compra->solicitud?->destino,
+                            'tipo_mudanza' => $compra->solicitud?->tipo_mudanza,
+                        ]
+                    ),
 
                     'tokens_pagados' => (int) $compra->tokens_pagados,
                     'exclusivo' => (bool) $compra->exclusivo,
@@ -386,17 +390,16 @@ class SuperAdminServiciosService
                 return [
                     'id' => $compra->id,
 
-                    'lead' => [
-                        'id' => $compra->solicitud?->id,
-                        'nombre' => $compra->solicitud?->nombre,
-                        'email' => $compra->solicitud?->email,
-                        'telefono' => $compra->solicitud?->telefono,
-                        'origen' => $compra->solicitud?->origen,
-                        'destino' => $compra->solicitud?->destino,
-                        'tipo_mudanza' => $compra->solicitud?->tipo_mudanza,
-                        'fecha_recoleccion' => $compra->solicitud?->fecha_recoleccion,
-                        'estado' => $compra->solicitud?->estado,
-                    ],
+                    'lead' => array_merge(
+                        $this->obtenerDatosContacto($compra->solicitud),
+                        [
+                            'origen' => $compra->solicitud?->origen,
+                            'destino' => $compra->solicitud?->destino,
+                            'tipo_mudanza' => $compra->solicitud?->tipo_mudanza,
+                            'fecha_recoleccion' => $compra->solicitud?->fecha_recoleccion,
+                            'estado' => $compra->solicitud?->estado,
+                        ]
+                    ),
 
                     'tokens_pagados' => (int) $compra->tokens_pagados,
                     'exclusivo' => (bool) $compra->exclusivo,
@@ -422,6 +425,39 @@ class SuperAdminServiciosService
             ],
 
             'compras' => $compras->values(),
+        ];
+    }
+
+    /**
+     * Prepara los datos de contacto de un lead para su visualización en el panel SuperAdmin.
+     */
+    private function obtenerDatosContacto(?SolicitudMudanza $solicitud): array
+    {
+        if (!$solicitud) {
+            return [
+                'id' => null,
+                'nombre' => null,
+                'email' => null,
+                'telefono' => null,
+                'whatsapp_url' => null,
+                'mailto_url' => null,
+            ];
+        }
+
+        $telefono = $solicitud->telefono;
+        $telefonoLimpio = $telefono ? preg_replace('/\D+/', '', $telefono) : null;
+
+        if ($telefonoLimpio && strlen($telefonoLimpio) === 10) {
+            $telefonoLimpio = '52' . $telefonoLimpio;
+        }
+
+        return [
+            'id' => $solicitud->id,
+            'nombre' => $solicitud->nombre,
+            'email' => $solicitud->email,
+            'telefono' => $telefono,
+            'whatsapp_url' => $telefonoLimpio ? 'https://wa.me/' . $telefonoLimpio : null,
+            'mailto_url' => $solicitud->email ? 'mailto:' . $solicitud->email : null,
         ];
     }
 }

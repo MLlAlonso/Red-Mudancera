@@ -15,7 +15,7 @@ class StoreReciboRequest extends FormRequest
     {
         return [
             'fecha_recibo' => ['required', 'date_format:Y-m-d',],
-            'ciudad' => ['required', 'string', 'max:150',],
+            'ciudad' => ['nullable', 'string', 'max:150',],
             'nombre_cliente' => ['required', 'string', 'max:255',],
             'origen' => ['required', 'string', 'max:1000',],
             'destino' => ['required', 'string', 'max:1000',],

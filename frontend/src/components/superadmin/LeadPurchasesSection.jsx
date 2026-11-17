@@ -35,9 +35,7 @@ export default function LeadPurchasesSection() {
         try {
             setLoading(true);
             setError(null);
-
-            const [companiesResponse, latestResponse,] =
-                await Promise.all([getLeadPurchasingCompanies(inicio, fin), getLatestLeadPurchases(inicio, fin),]);
+            const [companiesResponse, latestResponse,] = await Promise.all([getLeadPurchasingCompanies(inicio, fin), getLatestLeadPurchases(inicio, fin),]);
             setCompanies(companiesResponse.data || []);
             setLatestPurchases(latestResponse.data || []);
         } catch (error) {
@@ -250,7 +248,6 @@ export default function LeadPurchasesSection() {
 
                                                 <p>
                                                     {company.compras_rango}{" "}
-
                                                     {company.compras_rango === 1 ? "contacto comprado" : "contactos comprados"}
                                                 </p>
                                             </div>
@@ -311,17 +308,54 @@ export default function LeadPurchasesSection() {
                                             </div>
 
                                             <div className="latest-purchase__footer">
-                                                <span>
-                                                    {purchase.lead?.nombre}
-                                                </span>
+                                                <div className="purchase-contact">
+                                                    <strong className="purchase-contact__name">
+                                                        {purchase.lead?.nombre || "Cliente sin nombre"}
+                                                    </strong>
 
-                                                <span>
-                                                    {purchase.tokens_pagados}{" "} créditos
-                                                </span>
+                                                    <div className="purchase-contact__actions">
 
-                                                <span>
-                                                    {formatDateTime(purchase.created_at)}
-                                                </span>
+                                                        {purchase.lead?.telefono ? (
+                                                            <>
+                                                                <a href={`tel:${purchase.lead.telefono}`} className="purchase-contact__item" >
+                                                                    <span>☎</span>
+                                                                    {purchase.lead.telefono}
+                                                                </a>
+
+                                                                {purchase.lead?.whatsapp_url && (
+                                                                    <a href={purchase.lead.whatsapp_url} target="_blank" rel="noopener noreferrer" className="purchase-contact__whatsapp" >
+                                                                        Contactar por WhatsApp
+                                                                    </a>
+                                                                )}
+                                                            </>
+                                                        ) : (
+                                                            <span className="purchase-contact__unavailable">
+                                                                Teléfono no disponible
+                                                            </span>
+                                                        )}
+
+                                                        {purchase.lead?.email ? (
+                                                            <a href={purchase.lead.mailto_url} className="purchase-contact__item" >
+                                                                <span>✉</span>
+                                                                {purchase.lead.email}
+                                                            </a>
+                                                        ) : (
+                                                            <span className="purchase-contact__unavailable">
+                                                                Correo no disponible
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                <div className="latest-purchase__metadata">
+                                                    <span>
+                                                        {purchase.tokens_pagados} créditos
+                                                    </span>
+
+                                                    <span>
+                                                        {formatDateTime(purchase.created_at)}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </article>
                                     )
@@ -333,14 +367,7 @@ export default function LeadPurchasesSection() {
             </section>
 
             {selectedCompany && (
-                <div
-                    className="purchase-detail-overlay"
-                    onMouseDown={(event) => {
-                        if (event.target === event.currentTarget) {
-                            closeCompanyDetail();
-                        }
-                    }}
-                >
+                <div className="purchase-detail-overlay" onMouseDown={(event) => { if (event.target === event.currentTarget) { closeCompanyDetail(); } }} >
                     <div className="purchase-detail">
                         <div className="purchase-detail__header">
                             <div>
@@ -401,20 +428,47 @@ export default function LeadPurchasesSection() {
                                                     </div>
 
                                                     <div className="company-purchase__data">
-                                                        <div>
-                                                            <span> Cliente </span>
+                                                        <div className="company-purchase__contact-field">
+                                                            <span>Cliente</span>
 
                                                             <strong>
-                                                                {purchase.lead?.nombre}
+                                                                {purchase.lead?.nombre || "No disponible"}
                                                             </strong>
                                                         </div>
 
-                                                        <div>
-                                                            <span> Contacto </span>
+                                                        <div className="company-purchase__contact-field">
+                                                            <span>Teléfono</span>
 
-                                                            <strong>
-                                                                {purchase.lead?.telefono}
-                                                            </strong>
+                                                            {purchase.lead?.telefono ? (
+                                                                <a href={`tel:${purchase.lead.telefono}`}>
+                                                                    {purchase.lead.telefono}
+                                                                </a>
+                                                            ) : (
+                                                                <strong>No disponible</strong>
+                                                            )}
+
+                                                            {purchase.lead?.whatsapp_url && (
+                                                                <a
+                                                                    href={purchase.lead.whatsapp_url}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="purchase-contact__whatsapp"
+                                                                >
+                                                                    Contactar por WhatsApp
+                                                                </a>
+                                                            )}
+                                                        </div>
+
+                                                        <div className="company-purchase__contact-field">
+                                                            <span>Correo electrónico</span>
+
+                                                            {purchase.lead?.email ? (
+                                                                <a href={purchase.lead.mailto_url}>
+                                                                    {purchase.lead.email}
+                                                                </a>
+                                                            ) : (
+                                                                <strong>No disponible</strong>
+                                                            )}
                                                         </div>
 
                                                         <div>

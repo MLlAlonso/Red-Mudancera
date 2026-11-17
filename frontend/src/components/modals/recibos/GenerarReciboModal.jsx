@@ -195,11 +195,6 @@ export default function GenerarReciboModal({ solicitudId, onClose, onSuccess, })
         setError("");
         setErrores({});
 
-        if (!form.ciudad.trim()) {
-            setErrores({ ciudad: ["Selecciona una ciudad."], });
-            return;
-        }
-
         if (!form.nombre_cliente.trim()) {
             setError("El nombre del cliente es obligatorio.");
             return;
@@ -321,7 +316,7 @@ export default function GenerarReciboModal({ solicitudId, onClose, onSuccess, })
                                 <input type="date" value={form.fecha_recibo} onChange={(e) => cambiar("fecha_recibo", e.target.value)} required />
                             </Campo>
 
-                            <Campo label="Ciudad" required  >
+                           {/*  <Campo label="Ciudad" required  >
                                 <input
                                     ref={ciudadRef}
                                     value={form.ciudad}
@@ -335,7 +330,7 @@ export default function GenerarReciboModal({ solicitudId, onClose, onSuccess, })
                                         {errores.ciudad[0]}
                                     </small>
                                 )}
-                            </Campo>
+                            </Campo> */}
 
                             <Campo label="Nombre del cliente" required >
                                 <input value={form.nombre_cliente} onChange={(e) => cambiar("nombre_cliente", e.target.value)} required />
