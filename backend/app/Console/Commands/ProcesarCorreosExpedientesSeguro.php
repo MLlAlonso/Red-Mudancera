@@ -8,12 +8,13 @@ use Illuminate\Console\Command;
 class ProcesarCorreosExpedientesSeguro extends Command
 {
     protected $signature = 'seguro:procesar-correos';
+
     protected $description = 'Procesa las invitaciones y recordatorios de expedientes de seguro';
 
     public function handle(): int
     {
-        ProcesarCorreosExpedientesSeguroJob::dispatch();
-        $this->info('Job de correos de expedientes de seguro enviado a la cola.');
+        ProcesarCorreosExpedientesSeguroJob::dispatchSync();
+        $this->info('Procesamiento de correos de seguros ejecutado.');
         return self::SUCCESS;
     }
 }

@@ -30,9 +30,7 @@ class SendNotificationEmailJob implements ShouldQueue
                 return;
             }
 
-            $usuarios = Usuario::where('empresa_id', $empresa->id)
-                ->where('activoEmpresa', true)
-                ->get();
+            $usuarios = Usuario::where('empresa_id', $empresa->id) ->where('activoEmpresa', true) ->get();
 
             Log::info('Email enviado (simulado)', [
                 'empresa' => $empresa->email ?? null,
@@ -51,9 +49,5 @@ class SendNotificationEmailJob implements ShouldQueue
 
             throw $e;
         }
-
-        /*
-        Aquí irá integración con Resend
-        */
     }
 }

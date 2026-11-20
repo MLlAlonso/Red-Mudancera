@@ -42,7 +42,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('notificaciones:check-expiring')->hourly();
 
         // Seguros: procesamiento de correos
-        $schedule->command('seguro:procesar-correos')->hourly();
+        $schedule->command('seguro:procesar-correos') ->everyMinute() ->withoutOverlapping() ->onOneServer();
 
         // Leads
         $schedule->command('leads:expire')->daily();

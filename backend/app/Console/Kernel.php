@@ -20,7 +20,6 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('notificaciones:daily-views-summary')->dailyAt('23:59');
         $schedule->command('notificaciones:check-expiring')->hourly();
-        $schedule->command('seguro:procesar-correos')->hourly();
         $schedule->command('leads:expire')->daily();
     }
 

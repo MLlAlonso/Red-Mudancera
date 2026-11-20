@@ -50,16 +50,18 @@ class ExpedienteSeguro extends Model
         'correo_enviado_at',
         'video_programado_at',
         'video_enviado_at',
+        'recordatorio_programado_at',
+        'recordatorio_enviado_at',
+        'segundo_recordatorio_programado_at',
+        'segundo_recordatorio_enviado_at',
+        'tercer_recordatorio_programado_at',
+        'tercer_recordatorio_enviado_at',
         'cliente_inicio_at',
         'cliente_finalizo_at',
         'ultimo_autoguardado_at',
         'empresa_access_token',
         'empresa_access_created_at',
         'empresa_datos_finalizados_at',
-        'segundo_recordatorio_programado_at',
-        'segundo_recordatorio_enviado_at',
-        'tercer_recordatorio_programado_at',
-        'tercer_recordatorio_enviado_at',
     ];
 
     protected $casts = [
@@ -81,6 +83,8 @@ class ExpedienteSeguro extends Model
         'segundo_recordatorio_enviado_at' => 'datetime',
         'tercer_recordatorio_programado_at' => 'datetime',
         'tercer_recordatorio_enviado_at' => 'datetime',
+        'recordatorio_programado_at' => 'datetime',
+        'recordatorio_enviado_at' => 'datetime',
     ];
 
     protected $appends = ['enlace_empresa',];
