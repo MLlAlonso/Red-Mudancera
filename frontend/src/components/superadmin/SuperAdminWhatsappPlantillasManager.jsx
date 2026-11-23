@@ -4,24 +4,61 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { actualizarPlantillaWhatsapp, crearPlantillaWhatsapp, eliminarPlantillaWhatsapp, listarPlantillasWhatsapp, } from "@/services/superAdminWhatsappPlantillas";
 import "@/styles/components/_superAdminWhatsappPlantillas.scss";
 
-const NUEVA_PLANTILLA = { id: null, titulo: "", mensaje: "", };
-
-const VARIABLES_SEGUROS = [
-    { key: "nombre", label: "Nombre del cliente" },
-    { key: "email", label: "Correo del cliente" },
-    { key: "telefono", label: "Teléfono del cliente" },
-    { key: "folio", label: "Folio del expediente" },
-    { key: "origen", label: "Origen de la mudanza" },
-    { key: "destino", label: "Destino de la mudanza" },
-    { key: "fechaRecoleccion", label: "Fecha de recolección" },
-    { key: "tipoSeguro", label: "Tipo de seguro" },
-    { key: "valorMenaje", label: "Valor del menaje" },
-    { key: "valorAutomovil", label: "Valor del automóvil" },
-    { key: "primaEstimada", label: "Prima estimada" },
-    { key: "modalidad", label: "Modalidad de captura" },
-    { key: "enlaceExpediente", label: "Enlace al expediente" },
-    { key: "enlaceEmpresa", label: "Enlace para la empresa" },
+const CATEGORIAS = [
+    { value: "seguros", label: "Seguros" },
+    { value: "clientes", label: "Clientes" },
+    { value: "empresas", label: "Empresas" },
+    { value: "general", label: "General" },
 ];
+
+const NUEVA_PLANTILLA = {
+    id: null,
+    titulo: "",
+    mensaje: "",
+    area: "seguros",
+};
+
+const VARIABLES_POR_AREA = {
+    seguros: [
+        { key: "nombre", label: "Nombre del cliente" },
+        { key: "email", label: "Correo del cliente" },
+        { key: "telefono", label: "Teléfono del cliente" },
+        { key: "folio", label: "Folio del expediente" },
+        { key: "origen", label: "Origen de la mudanza" },
+        { key: "destino", label: "Destino de la mudanza" },
+        { key: "fechaRecoleccion", label: "Fecha de recolección" },
+        { key: "tipoSeguro", label: "Tipo de seguro" },
+        { key: "valorMenaje", label: "Valor del menaje" },
+        { key: "valorAutomovil", label: "Valor del automóvil" },
+        { key: "primaEstimada", label: "Prima estimada" },
+        { key: "modalidad", label: "Modalidad de captura" },
+        { key: "enlaceExpediente", label: "Enlace al expediente" },
+        { key: "enlaceEmpresa", label: "Enlace para la empresa" },
+    ],
+
+    clientes: [
+        { key: "nombre", label: "Nombre del cliente" },
+        { key: "email", label: "Correo del cliente" },
+        { key: "telefono", label: "Teléfono del cliente" },
+        { key: "empresa", label: "Empresa compradora" },
+        { key: "origen", label: "Origen de la mudanza" },
+        { key: "destino", label: "Destino de la mudanza" },
+        { key: "tipoMudanza", label: "Tipo de mudanza" },
+        { key: "fechaRecoleccion", label: "Fecha de recolección" },
+        { key: "fechaCompra", label: "Fecha de compra del contacto" },
+        { key: "creditos", label: "Créditos utilizados" },
+        { key: "estadoOperacion", label: "Estado de la operación" },
+        { key: "tipoCompra", label: "Tipo de compra" },
+    ],
+
+    empresas: [
+        { key: "empresa", label: "Nombre de la empresa" },
+        { key: "email", label: "Correo de la empresa" },
+        { key: "telefono", label: "Teléfono de la empresa" },
+    ],
+
+    general: [],
+};
 
 function renderMensaje(mensaje, variables = {}) {
     return String(mensaje || "").replace(/\{\{\s*([a-zA-Z][a-zA-Z0-9_]*)\s*\}\}/g, (_, key) => {
@@ -51,7 +88,7 @@ export default function SuperAdminWhatsappPlantillasManager() {
         setError("");
 
         try {
-            const result = await listarPlantillasWhatsapp("seguros");
+            const result = await listarPlantillasWhatsapp("todas");
             setPlantillas(result.data || []);
         } catch (e) {
             setError(e.message || "No se pudieron cargar las plantillas.");
@@ -123,7 +160,7 @@ export default function SuperAdminWhatsappPlantillasManager() {
         setGuardando(true);
 
         try {
-            const datos = { titulo, mensaje, area: "seguros", };
+            const datos = { titulo, mensaje, area: formulario.area, };
 
             if (editando) {
                 await actualizarPlantillaWhatsapp(formulario.id, datos);
@@ -146,12 +183,15 @@ export default function SuperAdminWhatsappPlantillasManager() {
             id: plantilla.id,
             titulo: plantilla.titulo,
             mensaje: plantilla.mensaje,
+            area: plantilla.area || "seguros",
         });
 
         setError("");
         setExito("");
         setVistaPrevia(false);
-        document.getElementById("superadmin-whatsapp-editor")?.scrollIntoView({ behavior: "smooth", block: "start", });
+
+        document.getElementById("superadmin-whatsapp-editor")
+            ?.scrollIntoView({ behavior: "smooth", block: "start", });
     };
 
     const eliminar = async (plantilla) => {
@@ -198,6 +238,13 @@ export default function SuperAdminWhatsappPlantillasManager() {
         modalidad: "Póliza asistida",
         enlaceExpediente: "https://app.mudanzafacil.com.mx/seguros/SEG-2026-0001",
         enlaceEmpresa: "https://app.mudanzafacil.com.mx/seguros/empresa/ejemplo",
+
+        empresa: "Mudanzas del Sureste",
+        tipoMudanza: "Foránea",
+        fechaCompra: "18/11/2026",
+        creditos: "8",
+        estadoOperacion: "Pendiente",
+        tipoCompra: "Exclusivo",
     };
 
     return (
@@ -247,6 +294,24 @@ export default function SuperAdminWhatsappPlantillasManager() {
 
                 <form onSubmit={guardar}>
                     <div className="sawp__field">
+                        <label htmlFor="sawp-area">
+                            Categoría de la plantilla
+                        </label>
+
+                        <select id="sawp-area" value={formulario.area} onChange={(e) => cambiarCampo("area", e.target.value)} disabled={guardando} required  >
+                            {CATEGORIAS.map((categoria) => (
+                                <option key={categoria.value} value={categoria.value} >
+                                    {categoria.label}
+                                </option>
+                            ))}
+                        </select>
+
+                        <span>
+                            Esta categoría determina en qué sección estará disponible el mensaje.
+                        </span>
+                    </div>
+
+                    <div className="sawp__field">
                         <label htmlFor="sawp-titulo">
                             Nombre de la plantilla
                         </label>
@@ -286,13 +351,11 @@ export default function SuperAdminWhatsappPlantillasManager() {
                     <div className="sawp__variables">
                         <div>
                             <h4>Variables dinámicas</h4>
-                            <p>
-                                Selecciona una variable para insertarla en el mensaje donde esté el cursor.
-                            </p>
+                            <p> Selecciona una variable para insertarla en el mensaje donde esté el cursor. </p>
                         </div>
 
                         <div className="sawp__variable-list">
-                            {VARIABLES_SEGUROS.map((variable) => (
+                            {(VARIABLES_POR_AREA[formulario.area] || []).map((variable) => (
                                 <button type="button" key={variable.key} onClick={() => insertarVariable(variable.key)} title={`Insertar {{${variable.key}}}`} >
                                     + {variable.label}
                                 </button>
@@ -307,8 +370,7 @@ export default function SuperAdminWhatsappPlantillasManager() {
                                 {renderMensaje(formulario.mensaje, ejemploVariables)}
                             </pre>
                             <p>
-                                Los datos mostrados son ilustrativos; al
-                                contactar al cliente se usarán los del expediente.
+                                Los datos mostrados son ilustrativos; al contactar al cliente se usarán los del expediente.
                             </p>
                         </div>
                     )}
@@ -335,9 +397,7 @@ export default function SuperAdminWhatsappPlantillasManager() {
                 <div className="sawp__library-heading">
                     <div>
                         <h3>Plantillas guardadas</h3>
-                        <p>
-                            Estos mensajes estarán disponibles desde el detalle de cada expediente de seguro.
-                        </p>
+                        <p> Estos mensajes estarán disponibles desde el detalle de cada expediente de seguro. </p>
                     </div>
 
                     <input type="search" aria-label="Buscar plantillas" placeholder="Buscar plantilla..." value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
@@ -359,7 +419,9 @@ export default function SuperAdminWhatsappPlantillasManager() {
                         {plantillasFiltradas.map((plantilla) => (
                             <article className="sawp__card" key={plantilla.id} >
                                 <div className="sawp__card-heading">
-                                    <span>Seguros</span>
+                                    <span>
+                                        {CATEGORIAS.find((categoria) => categoria.value === plantilla.area)?.label || "General"}
+                                    </span>
                                     <small> {plantilla.mensaje.length} caracteres </small>
                                 </div>
 

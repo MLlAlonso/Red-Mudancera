@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getLeadPurchasingCompanies, getLatestLeadPurchases, getLeadPurchasesByEmpresa, } from "@/services/superAdmin";
+import SuperAdminLeadWhatsappPlantillaSelectorModal from "@/components/superadmin/SuperAdminLeadWhatsappPlantillaSelectorModal";
 
 export default function LeadPurchasesSection() {
     const getToday = () => {
@@ -26,6 +27,8 @@ export default function LeadPurchasesSection() {
     const [loadingPurchases, setLoadingPurchases] = useState(false);
     const [applyingPeriod, setApplyingPeriod] = useState(false);
     const [error, setError] = useState(null);
+    const [whatsappLead, setWhatsappLead] = useState(null);
+    const [showWhatsappModal, setShowWhatsappModal] = useState(false);
 
     useEffect(() => {
         loadPurchases(fechaInicioAplicada, fechaFinAplicada);
@@ -95,6 +98,52 @@ export default function LeadPurchasesSection() {
     const closeCompanyDetail = () => {
         setSelectedCompany(null);
         setCompanyPurchases(null);
+    };
+
+    const abrirSelectorWhatsapp = (lead, empresa, purchase) => {
+        if (!lead?.telefono) {
+            setError("El cliente no tiene un teléfono registrado.");
+            return;
+        }
+
+        setWhatsappLead({
+            ...lead,
+            empresa: empresa || "Mudanza Fácil",
+            fecha_compra: purchase.created_at,
+            creditos: purchase.tokens_pagados,
+            estado_operacion: purchase.estado_operacion,
+            exclusivo: purchase.exclusivo,
+        });
+
+        setShowWhatsappModal(true);
+    };
+
+    const cerrarSelectorWhatsapp = () => {
+        setShowWhatsappModal(false);
+        setWhatsappLead(null);
+    };
+
+    const contactarPorWhatsapp = ({ mensaje, conMensaje }) => {
+        if (!whatsappLead?.telefono) {
+            setError("El cliente no tiene un teléfono registrado.");
+            return;
+        }
+
+        let telefono = String(whatsappLead.telefono).replace(/\D/g, "");
+
+        if (telefono.length === 10) {
+            telefono = `52${telefono}`;
+        }
+
+        if (!telefono) {
+            setError("El teléfono del cliente no es válido.");
+            return;
+        }
+
+        const texto = conMensaje ? `?text=${encodeURIComponent(mensaje)}` : "";
+        const url = `https://wa.me/${telefono}${texto}`;
+        window.open(url, "_blank", "noopener,noreferrer");
+        cerrarSelectorWhatsapp();
     };
 
     const formatDate = (date) => {
@@ -191,13 +240,7 @@ export default function LeadPurchasesSection() {
                                 Hasta
                             </label>
 
-                            <input
-                                id="compras-fecha-fin"
-                                type="date"
-                                value={fechaFin}
-                                min={fechaInicio}
-                                onChange={(event) => setFechaFin(event.target.value)}
-                            />
+                            <input id="compras-fecha-fin" type="date" value={fechaFin} min={fechaInicio} onChange={(event) => setFechaFin(event.target.value)} />
                         </div>
 
                         <button
@@ -323,7 +366,19 @@ export default function LeadPurchasesSection() {
                                                                 </a>
 
                                                                 {purchase.lead?.whatsapp_url && (
-                                                                    <a href={purchase.lead.whatsapp_url} target="_blank" rel="noopener noreferrer" className="purchase-contact__whatsapp" >
+                                                                    <a
+                                                                        href={purchase.lead.whatsapp_url}
+                                                                        onClick={(event) => {
+                                                                            event.preventDefault();
+
+                                                                            abrirSelectorWhatsapp(
+                                                                                purchase.lead,
+                                                                                purchase.empresa?.nombre,
+                                                                                purchase
+                                                                            );
+                                                                        }}
+                                                                        className="purchase-contact__whatsapp"
+                                                                    >
                                                                         Contactar por WhatsApp
                                                                     </a>
                                                                 )}
@@ -450,8 +505,10 @@ export default function LeadPurchasesSection() {
                                                             {purchase.lead?.whatsapp_url && (
                                                                 <a
                                                                     href={purchase.lead.whatsapp_url}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
+                                                                    onClick={(event) => {
+                                                                        event.preventDefault();
+                                                                        abrirSelectorWhatsapp( purchase.lead, selectedCompany.empresa, purchase );
+                                                                    }}
                                                                     className="purchase-contact__whatsapp"
                                                                 >
                                                                     Contactar por WhatsApp
@@ -510,6 +567,16 @@ export default function LeadPurchasesSection() {
                     </div>
                 </div>
             )}
+
+            {showWhatsappModal && (
+                <SuperAdminLeadWhatsappPlantillaSelectorModal
+                    open={showWhatsappModal}
+                    onClose={cerrarSelectorWhatsapp}
+                    onContactar={contactarPorWhatsapp}
+                    lead={whatsappLead}
+                />
+            )}
+
         </>
     );
 }
