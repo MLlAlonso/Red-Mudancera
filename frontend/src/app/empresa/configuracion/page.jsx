@@ -7,7 +7,7 @@ import Input from "@/components/common/Input";
 import BaseModal from "@/components/modals/BaseModal";
 import OneSignal from "react-onesignal";
 import MensajesWhatsappManager from "@/components/empresa/MensajesWhatsappManager";
-import ReciboColoresManager from "@/components/empresa/ReciboColoresManager";
+import PerfilEmpresaDocumentos from "@/components/empresa/PerfilEmpresaDocumentos";
 import "@/styles/pages/empresa/_empresaConfiguracion.scss";
 
 export default function ConfiguracionPage() {
@@ -186,7 +186,6 @@ export default function ConfiguracionPage() {
             });
 
             setPushEnabled(true);
-
         } catch (e) {
             console.error(e);
         }
@@ -223,132 +222,12 @@ export default function ConfiguracionPage() {
                 </div>
 
                 <div id="recibo-colores" className="configuracion__block">
-                    <ReciboColoresManager />
+                    <PerfilEmpresaDocumentos empresa={empresa} />
                 </div>
 
                 <div className="configuracion__block">
                     <MensajesWhatsappManager />
                 </div>
-
-                {/* ========================= FREE ========================= */}
-                {empresa.plan === "free" && (
-                    <div className="configuracion__block">
-                        <h2>Radar no disponible</h2>
-
-                        <p className="configuracion__copy">
-                            Estás en modo exploración. Para recibir coincidencias automáticas necesitas activar un plan.
-                        </p>
-
-                        <button className="configuracion__btn" onClick={() => window.location.href = "/empresa/planes"} >
-                            Ver planes
-                        </button>
-                    </div>
-                )}
-
-                {/* ========================= CONECTOR ========================= */}
-                {empresa.plan === "conector" && (
-                    <div className="configuracion__block">
-                        <h2>Destinos activos</h2>
-
-                        <p className="configuracion__copy">
-                            Recibe oportunidades de mudanza según los destinos que selecciones.
-                        </p>
-
-                        <div className="configuracion__box">
-                            {ciudades.length === 0 && (
-                                <p>Aún no has seleccionado tus destinos</p>
-                            )}
-
-                            {ciudades.map((c, i) => (
-                                <Input
-                                    key={i}
-                                    label={`Destino ${i + 1}`}
-                                    name={`ciudad_${i}`}
-                                    value={c}
-                                    placeholder="Escribe una ciudad"
-                                    onChange={(e) => handleCiudadChange(i, e.target.value)}
-                                    autocomplete
-                                    disabled={!editando}
-                                />
-                            ))}
-
-                            {editando && ciudades.length < 2 && (
-                                <button onClick={agregarCiudad} className="configuracion__addDestino">
-                                    + Agregar destino
-                                </button>
-                            )}
-                        </div>
-
-                        {!editando ? (
-                            <button
-                                className="configuracion__btn"
-                                onClick={() => {
-                                    if (diasRestantes > 0) {
-                                        setErrorMessage(`Podrás cambiar tus destinos en ${diasRestantes} día(s)`);
-                                        setShowErrorModal(true);
-                                        return;
-                                    }
-                                    setEditando(true);
-                                }}
-                            >
-                                Editar destinos
-                            </button>
-                        ) : (
-                            <button className="configuracion__btn" onClick={abrirConfirmacion} disabled={loading || ciudadesValidas.length < 2} >
-                                {loading ? "Guardando..." : "Guardar"}
-                            </button>
-                        )}
-
-                        {ultimaModificacion && (
-                            <div className="configuracion__info">
-                                <p>
-                                    Última actualización:{" "} <strong>{formatearFecha(ultimaModificacion)}</strong>
-                                </p>
-
-                                {diasRestantes > 0 ? (
-                                    <p className="configuracion__warning">
-                                        Podrás modificar tus destinos en {diasRestantes} día{diasRestantes > 1 ? "s" : ""}
-                                    </p>
-                                ) : (
-                                    <p className="configuracion__success">
-                                        Ya puedes modificar tus destinos
-                                    </p>
-                                )}
-                            </div>
-                        )}
-
-                        <p className="configuracion__limit">
-                            Debes seleccionar 2 destinos para activar el radar.
-                        </p>
-
-                        <div className="configuracion__upgrade">
-                            <p> ¿Quieres recibir oportunidades en todos los destinos? </p>
-
-                            <button onClick={() => window.location.href = "/empresa/planes"} >
-                                Activa Radar
-                            </button>
-                        </div>
-                    </div>
-                )}
-
-                {/* ========================= RADAR ========================= */}
-                {empresa.plan === "radar" && (
-                    <div className="configuracion__block">
-                        <h2>Cobertura automática activa</h2>
-
-                        <p className="configuracion__copy">
-                            Estás recibiendo oportunidades en todos los destinos disponibles.
-                        </p>
-
-                        <p className="configuracion__copy">
-                            No necesitas configurar destinos.
-                        </p>
-
-                        <div className="configuracion__pro">
-                            <p> Olvídate de elegir destinos manualmente, el sistema trabaja por ti. </p>
-                        </div>
-                    </div>
-                )}
             </main>
 
             {showConfirmModal && (

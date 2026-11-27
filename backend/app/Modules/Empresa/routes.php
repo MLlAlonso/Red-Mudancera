@@ -14,6 +14,7 @@ use App\Modules\Empresa\Controllers\EmpresaCRMController;
 use App\Modules\Empresa\Controllers\EmpresaNotaController;
 use App\Modules\Tutorial\Controllers\TutorialController;
 use App\Modules\Empresa\Controllers\EmpresaMensajeWhatsappController;
+use App\Modules\Empresa\Controllers\EmpresaConfiguracionDocumentosController;
 
 Route::prefix('empresa')->group(function () {
     Route::post('/register', [EmpresaAuthController::class, 'register']);
@@ -63,6 +64,10 @@ Route::prefix('empresa')->group(function () {
         Route::post('/mensajes-whatsapp', [EmpresaMensajeWhatsappController::class, 'store']);
         Route::put('/mensajes-whatsapp/{id}', [EmpresaMensajeWhatsappController::class, 'update'])->whereNumber('id');
         Route::delete('/mensajes-whatsapp/{id}',  [EmpresaMensajeWhatsappController::class, 'destroy'])->whereNumber('id');
+
+        // Configuración de documentos de la empresa
+        Route::get( '/configuracion-documentos', [EmpresaConfiguracionDocumentosController::class, 'show'] );
+        Route::put( '/configuracion-documentos', [EmpresaConfiguracionDocumentosController::class, 'update'] );
     });
 
     Route::get('/empresas/{id}', [EmpresaPublicController::class, 'show']);

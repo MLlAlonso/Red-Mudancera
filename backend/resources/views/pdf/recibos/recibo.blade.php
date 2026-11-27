@@ -1,8 +1,34 @@
-
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
+
+    @php
+        $nombreEmpresa = $empresa['nombre_comercial'] ?? $empresa['nombre'] ?? 'Empresa de mudanzas';
+        $telefonoEmpresa = $empresa['telefono'] ?? '';
+        $emailEmpresa = $empresa['email'] ?? '';
+        $piePersonalizado = $empresa['pie_pagina'] ?? '';
+        $colorPrimary = $colores['primary'] ?? '#09233E';
+        $colorAccent = $colores['accent'] ?? '#1C8F6A';
+        $colorBackground = $colores['background'] ?? '#F4F7F6';
+        $colorText = $colores['text'] ?? '#202B35';
+
+        $tiposPago = [
+            'anticipo' => 'Anticipo',
+            'pago_parcial' => 'Pago parcial',
+            'liquidacion' => 'Liquidación',
+        ];
+
+        $formasPago = [
+            'efectivo' => 'Efectivo',
+            'transferencia' => 'Transferencia',
+            'deposito' => 'Depósito',
+            'retiro_sin_tarjeta' => 'Retiro sin tarjeta',
+            'tarjeta' => 'Tarjeta',
+            'cheque' => 'Cheque',
+        ];
+    @endphp
 
     <style>
         @page {
@@ -15,12 +41,16 @@
 
         body {
             font-family: DejaVu Sans, sans-serif;
-            color: {{ $colores['text'] ?? '#202B35' }};
+            color:
+                {{ $colorText }}
+            ;
             font-size: 14px;
         }
 
         .header {
-            background: {{ $colores['primary'] ?? '#09233E' }};
+            background:
+                {{ $colorPrimary }}
+            ;
             color: #fff;
             padding: 10px;
         }
@@ -30,8 +60,8 @@
         }
 
         .logo {
-            max-width: 130px;
-            max-height: 65px;
+            max-width: 140px;
+            max-height: 80px;
         }
 
         .folio {
@@ -43,12 +73,16 @@
         }
 
         .section {
-            margin-top: 18px;
+            margin-top: 10px;
         }
 
         .section-title {
-            background: {{ $colores['background'] ?? '#F4F7F6' }};
-            border-left: 4px solid {{ $colores['accent'] ?? '#1C8F6A' }};
+            background:
+                {{ $colorBackground }}
+            ;
+            border-left: 4px solid
+                {{ $colorAccent }}
+            ;
             padding: 5px;
             font-size: 14px;
             font-weight: bold;
@@ -79,20 +113,25 @@
         }
 
         .amount {
-            background: {{ $colores['background'] ?? '#F4F7F6' }};
+            background:
+                {{ $colorBackground }}
+            ;
             border: 1px solid #e5e7eb;
             padding: 14px;
-            margin-top: 16px;
+            margin-top: 14px;
         }
 
         .amount strong {
-            color: {{ $colores['accent'] ?? '#1C8F6A' }};
+            color:
+                {{ $colorAccent }}
+            ;
             font-size: 24px;
         }
 
         .notes {
             background: #f8fafc;
             padding: 10px;
+            font-size: 12px;
             margin-top: 10px;
             line-height: 1.7;
         }
@@ -100,6 +139,7 @@
         .observations {
             margin-top: 10px;
             padding: 10px;
+            font-size: 12px;
             border: 1px solid #e5e7eb;
             min-height: 50px;
         }
@@ -128,7 +168,9 @@
 
         .footer {
             margin-top: 20px;
-            border-top: 2px solid {{ $colores['accent'] ?? '#1C8F6A' }};
+            border-top: 2px solid
+                {{ $colorAccent }}
+            ;
             padding-top: 10px;
             text-align: center;
             color: #64748b;
@@ -146,7 +188,7 @@
                         <img src="{{ $logo }}" class="logo">
                     @else
                         <strong style="font-size: 19px;">
-                            {{ $empresa['nombre'] }}
+                            {{ $nombreEmpresa }}
                         </strong>
                     @endif
                 </td>
@@ -291,9 +333,9 @@
                 @endif
 
                 <div class="signature-line">
-                    Firma de {{ $empresa['representante'] ?? $empresa['nombre'] }}
+                    Firma de {{ $empresa['representante'] ?? $nombreEmpresa }}
                     <br>
-                    {{ $empresa['nombre'] }}
+                    {{ $nombreEmpresa }}
                 </div>
             </td>
 
@@ -312,10 +354,25 @@
     </table>
 
     <div class="footer">
-        {{ $empresa['nombre'] }} | {{ $empresa['telefono'] ?? '' }}
+        {{ $nombreEmpresa }}
+
+        @if($telefonoEmpresa)
+            | {{ $telefonoEmpresa }}
+        @endif
+
+        @if($emailEmpresa)
+            | {{ $emailEmpresa }}
+        @endif
+
+        @if($piePersonalizado)
+            <br>
+            {{ $piePersonalizado }}
+        @endif
+
         <br>
         Documento generado mediante Mudanza Fácil.
     </div>
 
 </body>
+
 </html>

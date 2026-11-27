@@ -16,8 +16,9 @@ class ReciboPdfService
     public function generar(Recibo $recibo): Recibo
     {
         $empresa = $recibo->empresa_snapshot ?? [];
+        $colores = $recibo->colores_snapshot ?? [];
         $logo = $this->imagenCloudinary($empresa['logo'] ?? null);
-        $firmaEmpresa = $this->obtenerImagenFirma($recibo->firma_empresa_path,  true);
+        $firmaEmpresa = $this->obtenerImagenFirma($recibo->firma_empresa_path, true);
         $firmaCliente = $this->obtenerImagenFirma($recibo->firma_cliente_path, false);
 
         $pdf = Pdf::loadView(
@@ -25,7 +26,7 @@ class ReciboPdfService
             [
                 'recibo' => $recibo,
                 'empresa' => $empresa,
-                'colores' => $recibo->colores_snapshot ?? [],
+                'colores' => $colores,
                 'logo' => $logo,
                 'firmaEmpresa' => $firmaEmpresa,
                 'firmaCliente' => $firmaCliente,

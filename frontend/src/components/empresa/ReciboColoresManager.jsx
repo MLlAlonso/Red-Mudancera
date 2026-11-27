@@ -232,16 +232,15 @@ export default function ReciboColoresManager() {
         <section className="recibo-colores configuracion__block">
             <div className="recibo-colores__header">
                 <div>
-                    <h2>Personalización de recibos</h2>
+                    <h2>Color de empresa</h2>
 
                     <p className="configuracion__copy">
-                        Personaliza los colores de los documentos PDF que generas para tus clientes.
+                        Define la identidad visual que compartirán tus cotizaciones, recibos y futuros documentos.
                     </p>
                 </div>
             </div>
 
             <div className="recibo-colores__content">
-
                 <div className="recibo-colores__fields">
                     <ColorField
                         title="Color principal"
@@ -323,8 +322,7 @@ export default function ReciboColoresManager() {
             </div>
 
             <p className="recibo-colores__footnote">
-                Los cambios se aplicarán únicamente a los recibos
-                que generes después de guardar esta configuración.
+                Los cambios se aplicarán únicamente a los recibos que generes después de guardar esta configuración.
                 Tus documentos anteriores no se modificarán.
             </p>
         </section>

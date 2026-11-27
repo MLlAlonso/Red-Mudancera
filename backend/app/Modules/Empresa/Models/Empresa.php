@@ -48,6 +48,9 @@ class Empresa extends Authenticatable
         'trialEndsAt',
         'firma_recibo_path',
         'recibo_colores',
+        'firma_recibo_path',
+        'recibo_colores',
+        'configuracion_documentos',
     ];
 
     protected $hidden = [
@@ -67,6 +70,7 @@ class Empresa extends Authenticatable
         'verificado' => 'boolean',
         'cancel_at_period_end' => 'boolean',
         'recibo_colores' => 'array',
+        'configuracion_documentos' => 'array',
     ];
 
     // ===========================================
@@ -138,7 +142,6 @@ class Empresa extends Authenticatable
     {
         parent::boot();
         static::creating(function ($empresa) {
-
             if (!$empresa->slug) {
                 $baseSlug = Str::slug($empresa->empresa);
                 $slug = $baseSlug;

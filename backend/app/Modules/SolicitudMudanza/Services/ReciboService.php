@@ -3,6 +3,7 @@
 namespace App\Modules\SolicitudMudanza\Services;
 
 use App\Modules\Empresa\Models\Empresa;
+use App\Modules\Empresa\Services\EmpresaConfiguracionDocumentosService;
 use App\Modules\SolicitudMudanza\Models\Recibo;
 use App\Modules\SolicitudMudanza\Models\SolicitudMudanza;
 use Illuminate\Support\Facades\DB;
@@ -14,13 +15,14 @@ class ReciboService
     public function __construct(
         private FirmaReciboService $firmaService,
         private ReciboColorService $colorService,
-        private ReciboPdfService $pdfService
+        private ReciboPdfService $pdfService,
+        private EmpresaConfiguracionDocumentosService $documentosService
     ) {}
-
 
     public function obtenerDatos(Empresa $empresa, int $solicitudId): array
     {
         $solicitud = $this->obtenerSolicitud($empresa, $solicitudId);
+        $configuracion = $this->documentosService->obtener($empresa);
 
         return [
             'solicitud' => [
@@ -32,11 +34,19 @@ class ReciboService
             ],
 
             'empresa' => [
-                'nombre' => $empresa->empresa,
+                'nombre' => $configuracion['nombre_comercial'],
+                'nombre_comercial' => $configuracion['nombre_comercial'],
+                'nombre_legal' => $empresa->empresa,
                 'logo' => $empresa->logo_url,
                 'representante' => $empresa->representante,
                 'tel' => $empresa->tel,
                 'email' => $empresa->email,
+            ],
+
+            'configuracion_documentos' => [
+                'clausulas' => $configuracion['clausulas'],
+                'seguro_porcentaje' => $configuracion['seguro_porcentaje'],
+                'pie_pagina' => $configuracion['pie_pagina'],
             ],
 
             'firma' => [
@@ -48,14 +58,15 @@ class ReciboService
         ];
     }
 
-
     public function crear(Empresa $empresa, int $solicitudId, array $data): Recibo
     {
-        $solicitud = $this->obtenerSolicitud($empresa,  $solicitudId);
+        $solicitud = $this->obtenerSolicitud($empresa, $solicitudId);
         $firmaNueva = $data['firma_empresa'] ?? null;
 
         if ($firmaNueva) {
-            $firmaPath = !empty($data['guardar_firma']) ? $this->firmaService->guardarFirma($empresa, $firmaNueva) : $this->firmaService->guardarFirmaTemporal($firmaNueva);
+            $firmaPath = !empty($data['guardar_firma'])
+                ? $this->firmaService->guardarFirma($empresa, $firmaNueva)
+                : $this->firmaService->guardarFirmaTemporal($firmaNueva);
         } else {
             $firmaPath = $this->firmaService->obtenerFirma($empresa);
         }
@@ -71,8 +82,9 @@ class ReciboService
         }
 
         $colores = $this->colorService->obtener($empresa);
+        $configuracion = $this->documentosService->obtener($empresa);
 
-        $recibo = DB::transaction(function () use ($empresa, $solicitud, $data, $firmaPath, $firmaClientePath, $colores) {
+        $recibo = DB::transaction(function () use ($empresa, $solicitud, $data, $firmaPath, $firmaClientePath, $colores, $configuracion) {
             return Recibo::create([
                 'empresa_id' => $empresa->id,
                 'solicitud_id' => $solicitud->id,
@@ -91,13 +103,18 @@ class ReciboService
                 'firma_cliente_path' => $firmaClientePath,
 
                 'empresa_snapshot' => [
-                    'nombre' => $empresa->empresa,
+                    'nombre' => $configuracion['nombre_comercial'],
+                    'nombre_comercial' => $configuracion['nombre_comercial'],
+                    'nombre_legal' => $empresa->empresa,
                     'representante' => $empresa->representante,
                     'rfc' => $empresa->rfc,
                     'base' => $empresa->base,
                     'telefono' => $empresa->tel,
                     'email' => $empresa->email,
                     'logo' => $empresa->logo_url,
+                    'clausulas' => $configuracion['clausulas'],
+                    'seguro_porcentaje' => $configuracion['seguro_porcentaje'],
+                    'pie_pagina' => $configuracion['pie_pagina'],
                 ],
 
                 'colores_snapshot' => $colores,
