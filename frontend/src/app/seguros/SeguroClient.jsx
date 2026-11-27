@@ -5,25 +5,35 @@ import { useSearchParams } from "next/navigation";
 import BaseModal from "@/components/modals/BaseModal";
 import useClickOutside from "@/hooks/useClickOutside";
 
-
-export default function SeguroClient() {
+export default function SeguroClient({ action = "whatsapp" }) {
     const searchParams = useSearchParams();
     const id = searchParams.get("id");
     const API = process.env.NEXT_PUBLIC_API_URL;
+
+    const actionConfig = {
+        whatsapp: {
+            label: "Solicitar información por WhatsApp",
+            icon: "icons/whatsapp.png",
+            url: `https://wa.me/5214421896433?text=${encodeURIComponent(
+                "Hola, me gustaría recibir más información sobre el seguro para mudanzas de Mudanza Fácil."
+            )}`
+        },
+        agenda: {
+            label: "Agendar asesoría gratuita",
+            icon: "icons/calendario.png",
+            url: "https://app.mudanzafacil.com.mx/empresa/login"
+        }
+    };
+
+    const selectedAction = actionConfig[action] || actionConfig.whatsapp;
     const [solicitud, setSolicitud] = useState(null);
     const [modalMsg, setModalMsg] = useState("");
     const [modalError, setModalError] = useState("");
     const [loading, setLoading] = useState(false);
     const [sent, setSent] = useState(false);
     const [showForm, setShowForm] = useState(false);
-    const PREVIEW_MODAL = true;
-
     const successModalRef = useRef(null);
-
-    const cerrarModalExito = useCallback(() => {
-        setModalMsg("");
-    }, []);
-
+    const cerrarModalExito = useCallback(() => { setModalMsg(""); }, []);
     useClickOutside(successModalRef, cerrarModalExito);
 
     const [form, setForm] = useState({
@@ -43,6 +53,7 @@ export default function SeguroClient() {
         }));
     };
 
+    // Recuperar solicitud cuando el usuario viene desde Mudanza Fácil.
     useEffect(() => {
         if (!id) return;
 
@@ -53,20 +64,23 @@ export default function SeguroClient() {
 
                 if (res.ok) {
                     setSolicitud(data.data);
+                } else {
+                    setModalError(data.message || "No fue posible recuperar tu solicitud.");
                 }
             } catch (error) {
-                console.error(error);
+                console.error("Error al recuperar solicitud:", error);
+                setModalError("No fue posible conectar con el servidor.");
             }
         };
 
         fetchSolicitud();
-    }, [id]);
+    }, [id, API]);
 
     /* =========================
        FLUJO NORMAL
     ========================= */
     const handleSeguro = async () => {
-        if (!solicitud || sent) return;
+        if (!solicitud || sent || loading) return;
         setLoading(true);
 
         try {
@@ -87,23 +101,23 @@ export default function SeguroClient() {
             const data = await res.json();
 
             if (!res.ok) {
-                throw new Error(data.message);
+                throw new Error(data.message || "No fue posible registrar tu solicitud.");
             }
 
-            setModalMsg("Un asesor se pondrá en contacto contigo en breve.");
             setSent(true);
+            window.location.assign(selectedAction.url);
         } catch (error) {
             setModalError(error.message || "Ocurrió un error.");
+        } finally {
+            setLoading(false);
         }
-
-        setLoading(false);
     };
 
     /* =========================
        FLUJO EXTERNO
     ========================= */
     const handleExterno = async () => {
-        if (sent) return;
+        if (sent || loading) return;
 
         if (!form.fecha_recoleccion) {
             setModalError("Selecciona cuándo necesitas la mudanza.");
@@ -128,106 +142,127 @@ export default function SeguroClient() {
             const data = await res.json();
 
             if (!res.ok) {
-                throw new Error(data.message);
+                throw new Error(data.message || "No fue posible registrar tu solicitud.");
             }
 
-            setModalMsg("Un asesor se pondrá en contacto contigo en breve.");
             setSent(true);
+            setShowForm(false);
+            window.location.assign(selectedAction.url);
         } catch (error) {
             setModalError(error.message || "Ocurrió un error.");
+        } finally {
+            setLoading(false);
         }
-
-        setLoading(false);
     };
 
-    // FLUJO NORMAL
+    /* =========================
+       MODALES COMPARTIDOS
+    ========================= */
+    const renderModales = () => (
+        <>
+            {modalMsg && (
+                <BaseModal>
+                    <div className="success-modal" ref={successModalRef}>
+                        <img src="/icons/verificado.png" alt="verificado" className="success-img" />
+                        <h3>Solicitud enviada</h3>
+                        <div className="success-divider"></div>
+
+                        <p>
+                            {modalMsg || "Tu interés fue registrado correctamente."}
+                        </p>
+
+                        <p>
+                            Un especialista del área de seguros se pondrá en contacto contigo
+                            para darte más información sobre la protección para tu mudanza.
+                        </p>
+
+                        <section>
+                            <img src="/icons/mensaje.png" alt="correo" />
+
+                            <p>
+                                <span>¿Qué sigue?</span>
+                                <br />
+                                Revisa tu correo electrónico. Ahí recibirás los siguientes pasos
+                                para continuar con el proceso de protección de tu mudanza.
+                            </p>
+                        </section>
+
+                        <p className="privacy-note">
+                            <img src="/icons/candado.png" alt="Privacidad" />
+                            Tu información será utilizada únicamente para dar seguimiento a tu solicitud.
+                        </p>
+                    </div>
+                </BaseModal>
+            )}
+
+            {modalError && (
+                <BaseModal onClose={() => setModalError("")}>
+                    <div className="error-modal">
+                        <h3>Error</h3>
+                        <p>{modalError}</p>
+
+                        <button onClick={() => setModalError("")}>
+                            Cerrar
+                        </button>
+                    </div>
+                </BaseModal>
+            )}
+        </>
+    );
+
+    /* =========================
+       FLUJO NORMAL
+    ========================= */
     if (id) {
         return (
             <>
-                <button className="btnSeguro" onClick={handleSeguro} disabled={sent || loading} >
-                    <span className="text">
-                        {sent ? "Solicitud enviada" : "Quiero conocer más"}
+                <button className="btnSeguro" onClick={handleSeguro} disabled={!solicitud || sent || loading} >
+                    <span className="btnSeguro__content">
+                        <img src={selectedAction.icon} alt="" />
+                        <span className="text">
+                            {loading ? "Procesando..." : sent ? "Solicitud enviada" : selectedAction.label}
+                        </span>
                     </span>
 
-                    <span className="arrow">
-                        &gt;
-                    </span>
+                    {!loading && !sent && (
+                        <span className="arrow">&gt;</span>
+                    )}
                 </button>
 
-                {modalMsg && (
-                    <BaseModal >
-                        <div className="success-modal" ref={successModalRef}>
-                            <img src="/icons/verificado.png" alt="verificado" className="success-img" />
-                            <h3>Solicitud enviada</h3>
-                            <div className="success-divider"></div>
-
-                            <p>
-                                {modalMsg || "Tu interés fue registrado correctamente."}
-                            </p>
-
-                            <p>
-                                Un especialista del área de seguros se pondrá
-                                en contacto contigo para darte más información
-                                sobre la protección para tu mudanza.
-                            </p>
-
-                            <section>
-                                <img src="/icons/mensaje.png" alt="correo" />
-
-                                <p>
-                                    <span> ¿Qué sigue? </span> <br />
-                                    Revisa tu correo electrónico. Ahí recibirás los siguientes pasos para continuar con el proceso de protección de tu mudanza.
-                                </p>
-                            </section>
-
-                            <p className="privacy-note">
-                                <img src="/icons/candado.png" alt="Privacidad" />
-                                Tu información será utilizada únicamente para dar seguimiento a tu solicitud
-                            </p>
-                        </div>
-                    </BaseModal>
-                )}
-
-                {modalError && (
-                    <BaseModal onClose={() => setModalError("")} >
-                        <div className="error-modal">
-                            <h3>Error</h3>
-                            <p>{modalError}</p>
-
-                            <button onClick={() => setModalError("")}  >
-                                Cerrar
-                            </button>
-                        </div>
-                    </BaseModal>
-                )}
+                {renderModales()}
             </>
         );
     }
 
-    // USUARIO EXTERNO
+    /* =========================
+       USUARIO EXTERNO
+    ========================= */
     return (
         <>
             {!showForm && (
-                <button className="btnSeguro" onClick={() => setShowForm(true)} >
-                    <span className="text">
-                        Quiero conocer más
+                <button className="btnSeguro" onClick={() => setShowForm(true)} disabled={sent || loading} >
+                    <span className="btnSeguro__content">
+                        <img src={selectedAction.icon} alt="" />
+                        <span className="text">
+                            {sent ? "Solicitud enviada" : selectedAction.label}
+                        </span>
                     </span>
 
-                    <span className="arrow">
-                        &gt;
-                    </span>
+                    {!sent && (
+                        <span className="arrow">&gt;</span>
+                    )}
                 </button>
             )}
 
             {showForm && (
                 <div className="seguroFormModal" role="dialog" aria-modal="true" aria-labelledby="seguroFormTitle" >
-                    <div className="seguroFormModal__backdrop" onClick={() => { if (!loading) { setShowForm(false); } }} ></div>
+                    <div className="seguroFormModal__backdrop" onClick={() => { if (!loading) setShowForm(false); }} ></div>
 
                     <div className="seguroFormModal__content">
                         <button
                             type="button"
                             className="seguroFormModal__close"
-                            onClick={() => { if (!loading) { setShowForm(false); } }}
+                            onClick={() => { if (!loading) setShowForm(false);  }}
                             aria-label="Cerrar formulario"
                             disabled={loading}
                         >
@@ -240,7 +275,8 @@ export default function SeguroClient() {
                             </h2>
 
                             <p>
-                                Déjanos algunos datos para que un especialista pueda orientarte sobre la protección de tus pertenencias.
+                                Déjanos algunos datos para que un especialista pueda orientarte 
+                                sobre la protección de tus pertenencias.
                             </p>
                         </div>
 
@@ -339,42 +375,33 @@ export default function SeguroClient() {
                                     ¿Cuándo necesitas la mudanza?
                                 </label>
 
-                                <select id="fecha_recoleccion" name="fecha_recoleccion" value={form.fecha_recoleccion} onChange={handleChange}  >
+                                <select
+                                    id="fecha_recoleccion"
+                                    name="fecha_recoleccion"
+                                    value={form.fecha_recoleccion}
+                                    onChange={handleChange}
+                                >
                                     <option value="">
                                         Selecciona una opción
                                     </option>
 
-                                    <option value="1-7">
-                                        1-7 días
-                                    </option>
-
-                                    <option value="8-15">
-                                        8-15 días
-                                    </option>
-
-                                    <option value="15-30">
-                                        15-30 días
-                                    </option>
-
-                                    <option value="30+">
-                                        Más de 30 días
-                                    </option>
-
+                                    <option value="1-7">1-7 días</option>
+                                    <option value="8-15">8-15 días</option>
+                                    <option value="15-30">15-30 días</option>
+                                    <option value="30+">Más de 30 días</option>
                                     <option value="lo_antes_posible">
                                         Lo antes posible
                                     </option>
                                 </select>
                             </div>
 
-                            <button type="button" className="btnSeguro seguroForm__submit" onClick={handleExterno} disabled={sent || loading}  >
+                            <button type="button" className="btnSeguro seguroForm__submit" onClick={handleExterno}  disabled={sent || loading} >
                                 <span className="text">
                                     {loading ? "Enviando..." : sent ? "Solicitud enviada" : "Enviar solicitud"}
                                 </span>
 
                                 {!loading && !sent && (
-                                    <span className="arrow">
-                                        &gt;
-                                    </span>
+                                    <span className="arrow">&gt;</span>
                                 )}
                             </button>
 
@@ -386,52 +413,7 @@ export default function SeguroClient() {
                 </div>
             )}
 
-            {modalMsg && (
-                <BaseModal >
-                    <div className="success-modal" ref={successModalRef}>
-                        <img src="/icons/verificado.png" alt="verificado" className="success-img" />
-                        <h3>Solicitud enviada</h3>
-                        <div className="success-divider"></div>
-
-                        <p>
-                            {modalMsg || "Tu interés fue registrado correctamente."}
-                        </p>
-
-                        <p>
-                            Un especialista del área de seguros se pondrá
-                            en contacto contigo para darte más información
-                            sobre la protección para tu mudanza.
-                        </p>
-
-                        <section>
-                            <img src="/icons/mensaje.png" alt="correo" />
-
-                            <p>
-                                <span> ¿Qué sigue? </span> <br />
-                                Revisa tu correo electrónico. Ahí recibirás los siguientes pasos para continuar con el proceso de protección de tu mudanza.
-                            </p>
-                        </section>
-
-                        <p className="privacy-note">
-                            <img src="/icons/candado.png" alt="Privacidad" />
-                            Tu información será utilizada únicamente para dar seguimiento a tu solicitud
-                        </p>
-                    </div>
-                </BaseModal>
-            )}
-
-            {modalError && (
-                <BaseModal onClose={() => setModalError("")} >
-                    <div className="error-modal">
-                        <h3>Error</h3>
-                        <p>{modalError}</p>
-
-                        <button onClick={() => setModalError("")} >
-                            Cerrar
-                        </button>
-                    </div>
-                </BaseModal>
-            )}
+            {renderModales()}
         </>
     );
 }
